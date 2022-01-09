@@ -29,5 +29,9 @@ hs_err_pid*
 # Idea
 **/.idea/*
 **/bin/
+*.iml
+
 
 **/.settings/*
+**/target/*
+
