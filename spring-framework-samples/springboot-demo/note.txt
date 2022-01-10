@@ -1,0 +1,45 @@
+
+springboot集成hibernate
+依赖项如下：
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>8.0.17</version>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>druid</artifactId>
+        <version>1.1.2</version>
+    </dependency>
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.10</version>
+    </dependency>
+
+配置如下：
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        new_generator_mappings: false
+        format_sql: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/ss?serverTimezone=UTC&useSSL=false&autoReconnect=true&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+
+
+<aop:aspectj-autoproxy />
+<context:annotation-config/>
+
+@EnableTransactionManagement(proxyTargetClass = true)作用是启用注解事务，即可以使用@Transactional注解来控制事务等同于xml配置方式的 <tx:annotation-driven />
+@EnableAspectJAutoProxy 作用是允许AspectJ自动生成代理，将@Aspect 注解标注的组件类实现AOP功能。
+原文链接：https://blog.csdn.net/u011930054/article/details/106856750
