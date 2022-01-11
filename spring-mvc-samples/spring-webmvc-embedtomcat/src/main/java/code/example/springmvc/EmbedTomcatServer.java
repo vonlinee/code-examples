@@ -11,11 +11,11 @@ import org.apache.catalina.startup.Tomcat;
  */
 public class EmbedTomcatServer {
 	
+	private static final int port = 8080;
+	
 	//这里使用classpath作为webapp目录，实际可用根据情况设定，
 	//这个目录下放置WEB-INF/web.xml文件，tomcat启动会加载这个文件。
-	
-	private static int port = 8080;
-    private static String contextPath = "/";
+    private static final String contextPath = "/";
  
     public static void start() throws LifecycleException, IOException {
         Tomcat tomcat = new Tomcat();
@@ -26,7 +26,7 @@ public class EmbedTomcatServer {
         tomcat.addWebapp(contextPath, baseDir);
         tomcat.enableNaming();
         tomcat.start();
-        tomcat.getServer().await();
+        tomcat.getServer().await(); //堵塞
     }
  
     public static void main(String[] args) throws IOException, LifecycleException {

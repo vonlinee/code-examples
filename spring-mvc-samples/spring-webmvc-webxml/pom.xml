@@ -2,8 +2,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>spring-webmvc-embedtomcat</groupId>
-	<artifactId>spring-webmvc-embedtomcat</artifactId>
+	<groupId>spring-webmvc-webxml</groupId>
+	<artifactId>spring-webmvc-webxml</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
@@ -12,16 +12,10 @@
 	</properties>
 
 	<dependencies>
-<!-- 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>${spring.version}</version>
-		</dependency> -->
-<!-- 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-beans</artifactId> 
+			<version>${spring.version}</version> </dependency> -->
+		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-context</artifactId> 
+			<version>${spring.version}</version> </dependency> -->
 		<!-- 只加入spring-webmvc依赖就会引入：aop,beans,context,jcl,expression,web等依赖,所以将上面的注释掉也可以的 -->
 		<dependency>
 			<groupId>org.springframework</groupId>

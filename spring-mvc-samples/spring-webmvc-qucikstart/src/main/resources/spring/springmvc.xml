@@ -30,8 +30,7 @@
 		Supports direct URL matches and Ant-style pattern matches. For syntax details, see the 
  		org.springframework.util.AntPathMatcher javadoc.
  	-->
-	<bean
-		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<props>
 				<!-- 对 itemsController进行url映射,因为itemsController这个Bean实现了Controller接口 -->

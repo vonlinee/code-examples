@@ -5,15 +5,7 @@
                             http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
 
-	<!-- 这里使用servlet3.0，方便去除web.xml，使用javaBean实现web.xml能力
+	<!-- 这里使用servlet3.0，方便去除web.xml，使用javaBean实现web.xml
 	https://blog.csdn.net/Hicodden/article/details/111412025
 	 -->
-	<servlet>
-		<servlet-name>hello</servlet-name>
-		<servlet-class>code.example.springmvc.servlet.HelloServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>hello</servlet-name>
-		<url-pattern>/hello</url-pattern>
-	</servlet-mapping>
 </web-app>
