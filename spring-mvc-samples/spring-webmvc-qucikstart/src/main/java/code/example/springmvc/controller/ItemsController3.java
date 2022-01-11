@@ -1,20 +1,21 @@
-package com.crow.ssm.controller;
+package code.example.springmvc.controller;
 
-
-import com.crow.ssm.po.Items;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by CrowHawk on 17/3/30.
- */
-public class ItemsController implements Controller {
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import code.example.springmvc.pojo.Items;
+
+@Controller
+public class ItemsController3 {
+
+    @RequestMapping("/queryItems")
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         //调用service查找数据库，查询商品列表，这里使用静态数据模拟
         List<Items> itemsList = new ArrayList<Items>();
@@ -40,7 +41,6 @@ public class ItemsController implements Controller {
 
         //指定视图
         modelAndView.setViewName("/items/itemsList");
-
         return modelAndView;
     }
 }
