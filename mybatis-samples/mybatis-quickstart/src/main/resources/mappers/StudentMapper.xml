@@ -3,6 +3,6 @@
 <mapper namespace="code.example.mybatis.mapper.StudentMapper">
     <select id="queryAll" resultType="code.example.mybatis.entity.Student">
         SELECT *
-        FROM student
+        FROM t_student
     </select>
 </mapper>
