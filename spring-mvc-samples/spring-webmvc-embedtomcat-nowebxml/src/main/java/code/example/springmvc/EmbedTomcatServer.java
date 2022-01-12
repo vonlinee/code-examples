@@ -36,7 +36,6 @@ public class EmbedTomcatServer {
 		// tomcat.getConnector();  手动创建
 		tomcat.start();
 		tomcat.getServer().await();
-		
 	}
 
 	public static void main(String[] args) throws IOException, LifecycleException, ServletException {

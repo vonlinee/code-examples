@@ -1,0 +1,19 @@
+spring:
+  rabbitmq: #添加rabbitmq配置
+    host: 192.168.146.128
+    port: 5672 #management 15672
+    username: admin
+    password: admin
+  cloud:
+    config:
+      name: config-client
+      #uri: http://localhost:9001/ #配置中心的具体位置
+      profile: dev
+      label: master
+      discovery:
+        #表示使用服务发现组件中的Config Server，不自己指定Config Server的uri，默认false
+        enabled: true
+        service-id: microservice-config
+management:
+  security:
+    enabled: false #取消权限拦截 默认开启

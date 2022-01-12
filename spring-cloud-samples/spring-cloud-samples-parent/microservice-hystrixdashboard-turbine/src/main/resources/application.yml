@@ -1,0 +1,24 @@
+server:
+  port: 8000
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://admin:admin123@localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+spring:
+  application:
+    name: hystrix-turbine-dashboard
+
+turbine:
+  app-config: microservice-ribbon-hystrixdashboard,micoserice-ribbon
+  aggregator:
+    cluster-config: default
+  cluster-name-expression: new String("default")
+
+#management:
+#  port: 54001
+#  health:
+#    mail:
+#      enabled: false

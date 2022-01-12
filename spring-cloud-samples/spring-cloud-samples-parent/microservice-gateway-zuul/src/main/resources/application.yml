@@ -1,0 +1,37 @@
+#zuul注册到Eureka-service为服务后默认情况下是构建PAI-GATEWAY,只要在url这样拼接 zuul-host/appname/api
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://admin:admin123@localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+
+spring:
+  application:
+    name: micoserice-gateway-zuul
+  zipkin:
+    base-url: http://192.168.146.131:9994
+  sleuth:
+    sampler:
+      percentage: 1.0
+server:
+  port: 8090
+
+# zuul 路由配置 方式一
+#zuul:
+ # routes:
+#    micoserice-zipkin: /zipkin/**
+  #忽略微服务,多个微服务用逗号隔开,忽略所有的服务时用'*'表示
+ # ignored-services: micoserice-feign,micoserice-ribbon
+
+#方式二，效果和方式一一样
+#zuul:
+#  routes:
+#    zipkin-routes: #zipkin-routes只是一个路由名称可任意起名
+#      service-id: micoserice-zipkin
+#      path: /zipkin/** #service-id 对应路径
+#  ignored-services: /**/admin/** #忽略所有包含/admin/的路径
+#  sensitive-headers:  Cookie,Set-Cookie,Authorization #设置敏感header信息
+#  ignored-headers: header1,header2 #设置忽略header，设置后header1,header2将不会传到其他的微服务。
+
