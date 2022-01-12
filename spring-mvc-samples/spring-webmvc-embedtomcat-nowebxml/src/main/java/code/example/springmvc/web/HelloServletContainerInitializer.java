@@ -17,7 +17,6 @@ public class HelloServletContainerInitializer implements ServletContainerInitial
         if (c != null) {
             for (Class<?> clazz : c ){
                 System.out.println(clazz.getCanonicalName());
-                //clazz.con
             }
         }
         ServletRegistration.Dynamic dynamic = ctx.addServlet("hello", new HelloServlet());

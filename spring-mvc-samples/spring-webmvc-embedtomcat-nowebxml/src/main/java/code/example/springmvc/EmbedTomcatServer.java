@@ -4,7 +4,9 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Connector;
+import org.apache.catalina.core.StandardServer;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.catalina.util.LifecycleBase;
 
 /**
  * 嵌入式tomcat的不使用web.xml原理分析,明白Spring Boot是如何在没有web.xml的的情况下实现web能力
@@ -18,7 +20,7 @@ public class EmbedTomcatServer {
 	private static String contextPath = "/";
 
 	/**
-	 * 访问：http://localhost:8080/hello
+	 * 访问：http://localhost:8080/hello，会请求到HelloServlet，且HelloServlet是Lazy Intialization
 	 */
 	
 	public static void start() throws LifecycleException, IOException, ServletException {
@@ -34,6 +36,7 @@ public class EmbedTomcatServer {
 		// tomcat.getConnector();  手动创建
 		tomcat.start();
 		tomcat.getServer().await();
+		
 	}
 
 	public static void main(String[] args) throws IOException, LifecycleException, ServletException {
