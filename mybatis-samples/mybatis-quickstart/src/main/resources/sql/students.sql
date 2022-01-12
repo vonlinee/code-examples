@@ -1,65 +1,113 @@
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS `mybatis_learn` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
--- 建表及填充数据
--- 课程表
-DROP TABLE IF EXISTS `course`;
-CREATE TABLE `course` (
-  `cid` int(11) NOT NULL,
-  `cname` varchar(30) DEFAULT NULL,
-  `tid` int(11) DEFAULT NULL,
-  PRIMARY KEY (`cid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
--- 分数表
-DROP TABLE IF EXISTS `score`;
-CREATE TABLE `score` (
-  `sid` int(11) NOT NULL,
-  `cid` int(11) NOT NULL,
-  `score` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE
+DATABASE IF NOT EXISTS `mybatis_learn` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+--- 数据库需要有以下信息：统一32位UUID作为ID，16唯一编号
+-- 学生：学号、姓名、性别、年龄、选修课程名、院系名称
+-- 课程：课程编号、课程名、开课院系、课程时长、任课教师编号
+-- 教师：教师号、姓名、性别、职称、所在院系
+-- 院系：院系名称、院系联系电话
+--
+-- 公寓：
+-- 上述实体中存在如下联系：
+-- （1）一个学生可选修多门课程，一门课程可被多个学生选修。
+-- （2）一个教师可讲授多门课程，一门课程可由多个教师讲授
+-- （3）一个单位可有多个教师，一个教师只能属于一个院系
 
-DROP TABLE IF EXISTS `student`;
-CREATE TABLE `student` (
-  `id` int(11) NOT NULL,
-  `name` varchar(30) DEFAULT NULL,
-  `age` int(11) DEFAULT NULL,
-  `sex` varchar(8) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+SET NAMES utf8mb4;
+SET
+FOREIGN_KEY_CHECKS = 0;
 
-SELECT * FROM student;
-INSERT INTO student VALUES (1, "韩信", 29, "1");
-INSERT INTO student VALUES (2, "小乔", 28, "-1");
-INSERT INTO student VALUES (3, "花木兰", 24, "-1");
+-- ----------------------------
+-- Table structure for t_class
+-- ----------------------------
+DROP TABLE IF EXISTS `t_class`;
+CREATE TABLE `t_class`
+(
+    `CLASS_ID`    varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `CLASS_NO`    varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `CLASS_NAME`  varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '未知班级',
+    `DEPART_NO`   varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+    `DEPART_NAME` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+    PRIMARY KEY (`CLASS_ID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Table structure for t_cource
+-- ----------------------------
+DROP TABLE IF EXISTS `t_cource`;
+CREATE TABLE `t_cource`
+(
+    `COURSE_ID`        varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `COURSE_NO`        varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+    `COURSE_NAME`      varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+    `COURSE_TIME_LONG` float NULL DEFAULT NULL COMMENT '课程时长',
+    `TEACHER_NO`       varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+    `DEPART_NO`        varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '课程所开设院系编号',
+    PRIMARY KEY (`COURSE_ID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
-DROP TABLE IF EXISTS `teacher`;
-CREATE TABLE `teacher` (
-  `id` int(11) NOT NULL,
-  `name` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- ----------------------------
+-- Table structure for t_department
+-- ----------------------------
+DROP TABLE IF EXISTS `t_department`;
+CREATE TABLE `t_department`
+(
+    `DEPART_ID`   varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `DEPART_NO`   varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+    `DEPART_NAME` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+    `TELE_PHONE`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+    PRIMARY KEY (`DEPART_ID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Table structure for t_score
+-- ----------------------------
+DROP TABLE IF EXISTS `t_score`;
+CREATE TABLE `t_score`
+(
+    `SCORE_ID`    int(11) NOT NULL,
+    `SCORE_LEVEL` int(11) NOT NULL,
+    `COURSE_NO`   varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `COURSE_NAME` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `SCORE_VALUE` float NULL DEFAULT NULL,
+    `TEACHER_NO`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    PRIMARY KEY (`SCORE_ID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
-DROP TABLE IF EXISTS `class`;
-CREATE TABLE `class` (
-  `ID` int(11) NOT NULL,
-  `CLASS_NAME` varchar(30) DEFAULT NULL
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- ----------------------------
+-- Table structure for t_student
+-- ----------------------------
+DROP TABLE IF EXISTS `t_student`;
+CREATE TABLE `t_student`
+(
+    `STU_ID`        int(11) NOT NULL,
+    `STU_NO`        int(11) NOT NULL,
+    `STU_SEX`       char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '男',
+    `STU_NAME`      varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+    `NATIVE_PLACE`  varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '籍贯',
+    `STU_DEPART_NO` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '院系ID',
+    `STU_CLASS_NO`  int(11) NULL DEFAULT NULL,
+    PRIMARY KEY (`STU_ID`) USING BTREE,
+    UNIQUE INDEX `UNK_STU_NO`(`STU_NO`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Table structure for t_teacher
+-- ----------------------------
+DROP TABLE IF EXISTS `t_teacher`;
+CREATE TABLE `t_teacher`
+(
+    `TEACHER_ID`        int(11) NOT NULL,
+    `TEACHER_NO`        varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+    `TEACHER_SEX`       char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '男',
+    `NATIVE_PLACE`      varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '籍贯',
+    `TEACHER_NAME`      varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+    `TEACHER_DEPART_NO` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '院系ID',
+    `TITLE`             varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '职称',
+    `TELE_PHONE`        varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+    PRIMARY KEY (`TEACHER_ID`) USING BTREE,
+    UNIQUE INDEX `UNK_TEACHER_NO`(`TEACHER_NO`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
-
-
-
-
--- 其他可能用的表
--- 英雄表
-DROP TABLE IF EXISTS `t_hero`;
-CREATE TABLE `t_hero`  (
-  `ID` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `NAME` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  `HP` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '0',
-  `DAMAGE` datetime(6) DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
+SET
+FOREIGN_KEY_CHECKS = 1;

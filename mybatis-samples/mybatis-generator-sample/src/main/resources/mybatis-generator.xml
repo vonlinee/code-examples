@@ -30,8 +30,6 @@
         introspectedColumnImpl：类全限定名，用于扩展MBG
     -->
     <context id="mysql" defaultModelType="hierarchical" targetRuntime="MyBatis3Simple">
-        <!-- 这个插件给生成的Java模型对象增加了equals和hashCode方法 -->
-        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
         <!-- 自动识别数据库关键字，默认false，如果设置为true，根据SqlReservedWords中定义的关键字列表；-->
         <!-- 一般保留默认值，遇到数据库关键字（Java关键字），使用columnOverride覆盖-->
         <property name="autoDelimitKeywords" value="false"/>
@@ -44,6 +42,8 @@
         <!-- beginningDelimiter和endingDelimiter：指明数据库的用于标记数据库对象名的符号，比如ORACLE就是双引号，MYSQL默认是`反引号； -->
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
+        <!-- 这个插件给生成的Java模型对象增加了equals和hashCode方法 -->
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
         <!-- 注释 -->
         <commentGenerator>
             <!-- 是否不生成注释 -->
@@ -53,7 +53,6 @@
             <!-- 添加 db 表中字段的注释，只有suppressAllComments为false时才生效-->
             <!--<property name="addRemarkComments" value="true"/>-->
         </commentGenerator>
-
         <!-- 必须要有的，使用这个配置链接数据库 @TODO:是否可以扩展 -->
         <!-- 这里面可以设置property属性，每一个property属性都设置到配置的Driver上 -->
         <jdbcConnection driverClass="${mysql.jdbc.url}"
@@ -177,7 +176,7 @@
             15，delimitAllColumns：设置是否所有生成的SQL中的列名都使用标识符引起来。默认为false，delimitIdentifiers参考context的属性
             注意，table里面很多参数都是对javaModelGenerator，context等元素的默认属性的一个复写；
          -->
-        <table tableName="userinfo">
+        <table tableName="student">
             <!-- 参考 javaModelGenerator 的 constructorBased属性-->
             <property name="constructorBased" value="false"/>
             <!-- 默认为false，如果设置为true，在生成的SQL中，table名字不会加上catalog或schema； -->
@@ -228,7 +227,7 @@
             <!-- 用来修改表中某个列的属性，MBG会使用修改后的列来生成domain的属性；
                column:要重新设置的列名；注意，一个table元素中可以有多个columnOverride元素哈~
              -->
-            <columnOverride column="username">
+            <columnOverride column="STU_ID">
                 <!-- 使用property属性来指定列要生成的属性名称 -->
                 <property name="property" value="userName"/>
                 <!-- javaType用于指定生成的domain的属性类型，使用类型的全限定名
@@ -242,7 +241,8 @@
                 <!-- 参考table元素的delimitAllColumns配置，默认为false
                 <property name="delimitedColumnName" value=""/>-->
             </columnOverride>
-            <!-- ignoreColumn设置一个MGB忽略的列，如果设置了改列，那么在生成的domain中，生成的SQL中，都不会有该列出现
+            <!-- ignoreColumn设置mybatis generator忽略的列，如果设置了该列，那么在生成的domain中，
+                生成的SQL中，都不会有该列出现
                column:指定要忽略的列的名字；
                delimitedColumnName：参考table元素的delimitAllColumns配置，默认为false
                注意，一个table元素中可以有多个ignoreColumn元素

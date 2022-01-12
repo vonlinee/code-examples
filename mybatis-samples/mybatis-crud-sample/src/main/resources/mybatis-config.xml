@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-
-    <properties resource="db.properties"></properties>
+    <properties resource="jdbc.properties"/>
     <settings>
         <!-- 打印查询语句 -->
         <setting name="logImpl" value="STDOUT_LOGGING"/>
@@ -15,14 +14,12 @@
         <!--  Mybatis 创建具有延迟加载能力的对象所用到的代理工具，默认JAVASSIST -->
         <!--<setting name="proxyFactory" value="CGLIB" />-->
         <!-- STATEMENT级别的缓存，使一级缓存，只针对当前执行的这一statement有效 -->
-        <!--
-                <setting name="localCacheScope" value="STATEMENT"/>
-        -->
+        <setting name="localCacheScope" value="STATEMENT"/>
         <setting name="localCacheScope" value="SESSION"/>
     </settings>
-
+    <!-- 类型别名 -->
     <typeAliases>
-        <typeAlias alias="blog" type="com.wuzz.domain.Blog"/>
+        <typeAlias alias="blog" type="code.example.mybatis.crud.entity.Student"/>
     </typeAliases>
 
     <!--    <typeHandlers>
@@ -46,17 +43,14 @@
         <environment id="development">
             <transactionManager type="JDBC"/><!-- 单独使用时配置成MANAGED没有事务 -->
             <dataSource type="POOLED">
-                <property name="driver" value="${jdbc.driver}"/>
-                <property name="url" value="${jdbc.url}"/>
-                <property name="username" value="${jdbc.username}"/>
-                <property name="password" value="${jdbc.password}"/>
+                <property name="driver" value="${mysql.jdbc.driver}"/>
+                <property name="url" value="${mysql.jdbc.url}"/>
+                <property name="username" value="${mysql.jdbc.username}"/>
+                <property name="password" value="${mysql.jdbc.password}"/>
             </dataSource>
         </environment>
     </environments>
-
     <mappers>
-        <mapper resource="BlogMapper.xml"/>
-        <mapper resource="BlogMapperExt.xml"/>
+        <mapper resource="mappers/"/>
     </mappers>
-
 </configuration>

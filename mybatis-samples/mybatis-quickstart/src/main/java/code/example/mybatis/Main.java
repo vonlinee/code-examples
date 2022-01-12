@@ -23,8 +23,8 @@ public class Main {
         //5.执行mapper.xml文件里的sql语句，得到结果集合
         //方式一:生成动态代理类
         List<Object> list = session.selectList("queryAll");
-        for(Object obj : list) {
-        	System.out.println(obj);
+        for (Object obj : list) {
+            System.out.println(obj);
         }
     }
 }
