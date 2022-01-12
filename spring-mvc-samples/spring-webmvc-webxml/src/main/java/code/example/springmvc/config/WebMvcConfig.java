@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //Root WebApplicationContext , 对于和前端视图做交互的配置在Servlet WebApplicationContext)
 //https://blog.csdn.net/Hicodden/article/details/111412025
 @EnableWebMvc
-@ComponentScan(basePackages = "com.example.web", includeFilters = {
+@ComponentScan(basePackages = "code.example.springmvc", includeFilters = {
 		@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {
 				Controller.class })}, useDefaultFilters = false)
 @Configuration
@@ -23,3 +23,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		registry.jsp("/WEB-INF/views/", ".jsp");
 	}
 }
+//WebMvcConfig用于扫描@Controller注解

@@ -6,6 +6,7 @@ import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+//Spring的实现：SpringServletContainerInitializer
 public class AppInitializer implements ServletContainerInitializer {
 
 	/**

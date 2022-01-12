@@ -12,6 +12,7 @@ import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.Server;
 import org.apache.catalina.connector.Connector;
+import org.apache.catalina.core.StandardServer;
 import org.apache.catalina.startup.Tomcat;
 
 /**
@@ -29,25 +30,25 @@ public class EmbedTomcatServer {
     //嵌入式的Tomcat如果我想修改类似context.xml中Resources的属性
     //嵌入式tomcat也会读取/META-INF/context.xml;直接在这个文件配置就是了
     
-    
-    
     public static void start() throws LifecycleException, IOException {
         Tomcat tomcat = new Tomcat();
         String baseDir = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         tomcat.setBaseDir(baseDir); // ./target/classes
         tomcat.setPort(port);
-        
-//        initConnector(tomcat);
-        
         Context context = tomcat.addWebapp(contextPath, baseDir);
-        System.out.println(context);//StandardEngine[Tomcat].StandardHost[localhost].StandardContext[/mvc]
+        //System.out.println(context);//StandardEngine[Tomcat].StandardHost[localhost].StandardContext[/mvc]
         tomcat.enableNaming();
         //读取web.xml
-        tomcat.start();
+        tomcat.start();  //启动Tomcat服务器
         Server server = tomcat.getServer(); //StandardServer
-        server.await(); //堵塞
+        if (server instanceof StandardServer) {
+        	StandardServer ss = (StandardServer) server;
+        	ss.await(); //堵塞
+		}
     }
 
+    //LifecycleBase.start()
+    
     //https://blog.csdn.net/fenglllle/article/details/96590484
     //嵌入式tomcat的不使用web.xml原理分析
     //明白Spring Boot是如何在没有web.xml的的情况下实现web能力
