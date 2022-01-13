@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="code.example.mybatis.crud.mapper.TCourceMapper">
+
+    <resultMap id="BaseResultMap" type="code.example.mybatis.crud.entity.TCource">
+        <id column="COURSE_ID" jdbcType="VARCHAR" property="courseId"/>
+        <result column="COURSE_NO" jdbcType="VARCHAR" property="courseNo"/>
+        <result column="COURSE_NAME" jdbcType="VARCHAR" property="courseName"/>
+        <result column="COURSE_TIME_LONG" jdbcType="FLOAT" property="courseTimeLong"/>
+        <result column="TEACHER_NO" jdbcType="VARCHAR" property="teacherNo"/>
+        <result column="DEPART_NO" jdbcType="VARCHAR" property="departNo"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from `t_cource`
+        where `COURSE_ID` = #{courseId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

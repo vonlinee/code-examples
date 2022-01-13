@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="code.example.mybatis.crud.mapper.TTeacherMapper">
+
+    <resultMap id="BaseResultMap" type="code.example.mybatis.crud.entity.TTeacher">
+        <id column="TEACHER_ID" jdbcType="VARCHAR" property="teacherId"/>
+        <result column="TEACHER_NO" jdbcType="VARCHAR" property="teacherNo"/>
+        <result column="TEACHER_SEX" jdbcType="CHAR" property="teacherSex"/>
+        <result column="NATIVE_PLACE" jdbcType="VARCHAR" property="nativePlace"/>
+        <result column="TEACHER_NAME" jdbcType="VARCHAR" property="teacherName"/>
+        <result column="DEPART_NO" jdbcType="VARCHAR" property="departNo"/>
+        <result column="DEPART_NAME" jdbcType="VARCHAR" property="departName"/>
+        <result column="TITLE" jdbcType="VARCHAR" property="title"/>
+        <result column="TELE_PHONE" jdbcType="VARCHAR" property="telePhone"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from `t_teacher`
+        where `TEACHER_ID` = #{teacherId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

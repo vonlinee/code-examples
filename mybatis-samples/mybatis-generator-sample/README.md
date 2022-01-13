@@ -27,5 +27,43 @@ MyBatis Generator 插件启动后，会根据你在 pom 中配置都路径找到
 The content of element type "context" must match "(property*,plugin*,commentGenerator?,(connectionFactory|jdbcConnection),javaTypeResolver?,javaModelGenerator,sqlMapGenerator?,javaClientGenerator?,table+)".
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+[mybatis中关于example类详解 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/42411540#:~:text=一、什么是example类. mybatis-generator会为每个字段产生Criterion，为底层的mapper.xml创建动态sql。. 如果表的字段比较多%2C产生的example类会十分庞大。. 理论上通过example类可以构造你想到的任何筛选条件。. 在mybatis-generator中加以配置，配置数据表的生成操作就可以自动生成example了。. 具体配置可以参考,Mybatis-Generator的具体使用方法 - zorro的菜鸟笔记 - 博客园 。. 下面是mybatis自动生成example的使用。.)
+
+
+
+
+
+
+
+
+
+
+
+
 未完待续============
+
+
+
+
+
+
+
+
+
+
+
+
 

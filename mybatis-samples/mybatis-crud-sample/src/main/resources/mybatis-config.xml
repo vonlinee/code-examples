@@ -19,7 +19,6 @@
     </settings>
     <!-- 类型别名 -->
     <typeAliases>
-        <typeAlias alias="blog" type="code.example.mybatis.crud.entity.Student"/>
     </typeAliases>
 
     <!--    <typeHandlers>
@@ -51,6 +50,11 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="mappers/"/>
+        <mapper resource="mappers/TStudentMapper.xml"/>
+        <mapper resource="mappers/TCourseMapper.xml"/>
+        <mapper resource="mappers/TScoreMapper.xml"/>
+        <mapper resource="mappers/TDepartmentMapper.xml"/>
+        <mapper resource="mappers/TTeacherMapper.xml"/>
+        <mapper resource="mappers/TClassMapper.xml"/>
     </mappers>
 </configuration>
