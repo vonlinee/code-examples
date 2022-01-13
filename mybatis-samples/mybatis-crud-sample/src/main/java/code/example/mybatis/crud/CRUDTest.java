@@ -1,6 +1,5 @@
 package code.example.mybatis.crud;
 
-import code.example.mybatis.crud.mapper.TStudentMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;

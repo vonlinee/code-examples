@@ -1,23 +1,11 @@
 package code.example.mybatis.crud.entity;
 
-
-/**
- * @author Von
- * @date 2022-01-13 13:38:35
- * @email 
- */
-public class TStudent {
-
+public class Student {
     private String stuId;
-    
     private String stuNo;
-    
     private String stuSex;
-    
     private String stuName;
-    
-    // 籍贯
-    private String nativePlace;
+    private String nativePlace;// 籍贯
     
     // 院系ID
     private String stuDepartNo;

@@ -1,11 +1,5 @@
 package code.example.mybatis.crud.entity;
 
-
-/**
- * @author Von
- * @date 2022-01-13 13:38:35
- * @email 
- */
 public class TClass {
 
     private String classId;

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="code.example.mybatis.crud.mapper.TScoreMapper">
 
-    <resultMap id="BaseResultMap" type="code.example.mybatis.crud.entity.TScore">
+    <resultMap id="BaseResultMap" type="code.example.mybatis.crud.entity.Score">
         <id column="SCORE_ID" jdbcType="VARCHAR" property="scoreId"/>
         <result column="SCORE_LEVEL" jdbcType="VARCHAR" property="scoreLevel"/>
         <result column="COURSE_NO" jdbcType="VARCHAR" property="courseNo"/>

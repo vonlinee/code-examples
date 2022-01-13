@@ -2,12 +2,7 @@ package code.example.mybatis.crud.entity;
 
 import java.math.BigDecimal;
 
-/**
- * @author Von
- * @date 2022-01-13 13:38:35
- * @email 
- */
-public class TCource {
+public class Cource {
 
     private String courseId;
     
