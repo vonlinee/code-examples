@@ -57,6 +57,9 @@
                     <includeCompileDependencies>true</includeCompileDependencies>
                 </configuration>
                 <executions>
+                <!-- 再Eclipse中出现警告 -->
+                <!-- Plugin execution not covered by lifecycle configuration: -->
+                <!-- org.mybatis.generator:mybatis-generator-maven-plugin:1.3.7:generate (execution: Generate MyBatis Artifacts, phase: generate-sources) -->
                     <execution>
                         <id>Generate MyBatis Artifacts</id>
                         <goals>
