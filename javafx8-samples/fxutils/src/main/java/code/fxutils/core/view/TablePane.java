@@ -14,7 +14,7 @@ public abstract class TablePane<T> extends BorderPane {
     private TableView<Table> tableView;
 
     public static void init(List<Column> columns) {
-        
+
     }
 
     private TableColumn<String, Table> column1;
