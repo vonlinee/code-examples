@@ -1,4 +1,4 @@
-package code.fxutils.core.view;
+package code.fxutils.core.extension;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableRow;

@@ -20,7 +20,7 @@ import javafx.util.Callback;
 //https://blog.csdn.net/Hanniel/article/details/78875503
 public class FileChooserSample extends Application {
 
-    private TableView<Person> table = new TableView<>();
+    private final TableView<Person> table = new TableView<>();
 
     private final ObservableList<Person> data =
             FXCollections.observableArrayList(
@@ -54,17 +54,13 @@ public class FileChooserSample extends Application {
 
         TableColumn<Person, String> lastNameCol = new TableColumn<Person, String>("Last Name");
         lastNameCol.setMinWidth(100);
-        lastNameCol.setCellValueFactory(
-                new PropertyValueFactory<Person, String>("lastName"));
+        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
 
         TableColumn<Person, String> emailCol = new TableColumn<>("Email");
         emailCol.setMinWidth(200);
-        emailCol.setCellValueFactory(
-                new PropertyValueFactory<>("email"));
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
 
         table.setItems(data);
-
-
 
         table.getColumns().add(firstNameCol);
         table.getColumns().add(lastNameCol);

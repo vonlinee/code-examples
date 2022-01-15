@@ -512,16 +512,6 @@ public abstract class Validator {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param s1
-	 * @param e1
-	 * @param s2
-	 * @param e2
-	 * @param format
-	 * @return
-	 * boolean
-	 */
 	public static boolean dateTimeInRange(String s1, String e1, String s2, String e2, String format) {
 		boolean result = false;
 		try {
@@ -533,7 +523,7 @@ public abstract class Validator {
 			if (dts1.compareTo(dte2) > 0 || dte1.compareTo(dts2) < 0) {
 				result = true;
 			}
-			return false;
+			return result;
 		} catch (Exception ignore) {
 			// ignore
 		}
@@ -567,17 +557,17 @@ public abstract class Validator {
 	}
 	
 	public static <T> boolean isNullOrEmpty(final CharSequence sequence) {
-		return sequence == null ? true : sequence.length() == 0;
+		return sequence == null || sequence.length() == 0;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public static <T> boolean isNullOrEmpty(T ... array) {
-		return array == null ? true : array.length == 0;
+		return array == null || array.length == 0;
 	}
 	
 	/**
 	 * 判断字符序列是否为空
-	 * @param cs
+	 * @param cs CharSequence
 	 * @return boolean
 	 */
 	public static boolean isBlank(final CharSequence cs) {
@@ -591,9 +581,5 @@ public abstract class Validator {
 			}
 		}
 		return true;
-	}
-	
-	public static void main(String[] args) {
-		
 	}
 }

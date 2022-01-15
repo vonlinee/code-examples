@@ -26,7 +26,6 @@
             <artifactId>javafx-base</artifactId>
             <version>${javafx.lib.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
@@ -37,7 +36,6 @@
             <artifactId>javafx-media</artifactId>
             <version>${javafx.lib.version}</version>
         </dependency>
-
 
         <!-- https://mvnrepository.com/artifact/commons-dbutils/commons-dbutils -->
         <dependency>

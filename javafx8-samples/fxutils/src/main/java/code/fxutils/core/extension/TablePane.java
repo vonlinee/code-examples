@@ -1,4 +1,4 @@
-package code.fxutils.core.view;
+package code.fxutils.core.extension;
 
 import code.fxutils.core.db.Column;
 import code.fxutils.core.db.Table;
@@ -7,7 +7,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 
 import java.util.List;
-
 
 public abstract class TablePane<T> extends BorderPane {
 
