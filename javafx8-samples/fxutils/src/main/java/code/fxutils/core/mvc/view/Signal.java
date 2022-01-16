@@ -7,8 +7,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 public @interface Signal {
     boolean flag() default false;
-
     String message() default "";
-
-    String[] props() default {};
+    String[] properties() default {};
 }

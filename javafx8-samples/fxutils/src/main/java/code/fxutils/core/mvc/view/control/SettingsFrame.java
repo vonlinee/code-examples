@@ -1,13 +1,15 @@
 package code.fxutils.core.mvc.view.control;
 
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class SettingsFrame extends Stage {
@@ -33,10 +35,7 @@ public class SettingsFrame extends Stage {
         TextField value = new TextField();
         hBox.getChildren().addAll(btn, name, value);
         btn.setOnAction(event -> {
-            Map<String, String> map = new HashMap<>();
-            map.put("name", name.getText());
-            map.put("value", value.getText());
-            tableView.getItems().add(map);
+
         });
     }
 

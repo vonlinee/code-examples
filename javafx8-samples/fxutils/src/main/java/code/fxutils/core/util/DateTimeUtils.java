@@ -3,22 +3,18 @@ package code.fxutils.core.util;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatterBuilder;
 
-public class DateTimeUtils {
+public abstract class DateTimeUtils {
 
-	public static final String FORMAT_1 = "yy-MM-dd HH:mm:ss";
-	public static final String FORMAT_2 = "yy-MM-dd HH:mm:ss SSS";
-	
-	private static final DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder();
+    public static final String FORMAT_1 = "yy-MM-dd HH:mm:ss";
+    public static final String FORMAT_2 = "yy-MM-dd HH:mm:ss SSS";
 
-	static {
-		formatterBuilder.appendPattern("yy-MM-dd HH:mm:ss");
-	}
-	
-	public static String nowTimeString() {
-		return formatterBuilder.toFormatter().format(LocalDateTime.now());
-	}
+    private static final DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder();
 
-	public static void main(String[] args) {
-		System.out.println(nowTimeString());
-	}
+    static {
+        formatterBuilder.appendPattern("yy-MM-dd HH:mm:ss");
+    }
+
+    public static String nowTimeString() {
+        return formatterBuilder.toFormatter().format(LocalDateTime.now());
+    }
 }

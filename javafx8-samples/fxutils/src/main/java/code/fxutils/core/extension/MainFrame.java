@@ -1,5 +1,6 @@
 package code.fxutils.core.extension;
 
+import code.fxutils.core.mvc.view.app.TextHandlerFrame;
 import code.fxutils.core.mvc.view.control.SettingsFrame;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -17,8 +18,8 @@ public class MainFrame extends Application {
         HBox hBox = new HBox();
         Button btn = new Button("Button");
         btn.setOnAction(event -> {
-            SettingsFrame settingsFrame = new SettingsFrame();
-            settingsFrame.show();
+            TextHandlerFrame frame = new TextHandlerFrame();
+            frame.show();
         });
         hBox.getChildren().add(btn);
         borderPane.setTop(hBox);

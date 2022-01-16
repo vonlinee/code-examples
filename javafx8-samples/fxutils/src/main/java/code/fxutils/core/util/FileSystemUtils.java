@@ -1,10 +1,26 @@
 package code.fxutils.core.util;
 
+import javax.tools.JavaFileManager;
+import javax.tools.StandardJavaFileManager;
 import java.io.File;
+import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FileSystemUtils {
+
+    public static void createNewEmptyFile(String directory, String filename) {
+        createNewEmptyFile(directory + File.separator + filename);
+    }
+
+    public static void createNewEmptyFile(String filepath) {
+        File file = new File(filepath);
+        if (file.exists()) {
+            return;
+        }
+        String path = file.getAbsolutePath();
+        System.out.println(path);
+    }
 
     public static boolean normalize(String path) {
         File file = new File(path);

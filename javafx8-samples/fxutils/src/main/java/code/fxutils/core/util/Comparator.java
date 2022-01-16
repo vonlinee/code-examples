@@ -6,5 +6,4 @@ package code.fxutils.core.util;
  */
 public abstract class Comparator {
 
-	
 }
