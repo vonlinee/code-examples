@@ -1,0 +1,11 @@
+Project build error: Non-resolvable parent POM for 
+code.example.seata:seata-dubbo-example:[unknown-version]: 
+Failure to find org.springframework.boot:spring-boot-starter-parent:pom:2.1.6 
+in http://maven.aliyun.com/nexus/content/groups/public was cached in the local repository, 
+resolution will not be reattempted until the update interval of nexus-aliyun has elapsed or 
+updates are forced and 'parent.relativePath' points at wrong local POM
+
+
+
+
+

@@ -7,7 +7,6 @@ import javafx.util.Callback;
 
 public abstract class RowFactory<T> implements Callback<TableView<T>, TableRow<T>> {
 
-
     @Override
     public TableRow<T> call(TableView<T> param) {
         TableRow<T> row = new TableRow<>();

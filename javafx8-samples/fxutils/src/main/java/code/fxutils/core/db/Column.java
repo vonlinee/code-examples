@@ -188,6 +188,5 @@ public class Column implements Serializable {
         public void setColumnClassName(String columnClassName) {
             this.columnClassName = columnClassName;
         }
-
     }
 }

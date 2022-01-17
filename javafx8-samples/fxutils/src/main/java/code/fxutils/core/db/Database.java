@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class Database implements Serializable {
 
     private String databaseName;
-
     private MetaData metaData;
 
     public static class MetaData implements Serializable {

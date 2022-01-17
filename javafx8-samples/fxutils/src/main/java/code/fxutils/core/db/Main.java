@@ -1,5 +1,6 @@
 package code.fxutils.core.db;
 
+import code.fxutils.core.db.pool.DruidPool;
 import code.fxutils.core.util.ResourceLoader;
 import com.alibaba.druid.pool.DruidDataSource;
 
@@ -12,9 +13,6 @@ public class Main {
         Properties prop = ResourceLoader.loadProperties("jdbc.properties");
         Connection conn = DruidPool.druidConnection(prop);
         DruidDataSource dataSource = DruidPool.druidDataSource(prop);
-
-
-
         DbHelper.getTableMetaData("mybatis_learn", conn);
     }
 }

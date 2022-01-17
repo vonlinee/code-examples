@@ -4,7 +4,5 @@ import java.io.InputStream;
 
 public class TestStream {
 
-    InputStream inputStream
-
 
 }
