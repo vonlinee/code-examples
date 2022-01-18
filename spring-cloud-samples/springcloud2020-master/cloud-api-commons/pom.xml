@@ -21,7 +21,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-<!--        当optional为true则说明该依赖禁止依赖传递    <optional>true</optional>-->
+            <!-- 当optional为true则说明该依赖禁止依赖传递 -->
+            <!-- <optional>true</optional>-->
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -29,5 +30,4 @@
             <version>5.1.1</version>
         </dependency>
     </dependencies>
-
 </project>
