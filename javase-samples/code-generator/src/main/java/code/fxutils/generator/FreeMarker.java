@@ -7,6 +7,7 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
+import freemarker.core.Environment;
 import freemarker.core.ParseException;
 import freemarker.template.Configuration;
 import freemarker.template.MalformedTemplateNameException;
@@ -32,6 +33,15 @@ public final class FreeMarker extends AbstractTemplateEngine {
 		}
 	}
 	
+	public Environment createEnvironment(Template template, Object dataModel, Writer out) {
+		try {
+			return template.createProcessingEnvironment(dataModel, out, null);
+		} catch (TemplateException | IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public void method() throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
         //创建数据模型
         // Map<String, String> root = new HashMap<String, String>();
@@ -39,12 +49,13 @@ public final class FreeMarker extends AbstractTemplateEngine {
         //加载模板文件
         // 显示生成的数据
         Writer out = new OutputStreamWriter(System.out);
+        Template template = null;
         template.process(root, out);
         out.flush();
         out.close();
 	}
 	
 	public Template loadTemplate(String name) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException {
-		return config.getTemplate("hello.ftl");
-	} 
+		return config.getTemplate(name);
+	}
 }

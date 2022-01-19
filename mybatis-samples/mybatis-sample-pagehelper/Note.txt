@@ -1,0 +1,11 @@
+
+
+https://www.jianshu.com/p/50fcd7f127f0
+
+
+The content of element type "configuration" must match 
+ "(properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFactory?,reflectorFactory?,plugins?,environments?,databaseIdProvider?,mappers?)".
+
+
+https://pagehelper.github.io/docs/howtouse/
+

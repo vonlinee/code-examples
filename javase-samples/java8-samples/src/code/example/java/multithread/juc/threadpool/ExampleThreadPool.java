@@ -1,4 +1,4 @@
-package code.example.java.multithread.juc;
+package code.example.java.multithread.juc.threadpool;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -8,14 +8,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+//Executor
+//ThreadPoolExecutor
+//ExecutorService
 public class ExampleThreadPool {
 	
 	public static void main(String[] args) {
 		ExecutorService executorService = Executors.newCachedThreadPool();
-//		Executor
-//		ThreadPoolExecutor
-//		ExecutorService
-		
 		int corePoolSize = 10;
         int maximumPoolSize = 10;
         long keepAliveTime = 1000;
@@ -24,14 +23,11 @@ public class ExampleThreadPool {
 		ThreadPoolExecutor pool = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
 		AtomicInteger i = new AtomicInteger(0);
 		pool.submit(() -> {
-			while (true) {
-				int _i = i.getAndIncrement();
-				System.out.println(_i);
-			}
+			
 		});
 		pool.shutdown();
 		if (!pool.isShutdown()) {
-			
+			System.out.println("thread pool is shutdown!");
 		}
 	}
 }
