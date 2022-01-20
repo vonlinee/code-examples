@@ -38,6 +38,7 @@
     </parent>
     <dependencyManagement>
         <dependencies>
+            <!-- springcloud与springboot版本对应关系：https://spring.io/projects/spring-cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>

@@ -6,19 +6,63 @@
 	<artifactId>dubbo-sentinel-quickstart</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<packaging>pom</packaging>
 
-	<dependencies>
-		<!-- https://mvnrepository.com/artifact/com.alibaba/dubbo -->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>dubbo</artifactId>
-			<version>2.6.12</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.alibaba.csp/sentinel-dubbo-adapter -->
-		<dependency>
-			<groupId>com.alibaba.csp</groupId>
-			<artifactId>sentinel-dubbo-adapter</artifactId>
-			<version>1.8.3</version>
-		</dependency>
-	</dependencies>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.6.RELEASE</version>
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!-- 解决Eclipse中Maven项目报错Unknown error -->
+		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>2.1.6.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>1.2.15</version>
+			</dependency>
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>1.18.22</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>dubbo</artifactId>
+				<version>2.6.12</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba.csp</groupId>
+				<artifactId>sentinel-dubbo-adapter</artifactId>
+				<version>1.8.3</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<modules>
+		<module>dubbo-provider-8001</module>
+	</modules>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<fork>true</fork>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -1,0 +1,29 @@
+1、导入报错，无法获取依赖
+	打开本目录下的build.gradle
+	
+	修改
+	repositories {
+        mavenLocal()
+        maven {url "http://172.26.157.113:8081/repository/maven-public/"}
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "http://www.cameliatk.jp/maven2/repository/thirdparty" }
+        jcenter()
+    }
+	
+	为（删除第一行）
+	
+	repositories {
+        mavenLocal()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "http://www.cameliatk.jp/maven2/repository/thirdparty" }
+        jcenter()
+    }
+	
+	用lanyou需外网权限，没有则连接guest网络导入
+	
+2、导入后报红问题
+	删除导入项目
+	运行目录下的lombok.jar,点击Specify location 选择 eclipse的安装目录后 点击 Install\Update
+	安装完成后，重新打开eclipse，重新导入
