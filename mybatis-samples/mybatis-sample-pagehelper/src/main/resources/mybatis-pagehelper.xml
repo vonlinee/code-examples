@@ -3,8 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+
 	<!-- 加载外部配置文件：https://www.cnblogs.com/chenyanbin/p/11655095.html -->
 	<properties resource="jdbc.properties" />
+
+	<settings>
+		<setting name="logImpl" value="STDOUT_LOGGING" /> <!-- 打印sql到控制台 -->
+	</settings>
+
 	<!-- 插件配置 -->
 	<plugins>
 		<!-- com.github.pagehelper为PageHelper类所在包名 -->
