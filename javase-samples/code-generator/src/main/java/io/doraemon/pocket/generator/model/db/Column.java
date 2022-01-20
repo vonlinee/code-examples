@@ -4,14 +4,17 @@ import java.io.Serializable;
 
 public class Column implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private String columnName;
+    private static final long serialVersionUID = 1L;
+    private String columnName;
     private Object columnValue;
+    private String jdbcType;
+    private String dbDataType;
+    private MetaData metaData;
 
     public static class MetaData implements Serializable {
-        private boolean autoIncrement = false;
-        private boolean caseSensitive;
-        private boolean searchable;
+        private boolean autoIncrement = false;  //是否自增
+        private boolean caseSensitive;          //是否大小写敏感
+        private boolean searchable;             //是否可搜索
         private boolean currency;
         private int nullable = 0;
         private boolean signed;
@@ -189,5 +192,9 @@ public class Column implements Serializable {
         public void setColumnClassName(String columnClassName) {
             this.columnClassName = columnClassName;
         }
+    }
+
+    public void clearMetaInfomation() {
+        this.metaData = null;
     }
 }

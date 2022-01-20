@@ -1,2 +1,4 @@
-package io.doraemon.pocket.generator.model;public class ClassField {
+package io.doraemon.pocket.generator.model;
+
+public class ClassField {
 }
