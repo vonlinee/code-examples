@@ -1,7 +1,5 @@
 package io.doraemon.pocket.generator.model.db;
 
-import org.apache.commons.dbutils.ResultSetHandler;
-
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -9,6 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultResultSetHandler implements ResultSetHandler<List<List<NamedValue>>> {
+	
+	/**
+	 * List<List<NamedValue>> <=> List<Map<String, Object>>
+	 * List<NamedValue> -> Row
+	 */
     @Override
     public List<List<NamedValue>> handle(ResultSet rs) throws SQLException {
         List<List<NamedValue>> resultSetData = new ArrayList<>();

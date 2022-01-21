@@ -1,19 +1,24 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
- 
-    <!-- 提供方应用信息，用于计算依赖关系 -->
-    <dubbo:application name="" owner=""/>
- 
-    <!-- 使用zookeeper注册中心暴露服务地址 -->
-    <dubbo:registry protocol="zookeeper" address="${zookeeper.address}" />
-    <!-- 用dubbo协议暴露服务，随机选用一个不占用的端口 -->
-    <dubbo:protocol name="dubbo" port="-1" payload="883886080" />
-    <!--dubbo监控 -->
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="" owner="" />
+
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry protocol="zookeeper"
+		address="${zookeeper.address}" />
+	<!-- 用dubbo协议暴露服务，随机选用一个不占用的端口 -->
+	<dubbo:protocol name="dubbo" port="-1"
+		payload="883886080" />
+	<!--dubbo监控 -->
 	<!-- <dubbo:monitor protocol="registry" /> -->
-     <dubbo:consumer filter="busicenContext" loadbalance="localdefault" check="false" timeout="120000" />
-   	<!--  <dubbo:provider filter="busicenContext,busicenExceptionFilter,-exception" timeout="120000" /> -->
-    <dubbo:provider filter="busicenContext,-exception" timeout="120000" />
+	<dubbo:consumer filter="busicenContext"
+		loadbalance="localdefault" check="false" timeout="120000" />
+	<!-- <dubbo:provider filter="busicenContext,busicenExceptionFilter,-exception" 
+		timeout="120000" /> -->
+	<dubbo:provider filter="busicenContext,-exception"
+		timeout="120000" />
 </beans>

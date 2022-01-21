@@ -3,18 +3,22 @@
 <mapper namespace="code.example.mybatis.mapper.StudentMapper">
 
 	<!-- 字段映射关系 -->
-    <resultMap id="BaseResultMap" type="code.example.mybatis.entity.Student">
-        <id column="STU_ID" jdbcType="VARCHAR" property="stuId"/>
-        <result column="STU_NO" jdbcType="VARCHAR" property="stuNo"/>
-        <result column="STU_SEX" jdbcType="VARCHAR" property="stuSex"/>
-        <result column="STU_NAME" jdbcType="VARCHAR" property="stuName"/>
-        <result column="STU_AGE" jdbcType="NUMERIC" property="stuAge"/>
-        <result column="NATIVE_PLACE" jdbcType="VARCHAR" property="nativePlace"/>
-        <result column="STU_DEPART_NO" jdbcType="VARCHAR" property="stuDepartNo"/>
-        <result column="STU_CLASS_NO" jdbcType="VARCHAR" property="stuClassNo"/>
-    </resultMap>
-	
-    <select id="queryAll" resultMap="BaseResultMap">
-        SELECT * FROM t_student
-    </select>
+	<resultMap id="BaseResultMap"
+		type="code.example.mybatis.entity.Student">
+		<id column="STU_ID" jdbcType="VARCHAR" property="stuId" />
+		<result column="STU_NO" jdbcType="VARCHAR" property="stuNo" />
+		<result column="STU_SEX" jdbcType="VARCHAR" property="stuSex" />
+		<result column="STU_NAME" jdbcType="VARCHAR" property="stuName" />
+		<result column="STU_AGE" jdbcType="NUMERIC" property="stuAge" />
+		<result column="NATIVE_PLACE" jdbcType="VARCHAR"
+			property="nativePlace" />
+		<result column="STU_DEPART_NO" jdbcType="VARCHAR"
+			property="stuDepartNo" />
+		<result column="STU_CLASS_NO" jdbcType="VARCHAR"
+			property="stuClassNo" />
+	</resultMap>
+
+	<select id="queryAll" resultMap="BaseResultMap">
+		SELECT * FROM t_student
+	</select>
 </mapper>
