@@ -220,7 +220,7 @@ public class DatabaseMetadataHolder {
 	public static void main(String[] args) throws SQLException {
 		Connection connection = getConnections();
 		DatabaseMetaData metaData = connection.getMetaData();
-
+		
 	}
 
 	public static void printResult(List<List<NamedValue>> data) {
@@ -232,5 +232,6 @@ public class DatabaseMetadataHolder {
 			System.out.println(row.toString() + "\n");
 		}
 	}
+	
 
 }
