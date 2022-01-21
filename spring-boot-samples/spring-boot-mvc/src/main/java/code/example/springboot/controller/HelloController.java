@@ -30,6 +30,8 @@ public class HelloController {
 //	开发者工具：网络-停用缓存之后，就可以并发请求
 //	http://localhost:8080/browser/test
 	
+	
+	
 	@RequestMapping(value = "/test", method=RequestMethod.GET)
 	@ResponseBody
 	public String test() {
