@@ -3,9 +3,7 @@ package code.example.java.multithread.threadapi;
 public class ThreadYieldTest {
 	public static void main(String[] args) {
 		new RunnableThread().start();
-		
 		Thread.currentThread().setPriority(10);
-		
 		for (int i = 0; i < 10; i++) {
 			new Thread(new Runnable() {
 				@Override
@@ -16,10 +14,12 @@ public class ThreadYieldTest {
 				}
 			}).start();
 		}
-		Thread.holdsLock(new Object());
+		boolean holdsLock = Thread.holdsLock(new Object());
+		if (holdsLock) {
+			System.out.println("====================");
+		}
 	}
 }
-
 
 class RunnableThread extends Thread {
 
