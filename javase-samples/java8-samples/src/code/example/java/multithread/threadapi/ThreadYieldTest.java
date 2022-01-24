@@ -14,15 +14,10 @@ public class ThreadYieldTest {
 				}
 			}).start();
 		}
-		boolean holdsLock = Thread.holdsLock(new Object());
-		if (holdsLock) {
-			System.out.println("====================");
-		}
 	}
 }
 
 class RunnableThread extends Thread {
-
 	@Override
 	public void run() {
 		while (true) {

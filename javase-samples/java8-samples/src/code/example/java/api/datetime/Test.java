@@ -1,16 +1,48 @@
 package code.example.java.api.datetime;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.Era;
 import java.time.format.DateTimeFormatter;
 
 public class Test {
 	
-	public static void main(String[] args) {
-		System.out.println(caculateNextExecuteTime("1", LocalDateTime.now()));
+	public static DateTimeFormatter FORMAT_YMDHMS = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	public static DateTimeFormatter FORMAT_YMD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	
+	
+	public static void test1() {
+		Object nullPointer1 = null;
+		String nullPointer2 = null;
+		
+		System.out.println(nullPointer1 == nullPointer2);
+		
+		LocalDateTime ldt = LocalDateTime.now();
+		
+		LocalDate ld = LocalDate.now();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 	
 	
-	private static String caculateNextExecuteTime(String timeUnit, LocalDateTime start) {
+	public static void main(String[] args) {
+//		LocalDate now = LocalDate.now(); //2022-01-24
+//		LocalDate d2 = LocalDate.parse("2022-01-25", FORMAT_YMD);
+//		LocalDateTime starTime = d2.atStartOfDay();
+//		System.out.println(starTime.format(FORMAT_YMDHMS));
+		
+		test1();
+	}
+	
+	private static String plusDateTime(String timeUnit, LocalDateTime start) {
 		LocalDateTime nextExecuteTime = null;
 		switch (timeUnit) {
 		case "1": //日
