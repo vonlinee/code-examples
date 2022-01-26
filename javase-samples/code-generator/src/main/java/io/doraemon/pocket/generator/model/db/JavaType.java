@@ -1,5 +1,9 @@
 package io.doraemon.pocket.generator.model.db;
 
+/**
+ * every instance of Class<?> is singleton 
+ * @author someone
+ */
 public abstract class JavaType {
 	protected Class<?> classType = Void.class;
 

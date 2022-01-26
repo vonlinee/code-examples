@@ -1,0 +1,19 @@
+
+
+cafebabe
+11001010111111101011101010111110
+
+
+cd D:\Projects\Github\code-example\javase-samples\jvm-sample\src\code\example\jvm
+
+javap -verbose ./xxx.class
+
+javap -verbose ./Test.class
+
+javac Test.java
+
+
+
+
+
+

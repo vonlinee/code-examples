@@ -3,14 +3,11 @@ package io.doraemon.pocket.generator.model.db;
 import java.util.Properties;
 
 import javax.sql.DataSource;
-import com.alibaba.druid.pool.DruidDataSource;
-import io.doraemon.pocket.generator.utils.DataSourceFactory;
 
-public class DruidDataSourceHolder implements DataSourceFactory {
+public class DruidDataSourceHolder  {
 
 	private DataSource dataSource;
 
-	@Override
 	public void setProperties(Properties props) {
 //		DruidDataSource dataSource = new DruidDataSource();
 //		// dataSource.setDriverClassName(driverClassName);//如果不配置druid会根据url自动识别dbType，然后选择相应的driverClassName
@@ -29,7 +26,6 @@ public class DruidDataSourceHolder implements DataSourceFactory {
 //		return dataSource;
 	}
 
-	@Override
 	public DataSource getDataSource() {
 		return dataSource;
 	}
