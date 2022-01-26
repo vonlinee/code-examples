@@ -1,7 +1,5 @@
 package code.exmaple.spring.cycdepend.bean;
 
-import javax.sound.midi.Soundbank;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
