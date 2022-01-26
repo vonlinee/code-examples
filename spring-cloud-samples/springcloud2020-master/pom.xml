@@ -7,8 +7,9 @@
 
 	<groupId>com.sc2020</groupId>
 	<artifactId>com.springcloud</artifactId>
-	<packaging>pom</packaging>
 	<version>1.0-SNAPSHOT</version>
+	
+	<packaging>pom</packaging>
 
 	<modules>
 		<module>cloud-provider-payment8001</module>
