@@ -15,4 +15,7 @@ public class MutexTest {
 	Semaphore fairSemaphore = new Semaphore(1, true); //fair
 	Semaphore unfairSemaphore = new Semaphore(1, false); //unfair
 	
+	public void lock() {
+		mutex2.lock();
+	}
 }

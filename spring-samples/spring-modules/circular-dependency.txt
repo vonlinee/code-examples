@@ -1,0 +1,28 @@
+
+
+APPLICATION FAILED TO START
+***************************
+Description:
+The dependencies of some of the beans in the application context form a cycle:
+┌─────┐
+|  circularDependencyA defined in file [xxx\xxx\CircularDependencyA.class]
+↑     ↓
+|  circularDependencyB defined in file [xxx\xxx\CircularDependencyB.class]
+└─────┘
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
