@@ -6,8 +6,6 @@
 	<artifactId>activemq-samples</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>8</maven.compiler.source>
@@ -38,12 +36,4 @@
 			<version>1.2.3</version>
 		</dependency>
 	</dependencies>
-
-
-
-
-
-
-
-
 </project>
