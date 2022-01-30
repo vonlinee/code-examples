@@ -14,8 +14,6 @@ public class JmsConsumer {
 	private static final String ACTIVEMQ_URL = "tcp://localhost:61616";
 	private static final String QUEUE_NAME_1 = "queue-01";
 
-	
-	
 	public static final void consumeMessage() throws JMSException {
 	    //1.创建连接工厂，采用默认用户名/密码
 	    ActiveMQConnectionFactory amqcf = new ActiveMQConnectionFactory(ACTIVEMQ_URL);
@@ -41,7 +39,5 @@ public class JmsConsumer {
 	    }
 	    //关闭资源
 	    consumer.close();
-	    session.close();S
-	    connection.close();
 	}	
 }

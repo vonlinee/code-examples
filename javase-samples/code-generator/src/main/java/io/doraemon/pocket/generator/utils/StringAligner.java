@@ -1,5 +1,7 @@
 package io.doraemon.pocket.generator.utils;
 
+import io.doraemon.pocket.generator.model.db.Value;
+
 public class StringAligner {
 
     public static final int JUST_LEFT = 0;    //左对齐
@@ -135,5 +137,8 @@ public class StringAligner {
         formatter = new StringAligner(20, StringAligner.JUST_RIGHT);
         System.out.println(formatter.format("- i -"));
         System.out.println(formatter.format(Integer.toString(444)));
+
+
+
     }
 }

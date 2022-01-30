@@ -7,15 +7,11 @@ import javax.sql.DataSource;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/**
- * Table meta data loader.
- */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TableMetaDataLoader {
     
     /**
      * Load table meta data.
-     *
      * @param dataSource data source
      * @param table table name
      * @param databaseType database type

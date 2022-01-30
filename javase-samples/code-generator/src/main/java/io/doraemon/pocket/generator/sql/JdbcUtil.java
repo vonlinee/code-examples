@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JdbcUtil {
+public final class JdbcUtil {
     
 	private static final Logger LOG = LoggerFactory.getLogger(JdbcUtil.class);
 	

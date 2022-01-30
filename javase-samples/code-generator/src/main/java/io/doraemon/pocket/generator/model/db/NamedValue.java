@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 public final class NamedValue extends JavaType implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	public static final String NULL_STRING = "NULL";
-	public static final String NULL_REFERENCE = null;
+    private static final long serialVersionUID = 1L;
+
+    public static final String NULL_STRING = "NULL";
+    public static final String NULL_REFERENCE = null;
 
     private final String name;
     private final String typeName;
@@ -21,7 +21,7 @@ public final class NamedValue extends JavaType implements Serializable {
         } else {
             this.classType = Void.class;
             this.typeName = NULL_STRING;
-		}
+        }
     }
 
     public String getName() {
