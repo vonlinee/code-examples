@@ -28,7 +28,7 @@ public class Value extends JavaType {
     }
 
     public Value lookup(String name) {
-        return (Value<T>) table.get(name);
+        return table.get(name);
     }
 
     @SuppressWarnings("unchecked")
