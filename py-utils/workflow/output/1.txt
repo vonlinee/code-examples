@@ -1,0 +1,8 @@
+type VeMktActInfoActMode {
+	# 车系ID
+	carSeriesId: String
+	# 车系编码
+	carSeriesCode: String
+	# 车系中文名称
+	carSeriesCn: String
+}
