@@ -8,7 +8,7 @@ from jinja2 import Environment, PackageLoader
 # 参数1：模块名，参数2：模板路径
 
 global_env = {
-	"default": 
+	"default": ""
 }
 
 

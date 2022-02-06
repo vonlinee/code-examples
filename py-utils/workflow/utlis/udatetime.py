@@ -1,4 +1,5 @@
 import datetime
 
-def now_time_as_string() -> str:
-	return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+def now_time_as_string(format: str='%Y-%m-%d %H:%M:%S') -> str:
+	return datetime.datetime.now().strftime(format)

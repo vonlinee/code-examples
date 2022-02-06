@@ -1,4 +1,7 @@
-import chardet  # 编码探测
+# -*- coding: utf-8 -*-
+# 默认待处理文本由文本文件提供
+
+import chardet  # 编码检测
 import xlrd  # 读Excel
 import xlwt  # 写Excel
 import random  # 随机数
@@ -15,27 +18,9 @@ INPUT_TXT_FILE_PATH = "./input.txt"
 OUTPUT_TXT_FILE_PATH = "./output.txt"
 
 
-class Field:
-    code: str          # 字段编码
-    name: str          # 字段名称
-    value: str         # 字段值
-    type_literal: str  # 类型字面量
-    description: str   # 字段描述信息
-    extra_info: dict   # 附加信息
 
-    def __init__(self, code, name, value, type_literal, description):
-        self.code = code;
-        self.name = name;
-        self.value = value;
-        self.type_literal = type_literal
-        self.description = description
 
-    def to_string(self):
-        return self.code + ":" + self.value
 
-    def format(self):
-        result = "# " + self.description + "\n" + self.code + ": " + self.type_literal
-        print(result)
 
 # 名称(1)	     值(2)	        类型(3)
 # 编码  dlrOrderCode   String
@@ -394,6 +379,27 @@ def batch_strip(input_file: str = INPUT_TXT_FILE_PATH):
             print(line.strip())
 
 
+def batch_aligen(aligenment: str= 'L')-> None:
+    """
+    文本对齐，默认左对齐
+    """
+    lines = None
+    with open('./input.txt', 'r') as f:
+        lines = f.readlines()
+        max_len_str = max(lines, key=len)
+        max_len = len(max_len_str)
+        if aligenment == 'L':
+            for line in lines:
+                print(line.ljust(max_len))
+        if aligenment == 'R':
+            for line in lines:
+                print(line.rjust(max_len))
+        if aligenment == 'C':
+            for line in lines:
+                print(line.center(max_len))
+
+
+
 if __name__ == '__main__':
-    batch_snake_to_camel_style()
+    batch_aligen()
 
