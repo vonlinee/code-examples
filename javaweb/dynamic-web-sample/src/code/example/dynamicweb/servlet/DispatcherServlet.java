@@ -7,9 +7,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 /**
- * Context Root: dynamicweb => http://localhost:8888/dynamicweb/dispatch
+ * Context Root: dynamicweb => //http://localhost:8888/dynamicweb/dispatch
  * @author someone
  */
 @WebServlet(displayName = "DispatcherServlet", urlPatterns = { "/dispatch" }, loadOnStartup = 1)

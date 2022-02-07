@@ -3,7 +3,7 @@
 	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1">
-	<display-name>servlet-3.1-sample</display-name>
+	<display-name>dynamic-web-sample</display-name>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
@@ -12,4 +12,10 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+
+	<resource-ref>
+		<res-ref-name>student</res-ref-name> <!--根据配置的name区分不同的资源 -->
+		<res-type>javax.sql.DataSource</res-type> <!--指定资源类型 -->
+		<res-auth>Container</res-auth> <!--指定类型 -->
+	</resource-ref>
 </web-app>

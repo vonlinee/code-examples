@@ -2,7 +2,7 @@
 import os # os为内置模块，是一定存在的
 import sys
 # 运行时自动检测外部模块是否安装，没有则自动安装
-
+from io import StringIO
 
 def run_system_command(command: str):
     """
@@ -31,9 +31,44 @@ except ImportError as e:
     import requests
 
 
+class RedirectStdout:
+    """
+    输出重定向
+    """
+    def __init__(self):
+        self.content = ''
+        self.savedStdout = sys.stdout
+        self.memObj, self.fileObj, self.nulObj = None, None, None
 
+    #外部的print语句将执行本write()方法，并由当前sys.stdout输出
+    def write(self, outStr):
+        #self.content.append(outStr)
+        self.content += outStr
 
+    def toConsole(self):  #标准输出重定向至控制台
+        sys.stdout = self.savedStdout #sys.__stdout__
 
+    def toMemory(self):  #标准输出重定向至内存
+        self.memObj = StringIO()
+        sys.stdout = self.memObj
+
+    def toFile(self, file='out.txt'):  #标准输出重定向至文件
+        self.fileObj = open(file, 'a+', 1) #改为行缓冲
+        sys.stdout = self.fileObj
+    
+    def toMute(self):  #抑制输出
+        self.nulObj = open(os.devnull, 'w')
+        sys.stdout = self.nulObj
+        
+    def restore(self):
+        self.content = ''
+        if self.memObj.closed != True:
+            self.memObj.close()
+        if self.fileObj.closed != True:
+            self.fileObj.close()
+        if self.nulObj.closed != True:
+            self.nulObj.close()
+        sys.stdout = self.savedStdout #sys.__stdout__
 
 
 # syslog的官方说明

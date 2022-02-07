@@ -22,6 +22,12 @@ OUTPUT_TXT_FILE_PATH = "./output.txt"
 
 
 
+
+
+
+
+
+
 # 名称(1)	     值(2)	        类型(3)
 # 编码  dlrOrderCode   String
 def read_excel(excel_path, api_method_name="", txt_path=None) -> str:
