@@ -1,12 +1,6 @@
 package code.fxutils.support.util;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -14,10 +8,9 @@ import java.util.regex.Pattern;
  * copy from {@code org.apache.commons.lang3.Validate} used for parameter
  * validation all methods throws {@code IllegalArgumentException}
  */
-public abstract class Validator {
+public final class Validator {
 
-    private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter
-            .ofPattern("yyyy-MM-dd hh:mm:ss");
+    private Validator() {}
 
     // 默认提示信息
     private static final String DEFAULT_NOT_NAN_EX_MESSAGE = "The validated value is not a number";
@@ -41,15 +34,85 @@ public abstract class Validator {
     private static final String DEFAULT_IS_ASSIGNABLE_EX_MESSAGE = "Cannot assign a %s to a %s";
     private static final String DEFAULT_IS_INSTANCE_OF_EX_MESSAGE = "Expected type: %s, actual: %s";
 
+    /**
+     * ======================= CHECK START =================================
+     */
+
+    public static boolean isTrue(final boolean expression) {
+        return expression;
+    }
+
+    public static boolean isEmpty(final String string) {
+        notNull(string);
+        return string.length() == 0;
+    }
+
+    public static <T> boolean isEmpty(final T[] array) {
+        notNull(array);
+        return array.length == 0;
+    }
+
+    // 判断：返回true、false
+    public static <T> boolean isNull(T value) {
+        return value == null;
+    }
+
+    public static boolean isEmpty(Map<?, ?> map) {
+        notNull(map);
+        return map.isEmpty();
+    }
+
+    public static boolean isEmpty(List<?> list) {
+        notNull(list);
+        return list.isEmpty();
+    }
+
+    public static <T> boolean isEmpty(final CharSequence sequence) {
+        notNull(sequence);
+        return sequence.length() == 0;
+    }
+
+    public static <T> boolean isNullOrEmpty(final T[] array) {
+        return array == null || array.length == 0;
+    }
+
+    public static boolean isNullOrEmpty(final CharSequence sequence) {
+        return sequence == null || sequence.length() == 0;
+    }
+
+    public static boolean isNullOrEmpty(final List<?> list) {
+        return list == null || list.isEmpty();
+    }
+
+    public static boolean isNullOrEmpty(final Map<?, ?> map) {
+        return map == null || map.isEmpty();
+    }
+
+    /**
+     * 判断字符序列是否为空
+     * @param cs CharSequence
+     * @return boolean
+     */
+    public static boolean isBlank(final CharSequence cs) {
+        final int strLen = length(cs);
+        if (strLen == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * ======================= CHECK END =================================
+     */
+
     // Expression
     public static void whenTrue(final boolean expression, final String message) {
         if (expression) {
-            throw new IllegalArgumentException(message);
-        }
-    }
-
-    public static void isTrue(final boolean expression, final String message) {
-        if (!expression) {
             throw new IllegalArgumentException(message);
         }
     }
@@ -58,25 +121,25 @@ public abstract class Validator {
         return noNullElements(iterable, DEFAULT_NO_NULL_ELEMENTS_COLLECTION_EX_MESSAGE);
     }
 
-    public static void isTrue(final boolean expression, final String message, final long value) {
+    public static void whenTrue(final boolean expression, final String message, final long value) {
         if (!expression) {
             throw new IllegalArgumentException(String.format(message, value));
         }
     }
 
-    public static void isTrue(final boolean expression, final String message, final double value) {
+    public static void whenTrue(final boolean expression, final String message, final double value) {
         if (!expression) {
             throw new IllegalArgumentException(String.format(message, value));
         }
     }
 
-    public static void isTrue(final boolean expression, final String message, final Object... values) {
+    public static void whenTrue(final boolean expression, final String message, final Object... values) {
         if (!expression) {
             throw new IllegalArgumentException(String.format(message, values));
         }
     }
 
-    public static void isTrue(final boolean expression) {
+    public static void whenTrue(final boolean expression) {
         if (!expression) {
             throw new IllegalArgumentException(DEFAULT_IS_TRUE_EX_MESSAGE);
         }
@@ -120,14 +183,12 @@ public abstract class Validator {
         return noNullElements(array, DEFAULT_NO_NULL_ELEMENTS_ARRAY_EX_MESSAGE);
     }
 
-    public static <T extends Iterable<?>> T noNullElements(final T iterable, final String message,
-                                                           final Object... values) {
+    public static <T extends Iterable<?>> T noNullElements(final T iterable, final String message, final Object... values) {
         notNull(iterable);
         int i = 0;
         for (final Iterator<?> it = iterable.iterator(); it.hasNext(); i++) {
             if (it.next() == null) {
                 final Object[] values2 = null;
-                System.out.println(i);
                 throw new IllegalArgumentException(String.format(message, values2));
             }
         }
@@ -136,17 +197,16 @@ public abstract class Validator {
 
     /**
      * 数组没有NULL元素
-     * @param array
-     * @param message
-     * @param values
+     * @param array array
+     * @param message message
+     * @param values values
      * @return T[]
      */
     public static <T> T[] noNullElements(final T[] array, final String message, final Object... values) {
         notNull(array);
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == null) {
-                final Object[] values2 = null;
-                throw new IllegalArgumentException(String.format(message, values2));
+        for (T t : array) {
+            if (t == null) {
+                throw new IllegalArgumentException(String.format(message, null));
             }
         }
         return array;
@@ -197,8 +257,7 @@ public abstract class Validator {
         }
     }
 
-    public static <T extends Map<K, ? extends CharSequence>, K> void notBlankValue(final T map, K key,
-                                                                                   final String message) {
+    public static <T extends Map<K, ? extends CharSequence>, K> void notBlankValue(final T map, K key, final String message) {
         notNull(map);
         notEmpty(map);
         notExistKey(map, key);
@@ -208,10 +267,9 @@ public abstract class Validator {
         }
     }
 
-
     /**
      * 获取字符序列的长度，null check
-     * @param cs
+     * @param cs CharSequence
      * @return int
      */
     public static int length(final CharSequence cs) {
@@ -444,7 +502,7 @@ public abstract class Validator {
         // TODO when breaking BC, consider returning type
         if (!superType.isAssignableFrom(type)) {
             throw new IllegalArgumentException(String.format(DEFAULT_IS_ASSIGNABLE_EX_MESSAGE,
-                    type == null ? "null" : type.getName(), superType.getName()));
+                    type.getName(), superType.getName()));
         }
     }
 
@@ -494,85 +552,5 @@ public abstract class Validator {
             }
             test(value, rule, message);
         }
-    }
-
-    // DateTime Validation
-    public static LocalDateTime notValidDatetime(final String dt, String format) {
-        try {
-            return LocalDateTime.parse(dt, DateTimeFormatter.ofPattern(format));
-        } catch (Exception e) {
-            throw new IllegalArgumentException(String.format("datetime :{} is not suitable for the format:{}", dt, format));
-        }
-    }
-
-    public static boolean dateTimeInRange(String s1, String e1, String s2, String e2, String format) {
-        boolean result = false;
-        try {
-            LocalDateTime dts1 = LocalDateTime.parse(s1, DEFAULT_DATETIME_FORMATTER);
-            LocalDateTime dte1 = LocalDateTime.parse(e1, DEFAULT_DATETIME_FORMATTER);
-            LocalDateTime dts2 = LocalDateTime.parse(s1, DEFAULT_DATETIME_FORMATTER);
-            LocalDateTime dte2 = LocalDateTime.parse(e2, DEFAULT_DATETIME_FORMATTER);
-            // 开始时间大于结束时间
-            if (dts1.compareTo(dte2) > 0 || dte1.compareTo(dts2) < 0) {
-                result = true;
-            }
-            return result;
-        } catch (Exception ignore) {
-            // ignore
-        }
-        return result;
-    }
-
-    // 判断：返回true、false
-    public static <T> boolean isNull(T value) {
-        return value == null;
-    }
-
-    public static <T> boolean isEmpty(Map<?, ?> map) {
-        notNull(map);
-        return map.isEmpty();
-    }
-
-    public static <T> boolean isEmpty(List<?> list) {
-        notNull(list);
-        return list.isEmpty();
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> boolean isEmpty(T... array) {
-        notNull(array);
-        return array.length == 0;
-    }
-
-    public static <T> boolean isEmpty(final CharSequence sequence) {
-        notNull(sequence);
-        return sequence.length() == 0;
-    }
-
-    public static <T> boolean isNullOrEmpty(final CharSequence sequence) {
-        return sequence == null || sequence.length() == 0;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> boolean isNullOrEmpty(T... array) {
-        return array == null || array.length == 0;
-    }
-
-    /**
-     * 判断字符序列是否为空
-     * @param cs CharSequence
-     * @return boolean
-     */
-    public static boolean isBlank(final CharSequence cs) {
-        final int strLen = length(cs);
-        if (strLen == 0) {
-            return true;
-        }
-        for (int i = 0; i < strLen; i++) {
-            if (!Character.isWhitespace(cs.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
     }
 }

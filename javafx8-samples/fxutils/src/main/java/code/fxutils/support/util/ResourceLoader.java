@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Properties;
 
-public abstract class ResourceLoader {
+public class ResourceLoader {
 
     public static final String PROJECT_ROOT_PATH = new File("").getAbsolutePath();
     public static final String USER_DIR = System.getProperty("user.dir");
@@ -66,6 +66,7 @@ public abstract class ResourceLoader {
         String classPath = getClassPath();
         if (name.startsWith("..")) {
             // TODO 解析..的个数，判断相对目录的层级，然后向前缩进几个目录
+            name = name + name;
         }
         if (name.startsWith(".")) {
             return classPath + File.separator + name;

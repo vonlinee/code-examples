@@ -1,4 +1,4 @@
-package code.example.java.primary.inherit;
+package code.example.java.primary.oop.inherit;
 
 public abstract class AbstractClass1 {
 

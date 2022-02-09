@@ -97,6 +97,6 @@ public class BioThreadServer implements Runnable {
 	}
 	
 	public static void main(String[] args) {
-		new Thread(new BioThreadServer(20), "Server Thread").start();
+		new Thread(new BioThreadServer(20), "NioServer Thread").start();
 	}
 }

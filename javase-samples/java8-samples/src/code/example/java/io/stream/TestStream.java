@@ -1,8 +1,9 @@
 package code.example.java.io.stream;
 
-import java.io.InputStream;
-
 public class TestStream {
 
+    public static void main(String[] args) {
+
+    }
 
 }

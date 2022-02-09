@@ -9,6 +9,6 @@ public class TestList {
 		linkedList.add(new Hero("A"));
 		linkedList.addFirst(new Hero("B"));
 		linkedList.addLast(new Hero("C"));
-		CollectionPrinter.println(linkedList);
+		U.println(linkedList);
 	}
 }

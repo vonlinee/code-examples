@@ -5,11 +5,9 @@ import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
-import org.junit.jupiter.api.Test;
 
 public class TestSocketChannel {
 
-	@Test
 	public void server() throws IOException {
 		//1.创建ServerSocketChannel
 		ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
@@ -21,7 +19,6 @@ public class TestSocketChannel {
 		}
 	}
 	
-	@Test
 	public void client() {
 		try {
 			SocketChannel socketChannel = SocketChannel.open();
