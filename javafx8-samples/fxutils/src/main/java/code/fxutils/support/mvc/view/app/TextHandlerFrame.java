@@ -1,6 +1,6 @@
 package code.fxutils.support.mvc.view.app;
 
-import code.fxutils.support.mvc.view.Signal;
+import code.fxutils.support.mvc.controller.Signal;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;

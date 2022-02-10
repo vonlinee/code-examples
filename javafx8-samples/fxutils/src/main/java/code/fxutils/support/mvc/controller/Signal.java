@@ -1,4 +1,4 @@
-package code.fxutils.support.mvc.view;
+package code.fxutils.support.mvc.controller;
 
 import java.lang.annotation.*;
 

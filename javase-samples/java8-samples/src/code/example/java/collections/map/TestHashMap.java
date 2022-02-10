@@ -1,14 +1,12 @@
 package code.example.java.collections.map;
 
-import java.util.HashMap;
-
 import code.example.java.collections.Hero;
 import code.example.java.collections.U;
 
+import java.util.HashMap;
+
 public class TestHashMap {
 	public static void main(String[] args) {
-
-		
 		test2();
 	}
 	
@@ -24,13 +22,11 @@ public class TestHashMap {
 	}
 	
 	public static void test2() {
-		HashMap<String, Hero> hashMap = new HashMap<>(13);
-		
+		HashMap<String, Hero> hashMap = new HashMap<>(19);
 		hashMap.put("1", new Hero("A"));
 	}
-	
-	
-	static final int hash(Object key) {
+
+	static int hash(Object key) {
 	    int h;
 	    return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
 	}

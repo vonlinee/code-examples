@@ -3,10 +3,8 @@ package code.fxutils.support.mvc.controller;
 import java.lang.annotation.*;
 
 @Documented
-@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-public @interface FXController {
+@Target(ElementType.TYPE)
+public @interface FXModel {
 
-    String name() default "";
-    Class<?> target();
 }
