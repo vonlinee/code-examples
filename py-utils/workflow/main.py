@@ -17,17 +17,6 @@ RELATIVE_OUTPUT_DIR = "./output/"
 INPUT_TXT_FILE_PATH = "./input.txt"
 OUTPUT_TXT_FILE_PATH = "./output.txt"
 
-
-
-
-
-
-
-
-
-
-
-
 # 名称(1)	     值(2)	        类型(3)
 # 编码  dlrOrderCode   String
 def read_excel(excel_path, api_method_name="", txt_path=None) -> str:
@@ -136,7 +125,7 @@ def create_graphqls_content():
 
 
 def batch_snake_to_camel_style(
-    input_source=0,
+    input_source=1,
     output_target= 0,
     *args, 
     input_file_path=INPUT_TXT_FILE_PATH,
@@ -407,5 +396,5 @@ def batch_aligen(aligenment: str= 'L')-> None:
 
 
 if __name__ == '__main__':
-    batch_aligen()
+    batch_snake_to_camel_style(1)
 
