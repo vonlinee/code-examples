@@ -1,8 +1,5 @@
 package code.example.java;
 
-import java.io.PrintWriter;
-import java.io.StringWriter; //unused import
-
 public class Test {
 	byte b;
 	int i;
@@ -18,6 +15,6 @@ public class Test {
 	}
 	
 	public void method(int id, String name) {
-
+		this.i = id + name.length();
 	}
 }

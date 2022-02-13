@@ -15,7 +15,6 @@ public class Test {
 		String executeTime = "2022-01-24 00:00:00";
 		LocalDateTime time = LocalDateTime.parse(executeTime, formatter);
 		
-		
 	}
 	
 	public static void test1() {

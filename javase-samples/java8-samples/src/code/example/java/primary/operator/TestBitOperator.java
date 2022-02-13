@@ -71,7 +71,6 @@ public class TestBitOperator {
 		System.out.println(Long.toBinaryString(Long.MAX_VALUE >>> 16));
 
 		System.out.println(right("11010111011100001", 16));
-
 		System.out.println(randomBinaryString(17));
 		System.out.println("=========================");
 		System.out.println(Integer.parseInt("11001101", 2)); // 205

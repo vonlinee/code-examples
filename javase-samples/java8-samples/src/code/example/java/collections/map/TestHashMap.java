@@ -1,13 +1,28 @@
 package code.example.java.collections.map;
 
+import java.util.HashMap;
+
 import code.example.java.collections.Hero;
 import code.example.java.collections.U;
 
-import java.util.HashMap;
 
 public class TestHashMap {
 	public static void main(String[] args) {
-		test2();
+//		test2();
+//		HashMap<String, String> hashMap = new HashMap<>(19);
+//		
+//		hashMap.put("1", "AAA");
+//		
+//		HashMap<String, String> hashMap1 = new HashMap<>();
+
+		int hash = hash("5");
+		System.out.println(hash);
+		System.out.println(Integer.toBinaryString(hash));
+		System.out.println(hash & 15);
+		System.out.println(Integer.toBinaryString(16));
+		
+		String cls = System.getProperty("java.system.class.loader");
+		System.out.println(cls);
 	}
 	
 	public static void test1() {
