@@ -3,7 +3,7 @@ package code.fxutils.support.mvc.controller;
 import java.lang.annotation.*;
 
 @Documented
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Interceptor {
 

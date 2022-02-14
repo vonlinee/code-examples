@@ -3,7 +3,6 @@ package com.springcloud.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Data
 @AllArgsConstructor
@@ -15,5 +14,11 @@ public class CommonResult<T> {
 
     public CommonResult(Integer code, String message) {
         this(code, message, null);
+    }
+    
+    public CommonResult(Integer code, String message, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
     }
 }

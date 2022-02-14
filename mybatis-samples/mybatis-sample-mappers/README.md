@@ -47,7 +47,7 @@ public T newInstance(SqlSession sqlSession) {
 }
 ```
 
-
+MapperProxy用于处理Mapper接口的代理逻辑
 
 ```java
 public class MapperProxy<T> implements InvocationHandler, Serializable {

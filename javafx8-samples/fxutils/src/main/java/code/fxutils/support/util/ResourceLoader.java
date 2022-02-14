@@ -83,7 +83,7 @@ public class ResourceLoader {
         return ResourceLoader.class.getResourceAsStream(resolveName(name));
     }
 
-    public static URL getResource(String name) {
+    public static URL getResourceAsURL(String name) {
         return ResourceLoader.class.getResource(resolveName(name));
     }
 }
