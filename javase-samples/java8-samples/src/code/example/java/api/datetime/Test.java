@@ -1,14 +1,15 @@
 package code.example.java.api.datetime;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.chrono.Era;
 import java.time.format.DateTimeFormatter;
 
 public class Test {
 	
-	public static DateTimeFormatter FORMAT_YMDHMS = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-	public static DateTimeFormatter FORMAT_YMD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	public static final DateTimeFormatter FORMAT_YMDHMS = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	public static final DateTimeFormatter FORMAT_YMD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
 	public void method() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -30,12 +31,48 @@ public class Test {
 //		LocalDate d2 = LocalDate.parse("2022-01-25", FORMAT_YMD);
 //		LocalDateTime starTime = d2.atStartOfDay();
 //		System.out.println(starTime.format(FORMAT_YMDHMS));
+
+		// LocalDate date1 = LocalDate.parse("2022-2-14", FORMAT_YMD); //解析报错
+		LocalDate date2 = LocalDate.parse("2022-02-14", FORMAT_YMD);
 		
-		test1();
+		System.out.println(date2);
+		
+		Timestamp nowTimestamp = Timestamp.from(Instant.now());
+		
+		System.out.println(nowTimestamp);
+		
+		LocalDateTime dateTime = nowTimestamp.toLocalDateTime();
+		
+		LocalDateTime dt1 = LocalDate.parse("2022-02-14", DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay();
+		
+		System.out.println(dt1.format(FORMAT_YMDHMS));
 	}
 	
-	@SuppressWarnings("unused")
-	private static String plusDateTime(String timeUnit, LocalDateTime start) {
+	public static LocalDateTime string2DateTime(String text, DateTimeFormatter formatter) {
+		return LocalDateTime.parse(text, formatter);
+	}
+	
+	public static LocalDateTime string2DateTime(String text) {
+		return LocalDateTime.parse(text, FORMAT_YMDHMS);
+	}
+	
+	public static LocalDate string2Date(String text) {
+		return LocalDateTime.parse(text, FORMAT_YMDHMS).toLocalDate();
+	}
+	
+	public static LocalDate string2Date(String text, DateTimeFormatter formatter) {
+		return LocalDateTime.parse(text, formatter).toLocalDate();
+	}
+	
+	public static String dateTime2String(LocalDateTime dateTime) {
+		return dateTime.toString();
+	}
+	
+	public static String nowAsString() {
+		return LocalDateTime.now().format(FORMAT_YMDHMS).toString();
+	}
+	
+	public static String plusDateTime(String timeUnit, LocalDateTime start) {
 		LocalDateTime nextExecuteTime = null;
 		switch (timeUnit) {
 		case "1": //日
@@ -55,5 +92,16 @@ public class Test {
 			break;
 		}
 		return nextExecuteTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	}
+	
+	public static int compare(LocalDateTime dt1, LocalDateTime dt2, long secondsOffset) {
+		int i = dt1.compareTo(dt2.minusSeconds(secondsOffset));
+		if (i < 0) {
+			return i;
+		}
+		if ((i = dt1.compareTo(dt2.plusSeconds(secondsOffset))) > 0) {
+			return i;
+		}
+		return 0;
 	}
 }

@@ -26,13 +26,6 @@
 	<!-- 映射器配置 -->
 	<mappers>
 		<!-- 使用相对于类路径的资源引用 -->
-		<mapper resource="mappers/StudentMapper.xml" />  <!-- resources目录 -->
-		<mapper resource="code/example/mybatis/mapper/CourseMapper.xml" /> <!-- java目录 -->
-		<!-- 使用完全限定资源定位符（URL） -->
-		<mapper url="file:///D:/Projects\Github\code-example\mybatis-samples\mybatis-quickstart\src\main\resources\mappers\ClassMapper.xml"/>
-		<!-- 使用映射器接口实现类的完全限定类名 -->
-		<mapper class="code.example.mybatis.mapper.impl.TeacherMapperImpl"/>
-		<!-- 将包内的映射器接口实现全部注册为映射器 -->
-		<package name="code.example.mybatis.mapper"/>
+		<mapper resource="mappers/EntityMapper.xml" />  <!-- resources目录 -->
 	</mappers>
 </configuration>

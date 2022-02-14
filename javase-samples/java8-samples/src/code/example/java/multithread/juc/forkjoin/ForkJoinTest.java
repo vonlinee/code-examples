@@ -4,8 +4,6 @@ import java.util.Random;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
 
-import javafx.beans.binding.LongExpression;
-
 public class ForkJoinTest {
 	
 	public static void main(String[] args) {
