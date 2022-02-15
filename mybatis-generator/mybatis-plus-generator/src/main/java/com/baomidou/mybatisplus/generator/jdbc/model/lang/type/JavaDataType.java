@@ -1,4 +1,4 @@
-package com.baomidou.mybatisplus.generator.jdbc.model.lang.type.java;
+package com.baomidou.mybatisplus.generator.jdbc.model.lang.type;
 
 
 import com.baomidou.mybatisplus.generator.jdbc.model.lang.type.DataType;

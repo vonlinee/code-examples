@@ -1,6 +1,6 @@
-package com.baomidou.mybatisplus.generator.jdbc.model.lang.type.java;
+package com.baomidou.mybatisplus.generator.jdbc.model.lang.type;
 
-public class Reference extends JavaDataType {
+public class ReferenceType extends JavaDataType {
     @Override
     public String name() {
         return null;

@@ -1,7 +1,6 @@
 package com.baomidou.mybatisplus.generator.jdbc.model.lang;
 
-public class MethodParam {
+public class JavaMethodParam {
     String name;
     String type;
-    Object value;
 }

@@ -132,7 +132,6 @@ public class GlobalConfig {
         /**
          * 覆盖已有文件（3.5.3版本会删除此方法）
          */
-        @Deprecated
         public Builder fileOverride() {
             this.globalConfig.fileOverride = true;
             return this;

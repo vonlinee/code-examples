@@ -128,7 +128,7 @@ public class MySQLGenerator {
             .formatXmlFileName("%sXml")
             .build();
 
-        FastAutoGenerator.create("url", "username", "password")
+        FastAutoGenerator.create("jdbc:mysql://127.0.0.1:3306/db_mysql?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8", "root", "123456")
             .globalConfig(builder -> {
                 builder.author("baomidou") // 设置作者
                     .enableSwagger() // 开启 swagger 模式
@@ -141,8 +141,8 @@ public class MySQLGenerator {
                     .pathInfo(Collections.singletonMap(OutputFile.xml, "D://")); // 设置mapperXml生成路径
             })
             .strategyConfig(builder -> {
-                builder.addInclude("t_simple") // 设置需要生成的表名
-                    .addTablePrefix("t_", "c_"); // 设置过滤表前缀
+                builder.addInclude("course") // 设置需要生成的表名
+                    .addTablePrefix(""); // 设置过滤表前缀
             })
             .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
             .execute();
