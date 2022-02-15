@@ -7,16 +7,19 @@
 	<groupId>code.sample.springcloud</groupId>
 	<artifactId>samples-parernt</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>cloud-provider-payment-8001</module>
 		<module>cloud-consumer-order-80</module>
 		<module>cloud-api-commons</module>
 		<module>cloud-eureka-server-7001</module>
 		<module>cloud-consumerzk-order-80</module>
 		<module>cloud-consumer-feign-order-80</module>
+		<module>cloud-consumer-consul-order-80</module>
+		<module>cloud-consumer-feign-hystrix-order-80</module>
+		<module>cloud-consumer-hystrix-dashboard-9001</module>
+		<module>cloud-provider-payment-8001</module>
+		<module>cloud-provider-payment-8002</module>
 	</modules>
 
 	<properties>
@@ -29,6 +32,7 @@
 		<mysql.version>5.1.47</mysql.version>
 		<druid.version>1.1.16</druid.version>
 		<mybatis.spring.boot.version>1.3.2</mybatis.spring.boot.version>
+		<spring.cloud.alibaba.version>2.1.0.RELEASE</spring.cloud.alibaba.version>
 	</properties>
 
 	<!-- 子模块继承之后，提供作用：锁定版本+子模块不用写groupId和version -->
@@ -54,7 +58,7 @@
 			<dependency>
 				<groupId>com.alibaba.cloud</groupId>
 				<artifactId>spring-cloud-alibaba-dependencies</artifactId>
-				<version>2.1.0.RELEASE</version>
+				<version>${spring.cloud.alibaba.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -63,7 +67,6 @@
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql.version}</version>
 			</dependency>
-			<!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid-spring-boot-starter</artifactId>
