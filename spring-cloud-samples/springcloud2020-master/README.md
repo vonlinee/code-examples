@@ -1,42 +1,49 @@
-# springcloud2020（已完结）
+# SpringCloud
 
-#### 介绍
+# 介绍
 跟阳哥springcloud教程的个人手敲代码，如有错误，不吝赐教，已完结（2020年3月13日）！
+阳哥视频教程：https://www.bilibili.com/video/BV1yE411x7Ky?p=46
 
-#### 软件架构
+# 软件架构
 springcloud最新
 
-
-#### 更新时间
-
+# 更新时间
 个人接口测试工具直接使用IDEA-->Tools-->HTTP Client-->Test Restful WebService工具
 
 1.  2020年3月5日 更新支付模块
-
 2.  2020年3月6日 重构时注意将lombok依赖复制到api-commons下时要注意删除optional选项，否则当该选项为true时，说明该依赖禁止依赖传递，则依赖api的模块不会依赖lombok。
     ```xml
-            <!--    错误      -->
-              <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <optional>true</optional>
-              </dependency>
-              <!--    正确      -->
-               <dependency>
-                  <groupId>org.projectlombok</groupId>
-                  <artifactId>lombok</artifactId>
-               </dependency>
+    <!--    错误      -->
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <optional>true</optional>
+    </dependency>
+    <!--    正确      -->
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+    </dependency>
     ```
+
+
+
+# 微服务组件
+
+## 注册中心
+
+
 
 - Eureka注册中心集群环境: 负载均衡，容错控制
 
 - Eureka集群搭建
-    - 1、修改hosts
-      ```
-        C:\Windows\System32\drivers\etc 
-        127.0.0.1 eureka7001.com
-        127.0.0.1 eureka7002.com
-      ```
+  
+    1、修改hosts：C:\Windows\System32\drivers\etc\hosts 文件，在底部添加以下内容
+    
+    ```
+    127.0.0.1 eureka7001.com
+    127.0.0.1 eureka7002.com
+    ```
     
 - Consul 下载：https://www.consul.io/downloads.html      
  相关命令：consul --version：查看版本信息
@@ -228,5 +235,5 @@ springcloud最新
 
   **使用**：本地：@Transaction，全局：@GlobalTransaction
 
-### 完 结
+# 完 结
 

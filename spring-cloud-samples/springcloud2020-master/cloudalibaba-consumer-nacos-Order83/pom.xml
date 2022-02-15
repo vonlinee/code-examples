@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cloudalibaba-consumer-nacos-Order83</artifactId>
+    <artifactId>cloudalibaba-consumer-nacos-order83</artifactId>
     <dependencies>
         <!--  SpringCloud alibaba nacos    -->
         <dependency>
