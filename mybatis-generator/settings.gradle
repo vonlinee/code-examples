@@ -1,0 +1,4 @@
+rootProject.name = 'generator'
+include 'mybatis-plus-generator'
+include 'api-base'
+
