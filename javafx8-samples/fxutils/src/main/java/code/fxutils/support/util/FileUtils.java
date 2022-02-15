@@ -158,6 +158,6 @@ public class FileUtils {
     }
 
     public static void main(String[] args) {
-        deleteProjectFiles("D:\\Develop\\Projects\\Github\\code-example");
+        deleteProjectFiles("D:\\Projects\\Github\\code-example\\spring-cloud-samples\\springcloud-samples-parent");
     }
 }
