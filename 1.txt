@@ -1,0 +1,3 @@
+https://www.cnblogs.com/weizhxa/p/9222778.html
+
+https://github.com/gradle/gradle/issues/9394
