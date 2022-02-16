@@ -1,12 +1,11 @@
 package code.magicode.generator.lang;
 
+import code.magicode.generator.db.extra.ResultSetHandlers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.baomidou.mybatisplus.generator.jdbc.model.db.ResultSetHandlers;
-
 import code.magicode.generator.db.metadata.Table;
-import code.pocket.base.lang.NamedValue;
+import io.maker.base.lang.NamedValue;
 
 import java.sql.*;
 import java.util.*;
@@ -81,7 +80,7 @@ public class DatabaseMetadataHolder {
     public static final String MYSQL_USERNAME = "root";
     public static final String MYSQL_PASSWORD = "123456";
     public static final String MYSQL_URL = "jdbc:mysql://localhost/mysql_learn"
-        + "?useUnicode=true&characterEncoding=UTF-8";
+            + "?useUnicode=true&characterEncoding=UTF-8";
 
     /**
      * 根据数据库的连接参数，获取指定表的基本信息：字段名、字段类型、字段注释

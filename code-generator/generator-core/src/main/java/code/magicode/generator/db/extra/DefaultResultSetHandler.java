@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import code.pocket.base.lang.NamedValue;
+import io.maker.base.lang.NamedValue;
 
 public class DefaultResultSetHandler implements ResultSetHandler<List<List<NamedValue>>> {
 

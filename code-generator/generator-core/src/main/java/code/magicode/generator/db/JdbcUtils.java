@@ -19,7 +19,7 @@ import org.apache.commons.dbutils.DbUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import code.pocket.base.utils.ResourceLoader;
+import io.maker.base.ResourceLoader;
 
 /**
  * https://cloud.tencent.com/developer/article/1581184

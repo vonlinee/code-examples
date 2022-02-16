@@ -3,7 +3,7 @@ package code.magicode.generator.db.extra;
 import java.util.HashMap;
 import java.util.Map;
 
-import code.pocket.base.lang.JavaType;
+import io.maker.base.lang.JavaType;
 
 /**
  * 任意值

@@ -77,7 +77,8 @@
 		<module>api-base</module>
 		<module>mybatis-generator</module>
 		<module>generator-core</module>
-	</modules>
+        <module>api-commons</module>
+    </modules>
 
 	<description></description>
 

@@ -6,7 +6,7 @@ import java.util.Properties;
 import com.alibaba.druid.pool.DruidDataSource;
 
 import code.magicode.generator.db.pool.DruidPool;
-import code.pocket.base.utils.ResourceLoader;
+import io.maker.base.ResourceLoader;
 
 public class Main {
     public static void main(String[] args) throws Exception {
