@@ -17,4 +17,6 @@ dependencies {
     testImplementation "${lib.firebird}"
     testImplementation "${lib.'swagger-annotations'}"
     testCompileOnly "org.jetbrains:annotations:22.0.0"
+    // 生成Java代码
+    testImplementation 'com.squareup:javapoet:1.8.0'
 }

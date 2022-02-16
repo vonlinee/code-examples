@@ -15,6 +15,12 @@ buildscript {
     }
 }
 
+// Gradle Wrapper
+// wrapper {
+//     gradleVersion = '5.2'
+//     distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+// }
+
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
@@ -92,7 +98,7 @@ subprojects {
     jar {
         afterEvaluate {
             manifest {
-                attributes 'Implementation-Version': archiveVersion
+                // attributes 'Implementation-Version': archiveVersion
                 attributes 'Built-Gradle': gradle.gradleVersion
                 attributes 'Bundle-DocURL': 'https://mybatis.plus/'
                 attributes 'Build-OS': System.getProperty("os.name")
@@ -125,20 +131,21 @@ subprojects {
     dependencies {
         testAnnotationProcessor "org.projectlombok:lombok:1.18.22"
         testCompileOnly "org.projectlombok:lombok:1.18.22"
-
         testImplementation "${lib["assertj-core"]}"
         testImplementation "${lib["junit-jupiter-api"]}"
         testRuntimeOnly "${lib["junit-jupiter-engine"]}"
         testImplementation "org.mockito:mockito-junit-jupiter:3.4.4"
+        // HTML Parser: https://lagarto.jodd.org/
         testImplementation "${lib["lagarto"]}"
         testImplementation "${lib["logback-classic"]}"
     }
 
-    //noinspection GroovyAssignabilityCheck
-    task sourcesJar(type: Jar) {
-        archiveClassifier = 'sources'
-        from sourceSets.main.allSource
-    }
+    // no inspection GroovyAssignabilityCheck
+    // Gradle Version >= 5.1 Needed
+    // task sourcesJar(type: Jar) {
+    //     archiveClassifier = 'sources'
+    //     from sourceSets.main.allSource
+    // }
 
     javadoc {
         afterEvaluate {
@@ -158,10 +165,10 @@ subprojects {
         useJUnitPlatform()
     }
 
-    task javadocJar(type: Jar) {
-        archiveClassifier = 'javadoc'
-        from javadoc
-    }
+    // task javadocJar(type: Jar) {
+    //     archiveClassifier = 'javadoc'
+    //     from javadoc
+    // }
 
     tasks.whenTaskAdded { task ->
         if (task.name.contains('signMavenJavaPublication')) {
@@ -169,74 +176,74 @@ subprojects {
         }
     }
 
-    publishing {
-        repositories {
-            maven {
-                def userName = System.getProperty("un")
-                def passWord = System.getProperty("ps")
-                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+    // publishing {
+    //     repositories {
+    //         maven {
+    //             def userName = System.getProperty("un")
+    //             def passWord = System.getProperty("ps")
+    //             def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+    //             def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+    //             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 
-                credentials {
-                    username userName
-                    password passWord
-                }
-            }
-        }
-        publications {
+    //             credentials {
+    //                 username userName
+    //                 password passWord
+    //             }
+    //         }
+    //     }
+    //     publications {
 
-            mavenJava(MavenPublication) {
-                from components.java
+    //         mavenJava(MavenPublication) {
+    //             from components.java
 
-                artifact sourcesJar
-                artifact javadocJar
+    //             artifact sourcesJar
+    //             artifact javadocJar
 
-                pom {
-                    name = 'mybatis-plus'
-                    packaging 'jar'
-                    description = 'An enhanced toolkit of Mybatis to simplify development.'
-                    url = 'https://github.com/baomidou/mybatis-plus'
+    //             pom {
+    //                 name = 'mybatis-plus'
+    //                 packaging 'jar'
+    //                 description = 'An enhanced toolkit of Mybatis to simplify development.'
+    //                 url = 'https://github.com/baomidou/mybatis-plus'
 
-                    scm {
-                        connection = 'scm:git@github.com:Codearte/gradle-nexus-staging-plugin.git'
-                        developerConnection = 'scm:git@github.com:Codearte/gradle-nexus-staging-plugin.git'
-                        url = 'https://github.com/baomidou/mybatis-plus'
-                    }
+    //                 scm {
+    //                     connection = 'scm:git@github.com:Codearte/gradle-nexus-staging-plugin.git'
+    //                     developerConnection = 'scm:git@github.com:Codearte/gradle-nexus-staging-plugin.git'
+    //                     url = 'https://github.com/baomidou/mybatis-plus'
+    //                 }
 
-                    licenses {
-                        license {
-                            name = 'The Apache License, Version 2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        }
-                    }
+    //                 licenses {
+    //                     license {
+    //                         name = 'The Apache License, Version 2.0'
+    //                         url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    //                     }
+    //                 }
 
-                    developers {
-                        developer {
-                            id = 'baomidou'
-                            name = 'hubin'
-                            email = 'jobob@qq.com'
-                        }
-                    }
+    //                 developers {
+    //                     developer {
+    //                         id = 'baomidou'
+    //                         name = 'hubin'
+    //                         email = 'jobob@qq.com'
+    //                     }
+    //                 }
 
-                    withXml {
-                        def root = asNode()
-                        root.dependencies.'*'.findAll {
-                            def d = it
-                            d.scope.text() == 'runtime' && project.configurations.findByName("implementation").allDependencies.find { dep ->
-                                dep.name == it.artifactId.text()
-                            }.each() {
-                                d.scope*.value = 'compile'
-                                d.appendNode('optional', true)
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    //                 withXml {
+    //                     def root = asNode()
+    //                     root.dependencies.'*'.findAll {
+    //                         def d = it
+    //                         d.scope.text() == 'runtime' && project.configurations.findByName("implementation").allDependencies.find { dep ->
+    //                             dep.name == it.artifactId.text()
+    //                         }.each() {
+    //                             d.scope*.value = 'compile'
+    //                             d.appendNode('optional', true)
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        signing {
-            sign publishing.publications.mavenJava
-        }
-    }
+    //     signing {
+    //         sign publishing.publications.mavenJava
+    //     }
+    // }
 }
