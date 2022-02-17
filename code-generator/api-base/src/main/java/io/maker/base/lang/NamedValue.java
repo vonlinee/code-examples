@@ -2,9 +2,6 @@ package io.maker.base.lang;
 
 import java.io.Serializable;
 
-/**
- *
- */
 public final class NamedValue extends JavaType implements Serializable {
 
     public static final String NULL_STRING = "NULL";

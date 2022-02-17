@@ -1,10 +1,10 @@
 package code.magicode.generator.lang.java;
 
-import com.baomidou.mybatisplus.generator.jdbc.model.lang.type.JavaDataType;
-
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
 import java.util.List;
+
+import code.magicode.generator.lang.type.JavaDataType;
 
 public class JavaClassField<T> implements Serializable {
 

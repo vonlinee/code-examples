@@ -15,8 +15,6 @@
  */
 package code.magicode.generator.lang;
 
-import org.apache.ibatis.type.JdbcType;
-
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -24,6 +22,8 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import code.magicode.generator.db.JdbcType;
 
 /**
  * @author nieqiurong 2021/2/8.

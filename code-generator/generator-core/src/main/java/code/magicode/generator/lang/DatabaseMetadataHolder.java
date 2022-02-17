@@ -1,10 +1,11 @@
 package code.magicode.generator.lang;
 
 import code.magicode.generator.db.extra.ResultSetHandlers;
+import code.magicode.generator.db.meta.table.Table;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import code.magicode.generator.db.metadata.Table;
 import io.maker.base.lang.NamedValue;
 
 import java.sql.*;

@@ -1,8 +1,8 @@
 package code.magicode.generator.db.extra;
 
-import io.maker.base.lang.NamedValue;
-
 import java.util.List;
+
+import io.maker.base.lang.NamedValue;
 
 public class ResultSetHandlers {
     public static final ResultSetHandler<List<List<NamedValue>>> NAMED_VALUES = new DefaultResultSetHandler();

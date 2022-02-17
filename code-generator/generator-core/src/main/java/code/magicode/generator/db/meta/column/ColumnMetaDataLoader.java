@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package code.magicode.generator.db.metadata.column;
+package code.magicode.generator.db.meta.column;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

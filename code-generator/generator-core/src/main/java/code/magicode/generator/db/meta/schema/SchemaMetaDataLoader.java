@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package code.magicode.generator.db.metadata.schema;
+package code.magicode.generator.db.meta.schema;
 
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;

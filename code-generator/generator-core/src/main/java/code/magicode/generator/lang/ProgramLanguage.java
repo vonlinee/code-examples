@@ -1,4 +1,4 @@
-package com.baomidou.mybatisplus.generator.jdbc.model.lang;
+package code.magicode.generator.lang;
 
 public class ProgramLanguage {
 

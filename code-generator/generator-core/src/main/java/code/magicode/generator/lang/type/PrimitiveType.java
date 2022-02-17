@@ -1,4 +1,4 @@
-package com.baomidou.mybatisplus.generator.jdbc.model.lang.type;
+package code.magicode.generator.lang.type;
 
 public final class PrimitiveType extends JavaDataType {
 

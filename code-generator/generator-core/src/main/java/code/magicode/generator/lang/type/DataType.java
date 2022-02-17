@@ -1,4 +1,4 @@
-package com.baomidou.mybatisplus.generator.jdbc.model.lang.type;
+package code.magicode.generator.lang.type;
 
 /**
  * 数据类型

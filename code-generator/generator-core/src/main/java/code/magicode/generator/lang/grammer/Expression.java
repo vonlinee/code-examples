@@ -1,4 +1,4 @@
-package com.baomidou.mybatisplus.generator.jdbc.model.lang.grammer;
+package code.magicode.generator.lang.grammer;
 
 /**
  * 源代码中的表达式

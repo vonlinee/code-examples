@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package code.magicode.generator.db.metadata.schema;
+package code.magicode.generator.db.meta.schema;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -11,7 +11,7 @@ import io.maker.base.lang.NamedValue;
 public class DefaultResultSetHandler implements ResultSetHandler<List<List<NamedValue>>> {
 
 	/**
-	 * List<List<NamedValue>> <=> List<Map<String, Object>>
+	 * List<List<NamedValue>> 等同于 List<Map<String, Object>>
 	 * List<NamedValue> -> Row
 	 */
     @Override

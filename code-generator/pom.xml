@@ -56,7 +56,6 @@
 				<artifactId>slf4j-log4j12</artifactId>
 				<version>1.7.32</version>
 			</dependency>
-
 			<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 			<dependency>
 				<groupId>org.projectlombok</groupId>
@@ -64,7 +63,6 @@
 				<version>1.18.22</version>
 				<scope>provided</scope>
 			</dependency>
-
 			<dependency>
 				<groupId>com.google.code.gson</groupId>
 				<artifactId>gson</artifactId>
@@ -77,8 +75,8 @@
 		<module>api-base</module>
 		<module>mybatis-generator</module>
 		<module>generator-core</module>
-        <module>api-commons</module>
-    </modules>
+		<module>api-commons</module>
+	</modules>
 
 	<description></description>
 

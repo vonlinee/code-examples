@@ -3,8 +3,6 @@ package code.magicode.generator.db.pool;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 
-import code.fxutils.support.db.pool.DatabaseConnectionPool;
-
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.Properties;
