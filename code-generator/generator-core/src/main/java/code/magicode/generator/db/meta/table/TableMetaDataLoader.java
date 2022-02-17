@@ -30,4 +30,19 @@ public final class TableMetaDataLoader {
 					IndexMetaDataLoader.load(connection, table, databaseType));
 		}
 	}
+	
+	public static TableSchema loadSchema(final DataSource dataSource, final String dbName, final String tableName) {
+		String sql = "SELECT * FROM `information_schema`.`TABLES` T WHERE T.TABLE_SCHEMA = `%s` AND T.TABLE_NAME = `%s`";
+//		try (Connection connection = dataSource.getConnection()) {
+			sql = String.format(sql, dbName, tableName);
+			System.out.println(sql);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+		return null;
+	}
+	
+	public static void main(String[] args) {
+		loadSchema(null, "information_schema", "course");
+	}
 }

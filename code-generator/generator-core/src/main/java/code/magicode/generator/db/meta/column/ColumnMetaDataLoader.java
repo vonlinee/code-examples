@@ -17,10 +17,6 @@
 
 package code.magicode.generator.db.meta.column;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.apache.shardingsphere.sql.parser.binder.metadata.util.JdbcUtil;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +26,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.shardingsphere.sql.parser.binder.metadata.util.JdbcUtil;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Column meta data loader.
@@ -79,7 +80,14 @@ public final class ColumnMetaDataLoader {
         }
         for (int i = 0; i < columnNames.size(); i++) {
             // TODO load auto generated from database meta data
-            result.add(new ColumnMetaData(columnNames.get(i), columnTypes.get(i), columnTypeNames.get(i), isPrimaryKeys.get(i), false, isCaseSensitives.get(i)));
+        	ColumnMetaData columnMetaData = new ColumnMetaData();
+        	columnMetaData.setColumnName(columnNames.get(i));
+        	columnMetaData.setColumnType(columnTypes.get(i));
+        	columnMetaData.setColumnTypeName(columnTypeNames.get(i));
+        	columnMetaData.setPrimaryKey(isPrimaryKeys.get(i));
+        	columnMetaData.setGenerated(false);
+        	columnMetaData.setCaseSensitive(isCaseSensitives.get(i));
+            result.add(columnMetaData);
         }
         return result;
     }
@@ -118,5 +126,9 @@ public final class ColumnMetaDataLoader {
             }
         }
         return result;
+    }
+    
+    public static ColumnSchema loadSchema(String tableName) {
+    	return null;
     }
 }

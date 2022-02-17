@@ -3,6 +3,19 @@ package code.magicode.generator.db.meta.table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/*
+SELECT
+    T.TABLE_SCHEMA,   -- 模式
+    T.TABLE_NAME,     -- 表名
+    T.TABLE_COMMENT,  -- 表名注释
+    C.COLUMN_NAME,    -- 字段名
+    C.COLUMN_TYPE,    -- 字段类型
+    C.COLUMN_COMMENT  -- 字段注释
+FROM
+    `information_schema`.`TABLES` T, `information_schema`.`COLUMNS` C 
+WHERE T.TABLE_NAME = C.TABLE_NAME AND T.TABLE_SCHEMA = 'dbName'
+ORDER BY T.TABLE_NAME, C.ORDINAL_POSITION
+*/
 /**
  * SELECT * FROM `information_schema`.`TABLES` T 
  */
