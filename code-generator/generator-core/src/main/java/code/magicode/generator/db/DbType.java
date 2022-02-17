@@ -139,7 +139,12 @@ public enum DbType {
      */
     private final String desc;
 
-    /**
+    DbType(String db, String desc) {
+    	this.db = db;
+    	this.desc = desc;
+	}
+
+	/**
      * 获取数据库类型
      *
      * @param dbType 数据库类型字符串

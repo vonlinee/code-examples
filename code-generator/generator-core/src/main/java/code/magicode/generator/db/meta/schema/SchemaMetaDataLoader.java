@@ -17,16 +17,6 @@
 
 package code.magicode.generator.db.meta.schema;
 
-import com.google.common.collect.Lists;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.shardingsphere.sql.parser.binder.metadata.column.ColumnMetaDataLoader;
-import org.apache.shardingsphere.sql.parser.binder.metadata.index.IndexMetaDataLoader;
-import org.apache.shardingsphere.sql.parser.binder.metadata.table.TableMetaData;
-import org.apache.shardingsphere.sql.parser.binder.metadata.util.JdbcUtil;
-
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,40 +32,54 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javax.sql.DataSource;
+
+import org.apache.shardingsphere.sql.parser.binder.metadata.column.ColumnMetaDataLoader;
+import org.apache.shardingsphere.sql.parser.binder.metadata.index.IndexMetaDataLoader;
+import org.apache.shardingsphere.sql.parser.binder.metadata.table.TableMetaData;
+import org.apache.shardingsphere.sql.parser.binder.metadata.util.JdbcUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
+
 /**
  * Schema meta data loader.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Slf4j(topic = "ShardingSphere-metadata")
 public final class SchemaMetaDataLoader {
     
+	private static final Logger LOG = LoggerFactory.getLogger(SchemaMetaDataLoader.class);
+	
     private static final String TABLE_TYPE = "TABLE";
-    
     private static final String TABLE_NAME = "TABLE_NAME";
     
-    /**
-     * Load schema meta data.
-     *
-     * @param dataSource data source
-     * @param maxConnectionCount count of max connections permitted to use for this query
-     * @param databaseType database type
-     * @return schema meta data
-     * @throws SQLException SQL exception
-     */
-    public static SchemaMetaData load(final DataSource dataSource, final int maxConnectionCount, final String databaseType) throws SQLException {
-        List<String> tableNames;
-        try (Connection connection = dataSource.getConnection()) {
-            tableNames = loadAllTableNames(connection, databaseType);
-        }
-        log.info("Loading {} tables' meta data.", tableNames.size());
-        if (0 == tableNames.size()) {
-            return new SchemaMetaData(Collections.emptyMap());
-        }
-        List<List<String>> tableGroups = Lists.partition(tableNames, Math.max(tableNames.size() / maxConnectionCount, 1));
-        Map<String, TableMetaData> tableMetaDataMap = 1 == tableGroups.size()
-                ? load(dataSource.getConnection(), tableGroups.get(0), databaseType) : asyncLoad(dataSource, maxConnectionCount, tableNames, tableGroups, databaseType);
-        return new SchemaMetaData(tableMetaDataMap);
-    }
+	/**
+	 * Load schema meta data.
+	 *
+	 * @param dataSource         data source
+	 * @param maxConnectionCount count of max connections permitted to use for this
+	 *                           query
+	 * @param databaseType       database type
+	 * @return schema meta data
+	 * @throws SQLException SQL exception
+	 */
+	public static SchemaMetaData load(final DataSource dataSource, final int maxConnectionCount,
+			final String databaseType) throws SQLException {
+		List<String> tableNames;
+		try (Connection connection = dataSource.getConnection()) {
+			tableNames = loadAllTableNames(connection, databaseType);
+		}
+		LOG.info("Loading {} tables' meta data.", tableNames.size());
+		if (0 == tableNames.size()) {
+			return new SchemaMetaData(Collections.emptyMap());
+		}
+		List<List<String>> tableGroups = Lists.partition(tableNames,
+				Math.max(tableNames.size() / maxConnectionCount, 1));
+		Map<String, TableMetaData> tableMetaDataMap = 1 == tableGroups.size()
+				? load(dataSource.getConnection(), tableGroups.get(0), databaseType)
+				: asyncLoad(dataSource, maxConnectionCount, tableNames, tableGroups, databaseType);
+		return new SchemaMetaData(tableMetaDataMap);
+	}
     
     private static Map<String, TableMetaData> load(final Connection connection, final Collection<String> tables, final String databaseType) throws SQLException {
         try (Connection con = connection) {

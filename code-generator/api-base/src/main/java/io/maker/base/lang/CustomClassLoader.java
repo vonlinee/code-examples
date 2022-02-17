@@ -2,7 +2,6 @@ package io.maker.base.lang;
 
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.URLStreamHandlerFactory;
 
 /**
  * 打破双亲委派机制

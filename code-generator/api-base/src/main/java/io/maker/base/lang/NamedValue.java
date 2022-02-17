@@ -1,49 +1,21 @@
 package io.maker.base.lang;
 
-import java.io.Serializable;
+public final class NamedValue extends Value {
 
-public final class NamedValue extends JavaType implements Serializable {
-
-    public static final String NULL_STRING = "NULL";
-    public static final String NULL_REFERENCE = null;
-
-    private final String name;
-    private final String typeName;
-    private final Object value;
-
-    public NamedValue(String name, Object obj) {
-        this.name = name;
-        if ((this.value = obj) != null) {
-            this.classType = obj.getClass();
-            this.typeName = classType.getName();
-        } else {
-            this.classType = Void.class;
-            this.typeName = NULL_STRING;
-        }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public Class<?> getType() {
-        return classType;
-    }
-
-    public boolean isNull() {
-        return value == null;
-    }
-
-    @Override
-    public String toString() {
-        return value == null ? NULL_STRING : value.toString();
-    }
+	private String valueName;
+	
+	private static final String UNKNOWN_NAME = "unknown";
+	
+	private NamedValue(String name, Object value) {
+		super(value);
+		this.valueName = value == null ? "null" : name == null ? UNKNOWN_NAME : name;
+	}
+	
+	public String getName() {
+		return valueName;
+	}
+	
+	public static <T> NamedValue of(String name, T value) {
+		return new NamedValue(name, value);
+	}
 }

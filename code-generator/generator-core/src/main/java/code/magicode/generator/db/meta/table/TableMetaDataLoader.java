@@ -1,9 +1,16 @@
 package code.magicode.generator.db.meta.table;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Map;
 
 import javax.sql.DataSource;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.MapHandler;
 
 import code.magicode.generator.db.meta.column.ColumnMetaDataLoader;
 import code.magicode.generator.db.meta.index.IndexMetaDataLoader;
@@ -31,14 +38,22 @@ public final class TableMetaDataLoader {
 		}
 	}
 	
+	/**
+	 * 获取表的Schema信息
+	 * @param dataSource
+	 * @param dbName
+	 * @param tableName
+	 * @return
+	 */
 	public static TableSchema loadSchema(final DataSource dataSource, final String dbName, final String tableName) {
-		String sql = "SELECT * FROM `information_schema`.`TABLES` T WHERE T.TABLE_SCHEMA = `%s` AND T.TABLE_NAME = `%s`";
-//		try (Connection connection = dataSource.getConnection()) {
-			sql = String.format(sql, dbName, tableName);
-			System.out.println(sql);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+		try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement();) {
+			ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM `information_schema`.`TABLES` T WHERE T.TABLE_SCHEMA = '%s' AND T.TABLE_NAME = '%s'", dbName, tableName));
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	

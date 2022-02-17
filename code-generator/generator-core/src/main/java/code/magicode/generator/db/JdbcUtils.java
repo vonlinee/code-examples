@@ -23,9 +23,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
-import javax.sql.DataSource;
-
 import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
