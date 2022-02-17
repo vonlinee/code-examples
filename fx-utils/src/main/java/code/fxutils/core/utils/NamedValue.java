@@ -1,4 +1,4 @@
-package io.maker.base.lang;
+package code.fxutils.core.utils;
 
 /**
  * bind a name to a specified value

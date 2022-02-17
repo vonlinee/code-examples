@@ -1,4 +1,4 @@
-package io.maker.base.lang;
+package code.fxutils.core.utils;
 
 public class Value extends JavaType {
 

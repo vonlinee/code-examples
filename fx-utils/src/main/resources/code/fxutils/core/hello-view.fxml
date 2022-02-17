@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<TabPane id="rootTabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+         prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8"
+         xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.fxutils.core.fx.controller.MainController">
+    <tabs>
+        <Tab text="文本处理工具">
+            <content>
+                <BorderPane fx:id="textHandlePane" prefHeight="200.0" prefWidth="200.0">
+                    <top>
+                        <VBox fx:id="topRootVBox" prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <HBox onMouseClicked="#click" fx:id="centerHBox1" prefHeight="100.0" prefWidth="200.0">
+                                    <children>
+                                        <Button fx:id="chooseInputBtn" mnemonicParsing="false" text="Input"/>
+                                        <TextField fx:id="inputFileTextField"/>
+                                    </children>
+                                </HBox>
+                                <HBox fx:id="centerHBox2" layoutX="10.0" layoutY="10.0" prefHeight="100.0"
+                                      prefWidth="200.0">
+                                    <children>
+                                        <Button fx:id="chooseOutputBtn" mnemonicParsing="false" text="Output"/>
+                                        <TextField fx:id="outputFileTextField"/>
+                                    </children>
+                                </HBox>
+                                <HBox fx:id="centerHBox3" prefHeight="100.0" prefWidth="200.0">
+                                    <children>
+                                        <Button fx:id="choseFileBtn" mnemonicParsing="false" text="选择文件"/>
+                                        <TextField fx:id="choseFileTextField"/>
+                                        <Button fx:id="copyToClipboardBtn" mnemonicParsing="false" text="复制到剪贴板"/>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </top>
+                    <!--中间部分-->
+                    <center>
+                        <VBox fx:id="centerVBox" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <HBox prefHeight="65.0" prefWidth="598.0">
+                                    <children>
+                                        <Button mnemonicParsing="false" text="去除空格"/>
+                                        <Button mnemonicParsing="false" text="左对齐"/>
+                                        <Button mnemonicParsing="false" text="右对齐"/>
+                                        <Button mnemonicParsing="false" text="居中对齐"/>
+                                    </children>
+                                </HBox>
+                                <HBox prefHeight="50.0" prefWidth="598.0">
+                                    <children>
+                                        <Button mnemonicParsing="false" text="驼峰转下划线"/>
+                                        <Button mnemonicParsing="false" text="下划线转驼峰"/>
+                                    </children>
+                                </HBox>
+                                <HBox prefHeight="46.0" prefWidth="598.0">
+                                    <children>
+                                        <TextField/>
+                                        <Button mnemonicParsing="false" text="按指定字符分割"/>
+                                        <Button mnemonicParsing="false" text="左删除"/>
+                                        <Button mnemonicParsing="false" text="右删除"/>
+                                        <Button mnemonicParsing="false" text="截断"/>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </center>
+                    <bottom>
+                        <HBox fx:id="bottomHBox" style="-fx-background-color: green" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <Label text="1.不支持中文"/>
+                            </children>
+                        </HBox>
+                    </bottom>
+                </BorderPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>

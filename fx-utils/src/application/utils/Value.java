@@ -1,4 +1,4 @@
-package io.maker.base.lang;
+package application.utils;
 
 public class Value extends JavaType {
 

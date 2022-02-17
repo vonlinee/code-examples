@@ -1,4 +1,4 @@
-package io.maker.base.utils;
+package application.utils;
 
 import java.util.List;
 import java.util.StringTokenizer;

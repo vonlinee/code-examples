@@ -7,7 +7,6 @@ import lombok.Getter;
  * 支持的数据库类型,主要用于分页方言
  */
 @Getter
-@AllArgsConstructor
 public enum DbType {
 
     /**

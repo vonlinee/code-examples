@@ -1,4 +1,4 @@
-package io.maker.base.lang;
+package application.utils;
 
 /**
  * bind a name to a specified value
