@@ -36,7 +36,6 @@ public class CommonSql {
 //		
 //		System.out.println(tableInfoSchema);
 		
-		
 		Predicate<String> filter = columnName -> {
 			List<String> rules = new ArrayList<>();
 			return columnName.contains("COLUMN") || columnName.contains("_MYCAT_OP_TIME") || columnName.contains("_MYCAT_OP_TIME");

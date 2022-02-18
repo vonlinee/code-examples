@@ -45,7 +45,7 @@ public final class TableMetaDataLoader {
 	 * @param tableName
 	 * @return
 	 */
-	public static TableInfoSchema loadSchema(final DataSource dataSource, final String dbName, final String tableName) {
+	public static TableInfoSchema loadInfomationSchema(final DataSource dataSource, final String dbName, final String tableName) {
 		String sql = String.format("SELECT * FROM `information_schema`.`TABLES` T WHERE T.TABLE_SCHEMA = '%s' AND T.TABLE_NAME = '%s'", dbName, tableName);
 		TableInfoSchema schema = new TableInfoSchema();
 		try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement();) {

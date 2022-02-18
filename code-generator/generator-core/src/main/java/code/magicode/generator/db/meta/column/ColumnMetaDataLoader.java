@@ -210,13 +210,13 @@ public final class ColumnMetaDataLoader {
 
 	private static final String INFOMATION_SCHEMA_SQL_FORMAT = "SELECT * FROM `information_schema`.`COLUMNS` WHERE TABLE_SCHEMA = '%s' AND TABLE_NAME = '%s'";
 	
-	public static ColumnInfoSchema loadSchema(final DataSource dataSource, String dbName, String tableName) {
+	public static ColumnInfoSchema loadInfomationSchema(final DataSource dataSource, String dbName, String tableName) {
 		String sql = String.format(INFOMATION_SCHEMA_SQL_FORMAT, dbName, tableName);
 		ColumnInfoSchema schema = new ColumnInfoSchema();
 		try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement();) {
 			try (ResultSet resultSet = statement.executeQuery(sql)) {
 				while (resultSet.next()) {
-
+					
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
