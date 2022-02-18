@@ -1,0 +1,110 @@
+// Mat
+// template<typename _Tp> _Tp& at(int row, int col);
+
+// Mat_ 用于多通道图像矩阵
+template<typename _Tp> class Mat_ : public Mat
+
+// Vec
+// template<typename _Tp, int cn> class Vec : public Matx<_Tp, cn, 1>
+// Vec<T,n>:当成数组来使用
+typedef Vec<uchar, 2> Vec2b;
+typedef Vec<uchar, 3> Vec3b;
+typedef Vec<uchar, 4> Vec4b;
+typedef Vec<short, 2> Vec2s;
+typedef Vec<short, 3> Vec3s;
+typedef Vec<short, 4> Vec4s;
+typedef Vec<ushort, 2> Vec2w;
+typedef Vec<ushort, 3> Vec3w;
+typedef Vec<ushort, 4> Vec4w;
+
+
+
+uchar - unsigned char
+
+IplImage
+
+
+
+
+VideoCapture类用于视频文件的读取
+
+//v4.5.2
+void read_video_example() {
+    VideoCapture cap;
+    cap.open("D:/Temp/video/IR.avi"); //CodeBlocks中路径要用'/'，不能用'\'
+    if (!cap.isOpened()) //如果视频不能正常打开则返回
+        return;
+    //通过VideoCapture.get取出视频信息  枚举cv::VideoCaptureProperties
+    int frameRate = static_cast<int>(cap.get(cv::CAP_PROP_FPS));  //帧率 x frames/s
+    int totalFrames = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_COUNT)); //总帧数
+    int width = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_WIDTH));  //帧宽度
+    int height = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_HEIGHT)); //帧高度
+    cout << "视频宽度=" << width << endl;
+    cout << "视频高度=" << height << endl;
+    cout << "视频总帧数=" << totalFrames << endl;
+    cout << "帧率=" << frameRate << endl;
+}
+
+//逐帧读取
+// 1、流操作 >> 方法
+// 2、read()方法
+// 3、grap()和retrieve()方法，read方法就是将这两个函数放到了一起
+
+void read_video_example1() {
+    VideoCapture cap;
+    cap.open("D:/Temp/video/IR.avi");
+    if (!cap.isOpened())//如果视频不能正常打开则返回
+		return;
+    Mat frame;
+    double t = 0, fps = 0;
+    while (1)
+    {
+        t = (double) cv::getTickCount();
+        //方法1：
+        //cap >> frame;
+        //方法2：
+        bool res = cap.read(frame); //virtual bool read(OutputArray image);
+        cout << "res = " << res << "  ";
+        //方法3：
+        //cap.grab(); //virtual bool grab();
+        //cap.retrieve(frame);
+        if (frame.empty()) //如果某帧为空则退出循环
+            break;
+        t = ((double) cv::getTickCount() - t) / cv::getTickFrequency();
+        fps = 1.0 / t;
+        cout << " 帧频是： " << fps << endl;
+        imshow("frame1", frame);
+        namedWindow("frame1", cv::WindowFlags::WINDOW_NORMAL);
+    }
+}
+
+
+//读取任一帧
+视频的任意位置获取，需要首先设置任意帧的位置，
+VideoCaputure 通过其方法set设置要获取帧的位置，具体有以下几种方法：
+set(CAP_PROP_POS_MSEC, 毫秒为单位的时间位置)
+set(CAP_PROP_POS_FRAMES , 任意帧的索引位置)
+set(CAP_PROP_POS_AVI_RATIO  , 任意帧的位置在整个视频中的位置比例， 数值为0-1)
+
+void read_video_example2() {
+    int timeStame = 0;
+    while (1)
+	{
+		timeStame += 6;
+		t = (double)cv::getTickCount();
+		cap.set(CAP_PROP_POS_FRAMES, timeStame);
+		cap.read(frame);
+		t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
+		fps = 1.0 / t;
+		cout << " 帧频是： " << fps << endl;
+		//cap >> frame;//等价于cap.read(frame);
+		if (frame.empty())//如果某帧为空则退出循环
+			break;
+	}
+}
+
+
+
+
+
+
