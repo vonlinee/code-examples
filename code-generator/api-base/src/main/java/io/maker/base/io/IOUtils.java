@@ -16,8 +16,6 @@
  */
 package io.maker.base.io;
 
-import io.maker.base.io.output.ByteArrayOutputStream;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -36,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import io.maker.base.io.output.ByteArrayOutputStream;
 
 /**
  * General IO stream manipulation utilities.
@@ -899,7 +899,8 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void writeLines(Collection lines, String lineEnding,
+    @SuppressWarnings("rawtypes")
+	public static void writeLines(Collection lines, String lineEnding,
                                   OutputStream output, String encoding) throws IOException {
         if (encoding == null) {
             writeLines(lines, lineEnding, output);
@@ -910,7 +911,7 @@ public class IOUtils {
             if (lineEnding == null) {
                 lineEnding = LINE_SEPARATOR;
             }
-            for (Iterator it = lines.iterator(); it.hasNext(); ) {
+			for(Iterator it = lines.iterator(); it.hasNext() ;) {
                 Object line = it.next();
                 if (line != null) {
                     output.write(line.toString().getBytes(encoding));

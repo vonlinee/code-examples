@@ -1,7 +1,7 @@
 package code.magicode.generator.db.meta.table;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 /*
 SELECT
@@ -19,7 +19,7 @@ ORDER BY T.TABLE_NAME, C.ORDINAL_POSITION
 /**
  * SELECT * FROM `information_schema`.`TABLES` T 
  */
-public class TableSchema implements Serializable {
+public class TableInfoSchema implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -33,7 +33,7 @@ public class TableSchema implements Serializable {
 
 	private String engine;
 
-	private Long version;
+	private Integer version;
 
 	private String rowFormat;
 
@@ -51,11 +51,11 @@ public class TableSchema implements Serializable {
 
 	private Long autoIncrement;
 
-	private LocalDateTime createTime;
+	private Timestamp createTime;
 
-	private LocalDateTime updateTime;
+	private Timestamp updateTime;
 
-	private LocalDateTime checkTime;
+	private Timestamp checkTime;
 
 	private String tableCollation;
 
@@ -105,11 +105,11 @@ public class TableSchema implements Serializable {
 		this.engine = engine;
 	}
 
-	public Long getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 
-	public void setVersion(Long version) {
+	public void setVersion(Integer version) {
 		this.version = version;
 	}
 
@@ -177,27 +177,27 @@ public class TableSchema implements Serializable {
 		this.autoIncrement = autoIncrement;
 	}
 
-	public LocalDateTime getCreateTime() {
+	public Timestamp getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(LocalDateTime createTime) {
+	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
 	}
 
-	public LocalDateTime getUpdateTime() {
+	public Timestamp getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(LocalDateTime updateTime) {
+	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
 	}
 
-	public LocalDateTime getCheckTime() {
+	public Timestamp getCheckTime() {
 		return checkTime;
 	}
 
-	public void setCheckTime(LocalDateTime checkTime) {
+	public void setCheckTime(Timestamp checkTime) {
 		this.checkTime = checkTime;
 	}
 

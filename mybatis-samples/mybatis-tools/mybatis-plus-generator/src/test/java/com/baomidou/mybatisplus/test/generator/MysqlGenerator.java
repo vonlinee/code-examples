@@ -25,7 +25,6 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
  * <p>
  * 代码生成器演示
  * </p>
- * 
  * @author hubin
  * @since 2016-12-01
  */
@@ -57,6 +56,7 @@ public class MysqlGenerator extends GeneratorTest {
 	// "jdbc:mysql://172.26.165.30:3306/scmcenter?characterEncoding=utf-8&useUnicode=true&useSSL=false";
 
 	private static String Url = "jdbc:mysql://localhost:3306/mysql_learn?characterEncoding=utf-8&useUnicode=true&useSSL=false&serverTimezone=GMT%2B8";
+	private static String Url1 = "jdbc:mysql://172.26.136.195:3306/csc?characterEncoding=utf-8&useUnicode=true&useSSL=false&serverTimezone=GMT%2B8";
 	// 业务前缀 决定生成的文件 busicen.prc\ly.mp.busicen.prc
 	private static String busicen = "busicen";
 	// 包前缀 决定生成的包
@@ -64,7 +64,9 @@ public class MysqlGenerator extends GeneratorTest {
 	// 包配置名 中心简称 如 prc
 	private static String ModuleName = "scc";
 	// 表前缀 t_中心简称 如 t_prc
-	private static String[] TablePrefix = { "t_scc" };
+	private static String[] TablePrefix = {
+			"t_scc"
+	};
 	// 是否生成查询方法 0或1
 	private static int queryFalg = 1;
 	// 是否生成保存方法 0或1
@@ -73,12 +75,14 @@ public class MysqlGenerator extends GeneratorTest {
 	// 需要生成的表名
 	private static String[] prepareNeededTableNames() {
 		List<String> tableNameList = new ArrayList<>();
-		tableNameList.add("customers");
-		tableNameList.add("orderitems");
-		tableNameList.add("orders");
-		tableNameList.add("productnotes");
-		tableNameList.add("products");
-		tableNameList.add("vendors");
+		// tableNameList.add("customers");
+		// tableNameList.add("orderitems");
+		// tableNameList.add("orders");
+		// tableNameList.add("productnotes");
+		// tableNameList.add("products");
+		// tableNameList.add("vendors");
+
+		tableNameList.add("t_sac_onetask_receive_object");
 		return tableNameList.toArray(new String[6]);
 	}
 
@@ -124,9 +128,16 @@ public class MysqlGenerator extends GeneratorTest {
 				return super.processTypeConvert(globalConfig, fieldType);
 			}
 		});
-		config.setDriverName(MYSQL5_DRIVER_CLASSNAME);
-		config.setUsername(LOCAL_ROOT_USERNAME);
-		config.setPassword(LOCAL_ROOT_PASSWORD).setUrl(Url);
+		// config.setDriverName(MYSQL5_DRIVER_CLASSNAME);
+		// config.setUsername(LOCAL_ROOT_USERNAME);
+		// config.setPassword(LOCAL_ROOT_PASSWORD);
+		// config.setUrl(Url);
+
+		config.setDriverName(MYSQL8_DRIVER_CLASSNAME);
+		config.setUsername(Username);
+		config.setPassword(Password);
+		config.setUrl(Url1);
+		config.setDriverName(MYSQL8_DRIVER_CLASSNAME);
 		return config;
 	}
 

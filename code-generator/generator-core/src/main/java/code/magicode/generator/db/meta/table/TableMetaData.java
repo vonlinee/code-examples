@@ -43,7 +43,7 @@ public final class TableMetaData {
 	private Map<String, ColumnMetaData> getColumns(final Collection<ColumnMetaData> columnMetaDataList) {
 		Map<String, ColumnMetaData> result = new LinkedHashMap<>(columnMetaDataList.size(), 1);
 		for (ColumnMetaData each : columnMetaDataList) {
-			String lowerColumnName = each.getName().toLowerCase();
+			String lowerColumnName = each.getName(); //不进行大小写转换
 			columnNames.add(lowerColumnName);
 			result.put(lowerColumnName, each);
 			if (each.isPrimaryKey()) {

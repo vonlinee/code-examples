@@ -3,9 +3,9 @@ package code.magicode.generator.db.meta.column;
 import java.io.Serializable;
 
 /**
- * SELECT * FROM `information_schema`.`COLUMNS` T
+ * SELECT * FROM `information_schema`.`COLUMNS` WHERE TABLE_SCHEMA = 'dbName' AND TABLE_NAME = 'tableName'
  */
-public class ColumnSchema implements Serializable {
+public class ColumnInfoSchema implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
