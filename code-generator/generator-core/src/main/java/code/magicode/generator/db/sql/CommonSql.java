@@ -14,7 +14,6 @@ import javax.sql.DataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.google.common.base.CaseFormat;
 
-import code.magicode.generator.db.meta.table.TableInfoSchema;
 import code.magicode.generator.db.meta.table.TableMetaData;
 import code.magicode.generator.db.meta.table.TableMetaDataLoader;
 import io.maker.base.ResourceLoader;

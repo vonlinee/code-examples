@@ -1,7 +1,8 @@
 package io.maker.base.io;
 
 import io.maker.base.io.output.NullOutputStream;
-import io.maker.base.utils.Validator;
+import io.maker.base.lang.Validator;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.*;
 

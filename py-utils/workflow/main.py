@@ -394,23 +394,36 @@ def batch_aligen(aligenment: str= 'L')-> None:
                 print(line.center(max_len))
 
 
-s = '<if test="${columnValue} !=null and param.taskId !='' ">'\
-'    and T.TASK_ID = #{param.taskId}' \
-'</if>'
+def batch_upper_first_word()-> None:
+    lines = []
+    with open('./input.txt', 'r') as f:
+        read_lines = f.readlines()
+        for line in read_lines:
+            line = str(line)
+            if len(line) == 0:
+                print()
+            else:
+                print(line.strip().upper_first())
 
 
 
-# if __name__ == '__main__':
-#     batch_snake_to_camel_style(1)
+# s = '<if test="${columnValue} !=null and param.taskId !='' ">'\
+# '    and T.TASK_ID = #{param.taskId}' \
+# '</if>'
 
-with open("input.txt", 'r') as f:
-    result_list = []
-    lines = f.readlines()
-    for line in lines:
-        s = str(line).strip()
-        camel_style = snake_to_camel_style(s)
-        camel_style = 'param.' + camel_style 
-        print('<if test="' + camel_style + ' !=null and ' + camel_style + ' !='' ">')
-        print('AND T.' + s + ' = #{ ' + camel_style + ' }")'
-        print('</if>')
-        result_list.append()
+
+
+if __name__ == '__main__':
+    batch_upper_first_word()
+
+# with open("input.txt", 'r') as f:
+#     result_list = []
+#     lines = f.readlines()
+#     for line in lines:
+#         s = str(line).strip()
+#         camel_style = snake_to_camel_style(s)
+#         camel_style = 'param.' + camel_style 
+#         print('<if test="' + camel_style + ' !=null and ' + camel_style + ' !='' ">')
+#         print('AND T.' + s + ' = #{ ' + camel_style + ' }")'
+#         print('</if>')
+#         result_list.append()
