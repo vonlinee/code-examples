@@ -1,0 +1,23 @@
+<sql>
+	<id></id>
+	<description></description>
+	<text>SELECT * FROM `information_schema`.`COLUMNS` T</text>
+</sql>
+
+<sql>
+	<id></id>
+	<description></description>
+	<text>SELECT * FROM `information_schema`.`TABLES` T</text>
+</sql>
+
+<sql>
+	<id></id>
+	<description></description>
+	<text>
+		SELECT * FROM `information_schema`.`TABLES` T 
+			LEFT JOIN `information_schema`.`COLUMNS` C ON T.TABLE_NAME = C.TABLE_NAME 
+		WHERE T.TABLE_NAME = 't_account'
+		ORDER BY
+		    T.TABLE_NAME, C.ORDINAL_POSITION
+	</text>
+</sql>

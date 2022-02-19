@@ -42,6 +42,7 @@ dependencies {
     implementation("mysql:mysql-connector-java:8.0.21")
 
     implementation("${lib.lombok}")
+    testImplementation("${lib.lombok}")
 
 }
 

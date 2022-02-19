@@ -440,7 +440,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static List readLines(InputStream input) throws IOException {
+    public static List<String> readLines(InputStream input) throws IOException {
         InputStreamReader reader = new InputStreamReader(input);
         return readLines(reader);
     }
@@ -461,7 +461,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static List readLines(InputStream input, String encoding) throws IOException {
+    public static List<String> readLines(InputStream input, String encoding) throws IOException {
         if (encoding == null) {
             return readLines(input);
         } else {
@@ -482,9 +482,9 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static List readLines(Reader input) throws IOException {
+    public static List<String> readLines(Reader input) throws IOException {
         BufferedReader reader = new BufferedReader(input);
-        List list = new ArrayList();
+        List<String> list = new ArrayList<>();
         String line = reader.readLine();
         while (line != null) {
             list.add(line);
@@ -867,18 +867,17 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void writeLines(Collection lines, String lineEnding,
-                                  OutputStream output) throws IOException {
+    public static void writeLines(Collection<String> lines, String lineEnding, OutputStream output) throws IOException {
         if (lines == null) {
             return;
         }
         if (lineEnding == null) {
             lineEnding = LINE_SEPARATOR;
         }
-        for (Iterator it = lines.iterator(); it.hasNext(); ) {
-            Object line = it.next();
+        for (Iterator<String> it = lines.iterator(); it.hasNext(); ) {
+            String line = it.next();
             if (line != null) {
-                output.write(line.toString().getBytes());
+                output.write(line.getBytes());
             }
             output.write(lineEnding.getBytes());
         }
@@ -900,7 +899,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     @SuppressWarnings("rawtypes")
-	public static void writeLines(Collection lines, String lineEnding,
+    public static void writeLines(Collection lines, String lineEnding,
                                   OutputStream output, String encoding) throws IOException {
         if (encoding == null) {
             writeLines(lines, lineEnding, output);
@@ -911,7 +910,7 @@ public class IOUtils {
             if (lineEnding == null) {
                 lineEnding = LINE_SEPARATOR;
             }
-			for(Iterator it = lines.iterator(); it.hasNext() ;) {
+            for (Iterator it = lines.iterator(); it.hasNext(); ) {
                 Object line = it.next();
                 if (line != null) {
                     output.write(line.toString().getBytes(encoding));

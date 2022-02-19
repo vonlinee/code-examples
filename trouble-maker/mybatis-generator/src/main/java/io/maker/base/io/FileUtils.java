@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.CRC32;
@@ -82,6 +83,19 @@ public class FileUtils {
             throw new FileNotFoundException("File '" + file + "' does not exist");
         }
         return new FileInputStream(file);
+    }
+
+    /**
+     * 读取文件的每行并进行处理
+     * @param file
+     * @param lineConsumer
+     */
+    public static void handleLines(File file, Consumer<String> lineConsumer) {
+        try {
+            readLines(file).stream().filter(line -> !line.isEmpty()).forEach(lineConsumer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -1083,7 +1097,7 @@ public class FileUtils {
      *                                      by the VM
      * @since Commons IO 1.1
      */
-    public static List readLines(File file, String encoding) throws IOException {
+    public static List<String> readLines(File file, String encoding) throws IOException {
         InputStream in = null;
         try {
             in = openInputStream(file);
@@ -1102,7 +1116,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since Commons IO 1.3
      */
-    public static List readLines(File file) throws IOException {
+    public static List<String> readLines(File file) throws IOException {
         return readLines(file, null);
     }
 
@@ -1418,7 +1432,7 @@ public class FileUtils {
         if (directory.exists()) {
             if (directory.isFile()) {
                 String message = "File " + directory + " exists and is "
-                    + "not a directory. Unable to create directory.";
+                        + "not a directory. Unable to create directory.";
                 throw new IOException(message);
             }
         } else {
