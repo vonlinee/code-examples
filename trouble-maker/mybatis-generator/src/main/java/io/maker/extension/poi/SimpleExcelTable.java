@@ -24,7 +24,7 @@ public class SimpleExcelTable {
     /**
      * 将表格数据映射到SimpleExcelTable
      * @param workbook Excel Workbook
-     * @return
+     * @return SimpleExcelTable
      */
     public static SimpleExcelTable read(Workbook workbook) {
         SimpleExcelTable excelTable = new SimpleExcelTable();
@@ -36,7 +36,6 @@ public class SimpleExcelTable {
             Iterator<Cell> iterator = row.iterator();
             while (iterator.hasNext()) {
                 Cell cell = iterator.next();
-
                 String value = cell.getStringCellValue();
             }
         }

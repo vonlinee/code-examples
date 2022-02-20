@@ -13,8 +13,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 import io.maker.generator.db.meta.resultset.ResultSetColumnMetadata;
-import org.apache.commons.dbutils.DbUtils;
-import org.apache.commons.dbutils.ResultSetHandler;
+import io.maker.generator.db.meta.resultset.ResultSetHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,23 +99,29 @@ public final class JdbcUtils {
     }
 
     /**
-     * 获取数据库连接
-     * @return Connection
+     * TODO query
+     * @param conn
+     * @param sql
+     * @param <T>
+     * @return
      */
-    public static Optional<Connection> getOptionalConnection() {
-        Properties prop = ResourceLoader.loadProperties(JDBC_PROPERTIES);
-        boolean result = DbUtils.loadDriver(prop.getProperty("mysql.jdbc.driver"));
-        Connection connection = null;
-        if (result) {
-            try {
-                connection = DriverManager.getConnection(prop.getProperty("mysql.jdbc.url"), prop.getProperty("mysql.jdbc.username"), prop.getProperty("mysql.jdbc.password"));
-            } catch (SQLException e) {
-                LOG.error("failed to get connection", e);
-            }
-        } else {
-            LOG.error("failed to load driver");
+    public static <T> T query(Connection conn, String sql) {
+        try (Statement statement = conn.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
+            return null;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
-        return Optional.ofNullable(connection);
+        return null;
+    }
+
+    public static <T> T query(Connection conn, String sql, ResultSetHandler<T> handler) {
+        try (Statement statement = conn.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
+            LOG.debug("\nQuery : " + sql);
+            return handler.handle(resultSet);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -126,7 +131,7 @@ public final class JdbcUtils {
      * @param args
      * @return
      */
-    public static List<Map<String, Object>> executeQuery(Connection conn, String sql, Object... args) {
+    public static List<Map<String, Object>> queryMapping(Connection conn, String sql, Object... args) {
         List<Map<String, Object>> table = new ArrayList<>();
         try (Statement statement = conn.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(sql)) {
@@ -300,7 +305,7 @@ public final class JdbcUtils {
      * 获取数据库连接
      * @return Connection
      */
-    public static Connection getConnection(String properties) {
+    public static Optional<Connection> getConnection(String properties) {
         Properties prop = ResourceLoader.loadProperties(properties);
         boolean result = loadDriver(prop.getProperty("jdbc.driver"));
         Connection connection = null;
@@ -313,7 +318,46 @@ public final class JdbcUtils {
         } else {
             LOG.error("failed to load driver");
         }
-        return connection;
+        return Optional.ofNullable(connection);
+    }
+
+    /**
+     * 获取数据库连接
+     * @return Connection
+     */
+    public static Optional<Connection> getConnection(String driver, String url, String userName, String password) {
+        Connection connection = null;
+        boolean result = loadDriver(driver);
+        if (result) {
+            try {
+                connection = DriverManager.getConnection(url, userName, password);
+            } catch (SQLException e) {
+                LOG.error("failed to get connection", e);
+            }
+        } else {
+            LOG.error("failed to load driver");
+        }
+        return Optional.ofNullable(connection);
+    }
+
+    /**
+     * 获取数据库
+     * @param properties
+     * @return
+     */
+    public static Optional<Connection> getConnection(Properties properties) {
+        Connection connection = null;
+        boolean result = loadDriver(properties.getProperty("driverClassName"));
+        if (result) {
+            try {
+                connection = DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("username"), properties.getProperty("password"));
+            } catch (SQLException e) {
+                LOG.error("failed to get connection", e);
+            }
+        } else {
+            LOG.error("failed to load driver");
+        }
+        return Optional.ofNullable(connection);
     }
 
     /**
@@ -493,7 +537,7 @@ public final class JdbcUtils {
      * <code>false</code>
      */
     public static boolean loadDriver(String driverClassName) {
-        return loadDriver(DbUtils.class.getClassLoader(), driverClassName);
+        return loadDriver(JdbcUtils.class.getClassLoader(), driverClassName);
     }
 
     /**

@@ -76,6 +76,15 @@ public final class ObjectUtils {
         return null;
     }
 
+    /**
+     * 是否是数组
+     * @param obj Object
+     * @return
+     */
+    public static boolean isArray(Object obj) {
+        return obj != null && obj.getClass().isArray();
+    }
+
     public static <T> void setFieldValues(T obj, Map<String, Object> map) throws Exception {
         obj = Objects.requireNonNull(obj);
         BeanInfo beanInfo = Introspector.getBeanInfo(obj.getClass());

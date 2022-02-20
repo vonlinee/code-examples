@@ -6,7 +6,6 @@ import java.util.List;
 
 public class ResultSetMetaDataLoader {
 
-
     public static List<ResultSetColumnMetadata> load(ResultSetMetaData rsmd) {
         return new ArrayList<>();
     }

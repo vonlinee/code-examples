@@ -16,11 +16,46 @@ public class ExcelWriter {
 
     public static final String DEFAULT_SHEET_NAME = "sheet-1";
 
+    public static final String XLSX_EXCEL = "xlsx";
+    public static final String XLS = "xls";
+
     public boolean write(File file, String[][] data, String excelType, String sheetName) {
-        if ("xlsx".equalsIgnoreCase(excelType)) {
+        if (XLSX_EXCEL.equalsIgnoreCase(excelType)) {
             return writeXlsx(file, data, sheetName);
         }
-        return true;
+        throw new UnsupportedOperationException("不支持的Excel类型:" + excelType);
+    }
+
+    /**
+     * 不同数据类型的写入方法
+     * @param file
+     * @param table
+     * @return
+     */
+    public boolean write(File file, ExcelTable table) {
+        int rowCount = table.getRowCount();
+        int columnCount = table.getColumnCount();
+        Workbook book = new XSSFWorkbook();
+        Sheet sheet = book.createSheet(table.getSheetName());
+        List<ExcelColumn<String>> columnList = table.getColumnList();
+        //表头
+        Row titleRow = sheet.createRow(0);
+        for (int j = 0; j < columnCount; j++) {
+            Cell cell = titleRow.createCell(j);
+            cell.setCellValue(columnList.get(j).getTitle());
+        }
+        //表数据
+        for (int i = 1; i < rowCount; i++) {
+            System.out.println("\n写入第 " + i + "行：");
+            Row dataRow = sheet.createRow(i);
+            for (int j = 0; j < columnCount; j++) {
+                Cell cell = dataRow.createCell(j);
+                String cellValue = columnList.get(j).get(i - 1);
+                System.out.printf("%s\t", cellValue);
+                cell.setCellValue(cellValue);
+            }
+        }
+        return writeToWorkbook(book, file);
     }
 
     public boolean write(File file, String[][] data, String sheetName) {
@@ -55,7 +90,7 @@ public class ExcelWriter {
                 cell.setCellValue(tableData.get(rowNum).get(colNum).getValue());
             }
         }
-        return write(book, file);
+        return writeToWorkbook(book, file);
     }
 
     private boolean writeXlsx(File file, String[][] data, String sheetName) {
@@ -82,10 +117,10 @@ public class ExcelWriter {
                 cell.setCellValue(data[rowNum][colNum]);
             }
         }
-        return write(book, file);
+        return writeToWorkbook(book, file);
     }
 
-    private boolean write(Workbook workbook, File file) {
+    private boolean writeToWorkbook(Workbook workbook, File file) {
         boolean result = false;
         try (FileOutputStream fos = new FileOutputStream(file)) {
             workbook.write(fos);

@@ -14,8 +14,27 @@ dependencies {
     implementation "${lib.velocity}"
     implementation "${lib.freemarker}"
     implementation "${lib.beetl}"
-
     compileOnly "org.jetbrains:annotations:22.0.0"
+
+    implementation 'com.squareup:javapoet:1.13.0'
+    implementation 'commons-dbutils:commons-dbutils:1.7'
+    implementation 'org.freemarker:freemarker:2.3.31'
+    implementation 'com.alibaba:druid:1.2.8'
+    // 日志依赖
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.slf4j:slf4j-log4j12:1.7.36'
+    testImplementation 'org.slf4j:slf4j-log4j12:1.7.36'
+    implementation("mysql:mysql-connector-java:8.0.21")
+    implementation("${lib.lombok}")
+
+    implementation 'org.apache.shardingsphere:sharding-jdbc-core:4.1.1'
+    implementation "${lib.guava}"
+    implementation "com.baomidou:mybatis-plus:${mybatisPlusVersion}"
+// https://mvnrepository.com/artifact/commons-dbutils/commons-dbutils
+    implementation 'commons-dbutils:commons-dbutils:1.7'
+
+    testCompileOnly "org.jetbrains:annotations:22.0.0"
+
     testImplementation "${lib.sqlserver}"
     testImplementation "${lib.postgresql}"
     testImplementation lib.oracle as ConfigurableFileTree
@@ -26,24 +45,10 @@ dependencies {
     testImplementation "${lib.sqlite}"
     testImplementation "${lib.firebird}"
     testImplementation "${lib.'swagger-annotations'}"
-    testCompileOnly "org.jetbrains:annotations:22.0.0"
-
-    implementation 'com.squareup:javapoet:1.13.0'
-    implementation 'commons-dbutils:commons-dbutils:1.7'
-    implementation 'org.freemarker:freemarker:2.3.31'
-    implementation 'com.alibaba:druid:1.2.8'
-    implementation 'org.slf4j:slf4j-api:1.7.36'
-    testImplementation 'org.slf4j:slf4j-log4j12:1.7.36'
-    implementation 'org.apache.shardingsphere:sharding-jdbc-core:4.1.1'
-    implementation "${lib.guava}"
-    implementation "com.baomidou:mybatis-plus:${mybatisPlusVersion}"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-    implementation("mysql:mysql-connector-java:8.0.21")
-
-    implementation("${lib.lombok}")
     testImplementation("${lib.lombok}")
 
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 test {

@@ -8,11 +8,30 @@ import java.util.Map;
 /**
  * 包含数据和元数据信息
  */
-@Data
 public class ResultSetColumn {
 
     private List<ResultSetColumnMetadata> metadataList;
     private List<Map<String, Object>> data;
+
+    public List<ResultSetColumnMetadata> getMetadataList() {
+        return metadataList;
+    }
+
+    public void setMetadataList(List<ResultSetColumnMetadata> metadataList) {
+        this.metadataList = metadataList;
+    }
+
+    public List<Map<String, Object>> getData() {
+        return data;
+    }
+
+    public void setData(List<Map<String, Object>> data) {
+        this.data = data;
+    }
+
+    public void addColumnMetadata(ResultSetColumnMetadata columnMetadata) {
+        this.metadataList.add(columnMetadata);
+    }
 
     public ResultSetColumnMetadata getMetadata(int columnIndex) {
         return metadataList.get(columnIndex);
