@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * List工具类
@@ -52,6 +54,9 @@ public final class Lists {
         return result;
     }
 
+    public static <E> List<E> doFilter(List<E> list, Predicate<E> rule) {
+        return list.stream().filter(rule).collect(Collectors.toList());
+    }
 
     public static void println(List<List<?>> list) {
         list.forEach(row -> {

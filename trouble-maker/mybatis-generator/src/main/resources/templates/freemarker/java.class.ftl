@@ -23,4 +23,7 @@ ${typeModifier} ${type} ${typeName}<#if hasGenericType>typeVars</#if>
         ${field.decoratedFlags} ${field.name} <#if field.valueAssigned>= ${field.value}</#if>
     </#list>
 
+    <#list declaredMethods as method>
+        ${method.decoratedFlags} ${method.name} <#if method.valueAssigned>= ${method.value}</#if>
+    </#list>
 }

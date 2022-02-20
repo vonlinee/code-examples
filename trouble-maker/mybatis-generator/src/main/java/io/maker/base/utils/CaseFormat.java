@@ -3,15 +3,20 @@ package io.maker.base.utils;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Converter;
 
+import static io.maker.base.lang.Validator.isBlank;
 import static io.maker.base.lang.Validator.notNull;
 import static java.util.Objects.requireNonNull;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public enum CaseFormat {
 
-    /** 连字符变量命名方式，Hyphenated variable naming convention, e.g., "lower-hyphen". */
+    /**
+     * 连字符变量命名方式，Hyphenated variable naming convention, e.g., "lower-hyphen".
+     */
     LOWER_HYPHEN(CharMatcher.is('-'), "-") {
         @Override
         String normalizeWord(String word) {
@@ -30,7 +35,9 @@ public enum CaseFormat {
         }
     },
 
-    /** C++ variable naming convention, e.g., "lower_underscore". */
+    /**
+     * C++ variable naming convention, e.g., "lower_underscore".
+     */
     LOWER_UNDERSCORE(CharMatcher.is('_'), "_") {
         @Override
         String normalizeWord(String word) {
@@ -49,7 +56,9 @@ public enum CaseFormat {
         }
     },
 
-    /** Java variable naming convention, e.g., "lowerCamel". */
+    /**
+     * Java variable naming convention, e.g., "lowerCamel".
+     */
     LOWER_CAMEL(CharMatcher.inRange('A', 'Z'), "") {
         @Override
         String normalizeWord(String word) {
@@ -62,7 +71,9 @@ public enum CaseFormat {
         }
     },
 
-    /** Java and C++ class naming convention, e.g., "UpperCamel". */
+    /**
+     * Java and C++ class naming convention, e.g., "UpperCamel".
+     */
     UPPER_CAMEL(CharMatcher.inRange('A', 'Z'), "") {
         @Override
         String normalizeWord(String word) {
@@ -70,7 +81,9 @@ public enum CaseFormat {
         }
     },
 
-    /** Java and C++ constant naming convention, e.g., "UPPER_UNDERSCORE". */
+    /**
+     * Java and C++ constant naming convention, e.g., "UPPER_UNDERSCORE".
+     */
     UPPER_UNDERSCORE(CharMatcher.is('_'), "_") {
         @Override
         String normalizeWord(String word) {
@@ -109,7 +122,9 @@ public enum CaseFormat {
         return (format == this) ? str : convert(format, str);
     }
 
-    /** Enum values can override for performance reasons. */
+    /**
+     * Enum values can override for performance reasons.
+     */
     String convert(CaseFormat format, String s) {
         // deal with camel conversion
         StringBuilder out = null;
@@ -127,7 +142,7 @@ public enum CaseFormat {
             i = j + wordSeparator.length();
         }
         return (i == 0) ? format.normalizeFirstWord(s)
-            : requireNonNull(out).append(format.normalizeWord(s.substring(i))).toString();
+                : requireNonNull(out).append(format.normalizeWord(s.substring(i))).toString();
     }
 
     /**
@@ -195,5 +210,63 @@ public enum CaseFormat {
      */
     public static String firstCharOnlyToUpper(String word) {
         return word.isEmpty() ? word : Ascii.toUpperCase(word.charAt(0)) + Ascii.toLowerCase(word.substring(1));
+    }
+
+    /**
+     * 将传入的字段进行驼峰命名的验证（大驼峰）
+     * @param field
+     * @return
+     */
+    private boolean isFieldHump(String field) {
+        int index = field.indexOf("_");
+        String humps = field.substring(index + 1);
+        String[] humpsList = humps.split("_");
+        for (int i = 0; i < humpsList.length; i++) {
+            if (!isRegularJudgment(humpsList[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 验证驼峰
+     * @param field
+     * @return
+     */
+    private boolean isRegularJudgment(String field) {
+        String pattern = "^([A-Z][a-z0-9]+)+";
+        return Pattern.matches(pattern, field);
+    }
+
+    /**
+     * 数据表字段名转换为驼峰式名字的实体类属性名
+     * @param tabAttr 数据表字段名
+     * @return 转换后的驼峰式命名
+     */
+    public static String camelize(String tabAttr) {
+        if (isBlank(tabAttr))
+            return tabAttr;
+        Pattern pattern = Pattern.compile("(.*)_(\\w)(.*)");
+        Matcher matcher = pattern.matcher(tabAttr);
+        if (matcher.find()) {
+            return camelize(matcher.group(1) + matcher.group(2).toUpperCase() + matcher.group(3));
+        } else {
+            return tabAttr;
+        }
+    }
+
+    /**
+     * 驼峰式的实体类属性名转换为数据表字段名
+     * @param camelCaseStr 驼峰式的实体类属性名
+     * @return 转换后的以"_"分隔的数据表字段名
+     */
+    public static String decamelize(String camelCaseStr) {
+        return isBlank(camelCaseStr) ? camelCaseStr : camelCaseStr.replaceAll("[A-Z]", "_$0").toLowerCase();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(camelize("user_name_type"));
+        System.out.println(decamelize("userNameType"));
     }
 }

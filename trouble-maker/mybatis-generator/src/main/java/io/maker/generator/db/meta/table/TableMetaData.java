@@ -34,6 +34,10 @@ public final class TableMetaData {
 
     private final List<String> primaryKeyColumns = new ArrayList<>();
 
+    public static TableMetaData empty() {
+        return new TableMetaData(Collections.emptyList(), Collections.emptyList());
+    }
+
     public TableMetaData(final Collection<ColumnMetaData> columnMetaDataList,
                          final Collection<IndexMetaData> indexMetaDataList) {
         columns = getColumns(columnMetaDataList);

@@ -1,6 +1,5 @@
 package io.maker.extension.poi;
 
-import lombok.Data;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -13,13 +12,44 @@ import java.util.List;
  * 简单的Excel表格数据，数据必须从第一行第一列开始，且没有空行，空列
  * 表头不为空
  */
-@Data
 public class SimpleExcelTable {
 
     private int columnCount; //列数
     private int rowCount;  //行数
     private String[] titles;
     private List<String>[] columnDataList;
+
+    public int getColumnCount() {
+        return columnCount;
+    }
+
+    public void setColumnCount(int columnCount) {
+        this.columnCount = columnCount;
+    }
+
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    public String[] getTitles() {
+        return titles;
+    }
+
+    public void setTitles(String[] titles) {
+        this.titles = titles;
+    }
+
+    public List<String>[] getColumnDataList() {
+        return columnDataList;
+    }
+
+    public void setColumnDataList(List<String>[] columnDataList) {
+        this.columnDataList = columnDataList;
+    }
 
     /**
      * 将表格数据映射到SimpleExcelTable

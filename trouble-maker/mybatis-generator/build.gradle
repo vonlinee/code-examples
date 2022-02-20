@@ -49,6 +49,22 @@ dependencies {
     testImplementation("${lib.lombok}")
 
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    // Spring
+    // https://mvnrepository.com/artifact/org.springframework/spring-core
+    implementation 'org.springframework:spring-core:5.3.16'
+    implementation 'org.springframework:spring-context:5.3.16'
+    implementation 'org.springframework:spring-beans:5.3.16'
+    implementation 'org.springframework:spring-aop:5.3.16'
+    implementation 'org.springframework:spring-orm:5.3.16'
+    implementation 'org.springframework:spring-test:5.3.16'
+    implementation 'org.springframework:spring-tx:5.3.16'
+    implementation 'org.springframework:spring-web:5.3.16'
+    implementation 'org.springframework:spring-webmvc:5.3.16'
+    implementation 'org.springframework:spring-contex-support:5.3.16'
+
+    implementation 'org.mybatis:mybatis:3.5.9'
+    implementation 'org.mybatis:mybatis-spring:2.0.7'
 }
 
 test {

@@ -18,6 +18,7 @@
 package io.maker.generator.db.meta.column;
 
 import io.maker.generator.db.JdbcUtils;
+import io.maker.generator.db.meta.resultset.ResultSetHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +65,7 @@ public final class ColumnMetaDataLoader {
         List<Boolean> isPrimaryKeys = new ArrayList<>();
         List<Boolean> isCaseSensitives = new ArrayList<>();
         try (ResultSet resultSet = connection.getMetaData().getColumns(connection.getCatalog(),
-            JdbcUtils.getSchema(connection, databaseType), table, "%")) {
+                JdbcUtils.getSchema(connection, databaseType), table, "%")) {
             while (resultSet.next()) {
                 String columnName = resultSet.getString(COLUMN_NAME);
                 columnTypes.add(resultSet.getInt(DATA_TYPE));
@@ -116,7 +117,7 @@ public final class ColumnMetaDataLoader {
         List<Boolean> isPrimaryKeys = new ArrayList<>();
         List<Boolean> isCaseSensitives = new ArrayList<>();
         try (ResultSet resultSet = connection.getMetaData().getColumns(connection.getCatalog(),
-            JdbcUtils.getSchema(connection, databaseType), table, "%")) {
+                JdbcUtils.getSchema(connection, databaseType), table, "%")) {
             while (resultSet.next()) {
                 String columnName = resultSet.getString(COLUMN_NAME);
                 columnTypes.add(resultSet.getInt(DATA_TYPE));
@@ -155,7 +156,7 @@ public final class ColumnMetaDataLoader {
             delimiterLeft = "`";
             delimiterRight = "`";
         } else if ("Oracle".equals(databaseType) || "PostgreSQL".equals(databaseType) || "H2".equals(databaseType)
-            || "SQL92".equals(databaseType)) {
+                || "SQL92".equals(databaseType)) {
             delimiterLeft = "\"";
             delimiterRight = "\"";
         } else if ("SQLServer".equals(databaseType)) {
@@ -180,7 +181,7 @@ public final class ColumnMetaDataLoader {
     private static boolean isTableExist(final Connection connection, final String catalog, final String table,
                                         final String databaseType) throws SQLException {
         try (ResultSet resultSet = connection.getMetaData().getTables(catalog,
-            JdbcUtils.getSchema(connection, databaseType), table, null)) {
+                JdbcUtils.getSchema(connection, databaseType), table, null)) {
             return resultSet.next();
         }
     }
@@ -189,7 +190,7 @@ public final class ColumnMetaDataLoader {
                                                       final String databaseType) throws SQLException {
         Collection<String> result = new HashSet<>();
         try (ResultSet resultSet = connection.getMetaData().getPrimaryKeys(connection.getCatalog(),
-            JdbcUtils.getSchema(connection, databaseType), table)) {
+                JdbcUtils.getSchema(connection, databaseType), table)) {
             while (resultSet.next()) {
                 result.add(resultSet.getString(COLUMN_NAME));
             }
@@ -234,5 +235,20 @@ public final class ColumnMetaDataLoader {
             e.printStackTrace();
         }
         return schema;
+    }
+
+    public static <T> T loadInfomationSchema(final DataSource dataSource, String dbName, String tableName, ResultSetHandler<T> handler) {
+        String sql = String.format(INFOMATION_SCHEMA_SQL_FORMAT, dbName, tableName);
+        ColumnInfoSchema schema = new ColumnInfoSchema();
+        try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement();) {
+            try (ResultSet resultSet = statement.executeQuery(sql)) {
+                return handler.handle(resultSet, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

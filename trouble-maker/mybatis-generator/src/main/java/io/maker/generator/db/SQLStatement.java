@@ -7,30 +7,30 @@ import java.util.List;
  * @author vonline
  */
 public abstract class SQLStatement {
-	// https://blog.csdn.net/weixin_41490593/article/details/94745433
+    // https://blog.csdn.net/weixin_41490593/article/details/94745433
 
-	public abstract String render();
+    public abstract String render();
 
-	String sql = "SELECT * FROM `information_schema`.`TABLES` T \r\n"
-			+ "	LEFT JOIN `information_schema`.`COLUMNS` C ON T.TABLE_NAME = C.TABLE_NAME \r\n"
-			+ "WHERE T.TABLE_NAME = 't_usc_mdm_user_dlr'\r\n" + "ORDER BY\r\n" + "    T.TABLE_NAME, C.ORDINAL_POSITION";
+    String sql = "SELECT * FROM `information_schema`.`TABLES` T \r\n"
+            + "	LEFT JOIN `information_schema`.`COLUMNS` C ON T.TABLE_NAME = C.TABLE_NAME \r\n"
+            + "WHERE T.TABLE_NAME = 't_usc_mdm_user_dlr'\r\n" + "ORDER BY\r\n" + "    T.TABLE_NAME, C.ORDINAL_POSITION";
 
-	public class Select extends SQLStatement {
+    public class Select extends SQLStatement {
 
-		private List<String> tableNames;
+        private List<String> tableNames;
 
-		public Select table(String tableName, String alias) {
-			tableNames.add(tableName);
-			return this;
-		}
+        public Select table(String tableName, String alias) {
+            tableNames.add(tableName);
+            return this;
+        }
 
-		@Override
-		public String render() {
-			return null;
-		}
-	}
+        @Override
+        public String render() {
+            return null;
+        }
+    }
 
-	public static Select select() {
-		return select();
-	}
+    public static Select select() {
+        return select();
+    }
 }

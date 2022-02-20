@@ -17,7 +17,7 @@ public class ExcelWriter {
     public static final String DEFAULT_SHEET_NAME = "sheet-1";
 
     public static final String XLSX_EXCEL = "xlsx";
-    public static final String XLS = "xls";
+    public static final String XLS_EXCEL = "xls";
 
     public boolean write(File file, String[][] data, String excelType, String sheetName) {
         if (XLSX_EXCEL.equalsIgnoreCase(excelType)) {

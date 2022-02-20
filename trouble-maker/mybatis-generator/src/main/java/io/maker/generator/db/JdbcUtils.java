@@ -124,6 +124,14 @@ public final class JdbcUtils {
         return null;
     }
 
+    public static boolean isTableExist(final Connection connection, final String catalog, final String table,
+                                       final String databaseType) throws SQLException {
+        try (ResultSet resultSet = connection.getMetaData().getTables(
+                catalog, getSchema(connection, databaseType), table, null)) {
+            return resultSet.next();
+        }
+    }
+
     /**
      * 查询，封装结果
      * @param conn

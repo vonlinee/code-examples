@@ -1,5 +1,6 @@
 package io.maker.base.io;
 
+import java.awt.*;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -172,4 +173,29 @@ public final class UFiles {
         System.out.println("用时为：" + (end - start));
     }
 
+    public static boolean openDirectory(File file) {
+        if (file.isDirectory()) {
+            try {
+                Desktop.getDesktop().open(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        return openDirectory(file.getParentFile());
+    }
+
+    public static boolean openFile(File file) {
+        if (file.isFile()) {
+            try {
+                Desktop.getDesktop().open(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        throw new UnsupportedOperationException(file.getAbsolutePath() + "是目录!");
+    }
 }

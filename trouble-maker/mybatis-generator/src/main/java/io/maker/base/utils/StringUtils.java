@@ -104,8 +104,12 @@ public final class StringUtils {
     public static final String DOUBLE_QUTATION = "\"";
     public static final String SINGLE_QUTATION = "'";
     public static final String NULL_STRING_HCASE = "NULL";
-    public static final String NULL_STRING_LCASE = "NULL";
+    public static final String NULL_STRING_LCASE = "null";
 
+    /**
+     * @param str
+     * @return
+     */
     public static boolean isEmpty(String str) {
         return str == null || str.length() == 0;
     }
@@ -3531,6 +3535,22 @@ public final class StringUtils {
             }
         }
         return true;
+    }
+
+    public static boolean isNullString(String str) {
+        return NULL_STRING_HCASE.equals(str);
+    }
+
+    public static boolean isNullString(String str, boolean lowercase) {
+        if (lowercase) {
+            return NULL_STRING_LCASE.equals(str);
+        } else {
+            return NULL_STRING_HCASE.equals(str);
+        }
+    }
+
+    public static boolean trimEquals(String s1, String s2) {
+        return false;
     }
 
     /**

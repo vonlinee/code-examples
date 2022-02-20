@@ -1,5 +1,6 @@
 package io.maker.extension.poi;
 
+import io.maker.base.io.UFiles;
 import io.maker.base.utils.Lists;
 import io.maker.base.utils.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -241,7 +244,6 @@ public final class ExcelUtils {
             System.out.println(maps.get(j).toString());
         }
 
-
         System.out.println("数据加载...");
         List<Map<String, Object>> mapArrayList = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
@@ -255,6 +257,17 @@ public final class ExcelUtils {
 
         String excel = writeExcel(mapArrayList, "1.xlsx", "Sheet-1");
         System.out.println(excel);
+        File file = new File(excel);
+        boolean b = UFiles.openDirectory(file);
+    }
+
+    public static void writeExcelAndShow(List<Map<String, Object>> data, String title) {
+        String path = writeExcel(data, "tmp.xlsx", title);
+        UFiles.openFile(new File(path));
+    }
+
+    private static boolean checkIfExists(File file) {
+        return file.exists();
     }
 
     /**
@@ -271,15 +284,12 @@ public final class ExcelUtils {
         Map<String, Object> map = mapList.get(0);
         Set<String> stringSet = map.keySet();
         ArrayList<String> headList = new ArrayList<>(stringSet);
-        //定义一个新的工作簿
         XSSFWorkbook wb = new XSSFWorkbook();
-        //创建一个Sheet页
-        XSSFSheet sheet = wb.createSheet(title);
-        //设置行高
-        sheet.setDefaultRowHeight((short) (2 * 256));
+        XSSFSheet sheet = wb.createSheet(title); //创建一个Sheet页
+        sheet.setDefaultRowHeight((short) (2 * 256)); //设置行高
         //为有数据的每列设置列宽
         for (int i = 0; i < headList.size(); i++) {
-            sheet.setColumnWidth(i, 8000);
+            sheet.setColumnWidth(i, 4000);
         }
         //设置单元格字体样式
         XSSFFont font = wb.createFont();
@@ -295,7 +305,6 @@ public final class ExcelUtils {
         XSSFCellStyle cellStyle = wb.createCellStyle();
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
         titleCell.setCellStyle(cellStyle);
-
         //获得表格第二行
         XSSFRow row = sheet.createRow(1);
         //根据数据源信息给第二行每一列设置标题
@@ -311,17 +320,19 @@ public final class ExcelUtils {
             rows = sheet.createRow(i + 2);
             //给该行数据赋值
             for (int j = 0; j < headList.size(); j++) {
-                String value = mapList.get(i).get(headList.get(j)).toString();
+                Object nullableValue = mapList.get(i).get(headList.get(j));
+                String value = "NULL";
+                if (nullableValue != null) {
+                    value = nullableValue.toString();
+                }
                 cells = rows.createCell(j);
                 cells.setCellValue(value);
             }
         }
-
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         // 使用项目根目录, 文件名加上时间戳
         String path = System.getProperty("user.dir") + "\\" + filename + dateFormat.format(date) + ".xlsx";
-        System.out.println("Excel文件输出路径: " + path);
         try {
             File file = new File(path);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -332,5 +343,19 @@ public final class ExcelUtils {
             e.printStackTrace();
         }
         return path;
+    }
+
+    public static void writeWorkbook(Workbook workbook, File file) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            FileChannel channel = fos.getChannel();
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+            while (channel.write(byteBuffer) > 0) {
+                byteBuffer.flip();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

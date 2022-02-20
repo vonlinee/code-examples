@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.maker.generator.utils.SqlMapper">
+
+    <select id="selectAll" resultType="java.util.Map" parameterType="map">
+        SELECT T.TABLE_NAME, /*表名*/
+               T.TABLE_COLLATION, /*表排序规则*/
+               T.TABLE_SCHEMA, /*数据库名*/
+               C.COLUMN_NAME, /*字段名*/
+               C.COLUMN_DEFAULT, /*字段默认值*/
+               C.COLLATION_NAME, /*排序规则*/
+               C.COLUMN_TYPE, /*字段类型*/
+               C.IS_NULLABLE, /*是否可为NULL，YES/NO */
+               C.CHARACTER_SET_NAME, /*编码名称*/
+               C.COLUMN_COMMENT /*字段注释*/
+        FROM `information_schema`.`TABLES` T
+                 LEFT JOIN `information_schema`.`COLUMNS` C ON T.TABLE_NAME = C.TABLE_NAME
+        WHERE T.TABLE_SCHEMA = #{param.dbName}
+          AND T.TABLE_NAME = #{param.tableName}
+    </select>
+
+    <!--数据库能够执行这句，但是XML文件里好像不支持-->
+    <select id="selectFullFields" resultType="map" parameterType="map">
+        #         SHOW FULL fields FROM jsh_user;
+    </select>
+
+    <!--上面的替代品-->
+    <select id="selectFullFields" resultType="map" parameterType="map">
+        SHOW FULL COLUMNS FROM ${param.tableName}
+    </select>
+</mapper>

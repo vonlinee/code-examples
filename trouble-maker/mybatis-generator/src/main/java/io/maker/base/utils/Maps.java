@@ -2,6 +2,8 @@ package io.maker.base.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public final class Maps {
 
@@ -38,5 +40,23 @@ public final class Maps {
             sb.append("\t").append("\"").append(key).append("\":\"").append(map.get(key)).append("\",\n");
         }
         return sb.substring(0, sb.length()) + "\n";
+    }
+
+    public static <K, V> Map<K, V> doFilterKey(Map<K, V> map, Predicate<K> rule) {
+        Map<K, V> newMap = new HashMap<>();
+        map.keySet().stream().filter(rule).forEach(k -> {
+            newMap.put(k, map.get(k));
+        });
+        return newMap;
+    }
+
+    public static <K, V> Map<K, V> doFilterValue(Map<K, V> map, Predicate<V> rule) {
+        Map<K, V> newMap = new HashMap<>();
+        map.forEach((k, v) -> {
+            if (!rule.test(v)) {
+                newMap.put(k, v);
+            }
+        });
+        return newMap;
     }
 }
