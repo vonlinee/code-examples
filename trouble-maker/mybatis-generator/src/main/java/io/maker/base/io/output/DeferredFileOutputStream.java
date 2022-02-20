@@ -41,7 +41,7 @@ public class DeferredFileOutputStream
     extends ThresholdingOutputStream
 {
 
-    // ----------------------------------------------------------- Data members
+    // ----------------------------------------------------------- TemplateData members
 
 
     /**

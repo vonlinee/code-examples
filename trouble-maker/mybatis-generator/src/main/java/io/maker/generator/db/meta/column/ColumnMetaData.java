@@ -13,7 +13,7 @@ TABLE_SCHEM        String , table schema (may be null)
 TABLE_NAME         String , table name
 COLUMN_NAME        String , column name
 DATA_TYPE          int , SQL type from java.sql.Types
-TYPE_NAME          String , Data source dependent type name, for a UDT the type name is fully qualified
+TYPE_NAME          String , TemplateData source dependent type name, for a UDT the type name is fully qualified
 COLUMN_SIZE        int , column size.
 BUFFER_LENGTH      is not used.
 DECIMAL_DIGITS     int , the number of fractional digits. Null is returned for data types where DECIMAL_DIGITS is not applicable.

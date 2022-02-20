@@ -28,7 +28,8 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.querys.DbQueryDecorator;
 import com.baomidou.mybatisplus.generator.config.querys.H2Query;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
-import com.baomidou.mybatisplus.generator.jdbc.DatabaseMetaDataWrapper;
+import com.baomidou.mybatisplus.generator.jdbc.ColumnInfo;
+import com.baomidou.mybatisplus.generator.jdbc.DatabaseMetadataLoader;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +70,6 @@ public abstract class IDatabaseQuery {
 
     /**
      * 获取表信息
-     *
      * @return 表信息
      */
     @NotNull
@@ -77,7 +77,6 @@ public abstract class IDatabaseQuery {
 
     /**
      * 后面切换到元数据获取表与字段会移除这里
-     *
      * @author nieqiurong 2021/1/6.
      * @since 3.5.0
      */
@@ -129,9 +128,9 @@ public abstract class IDatabaseQuery {
                 });
                 if (isExclude || isInclude) {
                     Map<String, String> notExistTables = new HashSet<>(isExclude ? strategyConfig.getExclude() : strategyConfig.getInclude())
-                        .stream()
-                        .filter(s -> !ConfigBuilder.matcherRegTable(s))
-                        .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n));
+                            .stream()
+                            .filter(s -> !ConfigBuilder.matcherRegTable(s))
+                            .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n));
                     // 将已经存在的表移除，获取配置中数据库不存在的表
                     for (TableInfo tabInfo : tableList) {
                         if (notExistTables.isEmpty()) {
@@ -166,10 +165,10 @@ public abstract class IDatabaseQuery {
             DbType dbType = this.dataSourceConfig.getDbType();
             String tableName = tableInfo.getName();
             try {
-                final Map<String, DatabaseMetaDataWrapper.ColumnsInfo> columnsMetaInfoMap = new HashMap<>();
+                final Map<String, ColumnInfo> columnsMetaInfoMap = new HashMap<>();
                 //TODO 增加元数据信息获取,后面查询表字段要改成这个.
-                Map<String, DatabaseMetaDataWrapper.ColumnsInfo> columnsInfo =
-                    new DatabaseMetaDataWrapper(dbQuery.getConnection()).getColumnsInfo(null, dataSourceConfig.getSchemaName(), tableName);
+                Map<String, ColumnInfo> columnsInfo =
+                        new DatabaseMetadataLoader(dbQuery.getConnection()).getColumnsInfo(null, dataSourceConfig.getSchemaName(), tableName);
                 if (columnsInfo != null && !columnsInfo.isEmpty()) {
                     columnsMetaInfoMap.putAll(columnsInfo);
                 }
@@ -198,9 +197,9 @@ public abstract class IDatabaseQuery {
                         }
                     }
                     field.setColumnName(columnName)
-                        .setType(result.getStringResult(dbQuery.fieldType()))
-                        .setComment(result.getFiledComment())
-                        .setCustomMap(dbQuery.getCustomFields(result.getResultSet()));
+                            .setType(result.getStringResult(dbQuery.fieldType()))
+                            .setComment(result.getFiledComment())
+                            .setCustomMap(dbQuery.getCustomFields(result.getResultSet()));
                     String propertyName = entity.getNameConvert().propertyNameConvert(field);
                     IColumnType columnType = dataSourceConfig.getTypeConvert().processTypeConvert(globalConfig, field);
                     field.setPropertyName(propertyName, columnType);

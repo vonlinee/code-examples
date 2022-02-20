@@ -167,11 +167,14 @@ public final class UFiles {
         long end = System.currentTimeMillis();
         System.out.println("用时为：" + (end-start));*/
 
-        long start = System.currentTimeMillis();
-        nioCpoy("D:\\常用软件\\JDK1.8\\jdk-8u181-linux-x64.tar.gz", "D:\\常用软件\\JDK1.8\\NIO.tar.gz", 1024);
-        long end = System.currentTimeMillis();
-        System.out.println("用时为：" + (end - start));
+        // long start = System.currentTimeMillis();
+        // nioCpoy("D:\\常用软件\\JDK1.8\\jdk-8u181-linux-x64.tar.gz", "D:\\常用软件\\JDK1.8\\NIO.tar.gz", 1024);
+        // long end = System.currentTimeMillis();
+
+
+        // System.out.println("用时为：" + (end - start));
     }
+
 
     public static boolean openDirectory(File file) {
         if (file.isDirectory()) {
@@ -183,7 +186,7 @@ public final class UFiles {
             }
             return true;
         }
-        return openDirectory(file.getParentFile());
+        return openDirectory(getParentFile(file));
     }
 
     public static boolean openFile(File file) {
@@ -197,5 +200,22 @@ public final class UFiles {
             return true;
         }
         throw new UnsupportedOperationException(file.getAbsolutePath() + "是目录!");
+    }
+
+    /**
+     * 使用相对路径创建的File对象没有父级目录
+     * System.out.println(new File(""));
+     * System.out.println(new File("D:/Temp/1.txt").getParentFile());
+     * @param file File
+     * @return
+     */
+    public static File getParentFile(File file) {
+        if (file == null || file.isAbsolute()) return file;
+        return file.getAbsoluteFile().getParentFile();
+    }
+
+    public static boolean isPathAbsolute(File file) {
+        if (file == null) return false;
+        return file.isAbsolute();
     }
 }

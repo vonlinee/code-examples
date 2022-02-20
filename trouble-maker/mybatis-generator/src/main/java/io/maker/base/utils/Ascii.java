@@ -146,7 +146,7 @@ public final class Ascii {
     public static final byte SI = 15;
 
     /**
-     * Data Link Escape: A communication control character which will change the
+     * TemplateData Link Escape: A communication control character which will change the
      * meaning of a limited number of contiguously following characters. It is used
      * exclusively to provide supplementary controls in data communication networks.
      * @since 8.0

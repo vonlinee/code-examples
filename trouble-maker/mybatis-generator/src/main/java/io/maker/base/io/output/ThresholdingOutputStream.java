@@ -42,7 +42,7 @@ public abstract class ThresholdingOutputStream
     extends OutputStream
 {
 
-    // ----------------------------------------------------------- Data members
+    // ----------------------------------------------------------- TemplateData members
 
 
     /**

@@ -64,8 +64,7 @@ ext {
             "swagger-annotations" : "io.swagger:swagger-annotations:1.6.2",
             "guava"               : "com.google.guava:guava:31.0.1-jre",
             "commons-io"          : "commons-io:commons-io:2.11.0",
-            "commons-lang3"       : "org.apache.commons:commons-lang3:3.12.0",
-            "spring-context"      : "org.springframework:spring-context:5.3.16",
+            "commons-lang3"       : "org.apache.commons:commons-lang3:3.12.0"
     ]
 }
 

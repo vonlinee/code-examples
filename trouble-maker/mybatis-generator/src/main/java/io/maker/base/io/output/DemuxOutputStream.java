@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Data written to this stream is forwarded to a stream that has been associated
+ * TemplateData written to this stream is forwarded to a stream that has been associated
  * with this thread.
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>

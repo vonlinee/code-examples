@@ -3,6 +3,9 @@ package io.maker.generator.lang.java;
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
 
+/**
+ * Java的类定义：用于FreeMarker的模板文件映射
+ */
 public class JavaClassDefinition implements Serializable {
 
     private static final String EXTENDS = "extends";
