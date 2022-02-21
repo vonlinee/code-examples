@@ -5,22 +5,16 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 import io.maker.generator.lang.type.JavaDataType;
+import lombok.Data;
 
+@Data
 public class JavaClassField<T> implements Serializable {
 
     private String name;
     private Class<T> type;
     private JavaDataType dataType;
-    private T intialValue;
+    private T intialValue; // 可能是方法调用或者类定义
     private List<Modifier> modifiers;
-
-    public JavaClassField(String name, Class<T> type, JavaDataType dataType, T intialValue, List<Modifier> modifiers) {
-        this.name = name;
-        this.type = type;
-        this.dataType = dataType;
-        this.intialValue = intialValue;
-        this.modifiers = modifiers;
-    }
 
     public String getName() {
         return name;

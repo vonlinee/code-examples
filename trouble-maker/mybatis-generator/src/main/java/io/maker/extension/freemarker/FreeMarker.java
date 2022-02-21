@@ -11,17 +11,22 @@ import freemarker.cache.FileTemplateLoader;
 import freemarker.cache.TemplateLoader;
 import freemarker.template.*;
 import io.maker.base.io.UFiles;
+import io.maker.base.lang.Validator;
 
 public class FreeMarker {
 
     private static final Version VERSION = Configuration.VERSION_2_3_31;
 
-    private Configuration config;
+    private final Configuration config;
 
-    public FreeMarker(File templateLocation) {
+    public FreeMarker() {
         this.config = new Configuration(VERSION);
         config.setDefaultEncoding("UTF-8"); //这个一定要设置，不然在生成的页面中会乱码
         config.setObjectWrapper(new DefaultObjectWrapper(VERSION));
+    }
+
+    public FreeMarker(File templateLocation) {
+        this();
         try {
             config.setDirectoryForTemplateLoading(templateLocation);
         } catch (IOException e) {
@@ -29,7 +34,7 @@ public class FreeMarker {
         }
     }
 
-    private Map<String, FileTemplateLoader> fileTemplateLoaders = new LinkedHashMap<>();
+    private final Map<String, FileTemplateLoader> fileTemplateLoaders = new LinkedHashMap<>();
 
     public void addTemplateLocation(File dir) {
         try {

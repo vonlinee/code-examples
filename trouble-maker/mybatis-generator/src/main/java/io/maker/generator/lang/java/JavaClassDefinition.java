@@ -11,10 +11,16 @@ public class JavaClassDefinition implements Serializable {
     private static final String EXTENDS = "extends";
     private static final String IMPLEMENTS = "implements";
 
-    private String className;
-    private Modifier modifier;
-    private Class<?>[] interfaces;
-    private Class<?> superClass;
+    private boolean isInner = false; //是否是内部类
+    private String className; //类名
+    private String packageName; //包名
+    private String documentation; //类上的注释信息
+    private Modifier modifier; //修饰符
+    private Class<?>[] interfaces; //父接口
+    private Class<?> superClass;  //父类
+    private Class<?>[] annotations; //类上的注解
+    private String[] importList; //导入列表
+    private JavaClassDefinition[] innerClassDefinitions;
 
     private JavaClassField<?>[] fieldDefinitions;
     private JavaMethodDefinition[] methodDefinitions;
