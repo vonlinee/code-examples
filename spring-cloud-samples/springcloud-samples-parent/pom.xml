@@ -20,7 +20,8 @@
 		<module>cloud-consumer-hystrix-dashboard-9001</module>
 		<module>cloud-provider-payment-8001</module>
 		<module>cloud-provider-payment-8002</module>
-	</modules>
+        <module>cloud-provider-payment-zk-8004</module>
+    </modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
