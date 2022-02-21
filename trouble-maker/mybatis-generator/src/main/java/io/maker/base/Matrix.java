@@ -2,7 +2,7 @@ package io.maker.base;
 
 import io.maker.base.lang.Value;
 
-public final class Matrix<T> {
+public final class Matrix {
 
     private int x;
     private int y;
