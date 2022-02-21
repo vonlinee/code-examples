@@ -111,10 +111,8 @@ def generate_dubbo_xml_config(interfaceName: str, serviceId: str) -> str:
     """
     return '<dubbo:service interface="{interfaceName}" ref="{serviceId}"/>'.format(interfaceName=interfaceName, serviceId=serviceId)
 
-
 def method(param_list: dict, return_type: str) -> str:
     pass
-
 
 def create_graphqls_content():
     input_prefix = "Input"
@@ -414,7 +412,7 @@ def batch_upper_first_word()-> None:
 
 
 if __name__ == '__main__':
-    batch_upper_first_word()
+    batch_snake_to_camel_style()
 
 # with open("input.txt", 'r') as f:
 #     result_list = []
@@ -427,3 +425,7 @@ if __name__ == '__main__':
 #         print('AND T.' + s + ' = #{ ' + camel_style + ' }")'
 #         print('</if>')
 #         result_list.append()
+
+
+
+

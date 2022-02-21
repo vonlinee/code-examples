@@ -143,12 +143,19 @@ public final class UFiles {
         inChannel.close();
     }
 
-    //IO方法实现文件k拷贝
-    private static void traditionalCopy(String sourcePath, String destPath) throws Exception {
+    /**
+     * 传统方法实现文件拷贝 IO方法实现文件k拷贝
+     * @param sourcePath
+     * @param destPath
+     * @throws Exception
+     */
+    public static void traditionalCopy(String sourcePath, String destPath) throws Exception {
         File source = new File(sourcePath);
         File dest = new File(destPath);
         if (!dest.exists()) {
-            dest.createNewFile();
+            if (dest.createNewFile()) {
+                System.out.println("创建文件成功：" + dest.getAbsolutePath());
+            }
         }
         FileInputStream fis = new FileInputStream(source);
         FileOutputStream fos = new FileOutputStream(dest);
@@ -171,10 +178,9 @@ public final class UFiles {
         // nioCpoy("D:\\常用软件\\JDK1.8\\jdk-8u181-linux-x64.tar.gz", "D:\\常用软件\\JDK1.8\\NIO.tar.gz", 1024);
         // long end = System.currentTimeMillis();
 
-
         // System.out.println("用时为：" + (end - start));
+        edit(new File("D:/Temp/input.txt"));
     }
-
 
     public static boolean openDirectory(File file) {
         if (file.isDirectory()) {
@@ -187,6 +193,21 @@ public final class UFiles {
             return true;
         }
         return openDirectory(getParentFile(file));
+    }
+
+    public static void edit(File file) {
+        if (file.isFile()) {
+            try {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop desktop = Desktop.getDesktop();
+                    if (desktop.isSupported(Desktop.Action.EDIT)) {
+                        desktop.edit(file);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static boolean openFile(File file) {

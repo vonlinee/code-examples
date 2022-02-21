@@ -44,6 +44,7 @@ public class MyBatisXMLGenerator {
 //
 //        String sql = generateInsertSql(dataSource, "jsh_user", "MySQL", columnNameFilter);
 //        System.out.println(sql);
+        generateSelectXml(dataSource, "t_usc_mdm_user_dlr", "MySQL", columnNameFilter);
     }
 
     /**
@@ -91,7 +92,7 @@ public class MyBatisXMLGenerator {
         StringJoiner insertFields = new StringJoiner(",", "(", ")");
         StringJoiner insertFieldValues = new StringJoiner(",", "(", ")");
         for (String columnName : columnNames) {
-            if (filter.test(columnName)) {
+            if (filter == null || filter.test(columnName)) {
                 continue;
             }
             insertFields.add("\n\t" + columnName);
@@ -102,12 +103,12 @@ public class MyBatisXMLGenerator {
         return sql.toString();
     }
 
-    abstract class XMLFragment {
+    abstract static class XMLFragment {
         String type; /* select, update, insert , delete , sql */
         String sqlContent;
     }
 
-    class SelectTag extends XMLFragment {
+    static class SelectTag extends XMLFragment {
 
         public SelectTag() {
             this.type = "select";
@@ -118,10 +119,9 @@ public class MyBatisXMLGenerator {
         private String resultType;
     }
 
-    class Column {
+    static class Column {
         String name;
         String value;
         boolean toBeTest;
     }
-
 }
