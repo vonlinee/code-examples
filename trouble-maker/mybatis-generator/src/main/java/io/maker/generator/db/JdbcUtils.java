@@ -49,6 +49,7 @@ public final class JdbcUtils {
     public static final String LOCAL_USERNAME = "root";
     public static final String LOCAL_PASSWORD = "123456";
 
+    //从本地默认加载的连接信息
     private static final Properties props;
 
     static {

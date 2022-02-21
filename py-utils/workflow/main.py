@@ -412,7 +412,7 @@ def batch_upper_first_word()-> None:
 
 
 if __name__ == '__main__':
-    batch_upper_first_word()
+    batch_snake_to_camel_style()
 
 # with open("input.txt", 'r') as f:
 #     result_list = []
