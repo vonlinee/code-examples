@@ -1,14 +1,14 @@
 .idea
 
 .gradle
-**/.gradle/*
+.gradle/*
 *.lock
 *.xlsx
 *.bin
 *.bat
 gradlew
 
-**/build/*
-**/buildOutputCleanup/*
+build/*
+/buildOutputCleanup/*
 
 
