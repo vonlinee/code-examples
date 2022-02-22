@@ -17,7 +17,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException, SQLException {
         //1.指定MyBatis主配置文件位置
-        String resource = "qucikstart.xml";
+        String resource = "typehandle.xml";
         //2.加载配置文件
         InputStream inputStream = Resources.getResourceAsStream(resource);
         //3.创建SqlSessionFactory会话工厂
