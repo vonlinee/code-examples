@@ -11,14 +11,19 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        cid, cname, tid
+        cid
+        , cname, tid
     </sql>
 
-    <select id="queryTeacherAll">
-        SELECT t.tid , t.tname, c.cid , c.cname FROM teacher t
-        LEFT JOIN course c ON c.tid = t.tid
+    <!---->
+    <select id="queryTeacherAll" resultMap="BaseResultMap">
+        SELECT t.tid,
+               t.tname,
+               c.cid,
+               group_concat(c.cname) AS COURSE_NAME
+        FROM teacher t
+                 LEFT JOIN course c ON t.tid = c.tid
         GROUP BY t.tid
         ORDER BY t.tid;
     </select>
-
 </mapper>

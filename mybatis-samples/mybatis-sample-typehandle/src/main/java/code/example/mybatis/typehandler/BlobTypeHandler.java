@@ -1,4 +1,4 @@
-﻿package code.example.mybatis.typehandler;
+package code.example.mybatis.typehandler;
 
 import com.mysql.jdbc.Blob;
 import org.apache.ibatis.type.JdbcType;

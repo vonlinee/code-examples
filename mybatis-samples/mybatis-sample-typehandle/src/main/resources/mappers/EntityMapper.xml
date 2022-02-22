@@ -7,7 +7,17 @@
 	</insert>
 
 	<select id="queryAll" resultType="map">
-		SELECT * FROM t1
+		SELECT * FROM t_teacher
+	</select>
+
+	<select id="queryTeacherAll" resultType="map">
+		SELECT
+			T.*,
+			group_concat(C.COURSE_NAME) AS COURSE_NAME
+		FROM t_teacher T
+				 LEFT JOIN t_cource C ON T.TEACHER_NO = C.TEACHER_NO
+		GROUP BY T.TEACHER_ID
+		ORDER BY T.TEACHER_ID DESC
 	</select>
 
 </mapper>

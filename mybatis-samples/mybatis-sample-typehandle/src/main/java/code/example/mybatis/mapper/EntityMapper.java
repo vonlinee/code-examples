@@ -6,6 +6,9 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 public interface EntityMapper {
-	int insertOne(@Param("param") String date);
-	List<Map<String, Object>> queryAll();
+    int insertOne(@Param("param") String date);
+
+    List<Map<String, Object>> queryAll();
+
+    List<Map<String, Object>> queryTeacherAll();
 }
