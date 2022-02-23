@@ -26,4 +26,11 @@
         GROUP BY t.tid
         ORDER BY t.tid;
     </select>
+
+    <select id="queryTeacherAll1">
+        SELECT t.tid , t.tname, c.cid , c.cname FROM teacher t
+        LEFT JOIN course c ON c.tid = t.tid
+        GROUP BY t.tid
+        ORDER BY t.tid
+    </select>
 </mapper>
