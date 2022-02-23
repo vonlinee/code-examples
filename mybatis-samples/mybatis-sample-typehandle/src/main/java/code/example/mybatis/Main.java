@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import code.example.mybatis.mapper.EntityMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -46,10 +47,12 @@ public class Main {
         //     System.out.println(bornDate.getClass());
         // }
 
+        EntityMapper entityMapper = sqlSession.getMapper(EntityMapper.class);
 
-
-//      int i = mapper.insertOne("2022-02-16");
-        sqlSession.commit();
+        List<Map<String, String>> list = entityMapper.queryTeacherAllBlob();
+        for (Map<String, String> map : list) {
+            System.out.println(map);
+        }
     }
 }
 

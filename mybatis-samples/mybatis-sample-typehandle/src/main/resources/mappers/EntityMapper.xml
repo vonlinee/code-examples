@@ -10,20 +10,26 @@
         SELECT * FROM t_teacher
     </select>
 
-    <!--BLOB字段映射-->
-    <resultMap id="blobMap" type="map">
-        <id column=""/>
-        <result property="" column=""/>
-    </resultMap>
 
     <select id="queryTeacherAll" resultType="map">
         SELECT
         T.*,
-        convert(group_concat(C.COURSE_NAME) as utf8) AS COURSE_NAME  <!-- BLOB字段 -->
+        convert(group_concat(C.COURSE_NAME) using utf8) AS COURSE_NAME  <!-- BLOB字段 -->
         FROM t_teacher T
         LEFT JOIN t_cource C ON T.TEACHER_NO = C.TEACHER_NO
         GROUP BY T.TEACHER_ID
         ORDER BY T.TEACHER_ID DESC
     </select>
 
+    <!--BLOB字段映射-->
+    <!--mybatis会自动转成字符串-->
+    <select id="queryTeacherAllBlob" resultType="map">
+        SELECT
+        T.*,
+        group_concat(C.COURSE_NAME) AS COURSE_NAME  <!-- BLOB字段 -->
+        FROM t_teacher T
+        LEFT JOIN t_cource C ON T.TEACHER_NO = C.TEACHER_NO
+        GROUP BY T.TEACHER_ID
+        ORDER BY T.TEACHER_ID DESC
+    </select>
 </mapper>

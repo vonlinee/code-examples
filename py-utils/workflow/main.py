@@ -410,6 +410,9 @@ def batch_upper_first_word()-> None:
 # '</if>'
 
 
+def delete_project_files() -> None:
+    pass
+
 
 if __name__ == '__main__':
     batch_snake_to_camel_style()

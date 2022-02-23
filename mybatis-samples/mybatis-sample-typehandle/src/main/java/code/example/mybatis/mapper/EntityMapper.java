@@ -11,4 +11,6 @@ public interface EntityMapper {
     List<Map<String, Object>> queryAll();
 
     List<Map<String, Object>> queryTeacherAll();
+
+    List<Map<String, String>> queryTeacherAllBlob();
 }
