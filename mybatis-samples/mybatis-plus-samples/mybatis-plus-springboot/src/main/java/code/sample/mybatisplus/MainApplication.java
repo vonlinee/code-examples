@@ -7,7 +7,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-@MapperScan(value = "code.sample.mybatisplus.mapper")
+// @MapperScan(value = "code.sample.mybatisplus.mapper")
 public class MainApplication {
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
@@ -23,3 +23,12 @@ public class MainApplication {
 // </dependency>
 
 //原因有时实体类属性不够用，又不想写自定义VO了，所以用map，这样直接返回前台用起来也很方便
+
+//org.apache.ibatis.binding.BindingException: Invalid bound statement (not found):
+// code.sample.mybatisplus.mapper.CourseMapper.queryTeacherAll
+
+
+
+
+
+

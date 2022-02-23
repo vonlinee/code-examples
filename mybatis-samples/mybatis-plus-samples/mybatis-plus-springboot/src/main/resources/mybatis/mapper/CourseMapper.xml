@@ -16,7 +16,7 @@
     </sql>
 
     <!---->
-    <select id="queryTeacherAll" resultMap="BaseResultMap">
+    <select id="queryTeacherAll" resultType="map">
         SELECT t.tid,
                t.tname,
                c.cid,

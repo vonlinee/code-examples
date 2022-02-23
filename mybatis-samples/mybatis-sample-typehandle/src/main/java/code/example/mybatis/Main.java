@@ -11,8 +11,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-import code.example.mybatis.mapper.EntityMapper;
-
 public class Main {
 
     private static SqlSession openSession() {
@@ -33,7 +31,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException, SQLException {
 
-
         SqlSession sqlSession = openSession();
 
         //SqlSession session = sqlSessionFactory.openSession(true);  //自动提交
@@ -49,13 +46,7 @@ public class Main {
         //     System.out.println(bornDate.getClass());
         // }
 
-        EntityMapper mapper = sqlSession.getMapper(EntityMapper.class);
 
-        List<Map<String, Object>> list = mapper.queryTeacherAll();
-
-        for (Map<String, Object> dataMap : list) {
-            Object map = dataMap.get("courserName");
-        }
 
 //      int i = mapper.insertOne("2022-02-16");
         sqlSession.commit();
@@ -64,7 +55,6 @@ public class Main {
 
 //https://zhuanlan.zhihu.com/p/45044649
 //很多人放弃了数据库的范式，极端追求数据库表的＂扁平化＂，大量使用扁平的表结构，去掉关联关系，大量使用冗余，很多所谓的架构师还理所当然的说在服务化的场景下这是绝对正确的；
-
 
 // 领域建模
 

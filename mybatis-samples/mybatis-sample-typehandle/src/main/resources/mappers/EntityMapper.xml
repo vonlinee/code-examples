@@ -2,22 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="code.example.mybatis.mapper.EntityMapper">
 
-	<insert id="insertOne" parameterType="java.lang.String">
-		INSERT INTO t1 VALUES (#{param})
-	</insert>
+    <insert id="insertOne" parameterType="java.lang.String">
+        INSERT INTO t1 VALUES (#{param})
+    </insert>
 
-	<select id="queryAll" resultType="map">
-		SELECT * FROM t_teacher
-	</select>
+    <select id="queryAll" resultType="map">
+        SELECT * FROM t_teacher
+    </select>
 
-	<select id="queryTeacherAll" resultType="map">
-		SELECT
-			T.*,
-			group_concat(C.COURSE_NAME) AS COURSE_NAME
-		FROM t_teacher T
-				 LEFT JOIN t_cource C ON T.TEACHER_NO = C.TEACHER_NO
-		GROUP BY T.TEACHER_ID
-		ORDER BY T.TEACHER_ID DESC
-	</select>
+    <!--BLOB字段映射-->
+    <resultMap id="blobMap" type="map">
+        <id column=""/>
+        <result property="" column=""/>
+    </resultMap>
+
+    <select id="queryTeacherAll" resultType="map">
+        SELECT
+        T.*,
+        convert(group_concat(C.COURSE_NAME) as utf8) AS COURSE_NAME  <!-- BLOB字段 -->
+        FROM t_teacher T
+        LEFT JOIN t_cource C ON T.TEACHER_NO = C.TEACHER_NO
+        GROUP BY T.TEACHER_ID
+        ORDER BY T.TEACHER_ID DESC
+    </select>
 
 </mapper>
