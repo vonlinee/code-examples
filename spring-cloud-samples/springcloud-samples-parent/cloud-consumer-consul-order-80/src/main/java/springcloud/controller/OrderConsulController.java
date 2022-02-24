@@ -11,7 +11,6 @@ import javax.annotation.Resource;
 @Slf4j
 public class OrderConsulController {
 
-
     private static final String INVOKE_URL = "http://consul-provider-payment";
 
     @Resource

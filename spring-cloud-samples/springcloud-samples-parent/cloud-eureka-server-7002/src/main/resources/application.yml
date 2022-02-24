@@ -1,5 +1,5 @@
 server:
-  port: 7001
+  port: 7002
 
 eureka:
   instance:
@@ -8,16 +8,16 @@ eureka:
     register-with-eureka: false   #false表示不向注册中心注册自己
     fetch-registry: false   #false表示自己端就是注册中心
     service-url:
-      # 集群配置域名解析  7001注册7002
-      defaultZone: http://${eureka.instance.hostname}:7002/eureka/
+      # 单机,配置域名解析
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
   server:
     # 关闭自我保护机制，保证不可用服务被及时剔除
-    enable-self-preservation: false
+    enable-self-preservation: false 
     eviction-interval-timer-in-ms: 2000
 
 spring:
   application:
-    name: cloud-eureka-service-7001
+    name: cloud-eureka-service-7002
 
 logging:
   level:

@@ -1,0 +1,9 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: cloud-order-service-zk-80
+  cloud:
+    zookeeper:
+      connect-string: 101.33.212.245:2181 #linux的ip加暴露的端口号

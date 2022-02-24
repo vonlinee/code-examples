@@ -6,21 +6,19 @@ import lombok.Data;
 
 @Data
 public class Payment implements Serializable {
-	private Long id;
-	private String serial;
+    private Long id;
+    private String serial;
 
-	public Payment(Long id, String serial) {
-		this.id = id;
-		this.serial = serial;
-	}
+    public Payment(Long id, String serial) {
+        this.id = id;
+        this.serial = serial;
+    }
 
-	public Payment(String serial) {
-		this.serial = serial;
-	}
+    public Payment(String serial) {
+        this.serial = serial;
+    }
 
-	public Payment(Long id) {
-		this.id = id;
-	}
-
-	public Payment() {}
+    public Payment(Long id) {
+        this.id = id;
+    }
 }
