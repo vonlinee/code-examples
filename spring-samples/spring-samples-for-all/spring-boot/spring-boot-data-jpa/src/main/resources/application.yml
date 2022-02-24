@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/mysql?characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    #Hibernate默认创建的表是myisam引擎，可以用以下方式指定为使用innodb创建表
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+    show-sql: true

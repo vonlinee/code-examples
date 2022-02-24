@@ -1,0 +1,17 @@
+server:
+  port: 8020
+# 指定服务命名
+spring:
+  application:
+    name: producer
+# 指定注册中心地址
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8010/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        # 需要开启hystrix.stream端点的暴露 这样才能获取到监控信息 * 代表开启可监控端点
+        include: "*"
