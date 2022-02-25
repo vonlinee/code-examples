@@ -11,15 +11,9 @@ public class MyprojectJavaConventionsPlugin implements org.gradle.api.Plugin<org
     private static final String MIN_SUPPORTED_GRADLE_VERSION = "5.0";
     public void apply(org.gradle.api.internal.project.ProjectInternal target) {
         assertSupportedByCurrentGradleVersion();
+                target.getPluginManager().apply("java");
+
         try {
-            Class<? extends BasicScript> pluginsBlockClass = Class.forName("cp_precompiled_MyprojectJavaConventions").asSubclass(BasicScript.class);
-            BasicScript pluginsBlockScript = pluginsBlockClass.getDeclaredConstructor().newInstance();
-            pluginsBlockScript.setScriptSource(scriptSource(pluginsBlockClass));
-            pluginsBlockScript.init(target, target.getServices());
-            pluginsBlockScript.run();
-            target.getPluginManager().apply("java");
-
-
             Class<? extends BasicScript> precompiledScriptClass = Class.forName("precompiled_MyprojectJavaConventions").asSubclass(BasicScript.class);
             BasicScript script = precompiledScriptClass.getDeclaredConstructor().newInstance();
             script.setScriptSource(scriptSource(precompiledScriptClass));

@@ -7,7 +7,7 @@ public class Main {
     private static ApplicationContext context;
 
     public static void main(String[] args) {
-        context = new ClassPathXmlApplicationContext("spring.xml");
+        context = new ClassPathXmlApplicationContext("spring-config.xml");
 //        UserDao userDao = (UserDao) context.getBean("userDaoImpl");
 //		userDao.insertStudent(new Student(7, "avni"));
 //        userDao.displayData();

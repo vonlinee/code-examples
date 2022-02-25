@@ -1,57 +1,136 @@
-plugins {
-    id 'java'
+springBootVersion = '2.3.7.RELEASE'
+springVersion = "5.3.16.RELEASE"
+
+// 脚本依赖配置
+buildscript {
+    ext {
+        springBootVersion = '2.3.7.RELEASE'
+    }
+    repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/public'
+        }
+        mavenCentral();
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'com.github.shalousun:smart-doc-gradle-plugin:2.0.7-release'
+    }
 }
 
-//基于gradle的dependency-management配置实现多模块springboot依赖库的版本管理
-//https://blog.csdn.net/sjs_caomei/article/details/120711701
+apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+bootWar {
+    archiveFileName='security.war'
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version ''
+    id "io.spring.dependency-management" version "1.0.10.RELEASE"
+}
+
+//引入bom
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.boot:spring-boot-dependencies:${spring-boot.version}'
+    }
+}
+
+// 基于gradle的dependency-management配置实现多模块springboot依赖库的版本管理
+// https://blog.csdn.net/sjs_caomei/article/details/120711701
 
 repositories {
+    mavenLocal()
+    'maven(http://maven.aliyun.com/nexus/content/groups/public/)'
     mavenCentral()
 }
 
-ext {
-    lib = [
-            "spring": "5.3.16"
-    ]
+apply from: "dependency.gradle"
+// 所有模块/项目的通用配置
+allprojects {
+    
+    group = 'com.smile'
+    version = '0.0.1'
+    apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        //maven仓库
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
+        maven { url 'https://maven.aliyun.com/nexus/content/repositories/google' }
+        maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter' }
+        mavenCentral()
+    }
+
+    dependencies {
+            implementation 'org.springframework:spring-core:5.3.16'
+            implementation 'org.springframework:spring-beans:5.3.16'
+            implementation 'org.springframework:spring-context:5.3.16'
+            implementation 'org.springframework:spring-context-support:5.3.16'
+            implementation 'org.springframework:spring-tx:5.3.16'
+            implementation 'org.springframework:spring-aop:5.3.16'
+            implementation 'org.springframework:spring-orm:5.3.16'
+            implementation 'org.springframework:spring-test:5.3.16'
+            implementation 'org.springframework:spring-web:5.3.16'
+            implementation 'org.springframework:spring-webmvc:5.3.16'
+            implementation 'org.springframework:spring-jdbc:5.3.16'
+            implementation 'org.springframework:spring-expression:5.3.16'
+            implementation 'org.springframework:spring-jms:5.3.16'
+            implementation 'org.springframework:spring-aspects:5.3.16'
+            implementation 'org.springframework:spring-messaging:5.3.16'
+            implementation 'org.springframework:spring-jcl:5.3.16'
+            implementation 'org.springframework:spring-oxm:5.3.16'
+            implementation 'org.springframework:spring-webflux:5.3.16'
+            implementation 'org.springframework:spring-websocket:5.3.16'
+            implementation 'mysql:mysql-connector-java:5.1.49'
+            implementation 'org.hibernate:hibernate-core:5.6.5.Final'
+    }
 }
 
+// 子模块/项目的统一配置
 subprojects {
+    apply plugin: 'java'
+    // 指定JDK版本
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    // 指定编码格式
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
-}
+    // dependencyManagement版本统一管理，类似于父maven的dependencyManagement
+    dependencyManagement {
+        dependencies {
+            for (depJar in rootProject.ext.dependencies) {
+                dependency depJar.value
+            }
+        }
+    }
 
-dependencies {
-    // https://mvnrepository.com/artifact/org.springframework/spring-core
-    implementation 'org.springframework:spring-core:5.3.16'
-    implementation 'org.springframework:spring-beans:5.3.16'
-    implementation 'org.springframework:spring-context:5.3.16'
-    implementation 'org.springframework:spring-context-support:5.3.16'
-    implementation 'org.springframework:spring-tx:5.3.16'
-    implementation 'org.springframework:spring-aop:5.3.16'
-    implementation 'org.springframework:spring-orm:5.3.16'
-    implementation 'org.springframework:spring-test:5.3.16'
-    implementation 'org.springframework:spring-web:5.3.16'
-    implementation 'org.springframework:spring-webmvc:5.3.16'
-    implementation 'org.springframework:spring-jdbc:5.3.16'
-    implementation 'org.springframework:spring-expression:5.3.16'
-    implementation 'org.springframework:spring-jms:5.3.16'
-    implementation 'org.springframework:spring-aspects:5.3.16'
-    implementation 'org.springframework:spring-messaging:5.3.16'
-    implementation 'org.springframework:spring-jcl:5.3.16'
-    implementation 'org.springframework:spring-oxm:5.3.16'
-    implementation 'org.springframework:spring-webflux:5.3.16'
-    implementation 'org.springframework:spring-websocket:5.3.16'
-//    implementation 'org.springframework:spring-modules-cache:5.3.16'
-//    implementation 'org.springframework:spring-mock:5.3.16'
-//    implementation 'org.springframework:spring-retry:5.3.16'
-//    implementation 'org.springframework:spring-shell:5.3.16'
-//    implementation 'org.springframework:spring-kafka:5.3.16'
-//    implementation 'org.springframework:spring-dao:5.3.16'
-//    implementation 'org.springframework:spring-webmvc-portlet:5.3.16'
-//    implementation 'org.springframework:spring-contex-indexer:5.3.16'
-//    implementation 'org.springframework:spring-orgi-core:5.3.16'
+    // 子项目依赖，类似于在父maven的dependencies
+    dependencies {
+        //lombok
+        annotationProcessor 'org.projectlombok:lombok'
+        compileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+        testCompileOnly 'org.projectlombok:lombok'
+
+        compile "com.alibaba:fastjson"
+        compile "commons-lang:commons-lang"
+        implementation(enforcedPlatform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
+        compile 'org.springframework.boot:spring-boot-starter-web'
+        compile 'org.springframework.boot:spring-boot-starter-log4j2'
+        compile 'org.springframework.boot:spring-boot-starter-validation'
+        compile('org.springframework.boot:spring-boot-starter-test')
+        compile(rootProject.ext.dependencies["mybatis-plus-boot-starter"]) {
+            exclude group: 'com.baomidou', module: 'mybatis-plus-generator'
+        }
+    }
+    
+    configurations {
+        //移除spring boot 默认logger依赖
+        all*.exclude module: 'spring-boot-starter-logging'
+    }
 }
 
 test {
