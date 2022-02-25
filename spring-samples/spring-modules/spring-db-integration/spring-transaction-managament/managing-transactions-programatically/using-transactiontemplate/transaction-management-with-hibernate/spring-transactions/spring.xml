@@ -36,16 +36,6 @@
 		<property name="maxActive" value="7" />
 	</bean> 
 	
-	<!-- <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://localhost/personaldb" />
-		<property name="user" value="root" />
-		<property name="password" value="permanent" />
-		<property name="initialPoolSize" value="2" />
-		<property name="minPoolSize" value="1" />
-		<property name="maxPoolSize" value="7" />
-	</bean> -->
-	
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="packagesToScan" value="com.soni.modal"></property>
@@ -59,6 +49,14 @@
 		</property>
 	</bean>
 	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="transactionManager"/>
+	</bean>
+	
 	<!-- To add exception translation to a template-less Hibernate DAO, we just need to
 	add a PersistenceExceptionTranslationPostProcessor bean to the Spring application
 	context: -->
@@ -67,5 +65,10 @@
 	adds an advisor to any bean that’s annotated with @Repository so that any platformspecific
 	exceptions are caught and then rethrown as one of Spring’s unchecked data
 	access exceptions. -->
+	  
+	 <!-- <bean id="bookPurchaseDaoImpl" class="com.soni.dao.BookPurchaseDaoImpl">
+	 	<property name="sessionFactory" ref="sessionFactory"></property>
+	 	<property name="transactionManager" ref="transactionManager"></property>
+	 </bean> -->
 	  
 </beans>  
