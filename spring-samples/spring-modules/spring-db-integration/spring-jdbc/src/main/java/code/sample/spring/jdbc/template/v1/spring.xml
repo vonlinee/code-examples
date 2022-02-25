@@ -28,7 +28,7 @@
 
 	<aop:aspectj-autoproxy />
 	<context:annotation-config />
-	<context:component-scan base-package="com.soni" />
+	<context:component-scan base-package="code.sample.spring.jdbc.template.v1" />
 
 	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"> 
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" /> <property 

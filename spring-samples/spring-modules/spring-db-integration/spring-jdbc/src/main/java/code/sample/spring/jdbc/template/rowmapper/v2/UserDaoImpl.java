@@ -1,4 +1,4 @@
-package code.sample.spring.jdbc.template.rowmapper.v2.dao;
+package code.sample.spring.jdbc.template.rowmapper.v2;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import code.sample.spring.jdbc.dao.UserDao;
 import code.sample.spring.jdbc.model.Student;
 import lombok.Getter;
 import lombok.Setter;
