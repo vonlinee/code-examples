@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 类似于@Bean注解 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-lazy-init="true" default-merge="false"
+	default-autowire="byType" default-init-method="">
+	
+	<bean id="stu1" class="sample.spring.di.xml.Student"></bean>
+	
+</beans>

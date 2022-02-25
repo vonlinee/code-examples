@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+}
+
+//基于gradle的dependency-management配置实现多模块springboot依赖库的版本管理
+//https://blog.csdn.net/sjs_caomei/article/details/120711701
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    lib = [
+            "spring": "5.3.16"
+    ]
+}
+
+subprojects {
+
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.springframework/spring-core
+    implementation 'org.springframework:spring-core:5.3.16'
+    implementation 'org.springframework:spring-beans:5.3.16'
+    implementation 'org.springframework:spring-context:5.3.16'
+    implementation 'org.springframework:spring-context-support:5.3.16'
+    implementation 'org.springframework:spring-tx:5.3.16'
+    implementation 'org.springframework:spring-aop:5.3.16'
+    implementation 'org.springframework:spring-orm:5.3.16'
+    implementation 'org.springframework:spring-test:5.3.16'
+    implementation 'org.springframework:spring-web:5.3.16'
+    implementation 'org.springframework:spring-webmvc:5.3.16'
+    implementation 'org.springframework:spring-jdbc:5.3.16'
+    implementation 'org.springframework:spring-expression:5.3.16'
+    implementation 'org.springframework:spring-jms:5.3.16'
+    implementation 'org.springframework:spring-aspects:5.3.16'
+    implementation 'org.springframework:spring-messaging:5.3.16'
+    implementation 'org.springframework:spring-jcl:5.3.16'
+    implementation 'org.springframework:spring-oxm:5.3.16'
+    implementation 'org.springframework:spring-webflux:5.3.16'
+    implementation 'org.springframework:spring-websocket:5.3.16'
+//    implementation 'org.springframework:spring-modules-cache:5.3.16'
+//    implementation 'org.springframework:spring-mock:5.3.16'
+//    implementation 'org.springframework:spring-retry:5.3.16'
+//    implementation 'org.springframework:spring-shell:5.3.16'
+//    implementation 'org.springframework:spring-kafka:5.3.16'
+//    implementation 'org.springframework:spring-dao:5.3.16'
+//    implementation 'org.springframework:spring-webmvc-portlet:5.3.16'
+//    implementation 'org.springframework:spring-contex-indexer:5.3.16'
+//    implementation 'org.springframework:spring-orgi-core:5.3.16'
+}
+
+test {
+    useJUnitPlatform()
+}
