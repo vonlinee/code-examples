@@ -3,8 +3,8 @@ SET NAMES utf8mb4;
 -- ----------------------------
 -- Table structure for payment
 -- ----------------------------
-DROP TABLE IF EXISTS `payment`;
-CREATE TABLE `payment`  (
+DROP TABLE IF EXISTS `t_payment`;
+CREATE TABLE `t_payment`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `serial` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE

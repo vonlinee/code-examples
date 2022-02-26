@@ -2,16 +2,15 @@ package code.sample.springcloud;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableEurekaClient
-@EnableDiscoveryClient
-@EnableFeignClients
-public class OrderFeignMain80 {
+@EnableDiscoveryClient  // 该注解用于向使用consul或者Zookeeper作为注册中心时注册服务
+public class PaymentHystrixMain8009 {
     public static void main(String[] args) {
-        SpringApplication.run(OrderFeignMain80.class, args);
+        SpringApplication.run(PaymentHystrixMain8009.class, args);
     }
 }

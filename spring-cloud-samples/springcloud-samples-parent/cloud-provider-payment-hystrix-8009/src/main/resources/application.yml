@@ -1,0 +1,17 @@
+server:
+  port: 8009
+
+spring:
+  application:
+    name: cloud-provider-hystrix-payment-8009
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka  #单机版
+  instance:
+    instance-id: cloud-provider-hystrix-payment-8009
+    prefer-ip-address: true

@@ -11,11 +11,12 @@ import code.sample.springcloud.entities.Payment;
 
 @Repository
 @FeignClient(name = "FEIGN-PAYMENT-SERVICE-8001", url = "localhost:8001", fallback = FeignFallBack.class)
+// @FeignClient(name = "FEIGN-PAYMENT-SERVICE-8001", url = "CLOUD-PAYMENT-SERVICE", fallback = FeignFallBack.class)
 public interface FeignService {
 
-	@RequestMapping(value = "/payment/create", method = RequestMethod.GET)
-	CommonResult<Payment> create(Payment payment);
-	
-	@GetMapping("/payment/feign/timeout")
-	public String paymentFeignTimeOut();
+    @RequestMapping(value = "/payment/create", method = RequestMethod.GET)
+    CommonResult<Payment> create(Payment payment);
+
+    @GetMapping("/payment/feign/timeout")
+    String paymentFeignTimeOut();
 }

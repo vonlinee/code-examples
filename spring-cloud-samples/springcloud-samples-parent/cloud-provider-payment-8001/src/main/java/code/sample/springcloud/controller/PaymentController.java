@@ -38,13 +38,13 @@ public class PaymentController {
     private DiscoveryClient discoveryClient;
 
     @PostMapping(value = "/create")
-    public CommonResult<?> create(@RequestBody(required = true) Payment payment) {
+    public CommonResult<Payment> create(@RequestBody(required = false) Payment payment) {
         int result = paymentService.create(payment);
         LOG.info("插入结果:" + result);
         if (result > 0) {
-            return new CommonResult<>(200, "插入成功,serverPort: " + serverPort, result);
+            return new CommonResult<>(200, "插入成功,serverPort: " + serverPort, payment);
         }
-        return new CommonResult<>(444, "插入失败", null);
+        return new CommonResult<>(444, "插入失败", payment);
     }
 
     @GetMapping(value = "/get/{id}")
@@ -81,10 +81,15 @@ public class PaymentController {
         return serverPort;
     }
 
+
+    /**
+     * Feign调用的接口
+     * @return
+     */
     @GetMapping("/feign/timeout")
     public String paymentFeignTimeOut() {
         try {
-            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
             System.out.println("Feign 调用超时");

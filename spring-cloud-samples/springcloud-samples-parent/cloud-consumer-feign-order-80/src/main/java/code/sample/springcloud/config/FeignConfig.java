@@ -1,15 +1,13 @@
 package code.sample.springcloud.config;
 
-import com.netflix.loadbalancer.IRule;
-import com.netflix.loadbalancer.RandomRule;
+import feign.Logger;	//不要导错包
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class MySelfRule {
-
+public class FeignConfig {
     @Bean
-    public IRule myRule() {
-        return new RandomRule();
+    Logger.Level feignLoggerLevel(){
+        return Logger.Level.FULL; //打印最详细的日志
     }
 }

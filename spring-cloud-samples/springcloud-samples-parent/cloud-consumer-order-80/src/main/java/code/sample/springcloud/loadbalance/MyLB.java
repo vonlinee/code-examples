@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class MyLB implements LoadBalance {
 
-    private AtomicInteger atomicInteger = new AtomicInteger(0);
+    private final AtomicInteger atomicInteger = new AtomicInteger(0);
 
     public final int getAndIncrement() {
         int current;

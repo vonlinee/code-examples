@@ -1,12 +1,13 @@
 server:
-  port: 8888
+  port: 8888 # 因为有多个消费者，所以实际使用不同的端口
 
 eureka:
   client:
     register-with-eureka: true   #是否将自己注册到注册中心,集群必须设置为true配合ribbon
     fetch-registry: true    #是否从服务端抓取已有的注册信息
     service-url:
-      defaultZone: http://localhost:7001/eureka
+      # defaultZone: http://localhost:7001/eureka
+      defaultZone: http://eureka7001.com:7001/eureka/  # 集群Eureka
   instance:
     instance-id: order80
     prefer-ip-address: true   #访问路径可以显示IP地址

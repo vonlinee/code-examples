@@ -12,6 +12,6 @@ public class FeignFallBack implements FeignService {
 
 	@Override
 	public String paymentFeignTimeOut() {
-		return "Feign TimeOut";
+		return "Feign TimeOut"; //主动超时
 	}
 }
