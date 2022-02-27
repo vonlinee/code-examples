@@ -2,6 +2,7 @@ package io.maker.gui;
 
 import io.maker.base.io.FileUtils;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
@@ -21,8 +22,8 @@ public class GUI extends Application {
     private final File inputFile = new File("D:\\Temp\\input.txt");
     private final File outputFile = new File("D:\\Temp\\output.txt");
 
-    TxtThread outputTxtThread;
-    TxtThread inputTxtThread;
+    private TxtThread outputTxtThread;
+    private TxtThread inputTxtThread;
 
     private void openFileExpolrer(String path) {
         try {

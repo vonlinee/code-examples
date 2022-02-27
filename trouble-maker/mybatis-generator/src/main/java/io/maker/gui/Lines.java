@@ -2,7 +2,10 @@ package io.maker.gui;
 
 import java.util.List;
 
-public class Lines {
+/**
+ * 多行文本，不带有换行符
+ */
+public final class Lines {
 
     private List<String> lines;
 

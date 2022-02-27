@@ -1,4 +1,4 @@
-package io.maker.generator.lang.java;
+package io.maker.generator.lang;
 
 public abstract class MethodReturnValue {
     private Class<?> type;

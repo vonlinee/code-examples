@@ -24,6 +24,7 @@ public final class UFiles {
 
     /**
      * 不同平台
+     *
      * @param filepath 文件路径
      * @return
      */
@@ -36,6 +37,7 @@ public final class UFiles {
 
     /**
      * check path is valid in windows and linux
+     *
      * @param path path to be validate
      *             platform valid value: linux,windows
      * @return whether the path is valid
@@ -66,6 +68,7 @@ public final class UFiles {
 
     /**
      * NIO读取文件
+     *
      * @param allocate
      * @throws IOException
      */
@@ -95,6 +98,7 @@ public final class UFiles {
 
     /**
      * NIO写文件
+     *
      * @param context
      * @param allocate
      * @param chartName
@@ -116,6 +120,7 @@ public final class UFiles {
 
     /**
      * nio事实现文件拷贝
+     *
      * @param source
      * @param target
      * @param allocate
@@ -145,6 +150,7 @@ public final class UFiles {
 
     /**
      * 传统方法实现文件拷贝 IO方法实现文件k拷贝
+     *
      * @param sourcePath
      * @param destPath
      * @throws Exception
@@ -227,6 +233,7 @@ public final class UFiles {
      * 使用相对路径创建的File对象没有父级目录
      * System.out.println(new File(""));
      * System.out.println(new File("D:/Temp/1.txt").getParentFile());
+     *
      * @param file File
      * @return
      */

@@ -24,13 +24,12 @@ import java.util.*;
  * 一个sheet是由多个row（HSSFRow）组成，
  * 一个row是由多个cell（HSSFCell）组成
  * https://www.cnblogs.com/GarfieldEr007/p/14540744.html
+ * 总体思路如下：XLSX的文档读取类为XSSFWorkBook，其实现了WorkBook接口，可通过File类进行构造。然后通过Excel文档按照需求读取对应的工作表，
+ * 再从工作表中根据所需行号等信息读取对应的行，最后根据列号定位到表中的单元格。该API可以从单元格中读取字符串、整形数、浮点数、日期和公式等数据
  */
 public final class ExcelUtils {
 
-//    总体思路如下：XLSX的文档读取类为XSSFWorkBook，其实现了WorkBook接口，可通过File类进行构造。然后通过Excel文档按照需求读取对应的工作表，再从工作表中根据所需行号等信息读取对应的行，最后根据列号定位到表中的单元格。该API可以从单元格中读取字符串、整形数、浮点数、日期和公式等数据
-
     /**
-     * TODO
      * @param fileName
      * @param excelType
      * @return
@@ -46,6 +45,7 @@ public final class ExcelUtils {
 
     /**
      * 根据文件后缀获取对应Workbook对象
+     *
      * @param filePath
      * @param fileType
      * @return
@@ -104,6 +104,7 @@ public final class ExcelUtils {
 
     /**
      * 批量读取Excel文件，返回数据对象
+     *
      * @param filePath
      * @return
      */
@@ -140,6 +141,7 @@ public final class ExcelUtils {
 
     /**
      * 解析Excel文件，返回数据对象
+     *
      * @param workbook
      * @return
      */
@@ -177,6 +179,7 @@ public final class ExcelUtils {
 
     /**
      * 将每一行数据转化为一个Map对象
+     *
      * @param row       行对象
      * @param cellCount 列数
      * @param mapKey    表头Map
@@ -202,6 +205,7 @@ public final class ExcelUtils {
 
     /**
      * 获取单元格的值
+     *
      * @param cel
      * @return
      */
@@ -274,6 +278,7 @@ public final class ExcelUtils {
      * 将 List<Map<String,Object>> 类型的数据导出为 Excel
      * 默认 Excel 文件的输出路径为 项目根目录下
      * 文件名为 filename + 时间戳 + .xlsx
+     *
      * @param mapList  数据源(通常为数据库查询数据)
      * @param filename 文件名前缀, 实际文件名后会加上日期
      * @param title    表格首行标题

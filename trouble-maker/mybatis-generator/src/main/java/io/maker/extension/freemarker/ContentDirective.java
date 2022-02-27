@@ -1,18 +1,16 @@
 package io.maker.extension.freemarker;
 
-import static freemarker.template.ObjectWrapper.DEFAULT_WRAPPER;
+import freemarker.core.Environment;
+import freemarker.template.*;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-
-import freemarker.core.Environment;
-import freemarker.template.*;
-
 /**
  * 自定义标签解析类
  * https://blog.csdn.net/chenghui0317/article/details/7832474
+ *
  * @author Administrator
  */
 public class ContentDirective implements TemplateDirectiveModel {
@@ -52,7 +50,8 @@ public class ContentDirective implements TemplateDirectiveModel {
 
     /**
      * 获取String类型的参数的值
-     * @param paramName
+     *
+     * @param paramName 参数名
      * @param paramMap
      * @return
      * @throws TemplateModelException
@@ -73,6 +72,7 @@ public class ContentDirective implements TemplateDirectiveModel {
 
     /**
      * 获得int类型的参数
+     *
      * @param paramName
      * @param paramMap
      * @return

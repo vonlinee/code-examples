@@ -62,9 +62,7 @@ public class ExcelReader {
     public List<User> read(File file) throws InvalidFormatException, IOException {
         Workbook workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheetAt(0);
-
-        List<User> result = new ArrayList<User>();
-
+        List<User> result = new ArrayList<>();
         int rowStart = sheet.getFirstRowNum() + 1;
         int rowEnd = sheet.getLastRowNum();
 
@@ -85,14 +83,11 @@ public class ExcelReader {
             User user = new User();
             user.setUsername(cell.getStringCellValue());
             current++;
-
             cell = row.getCell(current);
             user.setPassword(cell.getStringCellValue());
             current++;
-
             cell = row.getCell(current);
             user.setNickname(cell.getStringCellValue());
-
             return user;
         }
         return null;

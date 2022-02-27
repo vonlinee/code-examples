@@ -6,5 +6,8 @@ package io.maker.generator.lang;
  * 那些不需要返回值的东西，比如循环，赋值，定义
  */
 public abstract class Statement {
+    //有些语言没有结束标记
     public static final String END = ";";
+    private static final String L = "";
+
 }

@@ -1,17 +1,15 @@
 package io.maker.extension.freemarker;
 
+import freemarker.cache.FileTemplateLoader;
+import freemarker.template.*;
+import io.maker.base.io.UFiles;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-
-import freemarker.cache.FileTemplateLoader;
-import freemarker.cache.TemplateLoader;
-import freemarker.template.*;
-import io.maker.base.io.UFiles;
-import io.maker.base.lang.Validator;
 
 public class FreeMarker {
 

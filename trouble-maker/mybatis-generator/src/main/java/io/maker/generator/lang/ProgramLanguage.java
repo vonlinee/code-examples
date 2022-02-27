@@ -1,12 +1,24 @@
 package io.maker.generator.lang;
 
-public class ProgramLanguage {
+/**
+ * 编程语言
+ */
+public enum ProgramLanguage {
 
-    public static final ProgramLanguage JAVA = new ProgramLanguage("Java");
+    JAVA("Java"),
+    C("C"),
+    CPLUSPLUS("C++"),
+    RUST("Rust"),
+    GOLANG("Golang"),
+    PYTHON("Python");
 
-    private String name;
+    private final String name;
 
-    public ProgramLanguage(String name) {
+    ProgramLanguage(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }
