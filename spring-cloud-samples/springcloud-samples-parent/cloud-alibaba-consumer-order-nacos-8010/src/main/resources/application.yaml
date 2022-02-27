@@ -1,0 +1,15 @@
+server:
+  port: 8010
+
+spring:
+  application:
+    name: nacos-order-consumer
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 101.33.212.245:8848
+
+#消费者将要去访问的微服务名称（注册成功进nacos的为服务提供者，可能是集群）
+#此配置是自定义配置，用于将服务地址放在配置文件中
+service-url:
+  nacos-user-service: http://nacos-payment-provider

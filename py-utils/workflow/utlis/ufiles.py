@@ -1,3 +1,4 @@
+import mimetypes
 import os  # 系统
 import shutil
 
