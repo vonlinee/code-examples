@@ -1,4 +1,4 @@
-package code.sample.spring.transaction.annotation.config;
+package code.sample.spring.transaction.declaratively.annotation.config;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

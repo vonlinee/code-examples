@@ -1,4 +1,4 @@
-package code.sample.spring.transaction.annotation.config;
+package code.sample.spring.transaction.declaratively.annotation.config;
 
 import javax.sql.DataSource;
 
@@ -36,15 +36,15 @@ public class MainConfiguration {
     
     private static final Logger LOG = LoggerFactory.getLogger(MainConfiguration.class);
     
-//    @Bean(name = "transactionManager")
-//    public PlatformTransactionManager createTransactionManager(DataSource dataSource) {
-//        return new DataSourceTransactionManager(dataSource);
-//    }
-//
-//    @Bean(name = "transactionTemplate")
-//    public TransactionTemplate createTransactionTemplate(PlatformTransactionManager txManager) {
-//        return new TransactionTemplate(txManager);
-//    }
+    @Bean(name = "transactionManager")
+    public PlatformTransactionManager createTransactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean(name = "transactionTemplate")
+    public TransactionTemplate createTransactionTemplate(PlatformTransactionManager txManager) {
+        return new TransactionTemplate(txManager);
+    }
 	
     @Bean(name = "dataSource")
     public DataSource createDataSource() {
