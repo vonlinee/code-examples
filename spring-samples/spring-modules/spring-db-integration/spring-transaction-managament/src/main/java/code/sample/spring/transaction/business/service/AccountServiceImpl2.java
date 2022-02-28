@@ -8,7 +8,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import code.sample.spring.transaction.business.dao.IAccountDao;
 
 @Service
-public class AccountServiceImpl {
+public class AccountServiceImpl2 {
     @Autowired
     private IAccountDao accountDao;
 //    @Autowired
