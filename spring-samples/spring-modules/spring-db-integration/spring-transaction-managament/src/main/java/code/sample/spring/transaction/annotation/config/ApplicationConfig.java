@@ -1,4 +1,4 @@
-package org.example.spring.tx;
+package code.sample.spring.transaction.annotation.config;
 
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,8 +47,7 @@ public class ApplicationConfig {
     }
 
     @Bean(name = "transactionTemplate")
-    public TransactionTemplate createTransactionTemplate(
-        								PlatformTransactionManager txManager) {
+    public TransactionTemplate createTransactionTemplate(PlatformTransactionManager txManager) {
         return new TransactionTemplate(txManager);
     }
 }

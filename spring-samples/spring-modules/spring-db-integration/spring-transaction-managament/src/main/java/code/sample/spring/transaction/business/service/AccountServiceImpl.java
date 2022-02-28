@@ -1,10 +1,11 @@
-package org.example.spring.tx.service;
+package code.sample.spring.transaction.business.service;
 
-import org.example.spring.tx.dao.IAccountDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
+
+import code.sample.spring.transaction.business.dao.IAccountDao;
 
 @Service
 public class AccountServiceImpl {

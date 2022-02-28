@@ -1,14 +1,14 @@
-package org.example.spring.tx;
+package code.sample.spring.transaction.annotation;
 
-import org.example.spring.tx.service.AccountServiceImpl;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 
-@SpringBootApplication
+import code.sample.spring.transaction.annotation.config.ApplicationConfig;
+import code.sample.spring.transaction.annotation.config.SpringContext;
+import code.sample.spring.transaction.business.service.AccountServiceImpl;
+
 @ImportResource("classpath:bean.xml")
-public class Service {
-	
+public class Main {
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext context = 
 				new AnnotationConfigApplicationContext(ApplicationConfig.class);
@@ -19,12 +19,7 @@ public class Service {
 //		context.getBean(AccountServiceImpl.class).transferMoney("zs", "ls", 200.0);
 		
 		AccountServiceImpl impl = SpringContext.getBean(AccountServiceImpl.class);
-		
 //		impl.transferMoney("zs", "ls", 200.0);
-		
-		
-		Object bean = context.getBean("obj");
-		System.out.println(bean);
 		
 	}
 }
