@@ -11,7 +11,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import code.sample.spring.transaction.business.dao.IAccountDao;
 
-@Repository
 public class AccountServiceImpl {
 
 	@Autowired
@@ -29,8 +28,8 @@ public class AccountServiceImpl {
 		TransactionStatus status = transactionManager.getTransaction(def);
 		try (Session session = sessionFactory.getCurrentSession()) {
 			//操作
-			// commit the transaction
-			transactionManager.commit(status);
+			transfer("zs", "ls", 200D);
+			transactionManager.commit(status); //提交事务
 		} catch (Exception e) {
 			// rollback the transaction
 			transactionManager.rollback(status);
@@ -38,4 +37,10 @@ public class AccountServiceImpl {
 			e.printStackTrace();
 		}
 	}
+	
+    private void transfer(String out, String in, Double money) {
+        accountDao.outMoney(out, money);
+        int i = 1 / 0;  //此处除0模拟转账发生异常
+        accountDao.inMoney(in, money);
+    }
 }

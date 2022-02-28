@@ -9,5 +9,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		context = new ClassPathXmlApplicationContext("spring.xml");
+		AccountServiceImpl service = context.getBean("accountService", AccountServiceImpl.class);
+		service.transferMoney();
 	}
 }

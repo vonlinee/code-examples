@@ -24,11 +24,8 @@ public class AccountServiceImpl {
     
     @Transactional
     public void transfer(String out, String in, Double money) {
-    	Account outAccount = accountDao.queryAccountByUserName(out);
-    	Account inAccount = accountDao.queryAccountByUserName(in);
-    	money = Math.abs(money);
-        accountDao.updateMoneyByUserName(out, money);
+        accountDao.outMoney(out, money);
         int i = 1 / 0;  //此处除0模拟转账发生异常
-        accountDao.updateMoneyByUserName(out, money);
+        accountDao.inMoney(in, money);
     }
 }
