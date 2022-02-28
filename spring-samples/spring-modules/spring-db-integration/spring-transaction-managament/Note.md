@@ -65,3 +65,26 @@ hibernate.cfg.xml配置了下面语句后：
 MySQL5Dialect： An SQL dialect for MySQL 5.x specific features.
 
 
+
+![image-20220228145927044](D:\Projects\Github\code-example\spring-samples\spring-modules\spring-db-integration\spring-transaction-managament\images\image-20220228145927044.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

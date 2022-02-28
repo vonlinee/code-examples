@@ -16,12 +16,12 @@ public class Main {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 	
 	public static void main(String[] args) {
-		LOG.debug("AAA");
 		test1();
 	}
 	
 	public static void test1() {
 		AccountServiceImpl serviceImpl = context.getBean(AccountServiceImpl.class);
+		LOG.info(serviceImpl.getClass().toString()); //AccountServiceImpl$$EnhancerBySpringCGLIB$$13744cf5
 //		serviceImpl.transferMoney("zs", "ls", 200.0);
 		serviceImpl.transfer("zs", "ls", 200.0);
 	}
