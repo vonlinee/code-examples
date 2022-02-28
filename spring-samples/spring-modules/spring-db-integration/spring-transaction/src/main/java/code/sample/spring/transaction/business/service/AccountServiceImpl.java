@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import code.sample.spring.transaction.business.dao.IAccountDao;
 import code.sample.spring.transaction.declaratively.annotation.Main;
+import code.sample.spring.transaction.model.Account;
 
 @Service
 public class AccountServiceImpl {
@@ -23,6 +24,8 @@ public class AccountServiceImpl {
     
     @Transactional
     public void transfer(String out, String in, Double money) {
+    	Account outAccount = accountDao.queryAccountByUserName(out);
+    	Account inAccount = accountDao.queryAccountByUserName(in);
     	money = Math.abs(money);
         accountDao.updateMoneyByUserName(out, money);
         int i = 1 / 0;  //此处除0模拟转账发生异常
