@@ -33,8 +33,8 @@ public class NioServer {
 
     public void start() throws IOException {
         //启动两个线程
-        Thread accepterThread = new Thread(socketAccepter); //处理连接事件
-        Thread processorThread = new Thread(socketProcessor); //处理读写事件
+        Thread accepterThread = new Thread(socketAccepter, "Socket-Accepter-Thread"); //处理连接事件
+        Thread processorThread = new Thread(socketProcessor, "Socket-Processor-Thread"); //处理读写事件
         accepterThread.start();
         processorThread.start();
     }
