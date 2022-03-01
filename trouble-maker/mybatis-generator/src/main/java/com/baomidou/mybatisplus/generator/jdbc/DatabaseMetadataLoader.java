@@ -39,6 +39,7 @@ public class DatabaseMetadataLoader {
 
     /**
      * 获取表字段信息
+     *
      * @return 表字段信息 (小写字段名->字段信息)
      */
     public Map<String, ColumnInfo> getColumnsInfo(String catalog, String schemaPattern, String tableNamePattern) throws SQLException {
@@ -57,6 +58,4 @@ public class DatabaseMetadataLoader {
         }
         return Collections.unmodifiableMap(columnsInfoMap);
     }
-
-
 }

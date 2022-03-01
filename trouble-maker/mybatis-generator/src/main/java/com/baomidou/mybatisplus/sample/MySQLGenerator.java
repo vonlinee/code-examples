@@ -12,19 +12,20 @@ import java.util.Collections;
  * <p>
  * 快速生成
  * </p>
+ *
  * @author lanjerry
  * @since 2021-09-16
  */
 public class MySQLGenerator {
 
-    public static final String URL = "jdbc:mysql://localhost:3306/db_mysql?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8";
-    public static final String USERNAME = "root";
-    public static final String PASSWORD = "123456";
+    public static final String URL = "jdbc:mysql://172.26.136.195:3306/mp?characterEncoding=utf-8&useUnicode=true&useSSL=false&serverTimezone=GMT%2B8";
+    public static final String USERNAME = "appuser";
+    public static final String PASSWORD = "app@user!!";
 
     public static final String AUTHOR = "ly-busicen";
 
-    public static final String OUTPUT_DIR = "D://";
-    public static final String MAPPER_OUT_ROOT_DIR = "D://";
+    public static final String OUTPUT_DIR = "D://Temp";
+    public static final String MAPPER_OUT_ROOT_DIR = "D://Temp";
     public static final String PARENT_PACKAGE = "com.baomidou.mybatisplus.samples.generator";
     public static final String MODULE_NAME = "system";
 
@@ -33,7 +34,7 @@ public class MySQLGenerator {
      */
     public static void main(String[] args) throws SQLException {
 
-        String includeTables = String.join(",", Lists.of("course", "account", "t1"));
+        String includeTables = String.join(",", Lists.of("t_sac_onetask_receive_object"));
 
         FastAutoGenerator.create(URL, USERNAME, PASSWORD)
                 .globalConfig(builder -> {

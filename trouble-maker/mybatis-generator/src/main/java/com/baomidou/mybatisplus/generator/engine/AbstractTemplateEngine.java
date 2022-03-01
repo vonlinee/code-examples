@@ -238,7 +238,9 @@ public abstract class AbstractTemplateEngine {
         try {
             ConfigBuilder config = this.getConfigBuilder();
             List<TableInfo> tableInfoList = config.getTableInfoList();
+            logger.info("表数量" + tableInfoList.size());
             tableInfoList.forEach(tableInfo -> {
+                logger.info("生成表:" + tableInfo.getName());
                 Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
                 Optional.ofNullable(config.getInjectionConfig()).ifPresent(t -> {
                     t.beforeOutputFile(tableInfo, objectMap);

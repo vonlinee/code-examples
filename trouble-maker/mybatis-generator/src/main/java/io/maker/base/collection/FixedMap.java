@@ -9,10 +9,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * TODO 换成数组实现而不是List,虽然List也是基于数组
  * 如果key为null则在数组第一个元素位置
  * Thread-Safe
+ *
  * @param <K>
  * @param <V>
  */
-public final class FixedMap<K, V> {
+public class FixedMap<K, V> {
 
     private final AtomicInteger cursor = new AtomicInteger(0);
 
