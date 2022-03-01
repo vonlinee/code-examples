@@ -6,7 +6,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Test {
 	private static ApplicationContext context;
 	public static void main(String[] args) {
-		context=new ClassPathXmlApplicationContext("abc.xml"); 
+		context=new ClassPathXmlApplicationContext("spring-config.xml");
 		Shape shape=(Shape)context.getBean("circle");
 		shape.draw();
 	}

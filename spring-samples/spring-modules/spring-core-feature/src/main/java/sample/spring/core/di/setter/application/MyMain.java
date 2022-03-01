@@ -1,4 +1,4 @@
-package spring21;
+package sample.spring.core.di.setter.application;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

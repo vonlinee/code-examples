@@ -1,4 +1,4 @@
-package spring21;
+package sample.spring.core.di.setter.application;
 
 public class A {
 	public void fun()

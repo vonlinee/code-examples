@@ -1,4 +1,4 @@
-package spring21;
+package sample.spring.core.di.setter.beanfactory;
 
 public class B {
 	private A aa;

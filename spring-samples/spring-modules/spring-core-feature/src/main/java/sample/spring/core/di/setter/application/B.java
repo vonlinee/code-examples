@@ -1,4 +1,4 @@
-package spring21;
+package sample.spring.core.di.setter.application;
 
 public class B {
 	private A aa;
@@ -9,11 +9,6 @@ public class B {
 
 	public void setAa(A aa) {
 		this.aa = aa;
-	}
-
-	public B(A aa)
-	{
-		this.aa=aa;
 	}
 	
 }
