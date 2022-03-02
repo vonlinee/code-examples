@@ -1,13 +1,13 @@
 server:
-  port: 6770
+  port: 7001
 spring:
   application:
-    name: order-service
+    name: storage-service
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3306/ordercenter?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true
+    url: jdbc:mysql://localhost:3306/productcenter?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true
   cloud:
     nacos:
       discovery:
@@ -24,7 +24,6 @@ seata:
   enabled: true
   application-id: ${spring.application.name}
   # 事务群组（可以每个应用独立取名，也可以使用相同的名字），要与服务端nacos-config.txt中service.vgroup_mapping的后缀对应
-  # 需要先创建事务分组：${spring.application.name}-tx-group，即order-service-tx-group
   tx-service-group: ${spring.application.name}-tx-group
   config:
     type: nacos

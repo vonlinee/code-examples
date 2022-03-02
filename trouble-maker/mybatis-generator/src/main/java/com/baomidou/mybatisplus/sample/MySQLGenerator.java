@@ -12,13 +12,12 @@ import java.util.Collections;
  * <p>
  * 快速生成
  * </p>
- *
  * @author lanjerry
  * @since 2021-09-16
  */
 public class MySQLGenerator {
 
-    public static final String URL = "jdbc:mysql://localhost:3306/ordercenter?characterEncoding=utf-8&useUnicode=true&useSSL=false&serverTimezone=GMT%2B8";
+    public static final String URL = "jdbc:mysql://localhost:3306/productcenter?characterEncoding=utf-8&useUnicode=true&useSSL=false&serverTimezone=GMT%2B8";
     public static final String USERNAME = "root";
     public static final String PASSWORD = "123456";
 
@@ -39,7 +38,7 @@ public class MySQLGenerator {
      */
     public static void main(String[] args) throws SQLException {
 
-        String includeTables = String.join(",", Lists.of("tab_order"));
+        String includeTables = String.join(",", Lists.of("tab_storage"));
 
         FastAutoGenerator.create(URL, USERNAME, PASSWORD).globalConfig(builder -> {
                     builder.author(AUTHOR) // 设置作者
@@ -57,6 +56,9 @@ public class MySQLGenerator {
                             .addFieldPrefix("")
                             .addFieldSuffix("")
                             .mapperBuilder()
+                            .enableMapperAnnotation()
+                            .fileOverride()
+                            .formatXmlFileName("")
                             .enableBaseResultMap()
                             .enableBaseColumnList();
                 }).templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
