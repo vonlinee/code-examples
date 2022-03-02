@@ -21,12 +21,12 @@ public class MySQLGenerator {
     public static final String USERNAME = "root";
     public static final String PASSWORD = "123456";
 
-    public static final String AUTHOR = "ly-busicen";
+    public static final String AUTHOR = "someone";
 
     public static final String OUTPUT_DIR = "D://Temp";
     public static final String MAPPER_OUT_ROOT_DIR = "D://Temp";
-    public static final String PARENT_PACKAGE = "mbpgenerator";
-    public static final String MODULE_NAME = "system";
+    public static final String PARENT_PACKAGE = "mybatis";
+    public static final String MODULE_NAME = "";
 
 
     private static String url(String ip, String dbName) {
