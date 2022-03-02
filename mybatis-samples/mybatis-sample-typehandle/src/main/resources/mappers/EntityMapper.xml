@@ -10,6 +10,19 @@
         SELECT * FROM t_teacher
     </select>
 
+    <insert id="insertJson" parameterType="map">
+        INSERT INTO mybatis_learn.t_temp
+        (ID, EXTEND_JSON)
+        VALUES(uuid(),
+        #{param.extendJson, javaType=java.lang.String, jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertJson1" parameterType="map">
+        INSERT INTO mybatis_learn.t_temp
+        (ID, EXTEND_JSON)
+        VALUES(uuid(),
+        #{param.extendJson, javaType=java.lang.String, jdbcType=VARCHAR})
+    </insert>
 
     <select id="queryTeacherAll" resultType="map">
         SELECT

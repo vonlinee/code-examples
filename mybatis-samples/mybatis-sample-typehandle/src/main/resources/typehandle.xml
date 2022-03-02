@@ -5,7 +5,6 @@
 <configuration>
     <!-- 加载外部配置文件：https://www.cnblogs.com/chenyanbin/p/11655095.html -->
     <properties resource="jdbc.properties"/>
-
     <settings>
         <setting name="logImpl" value="STDOUT_LOGGING"/> <!-- 使用标准输出打印SQL日志 -->
         <!-- <setting name="logImpl" value="LOG4J"/> -->   <!-- 使用log4j打印SQL日志，需要引入log4j -->
@@ -19,6 +18,9 @@
         <typeAlias alias="ArrayList" type="java.util.ArrayList"/>
         <typeAlias alias="LinkedList" type="java.util.LinkedList"/>
     </typeAliases>
+    <typeHandlers>
+        <typeHandler handler="code.example.mybatis.typehandler.JsonTypeHandler" javaType="java.util.Map"/>
+    </typeHandlers>
     <!-- 数据库环境配置 -->
     <environments default="development">
         <environment id="development">

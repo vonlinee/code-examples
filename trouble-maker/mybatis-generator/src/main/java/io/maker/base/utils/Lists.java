@@ -41,6 +41,7 @@ public final class Lists {
 
     /**
      * 二维数组的长度是第一个数，即E[i][j].length = i
+     *
      * @param array 二维数组
      * @param <E>   元素
      * @return 返回值
