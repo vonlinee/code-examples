@@ -1,16 +1,11 @@
 package io.maker.base.lang.reflect;
 
-import java.beans.BeanInfo;
-import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 public final class Reflective {
 
@@ -42,6 +37,7 @@ public final class Reflective {
 
     /**
      * 通过属性名获取对象的属性值
+     *
      * @param obj
      * @param propertyName
      * @return
@@ -53,18 +49,17 @@ public final class Reflective {
         return methodGetUserName.invoke(obj);
     }
 
-    public static void main(String[] args) {
-
+    private static void test() {
         String typeName = HashMap.class.getTypeName();
-
         TypeVariable<Class<HashMap>>[] typeParameters = HashMap.class.getTypeParameters();
-
         for (TypeVariable<Class<HashMap>> typeParameter : typeParameters) {
             System.out.println(typeParameter.getTypeName());
             System.out.println(typeParameter.getName());
-
             Class<HashMap> genericDeclaration = typeParameter.getGenericDeclaration();
         }
     }
 
+    public static void main(String[] args) {
+
+    }
 }

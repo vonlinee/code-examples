@@ -12,6 +12,7 @@ import java.util.Collections;
  * <p>
  * 快速生成
  * </p>
+ *
  * @author lanjerry
  * @since 2021-09-16
  */
@@ -43,7 +44,7 @@ public class MySQLGenerator {
         FastAutoGenerator.create(URL, USERNAME, PASSWORD).globalConfig(builder -> {
                     builder.author(AUTHOR) // 设置作者
                             .enableSwagger() // 开启 swagger 模式
-                            .fileOverride() // 覆盖已生成文件
+//                            .fileOverride() // 覆盖已生成文件
                             .outputDir(OUTPUT_DIR); // 指定输出目录
                 }).packageConfig(builder -> {
                     builder.parent(PARENT_PACKAGE) // 设置父包名

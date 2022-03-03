@@ -29,6 +29,7 @@ public final class ObjectUtils {
 
     /**
      * 可能会存在并未转换，而是返回了父类引用，指向子类
+     *
      * @param target
      * @param dstType
      * @param <A>
@@ -78,6 +79,7 @@ public final class ObjectUtils {
 
     /**
      * 是否是数组
+     *
      * @param obj Object
      * @return
      */
@@ -99,8 +101,13 @@ public final class ObjectUtils {
         }
     }
 
+    public static boolean isPrimitive(Object obj) {
+        return obj != null && obj.getClass().isPrimitive();
+    }
+
     /**
      * JavaBean -> Map
+     *
      * @param bean
      * @return
      */

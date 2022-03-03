@@ -9,17 +9,21 @@ import io.maker.base.DateTimeUnit;
 
 public class TimeUtils {
 
-    public static final String FORMAT_1 = "yy-MM-dd HH:mm:ss";
-    public static final String FORMAT_2 = "yy-MM-dd HH:mm:ss SSS";
+    public static final String DT_FORMAT_YMDHMS = "yy-MM-dd HH:mm:ss";
+    public static final String DT_FORMAT_YMD = "yy-MM-dd";
+
+    public static final DateTimeFormatter DT_FORMATTER_YMDHMS = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter DT_FORMATTER_YMD = DateTimeFormatter.ofPattern("yy-MM-dd");
 
     private static final DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder();
 
     static {
-        formatterBuilder.appendPattern("yy-MM-dd HH:mm:ss");
+        formatterBuilder.appendPattern("yy-MM-dd HH:mm:ss")
+                .parseCaseInsensitive();
     }
 
     public static String nowTimeString() {
-        return formatterBuilder.toFormatter().format(LocalDateTime.now());
+        return DT_FORMATTER_YMDHMS.format(LocalDateTime.now());
     }
 
     public static final DateTimeFormatter DT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
