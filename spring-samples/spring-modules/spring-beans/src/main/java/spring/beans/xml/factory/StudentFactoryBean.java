@@ -1,4 +1,4 @@
-package code.example.spring.beans.factory;
+package spring.beans.xml.factory;
 
 import org.springframework.beans.factory.FactoryBean;
 

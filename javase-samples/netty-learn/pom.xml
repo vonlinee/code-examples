@@ -16,6 +16,7 @@
         <module>netty-rpc</module>
         <module>netty-chat</module>
         <module>netty-nio</module>
+        <module>netty-server</module>
     </modules>
 
     <dependencyManagement>
