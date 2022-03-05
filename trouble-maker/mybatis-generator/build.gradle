@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'junit:junit:4.13.1'
     implementation "${lib.'mybatis-plus'}"
     implementation "${lib.velocity}"
     implementation "${lib.freemarker}"
