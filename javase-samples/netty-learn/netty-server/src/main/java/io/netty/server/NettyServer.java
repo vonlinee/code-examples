@@ -4,6 +4,8 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.epoll.EpollDomainSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -25,6 +27,9 @@ public class NettyServer {
                     // 客户端初始化处理
                     protected void initChannel(SocketChannel client) throws Exception {
                         // 无锁化串行编程
+
+                        ChannelPipeline pipeline = client.parent().pipeline();
+
                         //Netty对HTTP协议的封装，顺序有要求
                         client.pipeline().addLast(new HttpResponseEncoder());// HttpResponseEncoder 编码器
                         client.pipeline().addLast(new HttpRequestDecoder()); // HttpRequestDecoder 解码器

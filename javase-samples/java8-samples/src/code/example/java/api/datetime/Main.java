@@ -2,6 +2,7 @@ package code.example.java.api.datetime;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 
@@ -24,5 +25,10 @@ public class Main {
         for (int i = 1; i <= 12; i++) {
             System.out.println(Month.of(i).maxLength());
         }
+    }
+
+    @Test
+    public void m1() {
+        LocalDate.of(2024, 2, 29);
     }
 }

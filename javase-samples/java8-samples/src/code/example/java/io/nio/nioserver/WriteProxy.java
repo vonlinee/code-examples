@@ -4,19 +4,19 @@ import java.util.Queue;
 
 public class WriteProxy {
 
-	private MessageBuffer messageBuffer = null;
-	private Queue<Message> writeQueue = null;
+    private MessageBuffer messageBuffer;
+    private Queue<Message> writeQueue;
 
-	public WriteProxy(MessageBuffer messageBuffer, Queue<Message> writeQueue) {
-		this.messageBuffer = messageBuffer;
-		this.writeQueue = writeQueue;
-	}
+    public WriteProxy(MessageBuffer messageBuffer, Queue<Message> writeQueue) {
+        this.messageBuffer = messageBuffer;
+        this.writeQueue = writeQueue;
+    }
 
-	public Message getMessage() {
-		return this.messageBuffer.getMessage();
-	}
+    public Message getMessage() {
+        return this.messageBuffer.getMessage();
+    }
 
-	public boolean enqueue(Message message) {
-		return this.writeQueue.offer(message);
-	}
+    public boolean enqueue(Message message) {
+        return writeQueue.offer(message);
+    }
 }
