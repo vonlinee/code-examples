@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 睡眠当前线程
  */
-public class SleepThread {
+public class Sleep {
 
     public static void seconds(int seconds) {
         try {

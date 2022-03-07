@@ -31,7 +31,6 @@ dependencies {
     implementation 'org.apache.shardingsphere:sharding-jdbc-core:4.1.1'
     implementation "${lib.guava}"
     implementation "com.baomidou:mybatis-plus:${mybatisPlusVersion}"
-// https://mvnrepository.com/artifact/commons-dbutils/commons-dbutils
     implementation 'commons-dbutils:commons-dbutils:1.7'
 
     testCompileOnly "org.jetbrains:annotations:22.0.0"

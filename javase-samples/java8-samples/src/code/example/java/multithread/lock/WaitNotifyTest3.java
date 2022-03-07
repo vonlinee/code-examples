@@ -1,7 +1,7 @@
 package code.example.java.multithread.lock;
 
 
-import code.example.java.multithread.SleepThread;
+import code.example.java.multithread.Sleep;
 
 public class WaitNotifyTest3 {
 	public static void main(String args[]) {
@@ -26,7 +26,7 @@ public class WaitNotifyTest3 {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				SleepThread.seconds(5);
+				Sleep.seconds(5);
 				System.out.println("==============");
 				lock.notify();
 			}

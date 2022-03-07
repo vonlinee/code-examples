@@ -346,6 +346,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Check whether a key exists in the array.
+     *
      * @param key The key to search for.
      * @return Returns true if the key exists, else false.
      */
@@ -355,6 +356,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Returns the index of a key in the set.
+     *
      * @param key The key to search for.
      * @return Returns the index of the key if it exists, else a negative integer.
      */
@@ -384,6 +386,7 @@ public class SimpleArrayMap<K, V> {
     /**
      * Check whether a value exists in the array.  This requires a linear search
      * through the entire array.
+     *
      * @param value The value to search for.
      * @return Returns true if the value exists, else false.
      */
@@ -393,6 +396,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Retrieve a value from the array.
+     *
      * @param key The key of the value to retrieve.
      * @return Returns the value associated with the given key,
      * or null if there is no such key.
@@ -409,6 +413,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Retrieve a value from the array, or {@code defaultValue} if there is no mapping for the key.
+     *
      * @param key          The key of the value to retrieve.
      * @param defaultValue The default mapping of the key
      * @return Returns the value associated with the given key,
@@ -421,6 +426,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Return the key at the given index in the array.
+     *
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @return Returns the key stored at the given index.
      */
@@ -430,6 +436,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Return the value at the given index in the array.
+     *
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @return Returns the value stored at the given index.
      */
@@ -439,6 +446,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Set the value at a given index in the array.
+     *
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @param value The new value to store at this index.
      * @return Returns the previous value at the given index.
@@ -459,6 +467,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Add a new value to the array map.
+     *
      * @param key   The key under which to store the value.  <b>Must not be null.</b>  If
      *              this key already exists in the array, its value will be replaced.
      * @param value The value to store for the given key.
@@ -529,6 +538,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Perform a {@link #put(Object, Object)} of all key/value pairs in <var>array</var>
+     *
      * @param array The array whose contents are to be retrieved.
      */
     public void putAll(SimpleArrayMap<? extends K, ? extends V> array) {
@@ -550,6 +560,7 @@ public class SimpleArrayMap<K, V> {
     /**
      * Add a new value to the array map only if the key does not already have a value or it is
      * mapped to {@code null}.
+     *
      * @param key   The key under which to store the value.
      * @param value The value to store for the given key.
      * @return Returns the value that was stored for the given key, or null if there
@@ -566,6 +577,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Remove an existing key from the array map.
+     *
      * @param key The key of the mapping to remove.
      * @return Returns the value that was stored under the key, or null if there
      * was no such key.
@@ -582,6 +594,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Remove an existing key from the array map only if it is currently mapped to {@code value}.
+     *
      * @param key   The key of the mapping to remove.
      * @param value The value expected to be mapped to the key.
      * @return Returns true if the mapping was removed.
@@ -600,6 +613,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Remove the key/value mapping at the given index.
+     *
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @return Returns the value that was stored at this index.
      */
@@ -665,6 +679,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Replace the mapping for {@code key} only if it is already mapped to a value.
+     *
      * @param key   The key of the mapping to replace.
      * @param value The value to store for the given key.
      * @return Returns the previous mapped value or null.
@@ -680,6 +695,7 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Replace the mapping for {@code key} only if it is already mapped to a value.
+     *
      * @param key      The key of the mapping to replace.
      * @param oldValue The value expected to be mapped to the key.
      * @param newValue The value to store for the given key.

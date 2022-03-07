@@ -161,7 +161,7 @@ subprojects {
         implementation 'com.typesafe:config:1.4.2'
         implementation 'org.ini4j:ini4j:0.5.4'
 
-        /* POI */
+        /* POI 注意版本兼容性 */
         implementation 'org.apache.poi:poi:5.0.0'
         implementation 'org.apache.poi:poi-ooxml:5.0.0'
         // 这个不会用到，最新版也只在2020年
@@ -170,7 +170,6 @@ subprojects {
         implementation 'org.apache.xmlbeans:xmlbeans:5.0.0'
 
         /* JSON */
-        // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
         implementation 'com.fasterxml.jackson.core:jackson-core:2.13.1'
         implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.1'
@@ -256,8 +255,6 @@ subprojects {
                     developers {
                         developer {
                             id = 'baomidou'
-                            name = 'hubin'
-                            email = 'jobob@qq.com'
                         }
                     }
 

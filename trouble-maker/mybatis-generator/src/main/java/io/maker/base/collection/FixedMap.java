@@ -1,9 +1,13 @@
 package io.maker.base.collection;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * TODO 换成数组实现而不是List,虽然List也是基于数组
@@ -13,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @param <K>
  * @param <V>
  */
-public class FixedMap<K, V> {
+public class FixedMap<K, V> implements Map<K, V> {
 
     private final AtomicInteger cursor = new AtomicInteger(0);
 
@@ -27,28 +31,34 @@ public class FixedMap<K, V> {
         this.values = new Object[intialCapacity];
     }
 
+    @Override
     public int size() {
         return keys.length;
     }
 
+    @Override
     public boolean isEmpty() {
         return keys.length == 0;
     }
 
+    @Override
     public boolean containsKey(Object key) {
         return true;
     }
 
+    @Override
     public boolean containsValue(Object value) {
         return Arrays.binarySearch(values, value) > 0;
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public V get(Object key) {
         int i = Arrays.binarySearch(keys, key);
         return (V) values[i];
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public V put(K key, V value) {
         // Non-atomic operations on volatile fields are operations where the volatile field
@@ -69,10 +79,11 @@ public class FixedMap<K, V> {
 
     private void ensureCapacityFixed() {
         if (cursor.get() >= values.length) {
-            throw new UnsupportedOperationException("the capacity of FixedMap is fixed");
+            throw new UnsupportedOperationException("the capacity of FixedMap is fixed with value " + values.length);
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public V remove(Object key) {
         int i = Arrays.binarySearch(keys, key);
@@ -84,12 +95,14 @@ public class FixedMap<K, V> {
         return value;
     }
 
+    @Override
     public void putAll(Map<? extends K, ? extends V> m) {
         for (K key : m.keySet()) {
             put(key, m.get(key));
         }
     }
 
+    @Override
     public void clear() {
         for (int i = 0; i < values.length; i++) {
             keys[i] = null;
@@ -97,15 +110,82 @@ public class FixedMap<K, V> {
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    public @NotNull
-    Set<K> keySet() {
+    public @NotNull Set<K> keySet() {
         return new HashSet<K>((Collection<? extends K>) Arrays.asList(keys));
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    public @NotNull
-    Collection<V> values() {
+    public @NotNull Collection<V> values() {
         return (Collection<V>) Arrays.asList(values);
+    }
+
+    @Override
+    @SuppressWarnings("uncheced")
+    public Set<Entry<K, V>> entrySet() {
+        HashSet<Entry<K, V>> entrySet = new HashSet<>();
+        for (int i = 0; i < keys.length; i++) {
+            entrySet.add(new AbstractMap.SimpleEntry<K, V>((K) keys[i], (V) values[i]));
+        }
+        return Collections.unmodifiableSet(entrySet);
+    }
+
+    @Override
+    public V getOrDefault(Object key, V defaultValue) {
+        return Map.super.getOrDefault(key, defaultValue);
+    }
+
+    @Override
+    public void forEach(BiConsumer<? super K, ? super V> action) {
+        Map.super.forEach(action);
+    }
+
+    @Override
+    public void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) {
+        Map.super.replaceAll(function);
+    }
+
+    @Nullable
+    @Override
+    public V putIfAbsent(K key, V value) {
+        return Map.super.putIfAbsent(key, value);
+    }
+
+    @Override
+    public boolean remove(Object key, Object value) {
+        return Map.super.remove(key, value);
+    }
+
+    @Override
+    public boolean replace(K key, V oldValue, V newValue) {
+        return Map.super.replace(key, oldValue, newValue);
+    }
+
+    @Nullable
+    @Override
+    public V replace(K key, V value) {
+        return Map.super.replace(key, value);
+    }
+
+    @Override
+    public V computeIfAbsent(K key, @NotNull Function<? super K, ? extends V> mappingFunction) {
+        return Map.super.computeIfAbsent(key, mappingFunction);
+    }
+
+    @Override
+    public V computeIfPresent(K key, @NotNull BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+        return Map.super.computeIfPresent(key, remappingFunction);
+    }
+
+    @Override
+    public V compute(K key, @NotNull BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+        return Map.super.compute(key, remappingFunction);
+    }
+
+    @Override
+    public V merge(K key, @NotNull V value, @NotNull BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
+        return Map.super.merge(key, value, remappingFunction);
     }
 }

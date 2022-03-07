@@ -1,19 +1,17 @@
 package io.netty.server;
 
+import java.net.InetSocketAddress;
+
 import io.netty.bootstrap.Bootstrap;
-import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.ServerChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.http.HttpRequestDecoder;
-import io.netty.handler.codec.http.HttpResponseEncoder;
-
-import java.net.InetSocketAddress;
 
 public class NettyClient {
 
@@ -25,7 +23,16 @@ public class NettyClient {
             clientBootstrap.channel(NioSocketChannel.class);
             clientBootstrap.remoteAddress(new InetSocketAddress("localhost", 8888));
             clientBootstrap.handler(new ChannelInitializer<SocketChannel>() {
+            	
+            	@Override
                 protected void initChannel(SocketChannel socketChannel) throws Exception {
+                	
+            		ServerSocketChannel parent = socketChannel.parent();
+            		
+                	System.out.println("Client Init SocketChannel");
+                	ChannelPipeline pipeline1 = socketChannel.pipeline();
+                	ChannelPipeline pipeline2 = socketChannel.pipeline();
+                	System.out.println(pipeline1 == pipeline2);
                     socketChannel.pipeline().addLast(new ClientHandler());
                 }
             });

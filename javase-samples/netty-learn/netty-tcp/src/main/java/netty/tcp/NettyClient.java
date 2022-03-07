@@ -9,16 +9,16 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class NettyClient {
 
-    public static void main(String[] args) {
-        EventLoopGroup eventExecutors = new NioEventLoopGroup();
-        Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(eventExecutors)
-                .channel(NioSocketChannel.class)
-                .handler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
-
-                    }
-                });
-    }
+	public static void main(String[] args) {
+		EventLoopGroup eventExecutors = new NioEventLoopGroup();
+		Bootstrap bootstrap = new Bootstrap()
+				.group(eventExecutors)
+				.channel(NioSocketChannel.class)
+				.handler(new ChannelInitializer<SocketChannel>() {
+					@Override
+					protected void initChannel(SocketChannel ch) throws Exception {
+						ch.pipeline().addLast();
+					}
+				});
+	}
 }
