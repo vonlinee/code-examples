@@ -54,7 +54,6 @@ SELECT d1.name, (SELECT id FROM t3) d2
 FROM (SELECT id, name FROM t1 WHERE other_column = '') d1
 UNION (SELECT name, id FROM t2)
 
-
 -- P31
 -- https://www.bilibili.com/video/BV1KW411u7vy?p=31&spm_id_from=pageDriver
 -- 索引单表优化案例
