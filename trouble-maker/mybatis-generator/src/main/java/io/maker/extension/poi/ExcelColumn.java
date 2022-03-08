@@ -1,12 +1,12 @@
 package io.maker.extension.poi;
 
-import io.maker.base.lang.JavaType;
+import io.maker.base.lang.TypeMetaHolder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExcelColumn<T> extends JavaType implements Serializable {
+public class ExcelColumn<T> extends TypeMetaHolder implements Serializable {
 
     private String title;
     private List<T> data = new ArrayList<>();

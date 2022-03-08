@@ -1,4 +1,4 @@
-package io.maker.base;
+package io.maker.base.lang;
 
 import java.nio.charset.Charset;
 
@@ -19,6 +19,10 @@ public class ByteArray {
 
     public static ByteArray wrap(byte[] bytes) {
         return new ByteArray(bytes);
+    }
+
+    public static ByteArray wrap(byte[] bytes, Charset encoding) {
+        return new ByteArray(bytes, encoding);
     }
 
     public static ByteArray allocate(int len) {

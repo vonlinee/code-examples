@@ -4,14 +4,18 @@ package io.maker.base.lang;
  * 包装Class<?>实例，基于Class<?>对象是单例的提供类型判断 子类实现需要对typeClass赋值
  * @author vonline
  */
-public abstract class JavaType {
+public abstract class TypeMetaHolder {
+
+    /**
+     * 持有Class引用是否有问题？
+     */
     protected transient Class<?> typeClass;
 
     public final <T> boolean typeof(Class<T> clazz) {
         return this.typeClass == clazz;
     }
 
-    public final String type() {
+    public final String typeName() {
         return typeClass == null ? "null" : typeClass.getName();
     }
 
@@ -48,8 +52,16 @@ public abstract class JavaType {
     }
 
     /**
-     * 无法判断是否是引用类型
+     * Null可以转为任何类型
      * @return
+     */
+    public final boolean isNullType() {
+        return this.typeClass == null;
+    }
+
+    /**
+     * 无法判断是否是引用类型,Java中只有引用类型，左值都是引用
+     * @return boolean
      */
     public final boolean isPrimitive() {
         return this.typeClass == Byte.class || this.typeClass == Number.class || this.typeClass == Integer.class

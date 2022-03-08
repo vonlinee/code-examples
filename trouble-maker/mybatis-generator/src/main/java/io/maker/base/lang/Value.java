@@ -1,6 +1,6 @@
 package io.maker.base.lang;
 
-public class Value extends JavaType {
+public class Value extends TypeMetaHolder {
 
     protected final Object value;
 
