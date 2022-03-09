@@ -10,7 +10,6 @@ public class JavaMethodDefinition implements Serializable {
     private String methodName;
     private List<JavaMethodParam> params;
 
-
-
+    JavaMethodReturnValue returnValue;
 
 }

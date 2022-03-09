@@ -144,6 +144,7 @@ public enum DbType {
 
     /**
      * 获取数据库类型
+     *
      * @param dbType 数据库类型字符串
      */
     public static DbType getDbType(String dbType) {

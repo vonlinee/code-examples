@@ -1,6 +1,13 @@
 package io.maker.generator.lang.java;
 
-public class JavaMethodParam {
-    String name;
-    String type;
+import lombok.Data;
+
+import java.io.Serializable;
+
+@Data
+public class JavaMethodParam implements Serializable {
+    private String name;
+    private String type;
+
+
 }

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package io.maker.generator.db.meta.column;
+package com.baomidou.mybatisplus.column;
 
 import io.maker.generator.db.JdbcUtils;
 import io.maker.generator.db.meta.resultset.ResultSetHandler;

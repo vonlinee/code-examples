@@ -1,25 +1,20 @@
 package io.maker.generator.db;
 
-import static java.sql.DriverManager.registerDriver;
-
-import java.io.*;
-import java.lang.reflect.Constructor;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-
 import io.maker.generator.db.meta.resultset.ResultSetColumnMetadata;
 import io.maker.generator.db.meta.resultset.ResultSetHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.maker.base.ResourceLoader;
-
 import javax.sql.DataSource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
+import java.sql.*;
+import java.util.*;
+
+import static java.sql.DriverManager.registerDriver;
 
 /**
  * https://cloud.tencent.com/developer/article/1581184
@@ -62,12 +57,18 @@ public final class JdbcUtils {
         }
     }
 
-    public static Properties getProperties() {
+    /**
+     * 获取默认连接配置文件  DEFAULT_PROPERTIES_LOCATION
+     *
+     * @return
+     */
+    public static Properties getLocalProperties() {
         return props;
     }
 
     /**
      * 从本地文件加载
+     *
      * @return
      */
     public static Properties getProperties(String filePath) {
@@ -82,6 +83,7 @@ public final class JdbcUtils {
 
     /**
      * Get schema.
+     *
      * @param connection   connection
      * @param databaseType database type
      * @return schema
@@ -101,6 +103,7 @@ public final class JdbcUtils {
 
     /**
      * TODO query
+     *
      * @param conn
      * @param sql
      * @param <T>
@@ -135,6 +138,7 @@ public final class JdbcUtils {
 
     /**
      * 查询，封装结果
+     *
      * @param conn
      * @param sql
      * @param args
@@ -168,6 +172,7 @@ public final class JdbcUtils {
 
     /**
      * 使用PreparedStatement进行查询
+     *
      * @param conn
      * @param sql
      * @param handler
@@ -199,6 +204,7 @@ public final class JdbcUtils {
 
     /**
      * 获取DatabaseMetaData
+     *
      * @param dataSource
      * @return
      * @throws SQLException
@@ -214,6 +220,7 @@ public final class JdbcUtils {
 
     /**
      * 获取DatabaseMetaData
+     *
      * @param conn
      * @return
      * @throws SQLException
@@ -224,6 +231,7 @@ public final class JdbcUtils {
 
     /**
      * 获取数据库元数据
+     *
      * @param dbmd
      * @return
      * @throws SQLException
@@ -247,6 +255,7 @@ public final class JdbcUtils {
 
     /**
      * 获取ResultSet结果表的字段信息，ResultSet包含结果集合
+     *
      * @param rsmd ResultSetMetaData
      * @return Map<String, Object> key根据ResultSetMetaData的属性确定
      */
@@ -265,7 +274,8 @@ public final class JdbcUtils {
 
     /**
      * 提取ResultSet数据
-     * @param rsmd
+     *
+     * @param resultSet
      * @return
      */
     public static List<Map<String, Object>> extractResultSetData(ResultSet resultSet) {
@@ -286,6 +296,7 @@ public final class JdbcUtils {
 
     /**
      * 获取参数元数据
+     *
      * @param pstmt
      * @throws Exception
      */
@@ -298,6 +309,7 @@ public final class JdbcUtils {
 
     /**
      * 注意，此方法内部不关闭Connection
+     *
      * @param conn
      * @return
      */
@@ -312,10 +324,11 @@ public final class JdbcUtils {
 
     /**
      * 获取数据库连接
+     *
      * @return Connection
      */
     public static Optional<Connection> getConnection(String properties) {
-        Properties prop = ResourceLoader.loadProperties(properties);
+        Properties prop = null;
         boolean result = loadDriver(prop.getProperty("jdbc.driver"));
         Connection connection = null;
         if (result) {
@@ -332,6 +345,7 @@ public final class JdbcUtils {
 
     /**
      * 获取数据库连接
+     *
      * @return Connection
      */
     public static Optional<Connection> getConnection(String driver, String url, String userName, String password) {
@@ -351,6 +365,7 @@ public final class JdbcUtils {
 
     /**
      * 获取数据库
+     *
      * @param properties
      * @return
      */
@@ -374,6 +389,7 @@ public final class JdbcUtils {
      * <p>
      * 在MySQL中，物理上schema和database是等价的。 在MySQL
      * SQL语法中你可以用SCHEMA这个关键字代替DATABASE关键字，比如用CREATE SCHEMA代替CREATE DATABASE。
+     *
      * @param dbName
      * @param conn
      * @throws Exception
@@ -399,6 +415,7 @@ public final class JdbcUtils {
 
     /**
      * ResultSet转换为
+     *
      * @param rs
      * @return
      * @throws SQLException
@@ -420,6 +437,7 @@ public final class JdbcUtils {
 
     /**
      * Close a <code>Connection</code>, avoid closing if null.
+     *
      * @param conn Connection to close.
      * @throws SQLException if a database access error occurs
      */
@@ -431,6 +449,7 @@ public final class JdbcUtils {
 
     /**
      * Close a <code>ResultSet</code>, avoid closing if null.
+     *
      * @param rs ResultSet to close.
      * @throws SQLException if a database access error occurs
      */
@@ -442,6 +461,7 @@ public final class JdbcUtils {
 
     /**
      * Close a <code>Statement</code>, avoid closing if null.
+     *
      * @param stmt Statement to close.
      * @throws SQLException if a database access error occurs
      */
@@ -454,6 +474,7 @@ public final class JdbcUtils {
     /**
      * Close a <code>Connection</code>, avoid closing if null and hide any
      * SQLExceptions that occur.
+     *
      * @param conn Connection to close.
      */
     public static void closeQuietly(Connection conn) {
@@ -468,6 +489,7 @@ public final class JdbcUtils {
      * Close a <code>Connection</code>, <code>Statement</code> and
      * <code>ResultSet</code>. Avoid closing if null and hide any SQLExceptions that
      * occur.
+     *
      * @param conn Connection to close.
      * @param stmt Statement to close.
      * @param rs   ResultSet to close.
@@ -487,6 +509,7 @@ public final class JdbcUtils {
     /**
      * Close a <code>ResultSet</code>, avoid closing if null and hide any
      * SQLExceptions that occur.
+     *
      * @param rs ResultSet to close.
      */
     public static void closeQuietly(ResultSet rs) {
@@ -500,6 +523,7 @@ public final class JdbcUtils {
     /**
      * Close a <code>Statement</code>, avoid closing if null and hide any
      * SQLExceptions that occur.
+     *
      * @param stmt Statement to close.
      */
     public static void closeQuietly(Statement stmt) {
@@ -512,6 +536,7 @@ public final class JdbcUtils {
 
     /**
      * Commits a <code>Connection</code> then closes it, avoid closing if null.
+     *
      * @param conn Connection to close.
      * @throws SQLException if a database access error occurs
      */
@@ -528,6 +553,7 @@ public final class JdbcUtils {
     /**
      * Commits a <code>Connection</code> then closes it, avoid closing if null and
      * hide any SQLExceptions that occur.
+     *
      * @param conn Connection to close.
      */
     public static void commitAndCloseQuietly(Connection conn) {
@@ -541,6 +567,7 @@ public final class JdbcUtils {
     /**
      * Loads and registers a database driver class. If this succeeds, it returns
      * true, else it returns false.
+     *
      * @param driverClassName of driver to load
      * @return boolean <code>true</code> if the driver was found, otherwise
      * <code>false</code>
@@ -552,6 +579,7 @@ public final class JdbcUtils {
     /**
      * Loads and registers a database driver class. If this succeeds, it returns
      * true, else it returns false.
+     *
      * @param classLoader     the class loader used to load the driver class
      * @param driverClassName of driver to load
      * @return boolean <code>true</code> if the driver was found, otherwise
@@ -586,6 +614,7 @@ public final class JdbcUtils {
 
     /**
      * Print the stack trace for a SQLException to STDERR.
+     *
      * @param e SQLException to print stack trace of
      */
     public static void printStackTrace(SQLException e) {
@@ -594,6 +623,7 @@ public final class JdbcUtils {
 
     /**
      * Print the stack trace for a SQLException to a specified PrintWriter.
+     *
      * @param e  SQLException to print stack trace of
      * @param pw PrintWriter to print to
      */
@@ -610,6 +640,7 @@ public final class JdbcUtils {
 
     /**
      * Print warnings on a Connection to STDERR.
+     *
      * @param conn Connection to print warnings from
      */
     public static void printWarnings(Connection conn) {
@@ -618,6 +649,7 @@ public final class JdbcUtils {
 
     /**
      * Print warnings on a Connection to a specified PrintWriter.
+     *
      * @param conn Connection to print warnings from
      * @param pw   PrintWriter to print to
      */
@@ -633,6 +665,7 @@ public final class JdbcUtils {
 
     /**
      * Rollback any changes made on the given connection.
+     *
      * @param conn Connection to rollback. A null value is legal.
      * @throws SQLException if a database access error occurs
      */
@@ -645,6 +678,7 @@ public final class JdbcUtils {
     /**
      * Performs a rollback on the <code>Connection</code> then closes it, avoid
      * closing if null.
+     *
      * @param conn Connection to rollback. A null value is legal.
      * @throws SQLException if a database access error occurs
      * @since DbUtils 1.1
@@ -662,6 +696,7 @@ public final class JdbcUtils {
     /**
      * Performs a rollback on the <code>Connection</code> then closes it, avoid
      * closing if null and hide any SQLExceptions that occur.
+     *
      * @param conn Connection to rollback. A null value is legal.
      * @since DbUtils 1.1
      */
@@ -676,6 +711,7 @@ public final class JdbcUtils {
     /**
      * Simple {@link Driver} proxy class that proxies a JDBC Driver loaded
      * dynamically.
+     *
      * @since 1.6
      */
     private static final class DriverProxy implements Driver {
@@ -689,6 +725,7 @@ public final class JdbcUtils {
 
         /**
          * Creates a new JDBC Driver that adapts a JDBC Driver loaded dynamically.
+         *
          * @param adapted the adapted JDBC Driver loaded dynamically.
          */
         public DriverProxy(Driver adapted) {

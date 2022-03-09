@@ -43,6 +43,7 @@ import java.util.NoSuchElementException;
  *   LineIterator.closeQuietly(iterator);
  * }
  * </pre>
+ *
  * @author Niall Pemberton
  * @author Stephen Colebourne
  * @author Sandy McArthur
@@ -66,6 +67,7 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Constructs an iterator of the lines for a <code>Reader</code>.
+     *
      * @param reader the <code>Reader</code> to read from, not null
      * @throws IllegalArgumentException if the reader is null
      */
@@ -86,6 +88,7 @@ public class LineIterator implements Iterator<String> {
      * Indicates whether the <code>Reader</code> has more lines.
      * If there is an <code>IOException</code> then {@link #close()} will
      * be called on this instance.
+     *
      * @return <code>true</code> if the Reader has more lines
      * @throws IllegalStateException if an IO exception occurs
      */
@@ -115,6 +118,7 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Overridable method to validate each line that is returned.
+     *
      * @param line the line that is to be validated
      * @return true if valid, false to remove from the iterator
      */
@@ -124,6 +128,7 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Returns the next line in the wrapped <code>Reader</code>.
+     *
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return
      */
@@ -133,6 +138,7 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Returns the next line in the wrapped <code>Reader</code>.
+     *
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return
      */
@@ -160,6 +166,7 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Unsupported.
+     *
      * @throws UnsupportedOperationException always
      */
     public void remove() {
@@ -170,6 +177,7 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Closes the iterator, handling null and ignoring exceptions.
+     *
      * @param iterator the iterator to close
      */
     public static void closeQuietly(LineIterator iterator) {
@@ -177,5 +185,4 @@ public class LineIterator implements Iterator<String> {
             iterator.close();
         }
     }
-
 }

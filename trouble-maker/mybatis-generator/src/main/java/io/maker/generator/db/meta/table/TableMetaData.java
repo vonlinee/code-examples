@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.maker.generator.db.meta.column.ColumnMetaData;
+import com.baomidou.mybatisplus.column.ColumnMetaData;
 import io.maker.generator.db.meta.index.IndexMetaData;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

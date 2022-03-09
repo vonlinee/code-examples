@@ -1,7 +1,5 @@
 package io.maker.generator.db.meta.resultset;
 
-import io.maker.generator.db.JdbcUtils;
-
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;

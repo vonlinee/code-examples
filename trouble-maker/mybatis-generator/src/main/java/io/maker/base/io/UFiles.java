@@ -201,6 +201,10 @@ public final class UFiles {
         return openDirectory(getParentFile(file));
     }
 
+    public static boolean openUserHomeDir() {
+        return openDirectory(new File(System.getProperty("user.home")));
+    }
+
     public static void edit(File file) {
         if (file.isFile()) {
             try {

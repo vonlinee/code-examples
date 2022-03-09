@@ -72,7 +72,7 @@ public final class SchemaMetaData {
     /**
      * Add table meta data.
      *
-     * @param tableName table name
+     * @param tableName     table name
      * @param tableMetaData table meta data
      */
     public void put(final String tableName, final TableMetaData tableMetaData) {
@@ -101,7 +101,7 @@ public final class SchemaMetaData {
     /**
      * Judge whether contains column name.
      *
-     * @param tableName table name
+     * @param tableName  table name
      * @param columnName column name
      * @return contains column name or not
      */

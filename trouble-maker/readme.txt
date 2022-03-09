@@ -17,3 +17,32 @@ Gradle版本设置
 2.Idea中gradle使用的版本：   use Gradle from
 3.本地安装的版本
 4.Gradle User Home的版本
+
+
+
+
+
+
+
+org.springframework.jdbc.datasource.init.DataSourceInitializer
+
+
+delegate
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

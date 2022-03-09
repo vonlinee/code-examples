@@ -2,7 +2,9 @@ package io.maker.base.io;
 
 import io.maker.base.io.output.NullOutputStream;
 import io.maker.base.lang.Validator;
+import org.jetbrains.annotations.Contract;
 
+import java.awt.*;
 import java.io.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -13,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1712,4 +1715,71 @@ public class FileUtils {
         return checksum;
     }
 
+    public static boolean openDirectory(File file) {
+        if (file.isDirectory()) {
+            try {
+                Desktop.getDesktop().open(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        return openDirectory(getParentFile(file));
+    }
+
+    public static boolean openUserHomeDir() {
+        return openDirectory(new File(System.getProperty("user.home")));
+    }
+
+    /**
+     * 调用平台的默认打开方式编辑文件
+     *
+     * @param file File
+     */
+    public static void edit(File file) {
+        if (file.isFile()) {
+            try {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop desktop = Desktop.getDesktop();
+                    if (desktop.isSupported(Desktop.Action.EDIT)) {
+                        desktop.edit(file);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static boolean openFile(File file) {
+        if (file.isFile()) {
+            try {
+                Desktop.getDesktop().open(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        throw new UnsupportedOperationException(file.getAbsolutePath() + " is a directory!");
+    }
+
+    /**
+     * 使用相对路径创建的File对象没有父级目录
+     * System.out.println(new File(""));
+     * System.out.println(new File("D:/Temp/1.txt").getParentFile());
+     *
+     * @param file File
+     * @return
+     */
+    public static File getParentFile(File file) {
+        if (file == null || file.isAbsolute()) return file;
+        return file.getAbsoluteFile().getParentFile();
+    }
+
+    public static boolean isPathAbsolute(File file) {
+        if (file == null) return false;
+        return file.isAbsolute();
+    }
 }

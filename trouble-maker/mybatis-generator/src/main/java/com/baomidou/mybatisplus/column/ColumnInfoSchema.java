@@ -1,4 +1,4 @@
-package io.maker.generator.db.meta.column;
+package com.baomidou.mybatisplus.column;
 
 import java.io.Serializable;
 

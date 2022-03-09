@@ -34,7 +34,7 @@ public class MyBatisXMLGenerator {
     };
 
     public static void main(String[] args) throws Exception {
-        Properties properties = JdbcUtils.getProperties();
+        Properties properties = JdbcUtils.getLocalProperties();
         DataSource dataSource = DruidDataSourceFactory.createDataSource(properties);
         MyBatis mybatis = new MyBatis(dataSource);
 
@@ -49,6 +49,7 @@ public class MyBatisXMLGenerator {
 
     /**
      * 生成单表插入SQL
+     *
      * @param dataSource
      * @param tableName
      * @param databaseType
@@ -77,6 +78,7 @@ public class MyBatisXMLGenerator {
 
     /**
      * 生成单表查询的XML中的SQL语句
+     *
      * @param dataSource
      * @param tableName
      * @param databaseType

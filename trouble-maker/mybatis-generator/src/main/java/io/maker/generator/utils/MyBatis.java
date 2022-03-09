@@ -1,7 +1,5 @@
 package io.maker.generator.utils;
 
-import org.apache.ibatis.builder.xml.XMLMapperBuilder;
-import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
@@ -11,7 +9,6 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +23,8 @@ public class MyBatis {
 
     private static final String MYBATIS_CONFIG_LOCATION = "mybatis/mybatis-config.xml";
 
+    private String environmentId = "development";
+
     static {
         /**
          * SqlSessionFactory build(InputStream inputStream)
@@ -39,13 +38,12 @@ public class MyBatis {
 
     public MyBatis(DataSource dataSource) {
         TransactionFactory transactionFactory = new JdbcTransactionFactory();
-        Environment environment = new Environment("development", transactionFactory, dataSource);
+        Environment environment = new Environment(environmentId, transactionFactory, dataSource);
         this.config = new Configuration();
         config.setLazyLoadingEnabled(true);
         config.setEnvironment(environment);
         SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
         this.factory = builder.build(config);
-
     }
 
     public void registerAlias(Class<?>... classes) {

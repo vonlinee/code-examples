@@ -4,12 +4,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collections;
 
 import javax.sql.DataSource;
 
 import io.maker.generator.db.JdbcUtils;
-import io.maker.generator.db.meta.column.ColumnMetaDataLoader;
+import com.baomidou.mybatisplus.column.ColumnMetaDataLoader;
 
 import io.maker.generator.db.meta.index.IndexMetaDataLoader;
 import io.maker.generator.db.meta.resultset.ResultSetHandler;

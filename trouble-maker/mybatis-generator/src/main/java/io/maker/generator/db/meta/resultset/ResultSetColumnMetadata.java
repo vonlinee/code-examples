@@ -1,7 +1,5 @@
 package io.maker.generator.db.meta.resultset;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;

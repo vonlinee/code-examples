@@ -82,15 +82,21 @@ public class XMLMapperLoader {
 
     /**
      * 扫描xml文件所在的路径
+     *
      * @throws IOException
      */
     private void scanMapperXml() {
         //根据自己项目的实际路径查替换,最终是找到非编译的 xml所在的文件夹路径
-        String fileUrl = this.getClass().getResource(packageSearchPath)
-                .getPath().replace("/main", "")
+        String fileUrl = this.getClass()
+                .getResource(packageSearchPath)
+                .getPath()
+                .replace("/main", "")
                 .replace("build", "src/main");
         File file = new File(fileUrl);
         File[] matchingFiles = file.listFiles();
+        if (matchingFiles == null || matchingFiles.length == 0) {
+            return;
+        }
         Set<Resource> result = new LinkedHashSet<>(matchingFiles.length);
         for (File files : matchingFiles) {
             result.add(new FileSystemResource(files));
@@ -100,6 +106,7 @@ public class XMLMapperLoader {
 
     /**
      * 清空Configuration中几个重要的缓存
+     *
      * @param configuration
      * @throws Exception
      */

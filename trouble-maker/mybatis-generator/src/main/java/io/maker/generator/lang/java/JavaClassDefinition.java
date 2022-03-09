@@ -1,11 +1,14 @@
 package io.maker.generator.lang.java;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
 
 /**
  * Java的类定义：用于FreeMarker的模板文件映射
  */
+@Data
 public class JavaClassDefinition implements Serializable {
 
     private static final String EXTENDS = "extends";
@@ -20,9 +23,11 @@ public class JavaClassDefinition implements Serializable {
     private Class<?> superClass;  //父类
     private Class<?>[] annotations; //类上的注解
     private String[] importList; //导入列表
+
     private JavaClassDefinition[] innerClassDefinitions;
 
     private JavaClassField<?>[] fieldDefinitions;
     private JavaMethodDefinition[] methodDefinitions;
+
 
 }
