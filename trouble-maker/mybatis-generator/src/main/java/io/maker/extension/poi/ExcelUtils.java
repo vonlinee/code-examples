@@ -7,6 +7,7 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,8 @@ import java.util.*;
  */
 public final class ExcelUtils {
 
+    private static final Logger logger = LoggerFactory.getLogger(ExcelUtils.class);
+
     /**
      * @param fileName
      * @param excelType
@@ -38,14 +41,11 @@ public final class ExcelUtils {
         return true;
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(ExcelUtils.class);
-
     private static final String XLS = ".xls";
     private static final String XLSX = ".xlsx";
 
     /**
      * 根据文件后缀获取对应Workbook对象
-     *
      * @param filePath
      * @param fileType
      * @return
@@ -80,10 +80,15 @@ public final class ExcelUtils {
         return workbook;
     }
 
-    public static List<Object> readFolder(String filePath) {
+    /**
+     * 批量读取文件夹下的所有EXCEL文件
+     * @param filePath
+     * @return
+     */
+    public static List<List<Map<String, String>>> readFolder(String filePath) {
         int fileNum = 0;
         File file = new File(filePath);
-        List<Object> returnList = new ArrayList<>();
+        List<List<Map<String, String>>> returnList = new ArrayList<>();
         List<Map<String, String>> resultList;
         if (file.exists()) {
             File[] files = file.listFiles();
@@ -96,15 +101,14 @@ public final class ExcelUtils {
             }
         } else {
             logger.info("文件夹不存在");
-            return null;
+            return returnList;
         }
         logger.info("共有文件：" + fileNum);
         return returnList;
     }
 
     /**
-     * 批量读取Excel文件，返回数据对象
-     *
+     * 读取单个Excel文件，返回数据对象
      * @param filePath
      * @return
      */
@@ -129,6 +133,37 @@ public final class ExcelUtils {
         }
     }
 
+    /**
+     * 读取指定行
+     * @param filePath
+     * @param rowNum
+     * @return
+     */
+    public static Map<String, String> readExcelRow(String filePath, int rowNum) {
+        Workbook workbook = null;
+        List<Map<String, String>> resultList;
+        try {
+            String fileType = filePath.substring(filePath.lastIndexOf("."));
+            if (StringUtils.isEmpty(fileType)) fileType = "xlsx";
+            workbook = getWorkbook(filePath, fileType);
+            if (workbook == null) {
+                logger.info("获取workbook对象失败");
+                return null;
+            }
+            resultList = analysisExcel(workbook);
+        } catch (Exception e) {
+            logger.error("读取Excel文件失败" + filePath + "错误信息", e);
+            return null;
+        } finally {
+            closeQuitely(workbook);
+        }
+        return null;
+    }
+
+    /**
+     * 关闭Excel对象
+     * @param workbook
+     */
     public static void closeQuitely(Workbook workbook) {
         try {
             if (null != workbook) {
@@ -141,7 +176,6 @@ public final class ExcelUtils {
 
     /**
      * 解析Excel文件，返回数据对象
-     *
      * @param workbook
      * @return
      */
@@ -179,7 +213,6 @@ public final class ExcelUtils {
 
     /**
      * 将每一行数据转化为一个Map对象
-     *
      * @param row       行对象
      * @param cellCount 列数
      * @param mapKey    表头Map
@@ -205,7 +238,6 @@ public final class ExcelUtils {
 
     /**
      * 获取单元格的值
-     *
      * @param cel
      * @return
      */
@@ -228,7 +260,7 @@ public final class ExcelUtils {
     public static void main(String[] args) {
         //读取文件夹，批量解析Excel文件
         System.out.println("--------------------读取文件夹，批量解析Excel文件-----------------------");
-        List<Object> returnList = readFolder("D:\\Temp");
+        List<List<Map<String, String>>> returnList = readFolder("D:\\Temp");
         for (int i = 0; i < returnList.size(); i++) {
             List<Map<String, String>> maps = (List<Map<String, String>>) returnList.get(i);
             if (Lists.isEmpty(maps)) {
@@ -278,7 +310,6 @@ public final class ExcelUtils {
      * 将 List<Map<String,Object>> 类型的数据导出为 Excel
      * 默认 Excel 文件的输出路径为 项目根目录下
      * 文件名为 filename + 时间戳 + .xlsx
-     *
      * @param mapList  数据源(通常为数据库查询数据)
      * @param filename 文件名前缀, 实际文件名后会加上日期
      * @param title    表格首行标题
@@ -337,7 +368,7 @@ public final class ExcelUtils {
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         // 使用项目根目录, 文件名加上时间戳
-        String path = System.getProperty("user.dir") + "\\" + filename + dateFormat.format(date) + ".xlsx";
+        String path = System.getProperty("user.dir") + File.separator + filename + dateFormat.format(date) + ".xlsx";
         try {
             File file = new File(path);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -350,6 +381,38 @@ public final class ExcelUtils {
         return path;
     }
 
+    public static Workbook createWorkBook() {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet();
+        return workbook;
+    }
+
+    /**
+     * 创建字符串的Excel表
+     * @param workbook
+     * @param sheetName
+     * @param rowCount
+     * @param columnCount
+     * @return
+     */
+    public static Sheet createSimpleSheet(Workbook workbook, String sheetName, int rowCount, int columnCount) {
+        Sheet sheet = workbook.createSheet(sheetName);
+        for (int i = 1; i <= rowCount; i++) {
+            Row row = sheet.createRow(i);
+            for (int j = 1; j <= columnCount; j++) {
+                Cell cell = row.createCell(j, CellType.STRING);
+                cell.setCellValue("");
+            }
+            row.setHeight((short) 10);
+        }
+        return sheet;
+    }
+
+    /**
+     * 将准备好的workbook文档输出到文件中
+     * @param workbook
+     * @param file
+     */
     public static void writeWorkbook(Workbook workbook, File file) {
         try (FileOutputStream fos = new FileOutputStream(file)) {
             FileChannel channel = fos.getChannel();
@@ -358,7 +421,7 @@ public final class ExcelUtils {
                 byteBuffer.flip();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("failed to write workbook to {}, cause : {}", file.getAbsolutePath(), e.getMessage());
         }
     }
 }
