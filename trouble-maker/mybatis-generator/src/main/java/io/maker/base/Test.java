@@ -7,6 +7,7 @@ import io.maker.base.rest.OptResult;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,18 +24,20 @@ public class Test {
 //        fixedMap.put("A", "A");
 //        int i = 0;
 
-        List<File> files = FileUtils.listFiles("D:\\Projects\\Github\\code-example\\javase-samples\\java8-samples\\src", new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.getName().endsWith(".class");
-            }
-        });
-        files.forEach(file -> {
-            if (file.isFile()) {
-                System.out.println(file.getName());
-                file.delete();
-            }
-        });
+//        List<File> files = FileUtils.listFiles("D:\\Projects\\Github\\code-example\\javase-samples\\java8-samples\\src", new FileFilter() {
+//            @Override
+//            public boolean accept(File pathname) {
+//                return pathname.getName().endsWith(".class");
+//            }
+//        });
+//        files.forEach(file -> {
+//            if (file.isFile()) {
+//                System.out.println(file.getName());
+//                file.delete();
+//            }
+//        });
+
+
     }
 
     static final int MAXIMUM_CAPACITY = 1 << 30;

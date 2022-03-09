@@ -1,6 +1,6 @@
 package io.maker.extension.poi;
 
-import io.maker.base.io.UFiles;
+import io.maker.base.io.FileUtils;
 import io.maker.base.utils.Lists;
 import io.maker.base.utils.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
@@ -225,7 +225,6 @@ public final class ExcelUtils {
         return cel.toString();
     }
 
-
     public static void main(String[] args) {
         //读取文件夹，批量解析Excel文件
         System.out.println("--------------------读取文件夹，批量解析Excel文件-----------------------");
@@ -262,12 +261,13 @@ public final class ExcelUtils {
         String excel = writeExcel(mapArrayList, "1.xlsx", "Sheet-1");
         System.out.println(excel);
         File file = new File(excel);
-        boolean b = UFiles.openDirectory(file);
+        System.out.println(file);
+        boolean b = FileUtils.openDirectory(file);
     }
 
     public static void writeExcelAndShow(List<Map<String, Object>> data, String title) {
         String path = writeExcel(data, "tmp.xlsx", title);
-        UFiles.openFile(new File(path));
+        FileUtils.openFile(new File(path));
     }
 
     private static boolean checkIfExists(File file) {
@@ -357,8 +357,6 @@ public final class ExcelUtils {
             while (channel.write(byteBuffer) > 0) {
                 byteBuffer.flip();
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

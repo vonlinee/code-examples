@@ -2,7 +2,6 @@ package io.maker.extension.freemarker;
 
 import freemarker.cache.FileTemplateLoader;
 import freemarker.template.*;
-import io.maker.base.io.UFiles;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -87,9 +86,6 @@ public class FreeMarker {
 
         File file = freeMarker.process("static", prepareData(), new File("success.html"));
         System.out.println("恭喜，生成成功~~");
-
-        UFiles.openDirectory(file);
-
     }
 
     private static Map<String, Object> prepareData() {

@@ -8,25 +8,35 @@ import java.awt.*;
 import java.io.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
 
+import static io.maker.base.Regexs.matches;
+
 /**
  * Apache Commons-io FileUtils
  */
 public class FileUtils {
+
+    private static final Pattern LINUX_PATH_PATTERN =
+            Pattern.compile("(/([a-zA-Z0-9][a-zA-Z0-9_\\-]{0,255}/)*([a-zA-Z0-9][a-zA-Z0-9_\\-]{0,255})|/)");
+
+    private static final Pattern WINDOWS_PATH_PATTERN =
+            Pattern.compile("(^[A-Z]:((\\\\|/)([a-zA-Z0-9\\-_]){1,255}){1,255}|([A-Z]:(\\\\|/)))");
 
     /**
      * Instances should NOT be constructed in standard programming.
@@ -335,6 +345,39 @@ public class FileUtils {
         return file.exists();
     }
 
+    /**
+     * @param file
+     * @param predicate
+     * @param function
+     * @param <T>
+     * @return
+     */
+    public static <T> T whenTrue(File file, Predicate<File> predicate, Function<File, T> function) {
+        if (predicate.test(file)) {
+            return function.apply(file);
+        }
+        return null;
+    }
+
+    /**
+     * @param file
+     * @param predicate
+     * @param function
+     * @param <T>
+     * @return
+     */
+    public static <T> T whenTrue(File file, boolean condition, Function<File, T> function) {
+        if (condition) {
+            return function.apply(file);
+        }
+        return null;
+    }
+
+    /**
+     * 关闭流
+     *
+     * @param closeableList
+     */
     public static void closeQuitely(Closeable... closeableList) {
         for (Closeable target : closeableList) {
             try {
@@ -1715,6 +1758,12 @@ public class FileUtils {
         return checksum;
     }
 
+    /**
+     * 在资源管理器打开
+     *
+     * @param file
+     * @return
+     */
     public static boolean openDirectory(File file) {
         if (file.isDirectory()) {
             try {
@@ -1774,12 +1823,160 @@ public class FileUtils {
      * @return
      */
     public static File getParentFile(File file) {
-        if (file == null || file.isAbsolute()) return file;
+        if (file == null) return null;
+        if (isPathAbsolute(file)) {
+            return file.getParentFile();
+        }
         return file.getAbsoluteFile().getParentFile();
     }
 
+    /**
+     * System.out.println(new File("").isAbsolute());               f
+     * System.out.println(new File("./1.txt").isAbsolute());        f
+     * System.out.println(new File("./AAA").isAbsolute());          f
+     * System.out.println(new File("D:/1.txt").isAbsolute());       t
+     * System.out.println(new File("D:/Temp").isAbsolute());        t
+     *
+     * @param file
+     * @return
+     */
     public static boolean isPathAbsolute(File file) {
         if (file == null) return false;
         return file.isAbsolute();
+    }
+
+    /**
+     * 不同平台
+     *
+     * @param filepath 文件路径
+     * @return
+     */
+    public static boolean exists(String filepath) {
+        return Files.exists(Paths.get(filepath), LinkOption.NOFOLLOW_LINKS);
+    }
+
+    /**
+     * check path is valid in windows and linux
+     *
+     * @param path path to be validate  platform valid value: linux,windows
+     * @return whether the path is valid
+     **/
+    public static boolean isPathValid(String path) {
+        String osName = System.getProperty("os.name");
+        if (osName.equalsIgnoreCase("linux")) {
+            return matches(LINUX_PATH_PATTERN, path);
+        }
+        if (osName.equalsIgnoreCase("windows")) {
+            return matches(WINDOWS_PATH_PATTERN, path);
+        }
+        return false;
+    }
+
+    /**
+     * NIO读取文件
+     *
+     * @param allocate
+     * @throws IOException
+     */
+    public void read(File file, int allocate) throws IOException {
+        RandomAccessFile access = new RandomAccessFile(file, "r");
+        //FileInputStream inputStream = new FileInputStream(this.file);
+        FileChannel channel = access.getChannel();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(allocate);
+        CharBuffer charBuffer = CharBuffer.allocate(allocate);
+        Charset charset = Charset.forName("GBK");
+        CharsetDecoder decoder = charset.newDecoder();
+        int length = channel.read(byteBuffer);
+        while (length != -1) {
+            byteBuffer.flip();
+            decoder.decode(byteBuffer, charBuffer, true);
+            charBuffer.flip();
+            System.out.println(charBuffer.toString());
+            // 清空缓存
+            byteBuffer.clear();
+            charBuffer.clear();
+            // 再次读取文本内容
+            length = channel.read(byteBuffer);
+        }
+        channel.close();
+        access.close();
+    }
+
+    /**
+     * NIO写文件
+     *
+     * @param context
+     * @param allocate
+     * @param chartName
+     * @throws IOException
+     */
+    public void write(File file, String context, int allocate, String chartName) throws IOException {
+        // FileOutputStream outputStream = new FileOutputStream(this.file); //文件内容覆盖模式 --不推荐
+        FileOutputStream outputStream = new FileOutputStream(file, true); //文件内容追加模式--推荐
+        FileChannel channel = outputStream.getChannel();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(allocate);
+        byteBuffer.put(context.getBytes(chartName));
+        byteBuffer.flip();//读取模式转换为写入模式
+        channel.write(byteBuffer);
+        channel.close();
+        if (outputStream != null) {
+            outputStream.close();
+        }
+    }
+
+    /**
+     * nio事实现文件拷贝
+     *
+     * @param source
+     * @param target
+     * @param allocate
+     * @throws IOException
+     */
+    public static void nioCpoy(String source, String target, int allocate) throws IOException {
+        ByteBuffer byteBuffer = ByteBuffer.allocate(allocate);
+        FileInputStream inputStream = new FileInputStream(source);
+        FileChannel inChannel = inputStream.getChannel();
+
+        FileOutputStream outputStream = new FileOutputStream(target);
+        FileChannel outChannel = outputStream.getChannel();
+
+        int length = inChannel.read(byteBuffer);
+        while (length != -1) {
+            byteBuffer.flip();//读取模式转换写入模式
+            outChannel.write(byteBuffer);
+            byteBuffer.clear(); //清空缓存，等待下次写入
+            // 再次读取文本内容
+            length = inChannel.read(byteBuffer);
+        }
+        outputStream.close();
+        outChannel.close();
+        inputStream.close();
+        inChannel.close();
+    }
+
+    /**
+     * 传统方法实现文件拷贝 IO方法实现文件k拷贝
+     *
+     * @param sourcePath
+     * @param destPath
+     * @throws Exception
+     */
+    public static void traditionalCopy(String sourcePath, String destPath) throws Exception {
+        File source = new File(sourcePath);
+        File dest = new File(destPath);
+        if (!dest.exists()) {
+            if (dest.createNewFile()) {
+                System.out.println("创建文件成功：" + dest.getAbsolutePath());
+            }
+        }
+        FileInputStream fis = new FileInputStream(source);
+        FileOutputStream fos = new FileOutputStream(dest);
+        byte[] buf = new byte[1024];
+        int len = 0;
+        while ((len = fis.read(buf)) != -1) {
+            fos.write(buf, 0, len);
+        }
+        fis.close();
+        fos.close();
     }
 }
