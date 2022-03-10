@@ -1,30 +1,48 @@
 package code.sample.spring.transaction.declaratively.annotation;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import code.sample.spring.transaction.business.service.AccountServiceImpl;
 
+/**
+ * 1.需要DataSource
+ * 2.需要TransactionManager
+ */
 public class Main {
 	
-	static ApplicationContext context = 
-			new AnnotationConfigApplicationContext(MainConfiguration.class);
-	
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+	private static ApplicationContext context = 
+			new AnnotationConfigApplicationContext(DataSourceConfiguration.class);
 	
 	public static void main(String[] args) {
 		test1();
 	}
 	
+	/**
+	 * @Transactional 原理
+	 */
 	public static void test1() {
 		AccountServiceImpl serviceImpl = context.getBean(AccountServiceImpl.class);
-		LOG.info(serviceImpl.getClass().toString()); //AccountServiceImpl$$EnhancerBySpringCGLIB$$13744cf5
-//		serviceImpl.transferMoney("zs", "ls", 200.0);
+		// serviceImpl.transferMoney("zs", "ls", 200.0);
 		serviceImpl.transfer("zs", "ls", 200.0);
+	}
+	
+	/**
+	 * @Transactional 加在类上原理
+	 */
+	public static void test3() {
+		AccountServiceImpl serviceImpl = context.getBean(AccountServiceImpl.class);
+		// serviceImpl.transferMoney("zs", "ls", 200.0);
+		serviceImpl.transfer("zs", "ls", 200.0);
+	}
+	
+	/**
+	 * @Transactional 失效测试
+	 */
+	public static void test2() {
+		AccountServiceImpl serviceImpl = context.getBean(AccountServiceImpl.class);
+		// serviceImpl.transferMoney("zs", "ls", 200.0);
+		serviceImpl.transferMoney("zs", "ls", 200.0);
 	}
 }
 
-//1.需要DataSource
-//2.需要TransactionManager

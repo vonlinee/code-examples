@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import code.sample.spring.transaction.business.dao.IAccountDao;
-import net.bytebuddy.asm.Advice.This;
 
 @Service
 public class AccountServiceImpl implements InitializingBean {
@@ -18,6 +17,13 @@ public class AccountServiceImpl implements InitializingBean {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AccountServiceImpl.class);
 
+	/**
+	 * 
+	 * @param out
+	 * @param in
+	 * @param money
+	 * void
+	 */
 	public void transferMoney(String out, String in, Double money) {
 		transfer(out, in, money);
 	}
@@ -31,6 +37,6 @@ public class AccountServiceImpl implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		LOG.info(this.getClass().getName());
+		
 	}
 }

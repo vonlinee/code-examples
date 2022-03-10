@@ -1,7 +1,5 @@
 package code.sample.spring.transaction.business.dao;
 
-import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -49,8 +47,6 @@ public class AccountDaoImpl implements IAccountDao, InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		DataSource dataSource = jdbcTemplate.getDataSource();
-		System.out.println(dataSource);
-		System.out.println(dataSource.getConnection());
+		
 	}
 }
