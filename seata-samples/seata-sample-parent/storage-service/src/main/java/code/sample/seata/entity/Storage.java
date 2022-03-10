@@ -10,8 +10,6 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Table(name = "tab_order")
-@Data
-@Accessors(chain = true)
 public class Storage implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -22,4 +20,46 @@ public class Storage implements Serializable {
     private Long productId;
     private Integer total;
     private Integer used;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public Integer getUsed() {
+        return used;
+    }
+
+    public void setUsed(Integer used) {
+        this.used = used;
+    }
+
+    @Override
+    public String toString() {
+        return "Storage{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", total=" + total +
+                ", used=" + used +
+                '}';
+    }
 }

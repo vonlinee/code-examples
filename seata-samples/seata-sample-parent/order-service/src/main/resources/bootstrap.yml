@@ -40,12 +40,13 @@ seata:
     type: nacos
     nacos:
       # 需要和server端保持一致，即server在nacos中的名称，默认为seata-server
-      application: seata-server
+      application: serverAddr
       server-addr: 101.33.212.245:8848
       group: SEATA_GROUP
       namespace: 3a589299-7134-4d33-864a-3d68d2b41965
       username: "nacos"
       password: "nacos"
+      cluster: default
 
 mybatis:
   mapperLocations: classpath:mybatis/mapper/*.xml

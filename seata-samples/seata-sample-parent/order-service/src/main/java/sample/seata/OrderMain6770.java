@@ -26,6 +26,7 @@ public class OrderMain6770 {
     private OrderService orderService;
 
     //http://localhost:6770/order/create
+    //http://localhost:6770/order/create?userId=100&prodId=10000
     @GetMapping("/create")
     public Boolean create(long userId, long productId) {
         Order order = new Order();

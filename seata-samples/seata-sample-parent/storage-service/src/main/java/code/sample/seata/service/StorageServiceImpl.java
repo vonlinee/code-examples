@@ -1,6 +1,5 @@
 package code.sample.seata.service;
 
-import code.sample.seata.entity.Storage;
 import code.sample.seata.mapper.StorageMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

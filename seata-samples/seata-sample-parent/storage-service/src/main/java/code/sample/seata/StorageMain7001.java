@@ -19,18 +19,21 @@ import java.math.BigDecimal;
 @MapperScan("sample.seata.mapper")
 @EnableDiscoveryClient
 @EnableFeignClients
-@RequestMapping("/order")
+@RequestMapping("/storage")
 public class StorageMain7001 {
 
     @Autowired
-    private StorageService orderService;
+    private StorageService storageService;
 
     //http://localhost:6770/order/create
-    @GetMapping("/create")
+    @GetMapping("/use")
     public Boolean create(long userId, long productId) {
-        Storage order = new Storage();
-        order.setCount(1).setMoney(BigDecimal.valueOf(88)).setProductId(productId).setUserId(userId).setStatus(0);
-        return orderService.create(order);
+        Storage storage = new Storage();
+        storage.setId(1L);
+        storage.setTotal(100);
+        storage.setProductId(10L);
+        storage.setUsed(1);
+        return storageService.updateUseNum(storage.getUsed(), storage.getProductId());
     }
 
     public static void main(String[] args) {
