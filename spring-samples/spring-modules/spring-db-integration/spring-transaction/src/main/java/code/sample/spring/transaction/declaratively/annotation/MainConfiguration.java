@@ -1,4 +1,4 @@
-package code.sample.spring.transaction.declaratively.annotation.config;
+package code.sample.spring.transaction.declaratively.annotation;
 
 import javax.sql.DataSource;
 
@@ -29,8 +29,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 @EnableTransactionManagement
 public class MainConfiguration {
 
-    @Value("${jdbc.driver}")  private String driver;
-    @Value("${jdbc.url}")  private String url;
+    @Value("${jdbc.driver}")  	private String driver;
+    @Value("${jdbc.url}")  		private String url;
     @Value("${jdbc.username}")  private String username;
     @Value("${jdbc.password}")  private String password;
     

@@ -6,7 +6,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import code.sample.spring.transaction.business.service.AccountServiceImpl;
-import code.sample.spring.transaction.declaratively.annotation.config.MainConfiguration;
 
 public class Main {
 	

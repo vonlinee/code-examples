@@ -18,6 +18,7 @@ import lombok.Setter;
 @Setter
 @Component
 public class TemplateUserDaoImpl implements UserDao {
+	
     @Autowired
     private JdbcTemplate template;
 

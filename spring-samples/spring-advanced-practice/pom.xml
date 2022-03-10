@@ -1,250 +1,176 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>spring-advanced-practice</artifactId>
-    <version>1.0-SNAPSHOT</version>
+	<groupId>org.example</groupId>
+	<artifactId>spring-advanced-practice</artifactId>
+	<version>1.0-SNAPSHOT</version>
 
-    <packaging>war</packaging>
-    <!-- <packaging>jar</packaging> -->
+	<!-- <packaging>war</packaging> -->
+	<packaging>jar</packaging>
 
-    <properties>
-        <!-- https://www.cnblogs.com/biehongli/p/11748093.html -->
-        <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
-        <!-- SpringBoot 2.1.6.RELEASE 对应与 Spring 5.2.4.RELEASE -->
-        <spring.version>5.2.4.RELEASE</spring.version>
-        <!-- 5.1.47是5.x版本的最后一个版本 -->
-        <mysql-driver-version>5.1.47</mysql-driver-version>
-    </properties>
+	<properties>
+		<!-- https://www.cnblogs.com/biehongli/p/11748093.html -->
+		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+		<!-- SpringBoot 2.1.6.RELEASE 对应与 Spring 5.2.4.RELEASE -->
+		<spring.version>5.2.4.RELEASE</spring.version>
+		<!-- 5.1.47是5.x版本的最后一个版本 -->
+		<mysql-driver-version>5.1.47</mysql-driver-version>
+	</properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.1.22</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-driver-version}</version>
-        </dependency>
-        <!-- 1.Spring核心依赖 -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId> <!--Spring的核心工具包-->
-            <version>${spring.version}</version>
-        </dependency>
-        <!--Spring IOC的基础实现，包含访问配置文件、创建和管理bean等 -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!--在基础IOC功能上提供扩展服务，此外还提供许多企业级服务的支持，
-        有邮件服务、任务调度、JNDI定位，EJB集成、远程访问、缓存以及多种视图层框架的支持。-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- 2.Spring dao依赖 -->
-        <!-- spring-jdbc包括了一些如jdbcTemplate的工具类 -->
-        <!--对JDBC 的简单封装-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!--为JDBC、Hibernate、JDO、JPA等提供的一致的声明式和编程式事务管理。-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- 3.Spring web依赖 -->
-        <!--包含Web应用开发时，用到Spring框架时所需的核心类，包括自动载入
-        WebApplicationContext特性的类、Struts与JSF集成类、文件上传的支持类、
-        Filter类和大量工具辅助类。-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!--包含SpringMVC框架相关的所有类。包含国际化、标签、Theme、视图展现的FreeMarker、JasperReports、 Tiles、Velocity、XSLT相关类。
-        当然，如果你的应用使用了独立的MVC框架，则无需这个JAR文件里的任何类。-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- 4.Spring test依赖：方便做单元测试和集成测试 -->
-        <!--对JUNIT等测试框架的简单封装-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>1.8.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>1.8.4</version>
-        </dependency>
+	<dependencies>
+		<!-- 1.Spring核心依赖 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId> <!--Spring的核心工具包 -->
+			<version>${spring.version}</version>
+		</dependency>
+		<!--Spring IOC的基础实现，包含访问配置文件、创建和管理bean等 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!--在基础IOC功能上提供扩展服务，此外还提供许多企业级服务的支持， 有邮件服务、任务调度、JNDI定位，EJB集成、远程访问、缓存以及多种视图层框架的支持。 -->
+		<!-- Application Context (depends on spring-core, spring-expression, spring-aop, 
+			spring-beans) This is the central artifact for Spring's Dependency Injection 
+			Container and is generally always defined -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- Various Application Context utilities, including EhCache, JavaMail, 
+			Quartz, and Freemarker integration Define this if you need any of these integrations -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- 2.Spring dao依赖 -->
+		<!-- spring-jdbc包括了一些如jdbcTemplate的工具类，对JDBC 的简单封装 -->
+		<!-- JDBC Data Access Library (depends on spring-core, spring-beans, spring-context, 
+			spring-tx) Define this if you use Spring's JdbcTemplate API (org.springframework.jdbc.*) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!--为JDBC、Hibernate、JDO、JPA等提供的一致的声明式和编程式事务管理。 -->
+		<!-- Transaction Management Abstraction (depends on spring-core, spring-beans, 
+			spring-aop, spring-context) Define this if you use Spring Transactions or 
+			DAO Exception Hierarchy (org.springframework.transaction.*/org.springframework.dao.*) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- 3.Spring web依赖 -->
+		<!--包含Web应用开发时，用到Spring框架时所需的核心类，包括自动载入 WebApplicationContext特性的类、 -->
+		<!--Struts与JSF集成类、文件上传的支持类、Filter类和大量工具辅助类。 -->
+		<!-- Web application development utilities applicable to both Servlet and 
+			Portlet Environments (depends on spring-core, spring-beans, spring-context) 
+			Define this if you use Spring MVC, or wish to use Struts, JSF, or another 
+			web framework with Spring (org.springframework.web.*) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!--包含SpringMVC框架相关的所有类。包含国际化、标签、Theme、视图展现的FreeMarker、JasperReports、 Tiles、Velocity、XSLT相关类。 
+			当然，如果你的应用使用了独立的MVC框架，则无需这个JAR文件里的任何类。 -->
+		<!-- Spring MVC for Servlet Environments (depends on spring-core, spring-beans, 
+			spring-context, spring-web) Define this if you use Spring MVC with a Servlet 
+			Container such as Apache Tomcat (org.springframework.web.servlet.*) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- Spring MVC for Portlet Environments (depends on spring-core, spring-beans, 
+			spring-context, spring-web) Define this if you use Spring MVC with a Portlet 
+			Container (org.springframework.web.portlet.*) -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.springframework</groupId> -->
+		<!-- <artifactId>spring-webmvc-portlet</artifactId> -->
+		<!-- <version>${spring.version}</version> -->
+		<!-- </dependency> -->
+		<!-- 4.Spring test依赖：方便做单元测试和集成测试 -->
+		<!--对JUNIT等测试框架的简单封装 -->
+		<!-- Support for testing Spring applications with tools such as JUnit and 
+			TestNG This artifact is generally always defined with a 'test' scope for 
+			the integration testing framework and unit testing stubs -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- Aspect Oriented Programming (AOP) Framework (depends on spring-core, 
+			spring-beans) Define this if you use Spring AOP APIs (org.springframework.aop.*) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.8.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.14.8</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<!-- Object-to-Relation-Mapping (ORM) integration with Hibernate, JPA and 
+			iBatis. (depends on spring-core, spring-beans, spring-context, spring-tx) 
+			Define this if you need ORM (org.springframework.orm.*) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- Object-to-XML Mapping (OXM) abstraction and integration with JAXB, 
+			JiBX, Castor, XStream, and XML Beans. (depends on spring-core, spring-beans, 
+			spring-context) Define this if you need OXM (org.springframework.oxm.*) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- MySQL JDBC Driver -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.1.22</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql-driver-version}</version>
+		</dependency>
 
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.14.8</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- Expression Language (depends on spring-core)
-            Define this if you use Spring Expression APIs
-            (org.springframework.expression.*)-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-expression</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- Bean Factory and JavaBeans utilities (depends on spring-core)
-            Define this if you use Spring Bean APIs
-            (org.springframework.beans.*)-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- Aspect Oriented Programming (AOP) Framework
-            (depends on spring-core, spring-beans)
-            Define this if you use Spring AOP APIs
-            (org.springframework.aop.*)-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>1.8.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>1.8.4</version>
-        </dependency>
-        <!-- Application Context
-            (depends on spring-core, spring-expression, spring-aop, spring-beans)
-            This is the central artifact for Spring's Dependency Injection Container
-            and is generally always defined-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- Various Application Context utilities, including EhCache, JavaMail, Quartz,
-            and Freemarker integration
-            Define this if you need any of these integrations-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- Transaction Management Abstraction
-            (depends on spring-core, spring-beans, spring-aop, spring-context)
-            Define this if you use Spring Transactions or DAO Exception Hierarchy
-            (org.springframework.transaction.*/org.springframework.dao.*)-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- JDBC Data Access Library
-            (depends on spring-core, spring-beans, spring-context, spring-tx)
-            Define this if you use Spring's JdbcTemplate API
-            (org.springframework.jdbc.*)-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- Object-to-Relation-Mapping (ORM) integration with Hibernate, JPA and iBatis.
-            (depends on spring-core, spring-beans, spring-context, spring-tx)
-            Define this if you need ORM (org.springframework.orm.*)-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- Object-to-XML Mapping (OXM) abstraction and integration with JAXB, JiBX,
-            Castor, XStream, and XML Beans.
-            (depends on spring-core, spring-beans, spring-context)
-            Define this if you need OXM (org.springframework.oxm.*)-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-oxm</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- Web application development utilities applicable to both Servlet and
-            Portlet Environments
-            (depends on spring-core, spring-beans, spring-context)
-            Define this if you use Spring MVC, or wish to use Struts, JSF, or another
-            web framework with Spring (org.springframework.web.*)-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- Spring MVC for Servlet Environments
-            (depends on spring-core, spring-beans, spring-context, spring-web)
-            Define this if you use Spring MVC with a Servlet Container such as
-            Apache Tomcat (org.springframework.web.servlet.*)-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- Spring MVC for Portlet Environments
-            (depends on spring-core, spring-beans, spring-context, spring-web)
-            Define this if you use Spring MVC with a Portlet Container
-            (org.springframework.web.portlet.*)-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework</groupId>-->
-        <!--            <artifactId>spring-webmvc-portlet</artifactId>-->
-        <!--            <version>${spring.version}</version>-->
-        <!--        </dependency>-->
-        <!-- Support for testing Spring applications with tools such as JUnit and TestNG
-            This artifact is generally always defined with a 'test' scope for the
-            integration testing framework and unit testing stubs-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- MySQL JDBC Driver -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.6</version>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+	</dependencies>
 </project>
