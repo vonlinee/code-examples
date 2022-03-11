@@ -59,6 +59,7 @@ dependencies {
     implementation 'org.springframework:spring-orm:5.3.16'
     implementation 'org.springframework:spring-test:5.3.16'
     implementation 'org.springframework:spring-tx:5.3.16'
+    implementation 'org.springframework:spring-jdbc:5.3.16'
     implementation 'org.springframework:spring-web:5.3.16'
     implementation 'org.springframework:spring-webmvc:5.3.16'
     implementation 'org.springframework:spring-context-support:5.3.16'

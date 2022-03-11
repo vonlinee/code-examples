@@ -448,14 +448,20 @@ def delete_directory(dir: str) -> None:
         print(error.errno)
 
 
+# 删除项目文件 Idea/Eclipse
 def delete_project_files(root_dir: str) -> None:
     dirs = []
+    flag = True
     dirs.append(root_dir)
     while len(dirs) != 0:
-        dir_abs_path = os.getcwd() + dirs.pop()
-        print(dir_abs_path)
+        dir_abs_path = ''
+        if flag:
+            dir_abs_path = dirs.pop()
+            flag = False
+        else:
+            dir_abs_path = os.getcwd() + dirs.pop()
         for filename in os.listdir(dir_abs_path):
-            if os.path.isdir( + filename):
+            if os.path.isdir(dir_abs_path + filename):
                 print(filename)
                 delete_directory(filename)
                 dirs.append(filename)
@@ -464,7 +470,7 @@ def delete_project_files(root_dir: str) -> None:
 
 
 if __name__ == '__main__':
-    delete_project_files(r'D:\\Develop\\Projects\\Github\\code-example')
+    delete_project_files(r'D:/Projects/Github/code-example')
 
 
 # with open("input.txt", 'r') as f:
@@ -478,3 +484,4 @@ if __name__ == '__main__':
 #         print('AND T.' + s + ' = #{ ' + camel_style + ' }")'
 #         print('</if>')
 #         result_list.append()
+

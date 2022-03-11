@@ -1,5 +1,6 @@
 package io.maker.base.utils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -58,5 +59,15 @@ public final class Maps {
             }
         });
         return newMap;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <K> K[] keys(Map<K, ?> map) {
+        return (K[]) map.keySet().toArray();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <K> K[] values(Map<K, ?> map) {
+        return (K[]) map.values().toArray();
     }
 }

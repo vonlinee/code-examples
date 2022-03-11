@@ -8,8 +8,8 @@ import java.sql.Statement;
 import javax.sql.DataSource;
 
 import io.maker.generator.db.JdbcUtils;
-import com.baomidou.mybatisplus.column.ColumnMetaDataLoader;
 
+import io.maker.generator.db.meta.column.ColumnMetaDataLoader;
 import io.maker.generator.db.meta.index.IndexMetaDataLoader;
 import io.maker.generator.db.meta.resultset.ResultSetHandler;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Table meta data loader.
  */
-public final class TableMetaDataLoader {
+public class TableMetaDataLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(TableMetaDataLoader.class);
 

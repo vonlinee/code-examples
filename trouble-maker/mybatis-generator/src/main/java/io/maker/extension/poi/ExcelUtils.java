@@ -1,19 +1,19 @@
 package io.maker.extension.poi;
 
+import com.google.common.collect.Lists;
 import io.maker.base.io.FileUtils;
-import io.maker.base.utils.Lists;
-import io.maker.base.utils.StringUtils;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.filechooser.FileSystemView;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
@@ -263,7 +263,7 @@ public final class ExcelUtils {
         List<List<Map<String, String>>> returnList = readFolder("D:\\Temp");
         for (int i = 0; i < returnList.size(); i++) {
             List<Map<String, String>> maps = (List<Map<String, String>>) returnList.get(i);
-            if (Lists.isEmpty(maps)) {
+            if (maps.isEmpty()) {
                 continue;
             }
             for (int j = 0; j < maps.size(); j++) {

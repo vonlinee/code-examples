@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.baomidou.mybatisplus.column.ColumnMetaData;
+import io.maker.generator.db.meta.column.ColumnMetaData;
 import io.maker.generator.db.meta.index.IndexMetaData;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -20,7 +20,7 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode
 @ToString
-public final class TableMetaData {
+public class TableMetaData {
 
     private boolean autoIncrement = false;
     private boolean caseSensitive;

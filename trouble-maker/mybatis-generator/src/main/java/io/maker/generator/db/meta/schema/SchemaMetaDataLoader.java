@@ -1,20 +1,3 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.maker.generator.db.meta.schema;
 
 import java.sql.Connection;
@@ -48,38 +31,37 @@ import com.google.common.collect.Lists;
  */
 public final class SchemaMetaDataLoader {
 
-	private static final Logger LOG = LoggerFactory.getLogger(SchemaMetaDataLoader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SchemaMetaDataLoader.class);
 
     private static final String TABLE_TYPE = "TABLE";
     private static final String TABLE_NAME = "TABLE_NAME";
 
-	/**
-	 * Load schema meta data.
-	 *
-	 * @param dataSource         data source
-	 * @param maxConnectionCount count of max connections permitted to use for this
-	 *                           query
-	 * @param databaseType       database type
-	 * @return schema meta data
-	 * @throws SQLException SQL exception
-	 */
-	public static SchemaMetaData load(final DataSource dataSource, final int maxConnectionCount,
-			final String databaseType) throws SQLException {
-		List<String> tableNames;
-		try (Connection connection = dataSource.getConnection()) {
-			tableNames = loadAllTableNames(connection, databaseType);
-		}
-		LOG.info("Loading {} tables' meta data.", tableNames.size());
-		if (0 == tableNames.size()) {
-			return new SchemaMetaData(Collections.emptyMap());
-		}
-		List<List<String>> tableGroups = Lists.partition(tableNames,
-				Math.max(tableNames.size() / maxConnectionCount, 1));
-		Map<String, TableMetaData> tableMetaDataMap = 1 == tableGroups.size()
-				? load(dataSource.getConnection(), tableGroups.get(0), databaseType)
-				: asyncLoad(dataSource, maxConnectionCount, tableNames, tableGroups, databaseType);
-		return new SchemaMetaData(tableMetaDataMap);
-	}
+    /**
+     * Load schema meta data.
+     * @param dataSource         data source
+     * @param maxConnectionCount count of max connections permitted to use for this
+     *                           query
+     * @param databaseType       database type
+     * @return schema meta data
+     * @throws SQLException SQL exception
+     */
+    public static SchemaMetaData load(final DataSource dataSource, final int maxConnectionCount,
+                                      final String databaseType) throws SQLException {
+        List<String> tableNames;
+        try (Connection connection = dataSource.getConnection()) {
+            tableNames = loadAllTableNames(connection, databaseType);
+        }
+        LOG.info("Loading {} tables' meta data.", tableNames.size());
+        if (0 == tableNames.size()) {
+            return new SchemaMetaData(Collections.emptyMap());
+        }
+        List<List<String>> tableGroups = Lists.partition(tableNames,
+                Math.max(tableNames.size() / maxConnectionCount, 1));
+        Map<String, TableMetaData> tableMetaDataMap = 1 == tableGroups.size()
+                ? load(dataSource.getConnection(), tableGroups.get(0), databaseType)
+                : asyncLoad(dataSource, maxConnectionCount, tableNames, tableGroups, databaseType);
+        return new SchemaMetaData(tableMetaDataMap);
+    }
 
     private static Map<String, TableMetaData> load(final Connection connection, final Collection<String> tables, final String databaseType) throws SQLException {
         try (Connection con = connection) {

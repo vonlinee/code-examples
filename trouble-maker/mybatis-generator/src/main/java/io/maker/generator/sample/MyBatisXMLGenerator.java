@@ -37,7 +37,6 @@ public class MyBatisXMLGenerator {
         Properties properties = JdbcUtils.getLocalProperties();
         DataSource dataSource = DruidDataSourceFactory.createDataSource(properties);
         MyBatis mybatis = new MyBatis(dataSource);
-
 //		TableInfoSchema tableInfoSchema = TableMetaDataLoader.loadSchema(dataSource, "mp", "t_usc_mdm_user_dlr");
 //
 //		System.out.println(tableInfoSchema);
@@ -49,7 +48,6 @@ public class MyBatisXMLGenerator {
 
     /**
      * 生成单表插入SQL
-     *
      * @param dataSource
      * @param tableName
      * @param databaseType
@@ -78,7 +76,6 @@ public class MyBatisXMLGenerator {
 
     /**
      * 生成单表查询的XML中的SQL语句
-     *
      * @param dataSource
      * @param tableName
      * @param databaseType
