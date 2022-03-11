@@ -1,0 +1,58 @@
+
+
+
+
+
+
+
+void reconnect(String transactionServiceGroup) {
+    List<String> availList = null;
+    try {
+        availList = getAvailServerList(transactionServiceGroup);
+    } catch (Exception e) {
+        LOGGER.error("Failed to get available servers: {}", e.getMessage(), e);
+        return;
+    }
+    if (CollectionUtils.isEmpty(availList)) {
+        String serviceGroup = RegistryFactory.getInstance()
+                                             .getServiceGroup(transactionServiceGroup);
+        LOGGER.error("no available service '{}' found, please make sure registry config correct", serviceGroup);
+        return;
+    }
+    for (String serverAddress : availList) {
+        try {
+            acquireChannel(serverAddress);
+        } catch (Exception e) {
+            LOGGER.error("{} can not connect to {} cause:{}",FrameworkErrorCode.NetConnect.getErrCode(), serverAddress, e.getMessage(), e);
+        }
+    }
+}
+
+
+default String getServiceGroup(String key) {
+    key = PREFIX_SERVICE_ROOT + CONFIG_SPLIT_CHAR + PREFIX_SERVICE_MAPPING + key;
+    if (!SERVICE_GROUP_NAME.contains(key)) {
+        ConfigurationCache.addConfigListener(key);
+        SERVICE_GROUP_NAME.add(key);
+    }
+    return ConfigurationFactory.getInstance().getConfig(key);
+}
+
+
+service.vgroupMapping.order-service
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

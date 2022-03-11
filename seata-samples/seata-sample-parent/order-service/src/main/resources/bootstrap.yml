@@ -14,11 +14,16 @@ spring:
         server-addr: 101.33.212.245:8848
         register-enabled: true
         namespace: 3a589299-7134-4d33-864a-3d68d2b41965
+        group: SEATA_GROUP
       config:
         server-addr: 101.33.212.245:8848
         enabled: true
         file-extension: yaml
         namespace: 3a589299-7134-4d33-864a-3d68d2b41965
+        group: SEATA_GROUP
+    alibaba:
+      seata:
+        tx-service-group: ${spring.application.name}-tx-group
 
 seata:
   enabled: true

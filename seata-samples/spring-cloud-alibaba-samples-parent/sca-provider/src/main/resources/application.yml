@@ -1,0 +1,46 @@
+server:
+  port: 18080
+
+dubbo:
+  scan:
+    # dubbo 服务扫描基准包
+    base-packages: com.yuhb.provider.dubbo
+  protocol:
+    # dubbo 协议
+    name: dubbo
+    # dubbo 协议端口（ -1 表示自增端口，从 20880 开始）
+    port: -1
+  cloud:
+    subscribed-services: ""
+
+spring:
+  application:
+    name: sca-provider
+  main:
+    # Spring Boot 2.1 需要设定
+    allow-bean-definition-overriding: true
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/yuhb-test?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+
+  cloud:
+    nacos:
+      # Nacos 服务发现与注册配置
+      discovery:
+        server-addr: 101.33.212.245:8848
+      user-name: nacos
+      password: nacos
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+seata:
+  tx-service-group: sca-provider
+  service:
+    vgroup-mapping:
+      sca-provider: default
+    grouplist:
+      default: localhost:8091

@@ -1,0 +1,27 @@
+ERROR i.s.c.FileConfiguration - fileListener execute error, dataId :service.disableGlobalTransaction
+
+https://blog.csdn.net/m0_43404934/article/details/110134708
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

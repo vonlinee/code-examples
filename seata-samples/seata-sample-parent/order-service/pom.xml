@@ -14,6 +14,7 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
     </properties>
 
     <!--子模块order-service和storage-service的pom中添加nacos和seata依赖-->
@@ -32,7 +33,7 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
             <exclusions>
-                <!--移除掉该starter中自带的依赖，该依赖版本较低-->
+                <!--移除掉该starter中自带的依赖，该依赖版本较低 1.1.0 -->
                 <exclusion>
                     <groupId>io.seata</groupId>
                     <artifactId>seata-spring-boot-starter</artifactId>
@@ -66,7 +67,6 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.49</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

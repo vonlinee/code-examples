@@ -1,0 +1,40 @@
+server:
+  port: 18081
+
+dubbo:
+  cloud:
+    subscribed-services: sca-provider
+  consumer:
+    check: false
+
+spring:
+  datasource:
+    # type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3306/yuhb-test?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: true
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+seata:
+  tx-service-group: sca-customer
+  service:
+    vgroup-mapping:
+      sca-customer: default
+    grouplist:
+      default: localhost:8091
+
+sca-provider:
+  ribbon:
+    ConnectTimeout: 2000
+    ReadTimeout: 5000
+    MaxAutoRetries: 0
+    MaxAutoRetriesNextServer: 0
+    NFLoadBalancerRuleClassName: com.alibaba.cloud.nacos.ribbon.NacosRule
+    #listOfServers: localhost:18080
+

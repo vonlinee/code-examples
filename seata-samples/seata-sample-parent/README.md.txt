@@ -8,11 +8,6 @@ RM: order-service, storage-service
 TC服务端
 
 
-
-
-
-
-
 搭建RM
 
 

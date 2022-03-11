@@ -1,6 +1,5 @@
 package sample.seata.controller;
 
-
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
