@@ -114,6 +114,10 @@ public final class StringUtils {
         return str == null || str.length() == 0;
     }
 
+    public static String uuid() {
+        return UUID.randomUUID().toString();
+    }
+
     /**
      * 将字符串转换为同意最长的长度
      * @param strings 数组
