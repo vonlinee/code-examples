@@ -297,8 +297,8 @@ public final class ExcelUtils {
         boolean b = FileUtils.openDirectory(file);
     }
 
-    public static void writeExcelAndShow(List<Map<String, Object>> data, String title) {
-        String path = writeExcel(data, "tmp.xlsx", title);
+    public static void writeExcelAndShow(List<Map<String, Object>> tableData, String title) {
+        String path = writeExcel(tableData, "tmp.xlsx", title);
         FileUtils.openFile(new File(path));
     }
 
@@ -322,7 +322,6 @@ public final class ExcelUtils {
         ArrayList<String> headList = new ArrayList<>(stringSet);
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet(title); //创建一个Sheet页
-        sheet.setDefaultRowHeight((short) (2 * 256)); //设置行高
         //为有数据的每列设置列宽
         for (int i = 0; i < headList.size(); i++) {
             sheet.setColumnWidth(i, 4000);
@@ -413,7 +412,7 @@ public final class ExcelUtils {
      * @param workbook
      * @param file
      */
-    public static void writeWorkbook(Workbook workbook, File file) {
+    public static void writeWorkbook(Workbook workbook, File file) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(file)) {
             FileChannel channel = fos.getChannel();
             ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
@@ -422,6 +421,7 @@ public final class ExcelUtils {
             }
         } catch (IOException e) {
             logger.error("failed to write workbook to {}, cause : {}", file.getAbsolutePath(), e.getMessage());
+            throw e;
         }
     }
 }

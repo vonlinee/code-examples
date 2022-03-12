@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class ExcelWriter {
 
@@ -64,6 +65,10 @@ public class ExcelWriter {
 
     public boolean write(File file, String[][] data) {
         return writeXlsx(file, data, DEFAULT_SHEET_NAME);
+    }
+
+    public static void write(File file, List<Map<String, Object>> rowList) {
+
     }
 
     public boolean write(File file, List<List<Pair<String, String>>> tableData, String sheetName) {
