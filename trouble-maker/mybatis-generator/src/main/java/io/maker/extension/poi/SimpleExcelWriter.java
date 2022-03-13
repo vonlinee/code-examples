@@ -17,7 +17,7 @@ import java.util.Map;
  * 用于写简单的EXCEL文件，单元格都是字符串，不涉及其他样式
  * 基于Apache POI
  */
-public class SimpleExcelWriter {
+public class SimpleExcelWriter extends ExcelWriter {
 
     private static final Logger logger = LoggerFactory.getLogger(ExcelUtils.class);
 
@@ -25,7 +25,6 @@ public class SimpleExcelWriter {
 
     public static final String XLSX_EXCEL = "xlsx";
     public static final String XLS_EXCEL = "xls";
-
 
     /**
      * 从第一行开始写数据
@@ -135,12 +134,23 @@ public class SimpleExcelWriter {
         }
     }
 
+    @Override
+    public Workbook create(File file) {
+        return null;
+    }
+
+    @Override
+    public void fill(Workbook workbook, List<Map<String, Object>> rows) {
+
+    }
+
     /**
      * 将准备好的workbook文档输出到文件中
      * @param workbook workbook
      * @param file     file
      */
-    private void write(Workbook workbook, File file) throws IOException {
+    @Override
+    public void write(Workbook workbook, File file) throws IOException {
         try (OutputStream stream = new FileOutputStream(file)) {
             workbook.write(stream);
         } catch (IOException e) {

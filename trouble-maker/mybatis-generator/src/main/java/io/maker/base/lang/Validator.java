@@ -15,14 +15,11 @@ import java.util.regex.Pattern;
  * copy from {@code org.apache.commons.lang3.Validate} used for parameter
  * validation all methods throws {@code IllegalArgumentException}
  * when开头的进行校验，并抛出附带信息的异常
- * is开头的军返回boolean
+ * is开头的均返回boolean
  * no开头的除了进行校验之外，如果校验通过则返回被校验对象
- * not开头的，保留
  */
-public class Validator {
 
-    private Validator() {
-    }
+public final class Validator {
 
     private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter
             .ofPattern("yyyy-MM-dd hh:mm:ss");

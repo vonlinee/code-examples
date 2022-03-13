@@ -9,8 +9,4 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface ActionConsumer<K> {
     void apply(Supplier<K> param, Consumer<K> algorithm);
-
-    default void action(Supplier<K> param, Consumer<K> algorithm) {
-        algorithm.accept(param.get());
-    }
 }

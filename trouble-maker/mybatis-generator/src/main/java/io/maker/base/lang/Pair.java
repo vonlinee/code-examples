@@ -3,7 +3,6 @@ package io.maker.base.lang;
 import java.io.Serializable;
 import java.util.Objects;
 
-@SuppressWarnings("serial")
 public class Pair<K, V> implements Serializable {
 
     /**

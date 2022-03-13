@@ -4,7 +4,7 @@ package io.maker.base.lang;
  * 包装Class<?>实例，基于Class<?>对象是单例的提供类型判断 子类实现需要对typeClass赋值
  * @author vonline
  */
-public abstract class TypeMetaHolder {
+public abstract class TypeInfoHolder {
 
     /**
      * 持有Class引用是否有问题？

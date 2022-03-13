@@ -1,6 +1,9 @@
 package io.maker.base.lang;
 
-public class Value extends TypeMetaHolder {
+/**
+ * 包装值
+ */
+public class Value extends TypeInfoHolder {
 
     protected final Object value;
 
@@ -11,7 +14,7 @@ public class Value extends TypeMetaHolder {
     }
 
     @SuppressWarnings("unchecked")
-    public final <T> T get(Class<T> type) {
+    public final <T> T get() {
         return (T) value;
     }
 
@@ -31,10 +34,8 @@ public class Value extends TypeMetaHolder {
     public boolean equals(Object obj) {
         if (obj instanceof Value) {
             Value value = (Value) obj;
-            if (this.value != null)
-                return this.value.equals(value.value);
-            else
-                return value.value == null;
+            if (this.value != null) return this.value.equals(value.value);
+            else return value.value == null;
         }
         return false;
     }
