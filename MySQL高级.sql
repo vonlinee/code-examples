@@ -79,6 +79,69 @@ INSERT INTO mysql_learn.article
 VALUES(null, 1, 1, 3, 3, '1', '3');
 
 
+单表优化
+EXPLAIN SELECT id, author_id FROM artic1e WHERE category_id = l AND comments > l ORDER BY views DESC LIMIT 1;
+
+mysql> EXPLAIN SELECT id, author_id FROM article WHERE category_id = 1 AND comments > 1 ORDER BY views DESC LIMIT 1;
++----+-------------+---------+------------+------+---------------+------+---------+------+------+----------+-----------------------------+
+| id | select_type | table   | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                       |
++----+-------------+---------+------------+------+---------------+------+---------+------+------+----------+-----------------------------+
+|  1 | SIMPLE      | article | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    6 |    16.67 | Using where; Using filesort |
++----+-------------+---------+------------+------+---------------+------+---------+------+------+----------+-----------------------------+
+1 row in set, 1 warning (0.00 sec)
+
+有ALL和Using filesort，数据量大了就慢了，需要优化，但现在只有一个主键索引，该怎么加索引？
+
+-- 一般是需要被查询的条件对应的字段上建索引
+CREATE INDEX idx_article_ccv ON article(category_id, comments, views);
+-- 这里符合最左前缀匹配法则
+mysql> show index from article;
++---------+------------+-----------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table   | Non_unique | Key_name        | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++---------+------------+-----------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| article |          0 | PRIMARY         |            1 | id          | A         |           5 |     NULL | NULL   |      | BTREE      |         |               |
+| article |          1 | idx_article_ccv |            1 | category_id | A         |           2 |     NULL | NULL   |      | BTREE      |         |               |
+| article |          1 | idx_article_ccv |            2 | comments    | A         |           3 |     NULL | NULL   |      | BTREE      |         |               |
+| article |          1 | idx_article_ccv |            3 | views       | A         |           3 |     NULL | NULL   |      | BTREE      |         |               |
++---------+------------+-----------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+4 rows in set (0.00 sec)
+
+-- 再次执行的结果
+-- 索引被用到，但是还是有Using filesort
+mysql> EXPLAIN SELECT id, author_id FROM article WHERE category_id = 1 AND comments > 1 ORDER BY views DESC LIMIT 1;
++----+-------------+---------+------------+-------+-----------------+-----------------+---------+------+------+----------+---------------------------------------+
+| id | select_type | table   | partitions | type  | possible_keys   | key             | key_len | ref  | rows | filtered | Extra                                 |
++----+-------------+---------+------------+-------+-----------------+-----------------+---------+------+------+----------+---------------------------------------+
+|  1 | SIMPLE      | article | NULL       | range | idx_article_ccv | idx_article_ccv | 8       | NULL |    2 |   100.00 | Using index condition; Using filesort |
++----+-------------+---------+------------+-------+-----------------+-----------------+---------+------+------+----------+---------------------------------------+
+1 row in set, 1 warning (0.00 sec)
+
+mysql> EXPLAIN SELECT id, author_id FROM article WHERE category_id = 1 AND comments = 1 ORDER BY views DESC LIMIT 1;
++----+-------------+---------+------------+------+-----------------+-----------------+---------+-------------+------+----------+-------------+
+| id | select_type | table   | partitions | type | possible_keys   | key             | key_len | ref         | rows | filtered | Extra       |
++----+-------------+---------+------------+------+-----------------+-----------------+---------+-------------+------+----------+-------------+
+|  1 | SIMPLE      | article | NULL       | ref  | idx_article_ccv | idx_article_ccv | 8       | const,const |    2 |   100.00 | Using where |
++----+-------------+---------+------------+------+-----------------+-----------------+---------+-------------+------+----------+-------------+
+1 row in set, 1 warning (0.00 sec)
+
+-- 范围以后的索引会导致失效，中间有个范围导致后面的索引用不上，说明这个索引不合适
+DROP INDEX idx_article_ccv ON artic1e
+
+EXPLAIN SELECT id, author_id FROM article WHERE category_id IN (1) AND comments > 1 ORDER BY views DESC LIMIT 1;
+
+
+#1.2第2次EXPLAIN
+EXPLAIN SELECT id,author_id FROM `article` WHERE category_id = 1 AND comments > 1 ORDER BY views DESC LIMIT 1;
+EXPLAIN SELECT id,author_id FROM `article` WHERE category_id = 1 AND comments =3 ORDER BY views DESC LIMIT 1;
+# 结论:
+# type变成了range,这是可以忍受的。但是extra里使用Using filesort仍是无法接受的。#但是我们已经建立了索引,为啥没用呢?
+# 这是因为按照BTree索引的工作原理，# 先排序category_id,
+# 如果遇到相同的category_id则再排序comments,如果遇到相同的comments则再排序views。#当comments字段在联合索引里处于中间位置时，
+# 因comments >1条件是一个范围值(所谓range),
+# MySQL无法利用索引再对后面的views部分进行检索,即range类型查询字段后面的索引无效。
+
+CREATE INDEX idx_artic1e_cv ON article(category_id, views) ;
+
 SELECT * FROM mysql_learn.article a;
 DELETE FROM mysql_learn.article WHERE 1 = 1;
 
@@ -95,7 +158,12 @@ WHERE category_id = '1' AND comments > 1 ORDER BY views DESC LIMIT 0, 1;
 -- 范围查询之后的索引会失效
 
 
+
+
+
 -- 双表优化
+-- https://www.bilibili.com/video/BV1KW411u7vy?p=32&spm_id_from=pageDriver
+
 CREATE TABLE IF NOT EXISTS `class`(
 `id` INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 `card` INT (10) UNSIGNED NOT NULL
@@ -104,8 +172,6 @@ CREATE TABLE IF NOT EXISTS `book`(
 `bookid` INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 `card` INT (10) UNSIGNED NOT NULL
 );
-
-
 insert into class(card) values(floor(1+(rand()*20)));
 insert into class(card) values(floor(1+(rand()*20)));
 insert into class(card) values(floor(1+(rand()*20)));
@@ -148,7 +214,114 @@ insert into book(card) values(floor(1+(rand()*20)));
 insert into book(card) values(floor(1+(rand()*20)));
 insert into book(card) values(floor(1+(rand()*20)));
 
+-- 以下数据无实际意义，只是为了外键关联条件相等
+mysql> select * from class;
++----+------+
+| id | card |
++----+------+
+|  1 |    2 |
+|  2 |   19 |
+|  3 |    9 |
+|  4 |    8 |
+|  5 |   11 |
+|  6 |   12 |
+|  7 |    7 |
+|  8 |   18 |
+|  9 |    8 |
+| 10 |    5 |
+| 11 |   19 |
+| 12 |    2 |
+| 13 |   10 |
+| 14 |    4 |
+| 15 |   12 |
+| 16 |    6 |
+| 17 |   12 |
+| 18 |    5 |
+| 19 |    6 |
+| 20 |   14 |
++----+------+
+20 rows in set (0.00 sec)
 
+mysql> select * from book;
++--------+------+
+| bookid | card |
++--------+------+
+|      1 |   10 |
+|      2 |   11 |
+|      3 |    2 |
+|      4 |   19 |
+|      5 |    9 |
+|      6 |    7 |
+|      7 |    8 |
+|      8 |   20 |
+|      9 |   13 |
+|     10 |    5 |
+|     11 |    5 |
+|     12 |   12 |
+|     13 |    3 |
+|     14 |   17 |
+|     15 |   15 |
+|     16 |    7 |
+|     17 |    7 |
+|     18 |   13 |
+|     19 |    3 |
+|     20 |   15 |
++--------+------+
+20 rows in set (0.00 sec)
+
+
+EXPLAIN select * from book inner join class on book.card = c1ass.card;
+-- 索引应该加在哪里，是book.card还是c1ass.card
+
+mysql> EXPLAIN select * from book inner join class on book.card = class.card;
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+----------------------------------------------------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                                              |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+----------------------------------------------------+
+|  1 | SIMPLE      | book  | NULL       | ALL  | NULL          | NULL | NULL    | NULL |   20 |   100.00 | NULL                                               |
+|  1 | SIMPLE      | class | NULL       | ALL  | NULL          | NULL | NULL    | NULL |   20 |    10.00 | Using where; Using join buffer (Block Nested Loop) |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+----------------------------------------------------+
+2 rows in set, 1 warning (0.01 sec)
+
+-- 一定有一个驱动表，小表驱动大表
+ALTER TABLE `book` ADD INDEX Y(`card`);
+mysql> EXPLAIN select * from book inner join class on book.card = class.card;
++----+-------------+-------+------------+------+---------------+------+---------+------------------------+------+----------+-------------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref                    | rows | filtered | Extra       |
++----+-------------+-------+------------+------+---------------+------+---------+------------------------+------+----------+-------------+
+|  1 | SIMPLE      | class | NULL       | ALL  | NULL          | NULL | NULL    | NULL                   |   20 |   100.00 | NULL        |
+|  1 | SIMPLE      | book  | NULL       | ref  | Y             | Y    | 4       | mysql_learn.class.card |    1 |   100.00 | Using index |
++----+-------------+-------+------------+------+---------------+------+---------+------------------------+------+----------+-------------+
+2 rows in set, 1 warning (0.00 sec)
+-- 删除该索引
+DROP INDEX Y ON book;
+
+-- 因为左连接，左表的每个字段都要,因此给右边索引,好让右边去四配，而左边不动
+
+ALTER TABLE `class` ADD INDEX A(`card`);
+
+mysql> EXPLAIN select * from book inner join class on book.card = class.card;
++----+-------------+-------+------------+------+---------------+------+---------+-----------------------+------+----------+-------------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref                   | rows | filtered | Extra       |
++----+-------------+-------+------------+------+---------------+------+---------+-----------------------+------+----------+-------------+
+|  1 | SIMPLE      | book  | NULL       | ALL  | NULL          | NULL | NULL    | NULL                  |   20 |   100.00 | NULL        |
+|  1 | SIMPLE      | class | NULL       | ref  | A             | A    | 4       | mysql_learn.book.card |    1 |   100.00 | Using index |
++----+-------------+-------+------------+------+---------------+------+---------+-----------------------+------+----------+-------------+
+2 rows in set, 1 warning (0.00 sec)
+DROP INDEX A ON class;
+-- 注意表的加载顺序变了
+-- 可以看到第二行的type变为了ref,rows也变成了优化比较明显。
+-- 这是由左连接特性决定的。LEFTJOIN条件用于确定如何从右表搜索行,左边一定都有
+
+-- 主表不管加不加索引都要全部查一遍
+
+
+-- 可以对调表的顺序，但是要注意数据是否正确的问题
+-- 右连接就在左边建索引
+
+
+
+-- 三表优化
+-- https://www.bilibili.com/video/BV1KW411u7vy?p=33&spm_id_from=pageDriver
 -- P33
 CREATE TABLE IF NOT EXISTS `phone`(
 `phoneid` INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -176,7 +349,75 @@ insert into phone(card) values(floor(1+(rand()*20)));
 insert into phone(card) values(floor(1+(rand()*20)));
 insert into phone(card) values(floor(1+(rand()*20)));
 
--- P34
+
+ALTER TABLE `phone` ADD INDEX z(`card`);
+
+
+
+mysql> SELECT * FROM class INNER JOIN book ON class.card = book.card LEFT JOIN phone ON book.card = phone.card;
++----+------+--------+------+---------+------+
+| id | card | bookid | card | phoneid | card |
++----+------+--------+------+---------+------+
+|  3 |    9 |      5 |    9 |       3 |    9 |
+|  1 |    2 |      3 |    2 |       5 |    2 |
+| 12 |    2 |      3 |    2 |       5 |    2 |
+|  1 |    2 |      3 |    2 |       9 |    2 |
+| 12 |    2 |      3 |    2 |       9 |    2 |
+| 13 |   10 |      1 |   10 |      14 |   10 |
+|  6 |   12 |     12 |   12 |      19 |   12 |
+| 15 |   12 |     12 |   12 |      19 |   12 |
+| 17 |   12 |     12 |   12 |      19 |   12 |
+| 13 |   10 |      1 |   10 |      20 |   10 |
+|  5 |   11 |      2 |   11 |    NULL | NULL |
+|  2 |   19 |      4 |   19 |    NULL | NULL |
+| 11 |   19 |      4 |   19 |    NULL | NULL |
+|  7 |    7 |      6 |    7 |    NULL | NULL |
+|  4 |    8 |      7 |    8 |    NULL | NULL |
+|  9 |    8 |      7 |    8 |    NULL | NULL |
+| 10 |    5 |     10 |    5 |    NULL | NULL |
+| 18 |    5 |     10 |    5 |    NULL | NULL |
+| 10 |    5 |     11 |    5 |    NULL | NULL |
+| 18 |    5 |     11 |    5 |    NULL | NULL |
+|  7 |    7 |     16 |    7 |    NULL | NULL |
+|  7 |    7 |     17 |    7 |    NULL | NULL |
++----+------+--------+------+---------+------+
+22 rows in set (0.00 sec)
+
+mysql> EXPLAIN SELECT * FROM class INNER JOIN book ON class.card = book.card LEFT JOIN phone ON book.card = phone.card;
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+----------------------------------------------------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                                              |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+----------------------------------------------------+
+|  1 | SIMPLE      | class | NULL       | ALL  | NULL          | NULL | NULL    | NULL |   20 |   100.00 | NULL                                               |
+|  1 | SIMPLE      | book  | NULL       | ALL  | NULL          | NULL | NULL    | NULL |   20 |    10.00 | Using where; Using join buffer (Block Nested Loop) |
+|  1 | SIMPLE      | phone | NULL       | ALL  | NULL          | NULL | NULL    | NULL |   20 |   100.00 | Using where; Using join buffer (Block Nested Loop) |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+----------------------------------------------------+
+3 rows in set, 1 warning (0.00 sec)
+
+
+
+尽可能减少Join语句中的NestedLoop的循环总次数; 永远用小结果集驱动大的结果集
+
+优先优化NestedLoop的内层循环;
+
+当无法保证被驱动表的Join条件字段被索引且内存资源充足的前提下，不要太吝惜JoinBuffer的设置;
+
+这个可以在配置文件中调整buffer的大小
+
+ALTER TABLE`phone`ADD INDEXz ( 'card');
+ALTER TABLE`book`ADD INDEX Y ( `card');#上一个case建过一个同样的
+EXPLAIN SELECT* FROM class LEFTJOIN book ON class.card=book.card LEFTJOIN phone ON book.card = phone.card;
+#后2行的 type 都是ref且总 rows优化很好,效果不错。因此索引最好设置在需要经常查询的字段w。
+========EE=
+【结论】
+Join语句的优化
+`
+
+
+
+
+-- P34  索引失效
+-- https://www.bilibili.com/video/BV1KW411u7vy?p=34&spm_id_from=pageDriver
+
 CREATE TABLE staffs(
 id INT PRIMARY KEY AUTO_INCREMENT,
 `name` VARCHAR(24)NOT NULL DEFAULT'' COMMENT'姓名',
@@ -189,7 +430,53 @@ insert into staffs(NAME,age,pos,add_time) values('z3',22,'manager',NOW());
 insert into staffs(NAME,age,pos,add_time) values('July',23,'dev',NOW());
 insert into staffs(NAME,age,pos,add_time) values('2000',23,'dev',NOW());
 
+ALTER TABLE staffs ADD INDEX idx_staffs_nameAgePos(name，age，pos);
 
+
+-- 1.全值匹配： 如果索引了多列，要遵守最左前缀法则，指的是查询从索引的最左前列开始且不跳过索引中的列
+
+-- 比如建了3个索引，查询只有一个索引条件
+EXPLAIN SELECT * FROM staffs WHERE name = 'July';
+
+EXPLAIN SELECT * FROM staffs WHERE age = 23 AND pos = 'dev ';
+-- 第一个条件没用到，因为没有符合条件的数据
+
+-- 2.最佳左前缀法则
+-- 3.不在索引列上做任何操作（计算、函数、(自动或者手动)类型转换，会导致索引失效而转向全表扫描
+
+-- https://www.bilibili.com/video/BV1KW411u7vy?p=35&spm_id_from=pageDriver
+EXPLAIN SELECT * FROM staffs WHERE name = 'July' ;
+EXPLAIN SELECT * from staffs WHERE left(name, 4) LIKE 'July' ;
+
+-- 4.存储引擎不能使用索引中范围条件右边的列
+-- https://www.bilibili.com/video/BV1KW411u7vy?p=36&spm_id_from=pageDriver
+-- 范围之后全是小
+
+-- 5.尽量使用覆盖索引(只访问索引的查询(索引列和查询列一致))，减少SELECT *
+
+
+-- 6. mysql在使用不等于(!=或者<>)的时候无法使用索引会导致全表扫描
+-- https://www.bilibili.com/video/BV1KW411u7vy?p=38&spm_id_from=pageDriver
+-- 这个也属于范围查询
+explain select t from staff WHERE name <> 'july';
+
+-- 7. is null ,is not null也无法使用索引
+-- https://www.bilibili.com/video/BV1KW411u7vy?p=39&spm_id_from=pageDriver
+
+
+-- 8. like以通配符开头('%abc...' )mysql索引失效会变成全表扫描的操作
+-- https://www.bilibili.com/video/BV1KW411u7vy?p=40&spm_id_from=pageDriver
+
+-- 全表扫描
+EXPLAIN SELECT * FROM staffs WHERE name LIKE '%July%';
+-- 全扫描
+EXPLAIN SELECT * FROM staffs WHERE name LIKE 'July%';
+-- 全索引扫描
+EXPLAIN SELECT * FROM staffs WHERE name LIKE '%July';
+
+-- 解决like '%字符串%'时索引不被使用的方法?
+-- 使用覆盖索引来解决
+-- https://www.bilibili.com/video/BV1KW411u7vy?p=40&spm_id_from=pageDriver
 -- P40
 CREATE TABLE tbl_user(
 `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -203,6 +490,33 @@ insert into tbl_user(NAME,age,email) values('1aa1',21,'b@163.com');
 insert into tbl_user(NAME,age,email) values('2aa2',222,'a@163.com');
 insert into tbl_user(NAME,age,email) values('3aa3',265,'c@163.com');
 insert into tbl_user(NAME,age,email) values('4aa4',21,'d@163.com');
+
+
+-- 只查有索引的列
+SELECT id FROM tal_user WHERE name LIKE '%aa%';
+
+
+-- 9.字符串不加单引号索引失效
+-- https://www.bilibili.com/video/BV1KW411u7vy?p=41&spm_id_from=pageDriver
+
+-- 10.少用or,用它来连接时会索引失效
+
+
+
+
+-- 优化sql的前提是保证业务逻辑正确
+
+
+
+
+
+回表
+
+
+
+
+
+
 
 
 -- P44
@@ -423,10 +737,8 @@ INSERT INTO mysql_learn.teacher (tid, tname, tcid) VALUES(5, '张老师1', 2);
 
 
 
-
-
-
-
+-- MySQL 8.0版本 - 宋红康
+-- https://www.bilibili.com/video/BV1iq4y1u7vj/?spm_id_from=333.788.b_765f64657363.1
 
 
 

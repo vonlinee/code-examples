@@ -1,8 +1,6 @@
 package io.maker.base.utils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -69,5 +67,43 @@ public final class Maps {
     @SuppressWarnings("unchecked")
     public static <K> K[] values(Map<K, ?> map) {
         return (K[]) map.values().toArray();
+    }
+
+    /**
+     * 拷贝Map元素，不影响原来的Map
+     * @param <K>
+     * @param <V>
+     */
+    public static class MapCopier<K, V> {
+
+        private List<K> fromKeys;
+        private List<K> toKeys;
+
+        public MapCopier() {
+            this.fromKeys = new ArrayList<>();
+            this.toKeys = new ArrayList<>();
+        }
+
+        public MapCopier<K, V> addKey(K fromKey, K toKey) {
+            fromKeys.add(fromKey);
+            toKeys.add(toKey);
+            return MapCopier.this;
+        }
+
+        public <T extends Map<K, V>> Map<K, V> copy(final T fromMap) {
+            Map<K, V> newMap = new HashMap<>();
+            for (int i = 0; i < fromKeys.size(); i++) {
+                newMap.put(toKeys.get(i), fromMap.get(fromKeys.get(i)));
+            }
+            return newMap;
+        }
+    }
+
+    public static <K, V> MapCopier<K, V> copier() {
+        return new MapCopier<>();
+    }
+
+    public static void main(String[] args) {
+
     }
 }
