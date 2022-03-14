@@ -402,7 +402,8 @@ public final class ExcelUtils {
      */
     public static void writeWorkbook(Workbook workbook, File file) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(file)) {
-            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+            workbook.write(fos);
+            fos.flush();
         } catch (IOException e) {
             logger.error("failed to write workbook to {}, cause : {}", file.getAbsolutePath(), e.getMessage());
             throw e;
