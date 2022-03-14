@@ -1,8 +1,7 @@
 package io.maker.extension.poi;
 
-import com.google.common.collect.Lists;
 import io.maker.base.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
+import io.maker.base.utils.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -257,7 +256,7 @@ public final class ExcelUtils {
         return cel.toString();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //读取文件夹，批量解析Excel文件
         System.out.println("--------------------读取文件夹，批量解析Excel文件-----------------------");
         List<List<Map<String, String>>> returnList = readFolder("D:\\Temp");
@@ -297,8 +296,8 @@ public final class ExcelUtils {
         boolean b = FileUtils.openDirectory(file);
     }
 
-    public static void writeExcelAndShow(List<Map<String, Object>> tableData, String title) {
-        String path = writeExcel(tableData, "tmp.xlsx", title);
+    public static void writeExcelAndShow(List<Map<String, Object>> data, String title) throws IOException {
+        String path = writeExcel(data, "tmp.xlsx", title);
         FileUtils.openFile(new File(path));
     }
 
@@ -315,7 +314,7 @@ public final class ExcelUtils {
      * @param title    表格首行标题
      * @return 文件输出路径
      */
-    public static String writeExcel(List<Map<String, Object>> mapList, String filename, String title) {
+    public static String writeExcel(List<Map<String, Object>> mapList, String filename, String title) throws IOException {
         //获取数据源的 key, 用于获取列数及设置标题
         Map<String, Object> map = mapList.get(0);
         Set<String> stringSet = map.keySet();
@@ -364,20 +363,9 @@ public final class ExcelUtils {
                 cells.setCellValue(value);
             }
         }
-        Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         // 使用项目根目录, 文件名加上时间戳
-        String path = System.getProperty("user.dir") + File.separator + filename + dateFormat.format(date) + ".xlsx";
-        try {
-            File file = new File(path);
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            wb.write(fileOutputStream);
-            wb.close();
-            fileOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return path;
+        writeWorkbook(wb, new File(StringUtils.uuid() + File.separator + filename));
+        return "";
     }
 
     public static Workbook createWorkBook() {
@@ -414,11 +402,7 @@ public final class ExcelUtils {
      */
     public static void writeWorkbook(Workbook workbook, File file) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(file)) {
-            FileChannel channel = fos.getChannel();
             ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-            while (channel.write(byteBuffer) > 0) {
-                byteBuffer.flip();
-            }
         } catch (IOException e) {
             logger.error("failed to write workbook to {}, cause : {}", file.getAbsolutePath(), e.getMessage());
             throw e;

@@ -1,64 +1,24 @@
 package io.maker.extension.poi;
 
-import io.maker.base.lang.Pair;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class ExcelWriter {
+/**
+ * 模板
+ */
+public abstract class ExcelWriter {
 
-    public static final String DEFAULT_SHEET_NAME = "sheet-1";
+    public abstract Workbook create(File file) throws IOException;
 
-    public static final String XLSX_EXCEL = "xlsx";
-    public static final String XLS_EXCEL = "xls";
+    public abstract void fill(Workbook workbook, List<Map<String, Object>> rows);
 
-    public boolean write(File file, String[][] data, String excelType, String sheetName) {
-        if (XLSX_EXCEL.equalsIgnoreCase(excelType)) {
-            return writeXlsx(file, data, sheetName);
-        }
-        throw new UnsupportedOperationException("不支持的Excel类型:" + excelType);
-    }
+    public abstract void write(Workbook workbook, File file) throws IOException;
 
-    /**
-     * 不同数据类型的写入方法
-     * @param file
-     * @param table
-     * @return
-     */
-    public boolean write(File file, ExcelTable table) {
-        int rowCount = table.getRowCount();
-        int columnCount = table.getColumnCount();
-        Workbook book = new XSSFWorkbook();
-        Sheet sheet = book.createSheet(table.getSheetName());
-        List<ExcelColumn<String>> columnList = table.getColumnList();
-        //表头
-        Row titleRow = sheet.createRow(0);
-        for (int j = 0; j < columnCount; j++) {
-            Cell cell = titleRow.createCell(j);
-            cell.setCellValue(columnList.get(j).getTitle());
-        }
-        //表数据
-        for (int i = 1; i < rowCount; i++) {
-            System.out.println("\n写入第 " + i + "行：");
-            Row dataRow = sheet.createRow(i);
-            for (int j = 0; j < columnCount; j++) {
-                Cell cell = dataRow.createCell(j);
-                String cellValue = columnList.get(j).get(i - 1);
-                System.out.printf("%s\t", cellValue);
-                cell.setCellValue(cellValue);
-            }
-        }
-        return writeToWorkbook(book, file);
-    }
-
+<<<<<<< HEAD
     public boolean write(File file, String[][] data, String sheetName) {
         return writeXlsx(file, data, sheetName);
     }
@@ -130,27 +90,15 @@ public class ExcelWriter {
         try (FileOutputStream fos = new FileOutputStream(file)) {
             workbook.write(fos);
             result = true;
+=======
+    public final void write(List<Map<String, Object>> rows, File file) {
+        try {
+            Workbook workbook = create(file);
+            fill(workbook, rows);
+            write(workbook, file);
+>>>>>>> 91afff9bc4bd2868a8cbda20a5b003e0aa7e9efe
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result;
-    }
-
-    private boolean writeAndClose(Workbook workbook, File file) {
-        boolean result = false;
-        if (file.exists()) {
-            try (FileOutputStream fos = new FileOutputStream(file)) {
-                workbook.write(fos);
-                result = true;
-            } catch (IOException e) {
-                try {
-                    workbook.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                e.printStackTrace();
-            }
-        }
-        return result;
     }
 }
