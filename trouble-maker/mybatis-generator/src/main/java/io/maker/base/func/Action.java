@@ -11,8 +11,4 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface Action<K, V> {
     V apply(Supplier<K> param, Function<K, V> algorithm);
-
-    default V action(Supplier<K> param, Function<K, V> algorithm) {
-        return algorithm.apply(param.get());
-    }
 }

@@ -35,6 +35,7 @@ hs_err_pid*
 **/.settings/*
 **/target/*
 
-.gradle/
+**/.gradle/
 build/
 archive.zip
+*.lock

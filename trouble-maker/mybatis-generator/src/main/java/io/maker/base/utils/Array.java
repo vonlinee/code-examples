@@ -25,4 +25,21 @@ public class Array<T> {
     public T get(int x, int y) {
         return null;
     }
+
+    public static void moveAll() {
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T[] of(T... elments) {
+        int len = elments.length;
+        Object[] arr = new Object[len];
+        System.arraycopy(elments, 0, arr, 0, len);
+        return (T[]) arr;
+    }
+
+    public static void main(String[] args) {
+        final Integer[] arr = Array.of(1, 2, 3, 4, 5);
+
+    }
 }

@@ -1,36 +1,39 @@
 package io.maker.extension.poi;
 
+import io.maker.base.io.FileUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class TestUserXlsxReader {
-
-    private static final ExcelWriter writer = new ExcelWriter();
+public class Test {
 
     public static void main(String[] args) throws IOException, InvalidFormatException {
-        ExcelTable excelTable = new ExcelTable("xlsx", "模特");
-        for (int i = 0; i < 10; i++) {
-            ExcelColumn<String> column = new ExcelColumn<>("列" + i, String.class);
-            for (int j = 0; j < 4; j++) {
-                column.add("值 " + i + "" + j);
-            }
-            excelTable.addColumn(column);
-        }
-
         File file = new File("D:/Temp/1.xlsx");
+        SimpleExcelWriter writer = new SimpleExcelWriter();
+        writer.write(file, prepareData());
+        FileUtils.openFile(file);
+    }
 
-        boolean write = writer.write(file, excelTable);
-        if (write) {
-            System.out.println("写入成功");
+    private static List<Map<String, Object>> prepareData() {
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Map<String, Object> row = new HashMap<>();
+            for (int j = 0; j < 5; j++) {
+                row.put("列1", "值");
+                row.put("列2", "值");
+                row.put("列3", "值");
+                row.put("列4", "值");
+                row.put("列5", "值");
+                row.put("列6", "值");
+            }
+            rows.add(row);
         }
-
-        List<ExcelTable> excelTables = new ExcelReader().readXlsx(file);
-
-        System.out.println(excelTables);
+        return rows;
     }
 }
 
