@@ -1,0 +1,34 @@
+{
+    "manifest_version": 3,
+    "name": "get-cookie",
+    "version": "4.0",
+    "permissions": [
+        "cookies",
+        "tabs",
+        "storage"
+    ],
+    "description": "get token",
+    "background": {
+        "service_worker": "./js/background.js"
+    },
+    "chrome_url_overrides": {
+        "pageToOverride": "html/background.html"
+    },
+    "action": {
+        "default_popup": "html/popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*.--.com/*",
+                "https://*.----.com/*"
+            ],
+            "js": [
+                "js/popup.js"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        "js/popup.js"
+    ]
+}

@@ -1,0 +1,48 @@
+
+
+
+https://blog.csdn.net/fyyyr/article/details/80949965
+
+Chrome 扩展(插件)开发教程官方文档中文版
+https://github.com/facert/chrome-extension-guide/
+
+
+{
+    "manifest_version": 2,
+    "name": "get-cookie",
+    "version": "4.0",
+    "permissions": [
+        "cookies"
+    ],
+    "description": "get token",
+    "background": {
+        "service_worker": {
+            "page": "html/background.html",
+            "scripts": [
+                "lib/jquery-3.6.0.min.js",
+                "js/background.js"
+            ]
+        }
+    }
+}
+
+
+Manifest version 2 is deprecated, and support will be removed in 2023. See https://developer.chrome.com/blog/mv2-transition/ for more details.
+
+Service worker registration failed
+
+Uncaught TypeError: Cannot read properties of undefined (reading 'create')
+
+
+WorkerGlobalScope.importScripts()
+https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope/importScripts
+
+
+
+
+https://segmentfault.com/q/1010000016301596
+
+
+快速开始文档：https://developer.chrome.com/docs/extensions/mv3/getstarted/
+
+
