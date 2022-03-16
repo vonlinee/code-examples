@@ -22,11 +22,11 @@ qps
 
 
 
+Index_type
+The index method used (BTREE, FULLTEXT, HASH, RTREE).
 
 
-
-
-
+This version of MySQL doesn't yet support 'RTREE INDEX'  5.7.36-log
 
 
 

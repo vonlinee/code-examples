@@ -13,10 +13,12 @@ ApplicationListener
 org.springframework.context.annotation.Condition
 
 
+https://www.baidu.com/link?url=0XrPkKdFje-qpw29CYusHNYIIOA2j8QllFApfqkNNimzT0HxU_bNx3KEkYmAzTYQIbsFPVL0_AkM1ZB5na0VJj7BHajr9ZXjK7x_Crcwv-i&wd=&eqid=86781b430000ebb80000000662315480
 
 
 
-
+https://dev.mysql.com/doc/refman/5.7/en/partitioning-limitations-partitioning-keys-unique-keys.html
+partitioning keys
 
 
 

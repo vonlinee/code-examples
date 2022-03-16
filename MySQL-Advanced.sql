@@ -79,7 +79,7 @@ INSERT INTO mysql_learn.article
 VALUES(null, 1, 1, 3, 3, '1', '3');
 
 
-单表优化
+-- 单表优化
 EXPLAIN SELECT id, author_id FROM artic1e WHERE category_id = l AND comments > l ORDER BY views DESC LIMIT 1;
 
 mysql> EXPLAIN SELECT id, author_id FROM article WHERE category_id = 1 AND comments > 1 ORDER BY views DESC LIMIT 1;
@@ -400,7 +400,6 @@ mysql> EXPLAIN SELECT * FROM class INNER JOIN book ON class.card = book.card LEF
 优先优化NestedLoop的内层循环;
 
 当无法保证被驱动表的Join条件字段被索引且内存资源充足的前提下，不要太吝惜JoinBuffer的设置;
-
 这个可以在配置文件中调整buffer的大小
 
 ALTER TABLE`phone`ADD INDEXz ( 'card');
@@ -442,8 +441,10 @@ EXPLAIN SELECT * FROM staffs WHERE age = 23 AND pos = 'dev ';
 -- 第一个条件没用到，因为没有符合条件的数据
 
 -- 2.最佳左前缀法则
--- 3.不在索引列上做任何操作（计算、函数、(自动或者手动)类型转换，会导致索引失效而转向全表扫描
 
+
+
+-- 3.不在索引列上做任何操作（计算、函数、(自动或者手动)类型转换，会导致索引失效而转向全表扫描
 -- https://www.bilibili.com/video/BV1KW411u7vy?p=35&spm_id_from=pageDriver
 EXPLAIN SELECT * FROM staffs WHERE name = 'July' ;
 EXPLAIN SELECT * from staffs WHERE left(name, 4) LIKE 'July' ;
@@ -453,6 +454,7 @@ EXPLAIN SELECT * from staffs WHERE left(name, 4) LIKE 'July' ;
 -- 范围之后全是小
 
 -- 5.尽量使用覆盖索引(只访问索引的查询(索引列和查询列一致))，减少SELECT *
+
 
 
 -- 6. mysql在使用不等于(!=或者<>)的时候无法使用索引会导致全表扫描
@@ -510,11 +512,29 @@ SELECT id FROM tal_user WHERE name LIKE '%aa%';
 
 
 
-回表
+-- 回表
 
 
+SELECT @@version;
+DROP TABLE mysql_optimization.test ;
+DROP TABLE mysql_optimization.student ;
+CREATE TABLE `student` (
+  `ID` int(11) AUTO_INCREMENT NOT NULL,
+  `AGE` int(11) NOT NULL,
+  `NAME` varchar(255) NOT NULL DEFAULT '',
+  `ADDRESS` varchar(255) DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `idx_age_name` (`AGE`, `NAME`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+SELECT * FROM student 
 
+INSERT INTO student VALUES (NULL, 18, 'A', '');
+INSERT INTO student VALUES (NULL, 17, 'B', '');
+INSERT INTO student VALUES (NULL, 18, 'C', '');
+INSERT INTO student VALUES (NULL, 18, 'D', '');
+INSERT INTO student VALUES (NULL, 18, 'E', '');
+INSERT INTO student VALUES (NULL, 18, 'F', '');
 
 
 
@@ -636,13 +656,13 @@ LOCK table表名字iead(WRITE)，表名字2 READ(WRITE)，其它;
 
 
 
+-- 辅助索引
+-- https://zhuanlan.zhihu.com/p/339666157
 
+-- 只从辅助索引要数据。那么普通索引(单字段)和联合索引，以及唯一索引都能实现覆盖索引的作用。
 
-
-
-
-
-
+-- 一个index就是一个B-Tree或B plus tree
+-- https://www.cnblogs.com/happyflyingpig/p/7662881.html
 
 
 

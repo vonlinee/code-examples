@@ -45,15 +45,15 @@ public class DataSourceConfiguration {
 	private static final Logger LOG = LoggerFactory.getLogger(DataSourceConfiguration.class);
 
 	@Bean(name = "transactionManager")
-	public PlatformTransactionManager createTransactionManager(DataSource dataSource) {
+	public PlatformTransactionManager createTransactionManager(@Qualifier("dbcpDataSource") DataSource dataSource) {
 		return new DataSourceTransactionManager(dataSource);
 	}
 
 	@Bean(name = "transactionTemplate")
-	public TransactionTemplate createTransactionTemplate(PlatformTransactionManager txManager) {
+	public TransactionTemplate createTransactionTemplate(@Qualifier("transactionManager") PlatformTransactionManager txManager) {
 		return new TransactionTemplate(txManager);
 	}
-
+ 
 	@Bean(name = "springDataSource")
 	public DataSource createDataSource() {
 		DriverManagerDataSource ds = new DriverManagerDataSource();

@@ -1,8 +1,8 @@
 package sample.spring.transaction.programatically.platform;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -11,11 +11,11 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import lombok.Getter;
 import lombok.Setter;
 
-@Repository
 @Getter
 @Setter
 public class AccountDaoImpl extends JdbcDaoSupport {
 
+	@Autowired
 	private PlatformTransactionManager transactionManager;
 
 	public void transferMoney1(String idFrom, String idTo, float money) {
