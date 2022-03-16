@@ -30,7 +30,7 @@ This version of MySQL doesn't yet support 'RTREE INDEX'  5.7.36-log
 
 
 
-
+CannotAcquireLockException
 
 
 
