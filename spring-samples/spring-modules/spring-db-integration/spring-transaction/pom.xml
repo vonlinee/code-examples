@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springframework.samples</groupId>
-	<artifactId>sprinWithJpa</artifactId>
+	<artifactId>spring-transaction</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
@@ -237,4 +237,58 @@
 			<version>1.7.25</version>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- 把源代码中的xml文件，打包到相应位置， 这里主要是为了打包Mybatis的mapper.xml文件 -->
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+				<executions>
+					<execution>
+						<id>copy-xmls</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/src/main/java</directory>
+									<includes>
+										<!-- 包含的资源名称 -->
+										<include>**/*.xml</include>
+										<include>**/*.properties</include>
+										<include>**/*.yml</include>
+										<include>**/*.yaml</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<finalName>spring-samples</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+	</build>
 </project>

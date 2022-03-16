@@ -264,9 +264,4 @@ public enum CaseFormat {
     public static String decamelize(String camelCaseStr) {
         return isBlank(camelCaseStr) ? camelCaseStr : camelCaseStr.replaceAll("[A-Z]", "_$0").toLowerCase();
     }
-
-    public static void main(String[] args) {
-        System.out.println(camelize("user_name_type"));
-        System.out.println(decamelize("userNameType"));
-    }
 }

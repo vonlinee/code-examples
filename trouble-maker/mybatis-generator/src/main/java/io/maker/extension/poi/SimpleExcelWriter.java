@@ -1,5 +1,6 @@
 package io.maker.extension.poi;
 
+import io.maker.base.lang.Pair;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -159,19 +160,20 @@ public class SimpleExcelWriter extends ExcelWriter {
         }
     }
 
-    public void write(File file, List<Map<String, Object>> rows, String sheetName) throws IOException {
+    public boolean write(File file, List<List<Pair<String, String>>> rows, String sheetName) {
         ensureFileExists(file);
         if (!file.getName().endsWith(".xlsx")) {
             logger.error("目标文件 {} 不是Excel文件", file.getAbsolutePath());
-            return;
+            return false;
         }
         if (rows == null || rows.isEmpty()) {
             throw new RuntimeException("data cannot be null");
         }
-        write(createSimpleWorkbook(sheetName, rows), file);
+//        write(createSimpleWorkbook(sheetName, null), file);
+        return false;
     }
 
-    public void write(File file, List<Map<String, Object>> rows) throws IOException {
-        write(file, rows, "Sheet-1");
-    }
+//    public void write(File file, List<Map<String, Object>> rows) {
+//        write(file, rows, "Sheet-1");
+//    }
 }

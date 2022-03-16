@@ -1,11 +1,20 @@
 package io.maker.extension.poi;
 
+import io.maker.base.lang.Pair;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import static io.maker.extension.poi.SimpleExcelWriter.DEFAULT_SHEET_NAME;
 
 /**
  * 模板
@@ -18,7 +27,6 @@ public abstract class ExcelWriter {
 
     public abstract void write(Workbook workbook, File file) throws IOException;
 
-<<<<<<< HEAD
     public boolean write(File file, String[][] data, String sheetName) {
         return writeXlsx(file, data, sheetName);
     }
@@ -90,13 +98,17 @@ public abstract class ExcelWriter {
         try (FileOutputStream fos = new FileOutputStream(file)) {
             workbook.write(fos);
             result = true;
-=======
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public final void write(List<Map<String, Object>> rows, File file) {
         try {
             Workbook workbook = create(file);
             fill(workbook, rows);
             write(workbook, file);
->>>>>>> 91afff9bc4bd2868a8cbda20a5b003e0aa7e9efe
         } catch (IOException e) {
             e.printStackTrace();
         }
