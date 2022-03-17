@@ -1,4 +1,4 @@
-package sample.spring.aop.xml.sir.some;
+package sample.spring.aop.xml.some;
 
 import java.lang.reflect.Method;
 import org.springframework.aop.AfterReturningAdvice;

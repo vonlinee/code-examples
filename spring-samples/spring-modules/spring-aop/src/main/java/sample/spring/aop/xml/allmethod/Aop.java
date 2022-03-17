@@ -1,4 +1,4 @@
-package sample.spring.aop.xml.sir.allmethod;
+package sample.spring.aop.xml.allmethod;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

@@ -2,4 +2,4 @@
  * @author someone
  *
  */
-package sample.spring.aop.xml.sir.some;
+package sample.spring.aop.xml.some;

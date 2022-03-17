@@ -14,17 +14,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ExampleThreadPool {
 	
 	public static void main(String[] args) {
-		ExecutorService executorService = Executors.newCachedThreadPool();
+		
 		int corePoolSize = 10;
         int maximumPoolSize = 10;
         long keepAliveTime = 1000;
         TimeUnit unit = TimeUnit.SECONDS;
-        BlockingQueue<Runnable> workQueue = new LinkedBlockingDeque<Runnable>();
+        BlockingQueue<Runnable> workQueue = new LinkedBlockingDeque<>();
+        
 		ThreadPoolExecutor pool = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
 		AtomicInteger i = new AtomicInteger(0);
-		pool.submit(() -> {
-			
-		});
+		for (int j = 0; j < 11; j++) {
+			pool.submit(() -> {
+				System.out.println(Thread.currentThread().getName());
+			});
+		}
 		pool.shutdown();
 		if (!pool.isShutdown()) {
 			System.out.println("thread pool is shutdown!");
