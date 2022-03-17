@@ -7,7 +7,8 @@ public class Main {
     private static ApplicationContext context;
 
     public static void main(String[] args) {
-        context = new ClassPathXmlApplicationContext("abc.xml");
+    	String string = Main.class.getResource("spring-aop-config.xml").toExternalForm();
+        context = new ClassPathXmlApplicationContext(string);
         Performer performer = (Performer) context.getBean("performer");
         performer.perform();
     }

@@ -1,13 +1,14 @@
 package sample.spring.aop.annotation.aspect;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import sample.spring.aop.SpringUtils;
 
 public class Main {
 	private static ApplicationContext context;
 
 	public static void main(String[] args) {
-		context = new ClassPathXmlApplicationContext("./abc.xml");
+		context = SpringUtils.loadContext(Main.class, "spring-config.xml");
 		Performer performer = (Performer) context.getBean("performer");
 		performer.perform();
 	}
