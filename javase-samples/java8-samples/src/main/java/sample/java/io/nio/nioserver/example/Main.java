@@ -22,14 +22,19 @@ public class Main {
                 "<html><body>Hello World!!</body></html>";
         byte[] httpResponseBytes = httpResponse.getBytes(StandardCharsets.UTF_8);
         IMessageProcessor messageProcessor = (request, writeProxy) -> {
-            System.out.println("Message Received from socket: " + request.socketId);
+            System.out.println("Message Received from socket: Socket ID " + request.socketId);
             Message response = writeProxy.getMessage();
             response.socketId = request.socketId;
             response.writeToMessage(httpResponseBytes);
             writeProxy.enqueue(response);
         };
+        
         NioServer server = new NioServer(9999, new HttpMessageReaderFactory(), messageProcessor);
-        server.start();
+        try {
+        	server.start();
+		} catch (Exception e) {
+			
+		}
         System.out.println("浏览器访问：http://localhost:9999/");
     }
 }

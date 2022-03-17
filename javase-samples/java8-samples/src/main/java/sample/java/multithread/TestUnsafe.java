@@ -1,41 +1,43 @@
 package sample.java.multithread;
 
+import java.lang.reflect.Field;
+import java.security.NoSuchAlgorithmException;
+
 import sun.misc.Unsafe;
 import sun.misc.VM;
 import sun.reflect.Reflection;
 
-import java.lang.reflect.Field;
-import java.util.function.Consumer;
-
 public class TestUnsafe {
 
-    public static void main(String[] args) {
-        doUnsafe(unsafe -> {
-//            unsafe.freeMemory(2 * 1024 * 1024);
-
-            System.out.println(unsafe.addressSize());
-
-            long l = unsafe.allocateMemory(200);
-            System.out.println(l / 1024 / 1024);
-        });
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+    	
+//        doUnsafe(unsafe -> {
+////            unsafe.freeMemory(2 * 1024 * 1024);
+//
+//            System.out.println(unsafe.addressSize());
+//
+//            long l = unsafe.allocateMemory(200);
+//            System.out.println(l / 1024 / 1024);
+//        });
+    	
     }
 
-    public static void doUnsafe(Consumer<Unsafe> unsafeConsumer) {
-        Unsafe unsafe = getUnsafeByReflection();
-        if (unsafe == null) {
-            System.out.println("unsafe is null!");
-        }
-        unsafeConsumer.accept(unsafe);
-    }
+//    public static void doUnsafe(Consumer<Unsafe> unsafeConsumer) {
+//        Unsafe unsafe = getUnsafeByReflection();
+//        if (unsafe == null) {
+//            System.out.println("unsafe is null!");
+//        }
+//        unsafeConsumer.accept(unsafe);
+//    }
 
     //    sun.misc.VM
-    public static void testVm() {
+    @SuppressWarnings("restriction")
+	public static void testVm() {
         //sun.nio.MaxDirectMemorySize
         System.out.println(VM.maxDirectMemory() / 1024 / 1024 / 1024);
         boolean allowArraySyntax = VM.allowArraySyntax();
         VM.booted();
         VM.initializeOSEnvironment();
-
         Thread.State state = VM.toThreadState(1);
         ClassLoader classLoader = VM.latestUserDefinedLoader(); //sun.misc.Launcher$AppClassLoader@18b4aac2
         System.out.println(classLoader);
@@ -52,7 +54,8 @@ public class TestUnsafe {
         VM.addFinalRefCount(10);
     }
 
-    private static Unsafe getUnsafeByReflection() {
+    @SuppressWarnings("restriction")
+	public static Unsafe getUnsafe() {
         try {
             Field field = Unsafe.class.getDeclaredField("theUnsafe");
             field.setAccessible(true);
@@ -63,8 +66,11 @@ public class TestUnsafe {
         return null;
     }
 
-    public static Unsafe getUnsafe() {
-        Class var0 = Reflection.getCallerClass();
+    @SuppressWarnings({
+			"restriction", "unused"
+	})
+	private static Unsafe getUnsafe1() {
+        Class<?> var0 = Reflection.getCallerClass();
         if (!VM.isSystemDomainLoader(var0.getClassLoader())) {
             throw new SecurityException("Unsafe");
         } else {

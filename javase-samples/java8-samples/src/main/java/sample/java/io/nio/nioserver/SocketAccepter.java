@@ -6,11 +6,16 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Queue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 收到连接请求，进行入队操作，生产者
  */
 public class SocketAccepter implements Runnable {
 
+	private static final Logger LOG = LoggerFactory.getLogger(SocketAccepter.class);
+	
     private int tcpPort;
     private ServerSocketChannel serverSocket;
     private Queue<Socket> socketQueue; //客户端连接队列
@@ -22,6 +27,7 @@ public class SocketAccepter implements Runnable {
 
     @Override
     public void run() {
+    	
         try {
             this.serverSocket = ServerSocketChannel.open();
             this.serverSocket.bind(new InetSocketAddress(tcpPort));

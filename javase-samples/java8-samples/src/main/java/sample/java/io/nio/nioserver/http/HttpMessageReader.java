@@ -11,9 +11,7 @@ import sample.java.io.nio.nioserver.MessageBuffer;
 import sample.java.io.nio.nioserver.Socket;
 
 /**
- * HTTP消息，服务器不止要处理单个Http协议的请求
- *
- * @author someone
+ * HTTP消息，服务器不止要处理单个Http协议的请求，还有其他协议
  */
 public class HttpMessageReader implements IMessageReader {
 
