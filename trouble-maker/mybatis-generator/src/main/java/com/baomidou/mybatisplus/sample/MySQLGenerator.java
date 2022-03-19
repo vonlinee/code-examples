@@ -12,23 +12,20 @@ import java.util.Collections;
  * <p>
  * 快速生成
  * </p>
- *
  * @author lanjerry
  * @since 2021-09-16
  */
 public class MySQLGenerator {
 
-    public static final String URL = "jdbc:mysql://localhost:3306/productcenter?characterEncoding=utf-8&useUnicode=true&useSSL=false&serverTimezone=GMT%2B8";
+    public static final String URL = "jdbc:mysql://localhost:3306/mysql_learn?characterEncoding=utf-8&useUnicode=true&useSSL=false&serverTimezone=GMT%2B8";
     public static final String USERNAME = "root";
     public static final String PASSWORD = "123456";
-
     public static final String AUTHOR = "someone";
 
     public static final String OUTPUT_DIR = "D://Temp";
     public static final String MAPPER_OUT_ROOT_DIR = "D://Temp";
     public static final String PARENT_PACKAGE = "mybatis";
     public static final String MODULE_NAME = "";
-
 
     private static String url(String ip, String dbName) {
         return "jdbc:mysql://" + ip + ":3306/" + dbName + "?characterEncoding=utf-8&useUnicode=true&useSSL=false&serverTimezone=GMT%2B8";
@@ -39,7 +36,7 @@ public class MySQLGenerator {
      */
     public static void main(String[] args) throws SQLException {
 
-        String includeTables = String.join(",", Lists.of("tab_storage"));
+        String includeTables = String.join(",", Lists.of("orders", "orderitems", "products", "productnotes", "customers", "vendors"));
 
         FastAutoGenerator.create(URL, USERNAME, PASSWORD).globalConfig(builder -> {
                     builder.author(AUTHOR) // 设置作者

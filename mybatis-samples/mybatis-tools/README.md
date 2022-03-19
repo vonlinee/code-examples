@@ -12,7 +12,6 @@
   <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.baomidou%22%20AND%20a%3A%22mybatis-plus%22">
     <img alt="maven" src="https://img.shields.io/maven-central/v/com.baomidou/mybatis-plus.svg?style=flat-square">
   </a>
-
   <a href="https://www.apache.org/licenses/LICENSE-2.0">
     <img alt="code style" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
   </a>
@@ -40,6 +39,8 @@ Mybatis 增强工具包 - 只做增强不做改变，简化`CRUD`操作
 - **内置分页插件**：基于Mybatis物理分页，开发者无需关心具体操作，配置好插件之后，写分页等同于写基本List查询
 - **内置性能分析插件**：可输出Sql语句以及其执行时间，建议开发测试时启用该功能，能有效解决慢查询
 - **内置全局拦截插件**：提供全表 delete 、 update 操作智能分析阻断，预防误操作
+
+
 
 # 文档 | Documentation
 
