@@ -1,4 +1,4 @@
-package sample.spring.integration.mybatis;
+package sample.spring.integration.mybatis.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +13,15 @@ import org.springframework.context.annotation.Configuration;
  * 
  * 1.注解方式
  * 2.XML配置方式: 参考spring-config.xml和spring-mybatis.xml
+ * 
+ * 
+ * 参考博客：
+ * 1.https://blog.csdn.net/qq_32527287/article/details/105229125
+ * 2.https://www.cnblogs.com/mengd/p/13493502.html
  */
 @Configuration
 @ComponentScan("sample.spring.integration.mybatis")
-public class MainConfiguration {
+public class AnnotationConfiguration {
 
-	
-	
 	
 }

@@ -2,7 +2,9 @@ package code.example.mybatis;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -39,9 +41,36 @@ public class Main {
     
     public static DataSource initDataSource() throws IOException {
     	Properties properties = Resources.getResourceAsProperties("jdbc.properties");
+    	
+    	properties = adaptedMybatisProperties(properties);
+    	
     	PooledDataSourceFactory factory = new PooledDataSourceFactory();
     	factory.setProperties(properties);
     	return factory.getDataSource();
+    }
+    
+    /**
+     * org.apache.ibatis.datasource.unpooled.UnpooledDataSourceFactory
+     * 要求的属性前缀是driver.
+     * @param properties
+     * @return
+     */
+    private static Properties adaptedMybatisProperties(Properties properties) {
+    	String prefix = "driver.";
+    	Properties props = new Properties();
+    	for (Entry<Object, Object> entry : properties.entrySet()) {
+    		Object key = entry.getKey();
+    		Object value = entry.getValue();
+    		if (key instanceof String) {
+    			String propertyName = (String) key;
+        		if (!propertyName.startsWith(prefix)) {
+        			int i = propertyName.lastIndexOf(".");
+        			propertyName = prefix + propertyName.substring(i + 1);
+        		}
+        		props.put(propertyName, value);
+			}
+		}
+    	return props;
     }
     
     public static Configuration initMyBatisConfiguration() throws IOException {
