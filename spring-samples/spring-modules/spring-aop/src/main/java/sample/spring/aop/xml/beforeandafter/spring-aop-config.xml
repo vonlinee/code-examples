@@ -23,23 +23,22 @@
     		http://www.springframework.org/schema/task 
     		http://www.springframework.org/schema/task/spring-task-3.2.xsd">
 
+	<aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
+
 	<bean id="performer"
 		class="sample.spring.aop.xml.beforeandafter.Performer">
 	</bean>
 
-	<bean id="audience" class="sample.spring.aop.xml.beforeandafter.Audience">
+	<bean id="audience"
+		class="sample.spring.aop.xml.beforeandafter.Audience">
 	</bean>
 
 	<aop:config>
-	
-		
-	
 		<aop:aspect ref="audience">
 			<!-- 定义切点 -->
 			<aop:pointcut id="performance"
 				expression="execution(* sample.spring.aop.xml.beforeandafter.Performer.perform(..))" />
-			<!-- IF you want to use a pointcut among 2 or more aspects then define 
-				that pointcut directly within the <aop:config> element -->
+			<!-- 定义切面 -->
 			<aop:before pointcut-ref="performance" method="takeSeats" />
 			<aop:before pointcut-ref="performance"
 				method="turnOffCellPhones" />
@@ -49,4 +48,4 @@
 				method="demandRefund" />
 		</aop:aspect>
 	</aop:config>
-</beans>  
+</beans> 

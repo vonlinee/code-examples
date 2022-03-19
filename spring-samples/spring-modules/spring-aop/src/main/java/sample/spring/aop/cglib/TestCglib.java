@@ -1,5 +1,9 @@
 package sample.spring.aop.cglib;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -27,25 +31,52 @@ import net.sf.cglib.proxy.NoOp;
  * 
  * 深入理解InnoDB -- 存储篇: https://zhuanlan.zhihu.com/p/161737133
  *
+ * Spring 并未引入cglib, cglib-nodep等依赖
+ * 
+ * 
  */
 public class TestCglib {
 
 	public static void main(String[] args) {
-		test1();
+		
+		System.out.println(int.class == Integer.class);
+		System.out.println(int.class == Integer.TYPE);
+		
+		System.identityHashCode(LinkageError.class);
+		
 	}
 
 	public static void test1() {
 		// 设置输出代理类到指定路径，便于后面分析
-		System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "");
+		System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:/Temp");
 		Enhancer enhancer = new Enhancer();
 		enhancer.setSuperclass(TargetObject.class); // 设置哪个类需要代理
 		Callback callback = new TargetInterceptor();
-		enhancer.setCallback(callback); // 设置怎么代理
+		enhancer.setCallback(callback); // 设置怎么代理，代理回调
+		
+		Object array = Array.newInstance(int.class, 0);
+		
+		
 		TargetObject proxy = (TargetObject) enhancer.create(); // 获取代理类实例
+		//sample.spring.aop.cglib.TargetObject$$EnhancerByCGLIB$$d923bb46 => TargetObject(父类)
+		
 		String returnValue = proxy.method("zs");
 		System.out.println("returnValue = " + returnValue);
+		
 	}
 
+	public static void showDebugLocation() {
+		String debugLocationProperty = System.getProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY);
+		File file = new File(debugLocationProperty);
+		if (file.exists()) {
+			try {
+				Desktop.getDesktop().open(file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public static void test2() {
 		Enhancer enhancer = new Enhancer();
 		enhancer.setSuperclass(TargetObject.class);

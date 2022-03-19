@@ -13,8 +13,6 @@ public class Main {
         context = new FileSystemXmlApplicationContext(resource.toExternalForm());
         
         Thinker thinkerImpl = (Thinker) context.getBean("thinkerImpl");
-        
-        
         thinkerImpl.thinkOfSomething("Wanna be a java developer");
     }
 }

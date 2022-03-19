@@ -23,13 +23,13 @@
     		http://www.springframework.org/schema/task 
     		http://www.springframework.org/schema/task/spring-task-3.2.xsd">
 
-	<aop:aspectj-autoproxy/>
+	<aop:aspectj-autoproxy />
 
 	<bean id="mindReaderImpl"
 		class="sample.spring.aop.xml.passingparams.MindReaderImpl" />
 	<bean id="thinkerImpl"
 		class="sample.spring.aop.xml.passingparams.ThinkerImpl" />
-		
+
 	<!-- AOP配置：切点 + 切面 -->
 	<aop:config>
 		<aop:aspect ref="mindReaderImpl">
@@ -38,7 +38,8 @@
 				expression="execution(*
 										sample.spring.aop.xml.passingparams.Thinker.thinkOfSomething(String))
 										and args(thoughts)" />
-			<aop:before pointcut-ref="thinking" method="interceptThoughts" arg-names="thoughts"/>
+			<aop:before pointcut-ref="thinking"
+				method="interceptThoughts" arg-names="thoughts" />
 		</aop:aspect>
 	</aop:config>
 </beans>  

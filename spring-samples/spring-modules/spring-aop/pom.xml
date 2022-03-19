@@ -47,16 +47,7 @@
 			<artifactId>spring-aop</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>1.8.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>1.8.4</version>
-		</dependency>
+
 		<!-- Application Context (depends on spring-core, spring-expression, spring-aop, 
 			spring-beans) This is the central artifact for Spring's Dependency Injection 
 			Container and is generally always defined -->
@@ -155,7 +146,16 @@
 			<artifactId>cglib-nodep</artifactId>
 			<version>3.3.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.8.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>
