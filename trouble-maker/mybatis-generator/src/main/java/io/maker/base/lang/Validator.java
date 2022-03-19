@@ -559,6 +559,7 @@ public final class Validator {
         return list.isEmpty();
     }
 
+
     @SuppressWarnings("unchecked")
     public static <T> boolean isEmpty(T... array) {
         notNull(array);
@@ -577,6 +578,14 @@ public final class Validator {
     @SuppressWarnings("unchecked")
     public static <T> boolean isNullOrEmpty(T... array) {
         return array == null || array.length == 0;
+    }
+
+    public static <T> boolean isNullOrEmpty(List<?> list) {
+        return list == null || list.isEmpty();
+    }
+
+    public static <T> boolean isNullOrEmpty(Map<?, ?> map) {
+        return map == null || map.isEmpty();
     }
 
     /**

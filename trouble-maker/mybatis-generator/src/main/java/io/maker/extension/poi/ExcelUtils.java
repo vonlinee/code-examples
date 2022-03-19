@@ -1,6 +1,7 @@
 package io.maker.extension.poi;
 
 import io.maker.base.io.FileUtils;
+import io.maker.base.lang.Validator;
 import io.maker.base.utils.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -15,6 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -256,55 +259,6 @@ public final class ExcelUtils {
         return cel.toString();
     }
 
-    public static void main(String[] args) throws IOException {
-        //读取文件夹，批量解析Excel文件
-        System.out.println("--------------------读取文件夹，批量解析Excel文件-----------------------");
-        List<List<Map<String, String>>> returnList = readFolder("D:\\Temp");
-        for (int i = 0; i < returnList.size(); i++) {
-            List<Map<String, String>> maps = (List<Map<String, String>>) returnList.get(i);
-            if (maps.isEmpty()) {
-                continue;
-            }
-            for (int j = 0; j < maps.size(); j++) {
-                System.out.println(maps.get(j).toString());
-            }
-            System.out.println("--------------------手打List切割线-----------------------");
-        }
-
-        //读取单个文件
-        System.out.println("--------------------读取并解析单个文件-----------------------");
-        List<Map<String, String>> maps = readExcel("D:\\Temp\\1.xlsx");
-        for (int j = 0; j < maps.size(); j++) {
-            System.out.println(maps.get(j).toString());
-        }
-
-        System.out.println("数据加载...");
-        List<Map<String, Object>> mapArrayList = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("姓名", i);
-            map.put("年龄", i);
-            map.put("性别", i);
-            mapArrayList.add(map);
-        }
-        System.out.println("数据加载完成...");
-
-        String excel = writeExcel(mapArrayList, "1.xlsx", "Sheet-1");
-        System.out.println(excel);
-        File file = new File(excel);
-        System.out.println(file);
-        boolean b = FileUtils.openDirectory(file);
-    }
-
-    public static void writeExcelAndShow(List<Map<String, Object>> data, String title) throws IOException {
-        String path = writeExcel(data, "tmp.xlsx", title);
-        FileUtils.openFile(new File(path));
-    }
-
-    private static boolean checkIfExists(File file) {
-        return file.exists();
-    }
-
     /**
      * 将 List<Map<String,Object>> 类型的数据导出为 Excel
      * 默认 Excel 文件的输出路径为 项目根目录下
@@ -312,9 +266,8 @@ public final class ExcelUtils {
      * @param mapList  数据源(通常为数据库查询数据)
      * @param filename 文件名前缀, 实际文件名后会加上日期
      * @param title    表格首行标题
-     * @return 文件输出路径
      */
-    public static String writeExcel(List<Map<String, Object>> mapList, String filename, String title) throws IOException {
+    public static void writeExcel(List<Map<String, Object>> mapList, String filename, String title) throws IOException {
         //获取数据源的 key, 用于获取列数及设置标题
         Map<String, Object> map = mapList.get(0);
         Set<String> stringSet = map.keySet();
@@ -325,20 +278,22 @@ public final class ExcelUtils {
         for (int i = 0; i < headList.size(); i++) {
             sheet.setColumnWidth(i, 4000);
         }
-        //设置单元格字体样式
-        XSSFFont font = wb.createFont();
-        font.setFontName("等线");
-        font.setFontHeightInPoints((short) 16);
-        //在sheet里创建第一行，并设置单元格内容为 title (标题)
-        XSSFRow titleRow = sheet.createRow(0);
-        XSSFCell titleCell = titleRow.createCell(0);
-        titleCell.setCellValue(title);
-        //合并单元格CellRangeAddress构造参数依次表示起始行，截至行，起始列， 截至列
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headList.size() - 1));
+        // //设置单元格字体样式
+        // XSSFFont font = wb.createFont();
+        // font.setFontName("等线");
+        // font.setFontHeightInPoints((short) 16);
         // 创建单元格文字居中样式并设置标题单元格居中
-        XSSFCellStyle cellStyle = wb.createCellStyle();
-        cellStyle.setAlignment(HorizontalAlignment.CENTER);
-        titleCell.setCellStyle(cellStyle);
+        // XSSFCellStyle cellStyle = wb.createCellStyle();
+        // cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        //在sheet里创建第一行，并设置单元格内容为 title (标题)
+        // if (!Validator.isNullOrEmpty(title)) {
+        //     XSSFRow titleRow = sheet.createRow(0);
+        //     XSSFCell titleCell = titleRow.createCell(0);
+        //     titleCell.setCellValue(title);
+        //     // titleCell.setCellStyle(cellStyle);
+        // }
+        //合并单元格CellRangeAddress构造参数依次表示起始行，截至行，起始列， 截至列
+        // sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headList.size() - 1));
         //获得表格第二行
         XSSFRow row = sheet.createRow(1);
         //根据数据源信息给第二行每一列设置标题
@@ -364,14 +319,17 @@ public final class ExcelUtils {
             }
         }
         // 使用项目根目录, 文件名加上时间戳
-        writeWorkbook(wb, new File(StringUtils.uuid() + File.separator + filename));
-        return "";
+        writeWorkbook(wb, new File(filename), false);
     }
 
-    public static Workbook createWorkBook() {
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet();
-        return workbook;
+    private static void makeSureFileExists(File file) {
+        if (!file.exists()) {
+            try {
+                Files.createFile(file.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -397,10 +355,14 @@ public final class ExcelUtils {
 
     /**
      * 将准备好的workbook文档输出到文件中
-     * @param workbook
-     * @param file
+     * @param workbook    文档数据
+     * @param file        Excel文件
+     * @param fileExisted 文件是否存在
      */
-    public static void writeWorkbook(Workbook workbook, File file) throws IOException {
+    public static void writeWorkbook(Workbook workbook, File file, boolean fileExisted) throws IOException {
+        if (!fileExisted) {
+            makeSureFileExists(file);
+        }
         try (FileOutputStream fos = new FileOutputStream(file)) {
             workbook.write(fos);
             fos.flush();

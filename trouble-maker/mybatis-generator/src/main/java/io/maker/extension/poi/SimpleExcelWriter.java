@@ -141,8 +141,8 @@ public class SimpleExcelWriter extends ExcelWriter {
     }
 
     @Override
-    public void fill(Workbook workbook, List<Map<String, Object>> rows) {
-
+    public Workbook fill(Workbook workbook, List<Map<String, Object>> rows) {
+        return workbook;
     }
 
     /**
@@ -155,7 +155,7 @@ public class SimpleExcelWriter extends ExcelWriter {
         try (OutputStream stream = new FileOutputStream(file)) {
             workbook.write(stream);
         } catch (IOException e) {
-            logger.error("failed to write workbook to {}, cause : {}", file.getAbsolutePath(), e.getMessage());
+            logger.error("failed to write workbook to File: {}, cause : {}", file.getAbsolutePath(), e.getMessage());
             throw e;
         }
     }
@@ -169,11 +169,7 @@ public class SimpleExcelWriter extends ExcelWriter {
         if (rows == null || rows.isEmpty()) {
             throw new RuntimeException("data cannot be null");
         }
-//        write(createSimpleWorkbook(sheetName, null), file);
+        // write(createSimpleWorkbook(sheetName, null), file);
         return false;
     }
-
-//    public void write(File file, List<Map<String, Object>> rows) {
-//        write(file, rows, "Sheet-1");
-//    }
 }
