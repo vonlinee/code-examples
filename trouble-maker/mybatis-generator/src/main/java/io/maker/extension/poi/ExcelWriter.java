@@ -8,7 +8,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -23,7 +22,7 @@ public abstract class ExcelWriter {
 
     public abstract Workbook create(File file) throws IOException;
 
-    public abstract void fill(Workbook workbook, List<Map<String, Object>> rows);
+    public abstract Workbook fill(Workbook workbook, List<Map<String, Object>> rows);
 
     public abstract void write(Workbook workbook, File file) throws IOException;
 
@@ -33,10 +32,6 @@ public abstract class ExcelWriter {
 
     public boolean write(File file, String[][] data) {
         return writeXlsx(file, data, DEFAULT_SHEET_NAME);
-    }
-
-    public static void write(File file, List<Map<String, Object>> rowList) {
-
     }
 
     public boolean write(File file, List<List<Pair<String, String>>> tableData, String sheetName) {
@@ -104,7 +99,7 @@ public abstract class ExcelWriter {
         return result;
     }
 
-    public final void write(List<Map<String, Object>> rows, File file) {
+    protected final void write(List<Map<String, Object>> rows, File file) {
         try {
             Workbook workbook = create(file);
             fill(workbook, rows);

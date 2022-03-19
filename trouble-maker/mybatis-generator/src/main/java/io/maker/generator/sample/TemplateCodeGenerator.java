@@ -26,6 +26,5 @@ public class TemplateCodeGenerator {
         map.put("csc", tableNames2);
 
         List<Map<String, Object>> list = TableMetaDataLoader.loadInfomationSchema(dataSource, "mp", "t_sac_onetask_receive_object", new MapListHandler());
-        ExcelUtils.writeExcelAndShow(list, "course");
     }
 }

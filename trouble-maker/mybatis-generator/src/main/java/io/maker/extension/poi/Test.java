@@ -10,13 +10,54 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static io.maker.extension.poi.ExcelUtils.writeExcel;
+
 public class Test {
 
     public static void main(String[] args) throws IOException, InvalidFormatException {
         File file = new File("D:/Temp/1.xlsx");
         SimpleExcelWriter writer = new SimpleExcelWriter();
-        writer.write(file, prepareData());
+
+
+
+
         FileUtils.openFile(file);
+    }
+
+    public static void test1() throws IOException {
+        //读取文件夹，批量解析Excel文件
+        System.out.println("--------------------读取文件夹，批量解析Excel文件-----------------------");
+        List<List<Map<String, String>>> returnList = ExcelUtils.readFolder("D:\\Temp");
+        for (int i = 0; i < returnList.size(); i++) {
+            List<Map<String, String>> maps = returnList.get(i);
+            if (maps.isEmpty()) {
+                continue;
+            }
+            for (int j = 0; j < maps.size(); j++) {
+                System.out.println(maps.get(j).toString());
+            }
+            System.out.println("--------------------手打List切割线-----------------------");
+        }
+
+        //读取单个文件
+        System.out.println("--------------------读取并解析单个文件-----------------------");
+        List<Map<String, String>> maps = ExcelUtils.readExcel("D:\\Temp\\1.xlsx");
+        for (int j = 0; j < maps.size(); j++) {
+            System.out.println(maps.get(j).toString());
+        }
+
+        System.out.println("数据加载...");
+        List<Map<String, Object>> mapArrayList = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("姓名", i);
+            map.put("年龄", i);
+            map.put("性别", i);
+            mapArrayList.add(map);
+        }
+        System.out.println("数据加载完成...");
+
+        ExcelUtils.writeExcel(mapArrayList, "1.xlsx", "Sheet-1");
     }
 
     private static List<Map<String, Object>> prepareData() {
