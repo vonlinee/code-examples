@@ -2,8 +2,10 @@ package code.example.springmvc.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
@@ -15,9 +17,10 @@ public class ItemsController implements Controller {
 	//需要添加Server Runtime:这里我选的是Tomcat 8.5
 	//或者在maven中添加 servlet-api，servlet-jsp，jstl等依赖，因为这些依赖的作用范围都是Runtime
 	//否则会提示HttpServletRequest，HttpServletResponse找不到
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@Override
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         //调用service查找数据库，查询商品列表，这里使用静态数据模拟
-        List<Items> itemsList = new ArrayList<Items>();
+        List<Items> itemsList = new ArrayList<>();
         //向list中填充静态数据
         Items items_1 = new Items();
         items_1.setName("联想笔记本");

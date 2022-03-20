@@ -4,6 +4,16 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
 
+	<!-- 系统组件加载顺序：context-param -> listener -> filter -> servlet -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:/applicationContext.xml</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
 	<!-- springmvc 前端控制器 -->
 	<servlet>
 		<servlet-name>springmvc</servlet-name>

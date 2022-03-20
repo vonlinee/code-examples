@@ -41,3 +41,57 @@ Maven-webapp这个模板会自动添加Context Root为artifactId的值
 <mvc:default-servlet-handler/>
 
 HandlerMapping 请求路径映射
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+报错：Could not initialize class org.apache.maven.plugin.war.util.WebappStructureSerializer
+https://blog.csdn.net/weixin_45611051/article/details/118712494
+原因：POM中包含有maven-war-plugin插件，插件版本太低
+在build中加入如下代码：
+<build>
+	<finalName>itrip-search</finalName>
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-war-plugin</artifactId>
+			<version>3.3.1</version>
+		</plugin>
+	</plugins>
+</build>
+
+
+JSP中报错：
+The superclass "jakarta.servlet.http.HttpServlet" was not found on the Java Build Path
+
+
+
+
+
+https://www.cnblogs.com/whx7762/p/7762665.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

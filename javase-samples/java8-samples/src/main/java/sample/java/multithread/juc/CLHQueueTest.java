@@ -4,6 +4,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * CLH队列：
+ */
 public class CLHQueueTest {
     public static void main(String[] args) {
         final KFC kfc = new KFC();
@@ -66,7 +69,7 @@ class CLHLock implements Lock {
     }
 
     private void peekNodeInfo() {
-
+    	System.out.println("Lock Status => " + myNode.get().locked);
     }
 
     @Override
@@ -85,6 +88,5 @@ class QNode {
 
 interface Lock {
     void lock();
-
     void unlock();
 }
