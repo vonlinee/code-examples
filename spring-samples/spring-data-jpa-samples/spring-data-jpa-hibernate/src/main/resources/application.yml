@@ -1,11 +1,17 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/mytest
-    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/jpa_learn?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
-    password: root
+    password: 123456
     driver-class-name: com.mysql.jdbc.Driver # 驱动
   jpa:
     hibernate:
       ddl-auto: create # 自动更新
+      naming:
+        # 下面的配置参考：https://blog.csdn.net/WZH577/article/details/99698187              
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # 主键命名策略
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
     show-sql: true  # 日志中显示sql语句
+    generate-ddl: true
+    # open-in-view: true
+    

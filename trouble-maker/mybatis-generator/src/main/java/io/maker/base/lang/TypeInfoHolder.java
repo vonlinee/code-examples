@@ -11,7 +11,7 @@ public abstract class TypeInfoHolder {
      */
     protected transient Class<?> typeClass;
 
-    public final <T> boolean typeof(Class<T> clazz) {
+    public final <T> boolean isTypeOf(Class<T> clazz) {
         return this.typeClass == clazz;
     }
 

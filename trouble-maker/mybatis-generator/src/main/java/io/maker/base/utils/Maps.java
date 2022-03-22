@@ -103,6 +103,31 @@ public final class Maps {
         return new MapCopier<>();
     }
 
+    public static <K, V> MapBuilder<K, V> builder() {
+        return new MapBuilder<>();
+    }
+
+    public static class MapBuilder<K, V> {
+
+        private Map<K, V> map;
+
+        private MapBuilder() {
+            map = new HashMap<>();
+        }
+
+        public MapBuilder<K, V> put(K key, V value) {
+            map.put(key, value);
+            return this;
+        }
+
+        public Map<K, V> build() {
+            Map<K, V> returnValue = this.map;
+            this.map = null;
+            return returnValue;
+        }
+    }
+
+
     public static void main(String[] args) {
 
     }

@@ -83,7 +83,7 @@ public class GUI extends Application {
 
         Button btn1 = new Button("首字母大写");
         btn1.setOnAction(event -> {
-            handle(HandleMethod.upperFirstCharacter);
+            handle(null);
             outputTxtThread.setOpenFile(true);
         });
         hBox3.getChildren().addAll(btn1);
@@ -100,11 +100,7 @@ public class GUI extends Application {
     }
 
     final void handle(HandleMethod handleMethod) {
-        try {
-            writeOutput(handleMethod.apply(Lines.of(readInput())).getLines());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //            writeOutput(handleMethod.apply(Lines.of(readInput())).getLines());
     }
 
     void writeOutput(List<String> output) throws IOException {

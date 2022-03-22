@@ -25,14 +25,11 @@ import java.util.Set;
 
 /**
  * Helper for writing standard Java collection interfaces to a data
- * structure like {@link ArrayMap}.
+ * structure like ArrayMap}.
  */
 abstract class MapCollections<K, V> {
-    @Nullable
     EntrySet mEntrySet;
-    @Nullable
     KeySet mKeySet;
-    @Nullable
     ValuesCollection mValues;
 
     final class ArrayIterator<T> implements Iterator<T> {
@@ -356,8 +353,6 @@ abstract class MapCollections<K, V> {
             return result;
         }
     }
-
-    ;
 
     final class ValuesCollection implements Collection<V> {
 
