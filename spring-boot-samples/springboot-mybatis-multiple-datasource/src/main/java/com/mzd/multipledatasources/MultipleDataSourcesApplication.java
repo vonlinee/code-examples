@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @MapperScan("com.mzd.multipledatasources.mapper")
 public class MultipleDataSourcesApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(MultipleDataSourcesApplication.class, args);
 	}

@@ -25,6 +25,7 @@ public class TransactionController {
 	@Autowired
 	private TransactionService2 ts2;
 
+	//localhost:8888/savetest.do
 	@RequestMapping("/savetest.do")
 	public String savetest() {
 		TestBean tb = new TestBean();

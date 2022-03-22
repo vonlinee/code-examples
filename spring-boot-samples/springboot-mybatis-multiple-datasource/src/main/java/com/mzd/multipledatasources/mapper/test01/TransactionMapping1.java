@@ -6,7 +6,5 @@ import com.mzd.multipledatasources.bean.TestBean;
 
 @Repository
 public interface TransactionMapping1 {
-
 	void save(TestBean t);
-
 }
