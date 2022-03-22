@@ -48,16 +48,15 @@ class SumTask extends RecursiveTask<Long> {
 				sum +=this.array[i];
 				try {
 					Thread.sleep(2);
-				} catch (Exception e) {
-					// TODO: handle exception
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 			return sum;
 		} else { //任务太大进行拆分
 			int middle = (end - start) / 2;
-			
+			System.out.println(middle);
 		}
 		return null;
 	}
-	
 }

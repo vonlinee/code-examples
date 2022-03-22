@@ -1,0 +1,99 @@
+
+
+https://dev.mysql.com/doc/refman/5.7/en/function-optimization.html
+
+deterministic
+nondeterministic： RAND(), UUID().
+
+where
+
+如果函数是随机性函数，出现在where子句中的该函数，每行都要调用一次，或者在多表关联查询中，则在这些行的组合中都要调用
+SELECT * FROM orders o WHERE date_format(o.order_date, '%Y-%m-%d') = '2005-02-28'
+
+SELECT * FROM orders o 
+	LEFT JOIN orderitems oi ON o.order_num = oi.order_num 
+WHERE date_format(o.order_date, '%Y-%m-%d') = '2005-02-28'
+
+MySQL基于参数类型判断合适调用函数，参数类型有表的列，常量值
+
+以表列为参数的确定性函数必须在该列值更改时调用该函数进行求值
+
+非确定性函数可能会影响查询性能。例如，某些优化可能不可用，或者可能需要更多的锁。
+
+以RAND函数为例
+CREATE TABLE t (
+	`id` INT NOT NULL PRIMARY KEY,
+	`col_a` VARCHAR(100)
+)Engine = InnoDB;
+INSERT INTO t VALUES (1, 'A'), (2, 'B'), (3, 'C');
+
+
+SELECT * FROM t WHERE id = POW(1,2);
+SELECT * FROM t WHERE id = FLOOR(1 + RAND() * 49);
+
+
+这两个查询似乎都使用主键索引查找，因为它们与主键进行了相等比较，但这仅适用于第一个查询：
+
+mysql> EXPLAIN SELECT * FROM t WHERE id = POW(1, 2);
++----+-------------+-------+------------+-------+---------------+---------+---------+-------+------+----------+-------+
+| id | select_type | table | partitions | type  | possible_keys | key     | key_len | ref   | rows | filtered | Extra |
++----+-------------+-------+------------+-------+---------------+---------+---------+-------+------+----------+-------+
+|  1 | SIMPLE      | t     | NULL       | const | PRIMARY       | PRIMARY | 4       | const |    1 |   100.00 | NULL  |
++----+-------------+-------+------------+-------+---------------+---------+---------+-------+------+----------+-------+
+1 row in set, 1 warning (0.00 sec)
+
+mysql> EXPLAIN SELECT * FROM t WHERE id = FLOOR(1 + RAND() * 49);
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
+|  1 | SIMPLE      | t     | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    3 |    33.33 | Using where |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
+1 row in set, 1 warning (0.00 sec)
+
+
+第一个查询总是最多生成一行，因为带有常量参数的POW（）是一个常量值，，返回值也是常量，因此用到了索引查找
+第二个查询包含一个使用不确定函数RAND()的表达式，该函数在查询中不是常数，但实际上表t的每一行都有一个新值，因此查询读取表的每一行，计算每一行的函数返回值，
+并输出主键与随机值匹配的所有行。这可能是零行、一行或多行，具体取决于id列值和RAND()序列中的值。
+
+
+随机性函数的影响并不只是出现在SELECT查询中
+UPDATE t SET col_a = some_expr WHERE id = FLOOR(1 + RAND() * 49);
+这条语句的本意只是更新一行，根据id = FLOOR(1 + RAND() * 49);这个表达式限定，但是实际情况可能更新0，1或者多行，同样
+取决于id列值和RAND()序列中的值
+
+刚才描述的行为对性能和复制有影响
+1.由于非确定性函数不会产生常量值，因此优化器无法使用其他可能适用的策略，例如索引查找。结果可能是表扫描
+2.InnoDB可能会升级为一个范围锁，而不是对一个匹配行使用一个行锁
+3.不确定的更新操作对于数据复制是不安全的，会导致意料之外的更改
+
+
+问题源于这样一个事实，即RAND()等随机性函数会对表中的每一行求值一次，为了避免此问题：
+1.将包含不确定性函数的表达式移动到单独的语句中，将值保存在变量中。在之前的sql中，将表达式替换为对变量的引用，这样优化器可以将其视为常量值
+SET @keyval = FLOOR(1 + RAND() * 49);
+UPDATE t SET col_a = some_expr WHERE id = @keyval;
+2.将随机值指定给衍生表中的变量，这样会在WHERE子句中的比较中使用该变量之前，只给变量赋值一次
+SET optimizer_switch = 'derived_merge=off';
+UPDATE t, (SELECT @keyval := FLOOR(1 + RAND() * 49)) AS dt SET col_a = some_expr WHERE id = @keyval;
+dt是衍生表
+
+如前所述，WHERE子句中的随机性表达式可能会阻止优化并导致表扫描。但是，如果其他表达式是确定性的，则可以部分优化WHERE子句。例如：
+SELECT * FROM t WHERE partial_key = 5 AND some_column = RAND();
+
+如果优化器可以使用partial_key 来减少所选择的行的集合，则RAND()的执行次数会减少，从而可以减少不确定性对优化的影响。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
