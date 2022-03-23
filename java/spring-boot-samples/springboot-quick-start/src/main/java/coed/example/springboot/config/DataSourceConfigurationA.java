@@ -16,7 +16,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Configuration
 @PropertySource("classpath:jdbc.properties")
 @EnableTransactionManagement
-public class DataSourceConfiguration {
+public class DataSourceConfigurationA {
 
 	@Value("${jdbc.driver}")
 	private String driver;
