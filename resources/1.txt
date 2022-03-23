@@ -1,14 +1,13 @@
+
+不修改源代码，动态注入Java代码的方法（转） 
 https://www.cnblogs.com/weizhxa/p/9222778.html
+
 
 https://github.com/gradle/gradle/issues/9394
 
-
-
 远程调用RPC日志接口
 
-
-
-计算机开发正相关书籍：
+计算机开发相关书籍：
 https://github.com/7-sevens/Developer-Books
 
 
