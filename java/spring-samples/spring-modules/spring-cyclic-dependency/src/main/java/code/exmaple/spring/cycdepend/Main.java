@@ -9,19 +9,24 @@ import code.exmaple.spring.cycdepend.bean.Student;
 
 @SpringBootApplication
 public class Main {
-	public static void main(String[] args) {
+	
+	static {
 		System.setProperty("spring.devtools.restart.enabled", "false");
-		
+	}
+	
+	public static ConfigurableApplicationContext context ;
+	
+	public static void main(String[] args) {
+		context = SpringApplication.run(Main.class, args);
+	}
+	
+	public static void showCycleDependency() {
 		//spring-context
-		ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
-		
+
 		//AbstractApplicationContext.getBean(Class<?> requiredType)
 		Model model = context.getBean(Model.class);
-		
 		//BeanFactory
-		
 		//ConfigurableListableBeanFactory
-		
 		Student student = context.getBean(Student.class);
 		System.out.println(model); 			//bean.Model@2392212b
 		System.out.println(student); 		//bean.Student@5b43e173

@@ -40,14 +40,11 @@ Optimizing Queries with EXPLAIN
 https://dev.mysql.com/doc/refman/5.7/en/using-explain.html
 
 
-
-
 一：WHERE Clause Optimization
 https://dev.mysql.com/doc/refman/5.7/en/where-optimization.html
 
 对于单个MyISAM或者MEMORY表，不带WHERE的count(*)查询是直接从表信息中返回结果
 或者count(expression)，其中expression需要NOT NULL，注意：只针对单表且不带WHERE
-
 
 mysql> SELECT * FROM t ;
 +----+-------+
@@ -72,11 +69,25 @@ mysql> SELECT count(*), count(1), count(t.col_a), count(NULL) FROM t;
 
 
 如果不使用GROUP BY或聚合函数，HAVING将与WHERE合并
+在查询中，首先读取所有常量表，然后读取任何其他表
 
-
-constant table
-1.An empty table or a table with one row.
+常量表constant table的定义如下：
+1.空表或者只有一行的表
 2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Cause: com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException: Lock wait timeout exceeded; try restarting transaction

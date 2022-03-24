@@ -12,8 +12,6 @@ public class TestLinkedHahsMap {
         map.put("B", new Hero("2", "NAME2"));
 
         
-        map.
-        
         U.println(map);
     }
 }
