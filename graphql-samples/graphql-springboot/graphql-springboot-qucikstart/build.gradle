@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:11.0.0'
+    implementation 'com.graphql-java-kickstart:graphiql-spring-boot-starter:11.0.0'
+    implementation 'com.graphql-java-kickstart:voyager-spring-boot-starter:11.0.0'
+    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:11.0.0'
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,0 +1,40 @@
+type Query {
+    allCategories: [Category]
+    allProducts: [Product]
+    category(id: ID!): Category
+    product(id: ID!): Product
+    # 带对象类型参数的查询
+    category(id: ID!, dataInfo: InputInfo): Category
+}
+
+type Mutation {
+    addCategory(name: String!): Category!
+    updateCategory(id: ID!, name: String!): Category!
+    deleteCategory(id: ID!): Boolean
+    addProduct(name: String!, code: String!, price: Float!, category_id: ID!): Product!
+    updateProduct(id: ID!, name: String!, code: String!, price: Float!): Product!
+    deleteProduct(id: ID!): Boolean
+}
+
+type Category {
+    id: ID
+    name: String!
+}
+
+type Product {
+    id: ID
+    name: String!
+    code: String!
+    price: Float!
+    category: Category!
+}
+
+# 对象类型的输入参数
+input InputInfo{
+    #ID
+    id: String
+    #名字
+    name: String
+    #编码
+    code: String
+}

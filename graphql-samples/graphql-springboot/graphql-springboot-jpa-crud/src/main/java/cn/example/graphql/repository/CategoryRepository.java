@@ -1,0 +1,8 @@
+package cn.example.graphql.repository;
+
+import cn.example.graphql.entity.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
+
+}

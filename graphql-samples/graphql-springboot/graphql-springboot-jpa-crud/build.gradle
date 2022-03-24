@@ -1,0 +1,40 @@
+buildscript {
+    ext {
+        springBootVersion = '2.3.0.RELEASE'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+//You can go through the tutorial https://www.roytuts.com/graphql-spring-mysql-crud-example/
+
+plugins {
+    id 'java-library'
+    id 'org.springframework.boot' version "${springBootVersion}"
+}
+
+sourceCompatibility = 8
+targetCompatibility = 8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+    implementation('com.graphql-java:graphql-spring-boot-starter:5.0.2')
+    implementation('com.graphql-java:graphql-java-tools:5.2.4')
+    implementation('mysql:mysql-connector-java:5.1.37')
+
+    //required for jdk 9 or above
+//    runtimeOnly('javax.xml.bind:jaxb-api:2.4.0-b180830.0359')
+}

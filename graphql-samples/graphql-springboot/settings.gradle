@@ -1,0 +1,6 @@
+rootProject.name = 'graphql-learn'
+include 'graphql-java-helloworld'
+include 'graphql-springboot-jpa-crud'
+include 'graphql-springboot-qucikstart'
+include 'graphql-java-servlet-quickstart'
+
