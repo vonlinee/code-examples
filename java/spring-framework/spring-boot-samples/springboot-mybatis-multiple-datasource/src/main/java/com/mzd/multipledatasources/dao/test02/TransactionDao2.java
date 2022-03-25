@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.mzd.multipledatasources.bean.TeachersBean;
-import com.mzd.multipledatasources.mapper.test02.TransactionMapping2;
+import com.mzd.multipledatasources.mapper.ordercenter.TransactionMapping2;
 
 @Component
 public class TransactionDao2 {

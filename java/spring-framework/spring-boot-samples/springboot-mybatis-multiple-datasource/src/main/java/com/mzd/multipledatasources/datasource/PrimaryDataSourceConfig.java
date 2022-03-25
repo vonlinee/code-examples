@@ -24,9 +24,9 @@ import lombok.Data;
  * https://blog.csdn.net/jt_s8645/article/details/84569014
  */
 @Data
-@Configuration
-@ConfigurationProperties(prefix = "primary.datasource.druid") // 前缀为primary.datasource.druid的配置信息
-@MapperScan(basePackages = PrimaryDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "primarySqlSessionFactory")
+//@Configuration
+//@ConfigurationProperties(prefix = "primary.datasource.druid") // 前缀为primary.datasource.druid的配置信息
+//@MapperScan(basePackages = PrimaryDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "primarySqlSessionFactory")
 public class PrimaryDataSourceConfig {
  
     /**

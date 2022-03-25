@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.mzd.multipledatasources.bean.TestBean;
-import com.mzd.multipledatasources.mapper.test01.TransactionMapping1;
+import com.mzd.multipledatasources.mapper.productcenter.TransactionMapping1;
 
 @Component
 
@@ -15,5 +15,4 @@ public class TransactionDao1 {
 	public void save(TestBean t) {
 		tm1.save(t);
 	}
-
 }

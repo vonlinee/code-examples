@@ -16,7 +16,7 @@ CREATE TABLE `orderitems`  (
   `quantity` int(11) NOT NULL COMMENT '物品数量',
   `item_price` decimal(8, 2) NOT NULL COMMENT '物品价格',
   PRIMARY KEY (`order_num`, `order_item`) USING BTREE,
-  INDEX `idx_prod_quan_price`(`prod_id`, `quantity`, `item_price`) USING BTREE,
+  INDEX `idx_prod_quan_price`(`prod_id`, `quantity`, `item_price`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单详情表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
@@ -37,6 +37,6 @@ CREATE TABLE `products`  (
   `prod_price` decimal(8, 2) NOT NULL,
   `prod_desc` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   PRIMARY KEY (`prod_id`) USING BTREE,
-  INDEX `fk_products_vendors`(`vend_id`) USING BTREE,
+  INDEX `fk_products_vendors`(`vend_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '产品表' ROW_FORMAT = Dynamic;
 SET FOREIGN_KEY_CHECKS = 1;

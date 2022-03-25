@@ -1,4 +1,4 @@
-package com.mzd.multipledatasources.mapper.test01;
+package com.mzd.multipledatasources.mapper.productcenter;
 
 import org.springframework.stereotype.Repository;
 
