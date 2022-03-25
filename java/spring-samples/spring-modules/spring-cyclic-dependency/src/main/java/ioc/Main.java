@@ -1,11 +1,11 @@
-package sample.spring.ioc;
+package ioc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import sample.spring.ioc.lifecycle.Model;
-import sample.spring.ioc.lifecycle.Student;
+import ioc.bean.lifecycle.Model;
+import ioc.bean.lifecycle.Student;
 
 @SpringBootApplication
 public class Main {

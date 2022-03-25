@@ -1,4 +1,4 @@
-package sample.spring.ioc.utils;
+package ioc.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,5 +46,9 @@ public class SpringUtils implements ApplicationContextAware, EnvironmentAware {
 	@SuppressWarnings("unchecked")
 	public static <T> T getBean(String beanName) {
 		return (T) utils.getApplicationContext().getBean(beanName);
+	}
+	
+	public static String findConfigXml(Class<?> clazz, String filename) {
+		return clazz.getResource(filename).toExternalForm();
 	}
 }

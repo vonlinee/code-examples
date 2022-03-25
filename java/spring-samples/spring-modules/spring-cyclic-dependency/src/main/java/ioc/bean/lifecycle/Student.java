@@ -1,10 +1,10 @@
-package sample.spring.ioc.lifecycle;
+package ioc.bean.lifecycle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Model {
+public class Student {
 	@Autowired
-	public Student student;
+	public Model model;
 }

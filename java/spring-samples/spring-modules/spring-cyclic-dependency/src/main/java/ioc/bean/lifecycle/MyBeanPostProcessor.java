@@ -1,4 +1,4 @@
-package sample.spring.ioc.lifecycle;
+package ioc.bean.lifecycle;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
