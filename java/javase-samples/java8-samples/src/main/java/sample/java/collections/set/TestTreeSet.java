@@ -5,8 +5,10 @@ import java.util.TreeSet;
 public class TestTreeSet {
 	
 	public static void main(String[] args) {
-		TreeSet<E> treeSet = new TreeSet<>();
-		treeSet.add(new E(20));
+		TreeSet<Hero> treeSet = new TreeSet<>();
+		treeSet.add(new Hero(20, "A"));
+		
+		
 		
 	}
 }

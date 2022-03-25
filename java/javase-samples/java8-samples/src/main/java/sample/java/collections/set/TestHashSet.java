@@ -1,29 +1,20 @@
 package sample.java.collections.set;
 
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 
 public class TestHashSet {
+	
 	public static void main(String[] args) {
+		//HashSet内部存放Map
+		HashSet<Integer> hashSet = new HashSet<>();
 		
-		HashSet<String> hashSet = new HashSet<>();
-		boolean b1 = hashSet.add("A");
+		hashSet.add(5);
+		hashSet.add(1);
+		hashSet.add(7);
 		
-	}
-	
-	public static void test1() {
-		HashSet<E> hashSet = new HashSet<>();
-		boolean b1 = hashSet.add(new E(1));
+		hashSet.add(null);
 		
-		hashSet.stream().distinct();		
-		
-	}
-	
-	public static void test2() {
-		
-		LinkedHashSet<E> linkedHashSet = new LinkedHashSet<>();
-		
-		boolean b1 = linkedHashSet.add(new E(1));
+		hashSet.remove(null);
 		
 	}
 }
