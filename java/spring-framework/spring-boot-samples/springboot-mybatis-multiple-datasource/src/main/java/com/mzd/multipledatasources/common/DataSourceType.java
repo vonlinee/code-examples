@@ -1,4 +1,4 @@
-package sample.multidatasource.common;
+package com.mzd.multipledatasources.common;
 
 /**
  * 创建一个切换数据源类型的类

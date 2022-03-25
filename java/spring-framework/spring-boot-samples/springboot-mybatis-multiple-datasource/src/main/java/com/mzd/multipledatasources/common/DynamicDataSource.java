@@ -1,4 +1,4 @@
-package sample.multidatasource.common;
+package com.mzd.multipledatasources.common;
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 

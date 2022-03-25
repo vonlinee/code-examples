@@ -1,9 +1,10 @@
-package sample.multidatasource.switchdb.aop;
+package com.mzd.multipledatasources.switchdb;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-import sample.multidatasource.common.DataSourceType;
+
+import com.mzd.multipledatasources.common.DataSourceType;
 
 @Aspect
 @Component

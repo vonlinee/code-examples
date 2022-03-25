@@ -10,7 +10,6 @@
 		<config>java:com.mzd.multipledatasources.MultiDataSourcesApplication</config>
 	</configs>
 	<autoconfigs>
-		<config>java:sample.multidatasource.MainApplication</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

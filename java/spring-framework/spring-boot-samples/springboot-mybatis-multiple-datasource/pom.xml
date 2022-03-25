@@ -67,6 +67,19 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
+
+
+		
+		<!--Mybatis-Plus 注意版本-->
+
+<!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus -->
+<dependency>
+    <groupId>com.baomidou</groupId>
+    <artifactId>mybatis-plus</artifactId>
+    <version>3.3.2</version>
+</dependency>
+
+
 	</dependencies>
 
 	<build>

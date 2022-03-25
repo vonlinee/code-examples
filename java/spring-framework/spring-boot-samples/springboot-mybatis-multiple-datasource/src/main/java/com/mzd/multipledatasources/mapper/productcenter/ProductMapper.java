@@ -2,9 +2,9 @@ package com.mzd.multipledatasources.mapper.productcenter;
 
 import org.springframework.stereotype.Repository;
 
-import com.mzd.multipledatasources.bean.TestBean;
+import com.mzd.multipledatasources.entity.Product;
 
 @Repository
-public interface TransactionMapping1 {
-	void save(TestBean t);
+public interface ProductMapper {
+	void save(Product t);
 }
