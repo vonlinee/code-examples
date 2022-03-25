@@ -6,5 +6,5 @@ import multidatasource.entity.OrderItem;
 
 @Repository
 public interface OrderItemMapper {
-	void save(OrderItem t);
+	void saveOne(OrderItem t);
 }

@@ -8,8 +8,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for orderitems
 -- ----------------------------
-DROP TABLE IF EXISTS `orderitems`;
-CREATE TABLE `orderitems`  (
+DROP TABLE IF EXISTS `t_orderitem`;
+CREATE TABLE `t_orderitem`  (
   `order_num` int(11) NOT NULL COMMENT '订单号',
   `order_item` int(11) NOT NULL COMMENT '订单物品号，在订单中的顺序',
   `prod_id` char(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '产品ID，外键关联产品表主键',
@@ -29,8 +29,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for products
 -- ----------------------------
-DROP TABLE IF EXISTS `products`;
-CREATE TABLE `products`  (
+DROP TABLE IF EXISTS `t_product`;
+CREATE TABLE `t_product`  (
   `prod_id` char(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `vend_id` int(11) NOT NULL,
   `prod_name` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,

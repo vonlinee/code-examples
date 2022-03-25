@@ -10,16 +10,10 @@ import multidatasource.mapper.ordercenter.OrderItemMapper;
 @Service
 public class OrderItemService {
 	@Autowired
-	private OrderItemMapper ts2;
+	private OrderItemMapper orderItemMapper;
 
 	@Transactional
-	public void saveTeacher(OrderItem t) {
-		
-	}
-
-	@Transactional
-	public void saveTeacher2(OrderItem t) {
-		int i = 1 / 0;
-		ts2.save(t);
+	public void saveOne(OrderItem order) {
+		orderItemMapper.saveOne(order);
 	}
 }

@@ -1,29 +1,28 @@
 package multidatasource.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import java.math.BigDecimal;
 
 /**
  * <p>
- * 订单表
+ * 订单详情表
  * </p>
  *
- * @author someone
  * @since 2022-03-20
  */
 public class OrderItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "order_num", type = IdType.AUTO)
     private Integer orderNum;
 
-    private LocalDateTime orderDate;
+    private Integer orderItem;
 
-    private Integer custId;
+    private String prodId;
+
+    private Integer quantity;
+
+    private BigDecimal itemPrice;
 
     public Integer getOrderNum() {
         return orderNum;
@@ -32,27 +31,43 @@ public class OrderItem implements Serializable {
     public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
     }
-    public LocalDateTime getOrderDate() {
-        return orderDate;
+    public Integer getOrderItem() {
+        return orderItem;
     }
 
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
+    public void setOrderItem(Integer orderItem) {
+        this.orderItem = orderItem;
     }
-    public Integer getCustId() {
-        return custId;
+    public String getProdId() {
+        return prodId;
     }
 
-    public void setCustId(Integer custId) {
-        this.custId = custId;
+    public void setProdId(String prodId) {
+        this.prodId = prodId;
+    }
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+    public BigDecimal getItemPrice() {
+        return itemPrice;
+    }
+
+    public void setItemPrice(BigDecimal itemPrice) {
+        this.itemPrice = itemPrice;
     }
 
     @Override
     public String toString() {
-        return "Orders{" +
+        return "Orderitems{" +
             "orderNum=" + orderNum +
-            ", orderDate=" + orderDate +
-            ", custId=" + custId +
+            ", orderItem=" + orderItem +
+            ", prodId=" + prodId +
+            ", quantity=" + quantity +
+            ", itemPrice=" + itemPrice +
         "}";
     }
 }

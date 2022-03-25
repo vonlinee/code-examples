@@ -1,9 +1,14 @@
 package multidatasource.controller;
 
+import java.math.BigDecimal;
+import java.util.Random;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import multidatasource.entity.OrderItem;
 import multidatasource.service.OrderItemService;
 import multidatasource.service.ProductService;
 
@@ -15,11 +20,18 @@ public class OrderItemController {
 	@Autowired
 	private ProductService ts1;
 	@Autowired
-	private OrderItemService ts2;
+	private OrderItemService orderItemService;
 
-	//localhost:8888/savetest.do
-	@RequestMapping("/savetest.do")
-	public String savetest() {
+	// localhost:8888/savetest.do
+	@RequestMapping("/saveone.do")
+	public String saveOne() {
+		OrderItem oi = new OrderItem();
+		oi.setOrderNum(new Random().nextInt());
+		oi.setOrderItem(new Random().nextInt());
+		oi.setProdId(UUID.randomUUID().toString());
+		oi.setItemPrice(BigDecimal.valueOf(10));
+		oi.setQuantity(new Random().nextInt());
+		orderItemService.saveOne(oi);
 		return "success";
 	}
 
