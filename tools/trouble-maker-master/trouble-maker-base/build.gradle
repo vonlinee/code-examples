@@ -1,0 +1,10 @@
+/*============================================================================
+* Build file for subproject 'trouble-maker-base'
+*
+* Root build file: "${rootProject.projectDir}/build.gradle"
+* ============================================================================
+*/
+dependencies {
+    implementation library.slf4j_api
+    runtimeOnly library.slf4j_jdk
+}
