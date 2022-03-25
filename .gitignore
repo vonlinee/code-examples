@@ -43,5 +43,6 @@ build/
 archive.zip
 *.lock
 
-
-
+.factorypath
+.springBeans
+**/transaction-logs*/
