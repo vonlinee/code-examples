@@ -1,6 +1,0 @@
-
-rootProject.name = 'trouble-maker'
-include 'trouble-maker-base', 'trouble-maker-core', 'trouble-maker-extension'
-include 'trouble-maker-tools'
-include 'mybatis-generator'
-

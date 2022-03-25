@@ -14,28 +14,28 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 @Configuration
-@MapperScan(basePackages = "com.mzd.multipledatasources.mapper.ordercenter", sqlSessionFactoryRef = "test2SqlSessionFactory")
+@MapperScan(basePackages = "multidatasource.mapper.ordercenter", sqlSessionFactoryRef = "SqlSessionFactory_orc")
 public class DataSourceConfig2 {
 	
-	@Bean(name = "test2DataSource")
+	@Bean(name = "ds_orc")
 	@ConfigurationProperties(prefix = "spring.datasource.ordercenter")
 	public DataSource getDateSource2() {
 		return DataSourceBuilder.create().build();
 	}
 
-	@Bean(name = "test2SqlSessionFactory")
-	public SqlSessionFactory test2SqlSessionFactory(@Qualifier("test2DataSource") DataSource datasource)
+	@Bean(name = "SqlSessionFactory_orc")
+	public SqlSessionFactory test2SqlSessionFactory(@Qualifier("ds_orc") DataSource datasource)
 			throws Exception {
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 		bean.setDataSource(datasource);
 		bean.setMapperLocations(
-				new PathMatchingResourcePatternResolver().getResources("classpath*:mapping/test02/*.xml"));
+				new PathMatchingResourcePatternResolver().getResources("classpath*:mybatis/mapping/**/*.xml"));
 		return bean.getObject();
 	}
 
-	@Bean("test2SqlSessionTemplate")
+	@Bean("SqlSessionTemplate_orc")
 	public SqlSessionTemplate test2sqlsessiontemplate(
-			@Qualifier("test2SqlSessionFactory") SqlSessionFactory sessionfactory) {
+			@Qualifier("SqlSessionFactory_orc") SqlSessionFactory sessionfactory) {
 		return new SqlSessionTemplate(sessionfactory);
 	}
 }

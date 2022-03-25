@@ -13,13 +13,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-//表示这个类为一个配置类
 @Configuration
 // 配置mybatis的接口类放的地方
-@MapperScan(basePackages = "multidatasource.mapper.productcenter", sqlSessionFactoryRef = "test1SqlSessionFactory")
+@MapperScan(basePackages = "multidatasource.mapper.productcenter", sqlSessionFactoryRef = "SqlSessionFactory_prc")
 public class DataSourceConfig1 {
 	
-	@Bean(name = "ds_prod")
+	@Bean(name = "ds_prc")
 	@Primary  // 表示这个数据源是默认数据源
 	// 读取application.properties中的配置参数映射成为一个对象,prefix表示参数的前缀
 	@ConfigurationProperties(prefix = "spring.datasource.productcenter") 
@@ -27,11 +26,11 @@ public class DataSourceConfig1 {
 		return DataSourceBuilder.create().build();
 	}
 
-	@Bean(name = "prod_SqlSessionFactory")
+	@Bean(name = "SqlSessionFactory_prc")
 	// 表示这个数据源是默认数据源
 	@Primary
 	// @Qualifier表示查找Spring容器中名字为test1DataSource的对象
-	public SqlSessionFactory test1SqlSessionFactory(@Qualifier("ds_prod") DataSource datasource)
+	public SqlSessionFactory test1SqlSessionFactory(@Qualifier("ds_prc") DataSource datasource)
 			throws Exception {
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 		bean.setDataSource(datasource);
@@ -41,11 +40,11 @@ public class DataSourceConfig1 {
 		return bean.getObject();
 	}
 
-	@Bean("SqlSessionTemplate_prod")
+	@Bean("SqlSessionTemplate_prc")
 	// 表示这个数据源是默认数据源
 	@Primary
 	public SqlSessionTemplate test1sqlsessiontemplate(
-			@Qualifier("SqlSessionFactory_prod") SqlSessionFactory sessionfactory) {
+			@Qualifier("SqlSessionFactory_prc") SqlSessionFactory sessionfactory) {
 		return new SqlSessionTemplate(sessionfactory);
 	}
 }

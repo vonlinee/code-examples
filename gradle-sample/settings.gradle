@@ -1,0 +1,5 @@
+import org.gradle.initialization.DefaultProjectDescriptor
+
+rootProject.name = 'gradle-sample'
+
+
