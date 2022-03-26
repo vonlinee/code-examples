@@ -148,7 +148,7 @@ subprojects {
         testAnnotationProcessor "${lib.lombok}"
         testCompileOnly "${lib.lombok}"
         testImplementation "${lib["assertj-core"]}"
-        testImplementation "${lib["junit-jupiter-api"]}"
+        testImplementation "org.junit.jupiter:junit-jupiter-api:5.8.2"
         testRuntimeOnly "${lib["junit-jupiter-engine"]}"
         testImplementation "org.mockito:mockito-junit-jupiter:3.4.4"
         testImplementation "${lib["lagarto"]}"
@@ -264,7 +264,7 @@ subprojects {
                             def d = it
                             d.scope.text() == 'runtime' && project.configurations.findByName("implementation").allDependencies.find { dep ->
                                 dep.name == it.artifactId.text()
-                            }.each() {  
+                            }.each() {
                                 d.scope*.value = 'compile'
                                 d.appendNode('optional', true)
                             }

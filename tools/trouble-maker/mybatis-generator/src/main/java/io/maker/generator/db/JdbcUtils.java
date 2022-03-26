@@ -705,41 +705,26 @@ public final class JdbcUtils {
             this.adapted = adapted;
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public boolean acceptsURL(String url) throws SQLException {
             return adapted.acceptsURL(url);
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public Connection connect(String url, Properties info) throws SQLException {
             return adapted.connect(url, info);
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public int getMajorVersion() {
             return adapted.getMajorVersion();
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public int getMinorVersion() {
             return adapted.getMinorVersion();
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) throws SQLException {
             return adapted.getPropertyInfo(url, info);
