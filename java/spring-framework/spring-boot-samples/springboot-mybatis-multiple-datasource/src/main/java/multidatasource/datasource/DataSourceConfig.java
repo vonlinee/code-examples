@@ -18,7 +18,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 @Configuration
 // 配置mybatis的接口类放的地方
 // 在指定使用sqlSessionFactoryRef的情况下，这里有一个或多个的Spring的容器。经常我们会使用一个或多个的数据库.
-@MapperScan(basePackages = "multidatasource.mapper", sqlSessionFactoryRef = "SqlSessionFactory_prc")
+@MapperScan(basePackages = "multidatasource.mapper.*", sqlSessionFactoryRef = "SqlSessionFactory_business")
 public class DataSourceConfig implements InitializingBean {
 
     @Bean(name = "ds_business")
@@ -69,9 +69,7 @@ public class DataSourceConfig implements InitializingBean {
         return bean.getObject();
     }
 
-    @Bean("SqlSessionTemplate_prc")
-    // 表示这个数据源是默认数据源
-    @Primary
+    @Bean("SqlSessionTemplate_prc") // 表示这个数据源是默认数据源
     public SqlSessionTemplate test1sqlsessiontemplate(
             @Qualifier("SqlSessionFactory_prc") SqlSessionFactory sessionfactory) {
         return new SqlSessionTemplate(sessionfactory);
@@ -103,6 +101,6 @@ public class DataSourceConfig implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println(this);
+
     }
 }

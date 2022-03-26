@@ -1,0 +1,29 @@
+# 默认数据源
+
+spring:
+  datasource:
+    druid:
+      # 数据库访问配置, 使用druid数据源
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf8
+      username: root
+      password: 123456
+
+  # 其他数据源
+
+custom:
+  datasource:
+    druid:
+      type: com.alibaba.druid.pool.DruidDataSource
+      names: fishlog,fishgame
+      fishlog:
+        driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/test1?useUnicode=true&characterEncoding=utf8
+        username: root
+        password: 123456
+      fishgame:
+        driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/test2?useUnicode=true&characterEncoding=utf8
+        username: root
+        password: 123456

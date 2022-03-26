@@ -9,6 +9,8 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component("spring-utils")
 public class SpringUtils implements ApplicationContextAware, EnvironmentAware {
 
@@ -49,6 +51,6 @@ public class SpringUtils implements ApplicationContextAware, EnvironmentAware {
     }
 
     public static String findConfigXml(Class<?> clazz, String filename) {
-        return clazz.getResource(filename).toExternalForm();
+        return Objects.requireNonNull(clazz.getResource(filename)).toExternalForm();
     }
 }
