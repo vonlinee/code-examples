@@ -10,10 +10,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
- * 切换数据源的切面Advice，对应的切点？
+ * 切换数据源的切面Advice，对应的切点
  */
 @Aspect
-@Order(-1)// 保证该AOP在@Transactional之前执行
+@Order(-1) // 保证该AOP在@Transactional之前执行
 @Component
 public class DynamicDataSourceAspect {
 
@@ -35,5 +35,4 @@ public class DynamicDataSourceAspect {
         logger.debug("Revert DataSource : {} > {}", ds.name(), point.getSignature());
         DynamicDataSourceContextHolder.clearDataSourceType();
     }
-
 }

@@ -1,6 +1,7 @@
 package code.example.activemq;
 
 import javax.jms.JMSException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,18 +11,16 @@ public class Main {
 
     public static void main(String[] args) throws JMSException {
 
-        ArrayList<Map<String, Object>> list = new ArrayList<>();
-
-        for (int i = 0; i < 4; i++) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("k1", "v1");
-            map.put("k2", "v2");
-            list.add(map);
+        File dir = new File("C:\\Users\\vonline\\Pictures\\Wallpaper");
+        File[] files = dir.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            int index = files[i].getName().lastIndexOf(".");
+            String newFileName = files[i].getName().substring(index);
+            File newFile = new File(dir.getAbsolutePath() + File.separator + i + newFileName);
+            boolean b = files[i].renameTo(newFile);
+            if (b) {
+                System.out.println("===========");
+            }
         }
-
-        list.toString();
-
-        System.out.println(list);
-
     }
 }
