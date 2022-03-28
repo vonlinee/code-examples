@@ -76,6 +76,49 @@ mysql> SELECT count(*), count(1), count(t.col_a), count(NULL) FROM t;
 2.
 
 
+MySQL针对Where子句的优化
+1.当没加GROUP BY或者聚合函数时，Having会和Where合并
+
+
+
+10.通过尝试所有的可能性来找到连接表的最佳连接组合。如果ORDER BY和GROUP BY子句中的所有列都来自同一个表，则在联接时首选该表
+
+mysql> EXPLAIN
+SELECT * FROM customer A
+		LEFT JOIN address B ON A.address_id = B.address_id
+GROUP BY B.phone
+ORDER BY B.phone, B.location;
++----+-------------+-------+------------+--------+---------------+---------+---------+---------------------------------+------+----------+---------------------------------+
+| id | select_type | table | partitions | type   | possible_keys | key     | key_len | ref                             | rows | filtered | Extra                           |
++----+-------------+-------+------------+--------+---------------+---------+---------+---------------------------------+------+----------+---------------------------------+
+|  1 | SIMPLE      | A     | NULL       | ALL    | NULL          | NULL    | NULL    | NULL                            |  599 |   100.00 | Using temporary; Using filesort |
+|  1 | SIMPLE      | B     | NULL       | eq_ref | PRIMARY       | PRIMARY | 2       | mysql_optimization.A.address_id |    1 |   100.00 | NULL                            |
++----+-------------+-------+------------+--------+---------------+---------+---------+---------------------------------+------+----------+---------------------------------+
+2 rows in set (0.06 sec)
+
+11.如果存在ORDER BY子句和其他GROUP BY子句，或者如果ORDER BY或GROUP BY包含联接队列中第一个表以外的表中的列，则会创建一个临时表
+如第10点中sql出现Using temporary
+
+12.如果使用SQL_SMALL_RESULT修饰符，MySQL将使用内存中的临时表
+
+
+13.每个表的索引会被查询，除非MySQL优化器认为表扫描更有效率，否则MySQL会从查询的索引中选择一个最佳的索引来使用
+曾经，表扫描是基于最佳索引是否跨越了表的30%以上而使用的(使用索引的数据占表总数据的比例比较大时，此时认为全表扫描比较适合)，
+但固定的百分比不再决定使用索引还是扫描的选择。优化器现在更加复杂，它的估计基于其他因素，如表大小、行数和I/O Block大小
+
+14.在某些情况下，MySQL甚至可以在不查阅数据文件的情况下从索引中读取行。如果索引中使用的所有列都是数字，则只有索引树用于解析查询
+
+15.在输出每一行之前，将跳过与HAVING子句不匹配的行
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,100 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: sharding-sphere
+## 配置多数据源
+sharding:
+  jdbc:
+    datasource:
+      names: mydb,mydb0,mydb1
+      mydb:
+        type: com.zaxxer.hikari.HikariDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        jdbcUrl: jdbc:mysql://local.mysql.com:3306/mydb?tinyInt1isBit=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false
+        username: root
+        password: de1lA8D7zl
+        connection-test-query: SELECT 1 FROM DUAL
+        minimum-idle: 3
+        maximum-pool-size: 24
+        pool-name: ${spring.application.name}-CP
+        idle-timeout: 10000
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        leakDetectionThreshold: 6000
+        autoCommit: true
+
+      mydb0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        jdbcUrl: jdbc:mysql://local.mysql.com:3306/mydb0?tinyInt1isBit=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false
+        username: root
+        password: de1lA8D7zl
+        connection-test-query: SELECT 1 FROM DUAL
+        minimum-idle: 3
+        maximum-pool-size: 24
+        pool-name: ${spring.application.name}-CP
+        idle-timeout: 10000
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        leakDetectionThreshold: 6000
+        autoCommit: true
+
+      mydb1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        jdbcUrl: jdbc:mysql://local.mysql.com:3306/mydb1?tinyInt1isBit=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false
+        username: root
+        password: de1lA8D7zl
+        connection-test-query: SELECT 1 FROM DUAL
+        minimum-idle: 3
+        maximum-pool-size: 24
+        pool-name: ${spring.application.name}-CP
+        idle-timeout: 10000
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        leakDetectionThreshold: 6000
+        autoCommit: true
+
+    config:
+      sharding:
+        tables:
+          student:
+            actual-data-nodes: mydb$->{0..1}.student_$->{0..2}
+            table-strategy:
+              inline:
+                sharding-column: id
+                algorithm-expression: student_$->{id%3}
+            database-strategy:
+              inline:
+                sharding-column: id
+                algorithm-expression: mydb$->{id%2}
+            # 自增列名称，缺省表示不使用自增主键生成器
+            key-generator-column-name: id
+          teacher:
+            actual-data-nodes: mydb$->{0..1}.teacher_$->{0..1}
+            table-strategy:
+              inline:
+                sharding-column: id
+                algorithm-expression: teacher_$->{id%2}
+            database-strategy:
+              inline:
+                sharding-column: id
+                algorithm-expression: mydb$->{id%2}
+            # 自增列名称，缺省表示不使用自增主键生成器
+            key-generator-column-name: id
+        ## 设置默认的数据源
+        default-data-source-name: mydb
+      props:
+        sql:
+          show: true
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+  mapperLocations: classpath*:mappers/*.xml
