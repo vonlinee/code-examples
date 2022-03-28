@@ -1,0 +1,112 @@
+[
+  {
+    "children": [
+      {
+        "caption": "全部大写",
+        "command": "upper_all",
+        "id": "1"
+      },
+      {
+        "caption": "大写首字母",
+        "command": "upper_all",
+        "id": "1"
+      },
+      {
+        "caption": "全部小写",
+        "command": "upper_all",
+        "id": "1"
+      },
+      {
+        "caption": "小写首字母",
+        "command": "upper_all",
+        "id": "1"
+      },
+      {
+        "caption": "下划线变驼峰",
+        "command": "snake_to_camel",
+        "id": "1"
+      },
+      {
+        "caption": "驼峰变下划线",
+        "command": "camel_to_snake",
+        "id": "1"
+      },
+      {
+        "caption": "去除所有空格",
+        "command": "remove_blank",
+        "id": "2"
+      },
+      {
+        "caption": "左右去除空格",
+        "command": "strip_blank",
+        "id": "3"
+      },
+      {
+        "caption": "左去除空格",
+        "command": "remove_left_blank",
+        "id": "4"
+      },
+      {
+        "caption": "右去除空格",
+        "command": "remove_right_blank",
+        "id": "5"
+      },
+      {
+        "caption": "去除空行",
+        "command": "remove_blank_line",
+        "id": "5"
+      }
+    ],
+    "caption": "分行处理文本-行选",
+    "id": "sexample"
+  },
+  {
+    "caption": "分行处理文本-列选",
+    "id": "sexample",
+    "children": [
+		{
+			"id": "111",
+			"command": "test_sublime_api",
+			"caption": "测试Sublime API"
+		}
+    ]
+  },
+  {
+    "caption": "MyBatis工具",
+    "id": "mybatis_xml",
+    "children": [
+      {
+        "id": "mybatis_111",
+        "command": "mybatis_xml_test_column",
+        "caption": "XML字段判空条件查询"
+      },
+      {
+        "id": "mybatis_111",
+        "command": "mybatis_xml_update_column",
+        "caption": "XML字段判空条件更新"
+      },
+    ]
+  },
+  {
+    "caption": "格式化文本",
+    "id": "beautify_text",
+    "children": [
+      {
+        "id": "beautify_text_0001",
+        "command": "beautify_text",
+        "caption": "格式化文本"
+      }
+    ]
+  },
+  {
+    "caption": "其他工具",
+    "id": "other tools",
+    "children": [
+      {
+        "id": "gradle_to_maven",
+        "command": "gradle_to_maven",
+        "caption": "Gradle坐标转换为Maven坐标"
+      }
+    ]
+  },
+]

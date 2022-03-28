@@ -113,27 +113,29 @@ ORDER BY B.phone, B.location;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Cause: com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException: Lock wait timeout exceeded; try restarting transaction
+
+
+
+https://dev.mysql.com/doc/refman/5.7/en/range-optimization.html
+
+
+范围条件查询
+1.对于BTree和Hash索引，使用常量值通过=, <=>, IN(), IS NULL, or IS NOT NULL等操作符于索引部分比较是范围条件
+2.对于>, <, >=, <=, BETWEEN, !=, <>等操作符，如果是BTree索引，常量值比较时也是范围条件
+3.所有索引类型，多个范围条件用OR或AND连接，仍然是范围条件
+
+
+常量值的定义
+1.常量字符串
+2.来自同一联接的常量表(const table)或系统表(system table)的列
+3.不相关的子查询
+
+比如
+
+
+
+
 
 
 
