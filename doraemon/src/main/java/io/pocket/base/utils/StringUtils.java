@@ -9426,5 +9426,30 @@ public final class StringUtils {
         }
         return builder.toString();
     }
+
+    /**
+     * 同时包含多个子字符串 
+     **/
+    public static boolean containsAll(String target, String ... subStrList) {
+        for (String subStr : subStrList) {
+            if(!target.contains(subStr)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 包含任意一个即可
+     **/
+    public static boolean containsAny(String target, String ... subStrList) {
+        int i = 0;
+        for (String subStr : subStrList) {
+            if(target.contains(subStr)) {
+                i++;
+            }
+        }
+        return i > 0;
+    }
 }
 

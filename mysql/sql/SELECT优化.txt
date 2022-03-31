@@ -117,6 +117,8 @@ Cause: com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException: Lock wait
 
 
 
+二：范围优化
+
 https://dev.mysql.com/doc/refman/5.7/en/range-optimization.html
 
 
