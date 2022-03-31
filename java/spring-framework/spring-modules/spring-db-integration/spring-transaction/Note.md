@@ -60,13 +60,53 @@ hibernate.cfg.xml配置了下面语句后：
 
 配置改成：
 
+```xml
 <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+```
 
 MySQL5Dialect： An SQL dialect for MySQL 5.x specific features.
 
 
 
-![image-20220228145927044](D:\Projects\Github\code-example\spring-samples\spring-modules\spring-db-integration\spring-transaction-managament\images\image-20220228145927044.png)
+![image-20220228145927044](\images\异常调用栈.png)
+
+
+
+
+
+
+
+# 隔离级别
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 事务传播
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

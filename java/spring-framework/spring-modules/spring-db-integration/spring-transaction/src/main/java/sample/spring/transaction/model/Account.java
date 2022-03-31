@@ -16,14 +16,14 @@ import lombok.Setter;
 @Table(name = "t_account")
 public class Account {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ACCOUNT_ID")
-	private Integer accountId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ACCOUNT_ID")
+    private Integer accountId;
 
-	@Column(name = "USER_ID")
-	private Integer userId;
+    @Column(name = "USER_ID")
+    private Integer userId;
 
-	@Column(name = "BALANCE")
-	private Integer balance;
+    @Column(name = "BALANCE")
+    private Integer balance;
 }

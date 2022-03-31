@@ -1,6 +1,6 @@
 package io.maker.base.utils;
 
-public class Array<T> {
+public final class Array<T> {
 
     private final int order;
 

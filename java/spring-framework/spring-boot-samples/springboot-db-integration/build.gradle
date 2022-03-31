@@ -1,0 +1,33 @@
+apply plugin: 'java'
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenLocal()
+    maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+    mavenCentral()
+}
+
+//设置commons-pool2版本为'2.6.1'，Spring依赖的是2.6.2
+ext {
+    lib_version = [
+            commons_pool2 = "2.6.1",
+            springboot = "2.1.6.RELEASE"
+    ]
+}
+
+subprojects {
+
+    dependencies {
+        
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+}
+
+test {
+    useJUnitPlatform()
+}
