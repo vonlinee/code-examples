@@ -2,6 +2,7 @@ package sample.java.multithread;
 
 import java.lang.reflect.Field;
 import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 import sun.misc.Unsafe;
 import sun.misc.VM;
@@ -19,6 +20,10 @@ public class TestUnsafe {
 //            long l = unsafe.allocateMemory(200);
 //            System.out.println(l / 1024 / 1024);
 //        });
+    	
+    	optionalUnsafe().ifPresent(unsafe -> {
+    		long long1 = unsafe.getLong(10);
+    	});
     	
     }
 
@@ -60,6 +65,18 @@ public class TestUnsafe {
             Field field = Unsafe.class.getDeclaredField("theUnsafe");
             field.setAccessible(true);
             return (Unsafe) field.get(null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    @SuppressWarnings("restriction")
+	public static Optional<Unsafe> optionalUnsafe() {
+        try {
+            Field field = Unsafe.class.getDeclaredField("theUnsafe");
+            field.setAccessible(true);
+            return Optional.ofNullable((Unsafe) field.get(null));
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }

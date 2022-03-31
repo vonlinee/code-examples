@@ -1,4 +1,4 @@
-package sample.java.multithread.juc;
+package sample.java.multithread.juc.lock;
 
 public interface SpinLock {
 

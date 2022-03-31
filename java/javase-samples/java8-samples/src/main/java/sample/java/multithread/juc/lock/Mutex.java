@@ -1,7 +1,8 @@
-package sample.java.multithread.juc;
+package sample.java.multithread.juc.lock;
 
 //抄自sun.awt.Mutex
 public class Mutex {
+	
 	private boolean locked;
 	private Thread owner;
 

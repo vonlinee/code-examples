@@ -1,4 +1,4 @@
-package sample.java.multithread.juc;
+package sample.java.multithread.juc.aqs;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

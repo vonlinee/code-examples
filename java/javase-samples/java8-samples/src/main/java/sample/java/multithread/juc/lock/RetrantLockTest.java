@@ -1,4 +1,4 @@
-package sample.java.multithread.juc;
+package sample.java.multithread.juc.lock;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
