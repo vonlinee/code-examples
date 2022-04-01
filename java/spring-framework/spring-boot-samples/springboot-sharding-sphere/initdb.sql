@@ -4,7 +4,6 @@ CREATE DATABASE IF NOT EXISTS mydb default charset utf8 COLLATE utf8_general_ci;
 CREATE DATABASE IF NOT EXISTS mydb0 default charset utf8 COLLATE utf8_general_ci;
 CREATE DATABASE IF NOT EXISTS mydb1 default charset utf8 COLLATE utf8_general_ci;
 
-
 -- 2、创建表  （仅仅为了演示功能，仅定义3个表，user 、student、teacher）
 use mydb;
 CREATE TABLE `user` (

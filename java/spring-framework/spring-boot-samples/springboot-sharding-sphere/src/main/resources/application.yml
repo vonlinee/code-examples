@@ -1,8 +1,16 @@
 server:
-  port: 8081
+  port: 8888
 spring:
   application:
     name: sharding-sphere
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: create
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        format_sql: true
+    show-sql: true
 ## 配置多数据源
 sharding:
   jdbc:
@@ -11,9 +19,9 @@ sharding:
       mydb:
         type: com.zaxxer.hikari.HikariDataSource
         driverClassName: com.mysql.jdbc.Driver
-        jdbcUrl: jdbc:mysql://local.mysql.com:3306/mydb?tinyInt1isBit=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false
+        jdbcUrl: jdbc:mysql://localhost:3306/mydb?createDatabaseIfNotExist=true&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false
         username: root
-        password: de1lA8D7zl
+        password: 123456
         connection-test-query: SELECT 1 FROM DUAL
         minimum-idle: 3
         maximum-pool-size: 24
@@ -28,9 +36,9 @@ sharding:
       mydb0:
         type: com.zaxxer.hikari.HikariDataSource
         driverClassName: com.mysql.jdbc.Driver
-        jdbcUrl: jdbc:mysql://local.mysql.com:3306/mydb0?tinyInt1isBit=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false
+        jdbcUrl: jdbc:mysql://localhost:3306/mydb0?createDatabaseIfNotExist=true&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false
         username: root
-        password: de1lA8D7zl
+        password: 123456
         connection-test-query: SELECT 1 FROM DUAL
         minimum-idle: 3
         maximum-pool-size: 24
@@ -45,9 +53,9 @@ sharding:
       mydb1:
         type: com.zaxxer.hikari.HikariDataSource
         driverClassName: com.mysql.jdbc.Driver
-        jdbcUrl: jdbc:mysql://local.mysql.com:3306/mydb1?tinyInt1isBit=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false
+        jdbcUrl: jdbc:mysql://localhost:3306/mydb1?createDatabaseIfNotExist=true&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false
         username: root
-        password: de1lA8D7zl
+        password: 123456
         connection-test-query: SELECT 1 FROM DUAL
         minimum-idle: 3
         maximum-pool-size: 24

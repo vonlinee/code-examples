@@ -1,7 +1,6 @@
 package io.maker.base.utils;
 
 import org.apache.commons.lang3.*;
-
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.text.Normalizer;
@@ -2962,7 +2961,7 @@ public final class StringUtils {
      * @since 3.0 Changed signature from indexOfDifference(String...) to indexOfDifference(CharSequence...)
      */
     public static int indexOfDifference(final CharSequence... css) {
-        if (ArrayUtils.getLength(css) <= 1) {
+        if (css.length <= 1) {
             return INDEX_NOT_FOUND;
         }
         boolean anyStringNull = false;

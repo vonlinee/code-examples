@@ -40,9 +40,7 @@ public class TestService {
         student.setId(id);
         student.setName("zhansgan" + id);
         student.setAddress("江西" + id);
-
         int count = studentMapper.insertSelective(student);
-
         LOGGER.info("保存STUDENT结果：" + (count > 0 ? true : false));
     }
 
