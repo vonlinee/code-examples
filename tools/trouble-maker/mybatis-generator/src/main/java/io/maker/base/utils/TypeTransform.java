@@ -3,7 +3,7 @@ package io.maker.base.utils;
 /**
  * 类型转换工具类
  */
-public class TypeTransform {
+public final class TypeTransform {
 
     /**
      * 转为String类型
@@ -23,8 +23,21 @@ public class TypeTransform {
         try {
             return (String) obj;
         } catch (ClassCastException exception) {
-            return "";
+            throw exception;
         }
+    }
+
+    /**
+     * 打印日志信息
+     * @param srcType
+     * @param destType
+     * @return
+     */
+    private static UnsupportedOperationException reportException(Object srcType, Class<?> destType) {
+        if (srcType == null) {
+            return new UnsupportedOperationException(String.format("[%s]=>[%s]", "null", destType.toString()));
+        }
+        return new UnsupportedOperationException(String.format("[%s]=>[%s]", srcType.getClass().toString(), destType.toString()));
     }
 
     public static Integer toInterger(Object obj, Integer defaultValue) {

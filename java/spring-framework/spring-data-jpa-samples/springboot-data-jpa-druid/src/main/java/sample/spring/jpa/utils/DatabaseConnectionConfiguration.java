@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * jdbc:mysql://localhost:3306/jpa_learn?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
  */
-public class DataSourceConnConfiguration {
+public class DatabaseConnectionConfiguration {
 
 	// 基本连接信息
 	private String dbType = "mysql";
@@ -19,9 +19,7 @@ public class DataSourceConnConfiguration {
 	private String serverTimezone = "UTC";
 	private String characterEncoding = "utf8";
 
-	
-	
-	private DataSourceConnConfiguration(Builder builder) {
+	private DatabaseConnectionConfiguration(Builder builder) {
 		this.dbType = builder.dbType;
 		this.host = builder.host;
 		this.port = builder.port;
@@ -36,20 +34,20 @@ public class DataSourceConnConfiguration {
 	public String getUrl() {
 		return determineDbProtoctl() + "://" + host + ":" + port + "/" + databaseName;
 	}
-	
+
 	private String determineDbProtoctl() {
 		String prefix = "jdbc:";
 		return prefix + this.dbType;
 	}
-	
+
 	public static Builder builder() {
 		return new Builder();
 	}
 
 	public static final class Builder {
-		
+
 		private Map<String, Object> options;
-		
+
 		private String dbType = "mysql";
 		private String host = "localhost";
 		private int port = 3306;
@@ -108,8 +106,8 @@ public class DataSourceConnConfiguration {
 			return this;
 		}
 
-		public DataSourceConnConfiguration build() {
-			return new DataSourceConnConfiguration(this);
+		public DatabaseConnectionConfiguration build() {
+			return new DatabaseConnectionConfiguration(this);
 		}
 	}
 }

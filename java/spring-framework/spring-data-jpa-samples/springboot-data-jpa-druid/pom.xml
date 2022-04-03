@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.10</version>
+        <version>2.2.10.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>sample.spring.jpa</groupId>
-    <artifactId>spring-data-jpa-hibernate</artifactId>
+    <artifactId>springboot-data-jpa-druid</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-data-jpa-hibernate</name>
     <description>spring-data-jpa-hibernate</description>
@@ -49,11 +50,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!-- alibaba的druid数据库连接池 -->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid-spring-boot-starter</artifactId>
-			<version>1.1.9</version>
-		</dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.9</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -64,5 +65,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'junit:junit:4.13.1'
+    implementation 'junit:junit:4.13.2'
     implementation "${lib.'mybatis-plus'}"
     implementation "${lib.velocity}"
     implementation "${lib.freemarker}"
@@ -34,6 +34,9 @@ dependencies {
     implementation 'commons-dbutils:commons-dbutils:1.7'
 
     testCompileOnly "org.jetbrains:annotations:22.0.0"
+
+// https://mvnrepository.com/artifact/com.alibaba/fastjson
+    implementation 'com.alibaba:fastjson:1.2.80'
 
 
     testImplementation "${lib.sqlserver}"

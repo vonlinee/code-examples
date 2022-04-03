@@ -8,12 +8,13 @@ import javax.persistence.Table;
 
 import lombok.Data;
 
-@Entity
 @Data
+@Entity
 @Table(name = "person")
 public class Person {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue
     private Long id;
 
