@@ -1,4 +1,4 @@
-package io.maker.base.lang;
+package io.maker.base.utils;
 
 import java.security.SecureRandom;
 import java.util.Random;
@@ -6,7 +6,7 @@ import java.util.Random;
 /**
  * 数学工具类
  */
-public final class Maths {
+public final class MathUtils {
 
     //随机算法
     public static final String RANDOM_ALGORITHM_1 = "SHA1PRNG";

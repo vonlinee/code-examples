@@ -8,7 +8,7 @@ import java.util.Map;
  * 抽象结果类
  * @param <T>
  */
-abstract class Result<T> implements Serializable {
+public abstract class Result<T> implements Serializable {
 
     private static final long serialVersionUID = 2819999455116368072L;
 
@@ -40,7 +40,7 @@ abstract class Result<T> implements Serializable {
      * 展示结果，等同于toString方法
      * @return JSON字符串或者其他比较好的格式
      */
-    protected abstract String show();
+    protected abstract String explain();
 
     protected final String wrapQuotation(String str) {
         if (!str.contains("\"")) {

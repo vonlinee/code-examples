@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 /**
- * the result of operation
+ * the result of operation 操作结果，不携带数据
  * @param <T>
  * @author vonline
  */
@@ -40,7 +40,7 @@ public class OptResult<T> extends Result<T> implements Serializable {
     }
 
     @Override
-    public String show() {
+    public String explain() {
         StringJoiner sj = new StringJoiner(",", "{", "}");
         sj.add("\"timestamp\":\"" + timestamp + "\"");
         sj.add("\"code\":'" + description.code + "'");
@@ -71,10 +71,10 @@ public class OptResult<T> extends Result<T> implements Serializable {
      * @author line
      */
     public static class Builder<T> {
-        int code;
-        String message = "";
-        T data;
-        ResultDescription description;
+        private int code;
+        private String message = "";
+        private T data;
+        private ResultDescription description;
 
         private Builder() {
         }

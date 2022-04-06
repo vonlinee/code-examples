@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
  * is开头的均返回boolean
  * no开头的除了进行校验之外，如果校验通过则返回被校验对象
  */
-
 public final class Validator {
 
     private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter
@@ -558,7 +557,6 @@ public final class Validator {
         notNull(list);
         return list.isEmpty();
     }
-
 
     @SuppressWarnings("unchecked")
     public static <T> boolean isEmpty(T... array) {

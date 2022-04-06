@@ -7,7 +7,7 @@ public class BaseResult extends Result<String> {
     }
 
     @Override
-    protected String show() {
+    protected String explain() {
         return "null";
     }
 }

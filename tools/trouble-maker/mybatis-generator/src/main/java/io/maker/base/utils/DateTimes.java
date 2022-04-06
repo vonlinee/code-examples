@@ -107,7 +107,12 @@ public class DateTimes {
         return dt;
     }
 
-    public LocalDateTime parse(Object dateTime) {
+    /**
+     * 解析对象类型为LocalDateTime类型
+     * @param dateTime
+     * @return
+     */
+    public static LocalDateTime parse(Object dateTime) {
         if (dateTime == null) {
             throw new NullPointerException();
         }

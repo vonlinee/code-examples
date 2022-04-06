@@ -24,7 +24,7 @@ public final class PageResult<T> extends Result<T> implements Serializable {
     }
 
     @Override
-    protected String show() {
+    protected String explain() {
         return null;
     }
 

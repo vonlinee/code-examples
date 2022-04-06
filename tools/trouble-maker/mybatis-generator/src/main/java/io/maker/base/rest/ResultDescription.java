@@ -1,5 +1,6 @@
 package io.maker.base.rest;
 
+import java.io.Serializable;
 import java.util.function.Predicate;
 
 /**
@@ -8,10 +9,10 @@ import java.util.function.Predicate;
  * TODO 重用单个ResultDescription对象,可能导致并发问题
  * @author line
  */
-public abstract class ResultDescription {
+public abstract class ResultDescription implements Serializable {
 
     private static final Integer UNKNOWN_CODE = -128; //未知编码
-    private static final String UNKNOWN_MESSAGE = ""; //未知编码
+    private static final String UNKNOWN_MESSAGE = "NONE"; //未知编码
 
     protected int code;
     protected String message;
