@@ -2,7 +2,6 @@ package com.lontyu.sharding.shardingsphere.utils;
 
 public class StringUtils {
 	
-	
 	public static boolean containsAll(String target, String... subStrings) {
 		if (target == null || target.length() == 0 || subStrings.length == 0) {
 			return false;

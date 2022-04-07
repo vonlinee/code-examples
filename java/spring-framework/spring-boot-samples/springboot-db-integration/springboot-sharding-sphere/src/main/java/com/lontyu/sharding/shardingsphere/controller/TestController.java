@@ -36,7 +36,6 @@ public class TestController {
     @RequestMapping(value = "/003/{id}", method = RequestMethod.GET)
     public String test03(@PathVariable("id") int id) {
         testService.saveUser(id);
-
         return "ok-03，库名：mydb,表名：user";
     }
 

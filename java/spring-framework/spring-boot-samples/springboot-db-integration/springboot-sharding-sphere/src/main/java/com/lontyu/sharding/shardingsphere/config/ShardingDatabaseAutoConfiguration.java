@@ -38,8 +38,6 @@ public class ShardingDatabaseAutoConfiguration {
 		factory.setDataSource(dataSource);
 		LOGGER.info("Inject DataSource :=> " + dataSource);
 		
-		
-		
 		if (this.properties.getConfigLocation() != null) {
 			factory.setConfigLocation(this.resourceLoader.getResource(this.properties.getConfigLocation()));
 		}
