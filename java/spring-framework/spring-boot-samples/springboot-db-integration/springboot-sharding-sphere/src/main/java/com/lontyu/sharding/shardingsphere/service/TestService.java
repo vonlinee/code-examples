@@ -11,11 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * @description:
- * @author: xiaoZongjin
- * @create: 2019-09-23
- */
 @Service
 public class TestService {
 
@@ -32,7 +27,6 @@ public class TestService {
 
     /**
      * 保存 student 结果
-     *
      * @param id
      */
     public void saveStu(int id) {
@@ -54,9 +48,7 @@ public class TestService {
         user.setId(id);
         user.setName("zhansgan" + id);
         user.setAge(2 + id);
-
         int count = userMapper.insertSelective(user);
-
         LOGGER.info("保存USER结果：" + (count > 0 ? true : false));
     }
 

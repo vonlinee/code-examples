@@ -4,11 +4,6 @@ import com.lontyu.sharding.shardingsphere.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * @description: 测试控制器
- * @author: xiaoZongjin
- * @create: 2019-09-23
- */
 @RequestMapping("/test")
 @RestController
 public class TestController {
@@ -22,7 +17,8 @@ public class TestController {
 
     @Autowired
     TestService testService;
-
+    
+    // localhost:8888/test/001/1
     @GetMapping(value = "/001/{id}")
     public String test01(@PathVariable("id") int id) {
         testService.saveStu(id);
@@ -44,26 +40,17 @@ public class TestController {
         return "ok-03，库名：mydb,表名：user";
     }
 
-
-    /**
-     * 组装返回信息
-     *
-     * @param name
-     * @param id
-     * @param type
-     * @return
-     */
     private String returnDbTableInfo(String name, int id, String type) {
         StringBuffer sb = new StringBuffer();
         sb.append(name + ",库名：mydb" + id % DB_NUM);
         String tableName = "";
+        // 分片策略
         if ("student".equals(type)) {
             tableName = "student_" + id % TB_STUDENT_NUM;
         } else {
             tableName = "teacher_" + id % TB_TEACHER_NUM;
         }
         sb.append(",表名：" + tableName);
-
         return sb.toString();
     }
 }

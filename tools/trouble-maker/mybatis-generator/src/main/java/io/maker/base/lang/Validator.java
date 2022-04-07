@@ -101,6 +101,12 @@ public final class Validator {
             throw new IllegalArgumentException(DEFAULT_IS_NULL_EX_MESSAGE);
         }
     }
+    
+    public static <T> void whenNull(final T obj, String message) {
+        if (obj == null) {
+            throw new IllegalArgumentException(message);
+        }
+    }
 
     // Null Check
     // not开头的会进行校验，校验通过则原样返回，不通过则抛出相应异常
@@ -571,6 +577,10 @@ public final class Validator {
 
     public static <T> boolean isNullOrEmpty(final CharSequence sequence) {
         return sequence == null || sequence.length() == 0;
+    }
+    
+    public static <T> boolean hasLength(final CharSequence sequence) {
+        return !isNullOrEmpty(sequence);
     }
 
     @SuppressWarnings("unchecked")

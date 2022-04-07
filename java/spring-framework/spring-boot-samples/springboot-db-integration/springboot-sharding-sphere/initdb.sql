@@ -6,6 +6,7 @@ CREATE DATABASE IF NOT EXISTS mydb1 default charset utf8 COLLATE utf8_general_ci
 
 -- 2、创建表  （仅仅为了演示功能，仅定义3个表，user 、student、teacher）
 use mydb;
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -15,6 +16,7 @@ CREATE TABLE `user` (
 
 ---------------------[mydb0]-------------------
 use mydb0;
+DROP TABLE IF EXISTS `student_0`;
 CREATE TABLE `student_0` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -22,6 +24,7 @@ CREATE TABLE `student_0` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `student_1`;
 CREATE TABLE `student_1` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -29,6 +32,7 @@ CREATE TABLE `student_1` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `student_2`;
 CREATE TABLE `student_2` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -36,6 +40,7 @@ CREATE TABLE `student_2` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `teacher_0`;
 CREATE TABLE `teacher_0` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -43,6 +48,7 @@ CREATE TABLE `teacher_0` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `teacher_1`;
 CREATE TABLE `teacher_1` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
