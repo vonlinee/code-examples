@@ -26,7 +26,7 @@ public class ShardingJdbcConfig {
         dataSource1.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource1.setUrl("jdbc:mysql://localhost:3306/order_db?useUnicode=true");
         dataSource1.setUsername("root");
-        dataSource1.setPassword("mysql");
+        dataSource1.setPassword("123456");
         Map<String, DataSource> result = new HashMap<>();
         result.put("m1", dataSource1);
         return result;

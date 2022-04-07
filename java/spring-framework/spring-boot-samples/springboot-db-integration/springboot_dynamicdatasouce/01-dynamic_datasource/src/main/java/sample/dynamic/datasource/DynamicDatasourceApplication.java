@@ -1,4 +1,4 @@
-package com.tuling.dynamic.datasource;
+package sample.dynamic.datasource;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@MapperScan("com.tuling.dynamic.datasource.mapper")
+@MapperScan("sample.dynamic.datasource.mapper")
 @EnableAspectJAutoProxy(exposeProxy = true) // 启动AOP
 @EnableTransactionManagement
 public class DynamicDatasourceApplication {

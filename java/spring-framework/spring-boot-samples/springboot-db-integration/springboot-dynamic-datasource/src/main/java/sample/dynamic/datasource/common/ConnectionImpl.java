@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-public class MyConnection implements Connection {
+public class ConnectionImpl implements Connection {
+
+    private boolean autoCommit;
 
     @Override
     public Statement createStatement() throws SQLException {
