@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.setamv.shardingsphere.starter.dao.OrderDetailByYearDAO">
+
+	<insert id="batchInsert" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+		insert into order_detail_by_year(order_id, order_date, product_id, quantity, price, creator_id)
+		<trim prefix="values">
+			<foreach collection="list" item="detail" separator=",">
+				(#{detail.orderId}, #{detail.orderDate}, #{detail.productId}, #{detail.quantity}, #{detail.price}, #{detail.creatorId})
+			</foreach>
+		</trim>
+	</insert>
+
+	<select id="listWithMain" parameterType="org.setamv.shardingsphere.starter.dto.OrderDetailQueryParamsDTO" resultType="org.setamv.shardingsphere.starter.dto.OrderDetailByYearDTO">
+		select d.`id`, d.`order_id`, d.`product_id`, d.`quantity`, d.`price`, d.`creator_id`, m.order_date, m.amount
+		from order_detail_by_year d
+		join order_main_by_year m on d.order_id = m.order_id
+		<trim prefix="where" prefixOverrides="and">
+			<if test="orderId != null">
+				and d.order_id = #{orderId}
+			</if>
+			<if test="productId != null">
+				and d.product_id = #{productId}
+			</if>
+			<if test="mainOrderDate != null">
+				and m.order_date = #{mainOrderDate}
+			</if>
+			<if test="detailOrderDate != null">
+				and d.order_date = #{detailOrderDate}
+			</if>
+			<if test="startMainOrderDate != null">
+				and m.order_date >= #{startMainOrderDate}
+			</if>
+			<if test="endMainOrderDate != null">
+				and m.order_date <![CDATA[ <= ]]> #{endMainOrderDate}
+			</if>
+			<if test="startDetailOrderDate != null">
+				and d.order_date >= #{startDetailOrderDate}
+			</if>
+			<if test="endDetailOrderDate != null">
+				and d.order_date <![CDATA[ <= ]]> #{endDetailOrderDate}
+			</if>
+		</trim>
+	</select>
+
+</mapper>

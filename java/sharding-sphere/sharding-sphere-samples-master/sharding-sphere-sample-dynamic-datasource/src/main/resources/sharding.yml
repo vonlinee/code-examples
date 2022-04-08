@@ -1,0 +1,57 @@
+shardingsphere:
+  sharding:
+    defaultDataSourceName: scm_ds0      # 默认的数据源
+    #      defaultTableStrategy:        # 默认的分表策略
+    tables:
+      t_purchase_order:
+        actual-data-nodes: scm_ds0.t_purchase_order_102_$->{2018..2021}, scm_ds1.t_purchase_order_101_$->{2018..2021}     # 后缀为：租户ID_订单日期的年份
+        key-generator:
+          column: order_id
+          type: SNOWFLAKE
+        database-strategy:
+          inline:
+            sharding-column: tenant_id
+            algorithm-expression: scm_ds$->{tenant_id % 2}    # 租户ID % 2 为分库规则
+        table-strategy:
+          complex:
+            sharding-columns: tenant_id, order_date
+            algorithm-class-name: org.setamv.shardingsphere.sample.dynamic.shardingsphere.algorithm.TenantYearComplexShardingAlgorithm
+      t_purchase_item:
+        actual-data-nodes: scm_ds0.t_purchase_item_102_$->{2018..2021}, scm_ds1.t_purchase_item_101_$->{2018..2021}    # 后缀为：租户ID_订单日期的年份
+        key-generator:
+          column: item_id
+          type: SNOWFLAKE
+        database-strategy:
+          inline:
+            sharding-column: tenant_id
+            algorithm-expression: scm_ds$->{tenant_id % 2}    # 租户ID % 2 为分库规则
+        table-strategy:
+          complex:
+            sharding-columns: tenant_id, order_date
+            algorithm-class-name: org.setamv.shardingsphere.sample.dynamic.shardingsphere.algorithm.TenantYearComplexShardingAlgorithm
+      t_operate_log:
+        # 操作日志2021年及以后的数据存主库，由动态路由实现，不需要Sharding JDBC配置规则，只需要配置2021年以前的数据分片规则
+        # 操作日志分库规则：日志时间的年份 % 2。
+        # 操作日志分表规则：日志月份分表。如：t_operate_log_2010_02
+        actual-data-nodes: scm_ds0.t_operate_log_2020_0$->{1..9}, scm_ds0.t_operate_log_2020_1$->{0..2}, scm_ds1.t_operate_log_2019_0$->{1..9}, scm_ds1.t_operate_log_2019_1$->{0..2}
+        key-generator:
+          column: id
+          type: SNOWFLAKE
+        database-strategy:
+          standard:
+            sharding-column: operate_time
+            precise-algorithm-class-name: org.setamv.shardingsphere.sample.dynamic.shardingsphere.algorithm.PreciseYearModShardingAlgorithm
+            range-algorithm-class-name: org.setamv.shardingsphere.sample.dynamic.shardingsphere.algorithm.RangeYearModShardingAlgorithm
+        table-strategy:
+          standard:
+            sharding-column: operate_time
+            precise-algorithm-class-name: org.setamv.shardingsphere.sample.dynamic.shardingsphere.algorithm.PreciseMonthShardingAlgorithm
+            range-algorithm-class-name: org.setamv.shardingsphere.sample.dynamic.shardingsphere.algorithm.RangeMonthShardingAlgorithm
+    binding-tables:   # 配置绑定表
+      - t_purchase_order, t_purchase_item
+    broadcastTables:  # 广播表
+      - t_tenant
+      - t_sys_config
+  props:
+    sql:
+      show: true

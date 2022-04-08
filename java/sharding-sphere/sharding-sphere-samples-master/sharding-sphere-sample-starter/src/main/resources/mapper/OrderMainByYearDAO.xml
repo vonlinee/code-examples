@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.setamv.shardingsphere.starter.dao.OrderMainByYearDAO">
+
+	<insert id="insert" parameterType="org.setamv.shardingsphere.starter.model.OrderMainByYear"
+		useGeneratedKeys="true" keyProperty="orderId">
+		insert into order_main_by_year(order_date, amount, creator_id)
+		values
+		(#{orderDate}, #{amount}, #{creatorId})
+	</insert>
+
+</mapper>

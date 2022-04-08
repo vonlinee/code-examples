@@ -8,6 +8,7 @@ import org.apache.shardingsphere.api.config.sharding.TableRuleConfiguration;
 import org.apache.shardingsphere.api.config.sharding.strategy.InlineShardingStrategyConfiguration;
 import org.apache.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -16,7 +17,7 @@ import java.util.Map;
 import java.util.Properties;
 
 // Java 配置 添加配置类：
-//@Configuration
+@Configuration
 public class ShardingJdbcConfig {
 
     // 配置分片规则
@@ -46,7 +47,7 @@ public class ShardingJdbcConfig {
     }
 
     // 定义sharding-Jdbc数据源
-    @Bean
+    // @Bean
     public DataSource getShardingDataSource() throws SQLException {
         ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
         shardingRuleConfig.getTableRuleConfigs().add(getOrderTableRuleConfiguration());
@@ -55,5 +56,7 @@ public class ShardingJdbcConfig {
         properties.put("sql.show", "true");
         return ShardingDataSourceFactory.createDataSource(createDataSourceMap(), shardingRuleConfig, properties);
     }
+
+
 }
 

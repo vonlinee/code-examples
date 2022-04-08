@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.setamv.shardingsphere.sample.dynamic.mapper.PurchaseItemMapper">
+
+	<insert id="batchInsert" parameterType="list" useGeneratedKeys="true" keyColumn="item_id">
+		INSERT INTO t_purchase_item(
+			order_id, tenant_id, order_date, product_id,
+			quantity, price, create_user_id, update_user_id
+		)
+		VALUES
+		<foreach collection="list" item="item" separator=", ">
+			(
+			#{item.orderId, jdbcType=BIGINT},
+			#{item.tenantId, jdbcType=BIGINT}, #{item.orderDate, jdbcType=DATE},
+			#{item.productId, jdbcType=VARCHAR}, #{item.quantity, jdbcType=DECIMAL},
+			#{item.price, jdbcType=DECIMAL}, #{item.createTime, jdbcType=TIMESTAMP},
+			<choose>
+				<when test="item.createUserId != null">
+					#{item.createUserId, jdbcType=BIGINT}, #{item.createUserId, jdbcType=BIGINT}
+				</when>
+				<otherwise>
+					0, 0
+				</otherwise>
+			</choose>
+			)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="org.setamv.shardingsphere.sample.dynamic.model.PurchaseItem">
+		UPDATE t_purchase_item
+		<trim prefix="SET" suffixOverrides="," prefixOverrides=",">
+			<if test="quantity != null">
+				quantity = #{quantity, jdbcType=DECIMAL},
+			</if>
+			<if test="price != null">
+				price = #{price, jdbcType=DECIMAL},
+			</if>
+			<if test="updateUserId != null">
+				update_user_id = #{updateUserId, jdbcType=BIGINT},
+			</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="and">
+			AND item_id = #{itemId, jdbcType=BIGINT}
+			<if test="tenantId != null">
+				AND tenant_id = #{tenantId, jdbcType=BIGINT}
+			</if>
+			<if test="orderDate != null">
+				AND order_date = #{itemOrderDate, jdbcType=DATE}
+			</if>
+		</trim>
+	</update>
+
+	<select id="query" parameterType="org.setamv.shardingsphere.sample.dynamic.dto.PurchaseItemQueryReqDTO"
+			resultType="org.setamv.shardingsphere.sample.dynamic.model.PurchaseItem">
+		SELECT i.*
+		FROM t_purchase_item i
+		<trim prefix="WHERE" prefixOverrides="and">
+			i.tenant_id = #{tenantId, jdbcType=BIGINT}
+			<if test="orderId != null">
+				AND i.order_id = #{orderId, jdbcType=BIGINT}
+			</if>
+			<if test="itemOrderDate != null">
+				AND i.order_date = #{itemOrderDate, jdbcType=DATE}
+			</if>
+			<if test="startItemOrderDate != null">
+				AND i.order_date >= #{startItemOrderDate, jdbcType=DATE}
+			</if>
+			<if test="endItemOrderDate != null">
+				AND i.order_date <![CDATA[ <= ]]> #{endItemOrderDate, jdbcType=DATE}
+			</if>
+		</trim>
+	</select>
+
+	<select id="queryWithOrder" parameterType="org.setamv.shardingsphere.sample.dynamic.dto.PurchaseItemQueryReqDTO"
+			resultType="org.setamv.shardingsphere.sample.dynamic.dto.PurchaseItemDTO">
+		SELECT i.*, o.supplier_name, o.purchaser_id
+		FROM t_purchase_item i
+		JOIN t_purchase_order o ON i.order_id = o.order_id
+		<trim prefix="WHERE" prefixOverrides="and">
+			i.tenant_id = #{tenantId, jdbcType=BIGINT}
+			<if test="orderId != null">
+				AND i.order_id = #{orderId, jdbcType=BIGINT}
+			</if>
+			<if test="itemOrderDate != null">
+				AND i.order_date = #{itemOrderDate, jdbcType=DATE}
+			</if>
+			<if test="startItemOrderDate != null">
+				AND i.order_date >= #{startItemOrderDate, jdbcType=DATE}
+			</if>
+			<if test="endItemOrderDate != null">
+				AND i.order_date <![CDATA[ <= ]]> #{endItemOrderDate, jdbcType=DATE}
+			</if>
+			<if test="orderDate != null">
+				AND o.order_date = #{orderDate, jdbcType=DATE}
+			</if>
+			<if test="startOrderDate != null">
+				AND o.order_date >= #{startOrderDate, jdbcType=DATE}
+			</if>
+			<if test="endOrderDate != null">
+				AND o.order_date <![CDATA[ <= ]]> #{endOrderDate, jdbcType=DATE}
+			</if>
+			<if test="supplierName != null">
+				AND o.supplier_name LIKE CONCAT('%', #{supplierName, jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+	</select>
+</mapper>

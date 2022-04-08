@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.setamv.shardingsphere.starter.dao.OrderPaymentDAO">
+
+	<insert id="batchInsert" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+		insert into order_payment(order_id, pay_amount, pay_time, creator_id)
+		<trim prefix="values">
+			<foreach collection="list" item="detail" separator=",">
+				(#{detail.orderId}, #{detail.payAmount}, #{detail.payTime}, #{detail.creatorId})
+			</foreach>
+		</trim>
+	</insert>
+
+	<select id="getWithMain" parameterType="org.setamv.shardingsphere.starter.dto.OrderIdConditionDTO" resultType="org.setamv.shardingsphere.starter.dto.OrderPaymentDTO">
+		select d.`id`, d.`order_id`, d.`pay_amount`, d.`pay_time`, d.`creator_id`, m.order_date, m.amount
+		from order_payment d
+		join order_main m on d.order_id = m.order_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<choose>
+				<when test="mainOrderId != null">
+					AND m.order_id = #{mainOrderId}
+				</when>
+				<when test="detailOrderId != null">
+					AND d.order_id = #{detailOrderId}
+				</when>
+				<otherwise>
+					AND 1 != 1
+				</otherwise>
+			</choose>
+		</trim>
+
+	</select>
+
+</mapper>

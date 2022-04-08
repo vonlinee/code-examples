@@ -1,0 +1,18 @@
+server:
+  port: 8080
+  context-path: /starter
+
+spring:
+  shardingsphere:
+    enabled: false
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+logging:
+  level:
+    org.setamv.shardingsphere.starter.dao: debug
+    root: info

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.setamv.shardingsphere.sample.dynamic.mapper.OperateLogMapper">
+
+	<insert id="insert" parameterType="org.setamv.shardingsphere.sample.dynamic.model.OperateLog">
+		INSERT INTO t_operate_log(
+			id, operate_time, log_content, operator_id
+			<if test="createUserId != null">, create_user_id</if>
+			<if test="createUserId != null">, update_user_id</if>
+		)
+		VALUES (
+			#{id, jdbcType=BIGINT}, #{operateTime, jdbcType=TIMESTAMP},
+			#{logContent, jdbcType=VARCHAR},
+			#{operatorId, jdbcType=BIGINT}
+			<if test="createUserId != null">, #{createUserId, jdbcType=BIGINT}</if>
+			<if test="createUserId != null">, #{createUserId, jdbcType=BIGINT}</if>
+		)
+	</insert>
+
+	<update id="update" parameterType="org.setamv.shardingsphere.sample.dynamic.model.OperateLog">
+		UPDATE t_operate_log
+		<trim prefix="SET" suffixOverrides="," prefixOverrides=",">
+			<if test="logContent != null">
+				log_content = #{logContent, jdbcType=VARCHAR},
+			</if>
+			<if test="updateUserId != null">
+				update_user_id = #{updateUserId, jdbcType=BIGINT},
+			</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="and">
+			AND id = #{id, jdbcType=BIGINT}
+			<if test="operateTime != null">
+				AND operate_time = #{operateTime, jdbcType=DATETIME}
+			</if>
+		</trim>
+	</update>
+
+	<select id="get" parameterType="org.setamv.shardingsphere.sample.dynamic.dto.OperateLogGetReqDTO"
+			resultType="org.setamv.shardingsphere.sample.dynamic.model.OperateLog">
+		SELECT log.*
+		FROM t_operate_log log
+		<trim prefix="WHERE" prefixOverrides="and">
+			AND log.id = #{id, jdbcType=BIGINT}
+			<if test="operateTime != null">
+				AND log.operate_time = #{operateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</select>
+
+	<select id="query" parameterType="org.setamv.shardingsphere.sample.dynamic.dto.OperateLogQueryReqDTO"
+			resultType="org.setamv.shardingsphere.sample.dynamic.model.OperateLog">
+		SELECT log.*
+		FROM t_operate_log log
+		<trim prefix="WHERE" prefixOverrides="and">
+			<if test="id != null">
+				AND log.id = #{id, jdbcType=BIGINT}
+			</if>
+			<if test="operateTime != null">
+				AND log.operate_time = #{operateTime, jdbcType=DATETIME}
+			</if>
+			<if test="logContent != null and logContent != ''">
+				AND log.log_content LIKE CONCAT('%', #{logContent, jdbcType=TIMESTAMP}, '%')
+			</if>
+			<if test="startOperateTime != null">
+				AND log.operate_time >= #{startOperateTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="endOperateTime != null">
+				AND log.operate_time <![CDATA[ <= ]]> #{endOperateTime, jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+	</select>
+</mapper>

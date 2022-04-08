@@ -1,0 +1,40 @@
+server:
+  port: 8080
+  context-path: /dynamic
+
+spring:
+  datasource:
+    scm-ds:
+      type: com.zaxxer.hikari.HikariDataSource
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbcUrl: jdbc:mysql://127.0.0.1:3306/scm?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+      username: root
+      password: root
+    scm-ds0:
+      type: com.zaxxer.hikari.HikariDataSource
+      driverClassName: com.mysql.jdbc.Driver
+      jdbcUrl: jdbc:mysql://127.0.0.1:3306/scm_0?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+      username: root
+      password: root
+    scm-ds1:
+      type: com.zaxxer.hikari.HikariDataSource
+      driverClassName: com.mysql.jdbc.Driver
+      jdbcUrl: jdbc:mysql://127.0.0.1:3306/scm_1?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+      username: root
+      password: root
+  shardingsphere:
+    enabled: false    # 因为要配置动态数据源，禁止shardingsphere-spring-boot-starter默认的配置类，手动创建动态数据源
+
+# 配置多数据源时，application.yml的有关mybatis的配置是失效的，因为他不知道配置哪一个数据源。
+# 该配置已经通过手动加载的方式设置到动态数据源的 SqlSessionFactory 中了，参考 org.setamv.shardingsphere.sample.dynamic.config.DynamicDataSourceConfig.mybatisProperties
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-handlers-package: org.setamv.shardingsphere.sample.dynamic.mybatis.typehandler
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+logging:
+  level:
+    org.setamv.shardingsphere.sample.dynamic.mapper: debug
+    root: info
