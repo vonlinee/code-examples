@@ -1,0 +1,32 @@
+
+
+
+SELECT
+	* 
+FROM
+	t_order_item A
+	LEFT JOIN t_product B ON A.prod_id = B.prod_id
+
+
+视图无法实现此功能
+
+
+
+import xxx.A.B;
+
+class A {
+	
+}
+
+
+io.seata.rm.datasource.ConnectionProxy
+
+
+com.ly.bucn.component.mybatis.MybatisSqlWrapperInterceptor
+org.springframework.beans.factory.config.BeanPostProcessor
+
+
+
+
+
+
