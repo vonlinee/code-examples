@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import org.apache.commons.dbutils.DbUtils;
 
-import code.example.jdbc.primary.JdbcUtils;
+import code.example.jdbc.utils.JdbcUtils;
 
 public class Main {
 	
