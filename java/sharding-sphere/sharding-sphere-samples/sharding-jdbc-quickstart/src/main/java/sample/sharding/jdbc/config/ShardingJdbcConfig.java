@@ -2,11 +2,14 @@ package sample.sharding.jdbc.config;
 
 
 import com.alibaba.druid.pool.DruidDataSource;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.shardingsphere.api.config.sharding.KeyGeneratorConfiguration;
 import org.apache.shardingsphere.api.config.sharding.ShardingRuleConfiguration;
 import org.apache.shardingsphere.api.config.sharding.TableRuleConfiguration;
 import org.apache.shardingsphere.api.config.sharding.strategy.InlineShardingStrategyConfiguration;
 import org.apache.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -57,6 +60,17 @@ public class ShardingJdbcConfig {
         return ShardingDataSourceFactory.createDataSource(createDataSourceMap(), shardingRuleConfig, properties);
     }
 
-
+    @Bean
+    SqlSessionFactory sqlSessionFactory(DataSource dataSource) {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(dataSource);
+        SqlSessionFactory sqlSessionFactory = null;
+        try {
+            sqlSessionFactory = sqlSessionFactoryBean.getObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sqlSessionFactory;
+    }
 }
 
