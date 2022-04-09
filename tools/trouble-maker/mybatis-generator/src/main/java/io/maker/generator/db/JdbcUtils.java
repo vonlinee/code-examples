@@ -1,22 +1,40 @@
 package io.maker.generator.db;
 
-import io.maker.generator.db.meta.resultset.ResultSetColumnMetadata;
-import io.maker.generator.db.meta.resultset.ResultSetHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static java.sql.DriverManager.registerDriver;
 
-import com.alibaba.druid.pool.ha.PropertiesUtils;
-
-import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.DriverPropertyInfo;
+import java.sql.ParameterMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.StringJoiner;
 
-import static java.sql.DriverManager.registerDriver;
+import javax.sql.DataSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.maker.generator.db.meta.resultset.ResultSetColumnMetadata;
+import io.maker.generator.db.meta.resultset.ResultSetHandler;
 
 /**
  * https://cloud.tencent.com/developer/article/1581184

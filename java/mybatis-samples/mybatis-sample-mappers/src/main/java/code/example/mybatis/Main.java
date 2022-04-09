@@ -3,8 +3,6 @@ package code.example.mybatis;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -29,12 +27,9 @@ public class Main {
         // org.apache.ibatis.session.defaults.DefaultSqlSession@2d3379b4
         
         EntityMapper mapper = session.getMapper(EntityMapper.class);
+       
+        mapper.queryAll();
         
-        
-        
-        int i = mapper.insertOne("2022-02-16");
-        
-        System.out.println(i);
         session.commit();
     }
 }

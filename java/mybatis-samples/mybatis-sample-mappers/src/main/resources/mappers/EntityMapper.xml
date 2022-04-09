@@ -7,6 +7,6 @@
 	</insert>
 
 	<select id="queryAll" resultType="map">
-		SELECT * FROM t1
+		SELECT * FROM t_student
 	</select>
 </mapper>

@@ -10,7 +10,6 @@ public class ResultSetColumnHandler implements ResultSetHandler<ResultSetColumn>
     public ResultSetColumn handle(ResultSet rs) throws SQLException {
         ResultSetColumn resultSetColumn = new ResultSetColumn();
         ResultSetMetaData rsmd = rs.getMetaData();
-        int columnCount = rsmd.getColumnCount();
         try {
             for (int i = 1; i <= rsmd.getColumnCount(); i++) {
                 resultSetColumn.addColumnMetadata(new ResultSetColumnMetadata(rsmd, i));

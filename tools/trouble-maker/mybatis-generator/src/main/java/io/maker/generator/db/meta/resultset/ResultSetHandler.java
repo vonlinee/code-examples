@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public interface ResultSetHandler<T> {
     T handle(ResultSet rs) throws SQLException;
 
-    default T handle(ResultSet rs, boolean close) throws SQLException {
+    default T handleAndCloseResultSet(ResultSet rs, boolean close) throws SQLException {
         T result = handle(rs);
         if (close) {
             JdbcUtils.closeQuietly(rs);
