@@ -1,8 +1,10 @@
 package io.maker.base.collection;
 
-import com.google.common.collect.ForwardingListIterator;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * 固定容量大小的列表
@@ -46,7 +48,8 @@ public class FixedList<E> implements List<E> {
         return elementData;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <T> T[] toArray(T[] a) {
         return (T[]) elementData;
     }
@@ -116,7 +119,8 @@ public class FixedList<E> implements List<E> {
     }
 
     // 6 3
-    private int rangeCompare(int index, int min, int max) {
+    @SuppressWarnings("unused")
+	private int rangeCompare(int index, int min, int max) {
         if (min == max) {
             return Integer.compare(index, min);
         }

@@ -164,6 +164,10 @@ public final class Maps {
     public static <V> MapBuilder<String, V> stringKeybuilder(Class<V> valueType) {
         return new MapBuilder<String, V>();
     }
+    
+    public static <V> MapBuilder<String, String> stringMapBuilder() {
+        return new MapBuilder<String, String>();
+    }
 
     public static MapBuilder<String, Object> builder() {
         return new MapBuilder<>();

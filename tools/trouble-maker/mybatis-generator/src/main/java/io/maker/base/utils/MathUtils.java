@@ -37,9 +37,4 @@ public final class MathUtils {
         }
         return srandom.nextInt();
     }
-
-
-    public static void main(String[] args) {
-        System.out.println(randomInt());
-    }
 }

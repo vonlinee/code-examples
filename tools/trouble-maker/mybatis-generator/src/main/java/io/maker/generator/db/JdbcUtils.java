@@ -5,6 +5,8 @@ import io.maker.generator.db.meta.resultset.ResultSetHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.druid.pool.ha.PropertiesUtils;
+
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +33,7 @@ import static java.sql.DriverManager.registerDriver;
 public final class JdbcUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(JdbcUtils.class);
+    
     private static final String JDBC_PROPERTIES = "jdbc.properties";
 
     /**
@@ -307,7 +310,7 @@ public final class JdbcUtils {
     }
 
     /**
-     * 注意，此方法内部不关闭Connection
+     * TODO 注意，此方法内部不关闭Connection
      * @param conn
      * @return
      */
@@ -324,9 +327,7 @@ public final class JdbcUtils {
      * 获取数据库连接
      * @return Connection
      */
-    public static Optional<Connection> getConnection(String properties) {
-        Properties prop = null;
-        assert false;
+    public static Optional<Connection> getConnection(String dbName, Properties prop) {
         boolean result = loadDriver(prop.getProperty("jdbc.driver"));
         Connection connection = null;
         if (result) {
@@ -379,10 +380,53 @@ public final class JdbcUtils {
         }
         return Optional.ofNullable(connection);
     }
+    
+    public static Connection getLocalMySQLConnection(String dbName, Map<String, String> params) throws SQLException {
+    	return getConnection("mysql", "localhost", 3306, dbName, params);
+    }
+    
+    /**
+     * 获取本地MySQL数据库连接
+     * @param dbName
+     * @return
+     * @throws SQLException
+     * Connection
+     */
+    public static Connection getLocalMySQLConnection(String dbName) throws SQLException {
+    	return getConnection("mysql", "localhost", 3306, dbName, defaultConnectionParams());
+    }
+    
+    /**
+     * 默认连接参数设置
+     * createDatabaseIfNotExists=true&useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8";
+     * @return
+     * Map<String,String>
+     */
+    public static Map<String, String> defaultConnectionParams() {
+    	Map<String, String> map = new HashMap<>();
+    	map.put("useSSL", "false");
+    	map.put("createDatabaseIfNotExists", "true"); //是否创建数据库
+    	map.put("useUnicode", "true"); 
+    	map.put("characterEncoding", "utf8");
+    	map.put("serverTimezone", "GMT%2B8");
+    	return map;
+    }
+    
+    public static Connection getConnection(String dbType, String ip, int port, String dbName, Map<String, String> params) throws SQLException {
+    	StringJoiner paramString = new StringJoiner("&");
+    	for(Map.Entry<String, String> entry : params.entrySet()) {
+    		paramString.add(entry.getKey() + "=" + entry.getValue());
+    	}
+    	String url = "jdbc:" + dbType + "://" + ip + ":" + port + "/" + dbName + "?" + paramString.toString();
+    	try {
+			return DriverManager.getConnection(url, "root", "123456");
+		} catch (SQLException e) {
+			throw e;
+		}
+    }
 
     /**
      * 获取数据库表信息
-     * <p>
      * 在MySQL中，物理上schema和database是等价的。 在MySQL
      * SQL语法中你可以用SCHEMA这个关键字代替DATABASE关键字，比如用CREATE SCHEMA代替CREATE DATABASE。
      * @param dbName
@@ -409,7 +453,7 @@ public final class JdbcUtils {
     }
 
     /**
-     * ResultSet转换为
+     * ResultSet转换为List
      * @param rs
      * @return
      * @throws SQLException

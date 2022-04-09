@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Properties;
 
 /**
- * Builder模式控制顺序
+ * TODO Builder模式控制顺序
  */
 @Data
 public class DataSourceProperties {
