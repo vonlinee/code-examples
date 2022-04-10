@@ -7,6 +7,7 @@ public class TestCglib {
 		Enhancer enhancer = new Enhancer();
 		enhancer.setSuperclass(TargetObject.class);
 		enhancer.setCallback(new TargetInterceptor());
+		
 		TargetObject targetObject2 = (TargetObject) enhancer.create();
 		
 		System.out.println(targetObject2);

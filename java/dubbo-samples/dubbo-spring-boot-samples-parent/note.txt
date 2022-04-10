@@ -1,0 +1,21 @@
+
+
+
+
+
+
+
+Dubbo Spring Boot	Dubbo	Spring Boot
+0.2.1.RELEASE	2.6.5+	2.x
+0.1.2.RELEASE	2.6.5+	1.x
+
+
+
+
+
+
+
+
+
+
+
