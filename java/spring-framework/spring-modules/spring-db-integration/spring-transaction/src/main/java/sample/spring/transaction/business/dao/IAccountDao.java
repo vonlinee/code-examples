@@ -1,6 +1,6 @@
 package sample.spring.transaction.business.dao;
 
-import sample.spring.transaction.model.Account;
+import sample.spring.transaction.entity.Account;
 
 public interface IAccountDao {
 	public void updateMoneyByUserName(String userName, Double money);

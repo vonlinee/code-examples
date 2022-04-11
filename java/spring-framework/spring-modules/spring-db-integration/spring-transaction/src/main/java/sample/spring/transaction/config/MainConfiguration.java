@@ -1,4 +1,4 @@
-package sample.spring.transaction;
+package sample.spring.transaction.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

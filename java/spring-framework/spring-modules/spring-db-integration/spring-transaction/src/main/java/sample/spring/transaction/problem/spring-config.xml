@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+           http://www.springframework.org/schema/beans  
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+           http://www.springframework.org/schema/aop  
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/context  
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- 引入jdbc配置文件 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<!--要是有多个配置文件，只需在这里继续添加即可 -->
+				<value>classpath:properties/*.properties</value>
+				<value>classpath:*.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置数据源:不使用properties来配置 -->
+	<bean id="springDataSource1" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" /> 
+		<property name="url" value="jdbc:mysql://localhost:3306/db_mysql?useUnicode=true&amp;amp;characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=GMT%2B8"/> 
+		<property name="username" value="root" /> 
+		<property name="password" value="123456"/>
+	</bean>
+	
+	<!-- 配置数据源:使用properties来配置 -->
+	<bean id="springDataSource2" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driver}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username"><value>${jdbc.username}</value></property>
+		<property name="password"><value>${jdbc.password}</value></property>
+	</bean>
+
+	<!-- 事务管理器 -->
+	<bean id="springTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="springDataSource1" />
+	</bean>
+
+	<!-- 开启事务管理 -->
+	<tx:annotation-driven proxy-target-class="false" transaction-manager="springTransactionManager" />
+
+	<!-- 自动扫描了所有的XxxxMapper.xml对应的mapper接口文件，这样就不用一个一个手动配置Mpper的映射了，只要Mapper接口类和Mapper映射文件对应起来就可以了。 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.luo.dao" />
+	</bean>
+
+	<!-- 自动扫描注解的bean,放入容器 -->
+	<context:component-scan base-package="com.luo.service" />
+</beans>
