@@ -26,6 +26,7 @@ public class SqlPrepareInterceptor implements Interceptor {
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 		System.out.println("===================================");
+		// org.apache.ibatis.executor.statement.RoutingStatementHandler
 		StatementHandler handler = (StatementHandler) realTarget(invocation.getTarget());
 		MetaObject statementHandler = SystemMetaObject.forObject(handler);
 		MappedStatement mappedStatement = (MappedStatement) statementHandler.getValue("delegate.mappedStatement");

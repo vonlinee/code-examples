@@ -1,4 +1,4 @@
-package sample.spring.transaction.programatically.template;
+package sample.spring.transaction.solution.programatically.template;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

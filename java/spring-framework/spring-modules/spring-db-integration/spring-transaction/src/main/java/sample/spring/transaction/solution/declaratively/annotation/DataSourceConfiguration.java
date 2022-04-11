@@ -1,4 +1,4 @@
-package sample.spring.transaction.declaratively.annotation;
+package sample.spring.transaction.solution.declaratively.annotation;
 
 import java.sql.SQLException;
 

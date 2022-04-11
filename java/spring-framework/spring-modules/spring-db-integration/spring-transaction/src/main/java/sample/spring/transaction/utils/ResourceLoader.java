@@ -1,14 +1,11 @@
-package sample.spring.transaction;
+package sample.spring.transaction.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
-
-import sample.spring.transaction.programatically.template.Main;
 
 public class ResourceLoader {
 

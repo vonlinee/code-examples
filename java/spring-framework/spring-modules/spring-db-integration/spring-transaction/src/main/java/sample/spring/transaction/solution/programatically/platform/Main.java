@@ -1,4 +1,4 @@
-package sample.spring.transaction.programatically.platform;
+package sample.spring.transaction.solution.programatically.platform;
 
 import javax.sql.DataSource;
 

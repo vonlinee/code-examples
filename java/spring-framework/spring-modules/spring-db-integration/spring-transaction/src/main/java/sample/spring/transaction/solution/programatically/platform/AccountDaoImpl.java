@@ -1,4 +1,4 @@
-package sample.spring.transaction.programatically.platform;
+package sample.spring.transaction.solution.programatically.platform;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

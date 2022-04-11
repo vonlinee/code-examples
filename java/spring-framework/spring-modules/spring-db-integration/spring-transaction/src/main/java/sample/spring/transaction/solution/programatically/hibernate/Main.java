@@ -1,4 +1,4 @@
-package sample.spring.transaction.programatically.hibernate;
+package sample.spring.transaction.solution.programatically.hibernate;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

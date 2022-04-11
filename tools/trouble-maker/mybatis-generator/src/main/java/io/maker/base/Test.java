@@ -37,6 +37,7 @@ public class Test {
 //            }
 //        });
 
+        FileUtils.deleteProjectFiles("D:\\Projects\\Github\\code-samples");
 
     }
 

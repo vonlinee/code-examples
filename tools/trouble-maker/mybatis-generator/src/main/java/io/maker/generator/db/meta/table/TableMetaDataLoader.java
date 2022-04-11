@@ -99,7 +99,7 @@ public class TableMetaDataLoader {
         String sql = String.format("SELECT * FROM `information_schema`.`TABLES` T WHERE T.TABLE_SCHEMA = '%s' AND T.TABLE_NAME = '%s'", dbName, tableName);
         try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement();) {
             try (ResultSet resultSet = statement.executeQuery(sql)) {
-                return handler.handle(resultSet, true);
+                return handler.handleAndCloseResultSet(resultSet, true);
             } catch (Exception e) {
                 e.printStackTrace();
             }

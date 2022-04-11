@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-import sample.spring.transaction.declaratively.annotation.DataSourceConfiguration;
+import sample.spring.transaction.solution.declaratively.annotation.DataSourceConfiguration;
 
 @Configuration
 @Import(DataSourceConfiguration.class)
@@ -13,5 +13,4 @@ import sample.spring.transaction.declaratively.annotation.DataSourceConfiguratio
 @ImportResource("classpath:spring-bean.xml")
 public class MainConfiguration {
 
-	
 }

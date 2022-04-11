@@ -432,43 +432,6 @@ Debug进不去某些jar包
 
 
 
-# Plugin
-
-
-
-
-
-```java
-public static Object wrap(Object target, Interceptor interceptor) {
-    Map<Class<?>, Set<Method>> signatureMap = getSignatureMap(interceptor);
-    Class<?> type = target.getClass();
-    Class<?>[] interfaces = getAllInterfaces(type, signatureMap);
-    if (interfaces.length > 0) {
-        return Proxy.newProxyInstance(
-            type.getClassLoader(),
-            interfaces,
-            new Plugin(target, interceptor, signatureMap));
-    }
-    return target;
-}
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1,4 +1,4 @@
-package sample.spring.transaction.declaratively;
+package sample.spring.transaction.solution.declaratively;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

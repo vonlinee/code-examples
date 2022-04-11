@@ -1,4 +1,4 @@
-package sample.spring.transaction.declaratively.annotation;
+package sample.spring.transaction.solution.declaratively.annotation;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -6,7 +6,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import sample.spring.transaction.business.service.AccountServiceImpl;
 
 /**
- * 1.需要DataSource 2.需要TransactionManager
+ * 1.需要DataSource 
+ * 2.需要TransactionManager
  */
 public class Main {
 

@@ -1,4 +1,4 @@
-package sample.spring.transaction.programatically.platform;
+package sample.spring.transaction.solution.programatically.platform;
 
 import java.sql.SQLException;
 
@@ -22,7 +22,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import sample.spring.transaction.declaratively.annotation.SpringContext;
+import sample.spring.transaction.solution.declaratively.annotation.SpringContext;
 
 @Configuration
 @ComponentScans({
