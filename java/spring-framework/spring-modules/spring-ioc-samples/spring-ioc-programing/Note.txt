@@ -1,0 +1,78 @@
+
+spring-boot-starter-mvc  
+
+AnnotationConfigApplicationContext
+
+DefaultListableBeanFactory 
+
+
+
+循环依赖
+
+public class BeanC {
+
+	private BeanD beanD;
+
+	public BeanC(BeanD beanD) {
+		this.beanD = beanD;
+	}
+}
+
+public class BeanD {
+
+	private BeanC beanC;
+	
+	public BeanD(BeanC beanC) {
+		this.beanC = beanC;
+	}
+}
+
+<!-- 加载这两个Bean就无法处理循环依赖了 -->
+<bean id="beanC" class="sample.spring.ioc.circular.BeanC">
+    <constructor-arg name="beanD" ref="beanD"/>
+</bean>
+
+<bean id="beanD" class="sample.spring.ioc.circular.BeanD">
+    <constructor-arg name="beanC" ref="beanC"/>
+</bean>
+报错信息如下：
+Caused by: org.springframework.beans.factory.BeanCurrentlyInCreationException: 
+Error creating bean with name 'beanC': Requested bean is currently in creation: 
+Is there an unresolvable circular reference?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ObjectProvider使用
+https://spring.io/blog/2016/03/04/core-container-refinements-in-spring-framework-4-3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

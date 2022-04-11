@@ -3,11 +3,11 @@ package io.maker.base.lang;
 /**
  * 每次都要new一个异常对象
  */
-public class ExceptionWrapper extends RuntimeException {
+public class CustomException extends RuntimeException {
 
-    private static final ExceptionWrapper EMPTY = new ExceptionWrapper();
+    private static final CustomException EMPTY = new CustomException();
 
-    public static ExceptionWrapper getInstance() {
+    public static CustomException getInstance() {
         return EMPTY;
     }
 
@@ -15,9 +15,8 @@ public class ExceptionWrapper extends RuntimeException {
     private String message;
     private Throwable throwable;
 
-    public static ExceptionWrapper wrap(Throwable throwable) {
-        ExceptionWrapper wrapper = new ExceptionWrapper();
-        return wrapper;
+    public static CustomException wrap(Throwable throwable) {
+        return new CustomException();
     }
 
     public boolean isUnChecked() {
@@ -41,6 +40,6 @@ public class ExceptionWrapper extends RuntimeException {
     }
 
     public static void method() {
-        throw ExceptionWrapper.EMPTY;
+        throw CustomException.EMPTY;
     }
 }

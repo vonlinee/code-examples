@@ -1,10 +1,15 @@
 package io.maker.base.lang.reflect;
 
+import io.maker.base.utils.Array;
+import org.checkerframework.checker.units.qual.A;
+
 import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public final class Reflective {
@@ -20,7 +25,7 @@ public final class Reflective {
      * @throws SecurityException
      */
     @SuppressWarnings("unchecked")
-    public static <T extends Object> T newInstance(Class<T> type) throws InstantiationException, IllegalAccessException,
+    public static <T> T newInstance(Class<T> type) throws InstantiationException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException, SecurityException {
         Constructor<?>[] constructors = type.getDeclaredConstructors();
         if (constructors.length >= 1) {
@@ -57,9 +62,5 @@ public final class Reflective {
             System.out.println(typeParameter.getName());
             Class<HashMap> genericDeclaration = typeParameter.getGenericDeclaration();
         }
-    }
-
-    public static void main(String[] args) {
-
     }
 }

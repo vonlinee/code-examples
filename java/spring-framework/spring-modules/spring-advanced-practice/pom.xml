@@ -14,8 +14,8 @@
 	<properties>
 		<!-- https://www.cnblogs.com/biehongli/p/11748093.html -->
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
-		<!-- SpringBoot 2.1.6.RELEASE 对应与 Spring 5.2.4.RELEASE -->
-		<spring.version>5.2.4.RELEASE</spring.version>
+		<!-- SpringBoot 2.3.12.RELEASE 对应与 Spring 5.2.15.RELEASE -->
+		<spring.version>5.2.15.RELEASE</spring.version>
 		<!-- 5.1.47是5.x版本的最后一个版本 -->
 		<mysql-driver-version>5.1.47</mysql-driver-version>
 	</properties>

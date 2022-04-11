@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 加载外部配置文件：https://www.cnblogs.com/chenyanbin/p/11655095.html -->
+	<properties resource="jdbc.properties" />
+	<settings>
+		<setting name="logImpl" value="STDOUT_LOGGING" /> <!-- 使用标准输出打印SQL日志 -->
+		<!-- <setting name="logImpl" value="LOG4J"/> -->   <!-- 使用log4j打印SQL日志，需要引入log4j -->
+	</settings>
+	
+	<typeAliases>
+		<!--定义别名,避免写全限定类名 -->
+		<typeAlias alias="Integer" type="java.lang.Integer" />
+		<typeAlias alias="Long" type="java.lang.Long" />
+		<typeAlias alias="HashMap" type="java.util.HashMap" />
+		<typeAlias alias="LinkedHashMap"
+			type="java.util.LinkedHashMap" />
+		<typeAlias alias="ArrayList" type="java.util.ArrayList" />
+		<typeAlias alias="LinkedList" type="java.util.LinkedList" />
+	</typeAliases>
+	
+<!-- 	<typeHandlers>
+		<typeHandler handler="code.example.mybatis.typehandler.JsonTypeHandler" javaType="java.util.Map" />
+	</typeHandlers> -->
+	
+	<plugins>
+		<plugin interceptor="code.example.mybatis.plugin.SqlPrepareInterceptor"></plugin>
+	</plugins>
+	
+	<!-- 数据库环境配置 -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${mysql.jdbc.driver}" />
+				<property name="url" value="${mysql.jdbc.url}" />
+				<property name="username" value="${mysql.jdbc.username}" />
+				<property name="password" value="${mysql.jdbc.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<!-- 映射器配置 -->
+	<mappers>
+		<!-- 使用相对于类路径的资源引用 -->
+		<mapper resource="mappers/TeacherMapper.xml" />  <!-- resources目录 -->
+	</mappers>
+</configuration>

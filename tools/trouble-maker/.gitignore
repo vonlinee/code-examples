@@ -11,4 +11,8 @@ gradlew
 build/*
 /buildOutputCleanup/*
 
+# Eclipse
+.classpath
+.project
+*/.settings
 
