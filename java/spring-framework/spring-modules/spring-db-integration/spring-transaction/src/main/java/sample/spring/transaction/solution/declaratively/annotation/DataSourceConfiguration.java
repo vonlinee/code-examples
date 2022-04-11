@@ -24,62 +24,62 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 @Configuration
 @ComponentScans({
-        @ComponentScan("sample.spring.transaction.business")
+		@ComponentScan("sample.spring.transaction.business")
 })
 @PropertySource("classpath:jdbc.properties")
 @Import(SpringContext.class)
 @EnableTransactionManagement
 public class DataSourceConfiguration {
 
-    @Value("${jdbc.driver}")
-    private String driver;
-    @Value("${jdbc.url}")
-    private String url;
-    @Value("${jdbc.username}")
-    private String username;
-    @Value("${jdbc.password}")
-    private String password;
+	@Value("${jdbc.driver}")
+	private String driver;
+	@Value("${jdbc.url}")
+	private String url;
+	@Value("${jdbc.username}")
+	private String username;
+	@Value("${jdbc.password}")
+	private String password;
 
-    private static final Logger LOG = LoggerFactory.getLogger(DataSourceConfiguration.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DataSourceConfiguration.class);
 
-    @Bean(name = "transactionManager")
-    public PlatformTransactionManager createTransactionManager(DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
-    }
+	@Bean(name = "transactionManager")
+	public PlatformTransactionManager createTransactionManager(DataSource dataSource) {
+		return new DataSourceTransactionManager(dataSource);
+	}
 
-    @Bean(name = "transactionTemplate")
-    public TransactionTemplate createTransactionTemplate(PlatformTransactionManager txManager) {
-        return new TransactionTemplate(txManager);
-    }
+	@Bean(name = "transactionTemplate")
+	public TransactionTemplate createTransactionTemplate(PlatformTransactionManager txManager) {
+		return new TransactionTemplate(txManager);
+	}
 
-    @Bean(name = "springDataSource")
-    public DataSource createDataSource() {
-        DriverManagerDataSource ds = new DriverManagerDataSource();
-        ds.setDriverClassName(driver);
-        ds.setUrl(url);
-        ds.setUsername(username);
-        ds.setPassword(password);
-        return ds;
-    }
+	@Bean(name = "springDataSource")
+	public DataSource createDataSource() {
+		DriverManagerDataSource ds = new DriverManagerDataSource();
+		ds.setDriverClassName(driver);
+		ds.setUrl(url);
+		ds.setUsername(username);
+		ds.setPassword(password);
+		return ds;
+	}
 
-    //使用此数据源
-    @Bean
-    @Qualifier("dbcpDataSource")
-    public DataSource dataSource() {
-        BasicDataSource ds = new BasicDataSource();
-        ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUrl("jdbc:mysql://localhost:3306/db_mysql?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8");
-        ds.setUsername("root");
-        ds.setPassword("123456");
-        return ds;
-    }
+	// 使用此数据源
+	@Bean
+	@Qualifier("dbcpDataSource")
+	public DataSource dataSource() {
+		BasicDataSource ds = new BasicDataSource();
+		ds.setDriverClassName("com.mysql.jdbc.Driver");
+		ds.setUrl("jdbc:mysql://localhost:3306/db_mysql?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8");
+		ds.setUsername("root");
+		ds.setPassword("123456");
+		return ds;
+	}
 
-    @Bean(name = "jdbcTemplate")
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) throws SQLException {
-        LOG.info("Init JdbcTemplate with DataSource => " + dataSource);
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
-        jdbcTemplate.setDataSource(dataSource);
-        jdbcTemplate.setLazyInit(true);
-        return jdbcTemplate;
-    }
+	@Bean(name = "jdbcTemplate")
+	public JdbcTemplate jdbcTemplate(DataSource dataSource) throws SQLException {
+		LOG.info("Init JdbcTemplate with DataSource => " + dataSource);
+		JdbcTemplate jdbcTemplate = new JdbcTemplate();
+		jdbcTemplate.setDataSource(dataSource);
+		jdbcTemplate.setLazyInit(true);
+		return jdbcTemplate;
+	}
 }

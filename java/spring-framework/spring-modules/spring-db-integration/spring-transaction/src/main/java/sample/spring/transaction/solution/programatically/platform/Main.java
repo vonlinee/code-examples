@@ -8,7 +8,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 /**
  * using-transaction-manager-directly
  * transaction-management-with-jdbc
- * @author someone
+ * 
+ * 使用TransactionTemplate比使用PlatformTransactionManager更简单
+ * 将一些模板方法封装到了TransactionTemplate中
+ * 这两种方式都是编程式事务
  */
 public class Main {
 
