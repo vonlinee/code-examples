@@ -2,18 +2,31 @@ package sample.spring.transaction.solution.declaratively.annotation;
 
 import java.math.BigDecimal;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class IAccountServiceImpl implements IAccountService {
 
 	@Autowired
 	public IAccountDao accountDao;
-	
+
 	@Override
+	@Transactional(
+			value = "", 
+			transactionManager="", /*=value*/
+			isolation = Isolation.REPEATABLE_READ, 
+			readOnly = false, 
+			timeout = -1, 
+			propagation = Propagation.REQUIRED,
+			noRollbackFor= {},
+			noRollbackForClassName= {},
+			rollbackFor= {},
+			rollbackForClassName= {}
+	)
 	public void transferMoney(String from, String to, BigDecimal money, boolean throwException) {
 		accountDao.outMoney(from, money);
 		if (throwException) {
@@ -25,5 +38,10 @@ public class IAccountServiceImpl implements IAccountService {
 	@Override
 	public void transferMoney(String from, String to, BigDecimal money) {
 		transferMoney(from, to, money, false);
+	}
+
+	@Override
+	public void transferMoney(String from, String to, double money) {
+		transferMoney(from, to, BigDecimal.valueOf(money), false);
 	}
 }

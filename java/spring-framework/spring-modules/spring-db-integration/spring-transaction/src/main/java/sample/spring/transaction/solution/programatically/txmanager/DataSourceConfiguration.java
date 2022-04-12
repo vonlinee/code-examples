@@ -1,4 +1,4 @@
-package sample.spring.transaction.solution.programatically.platform;
+package sample.spring.transaction.solution.programatically.txmanager;
 
 import java.sql.SQLException;
 
@@ -26,7 +26,7 @@ import sample.spring.transaction.solution.declaratively.annotation.SpringContext
 
 @Configuration
 @ComponentScans({
-		@ComponentScan("sample.spring.transaction.programatically.platform")
+		@ComponentScan("sample.spring.transaction.solution.programatically.txmanager")
 })
 @PropertySource("classpath:jdbc.properties")
 @Import(SpringContext.class)
@@ -69,7 +69,7 @@ public class DataSourceConfiguration {
 	public DataSource dataSource() {
 		BasicDataSource ds = new BasicDataSource();
 		ds.setDriverClassName("com.mysql.jdbc.Driver");
-		ds.setUrl("jdbc:mysql://localhost:3306/mybatis_learn?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8");
+		ds.setUrl("jdbc:mysql://localhost:3306/db_mysql?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8");
 		ds.setUsername("root");
 		ds.setPassword("123456");
 		return ds;

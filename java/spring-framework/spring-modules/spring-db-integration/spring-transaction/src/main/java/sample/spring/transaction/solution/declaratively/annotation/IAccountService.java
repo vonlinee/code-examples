@@ -6,4 +6,6 @@ public interface IAccountService {
 	void transferMoney(String from, String to, BigDecimal money);
 
 	void transferMoney(String from, String to, BigDecimal money, boolean throwException);
+	
+	void transferMoney(String from, String to, double money);
 }

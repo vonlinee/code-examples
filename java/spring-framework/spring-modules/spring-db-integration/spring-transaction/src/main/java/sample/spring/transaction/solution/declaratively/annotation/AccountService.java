@@ -2,8 +2,6 @@ package sample.spring.transaction.solution.declaratively.annotation;
 
 import java.math.BigDecimal;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
