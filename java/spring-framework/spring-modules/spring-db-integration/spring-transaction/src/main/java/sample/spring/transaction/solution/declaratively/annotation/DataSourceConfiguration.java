@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +25,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 @Configuration
 @ComponentScans({
-		@ComponentScan("sample.spring.transaction.business")
+		@ComponentScan("sample.spring.transaction.business"),
+		@ComponentScan("sample.spring.transaction.solution.declaratively.annotation")
 })
 @PropertySource("classpath:jdbc.properties")
 @Import(SpringContext.class)
@@ -47,6 +49,7 @@ public class DataSourceConfiguration {
 		return new DataSourceTransactionManager(dataSource);
 	}
 
+	// 声明式事务不需要事务模板
 	@Bean(name = "transactionTemplate")
 	public TransactionTemplate createTransactionTemplate(PlatformTransactionManager txManager) {
 		return new TransactionTemplate(txManager);

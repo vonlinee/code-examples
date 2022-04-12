@@ -39,6 +39,6 @@ public class AccountServiceImpl {
 			protected void doInTransactionWithoutResult(TransactionStatus status) {
 				
 			}
-		};
+		});
 	}
 }

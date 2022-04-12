@@ -34,6 +34,8 @@ public class AccountServiceImpl implements InitializingBean {
 		int i = 1 / 0; // 此处除0模拟转账发生异常
 		accountDao.inMoney(in, money);
 	}
+	
+
 
 	@Override
 	public void afterPropertiesSet() throws Exception {

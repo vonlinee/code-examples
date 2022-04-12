@@ -59,13 +59,7 @@ hibernate.cfg.xml配置了下面语句后：
 MySQL5Dialect： An SQL dialect for MySQL 5.x specific features.
 
 
-
 ![image-20220228145927044](\images\异常调用栈.png)
-
-
-
-
-
 
 
 # 隔离级别
@@ -75,20 +69,11 @@ MySQL5Dialect： An SQL dialect for MySQL 5.x specific features.
 
 
 
-
-
-
-
-
-
-
 # 事务传播
 
 
-
-
-
-
+事务隔离级别
+带事务的方法内部调用了另外一个带事务的方法，应该如何处理？ -> 事务传播特性要解决的问题
 
 
 

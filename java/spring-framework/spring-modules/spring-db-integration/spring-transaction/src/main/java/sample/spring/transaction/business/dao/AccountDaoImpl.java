@@ -19,28 +19,28 @@ public class AccountDaoImpl implements IAccountDao, InitializingBean {
 
     @Override
     public void updateMoneyByUserName(String userName, Double money) {
-        String sql = "update account set money = ? where name = ?";
+        String sql = "update t_account set money = ? where name = ?";
         LOG.info("\nExecute SQL => " + String.format(sql.replace("?", "%s"), money, userName));
         jdbcTemplate.update(sql, money, userName);
     }
 
     @Override
     public Account queryAccountByUserName(String userName) {
-        String sql = "select * from account where name = ?";
+        String sql = "select * from t_account where name = ?";
         LOG.info("\nExecute SQL => " + String.format(sql.replace("?", "%s"), userName));
         return jdbcTemplate.queryForObject(sql, Account.class, userName);
     }
 
     @Override
     public void outMoney(String userName, Double money) {
-        String sql = "update account set money = money - ? where name = ?";
+        String sql = "update t_t_account set money = money - ? where name = ?";
         LOG.info("\nExecute SQL => " + String.format(sql.replace("?", "%s"), money, userName));
         jdbcTemplate.update(sql, money, userName);
     }
 
     @Override
     public void inMoney(String userName, Double money) {
-        String sql = "update account set money = money + ? where name = ?";
+        String sql = "update t_account set money = money + ? where name = ?";
         LOG.info("\nExecute SQL => " + String.format(sql.replace("?", "%s"), money, userName));
         jdbcTemplate.update(sql, money, userName);
     }
