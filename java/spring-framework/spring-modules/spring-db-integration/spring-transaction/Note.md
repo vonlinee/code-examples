@@ -89,9 +89,12 @@ MySQL5Dialect： An SQL dialect for MySQL 5.x specific features.
 
 
 
+java: JPS incremental annotation processing is disabled. Compilation results on partial recompilation may be inaccurate. Use build process "jps.track.ap.dependencies" VM flag to enable/disable incremental annotation processing environment.
 
-
-
+```java
+-Djps.track.ap.dependencies=false
+System.setProperty("jps.track.ap.dependencies", "false");
+```
 
 
 
