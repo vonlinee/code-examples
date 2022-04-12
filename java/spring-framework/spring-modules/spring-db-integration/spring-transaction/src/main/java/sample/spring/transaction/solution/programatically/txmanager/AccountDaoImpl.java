@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -94,6 +95,7 @@ public class AccountDaoImpl extends JdbcDaoSupport {
 			int i = 1 / 0;
 			jdbcTemplate.execute("update t_account set money = money + " + money + " where id = " + idTo);
 			connection.commit();
+			DriverManagerDataSource dataSource = null;
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}

@@ -9,6 +9,8 @@ SpringMVC：MVC请求流程，核心注解
 SpringBoot：启动流程，自动装配原理
 SpringCloud：核心组件及其理解，项目中用到的组件，为什么使用？
 
+Dubbo、Zookeeper
+
 MQ：MQ的理解，使用过的MQ，保证信息不丢失，不重复
 Redis：使用场景，基本数据类型，持久化机制，不集群方式
 

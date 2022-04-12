@@ -21,8 +21,7 @@ public class VerifyCodeFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-		if ("POST".equalsIgnoreCase(request.getMethod()) 
-				&& "/doLogin".equals(request.getServletPath())) {
+		if ("POST".equalsIgnoreCase(request.getMethod()) && "/doLogin".equals(request.getServletPath())) {
 			// 验证码验证
 			String requestCaptcha = request.getParameter("code");
 			String genCaptcha = (String) request.getSession().getAttribute("index_code");

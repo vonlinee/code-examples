@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		//在用户名密码
+		// 在用户名密码
 		http.addFilterBefore(new VerifyCodeFilter(), UsernamePasswordAuthenticationFilter.class);
 		http.authorizeRequests()// 开启登录配置
 				.antMatchers("/hello").hasRole("admin")// 表示访问 /hello 这个接口，需要具备 admin 这个角色

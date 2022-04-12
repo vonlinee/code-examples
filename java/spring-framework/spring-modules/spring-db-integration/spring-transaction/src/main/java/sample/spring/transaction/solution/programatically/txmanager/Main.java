@@ -13,8 +13,8 @@ public class Main {
 	public static void main(String[] args) {
 		@SuppressWarnings("resource")
 		ApplicationContext context = new AnnotationConfigApplicationContext(DataSourceConfiguration.class);
-
 		AccountDaoImpl daoImpl = context.getBean(AccountDaoImpl.class);
 		daoImpl.transferMoney1("1", "2", 200);
+		
 	}
 }
