@@ -9,6 +9,6 @@ public class TransactionPropagation {
         System.setProperty("jps.track.ap.dependencies", "true");
         ApplicationContext context = new AnnotationConfigApplicationContext(DataSourceConfiguration.class);
         IAccountService accountService = context.getBean(IAccountService.class);
-        accountService.batchTransferMoney("zs", "ls", 200.0, 10);
+        accountService.batchTransferMoney1("zs", "ls", 200.0, 10);
     }
 }

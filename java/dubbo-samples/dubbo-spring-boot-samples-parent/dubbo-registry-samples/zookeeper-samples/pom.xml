@@ -19,14 +19,13 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.apache.dubbo.samples</groupId>
-        <artifactId>dubbo-spring-boot-samples</artifactId>
-        <version>${revision}</version>
-        <relativePath>../../pom.xml</relativePath>
+        <groupId>org.example</groupId>
+        <artifactId>dubbo-registry-samples</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dubbo-spring-boot-registry-zookeeper-samples</artifactId>
+    <artifactId>dubbo-registry-zookeeper-samples</artifactId>
     <name>Apache Dubbo Spring Boot :: Samples :: Registry Zookeeper</name>
     <description>Apache Dubbo Spring Boot Registry Zookeeper Samples</description>
     <packaging>pom</packaging>

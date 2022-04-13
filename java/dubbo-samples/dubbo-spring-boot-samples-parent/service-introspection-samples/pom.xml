@@ -14,7 +14,7 @@
     <artifactId>service-introspection-samples</artifactId>
 
     <modules>
-        <module>zookeeper-samples</module>
-        <module>nacos-samples</module>
+        <module>service-introspection-zookeeper-samples</module>
+        <module>service-introspection-nacos-samples</module>
     </modules>
 </project>
