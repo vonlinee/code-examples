@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>consumer-sample</module>
-        <module>provider-sample</module>
+        <module>dubbo-registry-nacos-consumer</module>
+        <module>dubbo-registry-nacos-provider</module>
     </modules>
 </project>
