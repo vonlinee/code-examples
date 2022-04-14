@@ -1,17 +1,16 @@
 package sample.java.reflection.invoke;
 
 import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Method;
 
-import com.sun.corba.se.spi.orbutil.closure.Closure;
-
-public class TestMethodHandle implements Closure {
+public class TestMethodHandle {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NoSuchMethodException, SecurityException {
 		MethodHandle mh;
-	}
-
-	@Override
-	public Object evaluate() {
-		return null;
+		
+		Method privateLookupIn = MethodHandles.class.getMethod("privateLookupIn", Class.class, MethodHandles.Lookup.class);
+		
+		System.out.println(privateLookupIn);
 	}
 }
