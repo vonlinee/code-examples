@@ -1,0 +1,29 @@
+
+在以下目录下生成了相应的字节码文件
+D:\design\pattern\proxy\cglib
+
+TargetObject$$EnhancerByCGLIB$$651090fd$$FastClassByCGLIB$$2b7d3b4e.class
+TargetObject$$EnhancerByCGLIB$$651090fd.class
+TargetObject$$FastClassByCGLIB$$f256d7cb.class
+
+无法使用java反编译器查看这些字节码，比如jd-gui，不知道为什么
+
+D:\net\sf\cglib\core
+MethodWrapper$MethodWrapperKey$$KeyFactoryByCGLIB$$d45e49f7.class
+
+D:\net\sf\cglib\proxy
+Enhancer$EnhancerKey$$KeyFactoryByCGLIB$$7fb24d72.class
+
+
+二、查看代理类源码步骤
+https://blog.csdn.net/wqc19920906/article/details/115330354
+让程序阻塞（抛出异常会导致程序结束，所以在抛出异常之前阻塞），比如用System.in.read() 或者 Debuger打断点。
+windows控制台 cd到jdk目录下的lib目录，找到sa-jdi.jar 执行：java -classpath sa-jdi.jar “sun.jvm.hotspot.HSDB”。
+执行第2步命令后出现如下图片
+
+点File—>Attach to hotspot proccess，等待第5步
+再次在cmd中 执行 jps -l 列出java进程 找到项目进程
+在第4步中输入进程id后 Tools—>Class Browser，在查找框中输入：RealClass
+找到CGLIB生成的动态代理类，点击进去，然后再点击create .class File, cglib生成的class文件在执行
+java -classpath sa-jdi.jar 的目录下，然后使用IDEA查看即可
+

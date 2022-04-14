@@ -8,8 +8,6 @@ public class RetrantLockTest {
 	
 	private Lock lock = new ReentrantLock();
 	
-	
-	
 	public static void main(String[] args) {
 		Object blocker = LockSupport.getBlocker(Thread.currentThread());
 		LockSupport.parkUntil(3L);

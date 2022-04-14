@@ -1,14 +1,10 @@
 package sample.java.io;
 
-import sun.nio.fs.WindowsFileSystemProvider;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.spi.FileSystemProvider;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,5 +23,4 @@ public class FileUtils {
 		}
 		return false;
 	}
-	
 }

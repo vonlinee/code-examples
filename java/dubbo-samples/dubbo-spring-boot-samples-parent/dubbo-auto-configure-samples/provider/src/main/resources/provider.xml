@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://code.alibabatech.com/schema/dubbo
+     http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- http://dubbo.apache.org/schema/dubbo/dubbo.xsd 上面配置为这个一直报错，改为 http://code.alibabatech.com/schema/dubbo/dubbo.xsd -->
+
+    <!--用于配置当前应用信息，不管该应用是提供者还是消费者 -->
+    <dubbo:application name="hello-world-app"/>
+    <!-- 用于配置连接注册中心相关信息 -->
+    <dubbo:registry address="redis://localhost:6379" timeout="30000">
+        <!--配置redis连接参数 -->
+        <!--具体参数配置见com.alibaba.dubbo.registry.redis.RedisRegistry.class  -->
+        <dubbo:parameter key="max.idle" value="10"/>
+        <dubbo:parameter key="min.idle" value="5"/>
+        <dubbo:parameter key="max.active" value="20"/>
+        <dubbo:parameter key="max.total" value="100"/>
+    </dubbo:registry>
+
+    <!-- 用于配置提供服务的协议信息，协议由提供方指定，消费方被动接受 -->
+    <dubbo:protocol name="dubbo" port="20880" accesslog="true"/>
+
+    <!-- 实现类 -->
+    <bean id="defaultService" class="dubbo.provider.service.DefaultDemoService"/>
+    <!--用于暴露一个服务，定义服务的元信息，一个服务可以用多个协议暴露，一个服务也可以注册到多个注册中心 -->
+    <!--    <dubbo:service interface="dubbo.provider.service.DemoService" ref="defaultService"/>-->
+</beans>

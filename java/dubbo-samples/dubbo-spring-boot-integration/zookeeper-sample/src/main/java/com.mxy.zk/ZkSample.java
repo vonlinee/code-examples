@@ -21,12 +21,12 @@ import java.util.List;
 @Slf4j
 public class ZkSample {
 
-    private static CuratorFramework client = getClient();
+    private static final CuratorFramework client = getClient();
     private static Stat stat;
     private static InterProcessMultiLock interProcessMultiLock = null;
 
     public static CuratorFramework getClient() {
-        //sleep 3秒 重试 3次
+        // sleep 3秒 重试 3次
         return CuratorFrameworkFactory.builder()
                 .connectString("127.0.0.1:2181")
                 .sessionTimeoutMs(99999999)    // 连接超时时间
@@ -44,7 +44,6 @@ public class ZkSample {
             detele("/com");
             log.info("delete this node  {} ", path);
         }
-
     }
 
     public static void create(String path, String data) throws Exception {
@@ -53,13 +52,11 @@ public class ZkSample {
                 .withMode(CreateMode.PERSISTENT) // 创建的是持久节点
                 .withACL(Ids.OPEN_ACL_UNSAFE) // 默认匿名权限,权限scheme id:'world,'anyone,:cdrwa
                 .forPath(path, data.getBytes());
-
     }
 
     public static void detele(String path) throws Exception {
         // 删除节点
-        client.delete()
-                .guaranteed() // 保障机制，若未删除成功，只要会话有效会在后台一直尝试删除
+        client.delete().guaranteed() // 保障机制，若未删除成功，只要会话有效会在后台一直尝试删除
                 .deletingChildrenIfNeeded() // 若当前节点包含子节点，子节点也删除
                 .withVersion(stat.getCversion())//子节点版本号
                 .forPath(path);
@@ -83,7 +80,7 @@ public class ZkSample {
     }
 
     @SneakyThrows
-    public static void lock(String path,CuratorFramework client) {
+    public static void lock(String path, CuratorFramework client) {
         interProcessMultiLock = new InterProcessMultiLock(client, Lists.newArrayList(path));
         interProcessMultiLock.acquire();
     }
@@ -125,7 +122,6 @@ public class ZkSample {
         try {
             //watch
             watch(path);
-
             root(pathAndNode);
             //1.create
             create(pathAndNode, "mxy_create_node");
@@ -143,8 +139,5 @@ public class ZkSample {
         } finally {
             CloseableUtils.closeQuietly(client);
         }
-
-
     }
-
 }

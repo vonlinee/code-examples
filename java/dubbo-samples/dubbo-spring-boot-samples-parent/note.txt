@@ -17,5 +17,16 @@ https://github.com/apache/dubbo-spring-boot-project
 
 
 
+[Dubbo] Current Spring Boot Application is await...
+springboot项目集成dubbo时启动后一直停留在await......，一直没有启动tomcat，此时通过端口访问也是访问不了的 ，但是可以通过dubbo调用
+
+加入springboot依赖
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+然后就可以启动类
+Started DubboAutoConfigurationProviderBootstrap in 8.366 seconds (JVM running for 10.077)
+
 
 

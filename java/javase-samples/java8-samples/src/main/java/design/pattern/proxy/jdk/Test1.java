@@ -5,6 +5,7 @@ import java.lang.reflect.Proxy;
 public class Test1 {
 
 	static {
+        // 保存生成的代理类
 		System.setProperty("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
 	}
 	

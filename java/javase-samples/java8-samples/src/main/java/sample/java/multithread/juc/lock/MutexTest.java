@@ -2,8 +2,6 @@ package sample.java.multithread.juc.lock;
 
 import java.util.concurrent.Semaphore;
 
-import com.sun.corba.se.impl.orbutil.concurrent.Mutex;
-
 public class MutexTest {
 	
 	//com.sun.corba.se.impl.orbutil.concurrent.Mutex

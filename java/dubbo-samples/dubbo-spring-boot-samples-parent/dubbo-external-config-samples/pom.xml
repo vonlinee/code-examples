@@ -14,8 +14,8 @@
     <artifactId>dubbo-external-config-samples</artifactId>
 
     <modules>
-        <module>provider-sample</module>
-        <module>consumer-sample</module>
+        <module>external-config-provider</module>
+        <module>external-config-consumer</module>
     </modules>
 
     <properties>

@@ -22,11 +22,11 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
-        <dubbo.version>2.7.8</dubbo.version>
-        <maven_javadoc_version>3.0.1</maven_javadoc_version>
-        <maven_surefire_version>2.19.1</maven_surefire_version>
+        <dubbo.version>3.0.4</dubbo.version>
+        <maven.javadoc.version>3.0.1</maven.javadoc.version>
+        <maven.surefire.version>2.19.1</maven.surefire.version>
         <!-- dubbo-spring-boot-starter 版本 -->
-        <revision>2.7.15</revision>
+        <revision>3.0.4</revision>
     </properties>
 
     <dependencyManagement>
