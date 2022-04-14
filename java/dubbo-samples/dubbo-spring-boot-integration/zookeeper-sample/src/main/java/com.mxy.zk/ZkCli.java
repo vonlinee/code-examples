@@ -1,7 +1,5 @@
 package com.mxy.zk;
 
-import com.google.common.collect.Lists;
-import lombok.SneakyThrows;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -18,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -113,10 +110,13 @@ public final class ZkCli {
         }
     }
 
-    @SneakyThrows
     public void lock(String path, CuratorFramework client) {
         interProcessMultiLock = new InterProcessMultiLock(client, Collections.singletonList(path));
-        interProcessMultiLock.acquire();
+        try {
+            interProcessMultiLock.acquire();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void unlock() {
