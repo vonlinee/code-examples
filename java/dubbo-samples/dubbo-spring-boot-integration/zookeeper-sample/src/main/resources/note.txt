@@ -1,0 +1,33 @@
+
+
+zk报错:java.lang.IllegalStateException: Expected state [STARTED] was [LATENT]
+客户端使用时没有start而直接调用了其他方法
+
+public CuratorFramework getCuratorFramework() throws InterruptedException {
+   RetryPolicy retryPolicy = new ExponentialBackoffRetry(Integer.parseInt(zkProp.getSleepTimeMs()),
+       Integer.parseInt(zkProp.getMaxRetries()));
+   CuratorFramework client = CuratorFrameworkFactory.newClient(zkProp.getAddress(), retryPolicy);
+   // start()开始连接，没有此会报错
+   client.start();
+   // 阻塞直到连接成功
+   client.blockUntilConnected();
+   return client;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

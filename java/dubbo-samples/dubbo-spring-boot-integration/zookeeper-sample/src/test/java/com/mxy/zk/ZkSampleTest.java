@@ -12,41 +12,40 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ZkSampleTest {
 
-
     @SneakyThrows
     @Test
     public void lock() {
-        CuratorFramework client = ZkSample.getClient();
-        String path = "/mxy/zk/lock1";
-        client.start();
-        new Thread(() -> {
-            try {
-                ZkSample.lock(path, client);
-                System.out.println(Thread.currentThread().getName()+"：开始处理！");
-                Thread.sleep(10000);
-                System.out.println(Thread.currentThread().getName()+"：结束处理！");
-            } catch (Exception e) {
-
-            } finally {
-                ZkSample.unlock();
-                CloseableUtils.closeQuietly(client);
-            }
-        }).start();
-
-        new Thread(() -> {
-            try {
-                ZkSample.lock(path, client);
-                System.out.println(Thread.currentThread().getName()+"：开始处理！");
-                Thread.sleep(10000);
-                System.out.println(Thread.currentThread().getName()+"：结束处理！");
-                ZkSample.unlock();
-            } catch (Exception e) {
-
-            } finally {
-                ZkSample.unlock();
-                CloseableUtils.closeQuietly(client);
-            }
-        }).start();
+//        CuratorFramework client = ZkCli.getClient();
+//        String path = "/mxy/zk/lock1";
+//        client.start();
+//        new Thread(() -> {
+//            try {
+//                ZkCli.lock(path, client);
+//                System.out.println(Thread.currentThread().getName()+"：开始处理！");
+//                Thread.sleep(10000);
+//                System.out.println(Thread.currentThread().getName()+"：结束处理！");
+//            } catch (Exception e) {
+//
+//            } finally {
+//                ZkCli.unlock();
+//                CloseableUtils.closeQuietly(client);
+//            }
+//        }).start();
+//
+//        new Thread(() -> {
+//            try {
+//                ZkCli.lock(path, client);
+//                System.out.println(Thread.currentThread().getName()+"：开始处理！");
+//                Thread.sleep(10000);
+//                System.out.println(Thread.currentThread().getName()+"：结束处理！");
+//                ZkCli.unlock();
+//            } catch (Exception e) {
+//
+//            } finally {
+//                ZkCli.unlock();
+//                CloseableUtils.closeQuietly(client);
+//            }
+//        }).start();
 
         System.in.read();
 

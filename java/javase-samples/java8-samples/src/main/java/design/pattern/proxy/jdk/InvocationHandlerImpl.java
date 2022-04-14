@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 
 public class InvocationHandlerImpl implements InvocationHandler {
 
-    Object realObj;
+    private Object realObj;
 
     public InvocationHandlerImpl(Object target) {
         this.realObj = target;
