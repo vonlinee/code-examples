@@ -2,7 +2,6 @@ package org.springboot.sample.util;
 
 import java.util.Map;
 
-import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -23,14 +22,14 @@ public class HttpClientUtils {
      * @return
      */
     public static String doPost(String url, Map<String, String> formParams) {
-        if (MapUtils.isEmpty(formParams)) {
+        if (org.apache.commons.collections4.MapUtils.isEmpty(formParams)) {
             return doPost(url);
         }
 
         try {
             MultiValueMap<
                     String, String> requestEntity = new LinkedMultiValueMap<>();
-            formParams.keySet().stream().forEach(key -> requestEntity.add(key, MapUtils.getString(formParams, key, "")));
+            formParams.keySet().stream().forEach(key -> requestEntity.add(key, org.apache.commons.collections4.MapUtils.getString(formParams, key, "")));
             return RestClient.getClient().postForObject(url, requestEntity, String.class);
         } catch (Exception e) {
             LOGGER.error("POST请求出错：{}", url, e);

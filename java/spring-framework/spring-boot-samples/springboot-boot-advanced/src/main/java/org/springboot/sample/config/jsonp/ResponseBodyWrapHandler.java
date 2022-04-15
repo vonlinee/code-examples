@@ -73,7 +73,7 @@ public class ResponseBodyWrapHandler implements HandlerMethodReturnValueHandler 
 		if (jsonpParameterValue != null) {
 			if (!(returnValue instanceof MappingJacksonValue)) {
 				MappingJacksonValue container = new MappingJacksonValue(returnValue);
-				container.setJsonpFunction(jsonpParameterValue);
+//				container.setJsonpFunction(jsonpParameterValue);
 				returnValue = container;
 			}
 		}

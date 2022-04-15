@@ -1,27 +1,20 @@
-		package org.springboot.sample.entity;
+package org.springboot.sample.entity;
 
 import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 
-/**
- * 学生实体
- *
- * @author   单红宇(365384722)
- * @myblog  http://blog.csdn.net/catoop/
- * @create    2016年1月12日
- */
-public class Student implements Serializable{
-	
+public class Student implements Serializable {
+
 	private static final long serialVersionUID = 2120869894112984147L;
-	
+
 	@Id
 	private int id;
 	private String name;
-	@Column(name="SCORE_SUM")
+	@Column(name = "SCORE_SUM")
 	private String sumScore;
-	@Column(name="SCORE_AVG")
+	@Column(name = "SCORE_AVG")
 	private String avgScore;
 	private int age;
 

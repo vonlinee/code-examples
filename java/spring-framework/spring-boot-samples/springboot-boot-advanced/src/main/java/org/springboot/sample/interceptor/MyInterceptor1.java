@@ -33,5 +33,4 @@ public class MyInterceptor1 implements HandlerInterceptor {
             throws Exception {
         System.out.println(">>>MyInterceptor1>>>>>>>在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）");
     }
-
 }

@@ -66,7 +66,7 @@ public class StudentController {
         logger.info("从数据库读取Score集合");
         // 测试更新数据库
         logger.info("更新的行数：" + scoreService.updateScoreById(88.8f, 2));
-        scoreService.delete(23);
+//        scoreService.delete(23);
 
         return scoreService.getList();
     }

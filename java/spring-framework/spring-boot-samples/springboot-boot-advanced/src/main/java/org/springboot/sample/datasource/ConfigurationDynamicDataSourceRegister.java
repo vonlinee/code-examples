@@ -10,7 +10,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
+//import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
@@ -146,12 +146,12 @@ public class ConfigurationDynamicDataSourceRegister
      */
     @Override
     public void setEnvironment(Environment env) {
-        RelaxedPropertyResolver propertyResolver = new RelaxedPropertyResolver(env, "custom.datasource.");
-        String dsPrefixs = propertyResolver.getProperty("names");
-        for (String dsPrefix : dsPrefixs.split(",")) {// 多个数据源
-            Map<String, Object> dsMap = propertyResolver.getSubProperties(dsPrefix + ".");
-            dataSourceInfoMap.put(dsPrefix, dsMap);
-        }
+//        RelaxedPropertyResolver propertyResolver = new RelaxedPropertyResolver(env, "custom.datasource.");
+//        String dsPrefixs = propertyResolver.getProperty("names");
+//        for (String dsPrefix : dsPrefixs.split(",")) {// 多个数据源
+//            Map<String, Object> dsMap = propertyResolver.getSubProperties(dsPrefix + ".");
+//            dataSourceInfoMap.put(dsPrefix, dsMap);
+//        }
     }
 
 }

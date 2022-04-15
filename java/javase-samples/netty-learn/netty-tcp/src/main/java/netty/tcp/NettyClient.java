@@ -28,17 +28,19 @@ public class NettyClient {
                     }
                 });
         ChannelFuture future = bootstrap.connect(new InetSocketAddress("localhost", 8888));
-
+        // 异步监听回调
         future.addListener(new ChannelFutureListener() {
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
                 if (future.isSuccess()) {
                     ByteBuf buf = Unpooled.copiedBuffer("Hello", StandardCharsets.UTF_8);
                     ChannelFuture wf = future.channel().writeAndFlush(buf);
-                }
+                } else {
+                	// 如果失败，获取异常信息
+                	Throwable cause = future.cause();
+                	System.out.println(cause.getMessage());
+				}
             }
         });
-
-
     }
 }

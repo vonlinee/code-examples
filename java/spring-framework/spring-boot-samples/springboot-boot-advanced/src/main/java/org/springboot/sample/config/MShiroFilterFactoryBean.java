@@ -18,6 +18,7 @@ import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.mgt.WebSecurityManager;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
 import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.stereotype.Component;
 
 /**
  * 继承 ShiroFilterFactoryBean 处理拦截资源文件问题。
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.BeanInitializationException;
  * @myblog http://blog.csdn.net/catoop/
  * @create 2016年3月8日
  */
+@Component
 public class MShiroFilterFactoryBean extends ShiroFilterFactoryBean {
 
     // 对ShiroFilter来说，需要直接忽略的请求
@@ -43,20 +45,16 @@ public class MShiroFilterFactoryBean extends ShiroFilterFactoryBean {
 
     @Override
     protected AbstractShiroFilter createInstance() throws Exception {
-
         SecurityManager securityManager = getSecurityManager();
         if (securityManager == null) {
             String msg = "SecurityManager property must be set.";
             throw new BeanInitializationException(msg);
         }
-
         if (!(securityManager instanceof WebSecurityManager)) {
             String msg = "The security manager does not implement the WebSecurityManager interface.";
             throw new BeanInitializationException(msg);
         }
-
         FilterChainManager manager = createFilterChainManager();
-
         PathMatchingFilterChainResolver chainResolver = new PathMatchingFilterChainResolver();
         chainResolver.setFilterChainManager(manager);
 

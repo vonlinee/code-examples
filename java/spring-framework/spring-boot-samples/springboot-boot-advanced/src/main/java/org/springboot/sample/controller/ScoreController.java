@@ -27,7 +27,7 @@ public class ScoreController {
         // 测试更新数据库
         logger.info("更新的行数：" + scoreDao.updateScoreById(88.8f, 2));
         try {
-            scoreDao.delete(23);
+//            scoreDao.delete(23);
         } catch (Exception e) {
 //			e.printStackTrace();
         }

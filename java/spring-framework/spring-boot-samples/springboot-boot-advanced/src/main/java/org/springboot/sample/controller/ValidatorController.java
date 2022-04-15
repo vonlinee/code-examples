@@ -135,7 +135,8 @@ public class ValidatorController {
     @ResponseBody
     public Model test5(String name, String password, Model model) {
         try {
-            String content = validatorTestService.getContent(name, password);
+//            String content = validatorTestService.getContent(name, password);
+        	String content = "";
             model.addAttribute("name", content);
         } catch (ConstraintViolationException e) {
             addErrorMessage(model, e);
