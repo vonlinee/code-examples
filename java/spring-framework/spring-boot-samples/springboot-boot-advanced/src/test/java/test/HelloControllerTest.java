@@ -15,19 +15,17 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springboot.sample.SpringBootSampleApplication;
+import io.spring.boot.SpringBootSampleApplication;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.boot.test.rule.OutputCapture;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author 单红宇(365384722)

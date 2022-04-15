@@ -19,6 +19,7 @@ public class ParameterTest {
 
     /**
      * 该构造方法的参数与下面@Parameters注解的方法中的Object数组中值的顺序对应
+     *
      * @param name
      * @param result
      */
@@ -35,6 +36,7 @@ public class ParameterTest {
 
     /**
      * 该方法返回Collection
+     *
      * @return
      * @author SHANHY
      * @create 2016年2月26日

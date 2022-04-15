@@ -5,16 +5,18 @@ ehcache使用
 https://www.jianshu.com/p/154c82073b07
 
 
+shiro
 
 
 
+SpringBoot启动Tomcat失败：[StandardEngine[Tomcat].StandardHost[localhost]
+https://stackoverflow.com/questions/43041695/failed-to-start-component-standardenginetomcat-standardhostlocalhost-tomcat
 
 
+spring-boot-starter-parent
+从2.3.12.RELEASE到2.2.10.RELEASE
 
-
-
-
-
+2.3版本使用了jakataee的API， JAVAEE9
 
 
 
