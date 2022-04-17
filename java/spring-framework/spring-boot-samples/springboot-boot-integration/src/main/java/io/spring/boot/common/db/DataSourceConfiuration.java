@@ -7,9 +7,12 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
+/**
+ * 数据源配置
+ */
 @Configuration
 public class DataSourceConfiuration {
-
+	
     @Bean(name = "springJdbcTransactionManager")
     public PlatformTransactionManager springJdbcTransactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);

@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import io.spring.boot.common.db.TargetDataSource;
-import io.spring.boot.common.db.mapper.StudentMapper;
 import io.spring.boot.common.web.entity.Student;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +27,6 @@ public class StudentService implements IStudentService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private StudentMapper studentMapper;
-
-    /* (non-Javadoc)
-     * @see org.springboot.sample.service.IStudentService#likeName(java.lang.String)
-     */
     @Override
     @TargetDataSource(name = "ds2")
     public List<Student> likeName(String name) {

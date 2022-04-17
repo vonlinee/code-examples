@@ -1,14 +1,12 @@
 package io.spring.boot.common.web;
 
-import io.spring.boot.common.web.servlet.MyServlet;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.Servlet;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.spring.boot.common.web.viewresolver.JsonViewResolver;
-import io.spring.boot.common.web.viewresolver.PdfViewResolver;
-import io.spring.boot.common.web.viewresolver.XlsViewResolver;
-import io.spring.boot.common.web.interceptor.JsonErrorMsgInterceptor;
-import io.spring.boot.common.web.interceptor.WebRquestTracker;
-import io.spring.boot.common.web.interceptor.MyInterceptor2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.EnvironmentAware;
@@ -27,9 +25,12 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 
-import javax.servlet.Servlet;
-import java.util.ArrayList;
-import java.util.List;
+import io.spring.boot.common.web.interceptor.JsonErrorMsgInterceptor;
+import io.spring.boot.common.web.interceptor.WebRquestTracker;
+import io.spring.boot.common.web.servlet.MyServlet;
+import io.spring.boot.common.web.viewresolver.JsonViewResolver;
+import io.spring.boot.common.web.viewresolver.PdfViewResolver;
+import io.spring.boot.common.web.viewresolver.XlsViewResolver;
 
 @Configuration
 public class WebMVCConfiuration implements EnvironmentAware, WebMvcConfigurer {
@@ -47,7 +48,6 @@ public class WebMVCConfiuration implements EnvironmentAware, WebMvcConfigurer {
         // addPathPatterns 用于添加拦截规则
         // excludePathPatterns 用户排除拦截
         registry.addInterceptor(new WebRquestTracker()).addPathPatterns("/**");
-        registry.addInterceptor(new MyInterceptor2()).addPathPatterns("/**");
 //		registry.addInterceptor(new JsonErrorMsgInterceptor()).addPathPatterns("*.json");
         registry.addInterceptor(new JsonErrorMsgInterceptor()).addPathPatterns("/**");
     }

@@ -13,6 +13,6 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     @Override
     protected Object determineCurrentLookupKey() {
-        return SwithchDbInvoke.getDataSourceType();
+        return SwitchDbInvoke.getDataSourceType();
     }
 }

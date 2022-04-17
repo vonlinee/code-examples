@@ -1,5 +1,11 @@
 package io.spring.boot.common.db;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.MutablePropertyValues;
@@ -18,11 +24,6 @@ import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ClassUtils;
-
-import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * 动态数据源注册:启动动态数据源请在启动类中添加 @Import(DynamicDataSourceRegistrar.class)
@@ -52,10 +53,10 @@ public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar
         Map<Object, Object> targetDataSources = new HashMap<>();
         // 将主数据源添加到更多数据源中
         targetDataSources.put("dataSource", defaultDataSource);
-        SwithchDbInvoke.addOptionalDataSourceId("dataSource");
+        SwitchDbInvoke.addOptionalDataSourceId("dataSource");
         // 添加更多数据源
         targetDataSources.putAll(customDataSources);
-        SwithchDbInvoke.addOptionalDataSourceId(customDataSources.keySet());
+        SwitchDbInvoke.addOptionalDataSourceId(customDataSources.keySet());
         // 创建并注册DynamicDataSource这个Bean到容器
         GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
         beanDefinition.setBeanClass(DynamicDataSource.class);
@@ -64,6 +65,8 @@ public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar
         mpv.addPropertyValue("defaultTargetDataSource", defaultDataSource);
         mpv.addPropertyValue("targetDataSources", targetDataSources);
         registry.registerBeanDefinition("dynamicDataSource", beanDefinition);
+        
+        logger.info("register dynamic datasource: {}", targetDataSources);
     }
 
     /**
@@ -76,7 +79,8 @@ public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar
                 type = DataSourceType.DruidPool.getClassName();// 默认DataSource
             }
             Class<?> dataSourceClassType = ClassUtils.forName(type, null);
-            Class<DataSource> dataSourceType = (Class<DataSource>) dataSourceClassType;
+            @SuppressWarnings("unchecked")
+			Class<DataSource> dataSourceType = (Class<DataSource>) dataSourceClassType;
             String driverClassName = dataSourceInfoMap.get("driver-class-name");
             String url = dataSourceInfoMap.get("url");
             String username = dataSourceInfoMap.get("username");

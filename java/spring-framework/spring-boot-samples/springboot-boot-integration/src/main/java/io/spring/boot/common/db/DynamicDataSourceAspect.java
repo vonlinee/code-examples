@@ -11,13 +11,9 @@ import org.springframework.stereotype.Component;
 
 /**
  * 切换数据源Advice
- *
- * @author 单红宇(365384722)
- * @myblog http://blog.csdn.net/catoop/
- * @create 2016年1月23日
  */
 @Aspect
-@Order(-1)// 保证该AOP在@Transactional之前执行
+@Order(-1) // 保证该AOP在@Transactional之前执行
 @Component
 public class DynamicDataSourceAspect {
 
@@ -26,19 +22,18 @@ public class DynamicDataSourceAspect {
 	@Before("@annotation(ds)")
 	public void changeDataSource(JoinPoint point, TargetDataSource ds) throws Throwable {
 		String dsId = ds.name();
-
-		if (!SwithchDbInvoke.containsDataSource(dsId)) {
+		if (!SwitchDbInvoke.contains(dsId)) {
 			logger.error("数据源[{}]不存在，使用默认数据源 > {}", ds.name(), point.getSignature());
 		} else {
 			logger.debug("Use DataSource : {} > {}", ds.name(), point.getSignature());
-			SwithchDbInvoke.setDataSourceType(ds.name());
+			SwitchDbInvoke.setDataSourceType(ds.name());
 		}
 	}
 
 	@After("@annotation(ds)")
 	public void restoreDataSource(JoinPoint point, TargetDataSource ds) {
 		logger.debug("Revert DataSource : {} > {}", ds.name(), point.getSignature());
-		SwithchDbInvoke.clearDataSourceType();
+		SwitchDbInvoke.clearDataSourceType();
 	}
 
 }

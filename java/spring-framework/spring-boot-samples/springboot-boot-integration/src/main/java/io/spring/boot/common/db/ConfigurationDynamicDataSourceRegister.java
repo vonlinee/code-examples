@@ -80,7 +80,7 @@ public class ConfigurationDynamicDataSourceRegister
 
         // 将默认数据源放入 targetDataSources map中
         targetDataSources.put("dataSource", dataSource);
-        SwithchDbInvoke.dataSourceIds.add("dataSource");
+        SwitchDbInvoke.addOptionalDataSourceId("dataSource");
 
         // 根据数据源得到数据，动态创建数据源bean 并将bean注册到applicationContext中去
         Map<String, Object> dsMap = null;
@@ -103,7 +103,6 @@ public class ConfigurationDynamicDataSourceRegister
             acf.registerBeanDefinition(key, bdb.getBeanDefinition());
             // 放入map中，注意一定是刚才创建bean对象
             targetDataSources.put(key, applicationContext.getBean(key));
-            SwithchDbInvoke.dataSourceIds.add(key);
         }
 
         bdb = BeanDefinitionBuilder.rootBeanDefinition(DynamicDataSource.class);
