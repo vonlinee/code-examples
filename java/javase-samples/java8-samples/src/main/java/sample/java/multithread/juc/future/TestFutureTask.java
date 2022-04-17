@@ -17,7 +17,6 @@ public class TestFutureTask {
 	private ExecutorService service = new ThreadPoolExecutor(10, 20, 800, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 	
 	public static void main(String[] args) throws Exception {
-		
 		task1();
 	}
 	
@@ -31,6 +30,8 @@ public class TestFutureTask {
             }
         };
         FutureTask<Integer> task = new FutureTask<>(call);
+        
+        
         Thread thread = new Thread(task);
         thread.start();
         // do something

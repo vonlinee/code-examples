@@ -44,6 +44,11 @@ class OuterClass2 {
 		@Override
 		public void method() {
 			System.out.println(this);
+			System.out.println("匿名内部类中外部类的this => " + OuterClass2.this);
+			
+			// i1和i2都是匿名内部类
+			System.out.println("匿名内部类中外部类的this.i1 => " + OuterClass2.this.i1);
+			System.out.println("匿名内部类中外部类的this.i2 => " + OuterClass2.this.i2);
 		}
 	};
 	
