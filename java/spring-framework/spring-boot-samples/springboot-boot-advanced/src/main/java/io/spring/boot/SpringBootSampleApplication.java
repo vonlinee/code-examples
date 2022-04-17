@@ -1,10 +1,10 @@
 package io.spring.boot;
 
+import io.spring.boot.common.db.DynamicDataSourceRegister;
 import io.spring.boot.common.web.servlet.MyServlet;
 import org.apache.shiro.web.env.EnvironmentLoaderListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.spring.boot.common.datasource.DynamicDataSourceRegister;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

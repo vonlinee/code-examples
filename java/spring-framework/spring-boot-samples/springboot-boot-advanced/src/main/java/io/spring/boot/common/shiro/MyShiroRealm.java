@@ -1,4 +1,4 @@
-package io.spring.boot.common.config.shiro;
+package io.spring.boot.common.shiro;
 
 //import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 //import org.apache.commons.lang3.builder.ToStringStyle;

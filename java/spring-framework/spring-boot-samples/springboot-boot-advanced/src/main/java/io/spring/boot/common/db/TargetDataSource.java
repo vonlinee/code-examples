@@ -1,4 +1,4 @@
-package io.spring.boot.common.datasource;
+package io.spring.boot.common.db;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

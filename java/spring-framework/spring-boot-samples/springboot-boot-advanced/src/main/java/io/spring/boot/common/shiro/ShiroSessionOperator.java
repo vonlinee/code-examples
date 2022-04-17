@@ -1,4 +1,4 @@
-package io.spring.boot.common.config.shiro;
+package io.spring.boot.common.shiro;
 
 import java.io.Serializable;
 import java.util.Collection;
