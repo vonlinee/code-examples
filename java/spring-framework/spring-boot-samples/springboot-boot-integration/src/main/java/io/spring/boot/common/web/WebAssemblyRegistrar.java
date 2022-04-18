@@ -13,15 +13,14 @@ import org.springframework.core.type.AnnotationMetadata;
  */
 public class WebAssemblyRegistrar implements ImportBeanDefinitionRegistrar, ApplicationContextAware {
 
-    @Override
-    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
-                                        BeanDefinitionRegistry registry,
-                                        BeanNameGenerator importBeanNameGenerator) {
+	@Override
+	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry,
+			BeanNameGenerator importBeanNameGenerator) {
 
-    }
+	}
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 
-    }
+	}
 }

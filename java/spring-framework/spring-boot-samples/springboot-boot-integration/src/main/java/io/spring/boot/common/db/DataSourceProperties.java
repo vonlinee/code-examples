@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = DataSourceProperties.PREFIX)
 public class DataSourceProperties {
 
-	public static final String PREFIX = "shanhy.datasource";
+	public static final String PREFIX = "custom.datasource";
 
 	private ClassLoader classLoader;
 

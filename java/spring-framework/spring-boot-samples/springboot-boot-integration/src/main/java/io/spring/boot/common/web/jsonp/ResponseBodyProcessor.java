@@ -1,4 +1,4 @@
-package io.spring.boot.common.jsonp;
+package io.spring.boot.common.web.jsonp;
 
 import java.util.ArrayList;
 import java.util.List;

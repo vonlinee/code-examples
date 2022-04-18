@@ -1,5 +1,7 @@
 package io.spring.boot.common.db;
 
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -103,6 +105,7 @@ public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar
      */
     @Override
     public void setEnvironment(Environment env) {
+    	new Exception();
         initDefaultDataSource(env);
         initCustomDataSources(env);
     }
@@ -115,7 +118,7 @@ public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar
         Map<String, String> dsMap = new HashMap<>();
         dsMap.put("type", "");
         dsMap.put("driver-class-name", "com.mysql.jdbc.Driver");
-        dsMap.put("url", "jdbc:mysql://localhost:3306/test?useSSL=false");
+        dsMap.put("url", "jdbc:mysql://localhost:3306/ordercenter?useSSL=false&createDatabaseIfNotExist=true");
         dsMap.put("username", "root");
         dsMap.put("password", "123456");
         defaultDataSource = buildDataSource(dsMap);
@@ -126,6 +129,23 @@ public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar
      */
     private void initCustomDataSources(Environment env) {
         Properties properties = extractEnvironment(env, "spring.datasource");
+        Map<String, String> map = asStringMap(properties);
+        if (!map.isEmpty()) {
+        	buildDataSource(map);
+		}
+    }
+    
+    private Map<String, String> asStringMap(final Properties properties) {
+    	if (properties.isEmpty()) {
+			return Collections.emptyMap();
+		}
+    	Map<String, String> hashMap = new HashMap<>();
+    	for(Map.Entry<Object, Object> entry : properties.entrySet()) {
+    		String key = (String) entry.getKey();
+    		String value = (String) entry.getValue();
+    		hashMap.put(key, value);
+    	}
+		return hashMap;
     }
 
     /**

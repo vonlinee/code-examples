@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSessionListener;
  * 监听Session的创建与销毁
  */
 @WebListener
-public class MyHttpSessionListener implements HttpSessionListener {
+public class InternalHttpSessionListener implements HttpSessionListener {
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {

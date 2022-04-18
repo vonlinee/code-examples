@@ -16,7 +16,7 @@ public class ScheduledTaskConfiguration {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Scheduled(cron = "0/10 * * * * ?") // 每20秒执行一次
-    public void scheduler() {
-        logger.info(">>>>>>>>>>>>> scheduled ... ");
+    public void loadLocalConfigFile() {
+    	
     }
 }

@@ -34,6 +34,10 @@ public class MainApplication extends SpringBootServletInitializer {
         logger.debug("日志输出测试 Debug");
     }
 
+    static {
+    	System.setProperty("spring.devtools.restart.enabled", "false");
+    }
+    
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
     }

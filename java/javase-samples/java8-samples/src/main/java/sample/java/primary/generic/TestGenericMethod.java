@@ -1,17 +1,43 @@
 package sample.java.primary.generic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
-import io.netty.handler.codec.AsciiHeadersEncoder.NewlineType;
-
-public class TestGenericType {
+public class TestGenericMethod {
 
 	public static void main(String[] args) {
-
+		
+		String obj = (String) method1();
+		
 	}
 
+	public static void test5() {
+		TestGenericMethod test = new TestGenericMethod();
+		// List<Map<String, Object>> list = test.method();
+		// list.add(null);
+		Map<Object, Object> map = test.<Map<Object, Object>>method();
+		System.out.println(map);
+		
+		Map<Object, Object> map1 = test.<HashMap<Object, Object>>method();
+		System.out.println(map1);
+		
+		// java.util.HashMap cannot be cast to java.lang.String
+		String map2 = test.<String>method();
+		System.out.println(map2);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T method() {
+		return (T) new HashMap<Object, Object>();
+	}
+	
+	public static Object method1() {
+		return new Object();
+	}
+	
 	public <T> void genericMethod(T type) {
 
 	}

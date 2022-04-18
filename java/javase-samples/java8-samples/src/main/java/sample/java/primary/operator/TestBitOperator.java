@@ -2,6 +2,8 @@ package sample.java.primary.operator;
 
 import java.util.Random;
 
+import org.junit.jupiter.api.Test;
+
 /**
  * 位操作符
  * https://cloud.tencent.com/developer/article/1338265
@@ -21,19 +23,16 @@ public class TestBitOperator {
     private static final int TERMINATED =  3 << COUNT_BITS;
 
 	public static void main(String[] args) {
-		
+		test1();
+	}
+	
+	public static void test7() {
 		println(Integer.toBinaryString(COUNT_BITS)); //11101
-
 		int k = 1 << COUNT_BITS;
-		
 		System.out.println(k);
-		
 		int i = 10;
-		
 		int j = i & ~CAPACITY;
-		
 		println(Integer.toBinaryString(j)); //11101
-		
 	}
 	
 	public static void test5() {
@@ -58,10 +57,13 @@ public class TestBitOperator {
 	}
 	
 	public static void test1() {
-		byte a = ~127;  //二进制为：10000000
-		//JAVA在对不足32位的数(byte,char,short)进行移位运算时候,都会先转成int(32位)
-		//因此:a = 11111111111111111111111110000000
-		System.out.println(Integer.toBinaryString(a)); //11111111111111111111111110000000
+		System.out.println(Integer.toBinaryString(127));//1111111
+		byte a = ~127;  //二进制为：10000000 = -128
+		//JAVA在对不足32位的数(byte,char,short)进行移位运算时候,都会先转成int(32位)，因此 a >> 1返回int
+		// byte b = a >> 1; // Type mismatch: cannot convert from int to byte
+		
+		//这里toBinaryString接收int类型，因此:a = 11111111111111111111111110000000
+		System.out.println(Integer.toBinaryString(a));  //11111111111111111111111110000000
 		//0-正数，1-负数
 		System.out.println(a); //-128
 		int i = a >>> 2; //无符号右移2位，左边补0
@@ -72,11 +74,24 @@ public class TestBitOperator {
 		System.out.println(Integer.toBinaryString(Byte.toUnsignedInt(a))); //11100000
 		System.out.println(Integer.toBinaryString(a)); //11111111111111111111111111100000
 	}
+	
+	public static void test8() {
+		
+	}
 
 	//Integer.toBinaryString(a)函数的结果是长度为32的字符串
 	public static void test3() {
 		System.out.println(Integer.toBinaryString(12)); //1100
 		System.out.println(Integer.toBinaryString((byte)12)); //1100
+	}
+	
+	@Test
+	public void test6() {
+		// 32/64位架构
+		println(1 >> 32);
+		println(-1 >> 31); // -1
+		println(-1 >> 32); // -1
+		System.out.println(32 & 0x1f); // 0
 	}
 	
 	public static void test2() {
@@ -91,7 +106,6 @@ public class TestBitOperator {
 
 		System.out.println(l1);
 		System.out.println(l.length()); // 63
-
 		System.out.println(Long.toBinaryString(Long.MAX_VALUE >>> 16));
 
 		System.out.println(right("11010111011100001", 16));
@@ -133,9 +147,10 @@ public class TestBitOperator {
 	}
 	
 	public static void println(Object obj) {
-		System.out.println(obj);
+		if (obj == null) {
+			System.out.println("object is null");
+			return;
+		}
+		System.out.println(obj + " [" + obj.getClass().getName() + "]");
 	}
-	
-	
-	
 }

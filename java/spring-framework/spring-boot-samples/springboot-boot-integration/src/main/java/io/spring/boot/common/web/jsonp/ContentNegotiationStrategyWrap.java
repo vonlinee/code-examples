@@ -1,4 +1,4 @@
-package io.spring.boot.common.jsonp;
+package io.spring.boot.common.web.jsonp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,16 +16,12 @@ import org.springframework.web.accept.ContentNegotiationStrategy;
 import org.springframework.web.context.request.NativeWebRequest;
 
 /**
- * 对 ServletPathExtensionContentNegotiationStrategy 进行包装
- *
- * @author   单红宇(365384722)
- * @myblog  http://blog.csdn.net/catoop/
- * @create    2016年2月29日
+ * 对ServletPathExtensionContentNegotiationStrategy 进行包装
  */
 public class ContentNegotiationStrategyWrap implements ContentNegotiationStrategy {
 
 	protected final Log logger = LogFactory.getLog(getClass());
-	
+
 	private final ContentNegotiationStrategy strategy;
 
 	private final Set<String> jsonpParameterNames = new LinkedHashSet<String>(Arrays.asList("jsonp", "callback"));
@@ -55,7 +51,7 @@ public class ContentNegotiationStrategyWrap implements ContentNegotiationStrateg
 	protected boolean isValidJsonpQueryParam(String value) {
 		return CALLBACK_PARAM_PATTERN.matcher(value).matches();
 	}
-	
+
 	public ContentNegotiationStrategyWrap(ContentNegotiationStrategy strategy) {
 		super();
 		this.strategy = strategy;
@@ -73,5 +69,4 @@ public class ContentNegotiationStrategyWrap implements ContentNegotiationStrateg
 		// JSONP 响应类型处理 ---- END
 		return this.strategy.resolveMediaTypes(request);
 	}
-	
 }

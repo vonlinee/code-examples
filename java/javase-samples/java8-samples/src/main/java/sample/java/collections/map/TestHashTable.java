@@ -10,6 +10,5 @@ public class TestHashTable {
 		
 		table.put("", null);
 		
-		
 	}
 }

@@ -17,7 +17,12 @@ https://stackoverflow.com/questions/57958649/error-creating-bean-with-name-mvcva
 
 
 
-
+Non-resolvable parent POM for org.example:springboot-boot-integration:0.0.1-SNAPSHOT: org.springframework.boot:spring-boot-starter-parent:pom:2.3.12.RELEASE 
+ failed to transfer from http://0.0.0.0/ during a previous attempt. This failure was cached in the local repository and resolution is not reattempted until the update 
+ interval of maven-default-http-blocker has elapsed or updates are forced. 
+ Original error: Could not transfer artifact org.springframework.boot:spring-boot-starter-
+ parent:pom:2.3.12.RELEASE from/to maven-default-http-blocker (http://0.0.0.0/): 
+ Blocked mirror for repositories: [nexus-aliyun (http://maven.aliyun.com/nexus/content/groups/public, default, releases)]
 
 
 
