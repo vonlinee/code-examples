@@ -1,4 +1,4 @@
-package sample.java;
+package sample.java.io;
 
 public class Test {
 	byte b;

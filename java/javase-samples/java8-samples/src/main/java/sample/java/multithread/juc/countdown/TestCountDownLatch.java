@@ -1,8 +1,10 @@
 package sample.java.multithread.juc.countdown;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 同步计数器，当计数器数值减为0时，所有受其影响而等待的线程将会被激活，这样保证模拟并发请求的真实性
@@ -25,9 +27,9 @@ import java.util.concurrent.Executors;
  */
 public class TestCountDownLatch {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		ExecutorService service = Executors.newFixedThreadPool(3);
-		
+
 		// 计数器为3
 		final CountDownLatch latch = new CountDownLatch(3);
 		for (int i = 0; i < 3; i++) {
@@ -54,6 +56,15 @@ public class TestCountDownLatch {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		List<Runnable> shutdownNow = service.shutdownNow();
+		if (shutdownNow.size() > 0) {
+			System.out.println(shutdownNow);
+		}
+		
+		boolean awaitTermination = service.awaitTermination(20, TimeUnit.SECONDS);
+		if (awaitTermination) {
+			
+		}
 	}
-
 }

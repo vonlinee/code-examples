@@ -10,7 +10,7 @@ public class BufferDemo {
 
 	public static void main(String args[]) throws Exception {
 		// 这用用的是文件IO处理
-		FileInputStream fin = new FileInputStream("E://test.txt");
+		FileInputStream fin = new FileInputStream("D://1.txt");
 		// 创建文件的操作管道
 		FileChannel fc = fin.getChannel();
 		// 分配一个10个大小缓冲区，说白了就是分配一个10个大小的byte数组
@@ -25,7 +25,7 @@ public class BufferDemo {
 		// 判断有没有可读数据
 		while (buffer.remaining() > 0) {
 			byte b = buffer.get();
-			// System.out.print(((char)b));
+			System.out.println(((char) b));
 		}
 		output("调用get()", buffer);
 		// 可以理解为解锁
@@ -35,15 +35,14 @@ public class BufferDemo {
 		fin.close();
 	}
 
-	// 把这个缓冲里面实时状态给答应出来
+	// 把这个缓冲里面实时状态给打印出来
 	public static void output(String step, ByteBuffer buffer) {
-		System.out.println(step + " : ");
+		System.out.print(step + " => ");
 		// 容量，数组大小
 		System.out.print("capacity: " + buffer.capacity() + ", ");
 		// 当前操作数据所在的位置，也可以叫做游标
 		System.out.print("position: " + buffer.position() + ", ");
 		// 锁定值，flip，数据操作范围索引只能在position - limit 之间
 		System.out.println("limit: " + buffer.limit());
-		System.out.println();
 	}
 }

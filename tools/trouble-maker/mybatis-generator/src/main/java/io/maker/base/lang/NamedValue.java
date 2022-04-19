@@ -3,14 +3,15 @@ package io.maker.base.lang;
 /**
  * bind a name to a specified value
  */
-public class NamedValue extends Value {
+public final class NamedValue {
 
     private final String valueName;
+    private Value value;
 
-    private static final String UNKNOWN_NAME = "?";
+    private static final String UNKNOWN_NAME = "UNKNOWN_NAME";
 
     public NamedValue(String name, Object value) {
-        super(value);
+        this.value = Value.wrap(value);
         this.valueName = value == null ? "null" : name == null ? UNKNOWN_NAME : name;
     }
 
@@ -20,7 +21,7 @@ public class NamedValue extends Value {
 
     @Override
     public String toString() {
-        return valueName + " : " + value;
+        return valueName + " : " + value.get();
     }
 
     @Override

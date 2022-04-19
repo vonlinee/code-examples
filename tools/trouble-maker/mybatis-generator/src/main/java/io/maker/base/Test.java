@@ -1,20 +1,18 @@
 package io.maker.base;
 
-import io.maker.base.collection.FixedMap;
-import io.maker.base.io.FileUtils;
-import io.maker.base.rest.OptResult;
-
-import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
+import io.maker.base.lang.Value;
 
 public class Test {
     public static void main(String[] args) throws IOException {
 
+    	Value value = Value.wrap("A");
+    	
+    	
+    	
+    	
+    	
 //        new HashMap<>();
 //
 //        HashMap<String, Object> fixedMap = new HashMap<>(1);
@@ -37,7 +35,7 @@ public class Test {
 //            }
 //        });
 
-        FileUtils.deleteProjectFiles("D:\\Projects\\Github\\code-samples");
+        // FileUtils.deleteProjectFiles("D:\\Projects\\Github\\code-samples");
 
     }
 

@@ -1,21 +1,14 @@
-package sample.java;
+package sample.java.io;
 
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.io.StringWriter;
 
-public class TestStringReader {
+public class TestStringWriter {
 
-	//在字符串缓冲区中收集输出的字符流，可用于构造字符串， 关闭流无效，关闭后调用其他方法不会报异常
+//·在字符串缓冲区中收集输出的字符流，可用于构造字符串， 关闭流无效，关闭后调用其他方法不会报异常
 	public static void main(String[] args) {
 		StringWriter sw1 = new StringWriter();
 		StringWriter sw2 = new StringWriter(100);
-		
-		sw1.append("AAAAAAAAAAAAAAAA");
-		sw1.flush();
-		
-		StringReader sr = new StringReader(sw1.getBuffer().toString());
-		
 	}
 	
 	public void method(Exception ex) {

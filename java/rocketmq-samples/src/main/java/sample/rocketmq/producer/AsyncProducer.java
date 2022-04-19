@@ -1,5 +1,6 @@
 package sample.rocketmq.producer;
 
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -7,7 +8,6 @@ import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
-import org.apache.rocketmq.remoting.common.RemotingHelper;
 
 public class AsyncProducer {
     public static void main(String[] args) throws Exception {
@@ -24,10 +24,11 @@ public class AsyncProducer {
         for (int i = 0; i < messageCount; i++) {
             try {
                 final int index = i;
+                // String topic, String tags, String keys, byte[] body
                 Message msg = new Message("Jodie_topic_1023",
                     "TagA",
                     "OrderID188",
-                    "Hello world".getBytes(RemotingHelper.DEFAULT_CHARSET));
+                    "Hello world".getBytes(StandardCharsets.UTF_8));
                 producer.send(msg, new SendCallback() {
                     @Override
                     public void onSuccess(SendResult sendResult) {
@@ -42,11 +43,14 @@ public class AsyncProducer {
                         e.printStackTrace();
                     }
                 });
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        countDownLatch.await(5, TimeUnit.SECONDS);
+        boolean await =  countDownLatch.await(5, TimeUnit.SECONDS);
+        if (await) {
+			System.out.println(await);
+		}
         producer.shutdown();
     }
 }

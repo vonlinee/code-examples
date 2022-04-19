@@ -32,12 +32,12 @@ public class NioServer {
 			// 大堂经理准备就绪，接客
 			selector = Selector.open();
 			// BIO 升级版本 NIO，为了兼容BIO，NIO模型默认是采用阻塞式
-			server.configureBlocking(false); //需要在下面这句之前
+			server.configureBlocking(false); // 需要在下面这句之前
 			// 在门口翻牌子，正在营业
-			server.register(selector, SelectionKey.OP_ACCEPT);
+			server.register(selector, SelectionKey.OP_ACCEPT); // 连接
 			// 我得告诉地址
-			// IP/Port
-			server.bind(new InetSocketAddress(this.port));
+			server.bind(new InetSocketAddress(this.port)); // IP/Port
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -45,42 +45,43 @@ public class NioServer {
 
 	public void listen() {
 		System.out.println("listen on " + this.port + ".");
-		try {
-			// 轮询主线程
-			while (true) {
+		// 轮询主线程
+		while (true) {
+			try {
 				// 大堂经理再叫号
-				selector.select();
+				int i = selector.select(); // 返回准备就绪的事件个数 The number of keys
 				// 每次都拿到所有的号子
 				Set<SelectionKey> keys = selector.selectedKeys();
 				Iterator<SelectionKey> iter = keys.iterator();
 				// 不断地迭代，就叫轮询
-				// 同步体现在这里，因为每次只能拿一个key，每次只能处理一种状态
 				while (iter.hasNext()) {
+					// 同步体现在这里，因为每次只能拿一个key，每次只能处理一种状态
 					SelectionKey key = iter.next();
 					iter.remove();
-					// 每一个key代表一种状态
-					// 没一个号对应一个业务
-					// 数据就绪、数据可读、数据可写 等等等等
+					// 每一个key代表一种状态，每一个号对应一个业务 数据就绪、数据可读、数据可写 等等等等
 					process(key);
 				}
+				// 可接受的事件过多
+				if (i > 10) {
+					break;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				break;
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
 	// 具体办业务的方法，坐班柜员
 	// 每一次轮询就是调用一次process方法，而每一次调用，只能干一件事
-	// 在同一时间点，只能干一件事
+	// 在同一时间点，只能干一件事 业务处理在同一个线程中进行
 	private void process(SelectionKey key) throws IOException {
 		// 针对于每一种状态给一个反应
 		if (key.isAcceptable()) {
 			ServerSocketChannel server = (ServerSocketChannel) key.channel();
-			// 这个方法体现非阻塞，不管你数据有没有准备好
-			// 你给我一个状态和反馈，根据不同的状态做出响应
+			// 这个方法体现非阻塞，不管你数据有没有准备好 你给我一个状态和反馈，根据不同的状态做出响应
 			SocketChannel channel = server.accept();
-			// 一定一定要记得设置为非阻塞
-			channel.configureBlocking(false);
+			channel.configureBlocking(false); // 一定一定要记得设置为非阻塞
 			// 当数据准备就绪的时候，将状态改为可读
 			key = channel.register(selector, SelectionKey.OP_READ);
 		} else if (key.isReadable()) {
@@ -97,6 +98,7 @@ public class NioServer {
 			}
 		} else if (key.isWritable()) {
 			SocketChannel channel = (SocketChannel) key.channel();
+			// 拿到附带的数据
 			String content = (String) key.attachment();
 			channel.write(ByteBuffer.wrap(("输出：" + content).getBytes()));
 			channel.close();

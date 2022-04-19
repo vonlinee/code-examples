@@ -1,71 +1,108 @@
 package io.maker.base.lang;
 
-import java.util.Objects;
+import java.io.Serializable;
 
-/**
- * 包装值
- */
-public class Value extends TypeInfoHolder {
+public abstract class Value implements Serializable {
 
-    // 单例容器
-    private static final Value valueContainer = new Value(null);
+	private static final long serialVersionUID = 1L;
+	
+	// nullable
+	protected Object value;
+	protected transient Class<?> typeClass;
+	
+	protected Value(Object value) {
+		super();
+		set(value);
+	}
 
-    protected Object value;
+	public void set(Object value) {
+		this.value = value;
+		this.typeClass = value != null ? value.getClass() : null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public final <T> T get() {
+		return (T) value;
+	}
+	
+	public static Value wrap(Object value) {
+		return new SimpleValue(value);
+	}
+	
+	public static Value wrapFinal(Object value) {
+		return new FinalValue(value);
+	}
+	
+	public static Value empty(Object value) {
+		return new NullValue(value);
+	}
+	
+	public static Value empty(Object value, Class<?> clazz) {
+		Value value1 = new NullValue(value);
+		value1.typeClass = clazz;
+		return value1;
+	}
+	
+	public final boolean isNull() {
+		return value == null;
+	}
+	
+	public final Class<?> getTypeClass() {
+		return typeClass;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Value) {
+			Value val = (Value) obj;
+			if (this.value == null) {
+				return val.value == null && this.typeClass == val.typeClass;
+			}
+			return this.value.equals(val.value) && this.typeClass == val.typeClass;
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		if (this.value == null) {
+			return 0;
+		}
+		return this.value.hashCode();
+	}
 
-    public Value(Object value) {
-        super();
-        this.value = value;
-        this.typeClass = value != null ? value.getClass() : null;
-    }
+	/**
+	 * 默认实现
+	 */
+	private static class FinalValue extends Value {
 
-    public static Value wrapNullable(Object value) {
-        return new Value(value);
-    }
+		private static final long serialVersionUID = 1L;
 
-    public static Value wrap(Object value) {
-        return new Value(Objects.requireNonNull(value));
-    }
+		protected FinalValue(Object value) {
+			super(value);
+		}
 
-    public static Value resue(Object value) {
-        valueContainer.value = value;
-        valueContainer.typeClass = value != null ? value.getClass() : null;
-        return valueContainer;
-    }
+		@Override
+		public void set(Object value) {
+			throw new UnsupportedOperationException("update the value is not supported!");
+		}
+	}
+	
+	private static class SimpleValue extends Value {
 
-    public static Value resetAndPut(Object value) {
-        valueContainer.reset();
-        return resue(value);
-    }
+		private static final long serialVersionUID = 1L;
 
-    public void reset() {
-        this.value = null;
-        this.typeClass = null;
-    }
+		protected SimpleValue(Object value) {
+			super(value);
+		}
+	}
+	
+	private static class NullValue extends Value {
 
-    @SuppressWarnings("unchecked")
-    public final <T> T get() {
-        return (T) value;
-    }
+		private static final long serialVersionUID = 1L;
 
-    public final String getString() {
-        return (String) value;
-    }
-
-    public final int getInt() {
-        return (Integer) value;
-    }
-
-    public boolean isNull() {
-        return this.value == null;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Value) {
-            Value value = (Value) obj;
-            if (this.value != null) return this.value.equals(value.value);
-            else return value.value == null;
-        }
-        return false;
-    }
+		protected NullValue(Object value) {
+			super(value);
+		}
+	}
 }

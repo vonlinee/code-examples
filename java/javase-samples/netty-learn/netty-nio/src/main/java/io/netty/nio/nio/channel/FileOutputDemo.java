@@ -5,9 +5,7 @@ import java.nio.*;
 import java.nio.channels.*;
 
 public class FileOutputDemo {
-	private static final byte message[] = {
-			83, 111, 109, 101, 32, 98, 121, 116, 101, 115, 46
-	};
+	private static final byte message[] = { 83, 111, 109, 101, 32, 98, 121, 116, 101, 115, 46 };
 
 	public static void main(String args[]) throws Exception {
 		FileOutputStream fout = new FileOutputStream("D://1.txt");
