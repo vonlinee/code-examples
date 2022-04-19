@@ -45,8 +45,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public boolean isSharable() {
-		// TODO Auto-generated method stub
-		return super.isSharable();
+		return true;
 	}
 
 	@Override
@@ -82,7 +81,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		cause.printStackTrace();
+		cause.printStackTrace(); // 记录异常并关闭连接
 		ctx.close();
 	}
 }
