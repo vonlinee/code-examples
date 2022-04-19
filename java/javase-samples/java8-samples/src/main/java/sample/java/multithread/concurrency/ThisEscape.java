@@ -1,5 +1,8 @@
 package sample.java.multithread.concurrency;
 
+/**
+ * This溢出问题
+ */
 public class ThisEscape {
 
     private M m;

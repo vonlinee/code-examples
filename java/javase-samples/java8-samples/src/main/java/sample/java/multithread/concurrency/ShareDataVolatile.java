@@ -1,5 +1,8 @@
 package sample.java.multithread.concurrency;
 
+/**
+ * 共享数据
+ */
 public class ShareDataVolatile {
 
     public volatile static int count = 0;

@@ -1,6 +1,6 @@
 package sample.java.multithread.threadapi;
 
-import sample.java.multithread.Sleep;
+import sample.java.multithread.utils.Sleep;
 
 public class ThreadSleepTest {
 

@@ -1,7 +1,7 @@
 package sample.java.multithread.lock;
 
 
-import sample.java.multithread.Sleep;
+import sample.java.multithread.utils.Sleep;
 
 public class WaitNotifyTest3 {
 	public static void main(String args[]) {

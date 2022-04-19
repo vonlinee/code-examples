@@ -2,8 +2,11 @@ package sample.java.multithread.atomic;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import sample.java.multithread.Sleep;
+import sample.java.multithread.utils.Sleep;
 
+/**
+ * 原子类都是基于cas进行的
+ */
 public class TestAtomicInt {
 
     static AtomicInteger integer = new AtomicInteger(0);

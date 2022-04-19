@@ -16,8 +16,7 @@ public class Main {
         System.out.println(dt);
     }
 
-    public void
-    me() {
+    public void me() {
         for (int i = 1; i <= 12; i++) {
             System.out.println(Month.of(i).maxLength());
         }

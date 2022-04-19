@@ -1,8 +1,8 @@
 package sample.java.primary.operator;
 
-import java.util.Random;
-
 import org.junit.jupiter.api.Test;
+
+import java.util.Random;
 
 /**
  * 位操作符

@@ -1,11 +1,10 @@
 package sample.java.collections.map;
 
-import java.util.HashMap;
-
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import sample.java.collections.Hero;
 import sample.java.collections.U;
+
+import java.util.HashMap;
 
 
 public class TestHashMap {
