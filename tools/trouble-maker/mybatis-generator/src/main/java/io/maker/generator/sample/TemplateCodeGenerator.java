@@ -1,13 +1,17 @@
 package io.maker.generator.sample;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 import com.alibaba.druid.pool.DruidDataSource;
-import io.maker.extension.poi.ExcelUtils;
+
 import io.maker.generator.db.JdbcUtils;
 import io.maker.generator.db.meta.resultset.MapListHandler;
 import io.maker.generator.db.meta.table.TableMetaDataLoader;
 import io.maker.generator.db.pool.DruidPool;
-
-import java.util.*;
 
 /**
  * 模板代码生成

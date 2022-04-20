@@ -2,17 +2,24 @@ package io.maker.base;
 
 import java.io.IOException;
 
-import io.maker.base.lang.type.Value;
+import javax.sql.DataSource;
+
+import com.alibaba.druid.pool.DruidDataSource;
+
+import io.maker.generator.db.DataSourceBuilder;
 
 public class Test {
     public static void main(String[] args) throws IOException {
 
-    	Value value = Value.wrap("A");
+    	DataSource dataSource = DataSourceBuilder.create()
+    		.url("jdbc:mysql://localhost:3306/mysql_learn?useUnicode=true&characterEncoding=utf8")
+    		.type(DruidDataSource.class)
+    		.username("root")
+    		.password("123456")
+    		.driverClassName("com.mysql.jdbc.Driver")
+    		.build();
     	
-    	boolean primitive = Integer.class.isPrimitive();
-    	
-    	System.out.println(int.class.isPrimitive());
-    	
+    	System.out.println(dataSource);
     	
 //        new HashMap<>();
 //

@@ -1,8 +1,8 @@
 package io.maker.generator.db;
 
-import lombok.Data;
-
 import java.util.Properties;
+
+import lombok.Data;
 
 /**
  * TODO Builder模式控制顺序

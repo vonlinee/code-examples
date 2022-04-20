@@ -19,7 +19,7 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
+group 'io.trouble.maker'
 version '1.0-SNAPSHOT'
 
 ext {
@@ -63,8 +63,8 @@ ext {
 }
 
 allprojects {
-    group = 'com.baomidou'
-    version = "3.5.1"
+    group = 'io.trouble.maker'
+    version = "1.0-SNAPSHOT"
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
@@ -170,10 +170,10 @@ subprojects {
     }
 
     //noinspection GroovyAssignabilityCheck
-    // task sourcesJar(type: Jar) {
-    //     archiveClassifier = 'sources'
-    //     from sourceSets.main.allSource
-    // }
+    task sourcesJar(type: Jar) {
+        archiveClassifier = 'sources'
+        from sourceSets.main.allSource
+    }
 
     // javadoc {
     //     afterEvaluate {

@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group 'com.baomidou'
+version '3.5.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testRuntimeOnly 'junit:junit:4.13.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -12,11 +12,12 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 /**
- * copy from {@code org.apache.commons.lang3.Validate} used for parameter
- * validation all methods throws {@code IllegalArgumentException}
- * when开头的进行校验，并抛出附带信息的异常
- * is开头的均返回boolean
- * no开头的除了进行校验之外，如果校验通过则返回被校验对象
+ * copy from {@code org.apache.commons.lang3.Validate} used for parameter validation all methods throws {@code IllegalArgumentException}
+ * 1.when开头的进行校验，并抛出附带信息的异常
+ * 2.is开头的均返回boolean
+ * 3.no开头的除了进行校验之外，如果校验通过则返回被校验对象，校验不通过则抛出附带信息的异常
+ * 
+ * jsr305.jar
  */
 public final class Validator {
 

@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.springframework.lang.Nullable;
+
 public final class ObjectUtils {
 
     @SuppressWarnings("unchecked")
@@ -127,4 +129,15 @@ public final class ObjectUtils {
         }
         return new HashMap<>();
     }
+
+	/**
+	 * Determine whether the given array is empty:
+	 * i.e. {@code null} or of zero length.
+	 * @param array the array to check
+	 * @see #isEmpty(Object)
+	 */
+	public static boolean isEmpty(@Nullable Object[] array) {
+		return (array == null || array.length == 0);
+	}
+
 }

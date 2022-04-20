@@ -41,6 +41,7 @@ public class MyBatisXMLGenerator {
 
     public static void main(String[] args) throws Exception {
         Properties properties = JdbcUtils.getLocalProperties();
+        
         DataSource dataSource = DruidDataSourceFactory.createDataSource(properties);
         MyBatis mybatis = new MyBatis(dataSource);
 //		TableInfoSchema tableInfoSchema = TableMetaDataLoader.loadSchema(dataSource, "mp", "t_usc_mdm_user_dlr");
@@ -50,7 +51,6 @@ public class MyBatisXMLGenerator {
 //        String sql = generateInsertSql(dataSource, "jsh_user", "MySQL", columnNameFilter);
 //        System.out.println(sql);
         generateSelectXml(dataSource, "t_sac_bu_boutique_dlr", "MySQL", columnNameFilter);
-        
         generateInsertSql(dataSource, "t_sac_bu_boutique_dlr", "MySQL", null);
     }
 

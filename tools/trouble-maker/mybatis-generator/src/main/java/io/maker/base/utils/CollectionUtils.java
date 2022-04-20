@@ -1,6 +1,7 @@
 package io.maker.base.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,4 +26,22 @@ public abstract class CollectionUtils {
     public static <T> List<T> newArrayList(int intialCapacity) {
         return new ArrayList<T>(intialCapacity);
     }
+
+	/**
+	 * Return {@code true} if the supplied Collection is {@code null} or empty.
+	 * Otherwise, return {@code false}.
+	 * @param collection the Collection to check
+	 * @return whether the given Collection is empty
+	 */
+	public static boolean isEmpty(Collection<?> collection) {
+		return (collection == null || collection.isEmpty());
+	}
+
+	public static boolean isEmpty(Map<?, ?> map) {
+		return isEmpty(map);
+	}
+	
+	public static boolean isEmpty(List<?> list) {
+		return isEmpty(list);
+	}
 }
