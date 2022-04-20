@@ -1,16 +1,14 @@
 package io.maker.generator.sample;
 
-import io.maker.generator.utils.XMLMapperLoader;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import io.maker.generator.utils.XMLMapperLoader;
+
 /**
- * @author LMinY
- * @description: 开启自动刷新XML
- * @date 2020/8/27
+ * 开启自动刷新XML
  */
 @Configuration
 public class XMLMapperConfing {

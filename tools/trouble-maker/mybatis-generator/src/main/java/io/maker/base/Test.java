@@ -2,15 +2,16 @@ package io.maker.base;
 
 import java.io.IOException;
 
-import io.maker.base.lang.Value;
+import io.maker.base.lang.type.Value;
 
 public class Test {
     public static void main(String[] args) throws IOException {
 
     	Value value = Value.wrap("A");
     	
+    	boolean primitive = Integer.class.isPrimitive();
     	
-    	
+    	System.out.println(int.class.isPrimitive());
     	
     	
 //        new HashMap<>();

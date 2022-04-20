@@ -1,6 +1,6 @@
 package io.maker.base;
 
-import io.maker.base.lang.Value;
+import io.maker.base.lang.type.Value;
 
 public final class Matrix {
 

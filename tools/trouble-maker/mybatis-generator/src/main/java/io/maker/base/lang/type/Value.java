@@ -1,4 +1,4 @@
-package io.maker.base.lang;
+package io.maker.base.lang.type;
 
 import java.io.Serializable;
 
@@ -7,7 +7,7 @@ public abstract class Value implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	// nullable
-	protected Object value;
+	protected Object val;
 	protected transient Class<?> typeClass;
 	
 	protected Value(Object value) {
@@ -16,13 +16,13 @@ public abstract class Value implements Serializable {
 	}
 
 	public void set(Object value) {
-		this.value = value;
+		this.val = value;
 		this.typeClass = value != null ? value.getClass() : null;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public final <T> T get() {
-		return (T) value;
+		return (T) val;
 	}
 	
 	public static Value wrap(Object value) {
@@ -44,7 +44,7 @@ public abstract class Value implements Serializable {
 	}
 	
 	public final boolean isNull() {
-		return value == null;
+		return val == null;
 	}
 	
 	public final Class<?> getTypeClass() {
@@ -55,20 +55,20 @@ public abstract class Value implements Serializable {
 	public boolean equals(Object obj) {
 		if (obj instanceof Value) {
 			Value val = (Value) obj;
-			if (this.value == null) {
-				return val.value == null && this.typeClass == val.typeClass;
+			if (this.val == null) {
+				return val.val == null && this.typeClass == val.typeClass;
 			}
-			return this.value.equals(val.value) && this.typeClass == val.typeClass;
+			return this.val.equals(val.val) && this.typeClass == val.typeClass;
 		}
 		return false;
 	}
 	
 	@Override
 	public int hashCode() {
-		if (this.value == null) {
+		if (this.val == null) {
 			return 0;
 		}
-		return this.value.hashCode();
+		return this.val.hashCode();
 	}
 
 	/**

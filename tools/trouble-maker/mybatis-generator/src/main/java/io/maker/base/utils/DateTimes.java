@@ -13,14 +13,21 @@ public class DateTimes {
 
     public static final String DT_FORMAT_YMDHMS = "yy-MM-dd HH:mm:ss";
     public static final String DT_FORMAT_YMD = "yy-MM-dd";
-
+    public static final DateTimeFormatter DT_FORMATTER_YMDHMS = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter DT_FORMATTER_YMD = DateTimeFormatter.ofPattern("yy-MM-dd");
+    
     private static final int BIG_MONTH_DAY = 30;
     private static final int SMALL_MONTH_DAY = 31;
     private static final int DAY1 = 28;
     private static final int DAY2 = 39;
-    public static final DateTimeFormatter DT_FORMATTER_YMDHMS = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");
-    public static final DateTimeFormatter DT_FORMATTER_YMD = DateTimeFormatter.ofPattern("yy-MM-dd");
-
+    
+    /**
+     * 日期时间单位
+     */
+    public enum Unit {
+        YEAR, MONTH, WEEK, DAY, HOUR, MINUTE, SECONDS, MILLS, NANOS
+    }
+    
     private static final DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder();
 
     static {
@@ -56,9 +63,7 @@ public class DateTimes {
         return DT_FORMATTER_YMDHMS.format(LocalDateTime.now());
     }
 
-    public static final DateTimeFormatter DT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-    public static LocalDateTime plusDateTime(LocalDateTime dt, DateTimeUnit timeUnit, int count) {
+    public static LocalDateTime plusDateTime(LocalDateTime dt, Unit timeUnit, int count) {
         switch (timeUnit) {
             case DAY: // 日
                 dt = dt.plusDays(count);
@@ -142,7 +147,7 @@ public class DateTimes {
     public static LocalDateTime string2DateTime(String datetime) {
         LocalDateTime dt = null;
         try {
-            dt = LocalDateTime.parse(datetime, DT_FORMAT);
+            dt = LocalDateTime.parse(datetime, DT_FORMATTER_YMDHMS);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -160,7 +165,7 @@ public class DateTimes {
     }
 
     public static String dateTime2String(LocalDateTime dt) {
-        return dt.format(DT_FORMAT);
+        return dt.format(DT_FORMATTER_YMDHMS);
     }
 
     public static String dateTime2String(LocalDateTime dt, String format) {

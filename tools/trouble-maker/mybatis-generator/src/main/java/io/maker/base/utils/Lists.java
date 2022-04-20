@@ -78,7 +78,6 @@ public final class Lists {
     }
 
     public static void main(String[] args) {
-
         //String[] param = {"Tom",
         //        "Bob", "Andrew", "Taylor Swift"};
         //List<List<?>> list = new ArrayList<>();
@@ -88,8 +87,6 @@ public final class Lists {
         //list.add(Arrays.asList(param));
 
         String[][] arr = new String[3][4];
-
-
         //println(list);
     }
 }

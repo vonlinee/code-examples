@@ -969,7 +969,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void writeLines(Collection lines, String lineEnding,
+    public static void writeLines(Collection<String> lines, String lineEnding,
                                   Writer writer) throws IOException {
         if (lines == null) {
             return;

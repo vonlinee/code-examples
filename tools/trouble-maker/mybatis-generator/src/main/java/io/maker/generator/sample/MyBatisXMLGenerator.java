@@ -49,7 +49,9 @@ public class MyBatisXMLGenerator {
 //
 //        String sql = generateInsertSql(dataSource, "jsh_user", "MySQL", columnNameFilter);
 //        System.out.println(sql);
-        generateSelectXml(dataSource, "t_usc_mdm_user_dlr", "MySQL", columnNameFilter);
+        generateSelectXml(dataSource, "t_sac_bu_boutique_dlr", "MySQL", columnNameFilter);
+        
+        generateInsertSql(dataSource, "t_sac_bu_boutique_dlr", "MySQL", null);
     }
 
     /**

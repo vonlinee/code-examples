@@ -232,7 +232,7 @@ public class FileSystemUtils {
         String[] cmdAttribs = new String[]{"cmd.exe", "/C", "dir /-c " + path};
 
         // read in the output of the command to an ArrayList
-        List lines = performCommand(cmdAttribs, Integer.MAX_VALUE);
+        List<String> lines = performCommand(cmdAttribs, Integer.MAX_VALUE);
 
         // now iterate over the lines we just read and find the LAST
         // non-empty line (the free space bytes should be in the last element
@@ -331,7 +331,7 @@ public class FileSystemUtils {
                 (flags.length() > 1 ? new String[]{"df", flags, path} : new String[]{"df", path});
 
         // perform the command, asking for up to 3 lines (header, interesting, overflow)
-        List lines = performCommand(cmdAttribs, 3);
+        List<?> lines = performCommand(cmdAttribs, 3);
         if (lines.size() < 2) {
             // unknown problem, throw exception
             throw new IOException(
@@ -396,7 +396,7 @@ public class FileSystemUtils {
      * @return the parsed data
      * @throws IOException if an error occurs
      */
-    List performCommand(String[] cmdAttribs, int max) throws IOException {
+    List<String> performCommand(String[] cmdAttribs, int max) throws IOException {
         // this method does what it can to avoid the 'Too many open files' error
         // based on trial and error and these links:
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
@@ -405,7 +405,7 @@ public class FileSystemUtils {
         // however, its still not perfect as the JDK support is so poor
         // (see commond-exec or ant for a better multi-threaded multi-os solution)
 
-        List lines = new ArrayList(20);
+        List<String> lines = new ArrayList<>(20);
         Process proc = null;
         InputStream in = null;
         OutputStream out = null;

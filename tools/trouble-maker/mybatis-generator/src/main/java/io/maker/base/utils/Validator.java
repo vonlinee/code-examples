@@ -1,4 +1,4 @@
-package io.maker.base.lang;
+package io.maker.base.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

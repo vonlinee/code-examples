@@ -1,15 +1,11 @@
 package io.maker.base.lang.reflect;
 
-import io.maker.base.utils.Array;
-import org.checkerframework.checker.units.qual.A;
 
 import java.beans.PropertyDescriptor;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public final class Reflective {
@@ -54,7 +50,8 @@ public final class Reflective {
         return methodGetUserName.invoke(obj);
     }
 
-    private static void test() {
+    @SuppressWarnings({ "rawtypes", "unused" })
+	private static void test() {
         String typeName = HashMap.class.getTypeName();
         TypeVariable<Class<HashMap>>[] typeParameters = HashMap.class.getTypeParameters();
         for (TypeVariable<Class<HashMap>> typeParameter : typeParameters) {

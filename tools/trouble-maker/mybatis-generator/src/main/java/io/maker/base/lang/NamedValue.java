@@ -1,5 +1,7 @@
 package io.maker.base.lang;
 
+import io.maker.base.lang.type.Value;
+
 /**
  * bind a name to a specified value
  */

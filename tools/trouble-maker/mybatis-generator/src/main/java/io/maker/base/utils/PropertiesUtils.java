@@ -15,22 +15,26 @@
  */
 package io.maker.base.utils;
 
-import com.alibaba.druid.support.logging.Log;
-import com.alibaba.druid.support.logging.LogFactory;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+
+import com.alibaba.druid.support.logging.Log;
+import com.alibaba.druid.support.logging.LogFactory;
 
 /**
  * Utilities for Properties.
  */
 public class PropertiesUtils {
+	
 	private final static Log LOG = LogFactory.getLog(PropertiesUtils.class);
 
 	/**
@@ -104,5 +108,13 @@ public class PropertiesUtils {
 			}
 		}
 		return result;
+	}
+	
+	public static Map<String, String> asMap(Properties properties) {
+		Map<String, String> map = new HashMap<String, String>();
+		for (Entry<Object, Object> entry : properties.entrySet()) {
+			map.put(entry.getKey().toString(), entry.getValue().toString());
+		}
+		return map;
 	}
 }

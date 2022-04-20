@@ -56,7 +56,7 @@ public class ByteArrayOutputStream extends OutputStream {
     /**
      * The list of buffers, which grows and never reduces.
      */
-    private List buffers = new ArrayList();
+    private List<byte[]> buffers = new ArrayList<>();
     /**
      * The index of the current buffer.
      */

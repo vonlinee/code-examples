@@ -1,11 +1,7 @@
 package io.maker.base.utils;
 
 /**
- * <p>
  * StringEscape ，数据库字符串转义
- * </p>
- * @author Caratacus
- * @since 2016-10-16
  */
 public class StringEscape {
 
