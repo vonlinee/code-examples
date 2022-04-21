@@ -1,4 +1,4 @@
-package io.maker.base;
+package io.maker.base.lang;
 
 import java.util.Properties;
 import java.util.ResourceBundle;

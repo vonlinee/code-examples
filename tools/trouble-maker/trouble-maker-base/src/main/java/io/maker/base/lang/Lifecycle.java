@@ -1,4 +1,4 @@
-package io.maker.base;
+package io.maker.base.lang;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

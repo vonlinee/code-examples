@@ -1,4 +1,4 @@
-package io.maker.base;
+package io.maker.base.lang;
 
 import java.io.*;
 import java.net.URL;
