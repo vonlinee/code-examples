@@ -3,3 +3,6 @@ include 'mybatis-generator'
 include 'mybatis-extensions'
 
 include 'trouble-maker-base'
+include 'trouble-maker-extension'
+
+
