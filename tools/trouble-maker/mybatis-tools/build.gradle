@@ -2,17 +2,17 @@ plugins {
     id 'java'
 }
 
-group 'com.baomidou'
-version '3.5.1'
+group 'io.trouble.maker'
+version '0.0.1.SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-	
-	// implementation project("trouble-maker-base")
-	
+
+    // implementation project("trouble-maker-base")
+
     implementation 'junit:junit:4.13.2'
     implementation "${lib.'mybatis-plus'}"
     implementation "${lib.velocity}"

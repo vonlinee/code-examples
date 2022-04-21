@@ -1,6 +1,5 @@
 package io.maker.ext.mybatis;
 
-import org.apache.ibatis.javassist.bytecode.Descriptor;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.session.Configuration;

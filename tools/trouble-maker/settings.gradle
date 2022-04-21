@@ -1,6 +1,6 @@
 rootProject.name = 'trouble-maker'
 
-include 'mybatis-generator'
+include 'mybatis-tools'
 include 'mybatis-extensions'
 include 'trouble-maker-base'
 include 'trouble-maker-extension'

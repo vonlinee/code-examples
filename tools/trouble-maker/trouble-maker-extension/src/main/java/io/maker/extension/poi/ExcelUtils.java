@@ -36,15 +36,15 @@ public final class ExcelUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ExcelUtils.class);
 
-    private ExcelUtils() {
-    }
+    private ExcelUtils() {}
+
+    private static final String XLS = ".xls";
+    private static final String XLSX = ".xlsx";
 
     /**
-     * TODO
-     *
-     * @param fileName
-     * @param excelType
-     * @return
+     * @param fileName  Excel FilePath
+     * @param excelType Excel类型：XLSX，XLS
+     * @return if true success or false implies failure
      */
     public static boolean createEmptyExcel(String fileName, String excelType) {
         Validator.whenNull(fileName, "fileName cannot be null!");
@@ -67,12 +67,8 @@ public final class ExcelUtils {
         return true;
     }
 
-    private static final String XLS = ".xls";
-    private static final String XLSX = ".xlsx";
-
     /**
      * 根据文件后缀获取对应Workbook对象
-     *
      * @param filePath
      * @param fileType
      * @return
@@ -101,8 +97,7 @@ public final class ExcelUtils {
 
     /**
      * 批量读取文件夹下的所有EXCEL文件
-     *
-     * @param filePath
+     * @param filePath filepath
      * @return
      */
     public static List<List<Map<String, String>>> readFolder(String filePath) {
@@ -129,7 +124,6 @@ public final class ExcelUtils {
 
     /**
      * 读取单个Excel文件，返回数据对象
-     *
      * @param filePath
      * @return
      */
@@ -156,7 +150,6 @@ public final class ExcelUtils {
 
     /**
      * 读取指定行
-     *
      * @param filePath
      * @param rowNum
      * @return
@@ -184,7 +177,6 @@ public final class ExcelUtils {
 
     /**
      * 关闭Excel对象
-     *
      * @param workbook
      */
     public static void closeQuitely(Workbook workbook) {
@@ -199,7 +191,6 @@ public final class ExcelUtils {
 
     /**
      * 解析Excel文件，返回数据对象
-     *
      * @param workbook
      * @return
      */
@@ -237,7 +228,6 @@ public final class ExcelUtils {
 
     /**
      * 将每一行数据转化为一个Map对象
-     *
      * @param row       行对象
      * @param cellCount 列数
      * @param mapKey    表头Map
@@ -263,7 +253,6 @@ public final class ExcelUtils {
 
     /**
      * 获取单元格的值
-     *
      * @param cel
      * @return
      */
@@ -286,7 +275,6 @@ public final class ExcelUtils {
     /**
      * 将 List<Map<String,Object>> 类型的数据导出为 Excel 默认 Excel 文件的输出路径为 项目根目录下 文件名为
      * filename + 时间戳 + .xlsx
-     *
      * @param mapList  数据源(通常为数据库查询数据)
      * @param filename 文件名前缀, 实际文件名后会加上日期
      * @param title    表格首行标题
@@ -358,7 +346,6 @@ public final class ExcelUtils {
 
     /**
      * 创建字符串的Excel表
-     *
      * @param workbook
      * @param sheetName
      * @param rowCount
@@ -380,7 +367,6 @@ public final class ExcelUtils {
 
     /**
      * 将准备好的workbook文档输出到文件中
-     *
      * @param workbook    文档数据
      * @param file        Excel文件
      * @param fileExisted 文件是否存在
