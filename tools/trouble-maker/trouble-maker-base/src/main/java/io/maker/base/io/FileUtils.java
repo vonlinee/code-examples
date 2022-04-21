@@ -61,7 +61,7 @@ public class FileUtils {
 	/**
 	 * Instances should NOT be constructed in standard programming.
 	 */
-	public FileUtils() {
+	private FileUtils() {
 		super();
 	}
 
@@ -311,6 +311,17 @@ public class FileUtils {
 		}
 		try {
 			Files.createFile(Paths.get(filepath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void createNewEmptyFile(File file) {
+		if (file.exists()) {
+			return;
+		}
+		try {
+			Files.createFile(file.toPath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1834,18 +1845,25 @@ public class FileUtils {
 		}
 	}
 
+	/**
+	 * 调用系统接口打开文件
+	 * @param file
+	 */
 	public static void openFile(File file) {
+		if (!file.exists()) {
+			throw new RuntimeException(file.getAbsolutePath() + " is not existed!");
+		}
 		if (file.isFile()) {
 			try {
 				Desktop.getDesktop().open(file);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return;
+		} else if (file.isDirectory()) {
+			showFile(file);
 		}
-		throw new UnsupportedOperationException(file.getAbsolutePath() + " is a directory!");
 	}
-
+	
 	public static void showFile(final File file) {
 		File tmp = null;
 		if (!file.isAbsolute() || file.isHidden() || !file.exists()) {

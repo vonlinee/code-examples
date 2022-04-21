@@ -15,8 +15,7 @@ import java.util.regex.Pattern;
  * copy from {@code org.apache.commons.lang3.Validate} used for parameter validation all methods throws {@code IllegalArgumentException}
  * 1.when开头的进行校验，并抛出附带信息的异常
  * 2.is开头的均返回boolean
- * 3.no开头的除了进行校验之外，如果校验通过则返回被校验对象，校验不通过则抛出附带信息的异常
- * 
+ * 3.not开头的除了进行校验之外，如果校验通过则返回被校验对象，校验不通过则抛出附带信息的异常
  * jsr305.jar
  */
 public final class Validator {
@@ -46,15 +45,18 @@ public final class Validator {
     private static final String DEFAULT_IS_ASSIGNABLE_EX_MESSAGE = "Cannot assign a %s to a %s";
     private static final String DEFAULT_IS_INSTANCE_OF_EX_MESSAGE = "Expected type: %s, actual: %s";
 
-    // Expression
+    //=======================================================================
+    
+    public static boolean isTrue(final boolean expression) {
+        return expression;
+    }
+    
+    //=======================================================================
+    
     public static void whenTrue(final boolean expression, final String message) {
         if (expression) {
             throw new IllegalArgumentException(message);
         }
-    }
-
-    public static boolean isTrue(final boolean expression) {
-        return expression;
     }
 
     public static <T extends Iterable<?>> T noNullElements(final T iterable) {

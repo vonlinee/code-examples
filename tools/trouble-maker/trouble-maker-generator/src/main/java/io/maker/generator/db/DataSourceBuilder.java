@@ -6,7 +6,10 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.objenesis.instantiator.util.ClassUtils;
+
+import com.alibaba.druid.pool.DruidDataSource;
+
+import io.maker.base.utils.ClassUtils;
 
 /**
  * Convenience class for building a {@link DataSource} with common
@@ -28,17 +31,14 @@ public final class DataSourceBuilder<T extends DataSource> {
 	/**
 	 * supported datasource type
 	 */
-	private static final String[] DATA_SOURCE_TYPE_NAMES = new String[] { 
-			"com.zaxxer.hikari.HikariDataSource",
-			"org.apache.tomcat.jdbc.pool.DataSource", 
-			"org.apache.commons.dbcp2.BasicDataSource"
-	};
+	private static final String[] DATA_SOURCE_TYPE_NAMES = new String[] { "com.zaxxer.hikari.HikariDataSource",
+			"org.apache.tomcat.jdbc.pool.DataSource", "org.apache.commons.dbcp2.BasicDataSource" };
 
 	private Class<? extends DataSource> type;
 
 	private ClassLoader classLoader;
 
-	private Map<String, String> properties = new HashMap<>();
+	private final Map<String, String> properties = new HashMap<>();
 
 	public static DataSourceBuilder<?> create() {
 		return new DataSourceBuilder<>(null);
@@ -57,18 +57,18 @@ public final class DataSourceBuilder<T extends DataSource> {
 		Class<? extends DataSource> type = getType();
 		DataSource result = BeanUtils.instantiateClass(type);
 		maybeGetDriverClassName();
-		bind(result);
+		bind(result); // properties => DataSource
 		return (T) result;
 	}
-	
-	private void bind(DataSource result) {
 
+	private void bind(DataSource result) {
+		
 	}
 
 	private void maybeGetDriverClassName() {
 		if (!this.properties.containsKey("driverClassName") && this.properties.containsKey("url")) {
 			String url = this.properties.get("url");
-			String driverClass = DatabaseDriver.fromJdbcUrl(url).getDriverClassName();
+			String driverClass = DbType.fromJdbcUrl(url).getDriverClassName();
 			this.properties.put("driverClassName", driverClass);
 		}
 	}
@@ -103,8 +103,7 @@ public final class DataSourceBuilder<T extends DataSource> {
 	public static Class<? extends DataSource> findType(ClassLoader classLoader) {
 		for (String name : DATA_SOURCE_TYPE_NAMES) {
 			try {
-				// return (Class<? extends DataSource>) ClassUtils.forName(name, classLoader);
-				return (Class<? extends DataSource>) DataSource.class;
+				return (Class<? extends DataSource>) ClassUtils.forName(name, classLoader);
 			} catch (Exception ex) {
 				// Swallow and continue
 			}

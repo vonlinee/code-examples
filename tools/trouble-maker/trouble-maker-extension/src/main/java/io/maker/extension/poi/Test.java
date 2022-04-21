@@ -1,27 +1,17 @@
 package io.maker.extension.poi;
 
-import io.maker.base.io.FileUtils;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.maker.extension.poi.ExcelUtils.writeExcel;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 public class Test {
 
     public static void main(String[] args) throws IOException, InvalidFormatException {
-        File file = new File("D:/Temp/1.xlsx");
-        SimpleExcelWriter writer = new SimpleExcelWriter();
-
-
-
-
-        FileUtils.openFile(file);
+    	test1();
     }
 
     public static void test1() throws IOException {

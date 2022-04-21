@@ -75,15 +75,15 @@ public class DataSourceProperties {
 
     private String jdbcUrlPrefix(DbType dbType) {
         String urlPrefix = "";
-        switch (dbType) {
-            case MYSQL:
-                urlPrefix = "jdbc:mysql://";
-                break;
-            case ORACLE:
-                urlPrefix = "jdbc:oracle://";
-            default:
-                break;
-        }
+//        switch (dbType) {
+//            case MYSQL5:
+//                urlPrefix = "jdbc:mysql://";
+//                break;
+//            case ORACLE:
+//                urlPrefix = "jdbc:oracle://";
+//            default:
+//                break;
+//        }
         return urlPrefix;
     }
 
@@ -93,15 +93,15 @@ public class DataSourceProperties {
 
     private void chooseDriverClassName() {
         String driverClassName = "";
-        if (dbType == DbType.MYSQL) {
-            if (dbVersion.startsWith("5")) {
-                driverClassName = "com.mysql.jdbc.Driver";
-            } else if (dbVersion.startsWith("8")) {
-                driverClassName = "com.mysql.cj.jdbc.Driver";
-            }
-        } else if (dbType == DbType.ORACLE) {
-            driverClassName = "";
-        }
+//        if (dbType == DbType.MYSQL) {
+//            if (dbVersion.startsWith("5")) {
+//                driverClassName = "com.mysql.jdbc.Driver";
+//            } else if (dbVersion.startsWith("8")) {
+//                driverClassName = "com.mysql.cj.jdbc.Driver";
+//            }
+//        } else if (dbType == DbType.ORACLE) {
+//            driverClassName = "";
+//        }
         this.driverClassName = driverClassName;
     }
 }
