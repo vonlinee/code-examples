@@ -1,5 +1,6 @@
 package io.maker.extension.poi;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
+import io.maker.base.io.FileUtils;
 
 public class Test {
 
@@ -18,13 +21,12 @@ public class Test {
         //读取文件夹，批量解析Excel文件
         System.out.println("--------------------读取文件夹，批量解析Excel文件-----------------------");
         List<List<Map<String, String>>> returnList = ExcelUtils.readFolder("D:\\Temp");
-        for (int i = 0; i < returnList.size(); i++) {
-            List<Map<String, String>> maps = returnList.get(i);
+        for (List<Map<String, String>> maps : returnList) {
             if (maps.isEmpty()) {
                 continue;
             }
-            for (int j = 0; j < maps.size(); j++) {
-                System.out.println(maps.get(j).toString());
+            for (Map<String, String> map : maps) {
+                System.out.println(map.toString());
             }
             System.out.println("--------------------手打List切割线-----------------------");
         }
@@ -32,8 +34,8 @@ public class Test {
         //读取单个文件
         System.out.println("--------------------读取并解析单个文件-----------------------");
         List<Map<String, String>> maps = ExcelUtils.readExcel("D:\\Temp\\1.xlsx");
-        for (int j = 0; j < maps.size(); j++) {
-            System.out.println(maps.get(j).toString());
+        for (Map<String, String> stringStringMap : maps) {
+            System.out.println(stringStringMap.toString());
         }
 
         System.out.println("数据加载...");
@@ -47,7 +49,8 @@ public class Test {
         }
         System.out.println("数据加载完成...");
 
-        ExcelUtils.writeExcel(mapArrayList, "1.xlsx", "Sheet-1");
+        ExcelUtils.writeExcel(mapArrayList, "D:/Temp/1.xlsx", "Sheet-1");
+
     }
 
     private static List<Map<String, Object>> prepareData() {

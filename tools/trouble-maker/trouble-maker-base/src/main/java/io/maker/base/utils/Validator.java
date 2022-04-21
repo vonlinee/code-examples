@@ -46,13 +46,13 @@ public final class Validator {
     private static final String DEFAULT_IS_INSTANCE_OF_EX_MESSAGE = "Expected type: %s, actual: %s";
 
     //=======================================================================
-    
+
     public static boolean isTrue(final boolean expression) {
         return expression;
     }
-    
+
     //=======================================================================
-    
+
     public static void whenTrue(final boolean expression, final String message) {
         if (expression) {
             throw new IllegalArgumentException(message);
@@ -104,7 +104,7 @@ public final class Validator {
             throw new IllegalArgumentException(DEFAULT_IS_NULL_EX_MESSAGE);
         }
     }
-    
+
     public static <T> void whenNull(final T obj, String message) {
         if (obj == null) {
             throw new IllegalArgumentException(message);
@@ -167,6 +167,7 @@ public final class Validator {
 
     /**
      * 数组没有NULL元素
+     *
      * @param array
      * @param message
      * @param values
@@ -213,6 +214,7 @@ public final class Validator {
 
     /**
      * map has null value for the specificied key
+     *
      * @param <K>
      * @param map
      * @param key
@@ -240,6 +242,7 @@ public final class Validator {
 
     /**
      * 获取字符序列的长度，null check
+     *
      * @param cs
      * @return int
      */
@@ -581,7 +584,7 @@ public final class Validator {
     public static <T> boolean isNullOrEmpty(final CharSequence sequence) {
         return sequence == null || sequence.length() == 0;
     }
-    
+
     public static <T> boolean hasLength(final CharSequence sequence) {
         return !isNullOrEmpty(sequence);
     }
@@ -601,6 +604,7 @@ public final class Validator {
 
     /**
      * 判断字符序列是否为空
+     *
      * @param cs CharSequence
      * @return boolean
      */
@@ -646,6 +650,7 @@ public final class Validator {
 
     /**
      * 断言失败，则提供默认值，默认值为空，则报空指针；断言成功，则直接返回该值，即使是NULL
+     *
      * @param value        校验的值
      * @param condition    条件，测试对象为value
      * @param defaultValue 默认值，不可为空，确保这个值是预期的值
