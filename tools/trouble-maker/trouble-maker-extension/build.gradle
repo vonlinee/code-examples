@@ -15,9 +15,6 @@ dependencies {
 	
 	implementation project(':trouble-maker-base')
 	
-	// implementation project("trouble-maker-base")
-	
-	implementation 'junit:junit:4.13.2'
 	implementation "${lib.'mybatis-plus'}"
 	implementation "${lib.velocity}"
 	implementation "${lib.freemarker}"
@@ -42,9 +39,8 @@ dependencies {
 
 	testCompileOnly "org.jetbrains:annotations:22.0.0"
 
-// https://mvnrepository.com/artifact/com.alibaba/fastjson
+	// https://mvnrepository.com/artifact/com.alibaba/fastjson
 	implementation 'com.alibaba:fastjson:1.2.80'
-
 
 	testImplementation "${lib.sqlserver}"
 	testImplementation "${lib.postgresql}"
@@ -61,8 +57,7 @@ dependencies {
 
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
-	// Spring
-	// https://mvnrepository.com/artifact/org.springframework/spring-core
+	// Spring https://mvnrepository.com/artifact/org.springframework
 	implementation 'org.springframework:spring-core:5.3.16'
 	implementation 'org.springframework:spring-context:5.3.16'
 	implementation 'org.springframework:spring-beans:5.3.16'
@@ -74,7 +69,7 @@ dependencies {
 	implementation 'org.springframework:spring-web:5.3.16'
 	implementation 'org.springframework:spring-webmvc:5.3.16'
 	implementation 'org.springframework:spring-context-support:5.3.16'
-
+	
 	implementation 'org.mybatis:mybatis:3.5.9'
 	implementation 'org.mybatis:mybatis-spring:2.0.7'
 }
