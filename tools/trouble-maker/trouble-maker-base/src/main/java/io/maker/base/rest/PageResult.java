@@ -23,25 +23,8 @@ public final class PageResult<T> extends Result<T> implements Serializable {
         super();
     }
 
-    @Override
-    protected String explain() {
-        return null;
-    }
-
     public PageResult(String code, String message) {
         super();
-    }
-
-    public void setMessage(String message) {
-        this.message = this.description.message = message;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public void setRows(List<T> rows) {
@@ -101,8 +84,8 @@ public final class PageResult<T> extends Result<T> implements Serializable {
             return this;
         }
 
-        @SuppressWarnings({"unchecked", "hiding"})
-        public <T> PageResult<T> build() {
+        @SuppressWarnings({"hiding"})
+        public PageResult<T> build() {
             return new PageResult<>();
         }
     }

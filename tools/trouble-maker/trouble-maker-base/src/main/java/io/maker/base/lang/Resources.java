@@ -8,7 +8,6 @@ import java.util.*;
 
 public class Resources {
 
-
     private static final ClassLoaderWrapper classLoaderWrapper = new ClassLoaderWrapper();
     private static Charset charset;
 

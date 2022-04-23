@@ -1,15 +1,12 @@
 package io.maker.extension.poi;
 
-import java.io.File;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
-import io.maker.base.io.FileUtils;
 
 public class Test {
 

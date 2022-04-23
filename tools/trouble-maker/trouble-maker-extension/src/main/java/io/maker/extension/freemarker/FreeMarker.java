@@ -1,6 +1,6 @@
 package io.maker.extension.freemarker;
 
-import freemarker.cache.FileTemplateLoader;
+import freemarker.cache.*;
 import freemarker.template.*;
 
 import java.io.*;
@@ -22,8 +22,10 @@ public class FreeMarker {
         config.setObjectWrapper(new DefaultObjectWrapper(VERSION));
     }
 
-    public FreeMarker(File templateLocation) {
+    public FreeMarker(File templateLocation) throws IOException {
         this();
+        TemplateLoader[] loaders = new TemplateLoader[]{new FileTemplateLoader(), new ClassTemplateLoader(), new ByteArrayTemplateLoader()};
+        this.config.setTemplateLoader(new MultiTemplateLoader(loaders));
         try {
             config.setDirectoryForTemplateLoading(templateLocation);
         } catch (IOException e) {
@@ -78,7 +80,7 @@ public class FreeMarker {
         return process(templateName, dataModel, output, StandardCharsets.UTF_8);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String projectRootPath = new File("").getAbsolutePath();
         Path path = Paths.get(projectRootPath, "mybatis-generator", "src/main/resources/templates/freemarker");
 

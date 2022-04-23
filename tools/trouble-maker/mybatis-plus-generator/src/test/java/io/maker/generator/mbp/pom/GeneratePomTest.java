@@ -31,7 +31,6 @@ import java.util.Map;
 
 /**
  * 检查pom依赖
- *
  * @author nieqiurong 2019/2/9.
  */
 class GeneratePomTest {

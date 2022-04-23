@@ -36,6 +36,9 @@ public final class ExcelUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ExcelUtils.class);
 
+    private static final String EXCEL_2003L = ".xls";    //2003- 版本的excel
+    private static final String EXCEL_2007U = ".xlsx";   //2007+ 版本的excel
+
     private ExcelUtils() {}
 
     private static final String XLS = ".xls";
@@ -69,14 +72,11 @@ public final class ExcelUtils {
 
     /**
      * 根据文件后缀获取对应Workbook对象
-     * @param filePath
-     * @param fileType
-     * @return
+     * @param filePath 文件全路径
+     * @return Workbook
      */
-    public static Workbook findWorkbook(String filePath, String fileType) {
-        if (!filePath.endsWith(fileType)) {
-            throw new IllegalArgumentException(String.format("filepath[%s] cannot apply to file type[%s]", filePath, fileType));
-        }
+    public static Workbook getExcelWorkbook(String filePath) {
+        String fileType = filePath.substring(filePath.lastIndexOf("."));
         Workbook workbook = null;
         try (FileInputStream fileInputStream = new FileInputStream(filePath)) {
             File excelFile = new File(filePath);
@@ -84,13 +84,16 @@ public final class ExcelUtils {
                 logger.info("{} is not existed!", filePath);
                 return null;
             }
-            if (fileType.equalsIgnoreCase(XLS)) {
+            if (EXCEL_2003L.equalsIgnoreCase(fileType)) {
                 workbook = new HSSFWorkbook(fileInputStream);
-            } else if (fileType.equalsIgnoreCase(XLSX)) {
+            } else if (EXCEL_2007U.equalsIgnoreCase(fileType)) {
                 workbook = new XSSFWorkbook(fileInputStream);
+            } else {
+                logger.error("Unsupported Excel File Type[{}]", fileType);
+                throw new UnsupportedOperationException(String.format("Unsupported Excel File Type[%s]", fileType));
             }
-        } catch (Exception e) {
-            logger.error("获取文件失败", e);
+        } catch (IOException e) {
+            logger.error("failed to get workbook by filepath: {}, cause: {}", filePath, e);
         }
         return workbook;
     }
@@ -131,9 +134,7 @@ public final class ExcelUtils {
         Workbook workbook = null;
         List<Map<String, String>> resultList;
         try {
-            String fileType = filePath.substring(filePath.lastIndexOf("."));
-            if (StringUtils.isEmpty(fileType)) fileType = "xlsx";
-            workbook = findWorkbook(filePath, fileType);
+            workbook = getExcelWorkbook(filePath);
             if (workbook == null) {
                 logger.info("获取workbook对象失败");
                 return new ArrayList<>();
@@ -150,17 +151,15 @@ public final class ExcelUtils {
 
     /**
      * 读取指定行
-     * @param filePath
-     * @param rowNum
-     * @return
+     * @param filePath 文件全路径
+     * @param rowNum   行号
+     * @return 一行的数据：Map<String, String>
      */
     public static Map<String, String> readExcelRow(String filePath, int rowNum) {
         Workbook workbook = null;
         List<Map<String, String>> resultList;
         try {
-            String fileType = filePath.substring(filePath.lastIndexOf("."));
-            if (StringUtils.isEmpty(fileType)) fileType = "xlsx";
-            workbook = findWorkbook(filePath, fileType);
+            workbook = getExcelWorkbook(filePath);
             if (workbook == null) {
                 logger.info("获取workbook对象失败");
                 return null;
@@ -196,20 +195,25 @@ public final class ExcelUtils {
      */
     public static List<Map<String, String>> analysisExcel(Workbook workbook) {
         List<Map<String, String>> dataList = new ArrayList<>();
-        int sheetCount = workbook.getNumberOfSheets();// 或取一个Excel中sheet数量
+        int sheetCount = workbook.getNumberOfSheets();// 获取一个Excel中sheet数量
         for (int i = 0; i < sheetCount; i++) {
             Sheet sheet = workbook.getSheetAt(i);
             if (sheet == null) {
                 continue;
             }
+            // 如果前面有空行，则第一行为不是空行的第一行
+            // 同时Excel中行号从1开始，但是这里行号从0开始
             int firstRowCount = sheet.getFirstRowNum();// 获取第一行的序号
             Row firstRow = sheet.getRow(firstRowCount);
+            // 同理：最后一列表示最后一列不为空的列的序号，这里都是从1开始
+            short firstCellNum = firstRow.getFirstCellNum();
             int cellCount = firstRow.getLastCellNum();// 获取列数
             List<String> mapKey = new ArrayList<>();
-            // 获取表头信息，放在List中备用
+            // 获取表头信息，放在List中备用，默认第一行为表头
             for (int i1 = 0; i1 < cellCount; i1++) {
                 mapKey.add(firstRow.getCell(i1).toString());
             }
+
             // 解析每一行数据，构成数据对象
             int rowStart = firstRowCount + 1;
             int rowEnd = sheet.getPhysicalNumberOfRows();

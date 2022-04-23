@@ -129,7 +129,7 @@ public class FixedMap<K, V> implements Map<K, V> {
 	public Set<Entry<K, V>> entrySet() {
 		HashSet<Entry<K, V>> entrySet = new HashSet<>();
 		for (int i = 0; i < keys.length; i++) {
-			entrySet.add(new AbstractMap.SimpleEntry<K, V>((K) keys[i], (V) values[i]));
+			// entrySet.add(new AbstractMap.SimpleEntry<>(keys[i], values[i]));
 		}
 		return Collections.unmodifiableSet(entrySet);
 	}

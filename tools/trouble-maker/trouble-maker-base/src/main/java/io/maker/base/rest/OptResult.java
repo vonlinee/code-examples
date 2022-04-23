@@ -1,16 +1,9 @@
 package io.maker.base.rest;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringJoiner;
 
-/**
- * the result of operation 操作结果，不携带数据
- * @param <T>
- * @author vonline
- */
-public class OptResult<T> extends Result<T> implements Serializable {
+public final class OptResult<T> extends Result<T> implements Serializable {
 
     private OptResult(ResultDescription description) {
         super(description);
@@ -24,23 +17,13 @@ public class OptResult<T> extends Result<T> implements Serializable {
     private OptResult(int code, String message, T data) {
         super();
         if (this.description == null) {
-            this.description = new ResultDescription(code, message) {
-                @Override
-                public boolean success() {
-                    return false;
-                }
-
-                @Override
-                public boolean failed() {
-                    return false;
-                }
-            };
+            this.description = ResultDescription.custom(code, message, statusCode -> statusCode == 1);
         }
         this.data = data;
     }
 
     @Override
-    public String explain() {
+    public String toString() {
         StringJoiner sj = new StringJoiner(",", "{", "}");
         sj.add("\"timestamp\":\"" + timestamp + "\"");
         sj.add("\"code\":'" + description.code + "'");
@@ -58,11 +41,11 @@ public class OptResult<T> extends Result<T> implements Serializable {
     }
 
     public static <T> OptResult<T> create(int code, String message) {
-        return new OptResult<>(code, message, null);
+        return create(code, message, null);
     }
 
     public static <T> OptResult<T> create(String message) {
-        return new OptResult<>(0, message, null);
+        return create(0, message);
     }
 
     /**
@@ -102,21 +85,17 @@ public class OptResult<T> extends Result<T> implements Serializable {
             return this;
         }
 
-        public Builder<T> description(int code, String message, T data) {
-            this.code = code;
-            this.message = message;
-            this.data = data;
-            return this;
-        }
-
         public Builder<T> data(T data) {
             this.data = data;
             return this;
         }
 
-        @SuppressWarnings({"unchecked", "hiding"})
-        public <T> OptResult<T> build() {
-            return new OptResult<T>(Builder.this.code, Builder.this.message, (T) Builder.this.data);
+        @SuppressWarnings({"hiding"})
+        public OptResult<T> build() {
+            if (this.description != null) {
+                return new OptResult<>(this.description.code, this.description.message, Builder.this.data);
+            }
+            return new OptResult<>(Builder.this.code, Builder.this.message, Builder.this.data);
         }
     }
 }

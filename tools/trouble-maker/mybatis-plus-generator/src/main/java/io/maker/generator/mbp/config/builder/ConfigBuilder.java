@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 
 /**
  * 配置汇总 传递给文件生成工具
- *
  * @author YangHu, tangguo, hubin, Juzi, lanjerry
  * @since 2016-08-30
  */
@@ -80,7 +79,6 @@ public class ConfigBuilder {
 
     /**
      * 在构造器中处理配置
-     *
      * @param packageConfig    包配置
      * @param dataSourceConfig 数据源配置
      * @param strategyConfig   表配置
@@ -101,7 +99,6 @@ public class ConfigBuilder {
 
     /**
      * 判断表名是否为正则表名(这表名规范比较随意,只能尽量匹配上特殊符号)
-     *
      * @param tableName 表名
      * @return 是否正则
      * @since 3.5.0
@@ -133,6 +130,12 @@ public class ConfigBuilder {
         return templateConfig;
     }
 
+    /**
+     * 执行sql
+     * show table status WHERE 1=1  AND NAME IN ('orders')
+     * show full fields from `orders`
+     * @return
+     */
     @NotNull
     public List<TableInfo> getTableInfoList() {
         if (tableInfoList.isEmpty()) {

@@ -1,17 +1,24 @@
 package io.maker.base.lang;
 
-import io.maker.base.lang.reflect.TypeMetadata;
+import io.maker.base.collection.ParamMap;
+import io.maker.base.lang.reflect.TypeMetadataHolder;
 
-public class Bean extends TypeMetadata {
+import java.util.Date;
 
-	protected Bean(Object target) {
-		super(target);
-	}
+public class Bean extends TypeMetadataHolder {
 
-	public static void main(String[] args) {
-		
-		Bean bean = new Bean(new Object());
-		
-		System.out.println(bean.isString());
-	}
+    protected Bean(Object target) {
+
+    }
+
+    public static void main(String[] args) {
+        ParamMap paramMap = new ParamMap();
+        paramMap.put("name", "孙允珠");
+        paramMap.put("age", 30);
+        paramMap.put("sex", "女");
+        paramMap.put("description", new Date());
+        System.out.println(paramMap);
+
+        System.out.println(paramMap.getString("age"));
+    }
 }

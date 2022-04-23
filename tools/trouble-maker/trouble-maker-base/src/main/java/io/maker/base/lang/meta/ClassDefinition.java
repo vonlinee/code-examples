@@ -14,9 +14,6 @@ import java.util.Set;
  */
 public class ClassDefinition implements Serializable, Comparable<ClassDefinition> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private static final String EXTENDS = "extends";
@@ -241,12 +238,6 @@ public class ClassDefinition implements Serializable, Comparable<ClassDefinition
 			classDefinition.declaredAnnotations.put(annotation.getClass().getName(), parse(annotation.getClass()));
 		}
 		return classDefinition;
-	}
-
-	public static void main(String[] args) {
-		ClassDefinition definition = parse(TestClass.class);
-
-		System.out.println(definition.className);
 	}
 
 	public static ClassDefinition parseObject() {

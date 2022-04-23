@@ -55,7 +55,6 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
         }
     }
 
-
     @Override
     public @NotNull String templateFilePath(@NotNull String filePath) {
         return filePath + ".ftl";

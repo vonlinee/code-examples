@@ -21,6 +21,7 @@ import io.maker.generator.mbp.config.*;
 import io.maker.generator.mbp.config.builder.ConfigBuilder;
 import io.maker.generator.mbp.config.po.TableInfo;
 import io.maker.generator.mbp.util.FileUtils;
+import io.maker.generator.mbp.util.MapperUtils;
 import io.maker.generator.mbp.util.RuntimeUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +40,6 @@ import java.util.function.Function;
 
 /**
  * 模板引擎抽象类
- *
  * @author hubin
  * @since 2018-01-10
  */
@@ -60,7 +60,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出自定义模板文件
-     *
      * @param customFile 自定义配置模板文件信息
      * @param tableInfo  表信息
      * @param objectMap  渲染数据
@@ -77,7 +76,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出实体文件
-     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -95,7 +93,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出Mapper文件(含xml)
-     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -122,7 +119,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出service文件
-     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -149,7 +145,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出controller文件
-     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -168,7 +163,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出文件（3.5.3版本会删除此方法）
-     *
      * @param file         文件
      * @param objectMap    渲染信息
      * @param templatePath 模板路径
@@ -181,7 +175,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出文件
-     *
      * @param file         文件
      * @param objectMap    渲染信息
      * @param templatePath 模板路径
@@ -206,7 +199,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 获取模板路径
-     *
      * @param function function
      * @return 模板路径
      * @since 3.5.0
@@ -216,6 +208,7 @@ public abstract class AbstractTemplateEngine {
         TemplateConfig templateConfig = getConfigBuilder().getTemplateConfig();
         String filePath = function.apply(templateConfig);
         if (StringUtils.isNotBlank(filePath)) {
+            logger.info("templateFilePath {}", templateFilePath(filePath));
             return Optional.of(templateFilePath(filePath));
         }
         return Optional.empty();
@@ -223,7 +216,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 获取路径信息
-     *
      * @param outputFile 输出文件
      * @return 路径信息
      */
@@ -240,6 +232,7 @@ public abstract class AbstractTemplateEngine {
         try {
             ConfigBuilder config = this.getConfigBuilder();
             List<TableInfo> tableInfoList = config.getTableInfoList();
+
             tableInfoList.forEach(tableInfo -> {
                 Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
                 Optional.ofNullable(config.getInjectionConfig()).ifPresent(t -> {
@@ -247,6 +240,10 @@ public abstract class AbstractTemplateEngine {
                     // 输出自定义文件
                     outputCustomFile(t.getCustomFile(), tableInfo, objectMap);
                 });
+
+                MapperUtils.tableField(tableInfo, "T");
+
+
                 // entity
                 outputEntity(tableInfo, objectMap);
                 // mapper and xml
@@ -264,7 +261,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出文件（3.5.3版本会删除此方法）
-     *
      * @param objectMap    渲染数据
      * @param templatePath 模板路径
      * @param outputFile   输出文件
@@ -278,7 +274,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 将模板转化成为文件（3.5.3版本会删除此方法）
-     *
      * @param objectMap    渲染对象 MAP 信息
      * @param templatePath 模板文件
      * @param outputFile   文件生成的目录
@@ -292,7 +287,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 将模板转化成为文件
-     *
      * @param objectMap    渲染对象 MAP 信息
      * @param templatePath 模板文件
      * @param outputFile   文件生成的目录
@@ -321,8 +315,8 @@ public abstract class AbstractTemplateEngine {
     }
 
     /**
+     * FreeMarker
      * 渲染对象 MAP 信息
-     *
      * @param config    配置信息
      * @param tableInfo 表信息对象
      * @return ignore
@@ -363,7 +357,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 模板真实文件路径
-     *
      * @param filePath 文件路径
      * @return ignore
      */
@@ -372,7 +365,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 检测文件是否存在（3.5.3版本会删除此方法）
-     *
      * @return 文件是否存在
      * @deprecated 3.5.0
      */
@@ -383,7 +375,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 检查文件是否创建文件（3.5.3版本会删除此方法）
-     *
      * @param file 文件
      * @return 是否创建文件
      * @since 3.5.0
@@ -396,7 +387,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 检查文件是否创建文件
-     *
      * @param file         文件
      * @param fileOverride 是否覆盖已有文件
      * @return 是否创建文件

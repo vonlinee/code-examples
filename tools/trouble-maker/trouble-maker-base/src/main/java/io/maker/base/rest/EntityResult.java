@@ -13,14 +13,7 @@ public final class EntityResult<T> extends Result<T> implements Serializable {
 
     private static final long serialVersionUID = 4134449411254581242L;
 
-    private String code;
-    private String message;
-
     public EntityResult() {
-        super();
-    }
-
-    public EntityResult(String code, String message) {
         super();
     }
 
@@ -29,11 +22,6 @@ public final class EntityResult<T> extends Result<T> implements Serializable {
      */
     public EntityResult(ResultDescription description) {
         super();
-    }
-
-    @Override
-    protected String explain() {
-        return null;
     }
 
     public static <T> Builder<T> builder() {
@@ -74,8 +62,8 @@ public final class EntityResult<T> extends Result<T> implements Serializable {
             return this;
         }
 
-        @SuppressWarnings({"unchecked", "hiding"})
-        public <T> EntityResult<T> build() {
+        @SuppressWarnings({"hiding"})
+        public EntityResult<T> build() {
             return new EntityResult<>();
         }
     }

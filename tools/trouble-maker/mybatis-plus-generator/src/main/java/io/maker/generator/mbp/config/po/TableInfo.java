@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 
 /**
  * 表信息，关联到当前字段信息
- *
  * @author YangHu, lanjerry
  * @since 2016/8/30
  */
@@ -127,7 +126,6 @@ public class TableInfo {
 
     /**
      * 构造方法
-     *
      * @param configBuilder 配置构建
      * @param name          表名
      * @since 3.5.0
@@ -168,7 +166,6 @@ public class TableInfo {
 
     /**
      * 添加字段
-     *
      * @param field 字段
      * @since 3.5.0
      */
@@ -210,7 +207,6 @@ public class TableInfo {
 
     /**
      * 导包处理
-     *
      * @since 3.5.0
      */
     public void importPackage() {
@@ -271,7 +267,6 @@ public class TableInfo {
 
     /**
      * 处理表信息(文件名与导包)
-     *
      * @since 3.5.0
      */
     public void processTable() {
@@ -288,7 +283,7 @@ public class TableInfo {
     public TableInfo setComment(String comment) {
         //TODO 暂时挪动到这
         this.comment = this.globalConfig.isSwagger()
-            && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
+                && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
         return this;
     }
 
@@ -355,5 +350,28 @@ public class TableInfo {
     @NotNull
     public List<TableField> getCommonFields() {
         return commonFields;
+    }
+
+    @Override
+    public String toString() {
+        return "TableInfo{" +
+                "strategyConfig=" + strategyConfig +
+                ", globalConfig=" + globalConfig +
+                ", importPackages=" + importPackages +
+                ", convert=" + convert +
+                ", name='" + name + '\'' +
+                ", comment='" + comment + '\'' +
+                ", entityName='" + entityName + '\'' +
+                ", mapperName='" + mapperName + '\'' +
+                ", xmlName='" + xmlName + '\'' +
+                ", serviceName='" + serviceName + '\'' +
+                ", serviceImplName='" + serviceImplName + '\'' +
+                ", controllerName='" + controllerName + '\'' +
+                ", fields=" + fields +
+                ", havePrimaryKey=" + havePrimaryKey +
+                ", commonFields=" + commonFields +
+                ", fieldNames='" + fieldNames + '\'' +
+                ", entity=" + entity +
+                '}';
     }
 }

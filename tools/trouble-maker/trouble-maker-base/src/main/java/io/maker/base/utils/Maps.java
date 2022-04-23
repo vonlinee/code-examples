@@ -106,7 +106,6 @@ public final class Maps {
         return getString(map, key, "");
     }
 
-
     public static <K, V> Map<K, V> putAll(Map<K, V> map, List<K> keys, List<V> values) {
         int size = keys.size();
         if (size != values.size()) {
@@ -164,7 +163,7 @@ public final class Maps {
     public static <V> MapBuilder<String, V> stringKeybuilder(Class<V> valueType) {
         return new MapBuilder<String, V>();
     }
-    
+
     public static <V> MapBuilder<String, String> stringMapBuilder() {
         return new MapBuilder<String, String>();
     }

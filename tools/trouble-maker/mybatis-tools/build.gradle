@@ -13,6 +13,8 @@ dependencies {
 
     // implementation project("trouble-maker-base")
 
+    implementation project(":trouble-maker-base")
+
     implementation 'junit:junit:4.13.2'
     implementation "${lib.'mybatis-plus'}"
     implementation "${lib.velocity}"
