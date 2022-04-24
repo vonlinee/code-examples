@@ -1,12 +1,11 @@
 package io.netty.tomcat.http;
 
+import java.util.List;
+import java.util.Map;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
-
-import java.util.List;
-import java.util.Map;
 
 public class GPRequest {
 

@@ -13,5 +13,4 @@ public class FirstServlet extends GPServlet {
 	public void doPost(GPRequest request, GPResponse response) throws Exception {
 		response.write("This is First Serlvet");
 	}
-
 }
