@@ -40,6 +40,7 @@ public final class JdbcUtils {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public static Connection getConnection() {
