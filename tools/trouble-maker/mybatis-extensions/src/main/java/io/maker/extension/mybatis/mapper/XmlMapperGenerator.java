@@ -1,4 +1,4 @@
-package io.maker.extension.mybatis;
+package io.maker.extension.mybatis.mapper;
 
 import io.maker.extension.poi.ExcelUtils;
 

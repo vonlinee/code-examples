@@ -1,4 +1,4 @@
-package io.maker.extension.mybatis;
+package io.maker.extension.mybatis.mapper;
 
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;

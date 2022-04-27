@@ -5,5 +5,5 @@ import java.util.function.Supplier;
 
 @FunctionalInterface
 public interface Action<K, V> {
-    V doAction(Supplier<K> param, Function<K, V> algorithm);
+	V doAction(Supplier<K> param, Function<K, V> algorithm);
 }

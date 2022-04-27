@@ -66,8 +66,7 @@ public class StringEscape {
             StringBuilder buf = new StringBuilder((int) (escapeStr.length() * 1.1));
             //
             // Note: buf.append(char) is _faster_ than appending in blocks,
-            // because the block append requires a System.arraycopy().... go
-            // figure...
+            // because the block append requires a System.arraycopy().... go figure...
             //
             for (int i = 0; i < stringLength; ++i) {
                 char c = escapeStr.charAt(i);

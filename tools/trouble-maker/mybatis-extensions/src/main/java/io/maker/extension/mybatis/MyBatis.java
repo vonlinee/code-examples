@@ -7,9 +7,11 @@ import java.io.Reader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.io.Resources;
@@ -19,6 +21,9 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.session.defaults.DefaultSqlSession;
+
+import io.maker.extension.mybatis.mapper.MyBatisMapper;
 
 public class MyBatis {
 
@@ -41,7 +46,7 @@ public class MyBatis {
     static {
         Reader reader;
         try {
-            reader = Resources.getResourceAsReader("mybatis-config.xml");
+            reader = Resources.getResourceAsReader("mybatis/mybatis-config.xml");
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
         } catch (IOException e) {
             throw new ExceptionInInitializerError(e);
@@ -63,6 +68,35 @@ public class MyBatis {
         }
     }
 
+    
+    public static void main(String[] args) {
+		MyBatis iBatis = new MyBatis();
+		
+		iBatis.loadMapperStatements("C:\\Users\\ly-wangliang\\Desktop\\code-samples\\tools\\trouble-maker\\mybatis-extensions\\src\\main\\resources\\mybatis\\mapping\\mybatis-mapper.xml");
+    	
+    	DefaultSqlSession session = iBatis.openDefaultSqlSession();
+    	
+    	iBatis.configuration.addMapper(MyBatisMapper.class);
+    	
+    	MapperRegistry mapperRegistry = iBatis.configuration.getMapperRegistry();
+    	
+    	Collection<Class<?>> mappers = mapperRegistry.getMappers();
+    	
+    	Configuration configuration = iBatis.configuration;
+    	MyBatisMapper mapper = mapperRegistry.getMapper(MyBatisMapper.class, session);
+    	
+	}
+   
+    
+    private DefaultSqlSession openDefaultSqlSession() {
+    	SqlSession openSession = sqlSessionFactory.openSession();
+    	if (openSession instanceof DefaultSqlSession ) {
+    		return (DefaultSqlSession) openSession;
+		}
+    	return (DefaultSqlSession) openSession;
+    }
+    
+    
     public void executeMapperStatement(Connection connection, String mapperStatementId, Map<String, Object> paramMap) {
         MappedStatement mappedStatement = configuration.getMappedStatement(mapperStatementId);
         BoundSql boundSql = mappedStatement.getSqlSource().getBoundSql(paramMap);

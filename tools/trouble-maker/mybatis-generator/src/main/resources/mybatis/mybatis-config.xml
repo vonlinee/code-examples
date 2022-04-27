@@ -3,14 +3,12 @@
 <configuration>
 
 	<properties>
-		<property name="jdbc.url" value=""/>
+		<property name="jdbc.url" value="" />
 	</properties>
 
 	<settings>
 		<setting name="mapUnderscoreToCamelCase" value="true" />
-		<setting name="logImpl" value="STDOUT_LOGGING" />
-		<!-- https://blog.csdn.net/hou_ge/article/details/100178686 -->
-		<!--  <setting name="org.apache.ibatis.parsing.PropertyParser.enable" value="true" /> -->
+		<setting name="logImpl" value="stdout" />
 	</settings>
 
 	<environments default="dev">
@@ -19,10 +17,11 @@
 			<transactionManager type="JDBC">
 				<property name="autoCommit" value="true" />
 			</transactionManager>
-			<!-- 默认连接池 POOLED -->
-			<dataSource type="io.maker.extension.mybatis.internal.DruidDataSourceFactory">
+			<!-- 默认连接池 -->
+			<dataSource type="POOLED">
 				<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-				<property name="url" value="jdbc:mysql://localhost:3306/mysql_learn?useUnicode=true&amp;characterEncoding=UTF-8" />
+				<!-- useUnicode=true&characterEncoding=UTF-8&useSSL=false&jdbcCompliantTruncation=false&zeroDateTimeBehavior=CONVERT_TO_NULL&useAffectedRows=true&serverTimezone=GMT%2B8 -->
+				<property name="url" value="jdbc:mysql://localhost:3306/information_schema?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=GMT%2B8&amp;useAffectedRows=true" />
 				<property name="username" value="root" />
 				<property name="password" value="123456" />
 				<!-- 初始线程数 -->
@@ -32,8 +31,6 @@
 			</dataSource>
 		</environment>
 	</environments>
-	
-	
 	<!-- <mappers> -->
 	<!-- <mapper resource="mappers/test.xml"/> -->
 	<!-- </mappers> -->

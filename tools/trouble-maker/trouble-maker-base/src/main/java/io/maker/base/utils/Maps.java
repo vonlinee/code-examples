@@ -1,19 +1,24 @@
 package io.maker.base.utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Map工具类
  */
 public final class Maps {
 
+	private Maps() {}
+	
     /**
      * 打印Map
      * @param map
      */
     public static String println(Map<?, ?> map) {
+    	System.out.println("共" + map.size() + "个元素:");
         StringBuilder sb = new StringBuilder("{\n");
         for (Object key : map.keySet()) {
             sb.append("\t").append("\"").append(key).append("\":\"").append(map.get(key)).append("\",\n");
@@ -21,7 +26,7 @@ public final class Maps {
         return sb.substring(0, sb.length()) + "\n";
     }
 
-    public static <K, V> Map<K, V> doFilterKey(Map<K, V> map, Predicate<K> rule) {
+    public static <K, V> Map<K, V> doFilterKey(final Map<K, V> map, Predicate<K> rule) {
         Map<K, V> newMap = new HashMap<>();
         map.keySet().stream().filter(rule).forEach(k -> {
             newMap.put(k, map.get(k));
@@ -105,6 +110,28 @@ public final class Maps {
     public static String getString(Map<String, Object> map, String key) {
         return getString(map, key, "");
     }
+    
+    public static <K, V extends Number> int getInt(Map<K, V> map, K key, int optionalValue) {
+    	if (map.containsKey(key)) {
+    		V number = map.get(key);
+    		if (number == null) {
+				return optionalValue;
+			}
+    		return number.intValue();
+		}
+		return optionalValue;
+    }
+    
+    public static <K, V extends Number> int getInt(Map<K, V> map, K key) {
+    	if (map.containsKey(key)) {
+    		V number = map.get(key);
+    		if (number == null) {
+				throw new NullPointerException(key + " exist in the map but is null");
+			}
+    		return number.intValue();
+		}
+    	throw new NullPointerException(key + " does not exist in the map");
+    }
 
     public static <K, V> Map<K, V> putAll(Map<K, V> map, List<K> keys, List<V> values) {
         int size = keys.size();
@@ -114,6 +141,13 @@ public final class Maps {
         for (int i = 0; i < size; i++) {
             map.put(keys.get(i), values.get(i));
         }
+        return map;
+    }
+    
+    public static <K, V> Map<K, V> putAll(Map<K, V> map, List<K> keys, List<V> values, boolean kvSizeEquals) {
+        if (kvSizeEquals) {
+            putAll(map, keys, values);
+		}
         return map;
     }
 
@@ -254,13 +288,12 @@ public final class Maps {
                     map = new HashMap<>(initialCapacity, loadFactor);
                 } else {
                     try {
-                        // TODO 性能评估
-                        map = mapType.newInstance();
+                        map = mapType.newInstance(); // 性能评估
                     } catch (InstantiationException | IllegalAccessException e) {
                         map = new HashMap<>(initialCapacity, loadFactor);
                     }
                 }
-                Maps.putAll(map, keys, values);
+                putAll(map, keys, values);
             }
             return map;
         }

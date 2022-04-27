@@ -1,17 +1,15 @@
-package io.maker.extension.mybatis;
+package io.maker.extension.mybatis.config;
 
-import org.apache.ibatis.mapping.BoundSql;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
 import org.apache.ibatis.mapping.Environment;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.managed.ManagedTransactionFactory;
-
-import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MyBatisConfiguration {
 
@@ -36,5 +34,4 @@ public class MyBatisConfiguration {
     private TransactionFactory transactionFactory() {
         return new ManagedTransactionFactory();
     }
-
 }

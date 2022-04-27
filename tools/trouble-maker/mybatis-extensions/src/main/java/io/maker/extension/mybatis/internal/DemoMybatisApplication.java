@@ -1,4 +1,4 @@
-package io.maker.extension.mybatis;
+package io.maker.extension.mybatis.internal;
 
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
@@ -7,12 +7,11 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * @program: route
  * @description: 生成基础增加删除修改查询功能 （按照generatorConfig.xml生成）
- * @create: 2020-08-31 11:01
  **/
 public class DemoMybatisApplication {
 
@@ -30,11 +29,14 @@ public class DemoMybatisApplication {
 
 	// 执行main方法以生成代码
 	public static void main(String[] args) {
-		try {
-			DemoMybatisApplication generatorSqlmap = new DemoMybatisApplication();
-			generatorSqlmap.generator();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		List<String> asList = Arrays.asList(", B".split(","));
+		System.out.println(asList);
+		
+//		try {
+//			DemoMybatisApplication generatorSqlmap = new DemoMybatisApplication();
+//			generatorSqlmap.generator();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 }
