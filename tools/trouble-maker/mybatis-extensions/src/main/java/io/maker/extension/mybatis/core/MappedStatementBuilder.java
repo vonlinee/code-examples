@@ -1,4 +1,4 @@
-package io.maker.extension.mybatis.config;
+package io.maker.extension.mybatis.core;
 
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.session.Configuration;

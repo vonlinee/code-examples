@@ -11,8 +11,6 @@ public class XmlMapperGenerator {
 
         String filePath = "C:\\Users\\vonline\\Desktop\\code-samples\\tools\\trouble-maker\\mybatis-extensions\\src\\main\\resources\\excel\\单表生成模板.xlsx";
         List<Map<String, String>> dataList = ExcelUtils.readExcel(filePath);
-
-
         System.out.println(dataList);
 
     }

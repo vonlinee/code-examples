@@ -478,6 +478,7 @@ abstract class MapCollections<K, V> {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T[] toArrayHelper(T[] array, int offset) {
 		final int N = colGetSize();
 		if (array.length < N) {
@@ -505,7 +506,8 @@ abstract class MapCollections<K, V> {
 				return set.size() == s.size() && set.containsAll(s);
 			} catch (NullPointerException ignored) {
 				return false;
-			} catch (ClassCastException ignored) {
+			} catch (ClassCastException ignored1) {
+				ignored1.printStackTrace();
 				return false;
 			}
 		}
