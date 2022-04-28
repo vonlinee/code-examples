@@ -1,4 +1,4 @@
-package io.maker.generator.db.resultset;
+package io.maker.generator.db.result;
 
 import java.util.List;
 import java.util.Map;

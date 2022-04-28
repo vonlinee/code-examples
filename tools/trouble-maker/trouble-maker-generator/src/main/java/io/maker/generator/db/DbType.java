@@ -15,41 +15,46 @@ public enum DbType {
 	/**
 	 * Unknown type.
 	 */
-	UNKNOWN(null, null, null, null),
+	UNKNOWN(null, null, null, null, null),
 
 	/**
 	 * Apache Derby.
 	 */
 	DERBY("Apache Derby", "org.apache.derby.jdbc.EmbeddedDriver", "org.apache.derby.jdbc.EmbeddedXADataSource",
-			"SELECT 1 FROM SYSIBM.SYSDUMMY1"),
+			"SELECT 1 FROM SYSIBM.SYSDUMMY1", "jdbc"),
 
 	/**
 	 * H2.
 	 */
-	H2("H2", "org.h2.Driver", "org.h2.jdbcx.JdbcDataSource", "SELECT 1"),
+	H2("H2", "org.h2.Driver", "org.h2.jdbcx.JdbcDataSource", "SELECT 1", "jdbc:microsoft:sqlserver://"),
 
 	/**
 	 * HyperSQL DataBase.
 	 */
 	HSQLDB("HSQL Database Engine", "org.hsqldb.jdbc.JDBCDriver", "org.hsqldb.jdbc.pool.JDBCXADataSource",
-			"SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_USERS"),
+			"SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_USERS", "jdbc:microsoft:sqlserver://"),
 
 	/**
 	 * SQL Lite.
 	 */
-	SQLITE("SQLite", "org.sqlite.JDBC", "", ""),
+	SQLITE("SQLite", "org.sqlite.JDBC", "", "", "jdbc:microsoft:sqlserver://"),
 
 	/**
-	 * MySQL.
+	 * MySQL8.
 	 */
-	MYSQL8("MySQL8", "com.mysql.cj.jdbc.Driver", "com.mysql.cj.jdbc.MysqlXADataSource", "/* ping */ SELECT 1"),
+	MYSQL8("MySQL8", "com.mysql.cj.jdbc.Driver", "com.mysql.cj.jdbc.MysqlXADataSource", "/* ping */ SELECT 1",
+			"jdbc:mysql://".intern()),
 
-	MySQL5("MySQL5", "com.mysql.cj.jdbc.Driver", "com.mysql.jdbc.MysqlXADataSource", "/* ping */ SELECT 1"),
+	/**
+	 * MySQL5.
+	 */
+	MySQL5("MySQL5", "com.mysql.cj.jdbc.Driver", "com.mysql.jdbc.MysqlXADataSource", "/* ping */ SELECT 1",
+			"jdbc:mysql://".intern()),
 
 	/**
 	 * Maria DB.
 	 */
-	MARIADB("MySQL", "org.mariadb.jdbc.Driver", "org.mariadb.jdbc.MariaDbDataSource", "SELECT 1") {
+	MARIADB("MySQL", "org.mariadb.jdbc.Driver", "org.mariadb.jdbc.MariaDbDataSource", "SELECT 1", "jdbc:mysql://") {
 
 		@Override
 		public String getId() {
@@ -60,32 +65,32 @@ public enum DbType {
 	/**
 	 * Google App Engine.
 	 */
-	GAE(null, "com.google.appengine.api.rdbms.AppEngineDriver", "", ""),
+	GAE(null, "com.google.appengine.api.rdbms.AppEngineDriver", "", "", "jdbc:microsoft:sqlserver://"),
 
 	/**
 	 * Oracle.
 	 */
 	ORACLE("Oracle", "oracle.jdbc.OracleDriver", "oracle.jdbc.xa.client.OracleXADataSource", "SELECT 'Hello' from DUAL",
-			"Oracle11及以下数据库"),
+			"jdbc:oracle:thin:@//", "Oracle11及以下数据库"),
 
 	/**
 	 * Postgres.
 	 */
-	POSTGRESQL("PostgreSQL", "org.postgresql.Driver", "org.postgresql.xa.PGXADataSource", "SELECT 1"),
+	POSTGRESQL("PostgreSQL", "org.postgresql.Driver", "org.postgresql.xa.PGXADataSource", "SELECT 1", ""),
 
 	/**
 	 * Amazon Redshift.
 	 * 
 	 * @since 2.2.0
 	 */
-	REDSHIFT("Amazon Redshift", "com.amazon.redshift.jdbc.Driver", null, "SELECT 1"),
+	REDSHIFT("Amazon Redshift", "com.amazon.redshift.jdbc.Driver", null, "SELECT 1", ""),
 
 	/**
 	 * HANA - SAP HANA Database - HDB.
 	 * 
 	 * @since 2.1.0
 	 */
-	HANA("HDB", "com.sap.db.jdbc.Driver", "com.sap.db.jdbcext.XADataSourceSAP", "SELECT 1 FROM SYS.DUMMY") {
+	HANA("HDB", "com.sap.db.jdbc.Driver", "com.sap.db.jdbcext.XADataSourceSAP", "SELECT 1 FROM SYS.DUMMY", "") {
 		@Override
 		protected Collection<String> getUrlPrefixes() {
 			return Collections.singleton("sap");
@@ -96,13 +101,13 @@ public enum DbType {
 	 * jTDS. As it can be used for several databases, there isn't a single product
 	 * name we could rely on.
 	 */
-	JTDS(null, "net.sourceforge.jtds.jdbc.Driver", "", ""),
+	JTDS(null, "net.sourceforge.jtds.jdbc.Driver", "", "", ""),
 
 	/**
 	 * SQL Server.
 	 */
 	SQLSERVER("Microsoft SQL Server", "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-			"com.microsoft.sqlserver.jdbc.SQLServerXADataSource", "SELECT 1") {
+			"com.microsoft.sqlserver.jdbc.SQLServerXADataSource", "SELECT 1", "jdbc:microsoft:sqlserver://") {
 
 		@Override
 		protected boolean matchProductName(String productName) {
@@ -115,7 +120,7 @@ public enum DbType {
 	 * Firebird.
 	 */
 	FIREBIRD("Firebird", "org.firebirdsql.jdbc.FBDriver", "org.firebirdsql.ds.FBXADataSource",
-			"SELECT 1 FROM RDB$DATABASE") {
+			"SELECT 1 FROM RDB$DATABASE", "") {
 
 		@Override
 		protected Collection<String> getUrlPrefixes() {
@@ -132,7 +137,8 @@ public enum DbType {
 	/**
 	 * DB2 Server.
 	 */
-	DB2("DB2", "com.ibm.db2.jcc.DB2Driver", "com.ibm.db2.jcc.DB2XADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1") {
+	DB2("DB2", "com.ibm.db2.jcc.DB2Driver", "com.ibm.db2.jcc.DB2XADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1",
+			"jdbc:db2://") {
 
 		@Override
 		protected boolean matchProductName(String productName) {
@@ -144,7 +150,7 @@ public enum DbType {
 	 * DB2 AS400 Server.
 	 */
 	DB2_AS400("DB2 UDB for AS/400", "com.ibm.as400.access.AS400JDBCDriver",
-			"com.ibm.as400.access.AS400JDBCXADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1") {
+			"com.ibm.as400.access.AS400JDBCXADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1", "") {
 
 		@Override
 		public String getId() {
@@ -165,12 +171,12 @@ public enum DbType {
 	/**
 	 * Teradata.
 	 */
-	TERADATA("Teradata", "com.teradata.jdbc.TeraDriver", "", ""),
+	TERADATA("Teradata", "com.teradata.jdbc.TeraDriver", "", "", ""),
 
 	/**
 	 * Informix.
 	 */
-	INFORMIX("Informix Dynamic Server", "com.informix.jdbc.IfxDriver", null, "select count(*) from systables") {
+	INFORMIX("Informix Dynamic Server", "com.informix.jdbc.IfxDriver", null, "", "select count(*) from systables") {
 
 		@Override
 		protected Collection<String> getUrlPrefixes() {
@@ -183,18 +189,21 @@ public enum DbType {
 	private final String driverClassName;
 	private final String xaDataSourceClassName;
 	private final String validationQuery;
+	private final String jdbcProtocol;
 	private final String remark;
 
-	DbType(String productName, String driverClassName, String xaDataSourceClassName, String remark) {
-		this(productName, driverClassName, xaDataSourceClassName, null, remark);
+	DbType(String productName, String driverClassName, String xaDataSourceClassName, String jdbcProtocol,
+			String remark) {
+		this(productName, driverClassName, xaDataSourceClassName, null, jdbcProtocol, remark);
 	}
 
 	DbType(String productName, String driverClassName, String xaDataSourceClassName, String validationQuery,
-			String remark) {
+			String jdbcProtocol, String remark) {
 		this.productName = productName;
 		this.driverClassName = driverClassName;
 		this.xaDataSourceClassName = xaDataSourceClassName;
 		this.validationQuery = validationQuery;
+		this.jdbcProtocol = jdbcProtocol;
 		this.remark = remark;
 	}
 
@@ -240,6 +249,18 @@ public enum DbType {
 	 */
 	public String getValidationQuery() {
 		return this.validationQuery;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public String getJdbcProtocol() {
+		return jdbcProtocol;
+	}
+
+	public String getRemark() {
+		return remark;
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package io.maker.generator.db.resultset;
+package io.maker.generator.db.result;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,4 +6,6 @@ import java.sql.SQLException;
 @FunctionalInterface
 public interface ResultSetHandler<T> {
 	T handle(ResultSet rs) throws SQLException;
+	
+	MapListHandler MAP_LIST = new MapListHandler();
 }

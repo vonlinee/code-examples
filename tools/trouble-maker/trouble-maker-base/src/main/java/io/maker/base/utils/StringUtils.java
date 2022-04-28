@@ -1,27 +1,14 @@
 
 package io.maker.base.utils;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
-import java.util.StringJoiner;
 import java.util.StringTokenizer;
 import java.util.UUID;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.codec.binary.CharSequenceUtils;
-import org.springframework.lang.Nullable;
-import org.springframework.util.ObjectUtils;
 
 public final class StringUtils {
 
@@ -243,7 +230,109 @@ public final class StringUtils {
 	}
 
 	public static boolean hasText(String text) {
-		// TODO Auto-generated method stub
 		return false;
+	}
+
+    /**
+     * <p>Joins the elements of the provided {@code Iterable} into
+     * a single String containing the provided elements.</p>
+     *
+     * <p>No delimiter is added before or after the list.
+     * A {@code null} separator is the same as an empty String ("").</p>
+     *
+     * <p>See the examples here: {@link #join(Object[],String)}. </p>
+     *
+     * @param iterable  the {@code Iterable} providing the values to join together, may be null
+     * @param separator  the separator character to use, null treated as ""
+     * @return the joined String, {@code null} if null iterator input
+     * @since 2.3
+     */
+    public static String join(final Iterable<?> iterable, final String separator) {
+        if (iterable == null) {
+            return null;
+        }
+        return join(iterable.iterator(), separator);
+    }
+	
+    /**
+     * <p>Joins the elements of the provided {@code Iterator} into
+     * a single String containing the provided elements.</p>
+     *
+     * <p>No delimiter is added before or after the list.
+     * A {@code null} separator is the same as an empty String ("").</p>
+     *
+     * <p>See the examples here: {@link #join(Object[],String)}. </p>
+     *
+     * @param iterator  the {@code Iterator} of values to join together, may be null
+     * @param separator  the separator character to use, null treated as ""
+     * @return the joined String, {@code null} if null iterator input
+     */
+    public static String join(final Iterator<?> iterator, final String separator) {
+        // handle null, zero and one elements before building a buffer
+        if (iterator == null) {
+            return null;
+        }
+        if (!iterator.hasNext()) {
+            return EMPTY;
+        }
+        final Object first = iterator.next();
+        if (!iterator.hasNext()) {
+            return Objects.toString(first, "");
+        }
+        // two or more elements
+        final StringBuilder buf = new StringBuilder(STRING_BUILDER_SIZE); // Java default is 16, probably too small
+        if (first != null) {
+            buf.append(first);
+        }
+        while (iterator.hasNext()) {
+            if (separator != null) {
+                buf.append(separator);
+            }
+            final Object obj = iterator.next();
+            if (obj != null) {
+                buf.append(obj);
+            }
+        }
+        return buf.toString();
+    }
+    
+    /**
+     * 指定编码的字符串长度
+     */
+	public static int length(String str, String charset) {
+		int len = 0;
+		int j = 0;
+		byte[] bytes = str.getBytes(Charset.forName(charset));
+		while (bytes.length > 0) {
+			short tmpst = (short) (bytes[j] & 0xF0);
+			if (tmpst >= 0xB0) {
+				if (tmpst < 0xC0 || ((tmpst == 0xC0) || (tmpst == 0xD0))) {
+					j += 2;
+					len += 2;
+				} else if (tmpst == 0xE0) {
+					j += 3;
+					len += 2;
+				} else if (tmpst == 0xF0) {
+					short tmpst0 = (short) (((short) bytes[j]) & 0x0F);
+					if (tmpst0 == 0) {
+						j += 4;
+						len += 2;
+					} else if ((tmpst0 > 0) && (tmpst0 < 12)) {
+						j += 5;
+						len += 2;
+					} else if (tmpst0 > 11) {
+						j += 6;
+						len += 2;
+					}
+				}
+			} else {
+				j += 1;
+				len += 1;
+			}
+			if (j > bytes.length - 1) {
+				break;
+			}
+		}
+		return len;
 	}
 }

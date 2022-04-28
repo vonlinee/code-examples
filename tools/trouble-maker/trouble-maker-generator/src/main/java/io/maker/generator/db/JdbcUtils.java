@@ -33,8 +33,8 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.maker.generator.db.resultset.ResultSetColumnMetadata;
-import io.maker.generator.db.resultset.ResultSetHandler;
+import io.maker.generator.db.result.ResultSetColumnMetadata;
+import io.maker.generator.db.result.ResultSetHandler;
 
 /**
  * https://cloud.tencent.com/developer/article/1581184
@@ -50,14 +50,19 @@ import io.maker.generator.db.resultset.ResultSetHandler;
  */
 public final class JdbcUtils {
 
-	private JdbcUtils() {
-		
-	}
+	private JdbcUtils() {}
 	
     private static final Logger LOG = LoggerFactory.getLogger(JdbcUtils.class);
     
     private static final String JDBC_PROPERTIES = "jdbc.properties";
-
+    private static final String JPROPERTIES_LOCATION = System.getProperty("user.home") + File.separator + "jdbc";
+    private static final Map<String, String> LOCAL_JDBC_PROPERTIES = new HashMap<>();
+    
+    static {
+    	LOCAL_JDBC_PROPERTIES.put("local_mysql", "localdb-mysql.properties");
+    	LOCAL_JDBC_PROPERTIES.put("local_oracle", "localdb-oracle.properties");
+    }
+    
     /**
      * 加载连接信息
      */
@@ -66,8 +71,8 @@ public final class JdbcUtils {
     public static final String MYSQL5_DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
     public static final String MYSQL8_DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
     public static final String LOCAL_MYSQL_URL = "jdbc:mysql://localhost:3306/db_mysql?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8";
-    public static final String LOCAL_USERNAME = "root";
-    public static final String LOCAL_PASSWORD = "123456";
+    public static final String LOCAL_MYSQL_USERNAME = "root";
+    public static final String LOCAL_MYSQL_PASSWORD = "123456";
 
     public static final String ORACLE_DRIVER_CLASS_NAME = "oracle.jdbc.driver.OracleDriver";
     public static final String ORACLE_URL = "jdbc:oracle:thin:@192.168.12.44:1521:orcl";
@@ -109,6 +114,10 @@ public final class JdbcUtils {
         return properties;
     }
 
+    public static String getConnectionUrl() {
+    	return "";
+    }
+    
     /**
      * Get schema. 不支持Oracle
      * @param connection   connection
@@ -154,7 +163,6 @@ public final class JdbcUtils {
      * @return
      */
     public static <T> T prepareQuery(Connection conn, String sql, ResultSetHandler<T> handler, Object... args) {
-        List<Map<String, Object>> table = null;
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ParameterMetaData pmd = pstmt.getParameterMetaData();
             int paramCount = pmd.getParameterCount();
@@ -274,7 +282,7 @@ public final class JdbcUtils {
     }
 
     /**
-     * TODO 注意，此方法内部不关闭Connection
+     * 
      * @param conn
      * @return
      */
@@ -361,6 +369,27 @@ public final class JdbcUtils {
     }
     
     /**
+     * 获取本地MySQL数据库连接
+     * @param dbName
+     * @return
+     * @throws SQLException
+     * Connection
+     */
+    public static Connection getLocalConnection(DbType dbType, String dbName) throws SQLException {
+    	switch (dbType) {
+		case MySQL5:
+			
+			break;
+		case MYSQL8:
+			
+			break;
+		default:
+			break;
+		}
+    	return getConnection("mysql", "localhost", 3306, dbName, defaultConnectionParams());
+    }
+    
+    /**
      * 默认连接参数设置
      * createDatabaseIfNotExists=true&useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8";
      * @return
@@ -383,7 +412,7 @@ public final class JdbcUtils {
     	}
     	String url = "jdbc:" + dbType + "://" + ip + ":" + port + "/" + dbName + "?" + paramString.toString();
     	try {
-			return DriverManager.getConnection(url, "root", "123456");
+			return DriverManager.getConnection(url, LOCAL_MYSQL_USERNAME, LOCAL_MYSQL_PASSWORD);
 		} catch (SQLException e) {
 			throw e;
 		}

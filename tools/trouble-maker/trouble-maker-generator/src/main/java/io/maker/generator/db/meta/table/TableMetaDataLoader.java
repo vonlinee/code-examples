@@ -11,7 +11,7 @@ import io.maker.generator.db.JdbcUtils;
 
 import io.maker.generator.db.meta.column.ColumnMetaDataLoader;
 import io.maker.generator.db.meta.index.IndexMetaDataLoader;
-import io.maker.generator.db.resultset.ResultSetHandler;
+import io.maker.generator.db.result.ResultSetHandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

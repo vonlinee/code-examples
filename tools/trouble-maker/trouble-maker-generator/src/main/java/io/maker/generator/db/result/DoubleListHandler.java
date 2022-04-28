@@ -1,4 +1,4 @@
-package io.maker.generator.db.resultset;
+package io.maker.generator.db.result;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

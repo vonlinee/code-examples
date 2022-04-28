@@ -13,10 +13,13 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import com.alibaba.druid.pool.DruidDataSource;
 
 import io.maker.base.io.FileUtils;
+import io.maker.base.utils.Lists;
+import io.maker.base.utils.PropertiesUtils;
 import io.maker.base.utils.Validator;
 import io.maker.extension.poi.ExcelUtils;
 import io.maker.generator.db.pool.DruidPool;
-import io.maker.generator.db.resultset.MapListHandler;
+import io.maker.generator.db.result.MapListHandler;
+import io.maker.generator.db.result.ResultSetHandler;
 
 public class Test {
     public static void main(String[] args) throws Exception {
@@ -29,18 +32,11 @@ public class Test {
 //        }
 //        FileUtils.showFile(new File("D:/Temp/1.xlsx"));
     	
-    	DataSource dataSource = DataSourceBuilder.create()
-    		.type(DruidDataSource.class)
-    		.url("jdbc:mysql://localhost:3306/db_mysql?useUnicode=true&characterEncoding=utf8")
-    		.username("root")
-    		.password("123456")
-    		.driverClassName("com.mysql.jdbc.Driver")
-    		.build();
+    	Connection connection = JdbcUtils.getLocalMySQLConnection("information_schema");
     	
-    	System.out.println(dataSource);
+    	String sql = "show tables";
+    	List<Map<String, Object>> list = JdbcUtils.query(connection, sql, ResultSetHandler.MAP_LIST);
     	
-    	Connection connection = dataSource.getConnection();
-    	
-    	System.out.println(connection);
+    	list.forEach(System.out::println);
     }
 }

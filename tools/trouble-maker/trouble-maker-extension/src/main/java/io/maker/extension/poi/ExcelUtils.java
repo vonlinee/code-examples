@@ -1,6 +1,9 @@
 package io.maker.extension.poi;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.maker.base.io.FileUtils;
-import io.maker.base.utils.StringUtils;
 import io.maker.base.utils.Validator;
 
 /**

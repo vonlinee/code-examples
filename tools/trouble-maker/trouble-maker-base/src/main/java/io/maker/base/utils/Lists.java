@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -59,7 +60,7 @@ public final class Lists {
         return list.stream().filter(rule).collect(Collectors.toList());
     }
 
-    public static void println(List<List<?>> list) {
+    public static void printlnDoubleList(List<List<?>> list) {
         list.forEach(row -> {
             List<String> l = new ArrayList<>();
             for (int i = 0; i < row.size(); i++) {
@@ -75,6 +76,10 @@ public final class Lists {
                 });
             });
         });
+    }
+    
+    public static void printlnMapList(List<Map<?, ?>> list) {
+        list.forEach(System.out::println);
     }
 
     public static void main(String[] args) {

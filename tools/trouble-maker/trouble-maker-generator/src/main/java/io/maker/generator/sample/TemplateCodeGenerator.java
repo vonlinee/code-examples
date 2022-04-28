@@ -11,7 +11,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import io.maker.generator.db.JdbcUtils;
 import io.maker.generator.db.meta.table.TableMetaDataLoader;
 import io.maker.generator.db.pool.DruidPool;
-import io.maker.generator.db.resultset.MapListHandler;
+import io.maker.generator.db.result.MapListHandler;
 
 /**
  * 模板代码生成
