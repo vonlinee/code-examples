@@ -1,4 +1,4 @@
-package io.maker.base.lang.reflect;
+package io.maker.base.lang;
 
 public class StringAligner {
 

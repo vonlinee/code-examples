@@ -1,4 +1,4 @@
-package io.maker.base.lang.reflect;
+package io.maker.base.lang.exception;
 
 /**
  * 每次都要new一个异常对象
