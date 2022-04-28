@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * information_schema.COLUMNS
  * </p>
  *
  * @author baomidou

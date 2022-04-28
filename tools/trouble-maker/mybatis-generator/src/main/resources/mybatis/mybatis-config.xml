@@ -8,7 +8,7 @@
 
 	<settings>
 		<setting name="mapUnderscoreToCamelCase" value="true" />
-		<setting name="logImpl" value="stdout" />
+		<setting name="logImpl" value="STDOUT_LOGGING" />
 	</settings>
 
 	<environments default="dev">
@@ -17,21 +17,19 @@
 			<transactionManager type="JDBC">
 				<property name="autoCommit" value="true" />
 			</transactionManager>
-			<!-- 默认连接池 -->
+			<!-- 使用MyBatis提供的的默认连接池 -->
 			<dataSource type="POOLED">
-				<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+				<property name="driver.driverClassName" value="com.mysql.jdbc.Driver" />
 				<!-- useUnicode=true&characterEncoding=UTF-8&useSSL=false&jdbcCompliantTruncation=false&zeroDateTimeBehavior=CONVERT_TO_NULL&useAffectedRows=true&serverTimezone=GMT%2B8 -->
-				<property name="url" value="jdbc:mysql://localhost:3306/information_schema?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=GMT%2B8&amp;useAffectedRows=true" />
-				<property name="username" value="root" />
-				<property name="password" value="123456" />
-				<!-- 初始线程数 -->
-				<property name="initialSize" value="10" />
-				<!-- 最大线程数 -->
-				<property name="maxActive" value="20" />
+				<property name="driver.url" value="jdbc:mysql://localhost:3306/information_schema?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=GMT%2B8&amp;useAffectedRows=true" />
+				<property name="driver.username" value="root" />
+				<property name="driver.password" value="123456" />
 			</dataSource>
 		</environment>
 	</environments>
-	<!-- <mappers> -->
-	<!-- <mapper resource="mappers/test.xml"/> -->
-	<!-- </mappers> -->
+	
+	<mappers>
+		<mapper resource="mybatis/mapping/InformationSchemaMapper.xml"/>
+		<mapper resource="mybatis/mapping/InformationSchemaMapper.xml"/>
+	</mappers>
 </configuration>

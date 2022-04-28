@@ -34,7 +34,11 @@ public class Test {
     	
     	Connection connection = JdbcUtils.getLocalMySQLConnection("information_schema");
     	
-    	String sql = "show tables";
+    	String sql = "		SELECT\r\n"
+    			+ "			*\r\n"
+    			+ "		FROM `information_schema`.`TABLES` AS T\r\n"
+    			+ "			JOIN `information_schema`.`COLUMNS` AS C ON T.TABLE_NAME = C.TABLE_NAME\r\n"
+    			+ "		WHERE T.TABLE_NAME = 'orders'";
     	List<Map<String, Object>> list = JdbcUtils.query(connection, sql, ResultSetHandler.MAP_LIST);
     	
     	list.forEach(System.out::println);

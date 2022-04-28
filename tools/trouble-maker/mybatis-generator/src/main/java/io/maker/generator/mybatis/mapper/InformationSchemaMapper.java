@@ -10,7 +10,7 @@ import io.maker.generator.mybatis.entity.Tables;
 
 public interface InformationSchemaMapper {
 
-	List<Columns> selectColumns(@Param("mapParam") Map<String, Object> params);
+	public List<Columns> selectColumns(@Param("mapParam") Map<String, Object> params);
 	
-	List<Tables> selectTables(@Param("mapParam") Map<String, Object> params);
+	public List<Tables> selectTables(@Param("mapParam") Map<String, Object> params);
 }

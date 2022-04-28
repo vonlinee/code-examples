@@ -1,5 +1,7 @@
 plugins {
-    id 'java'
+	id 'org.springframework.boot' version '2.3.12.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
 }
 
 group 'io.trouble.maker'
@@ -9,9 +11,17 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
 dependencies {
 	// 基础库
     implementation project(":trouble-maker-base")
+	implementation project(":trouble-maker-generator")
+    implementation project(":trouble-maker-extension")
 
     implementation "${lib.'mybatis-plus'}"
     implementation "${lib.velocity}"
@@ -30,6 +40,15 @@ dependencies {
     testImplementation "${lib.firebird}"
     testImplementation "${lib.'swagger-annotations'}"
     testCompileOnly "org.jetbrains:annotations:22.0.0"
+	
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter
+	implementation 'com.alibaba:druid-spring-boot-starter:1.2.9'
+	
+	implementation 'mysql:mysql-connector-java:5.1.49'
 }
 
 test {

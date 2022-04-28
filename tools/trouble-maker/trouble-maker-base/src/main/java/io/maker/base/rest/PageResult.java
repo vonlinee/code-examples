@@ -1,52 +1,32 @@
 package io.maker.base.rest;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public final class PageResult<T> extends Result<T> implements Serializable {
+import io.maker.base.collection.ValueMap;
+
+public final class PageResult<T> extends Result<List<T>> implements Serializable {
 
     private static final long serialVersionUID = 4134449411254581242L;
-
-    private int pageIndex;    // 当前页
-    private int pageSize;    // 每页的数量
-    private int total;        // 总记录数
-    private int pages;        // 总页数
-
-    private String code;
-    private String message;
-    private List<T> rows;
 
     public PageResult() {
         super();
     }
 
-    public PageResult(String code, String message) {
-        super();
-    }
-
-    public void setRows(List<T> rows) {
-        if (rows == null) {
-            this.rows = new ArrayList<>(0);
-        }
-        this.rows = rows;
-    }
-
-    public List<T> getRows() {
-        return rows;
-    }
-
-    public T getRow(int rowCount) {
-        return rows.get(rowCount);
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
+    public static void main(String[] args) {
+		
+    	PageResult<ValueMap<String>> result = PageResult.<ValueMap<String>>builder().build();
+    	
+    	List<ValueMap<String>> data = result.getData();
+    	
+	}
+    
     public static <T> Builder<T> builder() {
+        return new Builder<>();
+    }
+    
+    public static <T> Builder<T> builder(Class<T> clazz) {
         return new Builder<>();
     }
 

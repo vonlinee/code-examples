@@ -60,6 +60,10 @@
 
 	<select id="selectColumns" parameterType="map" resultMap="ColumnsResultMap">
 		SELECT * FROM `information_schema`.`COLUMNS`
+		WHERE 1 = 1
+		<if test="mapParam.tableName != null and mapParam.tableName != ''">
+			AND TABLE_NAME = #{mapParam.tableName}
+		</if>
 	</select>
 
 	<select id="selectTables" parameterType="map" resultMap="TablesResultMap">
@@ -80,7 +84,7 @@
 		SELECT
 			*
 		FROM `information_schema`.`TABLES` AS T
-		JOIN `information_schema`.`COLUMNS` AS C ON T.TABLE_NAME = C.TABLE_NAME
+			JOIN `information_schema`.`COLUMNS` AS C ON T.TABLE_NAME = C.TABLE_NAME
 		WHERE 1 = 1
 		<if test="mapParam.tableName != null and mapParam.tableName != ''">
 			AND INSTR(T.TABLE_NAME, #{mapParam.tableSchema}) <![CDATA[ > ]]> 0

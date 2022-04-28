@@ -250,10 +250,11 @@ public final class Validator {
         }
     }
 
-    public static void notBlank(final CharSequence sequence) {
+    public static <T extends CharSequence> T notBlank(final T sequence) {
         if (isBlank(sequence)) {
             throw new IllegalArgumentException(DEFAULT_NOT_BLANK_EX_MESSAGE);
         }
+        return sequence;
     }
 
     public static <T extends Map<?, ?>> T notEmpty(final T map) {

@@ -43,7 +43,7 @@ public class MyBatis {
     //利用static属于类不属于对象，全局唯一
     private static final SqlSessionFactory sqlSessionFactory;
 
-    //利用静态块在出书画时实例化sqlSessionFactory
+    //利用静态块在实例化sqlSessionFactory
     static {
         Reader reader;
         try {

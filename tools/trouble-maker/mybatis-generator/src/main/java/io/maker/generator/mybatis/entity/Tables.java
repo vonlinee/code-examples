@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ * information_schema.TALBES
  * </p>
  *
  * @author baomidou
