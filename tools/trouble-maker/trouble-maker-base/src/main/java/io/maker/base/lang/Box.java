@@ -1,6 +1,5 @@
-package io.maker.base.lang.reflect;
+package io.maker.base.lang;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 
 public final class Box<T> implements Cloneable {

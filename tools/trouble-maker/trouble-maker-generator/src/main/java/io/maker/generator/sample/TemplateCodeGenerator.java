@@ -9,9 +9,9 @@ import java.util.Properties;
 import com.alibaba.druid.pool.DruidDataSource;
 
 import io.maker.generator.db.JdbcUtils;
-import io.maker.generator.db.meta.resultset.MapListHandler;
 import io.maker.generator.db.meta.table.TableMetaDataLoader;
 import io.maker.generator.db.pool.DruidPool;
+import io.maker.generator.db.resultset.MapListHandler;
 
 /**
  * 模板代码生成

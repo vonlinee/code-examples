@@ -11,7 +11,8 @@ import io.maker.generator.db.JdbcUtils;
 
 import io.maker.generator.db.meta.column.ColumnMetaDataLoader;
 import io.maker.generator.db.meta.index.IndexMetaDataLoader;
-import io.maker.generator.db.meta.resultset.ResultSetHandler;
+import io.maker.generator.db.resultset.ResultSetHandler;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,7 +100,7 @@ public class TableMetaDataLoader {
         String sql = String.format("SELECT * FROM `information_schema`.`TABLES` T WHERE T.TABLE_SCHEMA = '%s' AND T.TABLE_NAME = '%s'", dbName, tableName);
         try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement();) {
             try (ResultSet resultSet = statement.executeQuery(sql)) {
-                return handler.handleAndCloseResultSet(resultSet, true);
+                return handler.handle(resultSet);
             } catch (Exception e) {
                 e.printStackTrace();
             }

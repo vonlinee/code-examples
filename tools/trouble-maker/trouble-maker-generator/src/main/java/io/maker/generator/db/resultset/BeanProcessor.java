@@ -1,4 +1,4 @@
-package io.maker.generator.db.meta.resultset;
+package io.maker.generator.db.resultset;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;

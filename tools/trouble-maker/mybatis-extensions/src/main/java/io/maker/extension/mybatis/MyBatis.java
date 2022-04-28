@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -76,15 +77,17 @@ public class MyBatis {
     	
     	DefaultSqlSession session = iBatis.openDefaultSqlSession();
     	
-    	iBatis.configuration.addMapper(MyBatisMapper.class);
+    	// iBatis.configuration.addMapper(MyBatisMapper.class);
     	
-    	MapperRegistry mapperRegistry = iBatis.configuration.getMapperRegistry();
-    	
-    	Collection<Class<?>> mappers = mapperRegistry.getMappers();
+    	// Collection<Class<?>> mappers = mapperRegistry.getMappers();
     	
     	Configuration configuration = iBatis.configuration;
-    	MyBatisMapper mapper = mapperRegistry.getMapper(MyBatisMapper.class, session);
     	
+    	MyBatisMapper mapper = configuration.getMapper(MyBatisMapper.class, session);
+    	
+    	List<Map<String, Object>> list = mapper.select();
+    	
+    	System.out.println(list);
 	}
    
     

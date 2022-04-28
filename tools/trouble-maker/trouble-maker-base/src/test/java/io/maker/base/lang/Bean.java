@@ -1,11 +1,10 @@
 package io.maker.base.lang;
 
-import io.maker.base.collection.ParamMap;
-import io.maker.base.lang.reflect.TypeMetadataHolder;
-
 import java.util.Date;
 
-public class Bean extends TypeMetadataHolder {
+import io.maker.base.collection.ParamMap;
+
+public class Bean {
 
     protected Bean(Object target) {
 

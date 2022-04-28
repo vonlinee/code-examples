@@ -15,8 +15,8 @@ import com.alibaba.druid.pool.DruidDataSource;
 import io.maker.base.io.FileUtils;
 import io.maker.base.utils.Validator;
 import io.maker.extension.poi.ExcelUtils;
-import io.maker.generator.db.meta.resultset.MapListHandler;
 import io.maker.generator.db.pool.DruidPool;
+import io.maker.generator.db.resultset.MapListHandler;
 
 public class Test {
     public static void main(String[] args) throws Exception {

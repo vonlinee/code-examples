@@ -33,8 +33,8 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.maker.generator.db.meta.resultset.ResultSetColumnMetadata;
-import io.maker.generator.db.meta.resultset.ResultSetHandler;
+import io.maker.generator.db.resultset.ResultSetColumnMetadata;
+import io.maker.generator.db.resultset.ResultSetHandler;
 
 /**
  * https://cloud.tencent.com/developer/article/1581184
@@ -50,6 +50,10 @@ import io.maker.generator.db.meta.resultset.ResultSetHandler;
  */
 public final class JdbcUtils {
 
+	private JdbcUtils() {
+		
+	}
+	
     private static final Logger LOG = LoggerFactory.getLogger(JdbcUtils.class);
     
     private static final String JDBC_PROPERTIES = "jdbc.properties";
@@ -124,31 +128,6 @@ public final class JdbcUtils {
         return result;
     }
 
-    /**
-     * TODO query
-     * @param conn
-     * @param sql
-     * @param <T>
-     * @return
-     */
-    public static <T> T query(Connection conn, String sql) {
-        try (Statement statement = conn.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
-            return null;
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return null;
-    }
-
-    public static <T> T query(Connection conn, String sql, ResultSetHandler<T> handler) {
-        try (Statement statement = conn.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
-            LOG.debug("\nQuery : " + sql);
-            return handler.handle(resultSet);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return null;
-    }
 
     /**
      * isTableExist
@@ -163,39 +142,6 @@ public final class JdbcUtils {
         try (ResultSet resultSet = connection.getMetaData().getTables(catalog, getSchema(connection, databaseType), table, null)) {
             return resultSet.next();
         }
-    }
-
-    /**
-     * 查询，封装结果
-     * @param conn
-     * @param sql
-     * @param args
-     * @return
-     */
-    public static List<Map<String, Object>> queryMapping(Connection conn, String sql, Object... args) {
-        List<Map<String, Object>> table = new ArrayList<>();
-        try (Statement statement = conn.createStatement()) {
-            try (ResultSet resultSet = statement.executeQuery(sql)) {
-                LOG.debug("execute sql : \n" + sql);
-                ResultSetMetaData rsmd = resultSet.getMetaData();
-                int columnCount = rsmd.getColumnCount();
-                int i = 1;
-                while (resultSet.next()) {
-                    Map<String, Object> row = new HashMap<>(columnCount);
-                    for (int j = 0; j < columnCount; j++) {
-                        if (resultSet.wasNull()) {
-
-                        }
-                    }
-                    table.add(row);
-                }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return table;
     }
 
     /**
@@ -490,6 +436,20 @@ public final class JdbcUtils {
         return list;
     }
 
+    //========================================= CRUD API start =========================================
+    
+    public static <T> T query(Connection conn, String sql, ResultSetHandler<T> handler) {
+        try (Statement statement = conn.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
+            LOG.debug("\nQuery : " + sql);
+            return handler.handle(resultSet);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return null;
+    }
+    
+  //========================================= CRUD API end =========================================
+    
     /**
      * Close a <code>Connection</code>, avoid closing if null.
      * @param conn Connection to close.
