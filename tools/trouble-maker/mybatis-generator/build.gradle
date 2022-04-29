@@ -49,6 +49,10 @@ dependencies {
 	implementation 'com.alibaba:druid-spring-boot-starter:1.2.9'
 	
 	implementation 'mysql:mysql-connector-java:5.1.49'
+	
+	// https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
+	implementation 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3'
+	
 }
 
 test {

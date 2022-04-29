@@ -1,6 +1,6 @@
 package sample.java.multithread.concurrency;
 
-public class Test1 {
+public class TestSynchronized {
 
     public static void main(String[] args) {
         B b = new B();

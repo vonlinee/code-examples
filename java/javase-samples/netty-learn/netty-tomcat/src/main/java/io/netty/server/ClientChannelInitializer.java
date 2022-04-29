@@ -21,5 +21,6 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
 		
 		// 然后是业务处理逻辑对应的ChannelHandler
 		
+		ch.pipeline().addLast(new ClientDispatcher());
 	}
 }

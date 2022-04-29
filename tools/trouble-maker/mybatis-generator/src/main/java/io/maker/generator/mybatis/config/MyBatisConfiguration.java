@@ -18,15 +18,12 @@ public class MyBatisConfiguration {
 	private static final String DEFAULT_MAPPER_CLASSPATH_LOCATION = "mybatis/mapping/*.xml";
 	
 	@Value(value = "${mybatis.mapper.classpathlocation:" + DEFAULT_MAPPER_CLASSPATH_LOCATION + "}")
-	public String mapperLocationPattern;
+	private String mapperLocationPattern;
 	
-	@Bean(name = "sessionFactory")
-	public SqlSessionFactory test1SqlSessionFactory(DataSource datasource) throws Exception {
-		
-		System.out.println(datasource);
-		
+	@Bean(name = "sqlSessionFactory")
+	public SqlSessionFactory sqlSessionFactory(DataSource datasource) throws Exception {
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-		bean.setDataSource(datasource);
+		bean.setDataSource(datasource); 
 		// 设置mybatis的xml所在位置
 		bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(mapperLocationPattern));
 		return bean.getObject();
@@ -34,8 +31,8 @@ public class MyBatisConfiguration {
 
 	@Bean("sqlSessionTemplate")
 	@Primary
-	public SqlSessionTemplate test1sqlsessiontemplate(
-			@Qualifier("sessionFactory") SqlSessionFactory sessionfactory) {
+	public SqlSessionTemplate sqlSessionTemplate(
+			@Qualifier("sqlSessionFactory") SqlSessionFactory sessionfactory) {
 		return new SqlSessionTemplate(sessionfactory);
 	}
 }
