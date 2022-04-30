@@ -1,5 +1,8 @@
 package sample.java.multithread.concurrency.keyword;
 
+/**
+ * MemoryBarrier
+ */
 public class TestMemoryBarrier {
 
     public static volatile int i = 0;

@@ -6,6 +6,7 @@ plugins {
 
 group 'io.trouble.maker'
 version '0.0.1.SNAPSHOT'
+description '生成器带web界面'
 
 repositories {
     mavenCentral()
@@ -49,6 +50,10 @@ dependencies {
 	implementation 'com.alibaba:druid-spring-boot-starter:1.2.9'
 	
 	implementation 'mysql:mysql-connector-java:5.1.49'
+	
+	// https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
+	implementation 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3'
+	
 }
 
 test {

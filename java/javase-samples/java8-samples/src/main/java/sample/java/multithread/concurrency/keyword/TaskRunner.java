@@ -1,7 +1,5 @@
 package sample.java.multithread.concurrency.keyword;
 
-import java.util.concurrent.TimeUnit;
-
 public class TaskRunner {
     private static int number;
     private static boolean ready;

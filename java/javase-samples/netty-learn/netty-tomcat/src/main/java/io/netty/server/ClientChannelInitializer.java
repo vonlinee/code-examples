@@ -19,7 +19,8 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
 		ch.pipeline().addLast(new HttpResponseEncoder()); // HttpRequestDecoder 编码器
 		ch.pipeline().addLast(new HttpRequestDecoder()); // HttpRequestDecoder 解码器
 		// 然后是业务处理逻辑对应的ChannelHandler
-
 		ch.pipeline().addLast(new HttpServerHandler());
+		
+		ch.pipeline().addLast(new ClientDispatcher());
 	}
 }

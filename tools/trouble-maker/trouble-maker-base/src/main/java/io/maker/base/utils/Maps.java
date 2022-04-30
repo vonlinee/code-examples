@@ -122,6 +122,19 @@ public final class Maps {
 		return optionalValue;
     }
     
+    @SuppressWarnings("unchecked")
+    public static <K, V, T> T getValue(Map<K, V> map, K key, V optionalValue) {
+    	V v = map.get(key);
+    	if (v == null) {
+			return (T) optionalValue;
+		}
+    	return (T) v;
+    }
+    
+    public static <K, V, T> T getValue(Map<K, V> map, K key) {
+    	return getValue(map, key, null);
+    }
+    
     public static <K, V extends Number> int getInt(Map<K, V> map, K key) {
     	if (map.containsKey(key)) {
     		V number = map.get(key);
