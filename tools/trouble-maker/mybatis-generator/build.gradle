@@ -6,6 +6,7 @@ plugins {
 
 group 'io.trouble.maker'
 version '0.0.1.SNAPSHOT'
+description '生成器带web界面'
 
 repositories {
     mavenCentral()

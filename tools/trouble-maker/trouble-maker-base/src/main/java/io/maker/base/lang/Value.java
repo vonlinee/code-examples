@@ -15,6 +15,10 @@ public class Value implements Serializable {
 		this.holder = new TypeMetaHolder(value);
 	}
 	
+	public static Value wrap(Object val) {
+		return new Value(val);
+	}
+	
 	public final boolean isNull() {
 		return value == null;
 	}

@@ -131,7 +131,7 @@ public class GlobalConfig {
         }
 
         /**
-         * 覆盖已有文件（3.5.3版本会删除此方法）
+         * 覆盖已有文件（3.5.3版本会删除此方法），改为由各个输出项单独控制是否覆盖
          */
         @Deprecated
         public Builder fileOverride() {

@@ -1,19 +1,5 @@
 package io.maker.codegen.mbp.engine;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-
-import io.maker.codegen.mbp.config.*;
-import io.maker.codegen.mbp.config.builder.ConfigBuilder;
-import io.maker.codegen.mbp.config.po.TableInfo;
-import io.maker.codegen.mbp.util.FileUtils;
-import io.maker.codegen.mbp.util.MapperUtils;
-import io.maker.codegen.mbp.util.RuntimeUtils;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,10 +8,25 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+
+import io.maker.codegen.mbp.config.ConstVal;
+import io.maker.codegen.mbp.config.GlobalConfig;
+import io.maker.codegen.mbp.config.OutputFile;
+import io.maker.codegen.mbp.config.StrategyConfig;
+import io.maker.codegen.mbp.config.TemplateConfig;
+import io.maker.codegen.mbp.config.builder.ConfigBuilder;
+import io.maker.codegen.mbp.config.po.TableInfo;
+import io.maker.codegen.mbp.util.FileUtils;
+import io.maker.codegen.mbp.util.RuntimeUtils;
+
 /**
- * 模板引擎抽象类
- * @author hubin
- * @since 2018-01-10
+ * 模板引擎抽象类，提供生成代码的模板方法
  */
 public abstract class AbstractTemplateEngine {
 
@@ -82,20 +83,29 @@ public abstract class AbstractTemplateEngine {
      * @since 3.5.0
      */
     protected void outputMapper(@NotNull TableInfo tableInfo, @NotNull Map<String, Object> objectMap) {
+    	
+    	logger.info("开始输出Mapper.java");
+    	
         // MpMapper.java
         String entityName = tableInfo.getEntityName();
         String mapperPath = getPathInfo(OutputFile.mapper);
         if (StringUtils.isNotBlank(tableInfo.getMapperName()) && StringUtils.isNotBlank(mapperPath)) {
             getTemplateFilePath(TemplateConfig::getMapper).ifPresent(mapper -> {
                 String mapperFile = String.format((mapperPath + File.separator + tableInfo.getMapperName() + suffixJavaOrKt()), entityName);
+                
+                logger.info("模板文件路径:{}, 输出到文件: {}", mapper, mapperFile);
+                
                 outputFile(new File(mapperFile), objectMap, mapper, getConfigBuilder().getStrategyConfig().mapper().isFileOverride());
             });
         }
         // MpMapper.xml
+        logger.info("开始输出Mapper.xml");
         String xmlPath = getPathInfo(OutputFile.xml);
         if (StringUtils.isNotBlank(tableInfo.getXmlName()) && StringUtils.isNotBlank(xmlPath)) {
             getTemplateFilePath(TemplateConfig::getXml).ifPresent(xml -> {
                 String xmlFile = String.format((xmlPath + File.separator + tableInfo.getXmlName() + ConstVal.XML_SUFFIX), entityName);
+                
+                logger.info("模板文件路径:{}, 输出到文件: {}", xml, xmlFile);
                 outputFile(new File(xmlFile), objectMap, xml, getConfigBuilder().getStrategyConfig().mapper().isFileOverride());
             });
         }
@@ -166,6 +176,9 @@ public abstract class AbstractTemplateEngine {
      * @since 3.5.2
      */
     protected void outputFile(@NotNull File file, @NotNull Map<String, Object> objectMap, @NotNull String templatePath, boolean fileOverride) {
+    	
+    	logger.info("写入数据到文件{}", file);
+    	
         if (isCreate(file, fileOverride)) {
             try {
                 // 全局判断【默认】
@@ -192,7 +205,6 @@ public abstract class AbstractTemplateEngine {
         TemplateConfig templateConfig = getConfigBuilder().getTemplateConfig();
         String filePath = function.apply(templateConfig);
         if (StringUtils.isNotBlank(filePath)) {
-            logger.info("templateFilePath {}", templateFilePath(filePath));
             return Optional.of(templateFilePath(filePath));
         }
         return Optional.empty();
@@ -215,8 +227,15 @@ public abstract class AbstractTemplateEngine {
     public AbstractTemplateEngine batchOutput() {
         try {
             ConfigBuilder config = this.getConfigBuilder();
+            
+            logger.info("开始加载数据库表字段信息");
             List<TableInfo> tableInfoList = config.getTableInfoList();
-
+            logger.info("加载数据库表个数：{}", tableInfoList.size());
+            
+            tableInfoList.forEach(tableInfo -> {
+            	System.out.println(tableInfo.getName());
+            });
+            
             tableInfoList.forEach(tableInfo -> {
                 Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
                 Optional.ofNullable(config.getInjectionConfig()).ifPresent(t -> {
@@ -224,9 +243,6 @@ public abstract class AbstractTemplateEngine {
                     // 输出自定义文件
                     outputCustomFile(t.getCustomFile(), tableInfo, objectMap);
                 });
-
-                MapperUtils.tableField(tableInfo, "T");
-
 
                 // entity
                 outputEntity(tableInfo, objectMap);
@@ -279,7 +295,7 @@ public abstract class AbstractTemplateEngine {
      */
     public void writer(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception {
         this.writer(objectMap, templatePath, outputFile.getPath());
-        logger.debug("模板:" + templatePath + ";  文件:" + outputFile);
+        logger.info("模板:{}, 输出文件:{}", templatePath, outputFile.getAbsolutePath());
     }
 
     /**

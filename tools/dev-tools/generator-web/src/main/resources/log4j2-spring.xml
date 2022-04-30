@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="debug">  <!--设置log4j2的自身log级别为warn -->
+	<properties>
+		<!--这里配置的是日志存到文件中的路径 -->
+		<Property name="log_path">logs</Property>
+	</properties>
+	<appenders>
+		<!--输出格式布局，每个转换说明符以百分号(%)开头，'%'后面的转换字符有如下: -->
+		<!--
+			p (level) 日志级别
+			c（logger） Logger的Name
+			C (class) Logger调用者的全限定类名 ***
+			d (date) 日期
+			highlight 高亮颜色
+			l (location) 调用位置 ***
+			L (line) 行号
+			m (msg/message) 输出的内容
+			M (methode) 调用方法 ***
+			maker marker的全限定名
+			n 输出平台相关的换行符,如'\n' '\r\n'
+			pid (processId) 进程ID
+			level （p）日志级别
+			r JVM启动后经过的微秒
+			t (tn/thread/threadName) 线程名称
+			T (tid/threadId) 线程ID
+			tp (threadPriority) 线程优先级
+			x (NDC) 线程Context堆栈
+		-->
+		<console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%t][%c(类):%L(行)] %m%n" />
+		</console>
+		<!-- 这里配置了普通日志的格式和存入文件的路径 -->
+		<!-- 如果fileName中是"../info.log"，代表日志存放在和项目同级下 -->
+		<RollingFile name="RollingFileInfo"
+			fileName="${log_path}/info.log"
+			filePattern="${log_path}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+			<Filters>
+				<ThresholdFilter level="INFO" />
+				<ThresholdFilter level="WARN" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+			</Filters>
+			<PatternLayout pattern="[%d][%t][%c(类):%L(行)] %m%n" />
+			<!-- <PatternLayout pattern="[%d][%t] -5level %m%n"/> -->
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+				<SizeBasedTriggeringPolicy size="5 MB" />
+			</Policies>
+		</RollingFile>
+		<!-- 这里配置了警告日志的格式和存入文件的路径 -->
+		<RollingFile name="RollingFileWarn"
+			fileName="${log_path}/warn.log"
+			filePattern="${log_path}/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
+			<Filters>
+				<ThresholdFilter level="WARN" />
+				<ThresholdFilter level="ERROR" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+			</Filters>
+			<PatternLayout pattern="[%d][%t][%c(类):%L(行)] %m%n" />
+			<!-- <PatternLayout pattern="[%d][%t][%p][%c:%L] %m%n"/> -->
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+				<SizeBasedTriggeringPolicy size="5 MB" />
+			</Policies>
+		</RollingFile>
+		<RollingFile name="RollingFileError"
+			fileName="${log_path}/error.log"
+			filePattern="${log_path}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
+			<ThresholdFilter level="ERROR" />
+			<PatternLayout pattern="[%d][%t][%c(类):%L(行)] %m%n" />
+			<!-- <PatternLayout pattern="[%d][%t] %-5level %m%n"/> -->
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+				<SizeBasedTriggeringPolicy size="5 MB" />
+			</Policies>
+		</RollingFile>
+		<!-- 配置mongdb appender -->
+	</appenders>
+	<loggers>
+		<!-- 过滤redis重连日志 -->
+		<logger name="io.lettuce.core.protocol" level="ERROR">
+			<appender-ref ref="ERROR_FILE" />
+		</logger>
+		<!--过滤掉spring的一些无用的debug信息 -->
+		<logger
+			name="org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport"
+			level="Error"></logger>
+		<logger
+			name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"
+			level="Error"></logger>
+		<logger
+			name="org.springframework.boot.actuate.endpoint.web.servlet.WebMvcEndpointHandlerMapping"
+			level="Error"></logger>
+		<logger
+			name="org.springframework.amqp.rabbit.connection.CachingConnectionFactory"
+			level="Error"></logger>
+		<logger
+			name="org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer"
+			level="Error"></logger>
+		<logger
+			name="org.springframework.boot.web.servlet.FilterRegistrationBean"
+			level="Error"></logger>
+		<logger
+			name="org.springframework.jmx.export.annotation.AnnotationMBeanExporter"
+			level="Error"></logger>
+		<root level="INFO">
+			<appender-ref ref="Console" /><!-- 配置控制台输出日志 -->
+			<appender-ref ref="RollingFileInfo" /><!-- 配置普通日志 -->
+			<appender-ref ref="RollingFileWarn" /><!-- 配置警告日志 -->
+			<appender-ref ref="RollingFileError" /><!-- 配置异常日志 -->
+		</root>
+	</loggers>
+</configuration>

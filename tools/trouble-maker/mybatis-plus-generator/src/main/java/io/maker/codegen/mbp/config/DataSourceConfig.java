@@ -281,7 +281,7 @@ public class DataSourceConfig {
 
         private final DataSourceConfig dataSourceConfig;
 
-        private Builder() {
+        public Builder() {
             this.dataSourceConfig = new DataSourceConfig();
         }
 

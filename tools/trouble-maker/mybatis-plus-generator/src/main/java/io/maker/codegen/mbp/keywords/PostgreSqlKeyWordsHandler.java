@@ -9,11 +9,7 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * postgresql关键字处理
- * https://www.postgresql.org/docs/11/sql-keywords-appendix.html
- *
- * @author nieqiurong 2020/5/9.
- * @since 3.3.2
+ * postgresql关键字处理 https://www.postgresql.org/docs/11/sql-keywords-appendix.html
  */
 public class PostgreSqlKeyWordsHandler extends BaseKeyWordsHandler {
 

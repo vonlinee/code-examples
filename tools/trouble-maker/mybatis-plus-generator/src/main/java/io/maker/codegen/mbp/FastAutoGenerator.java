@@ -18,6 +18,7 @@ package io.maker.codegen.mbp;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 
 import io.maker.codegen.mbp.config.*;
+import io.maker.codegen.mbp.config.DataSourceConfig.Builder;
 import io.maker.codegen.mbp.engine.AbstractTemplateEngine;
 
 import org.jetbrains.annotations.NotNull;
@@ -79,6 +80,12 @@ public final class FastAutoGenerator {
 
     public static FastAutoGenerator create(@NotNull DataSourceConfig.Builder dataSourceConfigBuilder) {
         return new FastAutoGenerator(dataSourceConfigBuilder);
+    }
+    
+    public static FastAutoGenerator create(Consumer<DataSourceConfig.Builder> dataSourceConfigBuilder) {
+    	Builder builder = new DataSourceConfig.Builder();
+    	dataSourceConfigBuilder.accept(builder);
+        return new FastAutoGenerator(builder);
     }
 
     /**

@@ -388,7 +388,7 @@ public class Entity implements ITemplate {
          * @return this
          * @since 3.5.0
          */
-        public Builder disableSerialVersionUID() {
+        public Builder disableSerialVersionUUID() {
             this.entity.serialVersionUID = false;
             return this;
         }

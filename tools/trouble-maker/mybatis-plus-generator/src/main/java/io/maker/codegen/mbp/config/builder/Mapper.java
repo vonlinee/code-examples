@@ -191,7 +191,6 @@ public class Mapper implements ITemplate {
 
         /**
          * 开启 @Mapper 注解
-         *
          * @return this
          * @see #mapperAnnotation(Class)
          * @since 3.5.1

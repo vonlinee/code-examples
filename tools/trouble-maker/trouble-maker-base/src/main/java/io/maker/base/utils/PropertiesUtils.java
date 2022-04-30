@@ -102,4 +102,10 @@ public class PropertiesUtils {
 		}
 		return map;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T get(Properties props, String name, T defaultValue) {
+		Object value = props.get(name);
+		return value == null ? defaultValue : (T) value;
+	}
 }
