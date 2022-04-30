@@ -2,6 +2,7 @@ package io.netty.server;
 
 import java.net.InetSocketAddress;
 
+import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
@@ -24,6 +25,9 @@ public class NettyHttpServer {
 	private void start() throws InterruptedException {
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {
+
+			Bootstrap bootstrap;
+
 			// Bootstrap用于配置启动项
 			ServerBootstrap serverBootstrap = new ServerBootstrap()
 					.group(group)

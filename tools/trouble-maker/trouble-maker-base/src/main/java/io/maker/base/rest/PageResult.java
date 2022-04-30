@@ -2,9 +2,6 @@ package io.maker.base.rest;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
-
-import io.maker.base.collection.ValueMap;
 
 public final class PageResult<T> extends Result<List<T>> implements Serializable {
 
@@ -14,22 +11,10 @@ public final class PageResult<T> extends Result<List<T>> implements Serializable
         super();
     }
 
-    public static void main(String[] args) {
-		
-    	PageResult<ValueMap<String>> result = PageResult.<ValueMap<String>>builder().build();
-    	
-    	List<ValueMap<String>> data = result.getData();
-    	
-	}
-    
     public static <T> Builder<T> builder() {
         return new Builder<>();
     }
     
-    public static <T> Builder<T> builder(Class<T> clazz) {
-        return new Builder<>();
-    }
-
     /**
      * Builder Pattern
      * @param <T>

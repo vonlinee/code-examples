@@ -1,18 +1,14 @@
 package io.maker.base.test;
 
-import io.maker.base.collection.ValueMap;
-import io.maker.base.lang.NamedValue;
+import io.maker.base.collection.BeanMap;
+import io.maker.base.jdbc.Model;
+
+import java.util.Date;
 
 public class Test1 {
 	
 	public static void main(String[] args) {
-		NamedValue value = new NamedValue("A", "A");
-		
-		
-		ValueMap<String> map = new ValueMap<>();
-		
-		map.put("age", 28);
-		
+
 	}
 	
 	public static void test2(Object value) {

@@ -69,8 +69,4 @@ public abstract class Result<T> implements Serializable {
     public final void attach(String name, Object item) {
         this.attachement.put(name, item);
     }
-
-    public static <T> Result<T> doOpt(int code, String message, T data) {
-        return OptResult.create(code, message, data);
-    }
 }

@@ -1,10 +1,7 @@
 package netty.tcp;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -44,6 +41,14 @@ public class NettyServer {
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
             //3、启动服务器
             ChannelFuture cf = server.bind(8888).sync();
+
+            cf.addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture future) throws Exception {
+
+                }
+            });
+
             System.out.println("Server已启动，监听的端口是：" + 8888);
             cf.channel().closeFuture().sync(); //对关闭通道事件进行监听
         } catch (Exception e) {

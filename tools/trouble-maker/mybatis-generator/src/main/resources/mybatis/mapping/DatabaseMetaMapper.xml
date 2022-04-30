@@ -38,13 +38,11 @@
 		`information_schema`.`COLUMNS` AS C ON T.TABLE_NAME = C.TABLE_NAME
 		WHERE 1 = 1
 		<if test="mapParam.tableName != null and mapParam.tableName != ''">
-			AND INSTR(T.TABLE_NAME, #{mapParam.tableSchema}) <![CDATA[ > ]]>
-			0
+			AND INSTR(T.TABLE_NAME, #{mapParam.tableSchema}) <![CDATA[ > ]]> 0
 		</if>
 		<if
 			test="mapParam.tableSchema != null and mapParam.tableName != ''">
-			AND INSTR(T.TABLE_SCHEMA, #{mapParam.tableSchema}) <![CDATA[ > ]]>
-			0
+			AND INSTR(T.TABLE_SCHEMA, #{mapParam.tableSchema}) <![CDATA[ > ]]> 0
 		</if>
 	</select>
 </mapper>

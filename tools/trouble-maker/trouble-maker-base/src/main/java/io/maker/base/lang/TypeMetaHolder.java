@@ -4,7 +4,7 @@ import io.maker.base.annotation.Nullable;
 
 public class TypeMetaHolder {
 
-	private Class<?> clazz;
+	private final Class<?> clazz;
 	
 	public TypeMetaHolder(Object value) {
 		if (value != null) {
