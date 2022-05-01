@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.maker.codegen.mbp;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,9 +14,6 @@ import java.util.List;
 
 /**
  * 生成文件
- *
- * @author YangHu, tangguo, hubin
- * @since 2016-08-30
  */
 public class AutoGenerator {
 
@@ -72,7 +54,6 @@ public class AutoGenerator {
 
     /**
      * 构造方法
-     *
      * @param dataSourceConfig 数据库配置
      * @since 3.5.0
      */
@@ -83,7 +64,6 @@ public class AutoGenerator {
 
     /**
      * 注入配置
-     *
      * @param injectionConfig 注入配置
      * @return this
      * @since 3.5.0
@@ -95,7 +75,6 @@ public class AutoGenerator {
 
     /**
      * 生成策略
-     *
      * @param strategyConfig 策略配置
      * @return this
      * @since 3.5.0
@@ -107,7 +86,6 @@ public class AutoGenerator {
 
     /**
      * 指定包配置信息
-     *
      * @param packageConfig 包配置
      * @return this
      * @since 3.5.0
@@ -119,7 +97,6 @@ public class AutoGenerator {
 
     /**
      * 指定模板配置
-     *
      * @param templateConfig 模板配置
      * @return this
      * @since 3.5.0
@@ -131,7 +108,6 @@ public class AutoGenerator {
 
     /**
      * 指定全局配置
-     *
      * @param globalConfig 全局配置
      * @return this
      * @see 3.5.0
@@ -143,7 +119,6 @@ public class AutoGenerator {
 
     /**
      * 设置配置汇总
-     *
      * @param configBuilder 配置汇总
      * @return this
      * @since 3.5.0
@@ -162,7 +137,6 @@ public class AutoGenerator {
 
     /**
      * 生成代码
-     *
      * @param templateEngine 模板引擎
      */
     public void execute(AbstractTemplateEngine templateEngine) {
@@ -177,18 +151,18 @@ public class AutoGenerator {
         }
         templateEngine.setConfigBuilder(config);
         // 模板引擎初始化执行文件输出
-        templateEngine.init(config).batchOutput().open();
+        templateEngine.init(config)
+                      .batchOutput()
+                      .open();
         logger.debug("==========================文件生成完成！！！==========================");
     }
 
     /**
      * 开放表信息、预留子类重写
-     *
      * @param config 配置信息
      * @return ignore
      */
-    @NotNull
-    protected List<TableInfo> getAllTableInfoList(@NotNull ConfigBuilder config) {
+    protected List<TableInfo> getAllTableInfoList(ConfigBuilder config) {
         return config.getTableInfoList();
     }
 

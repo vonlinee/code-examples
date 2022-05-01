@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.maker.codegen.mbp;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -81,10 +66,10 @@ public final class FastAutoGenerator {
     public static FastAutoGenerator create(@NotNull DataSourceConfig.Builder dataSourceConfigBuilder) {
         return new FastAutoGenerator(dataSourceConfigBuilder);
     }
-    
+
     public static FastAutoGenerator create(Consumer<DataSourceConfig.Builder> dataSourceConfigBuilder) {
-    	Builder builder = new DataSourceConfig.Builder();
-    	dataSourceConfigBuilder.accept(builder);
+        Builder builder = new DataSourceConfig.Builder();
+        dataSourceConfigBuilder.accept(builder);
         return new FastAutoGenerator(builder);
     }
 
@@ -134,7 +119,7 @@ public final class FastAutoGenerator {
     }
 
     public FastAutoGenerator packageConfig(BiConsumer<Function<String, String>, PackageConfig.Builder> biConsumer) {
-        biConsumer.accept(message -> scannerNext(message), this.packageConfigBuilder);
+        biConsumer.accept(this::scannerNext, this.packageConfigBuilder);
         return this;
     }
 
@@ -149,7 +134,7 @@ public final class FastAutoGenerator {
     }
 
     public FastAutoGenerator strategyConfig(BiConsumer<Function<String, String>, StrategyConfig.Builder> biConsumer) {
-        biConsumer.accept(message -> scannerNext(message), this.strategyConfigBuilder);
+        biConsumer.accept(this::scannerNext, this.strategyConfigBuilder);
         return this;
     }
 
@@ -164,7 +149,7 @@ public final class FastAutoGenerator {
     }
 
     public FastAutoGenerator injectionConfig(BiConsumer<Function<String, String>, InjectionConfig.Builder> biConsumer) {
-        biConsumer.accept(message -> scannerNext(message), this.injectionConfigBuilder);
+        biConsumer.accept(this::scannerNext, this.injectionConfigBuilder);
         return this;
     }
 
@@ -179,7 +164,7 @@ public final class FastAutoGenerator {
     }
 
     public FastAutoGenerator templateConfig(BiConsumer<Function<String, String>, TemplateConfig.Builder> biConsumer) {
-        biConsumer.accept(message -> scannerNext(message), this.templateConfigBuilder);
+        biConsumer.accept(this::scannerNext, this.templateConfigBuilder);
         return this;
     }
 

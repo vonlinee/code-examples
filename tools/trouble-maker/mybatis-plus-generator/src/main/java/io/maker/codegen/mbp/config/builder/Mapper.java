@@ -32,7 +32,6 @@ import java.util.Map;
 
 /**
  * 控制器属性配置
- *
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
@@ -48,7 +47,6 @@ public class Mapper implements ITemplate {
 
     /**
      * 是否添加 @Mapper 注解（默认 false）
-     *
      * @see #mapperAnnotationClass
      * @since 3.5.1
      * @deprecated 3.5.3
@@ -58,49 +56,42 @@ public class Mapper implements ITemplate {
 
     /**
      * Mapper标记注解
-     *
      * @since 3.5.3
      */
     private Class<? extends Annotation> mapperAnnotationClass;
 
     /**
      * 是否开启BaseResultMap（默认 false）
-     *
      * @since 3.5.0
      */
     private boolean baseResultMap;
 
     /**
      * 是否开启baseColumnList（默认 false）
-     *
      * @since 3.5.0
      */
     private boolean baseColumnList;
 
     /**
      * 转换输出Mapper文件名称
-     *
      * @since 3.5.0
      */
     private ConverterFileName converterMapperFileName = (entityName -> entityName + ConstVal.MAPPER);
 
     /**
      * 转换输出Xml文件名称
-     *
      * @since 3.5.0
      */
     private ConverterFileName converterXmlFileName = (entityName -> entityName + ConstVal.MAPPER);
 
     /**
      * 是否覆盖已有文件（默认 false）
-     *
      * @since 3.5.2
      */
     private boolean fileOverride;
 
     /**
      * 设置缓存实现类
-     *
      * @since 3.5.0
      */
     private Class<? extends Cache> cache;
@@ -169,7 +160,6 @@ public class Mapper implements ITemplate {
 
         /**
          * 父类Mapper
-         *
          * @param superClass 类名
          * @return this
          */
@@ -180,7 +170,6 @@ public class Mapper implements ITemplate {
 
         /**
          * 父类Mapper
-         *
          * @param superClass 类
          * @return this
          * @since 3.5.0
@@ -206,7 +195,6 @@ public class Mapper implements ITemplate {
 
         /**
          * 标记 Mapper 注解
-         *
          * @param annotationClass 注解Class
          * @return this
          * @since 3.5.3
@@ -218,7 +206,6 @@ public class Mapper implements ITemplate {
 
         /**
          * 开启baseResultMap
-         *
          * @return this
          * @since 3.5.0
          */
@@ -229,7 +216,6 @@ public class Mapper implements ITemplate {
 
         /**
          * 开启baseColumnList
-         *
          * @return this
          * @since 3.5.0
          */
@@ -240,7 +226,6 @@ public class Mapper implements ITemplate {
 
         /**
          * 设置缓存实现类
-         *
          * @param cache 缓存实现
          * @return this
          * @since 3.5.0
@@ -252,7 +237,6 @@ public class Mapper implements ITemplate {
 
         /**
          * 输出Mapper文件名称转换
-         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
@@ -264,7 +248,6 @@ public class Mapper implements ITemplate {
 
         /**
          * 转换Xml文件名称处理
-         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
@@ -276,7 +259,6 @@ public class Mapper implements ITemplate {
 
         /**
          * 格式化Mapper文件名称
-         *
          * @param format 　格式
          * @return this
          * @since 3.5.0
@@ -287,7 +269,6 @@ public class Mapper implements ITemplate {
 
         /**
          * 格式化Xml文件名称
-         *
          * @param format 格式
          * @return this
          * @since 3.5.0

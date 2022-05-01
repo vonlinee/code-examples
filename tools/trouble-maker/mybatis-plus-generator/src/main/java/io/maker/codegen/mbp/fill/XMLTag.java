@@ -9,56 +9,62 @@ import java.util.List;
  */
 public class XMLTag implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private String name;
-	private boolean closed = false; // 是否封闭，例如<img src="..."/>，默认为false
-	private List<Attribute> attributes;
-	private String content;
-	private List<XMLTag> directSubTags;
+    private static final long serialVersionUID = 1L;
 
-	public XMLTag() {
-		this.attributes = new ArrayList<>();
-		this.directSubTags = new ArrayList<>();
-	}
+    private String name;
+    private boolean closed = false; // 是否封闭，例如<img src="..."/>，默认为false
+    private List<Attribute> attributes;
+    private String content;
+    private List<XMLTag> directSubTags;
 
-	public String getName() {
-		return name;
-	}
+    public XMLTag() {
+        this.attributes = new ArrayList<>();
+        this.directSubTags = new ArrayList<>();
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public boolean isClosed() {
-		return closed;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setClosed(boolean closed) {
-		this.closed = closed;
-	}
+    public boolean isClosed() {
+        return closed;
+    }
 
-	public List<Attribute> getAttributes() {
-		return attributes;
-	}
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
 
-	public void setAttributes(List<Attribute> attributes) {
-		this.attributes = attributes;
-	}
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public void setAttributes(List<Attribute> attributes) {
+        this.attributes = attributes;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public List<XMLTag> getDirectSubTags() {
-		return directSubTags;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public void setDirectSubTags(List<XMLTag> directSubTags) {
-		this.directSubTags = directSubTags;
-	}
+    public List<XMLTag> getDirectSubTags() {
+        return directSubTags;
+    }
+
+    public void setDirectSubTags(List<XMLTag> directSubTags) {
+        this.directSubTags = directSubTags;
+    }
+
+    public void addAttribute(String name, String value) {
+        if (this.attributes != null) {
+            this.attributes.add(new Attribute(name, value));
+        }
+    }
 }

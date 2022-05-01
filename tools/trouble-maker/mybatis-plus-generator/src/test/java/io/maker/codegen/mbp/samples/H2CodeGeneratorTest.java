@@ -20,8 +20,7 @@ import java.util.Map;
 
 /**
  * H2 代码生成
- *
- * @author hubin,lanjerry
+ * @author hubin, lanjerry
  * @since 1.0
  */
 public class H2CodeGeneratorTest {
@@ -43,8 +42,8 @@ public class H2CodeGeneratorTest {
      * 数据源配置
      */
     private static final DataSourceConfig DATA_SOURCE_CONFIG = new DataSourceConfig
-        .Builder("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;MODE=MYSQL", "sa", "")
-        .build();
+            .Builder("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;MODE=MYSQL", "sa", "")
+            .build();
 
     /**
      * 策略配置
@@ -57,7 +56,7 @@ public class H2CodeGeneratorTest {
      * 全局配置
      */
     private GlobalConfig.Builder globalConfig() {
-        return new GlobalConfig.Builder().fileOverride();
+        return new GlobalConfig.Builder();
     }
 
     /**
@@ -129,11 +128,11 @@ public class H2CodeGeneratorTest {
     public void testVersionAndFill() {
         AutoGenerator generator = new AutoGenerator(DATA_SOURCE_CONFIG);
         generator.strategy(strategyConfig().entityBuilder()
-            .versionColumnName("version") // 基于数据库字段
-            .versionPropertyName("version")// 基于模型属性
-            .addTableFills(new Column("create_time", FieldFill.INSERT))    //基于数据库字段填充
-            .addTableFills(new Property("updateTime", FieldFill.INSERT_UPDATE))    //基于模型属性填充
-            .build());
+                                           .versionColumnName("version") // 基于数据库字段
+                                           .versionPropertyName("version")// 基于模型属性
+                                           .addTableFills(new Column("create_time", FieldFill.INSERT))    //基于数据库字段填充
+                                           .addTableFills(new Property("updateTime", FieldFill.INSERT_UPDATE))    //基于模型属性填充
+                                           .build());
         generator.global(globalConfig().build());
         generator.execute();
     }
@@ -148,10 +147,10 @@ public class H2CodeGeneratorTest {
     public void testLogicDeleteAndIgnoreColumn() {
         AutoGenerator generator = new AutoGenerator(DATA_SOURCE_CONFIG);
         generator.strategy(strategyConfig().entityBuilder()
-            .logicDeleteColumnName("deleted") // 基于数据库字段
-            .logicDeletePropertyName("deleteFlag")// 基于模型属性
-            .addIgnoreColumns("age") // 基于数据库字段
-            .build());
+                                           .logicDeleteColumnName("deleted") // 基于数据库字段
+                                           .logicDeletePropertyName("deleteFlag")// 基于模型属性
+                                           .addIgnoreColumns("age") // 基于数据库字段
+                                           .build());
         generator.global(globalConfig().build());
         generator.execute();
     }
@@ -164,18 +163,17 @@ public class H2CodeGeneratorTest {
     public void testCustomTemplateName() {
         AutoGenerator generator = new AutoGenerator(DATA_SOURCE_CONFIG);
         generator.strategy(strategyConfig()
-            .entityBuilder().formatFileName("%sEntity")
-            .mapperBuilder().formatMapperFileName("%sDao").formatXmlFileName("%sXml")
-            .controllerBuilder().formatFileName("%sAction")
-            .serviceBuilder().formatServiceFileName("%sService").formatServiceImplFileName("%sServiceImp")
-            .build());
+                .entityBuilder().formatFileName("%sEntity")
+                .mapperBuilder().formatMapperFileName("%sDao").formatXmlFileName("%sXml")
+                .controllerBuilder().formatFileName("%sAction")
+                .serviceBuilder().formatServiceFileName("%sService").formatServiceImplFileName("%sServiceImp")
+                .build());
         generator.global(globalConfig().build());
         generator.execute();
     }
 
     /**
      * 自定义模板生成的文件路径
-     *
      * @see OutputFile
      */
     @Test
@@ -199,8 +197,8 @@ public class H2CodeGeneratorTest {
         AutoGenerator generator = new AutoGenerator(DATA_SOURCE_CONFIG);
         generator.strategy(strategyConfig().build());
         generator.template(templateConfig()
-            .entity("/templates/entity1.java")
-            .build());
+                .entity("/templates/entity1.java")
+                .build());
         generator.global(globalConfig().build());
         generator.execute();
     }
@@ -216,8 +214,8 @@ public class H2CodeGeneratorTest {
         AutoGenerator generator = new AutoGenerator(DATA_SOURCE_CONFIG);
         generator.strategy(strategyConfig().build());
         generator.template(templateConfig()
-            .entity("/templates/entity1.java")
-            .build());
+                .entity("/templates/entity1.java")
+                .build());
         generator.injection(injectionConfig().customMap(map).build());
         generator.global(globalConfig().build());
         generator.execute();

@@ -30,6 +30,13 @@ dependencies {
     testImplementation "${lib.firebird}"
     testImplementation "${lib.'swagger-annotations'}"
     testCompileOnly "org.jetbrains:annotations:22.0.0"
+
+
+    // https://mvnrepository.com/artifact/org.mybatis.dynamic-sql/mybatis-dynamic-sql
+    implementation 'org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.4.0'
+// https://mvnrepository.com/artifact/org.jooq/jooq
+    implementation 'org.jooq:jooq:3.16.6'
+
 }
 
 test {

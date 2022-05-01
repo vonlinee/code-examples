@@ -67,7 +67,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public void writer(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception {
+    public void write(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception {
         Template template = (Template) method.invoke(groupTemplate, templatePath);
         try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile)) {
             template.binding(objectMap);
