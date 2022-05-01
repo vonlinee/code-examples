@@ -25,7 +25,6 @@ public class DruidSqlParser {
         final DbType dbType = JdbcConstants.MYSQL; // 可以是ORACLE、POSTGRESQL、SQLSERVER、ODPS等
         String sql = "SELECT * FROM orders o LEFT JOIN orderitems o2 ON o.order_num = o2.order_num";
         System.out.println(execMySQL(sql));
-
         test1();
     }
 

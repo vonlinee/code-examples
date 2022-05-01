@@ -4,18 +4,12 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
-SELECT
-    T.TABLE_SCHEMA,   -- 模式
-    T.TABLE_NAME,     -- 表名
-    T.TABLE_COMMENT,  -- 表名注释
-    C.COLUMN_NAME,    -- 字段名
-    C.COLUMN_TYPE,    -- 字段类型
-    C.COLUMN_COMMENT  -- 字段注释
-FROM
-    `information_schema`.`TABLES` T, `information_schema`.`COLUMNS` C
-WHERE T.TABLE_NAME = C.TABLE_NAME AND T.TABLE_SCHEMA = 'dbName'
-ORDER BY T.TABLE_NAME, C.ORDINAL_POSITION
- * 使用于MySQL SELECT * FROM `information_schema`.`TABLES` T
+ * SELECT T.TABLE_SCHEMA, -- 模式 T.TABLE_NAME, -- 表名 T.TABLE_COMMENT, -- 表名注释
+ * C.COLUMN_NAME, -- 字段名 C.COLUMN_TYPE, -- 字段类型 C.COLUMN_COMMENT -- 字段注释 FROM
+ * `information_schema`.`TABLES` T, `information_schema`.`COLUMNS` C WHERE
+ * T.TABLE_NAME = C.TABLE_NAME AND T.TABLE_SCHEMA = 'dbName' ORDER BY
+ * T.TABLE_NAME, C.ORDINAL_POSITION 使用于MySQL SELECT * FROM
+ * `information_schema`.`TABLES` T
  */
 public class TableInfoSchema implements Serializable {
 
@@ -27,17 +21,15 @@ public class TableInfoSchema implements Serializable {
 	private String tableType;// 表类型[system view|base table]
 	private String engine;// 使用的数据库引擎[MyISAM|CSV|InnoDB]
 	private Integer version;// 版本，默认值10
-	
+
 	/**
 	 * 若一张表里面不存在varchar、text以及其变形、blob以及其变形的字段的话，那么张这个表其实也叫静态表，
 	 * 即该表的row_format是fixed，就是说每条记录所占用的字节一样。其优点读取快，缺点浪费额外一部分空间。
 	 * 若一张表里面存在varchar、text以及其变形、blob以及其变形的字段的话，那么张这个表其实也叫动态表，即该表的row_format是dynamic，就是说每条记录所占用的字节是动态的。其优点节省空间，缺点增加读取的时间开销。
-	 * 所以，做搜索查询量大的表一般都以空间来换取时间，设计成静态表。
-	 * row_format还有其他一些值：DEFAULT | FIXED | DYNAMIC | COMPRESSED | REDUNDANT | COMPACT
-	 * 修改行格式: ALTER TABLE table_name ROW_FORMAT = DEFAULT
-	 * 修改过程导致：
-	 * 		fixed--->dynamic: 这会导致CHAR变成VARCHAR
-	 * 		dynamic--->fixed: 这会导致VARCHAR变成CHAR
+	 * 所以，做搜索查询量大的表一般都以空间来换取时间，设计成静态表。 row_format还有其他一些值：DEFAULT | FIXED | DYNAMIC |
+	 * COMPRESSED | REDUNDANT | COMPACT 修改行格式: ALTER TABLE table_name ROW_FORMAT =
+	 * DEFAULT 修改过程导致： fixed--->dynamic: 这会导致CHAR变成VARCHAR dynamic--->fixed:
+	 * 这会导致VARCHAR变成CHAR
 	 */
 	private String rowFormat;// 行格式[Compact|Dynamic|Fixed]
 	private Long tableRows;// 表里所存多少行数据
@@ -45,15 +37,13 @@ public class TableInfoSchema implements Serializable {
 	private Long dataLength;// 数据长度
 	private Long maxDataLength;// 最大数据长度
 	private Long indexLength;// 索引长度
-	
+
 	/**
 	 * 每当MySQL从你的列表中删除了一行内容，该段空间就会被留空。而在一段时间内的大量删除操作，会使这种留空的空间变得
 	 * 比存储列表内容所使用的空间更大。当MySQL对数据进行扫描时，它扫描的对象实际是列表的容量需求上限，也就是数据被写
-	 * 入的区域中处于峰值位置的部分。如果进行新的插入操作，MySQL将尝试利用这些留空的区域，但仍然无法将其彻底占用。
-	 * 1.查询数据库空间碎片：
-	 * select table_name, data_free, engine from information_schema.tables 
-	 * where table_schema = '数据库名称';
-	 * 2.对数据表优化：optimeze table `table_name`;
+	 * 入的区域中处于峰值位置的部分。如果进行新的插入操作，MySQL将尝试利用这些留空的区域，但仍然无法将其彻底占用。 1.查询数据库空间碎片： select
+	 * table_name, data_free, engine from information_schema.tables where
+	 * table_schema = '数据库名称'; 2.对数据表优化：optimeze table `table_name`;
 	 */
 	private Long dataFree;// 空间碎片
 	private Long autoIncrement;// 做自增主键的自动增量当前值

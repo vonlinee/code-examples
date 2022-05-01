@@ -4,47 +4,44 @@ import java.nio.charset.StandardCharsets;
 
 import com.alibaba.fastjson.JSON;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
-import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpHeaderValues;
-import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpObject;
+import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpUtil;
 import io.netty.handler.codec.http.HttpVersion;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
-public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest>{
+public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> {
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest msg) throws Exception {
+	protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
+		// class io.netty.handler.codec.http.HttpObjectAggregator$AggregatedFullHttpRequest
+		System.out.println("HttpObject => " + msg.getClass());
+		System.out.println(ctx.channel().hashCode());
+		System.out.println(ctx.channel().pipeline().hashCode());
 		
-		log.info("{}", ctx.channel().id());
-		
-		String uri = msg.uri();
-		HttpHeaders headers = msg.headers();
-		HttpMethod method = msg.method();
-		ByteBuf content = msg.content();
-		String contentString = msg.content().toString(StandardCharsets.UTF_8);
-		
-		headers.get("content-type");
-		
+		// 类型实际上是
+		HttpRequest request = null;
+		if (msg instanceof HttpRequest) {
+			request = (HttpRequest) msg;
+		}
+
 		String res = "I am OK";
 		FullHttpResponse response = new DefaultFullHttpResponse(
-				HttpVersion.HTTP_1_1, 
+				HttpVersion.HTTP_1_1,
 				HttpResponseStatus.OK,
 				Unpooled.wrappedBuffer(JSON.toJSONString(res).getBytes(StandardCharsets.UTF_8)));
 		response.headers().set("content-type", HttpHeaderValues.APPLICATION_JSON);
 		response.headers().set("content-length", response.content().readableBytes());
-		if (HttpUtil.isKeepAlive(msg)) {
+		
+		
+		if (HttpUtil.isKeepAlive(request)) {
 			// 长连接
 			response.headers().set("Connection", "keepAlive");
 			ctx.writeAndFlush(response);

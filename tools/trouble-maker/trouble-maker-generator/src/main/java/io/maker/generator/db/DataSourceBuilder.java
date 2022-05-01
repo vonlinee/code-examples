@@ -2,37 +2,27 @@ package io.maker.generator.db;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.sql.DataSource;
-
 import org.springframework.beans.BeanUtils;
-
-import com.alibaba.druid.pool.DruidDataSource;
-
 import io.maker.base.utils.ClassUtils;
 
 /**
- * Convenience class for building a {@link DataSource} with common
- * implementations and properties. If HikariCP, Tomcat or Commons DBCP are on
- * the classpath one of them will be selected (in that order with Hikari first).
- * In the interest of a uniform interface, and so that there can be a fallback
- * to an embedded database if one can be detected on the classpath, only a small
- * set of common configuration properties are supported. To inject additional
- * properties into the result you can downcast it, or use
- * {@code @ConfigurationProperties}.
- *
+ * 如果类路径下存在HikariCP, Tomcat or Commons DBCP其中之一，那么将会选择其中之一，如果存在多个，则Hikari优先
+ * 为了实现统一的接口，并且如果可以在类路径上检测到嵌入式数据库，那么可以回退到嵌入式数据库，只支持一小部分公共配置属性
+ * 如果要注入其他属性，可以向下转型（downcast）
+ * 
  * @param <T> type of DataSource produced by the builder
- * @author Dave Syer
- * @author Madhura Bhave
- * @since 2.0.0
  */
 public final class DataSourceBuilder<T extends DataSource> {
 
 	/**
-	 * supported datasource type
+	 * 支持的数据类型
 	 */
-	private static final String[] DATA_SOURCE_TYPE_NAMES = new String[] { "com.zaxxer.hikari.HikariDataSource",
-			"org.apache.tomcat.jdbc.pool.DataSource", "org.apache.commons.dbcp2.BasicDataSource" };
+	private static final String[] DATA_SOURCE_TYPE_NAMES = new String[] {
+			"com.zaxxer.hikari.HikariDataSource",
+			"org.apache.tomcat.jdbc.pool.DataSource",
+			"org.apache.commons.dbcp2.BasicDataSource"
+	};
 
 	private Class<? extends DataSource> type;
 
@@ -61,8 +51,13 @@ public final class DataSourceBuilder<T extends DataSource> {
 		return (T) result;
 	}
 
+	/**
+	 * 绑定数据源属性
+	 * 
+	 * @param result
+	 */
 	private void bind(DataSource result) {
-		
+
 	}
 
 	private void maybeGetDriverClassName() {

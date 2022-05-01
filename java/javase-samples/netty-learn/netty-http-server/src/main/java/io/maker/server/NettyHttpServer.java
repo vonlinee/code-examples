@@ -1,5 +1,8 @@
 package io.maker.server;
 
+import java.nio.channels.Channel;
+
+import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -26,16 +29,15 @@ public class NettyHttpServer {
 					.channel(NioServerSocketChannel.class)
 					.childHandler(new ClientChannelInitializer());
 			ChannelFuture future = serverBootstrap.bind(port).sync();
-			
 			future.addListener(new ChannelFutureListener() {
 				@Override
 				public void operationComplete(ChannelFuture future) throws Exception {
 					if (future.isSuccess()) {
 						log.info("server started at localhost:{}", port);
+						System.out.println("localhost:" + port + "/");
 					}
 				}
 			});
-			
 			future.channel().closeFuture().sync();
 		} finally {
 			bossGroup.shutdownGracefully();

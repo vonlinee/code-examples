@@ -2,30 +2,16 @@ package io.maker.server;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 
 import javax.net.ssl.KeyManagerFactory;
 
-import com.alibaba.fastjson.JSON;
-
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.HttpServerExpectContinueHandler;
-import io.netty.handler.codec.http.HttpUtil;
-import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import lombok.Cleanup;
@@ -40,6 +26,9 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
 	 */
 	@Override
 	public void initChannel(SocketChannel ch) throws Exception {
+		
+		int i = 1 / 0;
+		
 		// 至少一个ChannelHandler—该组件实现了服务器对从客户端接收的数据的处理，即它的业务逻辑
 		// Netty对HTTP协议的封装，顺序有要求 责任链模式，双向链表Inbound/OutBound
 		//ch.pipeline().addLast(new HttpResponseEncoder()); // HttpRequestDecoder 编码器
