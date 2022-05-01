@@ -2,37 +2,34 @@ package io.maker.codegen.mbp.engine;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.function.Function;
 
-import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.google.common.base.Converter;
-import io.maker.base.utils.CaseFormat;
-import io.maker.base.utils.Maps;
-import io.maker.codegen.mbp.config.po.TableField;
-import io.maker.codegen.mbp.fill.Attribute;
-import io.maker.codegen.mbp.fill.XMLTag;
-import net.sf.jsqlparser.statement.select.Select;
 import org.jetbrains.annotations.Nullable;
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DefaultDSLContext;
-import org.mybatis.dynamic.sql.select.render.DefaultSelectStatementProvider;
-import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.google.common.base.Converter;
 
+import io.maker.base.utils.CaseFormat;
+import io.maker.base.utils.Maps;
 import io.maker.codegen.mbp.config.ConstVal;
 import io.maker.codegen.mbp.config.GlobalConfig;
 import io.maker.codegen.mbp.config.OutputFile;
 import io.maker.codegen.mbp.config.StrategyConfig;
 import io.maker.codegen.mbp.config.TemplateConfig;
 import io.maker.codegen.mbp.config.builder.ConfigBuilder;
+import io.maker.codegen.mbp.config.po.TableField;
 import io.maker.codegen.mbp.config.po.TableInfo;
+import io.maker.codegen.mbp.fill.XMLTag;
 import io.maker.codegen.mbp.util.FileUtils;
+import io.maker.codegen.mbp.util.MapperUtils;
 import io.maker.codegen.mbp.util.RuntimeUtils;
 
 /**
@@ -115,7 +112,7 @@ public abstract class AbstractTemplateEngine {
             getTemplateFilePath(TemplateConfig::getXml).ifPresent(xml -> {
                 String xmlFile = String.format((xmlPath + File.separator + tableInfo.getXmlName() + ConstVal.XML_SUFFIX), entityName);
                 logger.info("模板文件路径:{}, 输出到文件: {}", xml, xmlFile);
-                //增加默认的CRUD
+                //增加默认的CRUD查询sql语句
                 addDefaultMapperXmlCRUDTag(objectMap);
 
                 ConfigBuilder configBuilder = getConfigBuilder();
@@ -125,6 +122,10 @@ public abstract class AbstractTemplateEngine {
         }
     }
 
+    /**
+     * 增加默认的增删改查语句
+     * @param objectMap
+     */
     private void addDefaultMapperXmlCRUDTag(Map<String, Object> objectMap) {
         objectMap.put("generateDefaultCrudXmlSQL", true);
         List<XMLTag> list = new ArrayList<>();
@@ -132,32 +133,30 @@ public abstract class AbstractTemplateEngine {
 
         TableInfo tableInfo = Maps.getValue(objectMap, "table");
 
-        List<TableField> commonFields = tableInfo.getCommonFields();
-
-        // 表名
-        String tableName = tableInfo.getName();
-
-        Converter<String, String> converter = CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.LOWER_CAMEL);
-
-        String camelTableName = converter.convert(tableName);
-
-
-
-
-        for (TableField field : commonFields) {
-            String columnName = field.getName();
-            String camelColumnName = converter.convert(columnName);
-        }
-
-        QueryWrapper<Map<String, Object>> wrapper = new QueryWrapper<>();
-
-
-        // SELECT
+        //Insert
+        XMLTag insertXmlTag = createMapperXmlTag("insert", "AAAA");
+        insertXmlTag.addAttribute("id", "");
+        insertXmlTag.addAttribute("parameterType", "map");
+        insertXmlTag.addAttribute("resultType", "int");
+        insertXmlTag.setContent(MapperUtils.insertTag(tableInfo));
+        list.add(insertXmlTag);
+        
+        //TODO 批量新增
+        
+        //Update
+        XMLTag updateXmlTag = createMapperXmlTag("update", "AAAA");
+        updateXmlTag.addAttribute("id", "");
+        updateXmlTag.addAttribute("parameterType", "map");
+        updateXmlTag.addAttribute("resultType", "int");
+        updateXmlTag.setContent(MapperUtils.updateTag(tableInfo));
+        list.add(updateXmlTag);
+        
+        //Select
         XMLTag selectXmlTag = createMapperXmlTag("select", "AAAA");
         selectXmlTag.addAttribute("id", "");
         selectXmlTag.addAttribute("parameterType", "map");
         selectXmlTag.addAttribute("resultType", "map");
-        selectXmlTag.setContent("");
+        selectXmlTag.setContent(MapperUtils.selectTag(tableInfo));
         list.add(selectXmlTag);
     }
 

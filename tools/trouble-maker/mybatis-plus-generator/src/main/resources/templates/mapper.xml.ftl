@@ -40,10 +40,9 @@
 <#-- 默认的单表增删改查sql -->
 <#if generateDefaultCrudXmlSQL??>
     <!-- 默认的单表增删改查sql -->
-    <!-- 通用查询结果列 -->
 <#list xmlCrudTags as tag>
     <${tag.name} <#list tag.attributes as attr>${attr.name}="${attr.value}" </#list>>
-        ${tag.content}
+${tag.content}
     </${tag.name}>
 </#list>
 

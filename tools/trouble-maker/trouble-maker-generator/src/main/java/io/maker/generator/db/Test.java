@@ -1,24 +1,9 @@
 package io.maker.generator.db;
 
-import java.io.File;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-import javax.sql.DataSource;
-
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-
-import com.alibaba.druid.pool.DruidDataSource;
-
-import io.maker.base.io.FileUtils;
-import io.maker.base.utils.Lists;
-import io.maker.base.utils.PropertiesUtils;
-import io.maker.base.utils.Validator;
-import io.maker.extension.poi.ExcelUtils;
-import io.maker.generator.db.pool.DruidPool;
-import io.maker.generator.db.result.MapListHandler;
 import io.maker.generator.db.result.ResultSetHandler;
 
 public class Test {

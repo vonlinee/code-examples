@@ -1,10 +1,6 @@
 package io.maker.generator.db.meta.column;
 
 import com.google.common.base.Objects;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 public class ColumnMetaData {
 
