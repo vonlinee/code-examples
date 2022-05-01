@@ -1,8 +1,5 @@
 package io.maker.server;
 
-import java.nio.channels.Channel;
-
-import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
