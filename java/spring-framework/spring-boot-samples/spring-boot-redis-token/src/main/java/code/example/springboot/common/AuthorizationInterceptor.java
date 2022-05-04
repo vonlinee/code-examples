@@ -23,13 +23,13 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 	private RedisUtils redisUtils;
 
 	// 存放鉴权信息的Header名称，默认是Authorization
-	private String httpHeaderName = "Authorization";
+	private static final String httpHeaderName = "Authorization";
 
 	// 鉴权失败后返回的错误信息，默认是401 unauthorized
-	private String unauthorizedErrorMessage = "401 unathorized";
+	private static final String unauthorizedErrorMessage = "401 unathorized";
 
 	// 鉴权失败后返回的HTTP错误码，默认为401
-	private int unauthorizedErrorCode = HttpServletResponse.SC_UNAUTHORIZED;
+	private static final int unauthorizedErrorCode = HttpServletResponse.SC_UNAUTHORIZED;
 
 	// 存放登录用户模型Key的Request key
 	public static final String REQUEST_CURRENT_KEY = "REUQEST_CURRENT_KEY";
