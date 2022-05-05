@@ -1,14 +1,44 @@
 package io.maker.base.test;
 
-import io.maker.base.collection.BeanMap;
-import io.maker.base.jdbc.Model;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedType;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
-import java.util.Date;
+import org.springframework.core.SpringVersion;
+
+import io.maker.base.lang.meta.ClassDefinition;
+import io.maker.base.lang.meta.MetadataUtils;
+import io.maker.base.lang.meta.TestClass;
+import lombok.Data;
 
 public class Test1 {
 	
 	public static void main(String[] args) {
 
+//		ClassDefinition cd = MetadataUtils.parse(TestClass.class);
+//		
+//		String documentation = cd.getDocumentation();
+//		
+
+		test5();
+		
+	}
+	
+	
+	public static void test5() {
+		AnnotatedType[] annotatedInterfaces = Data.class.getAnnotatedInterfaces();
+		
+		AnnotatedType superAnnotatedType = Data.class.getAnnotatedSuperclass();
+		
+		Class<? super Data> superclass = Data.class.getSuperclass();
+		
+		Type genericSuperclass = Data.class.getGenericSuperclass();
+		
+		Annotation[] annotations = Data.class.getAnnotations();
+		
+		Method[] methods = Data.class.getMethods();
+		
 	}
 	
 	public static void test2(Object value) {

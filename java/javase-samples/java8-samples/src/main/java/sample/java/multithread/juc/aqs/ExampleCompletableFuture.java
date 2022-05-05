@@ -7,5 +7,9 @@ public class ExampleCompletableFuture {
 		CompletableFuture<Long> future = new CompletableFuture<>();
 		CompletableFuture<Void> futureList = CompletableFuture.allOf(future);
 		
+		
+		
+		
+		
 	}
 }
