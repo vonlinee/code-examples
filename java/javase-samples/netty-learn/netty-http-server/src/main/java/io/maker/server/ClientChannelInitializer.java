@@ -27,8 +27,6 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
 	@Override
 	public void initChannel(SocketChannel ch) throws Exception {
 		
-		int i = 1 / 0;
-		
 		// 至少一个ChannelHandler—该组件实现了服务器对从客户端接收的数据的处理，即它的业务逻辑
 		// Netty对HTTP协议的封装，顺序有要求 责任链模式，双向链表Inbound/OutBound
 		//ch.pipeline().addLast(new HttpResponseEncoder()); // HttpRequestDecoder 编码器
@@ -44,6 +42,8 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
 		cp.addLast(new HttpObjectAggregator(Integer.MAX_VALUE));
 		cp.addLast(new HttpServerExpectContinueHandler());
 		cp.addLast(new HttpRequestHandler());
+		
+		System.out.println(ch);
 	}
 
 	@SneakyThrows
