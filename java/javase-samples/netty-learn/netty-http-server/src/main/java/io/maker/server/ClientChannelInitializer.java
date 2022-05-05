@@ -39,9 +39,11 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
 		// decode and encode
 		cp.addLast(new HttpServerCodec());
 		// handle message-body of POST
-		cp.addLast(new HttpObjectAggregator(Integer.MAX_VALUE));
+		// cp.addLast(new HttpObjectAggregator(Integer.MAX_VALUE));
 		cp.addLast(new HttpServerExpectContinueHandler());
-		cp.addLast(new HttpRequestHandler());
+		
+		// 
+		cp.addLast(new HttpRequestDispatcher());
 		
 		System.out.println(ch);
 	}
@@ -78,7 +80,7 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
         // handle message-body of POST
         cp.addLast(new HttpObjectAggregator(Integer.MAX_VALUE));
         cp.addLast(new HttpServerExpectContinueHandler());
-        cp.addLast(new HttpRequestHandler());
+        cp.addLast(new HttpRequestDispatcher());
     }
 
     @SneakyThrows

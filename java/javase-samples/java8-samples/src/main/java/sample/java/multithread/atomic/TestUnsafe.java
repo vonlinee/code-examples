@@ -8,7 +8,9 @@ import sun.misc.Unsafe;
 import sun.misc.VM;
 import sun.reflect.Reflection;
 
-
+/**
+ * https://blog.csdn.net/u014783007/article/details/120533732
+ */
 public class TestUnsafe {
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
@@ -23,7 +25,7 @@ public class TestUnsafe {
 //        });
     	
     	optionalUnsafe().ifPresent(unsafe -> {
-    		long long1 = unsafe.getLong(10);
+    		
     	});
     	
     }
@@ -72,6 +74,10 @@ public class TestUnsafe {
         return null;
     }
     
+    /**
+     * 通过反射获取Unsafe实例
+     * @return
+     */
     @SuppressWarnings("restriction")
 	public static Optional<Unsafe> optionalUnsafe() {
         try {
@@ -81,13 +87,13 @@ public class TestUnsafe {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        return null;
+        return Optional.empty();
     }
 
     @SuppressWarnings({
 			"restriction", "unused"
 	})
-	private static Unsafe getUnsafe1() {
+    public static Unsafe getUnsafeInstance() {
         Class<?> var0 = Reflection.getCallerClass();
         if (!VM.isSystemDomainLoader(var0.getClassLoader())) {
             throw new SecurityException("Unsafe");
