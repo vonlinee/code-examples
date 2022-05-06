@@ -15,8 +15,7 @@ public class AQS {
 		AbstractQueuedSynchronizer aqs;
 		
 		Lock lock = new ReentrantLock();
-		
-		
-		
+
+
 	}
 }
