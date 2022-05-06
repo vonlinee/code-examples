@@ -1,6 +1,7 @@
 package sample.java.multithread.juc.aqs;
 
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -13,6 +14,9 @@ public class AQS {
 		AbstractQueuedSynchronizer aqs;
 		
 		Lock lock = new ReentrantLock();
+
+		Condition condition = lock.newCondition();
+
 
 
 	}
