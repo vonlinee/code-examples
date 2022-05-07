@@ -1,4 +1,4 @@
-package code.example.springboot.controller;
+package sample.redis.spring.boot.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import code.example.springboot.service.HelloService;
+import sample.redis.spring.boot.service.HelloService;
 
 @RestController
 @RequestMapping("/browser")

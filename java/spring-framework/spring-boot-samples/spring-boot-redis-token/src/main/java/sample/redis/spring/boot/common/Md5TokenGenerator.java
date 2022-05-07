@@ -1,4 +1,4 @@
-package code.example.springboot.common;
+package sample.redis.spring.boot.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

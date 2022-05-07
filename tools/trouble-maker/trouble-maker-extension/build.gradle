@@ -1,5 +1,7 @@
 plugins {
 	id 'java'
+	id 'org.springframework.boot' version '2.3.12.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 group 'io.trouble.maker'
@@ -72,6 +74,9 @@ dependencies {
 	
 	implementation 'org.mybatis:mybatis:3.5.9'
 	implementation 'org.mybatis:mybatis-spring:2.0.7'
+	
+	implementation 'org.springframework.boot:spring-boot-starter-web:2.3.12.RELEASE'
+	
 }
 
 test {

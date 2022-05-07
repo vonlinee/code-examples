@@ -13,9 +13,10 @@
 
  Date: 03/05/2022 18:02:47
 */
-
+DROP DATABASE IF EXISTS `db_auth_token`;
 CREATE DATABASE `db_auth_token` DEFAULT CHARACTER SET utf8mb4;
-DROP TABLE IF EXISTS `db_auth_token`;
+
+USE `db_auth_token`;
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;

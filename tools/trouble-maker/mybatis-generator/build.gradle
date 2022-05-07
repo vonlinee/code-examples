@@ -42,7 +42,7 @@ dependencies {
     testImplementation "${lib.'swagger-annotations'}"
     testCompileOnly "org.jetbrains:annotations:22.0.0"
 	
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-web:2.3.12.RELEASE'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

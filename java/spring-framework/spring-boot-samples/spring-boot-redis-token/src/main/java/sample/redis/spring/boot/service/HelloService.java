@@ -1,4 +1,4 @@
-package code.example.springboot.service;
+package sample.redis.spring.boot.service;
 
 import org.springframework.stereotype.Service;
 

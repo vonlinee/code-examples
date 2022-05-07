@@ -1,4 +1,4 @@
-package code.example.springboot.common;
+package sample.redis.spring.boot.common;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 
-import code.example.springboot.annotation.AuthToken;
+import sample.redis.spring.boot.annotation.AuthToken;
 
 @Controller
 public class LoginController {

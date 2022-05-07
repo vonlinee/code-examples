@@ -1,4 +1,4 @@
-package code.example.springboot.common;
+package sample.redis.spring.boot.common;
 
 import java.lang.reflect.Method;
 
@@ -10,8 +10,8 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import code.example.springboot.annotation.AuthToken;
 import lombok.extern.slf4j.Slf4j;
+import sample.redis.spring.boot.annotation.AuthToken;
 
 /**
  * 鉴权拦截器 使用token鉴权

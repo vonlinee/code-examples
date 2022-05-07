@@ -1,4 +1,4 @@
-package code.example.springboot.common;
+package sample.redis.spring.boot.common;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -26,6 +26,7 @@ import java.time.Duration;
 @EnableCaching // 启用缓存，这个注解很重要
 //继承CachingConfigurerSupport，为了自定义key的策略，可以不继承
 public class RedisConfig extends CachingConfigurerSupport {
+	
 	@Value("${spring.cache.redis.time-to-live}")
 	private Duration timeToLive = Duration.ZERO;
 

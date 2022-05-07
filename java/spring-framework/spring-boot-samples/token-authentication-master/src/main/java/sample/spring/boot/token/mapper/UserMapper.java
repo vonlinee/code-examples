@@ -1,8 +1,9 @@
 package sample.spring.boot.token.mapper;
 
-import org.apache.ibatis.annotations.*;
-
 import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserMapper {

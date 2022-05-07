@@ -2,6 +2,9 @@ package io.maker.base.lang;
 
 import io.maker.base.annotation.Nullable;
 
+/**
+ * no inherit, use combination pattern
+ */
 public class TypeMetaHolder {
 
 	private final Class<?> clazz;

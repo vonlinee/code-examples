@@ -1,4 +1,4 @@
-package code.example.springboot.common;
+package sample.redis.spring.boot.common;
 
 import java.util.List;
 import java.util.Map;
