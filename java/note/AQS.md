@@ -4,16 +4,6 @@ https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html
 
 
 
-
-
-
-
-
-
-
-
-
-
 # AQS重要方法与ReentrantLock的关联
 
 加锁过程：
@@ -31,6 +21,22 @@ https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html
 2. unlock方法会调用内部类Sync的release方法，该方法继承于AQS。
 3. release中会调用tryRelease方法，tryRelease需要自定义同步器实现，tryRelease只在ReentrantLock中的Sync实现，因此可以看出，释放锁的过程，并不区分是否为公平锁。
 4. 释放成功后，所有处理由AQS框架完成，与自定义同步器无关。
+
+
+
+# 节点状态
+
+
+SIGNAL：值为-1，后继节点的线程处于等待状态，而当前节点的线程如果释放了同步状态或者被取消，那么就会通知后继节点，让后继节点的线程能够运行
+
+CONDITION：值为-2，节点在等待队列中，节点线程等待在Condition上，不过当其他的线程对Condition调用了signal()方法后，该节点就会从等待队列转移到同步队列中，然后开始尝试对同步状态的获取
+
+PROPAGATE：值为-3，表示下一次的共享式同步状态获取将会无条件的被传播下去
+
+CANCELLED：值为1，由于超时或中断，该节点被取消。 节点进入该状态将不再变化。特别是具有取消节点的线程永远不会再次阻塞
+INITIAL	值为0，初始状态
+
+
 
 
 
@@ -64,48 +70,17 @@ public final void acquire(int arg) {
 }
 ```
 
-## tryAcquire
+## tryAcquire获取锁
 
 tryAcquire方法需要AQS子类实现，它只在Sync的非公平和公平锁实现类中有实现，在Sync中没有实现
 
 可以看出，这里只是AQS的简单实现，具体获取锁的实现方法是由各自的公平锁和非公平锁单独实现的（以ReentrantLock为例）。如果该方法返回了True，则说明当前线程获取锁成功，就不用往后执行了；如果获取失败，就需要加入到等待队列中。下面会详细解释线程是何时以及怎样被加入进等待队列中的。
 
-NonfairSync中的实现如下
-
-```java
-
-protected final boolean tryAcquire(int acquires) {
-    return nonfairTryAcquire(acquires);
-}
-```
-
-nonfairTryAcquire方法实际上是非公平版本的Sync的父类Sync的final方法
-
-```java
-// tryAcquire是在子类中实现的，但两者都需要非公平的尝试，对于trylock方法
-final boolean nonfairTryAcquire(int acquires) {
-    final Thread current = Thread.currentThread();
-    int c = getState();
-    if (c == 0) {
-        if (compareAndSetState(0, acquires)) {
-            setExclusiveOwnerThread(current);
-            return true;
-        }
-    }
-    else if (current == getExclusiveOwnerThread()) {
-        int nextc = c + acquires;
-        if (nextc < 0) // overflow
-            throw new Error("Maximum lock count exceeded");
-        setState(nextc);
-        return true;
-    }
-    return false;
-}
-```
-
 
 
 ### 公平锁版本
+
+ReentrantLock用state表示所有者线程已经重复获取该锁的次数
 
 FairSync中的实现如下
 
@@ -114,7 +89,8 @@ FairSync中的实现如下
 protected final boolean tryAcquire(int acquires) {
     final Thread current = Thread.currentThread();
     int c = getState();
-    if (c == 0) {
+    if (c == 0) { // 表明没有线程持有锁，初始状态
+        // 同时还要判断等待队列中是否有即将出队的节点，没有才加锁，可以看到对于公平锁，队列中的线程的优先级比新线程高
         if (!hasQueuedPredecessors() && compareAndSetState(0, acquires)) { // acquires = 1
             setExclusiveOwnerThread(current);
             return true;
@@ -136,9 +112,8 @@ hasQueuedPredecessors是公平锁加锁时判断等待队列中是否存在有�
 ```java
 public final boolean hasQueuedPredecessors() {
     // 此方法的正确性依赖于：1.head提前于tail被初始化，2.如果当前线程是第一次入队，那么head.next是确定的
-    // The correctness of this depends on head being initialized
-    // before tail and on head.next being accurate if the current
-    // thread is first in queue.
+    // The correctness of this depends on head being initialized before tail and on head.next being 
+    // accurate if the current thread is first in queue.
     Node t = tail; // Read fields in reverse initialization order 按相反的初始化顺序读取字段
     Node h = head;
     Node s;
@@ -147,7 +122,10 @@ public final boolean hasQueuedPredecessors() {
 }
 ```
 
-双向链表中，第一个节点为虚节点，其实并不存储任何信息，只是占位。真正的第一个有数据的节点，是在第二个节点开始的。当h != t时： 如果(s = h.next) == null，等待队列正在有线程进行初始化，但只是进行到了Tail指向Head，没有将Head指向Tail，此时队列中有元素，需要返回True（这块具体见下边代码分析）。 如果(s = h.next) != null，说明此时队列中至少有一个有效节点。如果此时s.thread == Thread.currentThread()，说明等待队列的第一个有效节点中的线程与当前线程相同，那么当前线程是可以获取资源的；如果s.thread != Thread.currentThread()，说明等待队列的第一个有效节点线程与当前线程不同，当前线程必须加入进等待队列。
+双向链表中，第一个节点为虚节点，其实并不存储任何信息，只是占位。真正的第一个有数据的节点，是在第二个节点开始的。
+
+1. 当h != t（即当前队列的头节点不等于尾节点，队列中存在有效节点）时： 如果(s = h.next) == null，表示等待队列正在有线程进行初始化，但只是进行到了tail指向head，没有将head指向tail，此时队列中有元素，需要返回True
+2. 当h != t，如果(s = h.next) != null，说明此时队列中至少有一个有效节点。如果此时s.thread == Thread.currentThread()，说明等待队列的第一个有效节点中的线程与当前线程相同，那么当前线程是可以获取资源的；如果s.thread != Thread.currentThread()，说明等待队列的第一个有效节点线程与当前线程不同，那么当前线程必须加入进等待队列，同时返回false。
 
 队列线程初始化的代码
 
@@ -160,9 +138,9 @@ private Node enq(final Node node) {
             if (compareAndSetHead(new Node()))
                 tail = head;
         } else { // 尾节点不为空
-            node.prev = t;
-            if (compareAndSetTail(t, node)) {
-                t.next = node;
+            node.prev = t;  								// 5
+            if (compareAndSetTail(t, node)) {				// 6
+                t.next = node;								// 7
                 return t;
             }
         }
@@ -170,9 +148,41 @@ private Node enq(final Node node) {
 }
 ```
 
-节点入队不是原子操作，所以会出现短暂的head != tail，此时Tail指向最后一个节点，而且Tail指向Head。如果Head没有指向Tail（可见5、6、7行），这种情况下也需要将相关线程加入队列中。所以这块代码是为了解决极端情况下的并发问题
+节点入队不是原子操作，所以会出现短暂的head != tail，此时Tail指向最后一个节点，而且tail指向Head。如果head没有指向tail（可见5、6、7行），这种情况下也需要将相关线程加入队列中。所以这块代码是为了解决极端情况下的并发问题
 
+### 非公平版本
 
+在java.util.concurrent.locks.ReentrantLock.NonfairSync中定义
+
+```java
+protected final boolean tryAcquire(int acquires) {
+    return nonfairTryAcquire(acquires);
+}
+```
+
+实际上是调用父类java.util.concurrent.locks.ReentrantLock.Sync的方法，之所以这么做是因为ReentrantLock#tryLock()方法，无论是非公平锁，还是公平锁都需要调用此方法获取锁
+
+```java
+final boolean nonfairTryAcquire(int acquires) {
+    final Thread current = Thread.currentThread();
+    int c = getState();
+    if (c == 0) {
+        if (compareAndSetState(0, acquires)) {
+            setExclusiveOwnerThread(current);
+            return true;
+        }
+    }
+    // 锁重入
+    else if (current == getExclusiveOwnerThread()) {
+        int nextc = c + acquires; // + 1
+        if (nextc < 0) // overflow
+            throw new Error("Maximum lock count exceeded"); // 超过最大的锁数量
+        setState(nextc);
+        return true;
+    }
+    return false;
+}
+```
 
 
 
@@ -201,6 +211,16 @@ public final void acquire(int arg) {
         selfInterrupt();
 }
 ```
+
+AQS中的静态方法，中断当前线程
+
+```java
+static void selfInterrupt() {
+    Thread.currentThread().interrupt();
+}
+```
+
+
 
 
 
@@ -265,7 +285,7 @@ private Node enq(final Node node) {
 
 
 
-## 出队
+## 出队时机
 
 ### acquireQueued
 
@@ -275,10 +295,10 @@ private Node enq(final Node node) {
 
 总的来说，一个线程获取锁失败了，被放入等待队列，acquireQueued会把放入队列中的线程不断去获取锁，直到获取成功或者不再需要获取，中断。
 
-下面我们从“何时出队列？”和“如何出队列？”两个方向来分析一下acquireQueued源码：
+下面我们从“何时出队列？”和“如何出队列？”两个方向来分析一下acquireQueued源码：下面的方法对于公平锁和非公平锁都适用
 
 ```java
-final boolean acquireQueued(final Node node, int arg) {
+final boolean acquireQueued(final Node node, int arg) { // node是刚加入队列的节点
     // 标记是否成功拿到资源
     boolean failed = true;
     try {
@@ -288,17 +308,17 @@ final boolean acquireQueued(final Node node, int arg) {
         for (;;) {
             // 获取当前节点的前驱节点
             final Node p = node.predecessor();
-            // 如果p是头结点，说明当前节点在真实数据队列的首部，就尝试获取锁（真实的头结点是虚节点）
-            if (p == head && tryAcquire(arg)) { 
+            // 如果p是头结点，说明当前节点在真实数据队列的首部，此时应该尝试获取锁（真实的头结点是虚节点）
+            if (p == head && tryAcquire(arg)) {  // arg = 1
                 setHead(node); // 获取锁成功，头指针移动到当前node
                 p.next = null; // help GC
                 failed = false;
-                return interrupted;
+                return interrupted;  //返回false，则不会调用selfInterrupt();
             }
-            // 1.p为头节点且当前没有获取到锁（可能是非公平锁被抢占了）或者是
+            // 1.p为头节点且当前没有获取到锁（可能被新线程抢占了）
             // 2.p不为头结点，此时要判断当前节点是否应该被阻塞，防止无限循环浪费资源。
             if (shouldParkAfterFailedAcquire(p, node) && parkAndCheckInterrupt())
-                interrupted = true;
+                interrupted = true; //返回true，则会调用selfInterrupt阻塞线程
         }
     } finally {
         if (failed)
@@ -307,27 +327,41 @@ final boolean acquireQueued(final Node node, int arg) {
 }
 ```
 
-（被阻塞条件：前驱节点的waitStatus为-1）
+当前节点被阻塞条件：前驱节点的waitStatus为-1
 
-AQS的静态方法
+```java
+public final void acquire(int arg) {
+    if (!tryAcquire(arg) &&
+        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+        selfInterrupt();
+}
+```
+
+
+
+### shouldParkAfterFailedAcquire
+
+AQS的静态方法，和名字一样，是否应该在获取锁失败后park线程
 
 如果p为头节点，但是没获取到锁，那么pred（头节点）和node就是连着的
 
 ```java
-private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
+// p是node的前驱节点, node是当前节点
+private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) { 
     // pred可能是头节点，也可能不是
-    int ws = pred.waitStatus; 
-    if (ws == Node.SIGNAL)  // 唤醒状态
+    int ws = pred.waitStatus;
+    if (ws == Node.SIGNAL)  // 唤醒状态 -1
         /*
          * This node has already set status asking a release to signal it, so it can safely park.
          */
         return true;
     if (ws > 0) {  // 通过枚举值知道waitStatus>0是取消状态
         /*
+         * 如果前驱节点被取消，那么跳过前驱节点
          * Predecessor was cancelled. Skip over predecessors and indicate retry.
          */
         do {
-            node.prev = pred = pred.prev; // 循环向前查找取消节点，把取消节点从队列中剔除
+            node.prev = pred = pred.prev; // 循环向前查找取消节点，把取消节点从等待队列中剔除
         } while (pred.waitStatus > 0);
         pred.next = node;
     } else {
@@ -341,9 +375,11 @@ private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
 }
 ```
 
-AQS中的final方法
 
-问题，这里的this指向的是谁？
+
+### parkAndCheckInterrupt
+
+AQS中的final方法，问题，这里的this指向的是谁？
 
 ```java
 // parkAndCheckInterrupt主要用于挂起当前线程，阻塞调用栈，返回当前线程的中断状态。
@@ -370,27 +406,28 @@ private static void setBlocker(Thread t, Object arg) {
 
 ## CANCELLED状态节点生成
 
-
+acquireQueued方法中的Finally代码，公平和非公平都会调用
 
 ```java
 final boolean acquireQueued(final Node node, int arg) {
     boolean failed = true;
     try {
         boolean interrupted = false;
+        // 自旋获取锁
         for (;;) {
             final Node p = node.predecessor();
             if (p == head && tryAcquire(arg)) {
                 setHead(node);
-                p.next = null; // help GC
+                p.next = null;    // help GC
                 failed = false;
                 return interrupted;
             }
-            if (shouldParkAfterFailedAcquire(p, node) &&
-                parkAndCheckInterrupt())
+            // 是否中断此线程
+            if (shouldParkAfterFailedAcquire(p, node) && parkAndCheckInterrupt())
                 interrupted = true;
         }
     } finally {
-        if (failed)
+        if (failed)  // 出队的节点获取锁失败
             cancelAcquire(node);
     }
 }
@@ -437,7 +474,6 @@ private void cancelAcquire(Node node) {
         } else {
             unparkSuccessor(node);
         }
-
         node.next = node; // help GC
     }
 }
