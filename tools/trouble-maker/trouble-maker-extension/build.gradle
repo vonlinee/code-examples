@@ -28,10 +28,7 @@ dependencies {
 	implementation 'org.freemarker:freemarker:2.3.31'
 	implementation 'com.alibaba:druid:1.2.8'
 	// 日志依赖
-	implementation 'org.slf4j:slf4j-api:1.7.36'
-	implementation 'org.slf4j:slf4j-log4j12:1.7.36'
-	testImplementation 'org.slf4j:slf4j-log4j12:1.7.36'
-	implementation("mysql:mysql-connector-java:8.0.21")
+	implementation("mysql:mysql-connector-java:5.1.49")
 	implementation("${lib.lombok}")
 
 	implementation 'org.apache.shardingsphere:sharding-jdbc-core:4.1.1'
@@ -76,7 +73,6 @@ dependencies {
 	implementation 'org.mybatis:mybatis-spring:2.0.7'
 	
 	implementation 'org.springframework.boot:spring-boot-starter-web:2.3.12.RELEASE'
-	
 }
 
 test {

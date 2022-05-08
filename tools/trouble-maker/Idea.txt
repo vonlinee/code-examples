@@ -1,11 +1,6 @@
 
 
 
-
-
-
-
-
 Idea链式调用方法对齐
 https://www.jianshu.com/p/378ba1f4ddb4
 找到设置项：Editor -> Code Style -> Java -> Wrapping And Braces -> Chain Method Call

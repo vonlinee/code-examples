@@ -21,3 +21,6 @@ ext {
             zxing                  : "com.google.zxing:core:3.1.0"
     ]
 }
+
+println("======================================")
+println(ext.libs)

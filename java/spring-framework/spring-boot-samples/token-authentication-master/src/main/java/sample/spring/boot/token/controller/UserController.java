@@ -40,12 +40,12 @@ public class UserController {
 
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
-	
+
 	@GetMapping("/welcome")
 	public String welcome() {
 		return "UserController token authentication";
 	}
-	
+
 	@GetMapping(value = "/login")
 	public Result login(String username, String password) {
 		// 先从Redis中获取token，如果不存在，则查寻数据库信息

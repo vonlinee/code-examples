@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  * 3.not开头的除了进行校验之外，如果校验通过则返回被校验对象，校验不通过则抛出附带信息的异常
  * jsr305.jar
  */
-public final class Validator {
+public abstract class Validator {
 
     private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
 
@@ -216,11 +216,18 @@ public final class Validator {
         }
     }
 
+    /**
+     * 不包含指定的key
+     * @param <T>
+     * @param <K>
+     * @param map
+     * @param key
+     */
     public static <T extends Map<K, ?>, K> void notExistKey(final T map, K key) {
         notNull(map);
         notEmpty(map);
         if (!map.containsKey(key)) {
-            throw new IllegalArgumentException(String.format("the key:{} does not exist in map", key));
+            throw new IllegalArgumentException(String.format("the key:%s does not exist in map", key));
         }
     }
 
@@ -584,7 +591,7 @@ public final class Validator {
         notNull(sequence);
         return sequence.length() == 0;
     }
-
+    
     /**
      * 针对字符串的特别校验
      * @param sequence
@@ -697,25 +704,5 @@ public final class Validator {
             return false;
         }
         return cs.length() > (i > 0 ? i : 1);
-    }
-
-    public static int compare(int i, int j, int range) {
-        if (i < j - range) {
-            return -1;
-        }
-        if (i > j + range) {
-            return 1;
-        }
-        return 0;
-    }
-
-    public static int compare(float i, float j, float range) {
-        if (i < j - range) {
-            return -1;
-        }
-        if (i > j + range) {
-            return 1;
-        }
-        return 0;
     }
 }

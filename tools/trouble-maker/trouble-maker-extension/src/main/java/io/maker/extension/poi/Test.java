@@ -1,32 +1,53 @@
 package io.maker.extension.poi;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
+import io.maker.base.lang.Value;
+import io.maker.base.utils.DateTimes;
+
 public class Test {
 
     public static void main(String[] args) throws IOException, InvalidFormatException {
-    	test1();
+    	// test1();
+    	ExcelReader excelReader = new ExcelReader();
+    	List<ExcelSheet> excelSheets = excelReader.readWorkbook("C:\\Users\\ly-wangliang\\Desktop\\23.xlsx");
+
+    	ExcelWriter writer = new ExcelWriter();
+    	for (int i = 0; i < excelSheets.size(); i++) {
+    		List<Value> list = excelSheets.get(i).getColumnData(1);
+//    		String filename = "D:/Temp/" + DateTimes.nowAsString().replace(":", "").replace(" ", "_") + ".xlsx";
+//    		System.out.printf("开始写入" + filename);
+//    		long start = System.currentTimeMillis();
+//			writer.write(excelSheets.get(i), new File(filename));
+//			long end = System.currentTimeMillis();
+//			System.out.println(" 耗时:" + (end - start) + "ms");
+    		list.forEach(value -> {
+    			Object object = value.get();
+    			System.out.println(object);
+    		});
+		}
     }
 
     public static void test1() throws IOException {
-        //读取文件夹，批量解析Excel文件
-        System.out.println("--------------------读取文件夹，批量解析Excel文件-----------------------");
-        List<List<Map<String, String>>> returnList = ExcelUtils.readFolder("D:\\Temp");
-        for (List<Map<String, String>> maps : returnList) {
-            if (maps.isEmpty()) {
-                continue;
-            }
-            for (Map<String, String> map : maps) {
-                System.out.println(map.toString());
-            }
-            System.out.println("--------------------手打List切割线-----------------------");
-        }
+//        //读取文件夹，批量解析Excel文件
+//        System.out.println("--------------------读取文件夹，批量解析Excel文件-----------------------");
+//        List<List<Map<String, String>>> returnList = ExcelUtils.readFolder("D:\\Temp");
+//        for (List<Map<String, String>> maps : returnList) {
+//            if (maps.isEmpty()) {
+//                continue;
+//            }
+//            for (Map<String, String> map : maps) {
+//                System.out.println(map.toString());
+//            }
+//            System.out.println("--------------------手打List切割线-----------------------");
+//        }
 
         //读取单个文件
         System.out.println("--------------------读取并解析单个文件-----------------------");
@@ -46,7 +67,7 @@ public class Test {
         }
         System.out.println("数据加载完成...");
 
-        ExcelUtils.writeExcel(mapArrayList, "D:/Temp/1.xlsx", "Sheet-1");
+        // ExcelUtils.writeExcel(mapArrayList, "D:/Temp/1.xlsx", "Sheet-1");
 
     }
 

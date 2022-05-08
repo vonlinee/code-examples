@@ -37,4 +37,24 @@ public final class MathUtils {
         }
         return srandom.nextInt();
     }
+    
+    public static int compare(float i, float j, float range) {
+        if (i < j - range) {
+            return -1;
+        }
+        if (i > j + range) {
+            return 1;
+        }
+        return 0;
+    }
+    
+    public static int compare(int i, int j, int range) {
+        if (i < j - range) {
+            return -1;
+        }
+        if (i > j + range) {
+            return 1;
+        }
+        return 0;
+    }
 }

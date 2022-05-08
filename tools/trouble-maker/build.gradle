@@ -161,7 +161,9 @@ subprojects {
         // implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2'
         implementation 'org.apache.poi:poi-excelant:5.0.0'
         implementation 'org.apache.xmlbeans:xmlbeans:5.0.0'
-
+		// https://mvnrepository.com/artifact/xerces/xercesImpl
+		implementation 'xerces:xercesImpl:2.12.2'
+		
         /* JSON */
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
         implementation 'com.fasterxml.jackson.core:jackson-core:2.13.1'
