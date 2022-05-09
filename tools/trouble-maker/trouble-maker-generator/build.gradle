@@ -4,14 +4,13 @@ plugins {
 
 group 'io.trouble.maker'
 version '0.0.1.SNAPSHOT'
+description 'io.trouble.maker.generator'
 
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	testRuntimeOnly 'junit:junit:4.13.2'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 	
 	implementation project(':trouble-maker-base')
 	implementation project(':trouble-maker-extension')
@@ -46,7 +45,6 @@ dependencies {
 // https://mvnrepository.com/artifact/com.alibaba/fastjson
 	implementation 'com.alibaba:fastjson:1.2.80'
 
-
 	testImplementation "${lib.sqlserver}"
 	testImplementation "${lib.postgresql}"
 	testImplementation lib.oracle as ConfigurableFileTree
@@ -59,22 +57,6 @@ dependencies {
 	testImplementation "${lib.'swagger-annotations'}"
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
 	testImplementation("${lib.lombok}")
-
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-
-	// Spring
-	// https://mvnrepository.com/artifact/org.springframework/spring-core
-	implementation 'org.springframework:spring-core:5.3.16'
-	implementation 'org.springframework:spring-context:5.3.16'
-	implementation 'org.springframework:spring-beans:5.3.16'
-	implementation 'org.springframework:spring-aop:5.3.16'
-	implementation 'org.springframework:spring-orm:5.3.16'
-	implementation 'org.springframework:spring-test:5.3.16'
-	implementation 'org.springframework:spring-tx:5.3.16'
-	implementation 'org.springframework:spring-jdbc:5.3.16'
-	implementation 'org.springframework:spring-web:5.3.16'
-	implementation 'org.springframework:spring-webmvc:5.3.16'
-	implementation 'org.springframework:spring-context-support:5.3.16'
 
 	implementation 'org.mybatis:mybatis:3.5.9'
 	implementation 'org.mybatis:mybatis-spring:2.0.7'

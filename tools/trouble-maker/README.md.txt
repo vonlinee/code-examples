@@ -1,4 +1,7 @@
 
+java.min.version >= jdk11
+gradle.min.version >= 5.8
+
 [官方文档](https://baomidou.com)
 
 [Mybatis-Plus](https://gitee.com/baomidou/mybatis-plus)

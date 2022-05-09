@@ -2,20 +2,13 @@ package io.maker.codegen.mbp.samples;
 
 import java.util.Collections;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-
 import io.maker.codegen.mbp.FastAutoGenerator;
 import io.maker.codegen.mbp.config.DataSourceConfig;
 import io.maker.codegen.mbp.config.OutputFile;
 import io.maker.codegen.mbp.config.TemplateType;
 import io.maker.codegen.mbp.config.converts.MySqlTypeConvert;
 import io.maker.codegen.mbp.config.querys.MySqlQuery;
-import io.maker.codegen.mbp.config.rules.NamingStrategy;
 import io.maker.codegen.mbp.engine.FreemarkerTemplateEngine;
-import io.maker.codegen.mbp.entity.BaseEntity;
-import io.maker.codegen.mbp.fill.Column;
-import io.maker.codegen.mbp.fill.Property;
 import io.maker.codegen.mbp.keywords.MySqlKeyWordsHandler;
 
 /**
@@ -23,12 +16,13 @@ import io.maker.codegen.mbp.keywords.MySqlKeyWordsHandler;
  */
 public class MySQLGenerator {
 
-	public static final String url = "jdbc:mysql://localhost:3306/information_schema?createDatabaseIfNotExists=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false";
+	public static final String URL1 = "jdbc:mysql://localhost:3306/information_schema?createDatabaseIfNotExists=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false";
 
 	public static final String OUTPUT_ROOT_DIR = "D://Temp";
 
 	// 数据库配置四要素
-	private static final String driverName = "com.mysql.jdbc.Driver";
+	private static final String MYSQL5_DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
+	private static final String MYSQL8_DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
 	private static final String url1 = "jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8";
 	private static final String username = "root";
 	private static final String password = "123456";
@@ -40,13 +34,15 @@ public class MySQLGenerator {
 	// 作者
 	private static String authorName = "xx";
 	// table前缀
-	// private static String prefix="t_";
+	private static String[] prefix = {"t_"};
 	// 要生成的表名
-	private static String[] tables = { "application" };
+	private static String[] tables = { "t_orc_ec_miss_sale_order" };
 
 	public static void main(String[] args) {
 		// 数据源配置
-		DataSourceConfig.Builder dataSourceBuilder = new DataSourceConfig.Builder(url, username, password)
+		DataSourceConfig.Builder dataSourceBuilder = new DataSourceConfig.Builder(
+				"jdbc:mysql://172.26.136.195:3306/orc?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false",
+				"appuser", "app@user!!")
 				.dbQuery(new MySqlQuery()) // 数据库查询
 				.schema("mybatis-plus") // 数据库schema(部分数据库适用)
 				.typeConvert(new MySqlTypeConvert()) // 数据库类型转换器 自定义数据库表字段类型转换【可选】
@@ -90,35 +86,36 @@ public class MySQLGenerator {
 					.build();
 		}).strategyConfig(builder -> {
 			// 策略配置
-			builder.addInclude("COLUMNS", "TABLES") // 设置需要生成的表名
-					.addTablePrefix("t_", "c_"); // 设置过滤表前缀
+			builder.addInclude(tables) // 设置需要生成的表名
+					.addTablePrefix(prefix); // 设置过滤表前缀
 			// 实体类输出配置
 			builder.entityBuilder()
-					.superClass(BaseEntity.class)
+					//.superClass(BaseEntity.class)
 					.disableSerialVersionUUID() // 禁用生成serialVersionUUID
-					.enableChainModel()
-					.enableLombok()
+					//.enableChainModel()
+					//.enableLombok()
 					.fileOverride()
-					.enableRemoveIsPrefix()
-					.enableTableFieldAnnotation()
-					.enableActiveRecord()
-					.versionColumnName("version")
-					.versionPropertyName("version")
-					.logicDeleteColumnName("deleted")
-					.logicDeletePropertyName("deleteFlag")
-					.naming(NamingStrategy.no_change)
-					.columnNaming(NamingStrategy.underline_to_camel)
-					.addSuperEntityColumns("id", "created_by", "created_time", "updated_by", "updated_time")
-					.addIgnoreColumns("age")
-					.addTableFills(new Column("create_time", FieldFill.INSERT))
-					.addTableFills(new Property("updateTime", FieldFill.INSERT_UPDATE)).idType(IdType.AUTO)
-					.formatFileName("%sEntity")
+					//.enableRemoveIsPrefix()
+					//.enableTableFieldAnnotation()
+					//.enableActiveRecord()
+					//.versionColumnName("version")
+					//.versionPropertyName("version")
+					//.logicDeleteColumnName("deleted")
+					//.logicDeletePropertyName("deleteFlag")
+					//.naming(NamingStrategy.no_change)
+					//.columnNaming(NamingStrategy.underline_to_camel)
+					//.addSuperEntityColumns("id", "created_by", "created_time", "updated_by", "updated_time") // 
+					//.addIgnoreColumns("age") // 忽略的列
+					//.addTableFills(new Column("create_time", FieldFill.INSERT))
+					//.addTableFills(new Property("updateTime", FieldFill.INSERT_UPDATE)).idType(IdType.AUTO)
+					// .formatFileName("%sEntity") // 格式化命名
 					.build();
 			// Mapper XML配置
 			builder.mapperBuilder()
 					.fileOverride() // 是否覆盖之前的mapper.xml文件
 					.enableBaseColumnList() // 添加字段列表，即sql标签
-					.enableBaseResultMap(); // 添加实体类和数据库字段映射，即ResultMap标签
+					.enableBaseResultMap() // 添加实体类和数据库字段映射，即ResultMap标签
+					.enableBaseCrudTag(); 
 		}).templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
 				.execute();
 	}

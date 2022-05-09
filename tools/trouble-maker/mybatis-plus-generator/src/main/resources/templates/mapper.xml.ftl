@@ -44,9 +44,10 @@
     <${tag.name} <#list tag.attributes as attr>${attr.name}="${attr.value}" </#list>>
 ${tag.content}
     </${tag.name}>
+    
 </#list>
-
 	<#else>
+	
 </#if>
 
 </mapper>

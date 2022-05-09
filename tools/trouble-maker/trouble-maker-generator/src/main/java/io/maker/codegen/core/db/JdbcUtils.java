@@ -50,7 +50,8 @@ import io.maker.codegen.core.db.result.ResultSetHandler;
  */
 public final class JdbcUtils {
 
-	private JdbcUtils() {}
+	private JdbcUtils() {
+	}
 
 	private static final Logger LOG = LoggerFactory.getLogger(JdbcUtils.class);
 
@@ -423,18 +424,43 @@ public final class JdbcUtils {
 		return map;
 	}
 
+	public static Connection getConnection(String dbType, String ip, int port, String dbName) throws SQLException {
+		return getConnection(dbType, ip, port, dbName, null);
+	}
+
+	/**
+	 * 
+	 * @param dbType
+	 * @param ip
+	 * @param port
+	 * @param dbName
+	 * @param params
+	 * @return
+	 * @throws SQLException
+	 */
 	public static Connection getConnection(String dbType, String ip, int port, String dbName,
 			Map<String, String> params) throws SQLException {
-		StringJoiner paramString = new StringJoiner("&");
-		for (Map.Entry<String, String> entry : params.entrySet()) {
-			paramString.add(entry.getKey() + "=" + entry.getValue());
+		String url = "jdbc:" + dbType + "://" + ip + ":" + port + "/" + dbName;
+		if (params != null && !params.isEmpty()) {
+			StringJoiner paramString = new StringJoiner("&");
+			for (Map.Entry<String, String> entry : params.entrySet()) {
+				paramString.add(entry.getKey() + "=" + entry.getValue());
+			}
+			url = url + "?" + paramString.toString();
 		}
-		String url = "jdbc:" + dbType + "://" + ip + ":" + port + "/" + dbName + "?" + paramString.toString();
-		try {
-			return DriverManager.getConnection(url, LOCAL_MYSQL_USERNAME, LOCAL_MYSQL_PASSWORD);
-		} catch (SQLException e) {
-			throw e;
-		}
+		return getConnection(url, LOCAL_MYSQL_USERNAME, LOCAL_MYSQL_PASSWORD);
+	}
+
+	/**
+	 * 
+	 * @param url
+	 * @param username
+	 * @param password
+	 * @return
+	 * @throws SQLException
+	 */
+	public static Connection getConnection(String url, String username, String password) throws SQLException {
+		return DriverManager.getConnection(url, username, password);
 	}
 
 	/**

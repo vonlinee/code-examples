@@ -62,7 +62,6 @@ public class MapperUtils {
 		for (ColumnInfoSchema columnInfoSchema : tableColumnMetaDataList) {
 			String columnName = columnInfoSchema.getColumnName();
 			String columnCamelName = upperUnderscoreTolowerCame.convert(columnName);
-
 			String comment = columnInfoSchema.getColumnComment();
 			if (!StringUtils.isEmpty(comment)) {
 				selectColumns.add(columnName + ", /*" + comment + "*/");
@@ -75,9 +74,7 @@ public class MapperUtils {
 		String string = selectColumns.toString();
 		int lastIndexOf = string.lastIndexOf(",");
 		string = string.substring(0, lastIndexOf);
-
 		String selectContent = "\tSELECT\n" + string + " \n\tFROM " + tableName + "\n\tWHERE 1 = 1";
-
 		return selectContent;
 	}
 
@@ -126,7 +123,11 @@ public class MapperUtils {
 		for (ColumnInfoSchema columnInfoSchema : tableColumnMetaDataList) {
 			String columnName = columnInfoSchema.getColumnName();
 			String columnCamelName = upperUnderscoreTolowerCame.convert(columnName);
-			updateColumns.add(tableName + " = #{param." + columnCamelName + "}");
+			// 判断if-test
+			String start = "<if test=\"param.%s != null and param.%s != '' \">\n\t";
+			String end = "</if>";
+			start = String.format(start, columnCamelName, columnCamelName);
+			updateColumns.add(start + "\t\t" + columnName + " = #{param." + columnCamelName + "}\n\t\t" + end);
 		}
 		// 去掉末尾的逗号
 		String string = updateColumns.toString();
@@ -201,6 +202,7 @@ public class MapperUtils {
 			ColumnInfoSchema columnInfoSchema = new ColumnInfoSchema();
 			columnInfoSchema.setColumnName(tableField.getName());
 			columnInfoSchema.setTableName(tableInfo.getName());
+			columnInfoSchema.setColumnComment(tableField.getComment());
 			columnInfoSchemaList.add(columnInfoSchema);
 		}
 		return columnInfoSchemaList;
