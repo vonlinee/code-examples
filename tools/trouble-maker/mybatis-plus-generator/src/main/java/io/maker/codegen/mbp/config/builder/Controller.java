@@ -32,7 +32,6 @@ import java.util.Map;
 
 /**
  * 控制器属性配置
- *
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
@@ -64,14 +63,12 @@ public class Controller implements ITemplate {
 
     /**
      * 转换输出控制器文件名称
-     *
      * @since 3.5.0
      */
     private ConverterFileName converterFileName = (entityName -> entityName + ConstVal.CONTROLLER);
 
     /**
      * 是否覆盖已有文件（默认 false）
-     *
      * @since 3.5.2
      */
     private boolean fileOverride;
@@ -120,7 +117,6 @@ public class Controller implements ITemplate {
 
         /**
          * 父类控制器
-         *
          * @param clazz 父类控制器
          * @return this
          */
@@ -130,7 +126,6 @@ public class Controller implements ITemplate {
 
         /**
          * 父类控制器
-         *
          * @param superClass 父类控制器类名
          * @return this
          */
@@ -141,7 +136,6 @@ public class Controller implements ITemplate {
 
         /**
          * 开启驼峰转连字符
-         *
          * @return this
          * @since 3.5.0
          */
@@ -152,7 +146,6 @@ public class Controller implements ITemplate {
 
         /**
          * 开启生成@RestController控制器
-         *
          * @return this
          * @since 3.5.0
          */
@@ -163,7 +156,6 @@ public class Controller implements ITemplate {
 
         /**
          * 转换输出文件名称
-         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
@@ -175,7 +167,6 @@ public class Controller implements ITemplate {
 
         /**
          * 格式化文件名称
-         *
          * @param format 　格式
          * @return this
          * @since 3.5.0

@@ -534,7 +534,7 @@ public abstract class ClassUtils {
 	 * @param lhsType the target type
 	 * @param rhsType the value type that should be assigned to the target type
 	 * @return if the target type is assignable from the value type
-	 * @see // TypeUtils#isAssignable(java.lang.reflect.Type, java.lang.reflect.Type)
+	 * @see // TypeUtils#isAssignable(java.lang.reflect.AnyType, java.lang.reflect.AnyType)
 	 */
 	public static boolean isAssignable(Class<?> lhsType, Class<?> rhsType) {
 		Assert.notNull(lhsType, "Left-hand side type must not be null");
@@ -561,7 +561,7 @@ public abstract class ClassUtils {
 	 * @return if the type is assignable from the value
 	 */
 	public static boolean isAssignableValue(Class<?> type, @Nullable Object value) {
-		Assert.notNull(type, "Type must not be null");
+		Assert.notNull(type, "AnyType must not be null");
 		return (value != null ? isAssignable(type, value.getClass()) : !type.isPrimitive());
 	}
 

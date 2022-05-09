@@ -1,8 +1,13 @@
 package io.maker.codegen.core.db;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+import io.maker.base.utils.Maps;
 import io.maker.codegen.core.db.meta.schema.SchemaMetaDataLoader;
+import io.maker.codegen.core.db.meta.table.TableMetaData;
 
 public class Test {
     public static void main(String[] args) throws Exception {
@@ -14,13 +19,12 @@ public class Test {
 //            ExcelUtils.writeExcel(result, new File("D:/Temp/1.xlsx").getAbsolutePath(), "Hello");
 //        }
 //        FileUtils.showFile(new File("D:/Temp/1.xlsx"));
-    	
-    	Connection connection = JdbcUtils.getLocalMySQLConnection("information_schema");
-    	
-    	
-    	SchemaMetaDataLoader.load(null, 0, null);
-    	
-    	
 
+        Connection connection = JdbcUtils.getLocalMySQLConnection("information_schema");
+        List<String> tableNames = new ArrayList<>();
+        tableNames.add("COLUMNS");
+        tableNames.add("TALBES");
+        Map<String, TableMetaData> meta = SchemaMetaDataLoader.load(connection, tableNames, "MySQL");
+        Maps.println(meta);
     }
 }

@@ -10,7 +10,6 @@ import java.util.function.BiConsumer;
 
 /**
  * 注入配置
- *
  * @author hubin
  * @since 2016-12-07
  */
@@ -33,7 +32,6 @@ public class InjectionConfig {
 
     /**
      * 是否覆盖已有文件（默认 false）
-     *
      * @since 3.5.2
      */
     private boolean fileOverride;
@@ -74,7 +72,6 @@ public class InjectionConfig {
 
         /**
          * 输出文件之前消费者
-         *
          * @param biConsumer 消费者
          * @return this
          */
@@ -85,7 +82,6 @@ public class InjectionConfig {
 
         /**
          * 自定义配置 Map 对象
-         *
          * @param customMap Map 对象
          * @return this
          */
@@ -96,7 +92,6 @@ public class InjectionConfig {
 
         /**
          * 自定义配置模板文件
-         *
          * @param customFile key为文件名称，value为文件路径
          * @return this
          */

@@ -7,21 +7,21 @@ public final class IndexMetaData {
 
     private String name;
 
-	public IndexMetaData(String name) {
-		super();
-		this.name = name;
-	}
+    public IndexMetaData(String name) {
+        super();
+        this.name = name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public String toString() {
-		return "IndexMetaData [name=" + name + "]";
-	}
+    @Override
+    public String toString() {
+        return "IndexMetaData [name=" + name + "]";
+    }
 }

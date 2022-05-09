@@ -96,7 +96,7 @@ public class Mapper implements ITemplate {
      */
     private Class<? extends Cache> cache;
 
-	public boolean baseCrudTag;
+    public boolean baseCrudTag;
 
     @NotNull
     public String getSuperClass() {
@@ -292,8 +292,8 @@ public class Mapper implements ITemplate {
             return this.mapper;
         }
 
-		public void enableBaseCrudTag() {
-			this.mapper.baseCrudTag = true;
-		}
+        public void enableBaseCrudTag() {
+            this.mapper.baseCrudTag = true;
+        }
     }
 }

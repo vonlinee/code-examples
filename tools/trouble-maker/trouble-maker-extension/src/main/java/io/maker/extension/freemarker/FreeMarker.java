@@ -22,6 +22,7 @@ public class FreeMarker {
         config.setObjectWrapper(new DefaultObjectWrapper(VERSION));
     }
 
+    @SuppressWarnings ("deprecation")
     public FreeMarker(File templateLocation) throws IOException {
         this();
         TemplateLoader[] loaders = new TemplateLoader[]{new FileTemplateLoader(), new ClassTemplateLoader(), new ByteArrayTemplateLoader()};

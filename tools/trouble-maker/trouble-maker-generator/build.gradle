@@ -1,5 +1,5 @@
 plugins {
-	id 'java'
+    id 'java'
 }
 
 group 'io.trouble.maker'
@@ -7,61 +7,65 @@ version '0.0.1.SNAPSHOT'
 description 'io.trouble.maker.generator'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	
-	implementation project(':trouble-maker-base')
-	implementation project(':trouble-maker-extension')
-	
-	// implementation project("trouble-maker-base")
-	
-	implementation 'junit:junit:4.13.2'
-	implementation "${lib.'mybatis-plus'}"
-	implementation "${lib.velocity}"
-	implementation "${lib.freemarker}"
-	implementation "${lib.beetl}"
-	compileOnly "org.jetbrains:annotations:22.0.0"
 
-	implementation 'com.squareup:javapoet:1.13.0'
-	implementation 'commons-dbutils:commons-dbutils:1.7'
-	implementation 'org.freemarker:freemarker:2.3.31'
-	implementation 'com.alibaba:druid:1.2.8'
-	// 日志依赖
-	implementation 'org.slf4j:slf4j-api:1.7.36'
-	implementation 'org.slf4j:slf4j-log4j12:1.7.36'
-	testImplementation 'org.slf4j:slf4j-log4j12:1.7.36'
-	implementation("mysql:mysql-connector-java:8.0.21")
-	implementation("${lib.lombok}")
+    implementation project(':trouble-maker-base')
+    implementation project(':trouble-maker-extension')
 
-	implementation 'org.apache.shardingsphere:sharding-jdbc-core:4.1.1'
-	implementation "${lib.guava}"
-	implementation "com.baomidou:mybatis-plus:${mybatisPlusVersion}"
-	implementation 'commons-dbutils:commons-dbutils:1.7'
+    // implementation project("trouble-maker-base")
 
-	testCompileOnly "org.jetbrains:annotations:22.0.0"
+    implementation 'junit:junit:4.13.2'
+    implementation "${lib.'mybatis-plus'}"
+    implementation "${lib.velocity}"
+    implementation "${lib.freemarker}"
+    implementation "${lib.beetl}"
+    compileOnly 'org.jetbrains:annotations:23.0.0'
+
+    implementation 'com.squareup:javapoet:1.13.0'
+    implementation 'commons-dbutils:commons-dbutils:1.7'
+    implementation 'org.freemarker:freemarker:2.3.31'
+    implementation 'com.alibaba:druid:1.2.9'
+    // 日志依赖
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.slf4j:slf4j-log4j12:1.7.36'
+    testImplementation 'org.slf4j:slf4j-log4j12:1.7.36'
+    implementation("mysql:mysql-connector-java:8.0.21")
+    implementation("${lib.lombok}")
+
+    implementation 'org.apache.shardingsphere:sharding-jdbc-core:4.1.1'
+    implementation "${lib.guava}"
+    implementation "com.baomidou:mybatis-plus:${mybatisPlusVersion}"
+    implementation 'commons-dbutils:commons-dbutils:1.7'
+
+    testCompileOnly "org.jetbrains:annotations:22.0.0"
 
 // https://mvnrepository.com/artifact/com.alibaba/fastjson
-	implementation 'com.alibaba:fastjson:1.2.80'
+    implementation 'com.alibaba:fastjson:1.2.80'
 
-	testImplementation "${lib.sqlserver}"
-	testImplementation "${lib.postgresql}"
-	testImplementation lib.oracle as ConfigurableFileTree
-	testImplementation lib.dm as ConfigurableFileTree
-	testImplementation lib.kingbase as ConfigurableFileTree
-	testImplementation "${lib.h2}"
-	testImplementation "${lib.mysql}"
-	testImplementation "${lib.sqlite}"
-	testImplementation "${lib.firebird}"
-	testImplementation "${lib.'swagger-annotations'}"
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-	testImplementation("${lib.lombok}")
+    testImplementation "${lib.sqlserver}"
+    testImplementation "${lib.postgresql}"
+    testImplementation lib.oracle
+    testImplementation lib.dm
+    //
+    testImplementation lib.kingbase
+    testImplementation "${lib.h2}"
+    testImplementation "${lib.mysql}"
+    testImplementation "${lib.sqlite}"
+    testImplementation "${lib.firebird}"
+    testImplementation "${lib.'swagger-annotations'}"
+    testImplementation("${lib.lombok}")
 
-	implementation 'org.mybatis:mybatis:3.5.9'
-	implementation 'org.mybatis:mybatis-spring:2.0.7'
+    implementation libs.spring_core
+
+    implementation 'org.mybatis:mybatis:3.5.9'
+    implementation 'org.mybatis:mybatis-spring:2.0.7'
+
+    implementation 'org.springframework:spring-context:5.3.16'
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

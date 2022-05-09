@@ -119,7 +119,7 @@ public final class ExcelUtils {
 				// Class[SaxHelper] in xmlbeans library.
 				workbook = new XSSFWorkbook(is);
 			} else {
-				throw new UnsupportedOperationException(String.format("Unsupported Excel File Type[%s]", fileType));
+				throw new UnsupportedOperationException(String.format("Unsupported Excel File AnyType[%s]", fileType));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

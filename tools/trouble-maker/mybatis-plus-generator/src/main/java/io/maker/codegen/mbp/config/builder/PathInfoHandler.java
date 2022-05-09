@@ -27,12 +27,8 @@ import java.util.Map;
 
 /**
  * 路径信息处理
- *
- * @author nieqiurong hubin
- * @since 2020-10-06
- * @since 3.5.0
  */
-class PathInfoHandler {
+public class PathInfoHandler {
 
     /**
      * 输出文件Map
@@ -63,7 +59,6 @@ class PathInfoHandler {
 
     /**
      * 设置默认输出路径
-     *
      * @param globalConfig   全局配置
      * @param templateConfig 模板配置
      */
@@ -93,7 +88,6 @@ class PathInfoHandler {
 
     /**
      * 连接路径字符串
-     *
      * @param parentDir   路径常量字符串
      * @param packageName 包名
      * @return 连接后的路径

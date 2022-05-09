@@ -1,15 +1,17 @@
 package io.maker.extension.xml;
 
-import java.io.PrintStream;
-import java.util.Date;
+import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.util.Date;
 
 public class JAXBUtils {
 
-	public static void main(String[] args) throws JAXBException {
+    public static void main(String[] args) throws JAXBException, MalformedURLException, SAXException {
         // 获取JAXB的上下文环境，需要传入具体的 Java bean -> 这里使用Student
         JAXBContext context = JAXBContext.newInstance(Student.class);
         // 创建 Marshaller 实例
@@ -20,5 +22,5 @@ public class JAXBUtils {
         PrintStream out = System.out;
         // 将所需对象序列化 -> 该方法没有返回值
         marshaller.marshal(new Student(10, "AAA", new Date()), out);
-	}
+    }
 }

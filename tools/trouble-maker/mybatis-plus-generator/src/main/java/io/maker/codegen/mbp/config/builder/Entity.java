@@ -41,7 +41,6 @@ import java.util.stream.Collectors;
 
 /**
  * 实体属性配置
- *
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
@@ -89,7 +88,6 @@ public class Entity implements ITemplate {
      * 【实体】是否为链式模型（默认 false）<br>
      * -----------------------------------<br>
      * public User setName(String name) { this.name = name; return this; }
-     *
      * @since 3.3.2
      */
     private boolean chain;
@@ -113,28 +111,24 @@ public class Entity implements ITemplate {
 
     /**
      * 乐观锁字段名称(数据库字段)
-     *
      * @since 3.5.0
      */
     private String versionColumnName;
 
     /**
      * 乐观锁属性名称(实体字段)
-     *
      * @since 3.5.0
      */
     private String versionPropertyName;
 
     /**
      * 逻辑删除字段名称(数据库字段)
-     *
      * @since 3.5.0
      */
     private String logicDeleteColumnName;
 
     /**
      * 逻辑删除属性名称(实体字段)
-     *
      * @since 3.5.0
      */
     private String logicDeletePropertyName;
@@ -157,28 +151,24 @@ public class Entity implements ITemplate {
 
     /**
      * 开启 ActiveRecord 模式（默认 false）
-     *
      * @since 3.5.0
      */
     private boolean activeRecord;
 
     /**
      * 指定生成的主键的ID类型
-     *
      * @since 3.5.0
      */
     private IdType idType;
 
     /**
      * 转换输出文件名称
-     *
      * @since 3.5.0
      */
     private ConverterFileName converterFileName = (entityName -> entityName);
 
     /**
      * 是否覆盖已有文件（默认 false）
-     *
      * @since 3.5.2
      */
     private boolean fileOverride;
@@ -187,7 +177,6 @@ public class Entity implements ITemplate {
      * <p>
      * 父类 Class 反射属性转换为公共字段
      * </p>
-     *
      * @param clazz 实体父类 Class
      */
     public void convertSuperEntityColumns(Class<?> clazz) {
@@ -216,7 +205,6 @@ public class Entity implements ITemplate {
 
     /**
      * 匹配父类字段(忽略大小写)
-     *
      * @param fieldName 字段名
      * @return 是否匹配
      * @since 3.5.0
@@ -228,7 +216,6 @@ public class Entity implements ITemplate {
 
     /**
      * 匹配忽略字段(忽略大小写)
-     *
      * @param fieldName 字段名
      * @return 是否匹配
      * @since 3.5.0
@@ -352,7 +339,6 @@ public class Entity implements ITemplate {
 
         /**
          * 名称转换实现
-         *
          * @param nameConvert 名称转换实现
          * @return this
          */
@@ -363,7 +349,6 @@ public class Entity implements ITemplate {
 
         /**
          * 自定义继承的Entity类全称
-         *
          * @param clazz 类
          * @return this
          */
@@ -373,7 +358,6 @@ public class Entity implements ITemplate {
 
         /**
          * 自定义继承的Entity类全称，带包名
-         *
          * @param superEntityClass 类全称
          * @return this
          */
@@ -384,7 +368,6 @@ public class Entity implements ITemplate {
 
         /**
          * 禁用生成serialVersionUID
-         *
          * @return this
          * @since 3.5.0
          */
@@ -395,7 +378,6 @@ public class Entity implements ITemplate {
 
         /**
          * 开启生成字段常量
-         *
          * @return this
          * @since 3.5.0
          */
@@ -406,7 +388,6 @@ public class Entity implements ITemplate {
 
         /**
          * 开启链式模型
-         *
          * @return this
          * @since 3.5.0
          */
@@ -417,7 +398,6 @@ public class Entity implements ITemplate {
 
         /**
          * 开启lombok模型
-         *
          * @return this
          * @since 3.5.0
          */
@@ -428,7 +408,6 @@ public class Entity implements ITemplate {
 
         /**
          * 开启Boolean类型字段移除is前缀
-         *
          * @return this
          * @since 3.5.0
          */
@@ -439,7 +418,6 @@ public class Entity implements ITemplate {
 
         /**
          * 开启生成实体时生成字段注解
-         *
          * @return this
          * @since 3.5.0
          */
@@ -450,7 +428,6 @@ public class Entity implements ITemplate {
 
         /**
          * 开启 ActiveRecord 模式
-         *
          * @return this
          * @since 3.5.0
          */
@@ -461,7 +438,6 @@ public class Entity implements ITemplate {
 
         /**
          * 设置乐观锁数据库表字段名称
-         *
          * @param versionColumnName 乐观锁数据库字段名称
          * @return this
          */
@@ -472,7 +448,6 @@ public class Entity implements ITemplate {
 
         /**
          * 设置乐观锁实体属性字段名称
-         *
          * @param versionPropertyName 乐观锁实体属性字段名称
          * @return this
          */
@@ -483,7 +458,6 @@ public class Entity implements ITemplate {
 
         /**
          * 逻辑删除数据库字段名称
-         *
          * @param logicDeleteColumnName 逻辑删除字段名称
          * @return this
          */
@@ -494,7 +468,6 @@ public class Entity implements ITemplate {
 
         /**
          * 逻辑删除实体属性名称
-         *
          * @param logicDeletePropertyName 逻辑删除实体属性名称
          * @return this
          */
@@ -505,7 +478,6 @@ public class Entity implements ITemplate {
 
         /**
          * 数据库表映射到实体的命名策略
-         *
          * @param namingStrategy 数据库表映射到实体的命名策略
          * @return this
          */
@@ -516,7 +488,6 @@ public class Entity implements ITemplate {
 
         /**
          * 数据库表字段映射到实体的命名策略
-         *
          * @param namingStrategy 数据库表字段映射到实体的命名策略
          * @return this
          */
@@ -527,7 +498,6 @@ public class Entity implements ITemplate {
 
         /**
          * 添加父类公共字段
-         *
          * @param superEntityColumns 父类字段(数据库字段列名)
          * @return this
          * @since 3.5.0
@@ -543,7 +513,6 @@ public class Entity implements ITemplate {
 
         /**
          * 添加忽略字段
-         *
          * @param ignoreColumns 需要忽略的字段(数据库字段列名)
          * @return this
          * @since 3.5.0
@@ -559,7 +528,6 @@ public class Entity implements ITemplate {
 
         /**
          * 添加表字段填充
-         *
          * @param tableFills 填充字段
          * @return this
          * @since 3.5.0
@@ -570,7 +538,6 @@ public class Entity implements ITemplate {
 
         /**
          * 添加表字段填充
-         *
          * @param tableFillList 填充字段集合
          * @return this
          * @since 3.5.0
@@ -582,7 +549,6 @@ public class Entity implements ITemplate {
 
         /**
          * 指定生成的主键的ID类型
-         *
          * @param idType ID类型
          * @return this
          * @since 3.5.0
@@ -594,7 +560,6 @@ public class Entity implements ITemplate {
 
         /**
          * 转换输出文件名称
-         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
@@ -606,7 +571,6 @@ public class Entity implements ITemplate {
 
         /**
          * 格式化文件名称
-         *
          * @param format 　格式
          * @return this
          * @since 3.5.0

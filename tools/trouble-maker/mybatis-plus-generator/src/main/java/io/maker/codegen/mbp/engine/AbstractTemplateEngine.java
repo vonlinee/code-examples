@@ -140,9 +140,9 @@ public abstract class AbstractTemplateEngine {
         insertXmlTag.addAttribute("resultType", "int");
         insertXmlTag.setContent(MapperUtils.insertTag(tableInfo));
         list.add(insertXmlTag);
-        
+
         //TODO 批量新增
-        
+
         //Update
         XMLTag updateXmlTag = createMapperXmlTag("update", "AAAA");
         updateXmlTag.addAttribute("id", "");
@@ -150,7 +150,7 @@ public abstract class AbstractTemplateEngine {
         updateXmlTag.addAttribute("resultType", "int");
         updateXmlTag.setContent(MapperUtils.updateTag(tableInfo));
         list.add(updateXmlTag);
-        
+
         //Select
         XMLTag selectXmlTag = createMapperXmlTag("select", "AAAA");
         selectXmlTag.addAttribute("id", "");
@@ -165,7 +165,6 @@ public abstract class AbstractTemplateEngine {
         xmlTag.setName(name);
         return xmlTag;
     }
-
 
     /**
      * 输出service文件
@@ -280,19 +279,15 @@ public abstract class AbstractTemplateEngine {
     /**
      * 批量输出 java xml 文件
      */
-
     public AbstractTemplateEngine batchOutput() {
         try {
             ConfigBuilder config = this.getConfigBuilder();
-
             logger.info("开始加载数据库表字段信息");
             List<TableInfo> tableInfoList = config.getTableInfoList();
             logger.info("加载数据库表个数：{}", tableInfoList.size());
-
             tableInfoList.forEach(tableInfo -> {
                 System.out.println(tableInfo.getName());
             });
-
             tableInfoList.forEach(tableInfo -> {
                 Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
                 Optional.ofNullable(config.getInjectionConfig()).ifPresent(t -> {

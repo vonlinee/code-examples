@@ -583,7 +583,7 @@ public abstract class Assert {
 	 * @throws IllegalArgumentException if the object is not an instance of type
 	 */
 	public static void isInstanceOf(Class<?> type, @Nullable Object obj, String message) {
-		notNull(type, "Type to check against must not be null");
+		notNull(type, "AnyType to check against must not be null");
 		if (!type.isInstance(obj)) {
 			instanceCheckFailed(type, obj, message);
 		}
@@ -602,7 +602,7 @@ public abstract class Assert {
 	 * @since 5.0
 	 */
 	public static void isInstanceOf(Class<?> type, @Nullable Object obj, Supplier<String> messageSupplier) {
-		notNull(type, "Type to check against must not be null");
+		notNull(type, "AnyType to check against must not be null");
 		if (!type.isInstance(obj)) {
 			instanceCheckFailed(type, obj, nullSafeGet(messageSupplier));
 		}

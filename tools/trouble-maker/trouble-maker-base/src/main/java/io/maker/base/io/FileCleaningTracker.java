@@ -231,6 +231,7 @@ public class FileCleaningTracker {
 		 * @param queue          the queue on to which the tracker will be pushed, not
 		 *                       null
 		 */
+		@SuppressWarnings("unchecked")
 		Tracker(String path, FileDeleteStrategy deleteStrategy, Object marker, ReferenceQueue queue) {
 			super(marker, queue);
 			this.path = path;

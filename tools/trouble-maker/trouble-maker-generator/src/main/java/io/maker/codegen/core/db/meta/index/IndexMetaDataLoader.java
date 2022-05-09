@@ -1,8 +1,6 @@
 package io.maker.codegen.core.db.meta.index;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.apache.shardingsphere.sql.parser.binder.metadata.util.JdbcUtil;
+import io.maker.codegen.core.db.JdbcUtils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,7 +11,6 @@ import java.util.HashSet;
 /**
  * Index meta data loader.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class IndexMetaDataLoader {
 
     private static final String INDEX_NAME = "INDEX_NAME";
@@ -28,7 +25,8 @@ public final class IndexMetaDataLoader {
      */
     public static Collection<IndexMetaData> load(final Connection connection, final String table, final String databaseType) throws SQLException {
         Collection<IndexMetaData> result = new HashSet<>();
-        try (ResultSet resultSet = connection.getMetaData().getIndexInfo(connection.getCatalog(), JdbcUtil.getSchema(connection, databaseType), table, false, false)) {
+        try (ResultSet resultSet = connection.getMetaData()
+                                             .getIndexInfo(connection.getCatalog(), JdbcUtils.getSchema(connection, databaseType), table, false, false)) {
             while (resultSet.next()) {
                 String indexName = resultSet.getString(INDEX_NAME);
                 if (null != indexName) {
