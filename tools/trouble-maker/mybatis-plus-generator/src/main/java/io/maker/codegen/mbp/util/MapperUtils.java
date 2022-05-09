@@ -9,10 +9,10 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.google.common.base.Converter;
 
 import io.maker.base.utils.CaseFormat;
+import io.maker.codegen.core.db.meta.schema.ColumnInfoSchema;
+import io.maker.codegen.core.db.meta.schema.TableInfoSchema;
 import io.maker.codegen.mbp.config.po.TableField;
 import io.maker.codegen.mbp.config.po.TableInfo;
-import io.maker.generator.db.meta.schema.ColumnInfoSchema;
-import io.maker.generator.db.meta.schema.TableInfoSchema;
 
 /**
  * 生成XML中sql语句的工具类

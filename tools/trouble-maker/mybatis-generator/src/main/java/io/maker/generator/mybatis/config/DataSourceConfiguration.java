@@ -6,11 +6,10 @@ import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 
-import io.maker.generator.db.JdbcUtils;
+import io.maker.codegen.core.db.JdbcUtils;
 
 @Configuration
 public class DataSourceConfiguration {
