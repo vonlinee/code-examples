@@ -1,7 +1,6 @@
-package io.maker.codegen.core.event;
+package io.maker.codegen.context.event;
 import java.util.EventListener;
 
-@FunctionalInterface
 public interface EventHandler<T extends Event> extends EventListener {
-	void handle(T var1);
+	void handle(T event);
 }

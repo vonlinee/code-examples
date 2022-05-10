@@ -71,13 +71,10 @@ wrap all elements, except second element if not necessary「前两个元素可�
 
 
 gradle 5.6版本
-
 Gradle
-
 命令
 查看Project中所有的Task：gradle tasks
 查看Project中所有的properties：gradle properties
-
 执行某个任务：gradlew 任务名
 
 

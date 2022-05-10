@@ -1,4 +1,4 @@
-package io.maker.codegen.core.event;
+package io.maker.codegen.context.event;
 
 import java.lang.ref.WeakReference;
 

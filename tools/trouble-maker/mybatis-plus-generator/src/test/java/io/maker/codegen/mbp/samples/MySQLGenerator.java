@@ -53,6 +53,7 @@ public class MySQLGenerator {
 		generator.globalConfig(builder -> {
 			builder.author("baomidou") // 设置作者
 					.enableSwagger() // 开启 swagger 模式
+					.fileOverride() // 覆盖文件
 					.outputDir(OUTPUT_ROOT_DIR); // 指定输出目录
 		}).templateConfig(builder -> {
 			// 模板配置

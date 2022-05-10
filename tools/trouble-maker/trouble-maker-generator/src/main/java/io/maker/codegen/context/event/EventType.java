@@ -1,10 +1,7 @@
-package io.maker.codegen.core.event;
+package io.maker.codegen.context.event;
 
-import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.WeakHashMap;
 
 public final class EventType<T extends Event> implements Serializable {
