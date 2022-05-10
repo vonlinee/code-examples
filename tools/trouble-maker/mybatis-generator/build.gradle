@@ -49,10 +49,12 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter
 	implementation 'com.alibaba:druid-spring-boot-starter:1.2.9'
 	
-	implementation 'mysql:mysql-connector-java:5.1.49'
+	implementation libs.db.mysql_driver
 	
 	// https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
 	implementation 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3'
+
+    implementation libs.mybatis.mybatis_generator_core
 	
 }
 

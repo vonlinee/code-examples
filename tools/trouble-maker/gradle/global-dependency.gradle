@@ -31,7 +31,25 @@ ext {
             spring_context         : 'org.springframework:spring-context:${spring_version}',
             spring_jdbc            : 'org.springframework:spring-jdbc:${spring_version}',
             // springboot
-            spring_boot_starter    : 'org.springframework.boot:spring-boot-starter-web:${spring_boot_version}'
+            spring_boot_starter    : 'org.springframework.boot:spring-boot-starter-web:${spring_boot_version}',
+            mybatis_dynamic_sql    : 'org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.4.0',
+            // 数据库相关依赖
+            db                     : [
+                    mysql_driver: 'mysql:mysql-connector-java:5.1.49',
+                    druid       : 'com.alibaba:druid:1.2.9',
+                    p6spy       : 'p6spy:p6spy:3.9.1',
+                    sqlserver   : 'com.microsoft.sqlserver:sqljdbc4:4.0',
+                    postgresql  : 'org.postgresql:postgresql:42.2.14',
+            ],
+            mybatis                : [
+                    mybatis_core          : 'org.mybatis:mybatis:3.5.9',
+                    mybatis_generator_core: 'org.mybatis.generator:mybatis-generator-core:1.4.0',
+                    page_helper           : 'com.github.pagehelper:pagehelper:5.3.0'
+            ],
+            // spring相关依赖
+            spring                 : [
+                    spring_context: 'org.springframework:spring-context:${spring_version}'
+            ]
     ]
 }
 

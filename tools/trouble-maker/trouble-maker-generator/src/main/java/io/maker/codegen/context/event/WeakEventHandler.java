@@ -13,8 +13,9 @@ public final class WeakEventHandler<T extends Event> implements EventHandler<T> 
 		return this.weakRef.get() == null;
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void handle(T var1) {
-		EventHandler var2 = (EventHandler) this.weakRef.get();
+		EventHandler var2 = this.weakRef.get();
 		if (var2 != null) {
 			var2.handle(var1);
 		}

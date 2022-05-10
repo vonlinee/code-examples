@@ -17,6 +17,7 @@
                         userId="root"
                         password="123456">
         </jdbcConnection>
+        <!--类型解析-->
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
