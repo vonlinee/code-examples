@@ -23,7 +23,7 @@ public class MySQLGenerator {
 	// 数据库配置四要素
 	private static final String MYSQL5_DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
 	private static final String MYSQL8_DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-	private static final String url1 = "jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8";
+	private static final String URL2 = "jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8";
 	private static final String username = "root";
 	private static final String password = "123456";
 
