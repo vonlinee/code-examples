@@ -96,7 +96,7 @@ public class CachePlugin extends PluginAdapter {
     }
 
     private void addAttributeIfExists(XmlElement element, IntrospectedTable introspectedTable,
-            CacheProperty cacheProperty) {
+                                      CacheProperty cacheProperty) {
         String property = introspectedTable.getTableConfigurationProperty(cacheProperty.getPropertyName());
         if (property == null) {
             property = properties.getProperty(cacheProperty.getPropertyName());

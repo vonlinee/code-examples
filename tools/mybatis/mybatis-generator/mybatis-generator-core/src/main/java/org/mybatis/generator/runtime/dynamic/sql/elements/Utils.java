@@ -42,7 +42,7 @@ public class Utils {
     public static boolean generateSelectByPrimaryKey(IntrospectedTable introspectedTable) {
         return introspectedTable.hasPrimaryKeyColumns()
                 && (introspectedTable.hasBaseColumns() || introspectedTable
-                        .hasBLOBColumns());
+                .hasBLOBColumns());
     }
 
     public static boolean generateUpdateByPrimaryKey(IntrospectedTable introspectedTable) {
@@ -52,6 +52,6 @@ public class Utils {
 
         return introspectedTable.hasPrimaryKeyColumns()
                 && (introspectedTable.hasBLOBColumns() || introspectedTable
-                        .hasBaseColumns());
+                .hasBaseColumns());
     }
 }

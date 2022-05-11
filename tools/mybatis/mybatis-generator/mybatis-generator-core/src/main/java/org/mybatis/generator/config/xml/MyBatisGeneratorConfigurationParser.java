@@ -72,19 +72,24 @@ public class MyBatisGeneratorConfigurationParser {
         configurationProperties = new Properties();
     }
 
+    /**
+     * 解析配置
+     *
+     * @param rootNode 根节点类型
+     * @return
+     * @throws XMLParserException
+     */
     public Configuration parseConfiguration(Element rootNode)
             throws XMLParserException {
-
         Configuration configuration = new Configuration();
-
+        // 获取子节点
         NodeList nodeList = rootNode.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node childNode = nodeList.item(i);
-
             if (childNode.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
-
+            // 解析不同的配置，填充Configuration的数据
             if ("properties".equals(childNode.getNodeName())) { //$NON-NLS-1$
                 parseProperties(childNode);
             } else if ("classPathEntry".equals(childNode.getNodeName())) { //$NON-NLS-1$
@@ -93,7 +98,6 @@ public class MyBatisGeneratorConfigurationParser {
                 parseContext(configuration, childNode);
             }
         }
-
         return configuration;
     }
 
@@ -142,13 +146,17 @@ public class MyBatisGeneratorConfigurationParser {
         }
     }
 
+    /**
+     * 解析Context配置
+     *
+     * @param configuration
+     * @param node
+     */
     private void parseContext(Configuration configuration, Node node) {
-
         Properties attributes = parseAttributes(node);
         String defaultModelType = attributes.getProperty("defaultModelType"); //$NON-NLS-1$
         String targetRuntime = attributes.getProperty("targetRuntime"); //$NON-NLS-1$
-        String introspectedColumnImpl = attributes
-                .getProperty("introspectedColumnImpl"); //$NON-NLS-1$
+        String introspectedColumnImpl = attributes.getProperty("introspectedColumnImpl"); //$NON-NLS-1$
         String id = attributes.getProperty("id"); //$NON-NLS-1$
 
         ModelType mt = defaultModelType == null ? null : ModelType
@@ -814,7 +822,7 @@ public class MyBatisGeneratorConfigurationParser {
      *
      * @param key property key
      * @return the resolved property.  This method will return null if the property is
-     *     undefined in any of the sources.
+     * undefined in any of the sources.
      */
     private String resolveProperty(String key) {
         String property = System.getProperty(key);

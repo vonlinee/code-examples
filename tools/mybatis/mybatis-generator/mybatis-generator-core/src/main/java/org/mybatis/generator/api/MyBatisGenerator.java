@@ -103,19 +103,16 @@ public class MyBatisGenerator {
         } else {
             this.configuration = configuration;
         }
-
         if (shellCallback == null) {
             this.shellCallback = new DefaultShellCallback(false);
         } else {
             this.shellCallback = shellCallback;
         }
-
         if (warnings == null) {
             this.warnings = new ArrayList<>();
         } else {
             this.warnings = warnings;
         }
-
         this.configuration.validate();
     }
 
@@ -191,11 +188,9 @@ public class MyBatisGenerator {
     public void generate(ProgressCallback callback, Set<String> contextIds,
                          Set<String> fullyQualifiedTableNames, boolean writeFiles) throws SQLException,
             IOException, InterruptedException {
-
         if (callback == null) {
             callback = NULL_PROGRESS_CALLBACK;
         }
-
         generatedJavaFiles.clear();
         generatedXmlFiles.clear();
         ObjectFactory.reset();

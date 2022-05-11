@@ -79,7 +79,7 @@ public class DynamicSqlSupportClassGenerator {
         innerClass.setStatic(true);
         innerClass.setFinal(true);
         innerClass.setSuperClass(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.AliasableSqlTable<" //$NON-NLS-1$
-                        + fqjt.getShortName() + ">")); //$NON-NLS-1$
+                + fqjt.getShortName() + ">")); //$NON-NLS-1$
 
         Method method = new Method(fqjt.getShortName());
         method.setVisibility(JavaVisibility.PUBLIC);
@@ -113,7 +113,7 @@ public class DynamicSqlSupportClassGenerator {
     }
 
     private void handleColumn(TopLevelClass topLevelClass, InnerClass innerClass,
-            IntrospectedColumn column, String tableFieldName) {
+                              IntrospectedColumn column, String tableFieldName) {
         topLevelClass.addImportedType(column.getFullyQualifiedJavaType());
 
         FullyQualifiedJavaType javaType;
@@ -179,7 +179,7 @@ public class DynamicSqlSupportClassGenerator {
     }
 
     public static DynamicSqlSupportClassGenerator of(IntrospectedTable introspectedTable,
-            CommentGenerator commentGenerator, List<String> warnings) {
+                                                     CommentGenerator commentGenerator, List<String> warnings) {
         DynamicSqlSupportClassGenerator generator = new DynamicSqlSupportClassGenerator();
         generator.introspectedTable = introspectedTable;
         generator.commentGenerator = commentGenerator;

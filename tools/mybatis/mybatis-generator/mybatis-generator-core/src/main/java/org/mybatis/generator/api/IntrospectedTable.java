@@ -50,7 +50,6 @@ import org.mybatis.generator.internal.rules.Rules;
  * the actual code generation methods left unimplemented.
  *
  * @author Jeff Butler
- *
  */
 public abstract class IntrospectedTable {
 
@@ -66,9 +65,13 @@ public abstract class IntrospectedTable {
         ATTR_EXAMPLE_TYPE,
         ATTR_MYBATIS3_XML_MAPPER_PACKAGE,
         ATTR_MYBATIS3_XML_MAPPER_FILE_NAME,
-        /** also used as XML Mapper namespace if a Java mapper is generated. */
+        /**
+         * also used as XML Mapper namespace if a Java mapper is generated.
+         */
         ATTR_MYBATIS3_JAVA_MAPPER_TYPE,
-        /** used as XML Mapper namespace if no client is generated. */
+        /**
+         * used as XML Mapper namespace if no client is generated.
+         */
         ATTR_MYBATIS3_FALLBACK_SQL_MAP_NAMESPACE,
         ATTR_FULLY_QUALIFIED_TABLE_NAME_AT_RUNTIME,
         ATTR_ALIASED_FULLY_QUALIFIED_TABLE_NAME_AT_RUNTIME,
@@ -121,7 +124,9 @@ public abstract class IntrospectedTable {
      */
     protected final Map<String, Object> attributes = new HashMap<>();
 
-    /** Internal attributes are used to store commonly accessed items by all code generators. */
+    /**
+     * Internal attributes are used to store commonly accessed items by all code generators.
+     */
     protected final Map<IntrospectedTable.InternalAttribute, String> internalAttributes =
             new EnumMap<>(InternalAttribute.class);
 
@@ -274,7 +279,7 @@ public abstract class IntrospectedTable {
      * Gets the base record type.
      *
      * @return the type for the record (the class that holds non-primary key and non-BLOB fields). Note that the value
-     *         will be calculated regardless of whether the table has these columns or not.
+     * will be calculated regardless of whether the table has these columns or not.
      */
     public String getBaseRecordType() {
         return internalAttributes.get(InternalAttribute.ATTR_BASE_RECORD_TYPE);
@@ -297,7 +302,7 @@ public abstract class IntrospectedTable {
      * Gets the record with blo bs type.
      *
      * @return the type for the record with BLOBs class. Note that the value will be calculated regardless of whether
-     *         the table has BLOB columns or not.
+     * the table has BLOB columns or not.
      */
     public String getRecordWithBLOBsType() {
         return internalAttributes
@@ -883,13 +888,11 @@ public abstract class IntrospectedTable {
      * <p>This method is called after all the setX methods, but before getNumberOfSubtasks(), getGeneratedJavaFiles, and
      * getGeneratedXmlFiles.
      *
-     * @param warnings
-     *            the warnings
-     * @param progressCallback
-     *            the progress callback
+     * @param warnings         the warnings
+     * @param progressCallback the progress callback
      */
     public abstract void calculateGenerators(List<String> warnings,
-            ProgressCallback progressCallback);
+                                             ProgressCallback progressCallback);
 
     /**
      * This method should return a list of generated Java files related to this
@@ -928,8 +931,7 @@ public abstract class IntrospectedTable {
     /**
      * This method exists to give plugins the opportunity to replace the calculated rules if necessary.
      *
-     * @param rules
-     *            the new rules
+     * @param rules the new rules
      */
     public void setRules(Rules rules) {
         this.rules = rules;

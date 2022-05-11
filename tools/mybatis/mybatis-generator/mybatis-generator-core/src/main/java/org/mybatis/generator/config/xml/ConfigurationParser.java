@@ -45,6 +45,8 @@ import org.xml.sax.SAXParseException;
 
 public class ConfigurationParser {
 
+    private static final Logger log = LoggerFactory.getLogger(ConfigurationParser.class);
+
     private final List<String> warnings;
     private final List<String> parseErrors;
     private final Properties extraProperties;
@@ -68,6 +70,7 @@ public class ConfigurationParser {
      *   <li>Properties specified in this "extra" property set are
      *       lowest precedence.</li>
      * </ol>
+     *
      * @param extraProperties an (optional) set of properties used to resolve property
      *                        references in the configuration file
      * @param warnings        any warnings are added to this array
@@ -75,13 +78,11 @@ public class ConfigurationParser {
     public ConfigurationParser(Properties extraProperties, List<String> warnings) {
         super();
         this.extraProperties = extraProperties;
-
         if (warnings == null) {
             this.warnings = new ArrayList<>();
         } else {
             this.warnings = warnings;
         }
-
         parseErrors = new ArrayList<>();
     }
 
@@ -101,25 +102,19 @@ public class ConfigurationParser {
         return parseConfiguration(is);
     }
 
-    public Configuration parseConfiguration(InputStream inputStream)
-            throws IOException, XMLParserException {
-
+    public Configuration parseConfiguration(InputStream inputStream) throws IOException, XMLParserException {
         InputSource is = new InputSource(inputStream);
         return parseConfiguration(is);
     }
-
-    private static final Logger log = LoggerFactory.getLogger(ConfigurationParser.class);
 
     private Configuration parseConfiguration(InputSource inputSource)
             throws IOException, XMLParserException {
         parseErrors.clear();
         // 使用jaxp,不同于jaxb
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
         // 防止报错
-        // factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-        // factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
-
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
         factory.setValidating(true);
 
         try {
@@ -144,11 +139,11 @@ public class ConfigurationParser {
                 }
             }
 
-            log.info("document {}", document);
-
             if (document == null || !parseErrors.isEmpty()) {
                 throw new XMLParserException(parseErrors);
             }
+
+            log.info("解析XML到文档成功，无解析错误");
 
             Configuration config;
             Element rootNode = document.getDocumentElement();
@@ -176,8 +171,8 @@ public class ConfigurationParser {
 
     private Configuration parseMyBatisGeneratorConfiguration(Element rootNode)
             throws XMLParserException {
-        MyBatisGeneratorConfigurationParser parser = new MyBatisGeneratorConfigurationParser(
-                extraProperties);
+        log.info("开始解析MyBatis生成器配置");
+        MyBatisGeneratorConfigurationParser parser = new MyBatisGeneratorConfigurationParser(extraProperties);
         return parser.parseConfiguration(rootNode);
     }
 }

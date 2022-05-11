@@ -403,12 +403,12 @@ public class DynamicSqlMapperGenerator extends AbstractJavaClientGenerator {
     protected void addUpdateByPrimaryKeySelectiveMethod(Interface interfaze) {
         UpdateByPrimaryKeySelectiveMethodGenerator generator =
                 new UpdateByPrimaryKeySelectiveMethodGenerator.Builder()
-                .withContext(context)
-                .withFragmentGenerator(fragmentGenerator)
-                .withIntrospectedTable(introspectedTable)
-                .withTableFieldName(tableFieldName)
-                .withRecordType(recordType)
-                .build();
+                        .withContext(context)
+                        .withFragmentGenerator(fragmentGenerator)
+                        .withIntrospectedTable(introspectedTable)
+                        .withTableFieldName(tableFieldName)
+                        .withRecordType(recordType)
+                        .build();
 
         generate(interfaze, generator);
     }

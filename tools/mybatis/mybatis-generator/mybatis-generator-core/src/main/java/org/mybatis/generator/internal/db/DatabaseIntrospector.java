@@ -70,8 +70,8 @@ public class DatabaseIntrospector {
     private final Log logger;
 
     public DatabaseIntrospector(Context context,
-            DatabaseMetaData databaseMetaData,
-            JavaTypeResolver javaTypeResolver, List<String> warnings) {
+                                DatabaseMetaData databaseMetaData,
+                                JavaTypeResolver javaTypeResolver, List<String> warnings) {
         super();
         this.context = context;
         this.databaseMetaData = databaseMetaData;
@@ -81,7 +81,7 @@ public class DatabaseIntrospector {
     }
 
     private void calculatePrimaryKey(FullyQualifiedTable table,
-            IntrospectedTable introspectedTable) {
+                                     IntrospectedTable introspectedTable) {
         ResultSet rs;
 
         try {
@@ -165,15 +165,14 @@ public class DatabaseIntrospector {
 
     /**
      * Returns a List of IntrospectedTable elements that matches the specified table configuration.
-     *
-     * @param tc
-     *            the table configuration
+     * @param tc the table configuration
      * @return a list of introspected tables
-     * @throws SQLException
-     *             if any errors in introspection
+     * @throws SQLException if any errors in introspection
      */
     public List<IntrospectedTable> introspectTables(TableConfiguration tc)
             throws SQLException {
+
+        logger.debug("开始获取表信息" + tc.getTableName());
 
         // get the raw columns from the DB
         Map<ActualTableName, List<IntrospectedColumn>> columns = getColumns(tc);
@@ -203,7 +202,7 @@ public class DatabaseIntrospector {
                 // add warning that the table has no columns, remove from the
                 // list
                 String warning = getString(
-                                "Warning.1", introspectedTable.getFullyQualifiedTable().toString()); //$NON-NLS-1$
+                        "Warning.1", introspectedTable.getFullyQualifiedTable().toString()); //$NON-NLS-1$
                 warnings.add(warning);
                 iter.remove();
             } else if (!introspectedTable.hasPrimaryKeyColumns()
@@ -211,7 +210,7 @@ public class DatabaseIntrospector {
                 // add warning that the table has only BLOB columns, remove from
                 // the list
                 String warning = getString(
-                                "Warning.18", introspectedTable.getFullyQualifiedTable().toString()); //$NON-NLS-1$
+                        "Warning.18", introspectedTable.getFullyQualifiedTable().toString()); //$NON-NLS-1$
                 warnings.add(warning);
                 iter.remove();
             } else {
@@ -227,11 +226,11 @@ public class DatabaseIntrospector {
     }
 
     private void removeIgnoredColumns(TableConfiguration tc,
-            Map<ActualTableName, List<IntrospectedColumn>> columns) {
+                                      Map<ActualTableName, List<IntrospectedColumn>> columns) {
         for (Map.Entry<ActualTableName, List<IntrospectedColumn>> entry : columns
                 .entrySet()) {
             Iterator<IntrospectedColumn> tableColumns = entry.getValue()
-                    .iterator();
+                                                             .iterator();
             while (tableColumns.hasNext()) {
                 IntrospectedColumn introspectedColumn = tableColumns.next();
                 if (tc
@@ -249,13 +248,13 @@ public class DatabaseIntrospector {
     }
 
     private void calculateExtraColumnInformation(TableConfiguration tc,
-            Map<ActualTableName, List<IntrospectedColumn>> columns) {
+                                                 Map<ActualTableName, List<IntrospectedColumn>> columns) {
         StringBuilder sb = new StringBuilder();
         Pattern pattern = null;
         String replaceString = null;
         if (tc.getColumnRenamingRule() != null) {
             pattern = Pattern.compile(tc.getColumnRenamingRule()
-                    .getSearchString());
+                                        .getSearchString());
             replaceString = tc.getColumnRenamingRule().getReplaceString();
             replaceString = replaceString == null ? "" : replaceString; //$NON-NLS-1$
         }
@@ -278,7 +277,7 @@ public class DatabaseIntrospector {
                     introspectedColumn.setJavaProperty(
                             JavaBeansUtil.getValidPropertyName(calculatedColumnName));
                 } else if (isTrue(tc
-                                .getProperty(PropertyRegistry.TABLE_USE_COMPOUND_PROPERTY_NAMES))) {
+                        .getProperty(PropertyRegistry.TABLE_USE_COMPOUND_PROPERTY_NAMES))) {
                     sb.setLength(0);
                     sb.append(calculatedColumnName);
                     sb.append('_');
@@ -328,7 +327,7 @@ public class DatabaseIntrospector {
 
                 if (context.autoDelimitKeywords()
                         && SqlReservedWords.containsWord(introspectedColumn
-                            .getActualColumnName())) {
+                        .getActualColumnName())) {
                     introspectedColumn.setColumnNameDelimited(true);
                 }
 
@@ -367,7 +366,7 @@ public class DatabaseIntrospector {
     }
 
     private void applyColumnOverrides(TableConfiguration tc,
-            Map<ActualTableName, List<IntrospectedColumn>> columns) {
+                                      Map<ActualTableName, List<IntrospectedColumn>> columns) {
         for (Map.Entry<ActualTableName, List<IntrospectedColumn>> entry : columns
                 .entrySet()) {
             for (IntrospectedColumn introspectedColumn : entry.getValue()) {
@@ -436,49 +435,55 @@ public class DatabaseIntrospector {
             localCatalog = tc.getCatalog();
             localSchema = tc.getSchema();
             localTableName = tc.getTableName();
+
         } else if (databaseMetaData.storesLowerCaseIdentifiers()) {
-            localCatalog = tc.getCatalog() == null ? null : tc.getCatalog()
-                    .toLowerCase();
-            localSchema = tc.getSchema() == null ? null : tc.getSchema()
-                    .toLowerCase();
+            //检索此数据库是否将混合大小写的不带引号的SQL标识符视为不区分大小写并将它们以小写形式存储
+            localCatalog = tc.getCatalog() == null ? null : tc.getCatalog().toLowerCase();
+            localSchema = tc.getSchema() == null ? null : tc.getSchema().toLowerCase();
             localTableName = tc.getTableName().toLowerCase();
         } else if (databaseMetaData.storesUpperCaseIdentifiers()) {
-            localCatalog = tc.getCatalog() == null ? null : tc.getCatalog()
-                    .toUpperCase();
-            localSchema = tc.getSchema() == null ? null : tc.getSchema()
-                    .toUpperCase();
+            //检索此数据库是否将混合大小写的不带引号的SQL标识符视为不区分大小写并将它们以大写形式存储
+            localCatalog = tc.getCatalog() == null ? null : tc.getCatalog().toUpperCase();
+            localSchema = tc.getSchema() == null ? null : tc.getSchema().toUpperCase();
             localTableName = tc.getTableName().toUpperCase();
         } else {
             localCatalog = tc.getCatalog();
             localSchema = tc.getSchema();
             localTableName = tc.getTableName();
         }
-
+        //开启去除通配符
         if (tc.isWildcardEscapingEnabled()) {
+            // 检索可用于转义通配符的字符串。 这是可用于在作为模式的目录搜索参数中转义“_”或“%”的字符串（因此使用通配符之一）。
+            // '_' 字符代表任何单个字符； '%' 字符表示任何零个或多个字符的序列
             String escapeString = databaseMetaData.getSearchStringEscape();
-
             if (localSchema != null) {
                 localSchema = escapeName(localSchema, escapeString);
             }
-
             localTableName = escapeName(localTableName, escapeString);
         }
 
         Map<ActualTableName, List<IntrospectedColumn>> answer = new HashMap<>();
 
         if (logger.isDebugEnabled()) {
-            String fullTableName = composeFullyQualifiedTableName(localCatalog, localSchema,
-                            localTableName, '.');
+            // 数据库名.表名
+            String fullTableName = composeFullyQualifiedTableName(localCatalog, localSchema, localTableName, '.');
             logger.debug(getString("Tracing.1", fullTableName)); //$NON-NLS-1$
         }
 
-        ResultSet rs = databaseMetaData.getColumns(localCatalog, localSchema,
-                localTableName, "%"); //$NON-NLS-1$
+        log.info("{}, {}, {}, {}", localCatalog, localSchema, localTableName, "%");
+        ResultSet rs = databaseMetaData.getColumns(localCatalog, localSchema, localTableName, "%"); //$NON-NLS-1$
+
+        if (!rs.isBeforeFirst()) {
+            log.info("表{}中不存在", tc.getTableName());
+        }
+
+        boolean wasNull = rs.wasNull();
 
         boolean supportsIsAutoIncrement = false;
         boolean supportsIsGeneratedColumn = false;
         ResultSetMetaData rsmd = rs.getMetaData();
         int colCount = rsmd.getColumnCount();
+        logger.debug("" + colCount);
         for (int i = 1; i <= colCount; i++) {
             if ("IS_AUTOINCREMENT".equals(rsmd.getColumnName(i))) { //$NON-NLS-1$
                 supportsIsAutoIncrement = true;
@@ -630,7 +635,6 @@ public class DatabaseIntrospector {
      * such as remarks associated with the table and the type.
      *
      * <p>If there is any error, we just add a warning and continue.
-     *
      * @param introspectedTable the introspected table to enhance
      */
     private void enhanceIntrospectedTable(IntrospectedTable introspectedTable) {

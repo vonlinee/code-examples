@@ -24,7 +24,6 @@ import org.mybatis.generator.internal.util.StringUtility;
 
 /**
  * This class holds information about an introspected column.
- *
  * @author Jeff Butler
  */
 public class IntrospectedColumn {
@@ -334,7 +333,6 @@ public class IntrospectedColumn {
      * The platform specific type name as reported by the JDBC driver. This value is determined
      * from the DatabaseMetadata.getColumns() call - specifically ResultSet.getString("TYPE_NAME").
      * This value is platform dependent.
-     *
      * @return the platform specific type name as reported by the JDBC driver
      */
     public String getActualTypeName() {
