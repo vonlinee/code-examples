@@ -36,12 +36,12 @@ public class MySQLGenerator {
 	// table前缀
 	private static String[] prefix = {"t_"};
 	// 要生成的表名
-	private static String[] tables = { "t_sac_clue_compete_record" };
+	private static String[] tables = { "t_orc_ec_miss_sale_order" };
 
 	public static void main(String[] args) {
 		// 数据源配置
 		DataSourceConfig.Builder dataSourceBuilder = new DataSourceConfig.Builder(
-				"jdbc:mysql://172.26.136.195:3306/csc?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false",
+				"jdbc:mysql://172.26.136.195:3306/orc?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false",
 				"appuser", "app@user!!")
 				.dbQuery(new MySqlQuery()) // 数据库查询
 				.schema("mybatis-plus") // 数据库schema(部分数据库适用)
@@ -75,12 +75,12 @@ public class MySQLGenerator {
 		}).packageConfig(builder -> {
 			// 包配置
 			builder.parent("") // 设置父包名
-					.moduleName("sys") // 设置父包模块名
-					.entity("po")
+					.moduleName("com.ly.adp.orc") // 设置父包模块名
+					.entity("entities")
 					.service("service")
 					.serviceImpl("service.impl")
-					.mapper("mapper")
-					.xml("mapper.xml")
+					.mapper("dao.mapper")
+					.xml("mybatis.mapping")
 					.controller("controller")
 					.other("other")
 					.pathInfo(Collections.singletonMap(OutputFile.xml, "D://Temp"))// 设置mapperXml生成路径

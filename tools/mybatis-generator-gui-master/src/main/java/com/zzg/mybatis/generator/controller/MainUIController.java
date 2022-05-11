@@ -553,6 +553,5 @@ public class MainUIController extends BaseFXController {
         }catch (Exception e) {
             AlertUtil.showErrorAlert("打开目录失败，请检查目录是否填写正确" + e.getMessage());
         }
-
     }
 }
