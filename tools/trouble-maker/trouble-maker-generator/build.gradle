@@ -24,19 +24,18 @@ dependencies {
     implementation "${lib.beetl}"
     compileOnly 'org.jetbrains:annotations:23.0.0'
 
-    implementation 'com.squareup:javapoet:1.13.0'
+    implementation libs.javapoet
     implementation 'commons-dbutils:commons-dbutils:1.7'
-    implementation 'org.freemarker:freemarker:2.3.31'
-    implementation 'com.alibaba:druid:1.2.9'
+    implementation libs.freemarker
+    implementation libs.db.druid
     // 日志依赖
-    implementation 'org.slf4j:slf4j-api:1.7.36'
-    implementation 'org.slf4j:slf4j-log4j12:1.7.36'
-    testImplementation 'org.slf4j:slf4j-log4j12:1.7.36'
+    implementation libs.log.slf4j_api
+    implementation libs.log.slf4j_log4j12
     implementation("mysql:mysql-connector-java:8.0.21")
     implementation("${lib.lombok}")
 
     implementation 'org.apache.shardingsphere:sharding-jdbc-core:4.1.1'
-    implementation "${lib.guava}"
+    implementation libs.guava
     implementation "com.baomidou:mybatis-plus:${mybatisPlusVersion}"
     implementation 'commons-dbutils:commons-dbutils:1.7'
 

@@ -49,7 +49,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter
 	implementation 'com.alibaba:druid-spring-boot-starter:1.2.9'
 	
-	implementation libs.db.mysql_driver
+	implementation libs.db.mysql5_driver
 	
 	// https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
 	implementation 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3'
@@ -59,9 +59,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
     implementation 'org.apache.logging.log4j:log4j-api:2.17.2'
-// https://mvnrepository.com/artifact/org.assertj/assertj-core
+	// https://mvnrepository.com/artifact/org.assertj/assertj-core
     testImplementation 'org.assertj:assertj-core:3.22.0'
-// https://mvnrepository.com/artifact/org.hsqldb/hsqldb
+	// https://mvnrepository.com/artifact/org.hsqldb/hsqldb
     testImplementation 'org.hsqldb:hsqldb:2.5.1'
 
     implementation 'org.reflections:reflections:0.10.2'
