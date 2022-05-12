@@ -389,6 +389,9 @@ public abstract class IntrospectedTable {
         attributes.put(name, value);
     }
 
+    /**
+     * 初始化表的数据
+     */
     public void initialize() {
         calculateJavaClientAttributes();
         calculateModelAttributes();

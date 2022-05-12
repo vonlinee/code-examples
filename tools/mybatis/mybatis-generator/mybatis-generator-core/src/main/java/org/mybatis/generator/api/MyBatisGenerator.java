@@ -52,6 +52,7 @@ import org.slf4j.LoggerFactory;
  * <li>Create a MyBatisGenerator object</li>
  * <li>Call one of the generate() methods</li>
  * </ol>
+ *
  * @author Jeff Butler
  * @see org.mybatis.generator.config.xml.ConfigurationParser
  */
@@ -83,6 +84,7 @@ public class MyBatisGenerator {
 
     /**
      * Constructs a MyBatisGenerator object.
+     *
      * @param configuration The configuration for this invocation
      * @param shellCallback an instance of a ShellCallback interface. You may specify
      *                      <code>null</code> in which case the DefaultShellCallback will
@@ -120,6 +122,7 @@ public class MyBatisGenerator {
      * This is the main method for generating code. This method is long running, but progress can be provided and the
      * method can be canceled through the ProgressCallback interface. This version of the method runs all configured
      * contexts.
+     *
      * @param callback an instance of the ProgressCallback interface, or <code>null</code> if you do not require progress
      *                 information
      * @throws SQLException         the SQL exception
@@ -134,6 +137,7 @@ public class MyBatisGenerator {
     /**
      * This is the main method for generating code. This method is long running, but progress can be provided and the
      * method can be canceled through the ProgressCallback interface.
+     *
      * @param callback   an instance of the ProgressCallback interface, or <code>null</code> if you do not require progress
      *                   information
      * @param contextIds a set of Strings containing context ids to run. Only the contexts with an id specified in this list
@@ -150,6 +154,7 @@ public class MyBatisGenerator {
     /**
      * This is the main method for generating code. This method is long running, but progress can be provided and the
      * method can be cancelled through the ProgressCallback interface.
+     *
      * @param callback                 an instance of the ProgressCallback interface, or <code>null</code> if you do not require progress
      *                                 information
      * @param contextIds               a set of Strings containing context ids to run. Only the contexts with an id specified in this list
@@ -171,6 +176,7 @@ public class MyBatisGenerator {
     /**
      * This is the main method for generating code. This method is long running, but progress can be provided and the
      * method can be cancelled through the ProgressCallback interface.
+     *
      * @param callback                 an instance of the ProgressCallback interface, or <code>null</code> if you do not require progress
      *                                 information
      * @param contextIds               a set of Strings containing context ids to run. Only the contexts with an id specified in this list
@@ -239,15 +245,20 @@ public class MyBatisGenerator {
         }
         callback.generationStarted(totalSteps);
 
-        log.info("  callback.generationStarted(totalSteps) ");
+        log.info("callback.generationStarted(totalSteps) ");
 
         log.info("callback  {}", callback);
 
+        // 遍历每个Context
+        // 插件会开始运行
         for (Context context : contextsToRun) {
             context.generateFiles(callback, generatedJavaFiles,
                     generatedXmlFiles, generatedKotlinFiles, otherGeneratedFiles, warnings);
         }
 
+        log.info("上下文初始化完毕");
+
+        // 填充需要生成的文件
         log.info("开始保存文件 {}", writeFiles);
 
         // now save the files
@@ -287,8 +298,8 @@ public class MyBatisGenerator {
         File targetFile;
         String source;
         try {
-            File directory = shellCallback.getDirectory(gjf
-                    .getTargetProject(), gjf.getTargetPackage());
+            log.info("{}, {}", gjf.getTargetProject(), gjf.getTargetPackage());
+            File directory = shellCallback.getDirectory(gjf.getTargetProject(), gjf.getTargetPackage());
             targetFile = new File(directory, gjf.getFileName());
             if (targetFile.exists()) {
                 if (shellCallback.isMergeSupported()) {
@@ -391,6 +402,7 @@ public class MyBatisGenerator {
 
     /**
      * Writes, or overwrites, the contents of the specified file.
+     *
      * @param file         the file
      * @param content      the content
      * @param fileEncoding the file encoding
@@ -413,6 +425,7 @@ public class MyBatisGenerator {
 
     /**
      * Gets the unique file name.
+     *
      * @param directory the directory
      * @param fileName  the file name
      * @return the unique file name
@@ -447,6 +460,7 @@ public class MyBatisGenerator {
      * Returns the list of generated Java files after a call to one of the generate methods.
      * This is useful if you prefer to process the generated files yourself and do not want
      * the generator to write them to disk.
+     *
      * @return the list of generated Java files
      */
     public List<GeneratedJavaFile> getGeneratedJavaFiles() {
@@ -457,6 +471,7 @@ public class MyBatisGenerator {
      * Returns the list of generated Kotlin files after a call to one of the generate methods.
      * This is useful if you prefer to process the generated files yourself and do not want
      * the generator to write them to disk.
+     *
      * @return the list of generated Kotlin files
      */
     public List<GeneratedKotlinFile> getGeneratedKotlinFiles() {
@@ -467,6 +482,7 @@ public class MyBatisGenerator {
      * Returns the list of generated XML files after a call to one of the generate methods.
      * This is useful if you prefer to process the generated files yourself and do not want
      * the generator to write them to disk.
+     *
      * @return the list of generated XML files
      */
     public List<GeneratedXmlFile> getGeneratedXmlFiles() {

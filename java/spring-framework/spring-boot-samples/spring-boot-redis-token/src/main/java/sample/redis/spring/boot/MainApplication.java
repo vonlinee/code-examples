@@ -12,6 +12,5 @@ public class MainApplication {
 		ConfigurableApplicationContext context = application.run(args);
 		String[] aliases = context.getAliases("spring");
 		System.out.println(aliases);
-		
 	}
 }

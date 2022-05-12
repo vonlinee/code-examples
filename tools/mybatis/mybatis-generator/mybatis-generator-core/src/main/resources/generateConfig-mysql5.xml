@@ -11,6 +11,11 @@
     <context id="mysqlTables" targetRuntime="MyBatis3">
         <!--插件-->
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <!--自定义插件-->
+        <plugin type="samples.plugins.WebMVCPlugin">
+            <property name="name" value="孙允珠"/>
+            <property name="age" value="30"/>
+        </plugin>
 
         <commentGenerator>
             <property name="suppressDate" value="true"/>

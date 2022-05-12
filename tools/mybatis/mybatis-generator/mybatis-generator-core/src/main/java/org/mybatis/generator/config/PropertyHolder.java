@@ -17,6 +17,9 @@ package org.mybatis.generator.config;
 
 import java.util.Properties;
 
+/**
+ * 保存一个Properties属性，自动拥有添加数据的能力
+ */
 public abstract class PropertyHolder {
     private final Properties properties;
 

@@ -171,12 +171,9 @@ public class DatabaseIntrospector {
      */
     public List<IntrospectedTable> introspectTables(TableConfiguration tc)
             throws SQLException {
-
         logger.debug("开始获取表信息" + tc.getTableName());
-
         // get the raw columns from the DB
         Map<ActualTableName, List<IntrospectedColumn>> columns = getColumns(tc);
-
         if (columns.isEmpty()) {
             warnings.add(getString("Warning.19", tc.getCatalog(), //$NON-NLS-1$
                     tc.getSchema(), tc.getTableName()));

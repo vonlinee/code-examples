@@ -26,12 +26,18 @@ public class StringUtility {
         super();
     }
 
+    /**
+     * String不为空
+     *
+     * @param s
+     * @return
+     */
     public static boolean stringHasValue(String s) {
         return s != null && s.length() > 0;
     }
 
     public static String composeFullyQualifiedTableName(String catalog,
-            String schema, String tableName, char separator) {
+                                                        String schema, String tableName, char separator) {
         StringBuilder sb = new StringBuilder();
 
         if (stringHasValue(catalog)) {

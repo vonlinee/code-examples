@@ -26,9 +26,9 @@ public class GeneratedJavaFile extends GeneratedFile {
     private final JavaFormatter javaFormatter;
 
     public GeneratedJavaFile(CompilationUnit compilationUnit,
-            String targetProject,
-            String fileEncoding,
-            JavaFormatter javaFormatter) {
+                             String targetProject,
+                             String fileEncoding,
+                             JavaFormatter javaFormatter) {
         super(targetProject);
         this.compilationUnit = compilationUnit;
         this.fileEncoding = fileEncoding;
@@ -36,8 +36,8 @@ public class GeneratedJavaFile extends GeneratedFile {
     }
 
     public GeneratedJavaFile(CompilationUnit compilationUnit,
-            String targetProject,
-            JavaFormatter javaFormatter) {
+                             String targetProject,
+                             JavaFormatter javaFormatter) {
         this(compilationUnit, targetProject, null, javaFormatter);
     }
 
@@ -62,7 +62,7 @@ public class GeneratedJavaFile extends GeneratedFile {
      * function, you may return null from this method.
      *
      * @return the CompilationUnit associated with this file, or null if the
-     *         file is not mergeable.
+     * file is not mergeable.
      */
     public CompilationUnit getCompilationUnit() {
         return compilationUnit;

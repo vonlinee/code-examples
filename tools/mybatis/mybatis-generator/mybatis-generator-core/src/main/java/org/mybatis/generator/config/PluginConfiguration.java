@@ -20,6 +20,9 @@ import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.List;
 
+/**
+ * 插件配置
+ */
 public class PluginConfiguration extends TypedPropertyHolder {
     public PluginConfiguration() {
         super();

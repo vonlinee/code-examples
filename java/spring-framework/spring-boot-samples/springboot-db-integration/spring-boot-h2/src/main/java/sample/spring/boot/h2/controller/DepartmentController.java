@@ -2,8 +2,6 @@ package sample.spring.boot.h2.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +23,7 @@ public class DepartmentController {
 	// http://localhost:8082/departments/
 	// Save operation
 	@PostMapping("/departments")
-	public Department saveDepartment(@Valid @RequestBody Department department) {
+	public Department saveDepartment(@RequestBody Department department) {
 		return departmentService.saveDepartment(department);
 	}
 
@@ -37,10 +35,8 @@ public class DepartmentController {
 
 	// Update operation
 	@PutMapping("/departments/{id}")
-	public Department updateDepartment(@RequestBody Department department,
-			@PathVariable("id") Long departmentId) {
-		return departmentService.updateDepartment(
-				department, departmentId);
+	public Department updateDepartment(@RequestBody Department department, @PathVariable("id") Long departmentId) {
+		return departmentService.updateDepartment(department, departmentId);
 	}
 
 	// Delete operation

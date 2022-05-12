@@ -8,4 +8,6 @@ include 'trouble-maker-generator'
 include 'mybatis-plus-generator'
 include 'mybatis-generator'
 include 'trouble-maker-test'
+// 通用模块
+include 'trouble-maker-commons'
 

@@ -8,6 +8,12 @@ description 'io.trouble.maker.generator'
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://repo.spring.io/release"
+    }
+    maven {
+        url "https://repository.jboss.org/maven2"
+    }
 }
 
 dependencies {
@@ -15,54 +21,47 @@ dependencies {
     implementation project(':trouble-maker-base')
     implementation project(':trouble-maker-extension')
 
-    // implementation project("trouble-maker-base")
-
-    implementation 'junit:junit:4.13.2'
-    implementation "${lib.'mybatis-plus'}"
-    implementation "${lib.velocity}"
-    implementation "${lib.freemarker}"
-    implementation "${lib.beetl}"
-    compileOnly 'org.jetbrains:annotations:23.0.0'
+    implementation libs.juint
+    implementation libs.mybatis_plus_core
+    implementation libs.velocity
+    implementation libs.freemarker
+    implementation libs.beetl
+    compileOnly libs.jetbrains_anotations
 
     implementation libs.javapoet
-    implementation 'commons-dbutils:commons-dbutils:1.7'
+    implementation libs.commons_dbutils
     implementation libs.freemarker
-    implementation libs.db.druid
+    implementation libs.druid
     // 日志依赖
-    implementation libs.log.slf4j_api
-    implementation libs.log.slf4j_log4j12
-    implementation("mysql:mysql-connector-java:8.0.21")
-    implementation("${lib.lombok}")
+    implementation libs.slf4j_api
+    implementation libs.slf4j_log4j12
+    implementation libs.mysql8_driver
+    implementation libs.lombok
 
-    implementation 'org.apache.shardingsphere:sharding-jdbc-core:4.1.1'
+    implementation libs.sharding_jdbc_core
     implementation libs.guava
-    implementation "com.baomidou:mybatis-plus:${mybatisPlusVersion}"
-    implementation 'commons-dbutils:commons-dbutils:1.7'
+    implementation libs.mybatis_plus_core
+    implementation libs.commons_dbutils
 
-    testCompileOnly "org.jetbrains:annotations:22.0.0"
-
+    testCompileOnly libs.jetbrains_anotations
 // https://mvnrepository.com/artifact/com.alibaba/fastjson
-    implementation 'com.alibaba:fastjson:1.2.80'
-
-    testImplementation "${lib.sqlserver}"
-    testImplementation "${lib.postgresql}"
-    testImplementation lib.oracle
-    testImplementation lib.dm
+    implementation libs.fastjson
+    testImplementation libs.sqlserver
+    testImplementation libs.postgresql
+    testImplementation libs.oracle
+    testImplementation libs.dm
     //
-    testImplementation lib.kingbase
-    testImplementation "${lib.h2}"
-    testImplementation "${lib.mysql}"
-    testImplementation "${lib.sqlite}"
-    testImplementation "${lib.firebird}"
-    testImplementation "${lib.'swagger-annotations'}"
-    testImplementation("${lib.lombok}")
-
+    testImplementation libs.kingbase
+    testImplementation libs.h2
+    testImplementation libs.mysql5_driver
+    testImplementation libs.sqlite
+    testImplementation libs.firebird
+    testImplementation libs.swagger_annotations
+    implementation libs.lombok
     implementation libs.spring_core
-
-    implementation 'org.mybatis:mybatis:3.5.9'
-    implementation 'org.mybatis:mybatis-spring:2.0.7'
-
-    implementation 'org.springframework:spring-context:5.3.16'
+    implementation libs.mybatis_spring
+    implementation libs.mybatis_core
+    implementation libs.spring_context
 }
 
 test {

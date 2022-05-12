@@ -14,15 +14,11 @@ dependencies {
     implementation project(":trouble-maker-base")
     implementation project(":trouble-maker-extension")
 
-    implementation libs.mybatis.mybatis_core
-    // https://mvnrepository.com/artifact/com.alibaba/druid
-    implementation libs.db.druid
-    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    implementation libs.db.mysql_driver
-    // https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper
-    implementation libs.mybatis.page_helper
-    // https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-core
-    implementation libs.mybatis.mybatis_generator_core
+    implementation libs.mybatis_core
+    implementation libs.druid
+    implementation libs.mysql5_driver
+    implementation libs.page_helper
+    implementation libs.mybatis_generator_core
     implementation libs.mybatis_dynamic_sql
 }
 

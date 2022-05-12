@@ -47,6 +47,8 @@ import org.mybatis.generator.config.TableConfiguration;
 import org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl;
 import org.mybatis.generator.runtime.dynamic.sql.IntrospectedTableMyBatis3DynamicSqlImpl;
 import org.mybatis.generator.runtime.kotlin.IntrospectedTableKotlinImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class creates the different objects needed by the generator.
@@ -73,7 +75,6 @@ public class ObjectFactory {
      * a generation run so that and change to the classloading configuration
      * will be reflected.  For example, if the eclipse launcher changes configuration
      * it might not be updated if eclipse hasn't been restarted.
-     *
      */
     public static void reset() {
         externalClassLoaders.clear();
@@ -84,8 +85,7 @@ public class ObjectFactory {
      * that do not depend on any of the generator's classes or interfaces. Examples are JDBC drivers, root classes, root
      * interfaces, etc.
      *
-     * @param classLoader
-     *            the class loader
+     * @param classLoader the class loader
      */
     public static synchronized void addExternalClassLoader(
             ClassLoader classLoader) {
@@ -97,11 +97,9 @@ public class ObjectFactory {
      * appropriate for JDBC drivers, model root classes, etc. It is not appropriate for any class that extends one of
      * the supplied classes or interfaces.
      *
-     * @param type
-     *            the type
+     * @param type the type
      * @return the Class loaded from the external classloader
-     * @throws ClassNotFoundException
-     *             the class not found exception
+     * @throws ClassNotFoundException the class not found exception
      */
     public static Class<?> externalClassForName(String type)
             throws ClassNotFoundException {
@@ -122,7 +120,6 @@ public class ObjectFactory {
 
     public static Object createExternalObject(String type) {
         Object answer;
-
         try {
             Class<?> clazz = externalClassForName(type);
             answer = clazz.getConstructor().newInstance();
@@ -137,18 +134,15 @@ public class ObjectFactory {
     public static Class<?> internalClassForName(String type)
             throws ClassNotFoundException {
         Class<?> clazz = null;
-
         try {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             clazz = Class.forName(type, true, cl);
         } catch (Exception e) {
             // ignore - failsafe below
         }
-
         if (clazz == null) {
             clazz = Class.forName(type, true, ObjectFactory.class.getClassLoader());
         }
-
         return clazz;
     }
 
@@ -174,22 +168,19 @@ public class ObjectFactory {
 
     public static Object createInternalObject(String type) {
         Object answer;
-
         try {
             Class<?> clazz = internalClassForName(type);
-
             answer = clazz.getConstructor().newInstance();
         } catch (Exception e) {
-            throw new RuntimeException(getString(
-                    "RuntimeError.6", type), e); //$NON-NLS-1$
-
+            throw new RuntimeException(getString("RuntimeError.6", type), e); //$NON-NLS-1$
         }
-
         return answer;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(ObjectFactory.class);
+
     public static JavaTypeResolver createJavaTypeResolver(Context context,
-            List<String> warnings) {
+                                                          List<String> warnings) {
         JavaTypeResolverConfiguration config = context
                 .getJavaTypeResolverConfiguration();
         String type;
@@ -216,16 +207,15 @@ public class ObjectFactory {
     }
 
     public static Plugin createPlugin(Context context,
-            PluginConfiguration pluginConfiguration) {
-        Plugin plugin = (Plugin) createInternalObject(pluginConfiguration
-                .getConfigurationType());
+                                      PluginConfiguration pluginConfiguration) {
+        log.info("开始通过反射创建Plugin对象并注入Context和配置Properties => {}", pluginConfiguration.getConfigurationType());
+        Plugin plugin = (Plugin) createInternalObject(pluginConfiguration.getConfigurationType());
         plugin.setContext(context);
         plugin.setProperties(pluginConfiguration.getProperties());
         return plugin;
     }
 
     public static CommentGenerator createCommentGenerator(Context context) {
-
         CommentGeneratorConfiguration config = context
                 .getCommentGeneratorConfiguration();
         CommentGenerator answer;
@@ -321,9 +311,7 @@ public class ObjectFactory {
     /**
      * Creates an introspected table implementation that is only usable for validation .
      *
-     *
-     * @param context
-     *            the context
+     * @param context the context
      * @return the introspected table
      */
     public static IntrospectedTable createIntrospectedTableForValidation(Context context) {

@@ -33,6 +33,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.mybatis.generator.codegen.XmlConstants;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.exception.XMLParserException;
+import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -45,7 +47,7 @@ import org.xml.sax.SAXParseException;
 
 public class ConfigurationParser {
 
-    private static final Logger log = LoggerFactory.getLogger(ConfigurationParser.class);
+    private static final Log log = LogFactory.getLog(ConfigurationParser.class);
 
     private final List<String> warnings;
     private final List<String> parseErrors;
@@ -143,7 +145,7 @@ public class ConfigurationParser {
                 throw new XMLParserException(parseErrors);
             }
 
-            log.info("解析XML到文档成功，无解析错误");
+            log.debug("解析XML到文档成功，无解析错误");
 
             Configuration config;
             Element rootNode = document.getDocumentElement();
@@ -155,8 +157,6 @@ public class ConfigurationParser {
             } else {
                 throw new XMLParserException(getString("RuntimeError.5")); //$NON-NLS-1$
             }
-
-            log.info("parseErrors {}", parseErrors);
 
             if (!parseErrors.isEmpty()) {
                 throw new XMLParserException(parseErrors);
@@ -171,7 +171,7 @@ public class ConfigurationParser {
 
     private Configuration parseMyBatisGeneratorConfiguration(Element rootNode)
             throws XMLParserException {
-        log.info("开始解析MyBatis生成器配置");
+        log.debug("开始解析MyBatis生成器配置");
         MyBatisGeneratorConfigurationParser parser = new MyBatisGeneratorConfigurationParser(extraProperties);
         return parser.parseConfiguration(rootNode);
     }

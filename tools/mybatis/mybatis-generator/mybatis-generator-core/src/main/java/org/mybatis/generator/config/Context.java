@@ -123,14 +123,15 @@ public class Context extends PropertyHolder {
         return sqlMapGeneratorConfiguration;
     }
 
-    public void addPluginConfiguration(
-            PluginConfiguration pluginConfiguration) {
+    public void addPluginConfiguration(PluginConfiguration pluginConfiguration) {
+        log.info("增加插件配置{}", pluginConfiguration.getConfigurationType());
         pluginConfigurations.add(pluginConfiguration);
     }
 
     /**
      * This method does a simple validate, it makes sure that all required fields have been filled in. It does not do
      * any more complex operations such as validating that database tables exist or validating that named columns exist
+     *
      * @param errors the errors
      */
     public void validate(List<String> errors) {
@@ -312,8 +313,7 @@ public class Context extends PropertyHolder {
 
     // methods related to code generation.
     //
-    // Methods should be called in this order:
-    //
+    // Methods should be called in this order: 方法调用顺序
     // 1. getIntrospectionSteps()
     // 2. introspectTables()
     // 3. getGenerationSteps()
@@ -325,6 +325,7 @@ public class Context extends PropertyHolder {
     /**
      * This method could be useful for users that use the library for introspection only
      * and not for code generation.
+     *
      * @return a list containing the results of table introspection. The list will be empty
      * if this method is called before introspectTables(), or if no tables are found that
      * match the configuration
@@ -350,6 +351,7 @@ public class Context extends PropertyHolder {
     /**
      * Introspect tables based on the configuration specified in the
      * constructor. This method is long running.
+     *
      * @param callback                 a progress callback if progress information is desired, or
      *                                 <code>null</code>
      * @param warnings                 any warning generated from this method will be added to the
@@ -399,8 +401,8 @@ public class Context extends PropertyHolder {
                 }
 
                 callback.startTask(getString("Progress.1", tableName)); //$NON-NLS-1$
-                List<IntrospectedTable> tables = databaseIntrospector
-                        .introspectTables(tc);
+                //从数据库获取表信息
+                List<IntrospectedTable> tables = databaseIntrospector.introspectTables(tc);
 
                 if (tables != null) {
                     introspectedTables.addAll(tables);
@@ -425,6 +427,17 @@ public class Context extends PropertyHolder {
         return steps;
     }
 
+    /**
+     * 核心方法，准备好所有需要生成的文件 => 扩展点
+     *
+     * @param callback
+     * @param generatedJavaFiles
+     * @param generatedXmlFiles
+     * @param generatedKotlinFiles
+     * @param otherGeneratedFiles
+     * @param warnings
+     * @throws InterruptedException
+     */
     public void generateFiles(ProgressCallback callback,
                               List<GeneratedJavaFile> generatedJavaFiles,
                               List<GeneratedXmlFile> generatedXmlFiles,
@@ -432,11 +445,13 @@ public class Context extends PropertyHolder {
                               List<GeneratedFile> otherGeneratedFiles,
                               List<String> warnings)
             throws InterruptedException {
-
+        // 聚合插件
         pluginAggregator = new PluginAggregator();
+
+        // 生成所有插件实例
         for (PluginConfiguration pluginConfiguration : pluginConfigurations) {
-            Plugin plugin = ObjectFactory.createPlugin(this,
-                    pluginConfiguration);
+            // 根据插件配置及全局上下文生成插件实例
+            Plugin plugin = ObjectFactory.createPlugin(this, pluginConfiguration);
             if (plugin.validate(warnings)) {
                 pluginAggregator.addPlugin(plugin);
             } else {
@@ -445,23 +460,24 @@ public class Context extends PropertyHolder {
             }
         }
 
+        // 初始化表的所有对于代码生成有用的数据
         // initialize everything first before generating. This allows plugins to know about other
         // items in the configuration.
+        log.info("开始初始化表的所有对于代码生成有用的数据");
         for (IntrospectedTable introspectedTable : introspectedTables) {
             callback.checkCancel();
+
             introspectedTable.initialize();
             introspectedTable.calculateGenerators(warnings, callback);
         }
-
+        log.info("开始添加带生成的文件的元数据，插件开始运行");
         for (IntrospectedTable introspectedTable : introspectedTables) {
             callback.checkCancel();
-            generatedJavaFiles.addAll(introspectedTable
-                    .getGeneratedJavaFiles());
-            generatedXmlFiles.addAll(introspectedTable
-                    .getGeneratedXmlFiles());
-            generatedKotlinFiles.addAll(introspectedTable
-                    .getGeneratedKotlinFiles());
+            generatedJavaFiles.addAll(introspectedTable.getGeneratedJavaFiles());
+            generatedXmlFiles.addAll(introspectedTable.getGeneratedXmlFiles());
+            generatedKotlinFiles.addAll(introspectedTable.getGeneratedKotlinFiles());
 
+            //生成的Java文件
             generatedJavaFiles.addAll(pluginAggregator
                     .contextGenerateAdditionalJavaFiles(introspectedTable));
             generatedXmlFiles.addAll(pluginAggregator
@@ -472,14 +488,11 @@ public class Context extends PropertyHolder {
                     .contextGenerateAdditionalFiles(introspectedTable));
         }
 
-        generatedJavaFiles.addAll(pluginAggregator
-                .contextGenerateAdditionalJavaFiles());
-        generatedXmlFiles.addAll(pluginAggregator
-                .contextGenerateAdditionalXmlFiles());
-        generatedKotlinFiles.addAll(pluginAggregator
-                .contextGenerateAdditionalKotlinFiles());
-        otherGeneratedFiles.addAll(pluginAggregator
-                .contextGenerateAdditionalFiles());
+        // 为什么在外面的还要重新调一次？
+        generatedJavaFiles.addAll(pluginAggregator.contextGenerateAdditionalJavaFiles());
+        generatedXmlFiles.addAll(pluginAggregator.contextGenerateAdditionalXmlFiles());
+        generatedKotlinFiles.addAll(pluginAggregator.contextGenerateAdditionalKotlinFiles());
+        otherGeneratedFiles.addAll(pluginAggregator.contextGenerateAdditionalFiles());
     }
 
     /**
@@ -487,6 +500,7 @@ public class Context extends PropertyHolder {
      * If you call this method, then you are responsible
      * for closing the connection (See {@link Context#closeConnection(Connection)}). If you do not
      * close the connection, then there could be connection leaks.
+     *
      * @return a new connection created from the values in the configuration file
      * @throws SQLException if any error occurs while creating the connection
      */
@@ -497,13 +511,13 @@ public class Context extends PropertyHolder {
         } else {
             connectionFactory = ObjectFactory.createConnectionFactory(this);
         }
-
         return connectionFactory.getConnection();
     }
 
     /**
      * This method closes a JDBC connection and ignores any errors. If the passed connection is null,
      * then the method does nothing.
+     *
      * @param connection a JDBC connection to close, may be null
      */
     public void closeConnection(Connection connection) {
