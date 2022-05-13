@@ -8,6 +8,7 @@ import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.mybatis.generator.exception.InvalidConfigurationException;
 import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.DefaultShellCallback;
+import org.mybatis.generator.internal.ObjectFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,11 +37,9 @@ public class MySQLGenerator {
         // 开始生成
         generator.generate(null);
 
-
         List<IntrospectedTable> tables = config.getContexts().get(0).getIntrospectedTables();
         for (IntrospectedTable table : tables) {
             table.getAttribute("");
         }
-
     }
 }

@@ -27,7 +27,7 @@ dependencies {
     implementation libs.freemarker
     implementation libs.beetl
     compileOnly libs.jetbrains_anotations
-
+    // 生成代码
     implementation libs.javapoet
     implementation libs.commons_dbutils
     implementation libs.freemarker

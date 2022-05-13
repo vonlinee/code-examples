@@ -5,7 +5,7 @@ import java.io.OutputStream;
 /**
  * 代码生成器
  */
-public interface CodeGenerator {
+public interface CodeGeneration {
 
     void initialize();
 

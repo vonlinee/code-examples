@@ -46,7 +46,6 @@ public class FirstNameTypeHandler implements TypeHandler<FirstName> {
             answer = new FirstName();
             answer.setValue(string);
         }
-
         return answer;
     }
 
@@ -59,7 +58,6 @@ public class FirstNameTypeHandler implements TypeHandler<FirstName> {
             answer = new FirstName();
             answer.setValue(string);
         }
-
         return answer;
     }
 
