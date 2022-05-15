@@ -3,9 +3,7 @@ package samples.meta;
 import java.util.Date;
 import java.util.HashMap;
 
-import io.maker.base.annotation.NotNull;
 
-@NotNull
 public class TestClass<K extends Date, V> extends HashMap<K, V> {
 
 	private static final long serialVersionUID = 1L;

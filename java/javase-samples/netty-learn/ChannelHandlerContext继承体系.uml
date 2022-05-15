@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>io.netty.channel.ChannelHandlerContext</OriginalElement>
+  <nodes>
+    <node x="395.87" y="80.0">io.netty.channel.ChannelHandlerContext</node>
+    <node x="176.25000000000006" y="0.0">io.netty.util.AttributeMap</node>
+    <node x="107.0" y="240.0">io.netty.channel.AbstractChannelHandlerContext.WriteTask</node>
+    <node x="508.87" y="160.0">io.netty.channel.CombinedChannelDuplexHandler.DelegatingChannelHandlerContext</node>
+    <node x="342.25000000000006" y="0.0">io.netty.channel.ChannelOutboundInvoker</node>
+    <node x="692.0" y="240.0">io.netty.channel.DefaultChannelPipeline.TailContext</node>
+    <node x="531.0" y="240.0">io.netty.channel.DefaultChannelPipeline.HeadContext</node>
+    <node x="214.87000000000006" y="160.0">io.netty.channel.AbstractChannelHandlerContext</node>
+    <node x="0.0" y="240.0">io.netty.channel.AbstractChannelHandlerContext.Tasks</node>
+    <node x="245.00000000000006" y="240.0">io.netty.channel.DefaultChannelHandlerContext</node>
+    <node x="591.25" y="0.0">io.netty.channel.ChannelInboundInvoker</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="io.netty.channel.DefaultChannelHandlerContext" target="io.netty.channel.AbstractChannelHandlerContext" relationship="GENERALIZATION">
+      <point x="-26.129999999999995" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="io.netty.channel.ChannelHandlerContext" target="io.netty.channel.ChannelInboundInvoker" relationship="INTERFACE_GENERALIZATION">
+      <point x="0.0" y="-15.0" />
+      <point x="503.37" y="55.0" />
+      <point x="698.75" y="55.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="io.netty.channel.AbstractChannelHandlerContext" target="io.netty.channel.ChannelHandlerContext" relationship="REALIZATION">
+      <point x="0.0" y="-15.0" />
+      <point x="351.87000000000006" y="135.0" />
+      <point x="503.37" y="135.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="io.netty.channel.ChannelHandlerContext" target="io.netty.util.AttributeMap" relationship="INTERFACE_GENERALIZATION">
+      <point x="0.0" y="-15.0" />
+      <point x="503.37" y="55.0" />
+      <point x="249.25000000000006" y="55.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="io.netty.channel.AbstractChannelHandlerContext.Tasks" target="io.netty.channel.AbstractChannelHandlerContext" relationship="INNER_CLASS">
+      <point x="0.0" y="-15.0" />
+      <point x="43.5" y="220.0" />
+      <point x="104.75" y="220.0" />
+      <point x="104.75" y="210.0" />
+      <point x="283.37000000000006" y="210.0" />
+      <point x="-68.5" y="15.0" />
+    </edge>
+    <edge source="io.netty.channel.CombinedChannelDuplexHandler.DelegatingChannelHandlerContext" target="io.netty.channel.ChannelHandlerContext" relationship="REALIZATION">
+      <point x="0.0" y="-15.0" />
+      <point x="654.87" y="135.0" />
+      <point x="503.37" y="135.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="io.netty.channel.ChannelHandlerContext" target="io.netty.channel.ChannelOutboundInvoker" relationship="INTERFACE_GENERALIZATION">
+      <point x="0.0" y="-15.0" />
+      <point x="503.37" y="55.0" />
+      <point x="456.75000000000006" y="55.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="io.netty.channel.AbstractChannelHandlerContext.WriteTask" target="io.netty.channel.AbstractChannelHandlerContext" relationship="INNER_CLASS">
+      <point x="0.0" y="-15.0" />
+      <point x="166.0" y="220.0" />
+      <point x="104.75" y="220.0" />
+      <point x="104.75" y="210.0" />
+      <point x="283.37000000000006" y="210.0" />
+      <point x="-68.5" y="15.0" />
+    </edge>
+    <edge source="io.netty.channel.DefaultChannelPipeline.HeadContext" target="io.netty.channel.AbstractChannelHandlerContext" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.0" />
+      <point x="601.5" y="220.0" />
+      <point x="524.07" y="220.0" />
+      <point x="524.07" y="210.0" />
+      <point x="420.37000000000006" y="210.0" />
+      <point x="68.5" y="15.0" />
+    </edge>
+    <edge source="io.netty.channel.DefaultChannelPipeline.TailContext" target="io.netty.channel.AbstractChannelHandlerContext" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.0" />
+      <point x="756.0" y="220.0" />
+      <point x="524.07" y="220.0" />
+      <point x="524.07" y="210.0" />
+      <point x="420.37000000000006" y="210.0" />
+      <point x="68.5" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="false" x="410.0" y="135.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+
