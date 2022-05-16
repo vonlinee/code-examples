@@ -48,6 +48,8 @@ import org.mybatis.generator.config.SqlMapGeneratorConfiguration;
 import org.mybatis.generator.config.TableConfiguration;
 import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.ObjectFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -95,28 +97,25 @@ public class MyBatisGeneratorConfigurationParser {
             } else if ("classPathEntry".equals(childNode.getNodeName())) { //$NON-NLS-1$
                 parseClassPathEntry(configuration, childNode);
             } else if ("context".equals(childNode.getNodeName())) { //$NON-NLS-1$
+                // 解析Context节点
                 parseContext(configuration, childNode);
             }
         }
         return configuration;
     }
 
-    protected void parseProperties(Node node)
-            throws XMLParserException {
+    protected void parseProperties(Node node) throws XMLParserException {
         Properties attributes = parseAttributes(node);
         String resource = attributes.getProperty("resource"); //$NON-NLS-1$
         String url = attributes.getProperty("url"); //$NON-NLS-1$
-
         if (!stringHasValue(resource)
                 && !stringHasValue(url)) {
             throw new XMLParserException(getString("RuntimeError.14")); //$NON-NLS-1$
         }
-
         if (stringHasValue(resource)
                 && stringHasValue(url)) {
             throw new XMLParserException(getString("RuntimeError.14")); //$NON-NLS-1$
         }
-
         URL resourceUrl;
 
         try {
@@ -130,8 +129,7 @@ public class MyBatisGeneratorConfigurationParser {
                 resourceUrl = new URL(url);
             }
 
-            InputStream inputStream = resourceUrl.openConnection()
-                    .getInputStream();
+            InputStream inputStream = resourceUrl.openConnection().getInputStream();
 
             configurationProperties.load(inputStream);
             inputStream.close();
@@ -562,7 +560,10 @@ public class MyBatisGeneratorConfigurationParser {
         }
     }
 
+    private static final Logger log = LoggerFactory.getLogger(MyBatisGeneratorConfigurationParser.class);
+
     private void parsePlugin(Context context, Node node) {
+        log.info("开始解析插件配置");
         PluginConfiguration pluginConfiguration = new PluginConfiguration();
 
         context.addPluginConfiguration(pluginConfiguration);
@@ -575,11 +576,9 @@ public class MyBatisGeneratorConfigurationParser {
         NodeList nodeList = node.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node childNode = nodeList.item(i);
-
             if (childNode.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
-
             if ("property".equals(childNode.getNodeName())) { //$NON-NLS-1$
                 parseProperty(pluginConfiguration, childNode);
             }

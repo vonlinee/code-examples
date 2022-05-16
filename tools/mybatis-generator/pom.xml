@@ -256,11 +256,7 @@
                 <artifactId>mybatis-dynamic-sql</artifactId>
                 <version>1.4.0</version>
             </dependency>
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-stdlib</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
@@ -276,12 +272,8 @@
 
     <modules>
         <module>mybatis-generator-core</module>
-        <module>mybatis-generator-systests-domtests</module>
         <module>mybatis-generator-maven-plugin</module>
         <module>mybatis-generator-systests-common</module>
-        <module>mybatis-generator-systests-mybatis3</module>
-        <module>mybatis-generator-systests-mybatis3-java8</module>
-        <module>mybatis-generator-systests-kotlin</module>
     </modules>
 
     <repositories>

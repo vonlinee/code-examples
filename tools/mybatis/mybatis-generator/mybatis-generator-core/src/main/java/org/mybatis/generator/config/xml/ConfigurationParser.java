@@ -112,7 +112,7 @@ public class ConfigurationParser {
     private Configuration parseConfiguration(InputSource inputSource)
             throws IOException, XMLParserException {
         parseErrors.clear();
-        // 使用jaxp,不同于jaxb
+        // 使用jaxp解析XML,不同于jaxb
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         // 防止报错
         factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");

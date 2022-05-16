@@ -40,7 +40,6 @@ public class WebMVCPlugin extends PluginAdapter {
     @Override
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles() {
         // 多个插件顺序执行
-
         return super.contextGenerateAdditionalJavaFiles();
     }
 }
