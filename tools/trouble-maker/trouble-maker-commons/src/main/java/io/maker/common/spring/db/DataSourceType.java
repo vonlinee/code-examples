@@ -3,23 +3,23 @@ package io.maker.common.spring.db;
 /**
  * 如配置文件中未指定数据源类型，使用该默认值
  */
+import javax.sql.DataSource;
+
 public enum DataSourceType {
-	TomcatJdbcPool("org.apache.tomcat.jdbc.pool.DataSource"), 
-	HikariDataSource("com.zaxxer.hikari.HikariDataSource"),
-	SpringDataSource("org.springframework.jdbc.datasource.DriverManagerDataSource"),
-	DruidPool("com.alibaba.druid.pool.DruidDataSource");
+    Druid(""),
+    HikariCP(""),
+    TomcatJDBC("org.apache.tomcat.jdbc.pool.DataSource"),
+    Dbcp("org.apache.commons.dbcp2.BasicDataSource"),
+    Spring("org.springframework.jdbc.datasource.DriverManagerDataSource"),
+    C3p0("com.mchange.v2.c3p0.ComboPooledDataSource");
 
-	private String className;
+    String name;
 
-	DataSourceType(String className) {
-		this.className = className;
-	}
+    DataSourceType(String name) {
+        this.name = name;
+    }
 
-	public String getClassName() {
-		return className;
-	}
-
-	public void setClassName(String className) {
-		this.className = className;
-	}
+    public String getName() {
+        return name;
+    }
 }

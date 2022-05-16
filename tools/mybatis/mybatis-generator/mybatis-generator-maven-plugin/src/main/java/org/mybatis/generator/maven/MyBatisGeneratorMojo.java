@@ -52,11 +52,10 @@ import org.mybatis.generator.logging.LogFactory;
         requiresDependencyResolution = ResolutionScope.TEST)
 public class MyBatisGeneratorMojo extends AbstractMojo {
 
-    private ThreadLocal<ClassLoader> savedClassloader = new ThreadLocal<>();
+    private final ThreadLocal<ClassLoader> savedClassloader = new ThreadLocal<>();
 
     /**
      * Maven Project.
-     *
      */
     @Parameter(property = "project", required = true, readonly = true)
     private MavenProject project;
@@ -174,7 +173,7 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
         // include the project classpath.
         List<Resource> resources = project.getResources();
         List<String> resourceDirectories = new ArrayList<>();
-        for (Resource resource: resources) {
+        for (Resource resource : resources) {
             resourceDirectories.add(resource.getDirectory());
         }
         ClassLoader cl = ClassloaderUtility.getCustomClassloader(resourceDirectories);

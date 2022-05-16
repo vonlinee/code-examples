@@ -14,7 +14,7 @@ import sun.reflect.Reflection;
 public class TestUnsafe {
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
-    	
+
 //        doUnsafe(unsafe -> {
 ////            unsafe.freeMemory(2 * 1024 * 1024);
 //
@@ -23,11 +23,11 @@ public class TestUnsafe {
 //            long l = unsafe.allocateMemory(200);
 //            System.out.println(l / 1024 / 1024);
 //        });
-    	
-    	optionalUnsafe().ifPresent(unsafe -> {
-    		
-    	});
-    	
+
+        optionalUnsafe().ifPresent(unsafe -> {
+
+        });
+
     }
 
 //    public static void doUnsafe(Consumer<Unsafe> unsafeConsumer) {
@@ -40,7 +40,7 @@ public class TestUnsafe {
 
     //    sun.misc.VM
     @SuppressWarnings("restriction")
-	public static void testVm() {
+    public static void testVm() {
         //sun.nio.MaxDirectMemorySize
         System.out.println(VM.maxDirectMemory() / 1024 / 1024 / 1024);
         boolean allowArraySyntax = VM.allowArraySyntax();
@@ -63,7 +63,7 @@ public class TestUnsafe {
     }
 
     @SuppressWarnings("restriction")
-	public static Unsafe getUnsafe() {
+    public static Unsafe getUnsafe() {
         try {
             Field field = Unsafe.class.getDeclaredField("theUnsafe");
             field.setAccessible(true);
@@ -73,13 +73,14 @@ public class TestUnsafe {
         }
         return null;
     }
-    
+
     /**
      * 通过反射获取Unsafe实例
+     *
      * @return
      */
     @SuppressWarnings("restriction")
-	public static Optional<Unsafe> optionalUnsafe() {
+    public static Optional<Unsafe> optionalUnsafe() {
         try {
             Field field = Unsafe.class.getDeclaredField("theUnsafe");
             field.setAccessible(true);
@@ -91,8 +92,8 @@ public class TestUnsafe {
     }
 
     @SuppressWarnings({
-			"restriction", "unused"
-	})
+            "restriction", "unused"
+    })
     public static Unsafe getUnsafeInstance() {
         Class<?> var0 = Reflection.getCallerClass();
         if (!VM.isSystemDomainLoader(var0.getClassLoader())) {
