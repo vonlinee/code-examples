@@ -1,9 +1,3 @@
-
-
-
-
-
-
 ChannelInitializer：单例
 
 ```java
@@ -11,13 +5,7 @@ ChannelInitializer：单例
 public abstract class ChannelInitializer<C extends Channel> extends ChannelInboundHandlerAdapter
 ```
 
-
-
 @Sharable表示注解修饰的ChannelHandler可以在没有竞态条件（race condition）下被多次添加到一个或多个ChannelPipeline
-
-
-
-
 
 
 
@@ -60,115 +48,6 @@ c = VALUES(c)
 </insert>
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 可以使用row_number()函数，mysql8.0开始 已经支持这个函数
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

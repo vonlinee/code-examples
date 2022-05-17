@@ -3,6 +3,7 @@ package sample.springboot;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
@@ -10,14 +11,28 @@ import org.springframework.boot.context.properties.source.ConfigurationPropertyN
 import org.springframework.boot.context.properties.source.ConfigurationPropertyNameAliases;
 import org.springframework.boot.context.properties.source.ConfigurationPropertySource;
 import org.springframework.boot.context.properties.source.MapConfigurationPropertySource;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.io.Resource;
 
 import sample.springboot.config.props.Bean;
 
 @SpringBootApplication
 public class MainLauncher {
 	public static void main(String[] args) {
-		// SpringApplication.run(MainLauncher.class, args);
-		
+		ConfigurableApplicationContext context = null;
+		try {
+			context = SpringApplication.run(MainLauncher.class, args);
+		} catch (Exception e) {
+			System.exit(0);
+		}
+
+		Resource resource = context.getResource("C:\\Users\\ly-wangliang\\jdbc.properties");
+
+		System.out.println(resource.exists());
+
+	}
+
+	public static void test1() {
 		Bean bean = new Bean();
 		Map<String, Object> map = new HashMap<>();
 		map.put("age", "30");

@@ -45,6 +45,7 @@ public class ConfigurationDynamicDataSourceRegister
 
     /**
      * 获得ApplicationContext
+     *
      * @author SHANHY
      * @create 2016年1月23日
      */
@@ -122,6 +123,7 @@ public class ConfigurationDynamicDataSourceRegister
 
     /**
      * 注入动态数据源到jdbcTemplate、sqlSessoinTemplate
+     *
      * @author SHANHY
      * @create 2016年1月24日
      */

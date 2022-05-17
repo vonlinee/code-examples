@@ -4,17 +4,10 @@
 ehcache使用
 https://www.jianshu.com/p/154c82073b07
 
-
-
 基于springboot 2.3.12.RELEASE
 
 Error creating bean with name 'mvcValidator'
 https://stackoverflow.com/questions/57958649/error-creating-bean-with-name-mvcvalidator
-
-
-
-
-
 
 
 Non-resolvable parent POM for org.example:springboot-boot-integration:0.0.1-SNAPSHOT: org.springframework.boot:spring-boot-starter-parent:pom:2.3.12.RELEASE 

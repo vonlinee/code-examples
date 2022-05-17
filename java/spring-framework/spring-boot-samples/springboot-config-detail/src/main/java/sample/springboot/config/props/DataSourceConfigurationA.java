@@ -2,6 +2,7 @@ package sample.springboot.config.props;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,12 +31,12 @@ public class DataSourceConfigurationA {
 	@Value("${jdbc.password}")
 	private String password;
 
-	@Bean(name = "jdbcTemplate")
+	@Bean(name = "jdbcTemplateA")
 	public JdbcTemplate createJdbcTemplate(DataSource dataSource) {
 		return new JdbcTemplate(dataSource);
 	}
 
-	@Bean(name = "dataSource")
+	@Bean(name = "dataSourceA")
 	public DataSource createDataSource() {
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setDriverClassName(driver);
@@ -45,13 +46,13 @@ public class DataSourceConfigurationA {
 		return ds;
 	}
 
-	@Bean(name = "transactionManager")
-	public PlatformTransactionManager createTransactionManager(DataSource dataSource) {
+	@Bean(name = "transactionManagerA")
+	public PlatformTransactionManager createTransactionManager(@Qualifier("dataSourceA") DataSource dataSource) {
 		return new DataSourceTransactionManager(dataSource);
 	}
 
-	@Bean(name = "transactionTemplate")
-	public TransactionTemplate createTransactionTemplate(PlatformTransactionManager txManager) {
+	@Bean(name = "transactionTemplateA")
+	public TransactionTemplate createTransactionTemplate(@Qualifier("transactionManagerA") PlatformTransactionManager txManager) {
 		return new TransactionTemplate(txManager);
 	}
 }

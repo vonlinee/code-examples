@@ -13,14 +13,15 @@ public class WebMvcConfiguration {
 
 	/**
 	 * 自动序列化Controller的返回值
+	 * 
 	 * @return
 	 */
-    @Bean
-    MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(){
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
-        converter.setObjectMapper(objectMapper);
-        return converter;
-    }
+	@Bean
+	MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+		converter.setObjectMapper(objectMapper);
+		return converter;
+	}
 }

@@ -17,8 +17,7 @@ import org.springframework.stereotype.Component;
  * 2.和@SpringBootApplication注解一起使用：继承了@SpringBootApplication的类同时实现CommandLineRunner接口，那么启动时就执行
  * 3.声明一个实现了CommandLineRunner接口的Bean：在SpringBootApplication里定义一个Bean，改Bean实现了CommandLineRunner接口
  * 注意：在实现CommandLineRunner接口时，run(String… args)方法内部如果抛异常的话，会直接导致应用启动失败，所以，一定要记得将危险的代码放在try-catch代码块里
- * 把该Bean放入容器即可
- * 一个应用可能存在多个CommandLineRunner接口实现类，如果我们想设置它们的执行顺序，可以使用 @Order实现
+ * 把该Bean放入容器即可 一个应用可能存在多个CommandLineRunner接口实现类，如果我们想设置它们的执行顺序，可以使用 @Order实现
  */
 @Component
 @Order(value = 2)
