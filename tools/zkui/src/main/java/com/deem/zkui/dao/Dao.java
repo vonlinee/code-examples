@@ -94,6 +94,5 @@ public class Dao {
         } catch (Exception ex) {
             logger.error(Arrays.toString(ex.getStackTrace()));
         }
-        
     }
 }

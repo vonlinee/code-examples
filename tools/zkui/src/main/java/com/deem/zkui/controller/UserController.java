@@ -1,12 +1,5 @@
 package com.deem.zkui.controller;
 
-import com.deem.zkui.utils.LdapAuth;
-import com.deem.zkui.utils.ServletUtil;
-import com.deem.zkui.utils.ZooKeeperUtil;
-import freemarker.template.TemplateException;
-import jdk.nashorn.internal.parser.JSONParser;
-import org.h2.util.json.JSONArray;
-import org.h2.util.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -14,13 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/user/system", produces = MediaType.APPLICATION_JSON_VALUE)

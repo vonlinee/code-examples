@@ -45,5 +45,4 @@ public class SessionListener implements HttpSessionListener {
             logger.error(Arrays.toString(ex.getStackTrace()));
         }
     }
-
 }

@@ -1,9 +1,6 @@
 package com.deem.zkui.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BeanMap extends HashMap<String, Object> implements Map<String, Object> {
 
@@ -22,6 +19,23 @@ public class BeanMap extends HashMap<String, Object> implements Map<String, Obje
 
     @SuppressWarnings("unchecked")
     public <T> T setField(String name, Object value) {
+        if (!fieldNames.contains(name)) {
+            throw new NullPointerException("不存在" + name);
+        }
         return (T) put(name, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T putField(String name, Object value) {
+        return (T) put(name, value);
+    }
+
+    public static void main(String[] args) {
+        BeanMap map = new BeanMap(10);
+        map.put("name", "孙允珠");
+        map.put("age", 23);
+        map.put("bornDate", new Date());
+
+        System.out.println(map);
     }
 }

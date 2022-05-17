@@ -1,24 +1,23 @@
 /**
- *
  * Copyright (c) 2014, Deem Inc. All Rights Reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- *
  */
 package com.deem.zkui.utils;
 
 import com.deem.zkui.vo.LeafBean;
 import com.deem.zkui.vo.ZKNode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+import com.google.gson.JsonArray;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
@@ -36,10 +37,8 @@ import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Id;
 import org.apache.zookeeper.data.Stat;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.h2.util.json.JSONArray;
+import org.h2.util.json.JSONObject;
 import org.slf4j.LoggerFactory;
 
 public enum ZooKeeperUtil {
@@ -90,45 +89,46 @@ public enum ZooKeeperUtil {
         // Don't let things happen in a half-baked state, build the new ACL and then set it into
         // defaultAcl
         ArrayList<ACL> newDefault = new ArrayList<>();
-        try {
-            JSONArray acls = (JSONArray) ((JSONObject) new JSONParser().parse(jsonAcl)).get("acls");
-            for (Iterator it = acls.iterator(); it.hasNext();) {
-                JSONObject acl = (JSONObject) it.next();
-                String scheme = ((String) acl.get("scheme")).trim();
-                String id = ((String) acl.get("id")).trim();
-                int perms = 0;
-                String permStr = ((String) acl.get("perms")).toLowerCase().trim();
-                for (char c : permStr.toCharArray()) {
-                    switch (c) {
-                        case 'a':
-                            perms += ZooDefs.Perms.ADMIN;
-                            break;
-                        case 'c':
-                            perms += ZooDefs.Perms.CREATE;
-                            break;
-                        case 'd':
-                            perms += ZooDefs.Perms.DELETE;
-                            break;
-                        case 'r':
-                            perms += ZooDefs.Perms.READ;
-                            break;
-                        case 'w':
-                            perms += ZooDefs.Perms.WRITE;
-                            break;
-                        case '*':
-                            perms += ZooDefs.Perms.ALL;
-                            break;
-                        default:
-                            throw new RuntimeException("Illegal permission character in ACL " + c);
-                    }
-                }
-                newDefault.add(new ACL(perms, new Id(scheme, id)));
-            }
-        } catch (ParseException e) {
-            // Throw it all the way up to the error handlers
-            throw new RuntimeException("Unable to parse default ACL " + jsonAcl, e);
-        }
-        defaultAcl = newDefault;
+//        try {
+//            //JSONArray acls = (JSONArray) ((JSONObject) new JSONParser().parse(jsonAcl)).get("acls");
+//            JSONArray acls = new JsonArray();
+//            for (Iterator it = acls.iterator(); it.hasNext(); ) {
+//                JSONObject acl = (JSONObject) it.next();
+//                String scheme = ((String) acl.get("scheme")).trim();
+//                String id = ((String) acl.get("id")).trim();
+//                int perms = 0;
+//                String permStr = ((String) acl.get("perms")).toLowerCase().trim();
+//                for (char c : permStr.toCharArray()) {
+//                    switch (c) {
+//                        case 'a':
+//                            perms += ZooDefs.Perms.ADMIN;
+//                            break;
+//                        case 'c':
+//                            perms += ZooDefs.Perms.CREATE;
+//                            break;
+//                        case 'd':
+//                            perms += ZooDefs.Perms.DELETE;
+//                            break;
+//                        case 'r':
+//                            perms += ZooDefs.Perms.READ;
+//                            break;
+//                        case 'w':
+//                            perms += ZooDefs.Perms.WRITE;
+//                            break;
+//                        case '*':
+//                            perms += ZooDefs.Perms.ALL;
+//                            break;
+//                        default:
+//                            throw new RuntimeException("Illegal permission character in ACL " + c);
+//                    }
+//                }
+//                newDefault.add(new ACL(perms, new Id(scheme, id)));
+//            }
+//        } catch (ParseException e) {
+//            // Throw it all the way up to the error handlers
+//            throw new RuntimeException("Unable to parse default ACL " + jsonAcl, e);
+//        }
+//        defaultAcl = newDefault;
     }
 
     public Set<LeafBean> searchTree(String searchString, ZooKeeper zk, String authRole) throws InterruptedException, KeeperException {
