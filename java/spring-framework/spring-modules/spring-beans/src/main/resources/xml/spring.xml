@@ -14,7 +14,7 @@
     <!--    <aop:aspectj-autoproxy expose-proxy="true"/>-->
 
     <context:annotation-config/>
-    
+
     <!--导入其他配置文件-->
     <import resource="spring-*.xml"/>
 </beans>
