@@ -15,6 +15,13 @@ def println(obj) -> None:
 def print_type(obj) -> None:
     print(type(obj))
 
+
+import sys
+
+def python_version():
+    return sys.version()
+
+
 # https://oktools.net/json
 # view.run_command('example')
 
@@ -184,7 +191,7 @@ def open_in_file_explorer(file_name: str) -> None:
             import win32process
             try:   # 打开外部可执行程序
                 win32process.CreateProcess(file_name, '',None , None , 0 ,win32process. CREATE_NO_WINDOW , None , None ,win32process.STARTUPINFO())
-            except Exception, e:
+            except Exception as e:
                 print(e)
         else:
             os.startfile(str(file_name))  # 打开目录
@@ -474,5 +481,23 @@ class GradleToMavenCommand(sublime_plugin.TextCommand):
         txt = lines_to_string(new_lines)
         self.view.replace(edit, reg, txt)
 
+
+
+# 运行系统命令
+class RunSystemCommandCommand(sublime_plugin.TextCommand):
+
+    def run(self, edit):
+        reg, txt = get_selcted(self.view)
+        lines = str_to_lines(txt)
+        new_lines = []
+        error_message = ""
+        for i in range(0, len(lines)):
+            if lines[i] == "":
+                continue
+            line = lines[i].strip()
+            os.system(line)
+            new_lines.append(new_line)  # 直接重新赋值引用无效
+        txt = lines_to_string(new_lines)
+        self.view.replace(edit, reg, txt)
 
 

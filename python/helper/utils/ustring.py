@@ -1,4 +1,4 @@
-import regex
+# import regex
 
 
 DEFAULT_REPLACE = {
@@ -22,5 +22,4 @@ class StringTokenizer:
 
 	def __init__(self, delimiter):
 		src = ""
-
 
