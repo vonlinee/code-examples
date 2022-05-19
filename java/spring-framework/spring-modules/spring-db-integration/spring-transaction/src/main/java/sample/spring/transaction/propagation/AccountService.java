@@ -1,16 +1,15 @@
 package sample.spring.transaction.propagation;
 
-import java.math.BigDecimal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import sample.spring.transaction.utils.SpringUtils;
 
+import java.math.BigDecimal;
+
 @Service
-public class IAccountServiceImpl implements IAccountService {
+public class AccountService {
 
     @Autowired
     public IAccountDao accountDao;
@@ -18,7 +17,6 @@ public class IAccountServiceImpl implements IAccountService {
     @Autowired
     public IAccountService accountService;  //防止事务失效情况
 
-    @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void transferMoney(String from, String to, BigDecimal money, boolean throwException) {
         transferMoney(from, to, money.doubleValue(), throwException);
@@ -42,7 +40,6 @@ public class IAccountServiceImpl implements IAccountService {
         accountDao.inMoney(to, money1);
     }
 
-    @Override
     @Transactional
     public void batchTransferMoney(String from, String to, double money, int num) {
         num = num > 3 ? num : 5;
@@ -53,7 +50,6 @@ public class IAccountServiceImpl implements IAccountService {
         }
     }
 
-    @Override
     @Transactional
     public void batchTransferMoney1(String from, String to, double money, int num) {
         num = num > 3 ? num : 5;
@@ -64,7 +60,6 @@ public class IAccountServiceImpl implements IAccountService {
         }
     }
 
-    @Override
     public void batchTransferMoneyNoTransactional(String from, String to, double money, int num) {
         num = num > 3 ? num : 5;
         for (int i = 0; i < num; i++) {

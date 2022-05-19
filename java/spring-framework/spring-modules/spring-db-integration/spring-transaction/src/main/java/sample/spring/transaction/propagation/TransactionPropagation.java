@@ -10,7 +10,13 @@ public class TransactionPropagation {
         System.setProperty("jps.track.ap.dependencies", "true");
         ApplicationContext context = new AnnotationConfigApplicationContext(DataSourceConfiguration.class);
         // JDK代理
-        IAccountService accountService = context.getBean(IAccountService.class);
-        accountService.batchTransferMoney1("zs", "ls", 200.0, 10);
+        // IAccountService accountService = context.getBean(IAccountService.class);
+        // JdkDynamicAopProxy
+        // accountService.batchTransferMoney1("zs", "ls", 200.0, 10);
+
+        // CGlib代理  没有实现接口
+        AccountService cglibService = context.getBean(AccountService.class);
+        cglibService.batchTransferMoney1("zs", "ls", 200.0, 10);
+
     }
 }

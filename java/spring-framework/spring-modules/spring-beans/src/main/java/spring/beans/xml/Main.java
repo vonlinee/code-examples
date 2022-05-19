@@ -17,7 +17,5 @@ public class Main {
         System.out.println(student2);
         System.out.println(student1 == student2);
 
-        Main main = context.getBean(Main.class);
-        System.out.println(main);
     }
 }
