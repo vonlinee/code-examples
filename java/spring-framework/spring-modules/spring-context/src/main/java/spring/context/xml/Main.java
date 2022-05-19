@@ -1,10 +1,10 @@
-package spring.beans.xml;
+package spring.context.xml;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import spring.beans.xml.factory.Student;
-import spring.beans.xml.interfaces.Filter;
+import spring.context.xml.factory.Student;
+import spring.context.xml.interfaces.Filter;
 
 public class Main {
 

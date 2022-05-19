@@ -1,4 +1,4 @@
-package spring.beans.xml.beanpost;
+package spring.context.xml.beanpost;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;

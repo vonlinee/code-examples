@@ -4,12 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
-    <bean class="spring.beans.xml.factory.StudentFactoryBean"/>
+    <bean class="spring.context.xml.factory.StudentFactoryBean"/>
 
-    <bean class="spring.beans.xml.beanpost.MyBeanPostProcessor"/>
+    <bean class="spring.context.xml.beanpost.MyBeanPostProcessor"/>
 
 
-    <bean class="spring.beans.xml.model.MyFilter"/>
+    <bean class="spring.context.xml.model.MyFilter"/>
 
 
 </beans>
