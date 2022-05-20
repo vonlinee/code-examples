@@ -59,7 +59,7 @@ public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar
 		// 添加更多数据源
 		targetDataSources.putAll(customDataSources);
 		SwitchDbInvoke.addOptionalDataSourceId(customDataSources.keySet());
-		
+
 		// 创建并注册DynamicDataSource这个Bean到容器
 		GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
 		beanDefinition.setBeanClass(DynamicDataSource.class);
@@ -84,7 +84,7 @@ public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar
 		try {
 			String type = dataSourceInfoMap.get("type");
 			if (type == null || type.length() == 0) {
-				type = DataSourceType.DruidPool.getClassName();// 默认DataSource
+				type = DataSourceType.DRUID.getClassName();// 默认DataSource
 			}
 			Class<?> dataSourceClassType = ClassUtils.forName(type, null);
 			@SuppressWarnings("unchecked")

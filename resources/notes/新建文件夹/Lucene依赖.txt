@@ -1,0 +1,280 @@
+//核心依赖
+implementation group: 'org.apache.lucene', name: 'lucene-core', version: '8.11.0'
+implementation group: 'org.apache.lucene', name: 'lucene-queryparser', version: '8.11.0'
+implementation group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '8.11.0'
+//可选依赖
+implementation group: 'org.apache.lucene', name: 'lucene-highlighter', version: '8.11.0'
+implementation group: 'org.apache.lucene', name: 'lucene-queries', version: '8.11.0'
+
+
+
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-scratchpad</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>ooxml-schemas</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+
+<!-- Hikari 连接池 -->
+<!-- https://mvnrepository.com/artifact/hikari-cp/hikari-cp -->
+<dependency>
+    <groupId>hikari-cp</groupId>
+    <artifactId>hikari-cp</artifactId>
+    <version>2.13.0</version>
+</dependency>
+
+
+
+<dependency>
+    <groupId>org.apache.lucene</groupId>
+    <artifactId>lucene-core</artifactId>
+    <version>8.11.1</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.lucene</groupId>
+    <artifactId>lucene-queryparser</artifactId>
+    <version>8.11.1</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.lucene</groupId>
+    <artifactId>lucene-analyzers-common</artifactId>
+    <version>8.11.1</version>
+</dependency>
+
+
+
+
+
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-scratchpad</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>ooxml-schemas</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+
+<!-- Hikari 连接池 -->
+<!-- https://mvnrepository.com/artifact/hikari-cp/hikari-cp -->
+<dependency>
+    <groupId>hikari-cp</groupId>
+    <artifactId>hikari-cp</artifactId>
+    <version>2.13.0</version>
+</dependency>
+
+
+
+<when test="param.countsType = '0'.toString()"> <!-- 活动类型 -->
+        C.ACT_TYPE
+</when>
+
+param.countsType = '0'
+param.countsType = '0'.toString()
+
+UserBusiEntity info = BusicenContext.getCurrentUserBusiInfo(authentication);
+
+org.springframework.cache.CacheManager
+org.springframework.cache.Cache
+org.springframework.cache.Cache.ValueWrapper
+
+Caused by: java.sql.SQLException: Parameter index out of range (12 > number of parameters, which is 11).
+    at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:127)
+    at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:95)
+    at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:87)
+    at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:61)
+    at com.mysql.cj.jdbc.ClientPreparedStatement.checkBounds(ClientPreparedStatement.java:1419)
+    at com.mysql.cj.jdbc.ClientPreparedStatement.getCoreParameterIndex(ClientPreparedStatement.java:1432)
+    at com.mysql.cj.jdbc.ClientPreparedStatement.setString(ClientPreparedStatement.java:1762)
+    at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_setString(FilterChainImpl.java:3353)
+    at com.alibaba.druid.filter.FilterAdapter.preparedStatement_setString(FilterAdapter.java:1363)
+    at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_setString(FilterChainImpl.java:3350)
+    at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.setString(PreparedStatementProxyImpl.java:611)
+    at com.alibaba.druid.pool.DruidPooledPreparedStatement.setString(DruidPooledPreparedStatement.java:369)
+    at io.seata.rm.datasource.AbstractPreparedStatementProxy.setString(AbstractPreparedStatementProxy.java:166)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+    at java.lang.reflect.Method.invoke(Unknown Source)
+    at org.apache.ibatis.logging.jdbc.PreparedStatementLogger.invoke(PreparedStatementLogger.java:67)
+    at com.sun.proxy.$Proxy193.setString(Unknown Source)
+    at org.apache.ibatis.type.StringTypeHandler.setNonNullParameter(StringTypeHandler.java:31)
+    at org.apache.ibatis.type.StringTypeHandler.setNonNullParameter(StringTypeHandler.java:26)
+    at org.apache.ibatis.type.BaseTypeHandler.setParameter(BaseTypeHandler.java:69)
+    ... 128 common frames omitted
+
+
+
+https://zhuanlan.zhihu.com/p/57928490
+Skywalking 是一个APM系统，即应用性能监控系统，为微服务架构和云原生架构系统设计。它通过探针自动收集所需的指标，并进行分布式追踪。通过这些调用链路以及指标，Skywalking APM会感知应用间关系和服务间关系，并进行相应的指标统计。目前支持链路追踪和监控应用组件如下，基本涵盖主流框架和容器，如国产PRC Dubbo和motan等，国际化的spring boot，spring cloud都支持了
+
+SonarQube
+开源的代码分析平台, 用来持续分析和评测项目源代码的质量。 通过SonarQube我们可以检测出项目中重复代码, 潜在bug, 代码规
+
+
+
+3241cb4ac2c340989517d1b1f8ad509b
+
+SprignMVC参数映射，不能填map
+
+
+激活码：XDM3T-W3T3V-MGJWK-8BFVD-GVPKY
+
+
+发送指令，执行相应操作
+
+增加代码逻辑
+
+
+数据 + 逻辑
+
+org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod
+
+The main considerations for optimizing queries are:
+• To make a slow SELECT ... WHERE query faster, the first thing to check is whether you can add an
+index. Set up indexes on columns used in the WHERE clause, to speed up evaluation, filtering, and the
+final retrieval of results. To avoid wasted disk space, construct a small set of indexes that speed up
+many related queries used in your application.
+1362
+Optimizing SELECT Statements
+Indexes are especially important for queries that reference different tables, using features such as
+joins and foreign keys. You can use the EXPLAIN statement to determine which indexes are used for a
+SELECT. See Section 8.3.1, “How MySQL Uses Indexes” and Section 8.8.1, “Optimizing Queries with
+EXPLAIN”.
+
+
+• Isolate and tune any part of the query, such as a function call, that takes excessive time. Depending on
+how the query is structured, a function could be called once for every row in the result set, or even once
+for every row in the table, greatly magnifying any inefficiency.
+• Minimize the number of full table scans in your queries, particularly for big tables.
+• Keep table statistics up to date by using the ANALYZE TABLE statement periodically, so the optimizer
+has the information needed to construct an efficient execution plan.
+• Learn the tuning techniques, indexing techniques, and configuration parameters that are specific to
+the storage engine for each table. Both InnoDB and MyISAM have sets of guidelines for enabling and
+sustaining high performance in queries. For details, see Section 8.5.6, “Optimizing InnoDB Queries” and
+Section 8.6.1, “Optimizing MyISAM Queries”.
+• You can optimize single-query transactions for InnoDB tables, using the technique in Section 8.5.3,
+“Optimizing InnoDB Read-Only Transactions”.
+• Avoid transforming the query in ways that make it hard to understand, especially if the optimizer does
+some of the same transformations automatically.
+
+1.如果性能问题不容易通过基本准则之一解决，请调查内部细节
+通过阅读解释计划并调整索引、WHERE子句、join条款等等。（当你达到一定的专业水平时，阅读“解释计划”可能会更容易。）
+（每个查询的第一步。）
+
+2.调整MySQL用于缓存的内存大小，利用InnoDB buffer pool，MyISAM key cache以及MySQL query cache，重复的查询会变快
+
+
+3.即使对于使用高速缓存区域快速运行的查询，也可以进一步优化，以便它们需要更少的缓存，使应用程序更具可扩展性。可伸缩性意味着
+应用程序可以处理更多同时出现的用户、更大的请求等，而不会遇到大的问题性能下降。
+
+4.处理锁问题，查询速度被其他同时访问该表的会话影响
+
+
+
+instruction     (计算机的)指令
+
+
+
+virtual machine assembly language
+字节码         
+
+TemplateModel
+ObjectWrapper
+Environment
+
+CONSTANT_Utf8_info {
+    u1 tag;
+    u2 length;
+    u1 bytes[length];
+}
+
+new AQS();
+
+0 new #1 <code/example/java/multithread/juc/AQS>
+3 invokespecial #16 <code/example/java/multithread/juc/AQS.<init> : ()V>
+6 return
+
+1.主动性，沟通能力
+2.理解业务场景：技术为业务服务
+3.SQL
+4.规划
+
+
+taskAttestationIs
+taskRepeatIs
+cycleUnitCode
+cycleUnitName
+executeTime
+deadline
+
+
+//选的日期，截止日期，下次执行日期
+
+选的日期 > 当前日期
+vftawanq
+
+
+@Override
+public <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds) {
+try {
+  MappedStatement ms = configuration.getMappedStatement(statement);
+  return executor.query(ms, wrapCollection(parameter), rowBounds, Executor.NO_RESULT_HANDLER);
+} catch (Exception e) {
+  throw ExceptionFactory.wrapException("Error querying database.  Cause: " + e, e);
+} finally {
+  ErrorContext.instance().reset();
+}
+}
+
+
+org.apache.ibatis.executor.Executor
+
+
+
+
+
+
+
+
+
+

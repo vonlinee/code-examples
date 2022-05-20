@@ -1,0 +1,42 @@
+
+Optimizing Subqueries, Derived Tables, and View References
+
+不同类型的子查询可以使用的优化策略不同
+
+IN (or =ANY) 子查询
+1.Semijoin
+2.Materialization
+3.EXISTS strategy
+
+NOT IN或者<>ALL
+1.Materialization
+2.EXISTS strategy
+
+衍生表和视图
+1.Merge the derived table into the outer query block
+2.Materialize the derived table to an internal temporary table
+
+使用了子查询去修改单表的UPDATE和DELETE语句，优化器不会使用semijoin或者materialization这两种查询优化.因此，变通方法是
+重写sql变成多表的UPDATE或者DELETE，使用join而不是子查询
+例如：DELETE a1, a2 FROM t1 AS a1 INNER JOIN t2 AS a2 WHERE a1.id=a2.id;
+
+DELETE FROM a1 WHERE a1.id = (SELECT id FROM a2 WHERE a1.id = a2.id)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

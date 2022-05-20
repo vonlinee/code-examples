@@ -15,46 +15,50 @@ import org.slf4j.LoggerFactory;
 public final class SwitchDbInvoke {
 
 	private static final Logger log = LoggerFactory.getLogger(SwitchDbInvoke.class);
-	
-    private static final ThreadLocal<String> holder = new ThreadLocal<>();
-    
-    private static final List<String> dataSourceIds = new ArrayList<>();
 
-    public static <T> T invoke(String dataSoruceId, Supplier<T> supplier) {
-    	try {
-    		log.info("switch datasource to [{}]", dataSoruceId);
+	/**
+	 * 持有当前数据源ID
+	 */
+	private static final ThreadLocal<String> holder = new ThreadLocal<>();
+
+	private static final List<String> dataSourceIds = new ArrayList<>();
+
+	public static <T> T invoke(String dataSoruceId, Supplier<T> supplier) {
+		try {
+			log.info("switch datasource to [{}]", dataSoruceId);
 			return supplier.get();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	return null;
-    }
-    
-    public static void setDataSourceType(String dataSourceType) {
-    	holder.set(dataSourceType);
-    }
+		return null;
+	}
 
-    public static void addOptionalDataSourceId(String... dataSourceId) {
-        dataSourceIds.addAll(Arrays.asList(dataSourceId));
-    }
+	public static void setDataSourceType(String dataSourceType) {
+		holder.set(dataSourceType);
+	}
 
-    public static void addOptionalDataSourceId(Collection<String> dataSourceId) {
-        dataSourceIds.addAll(dataSourceId);
-    }
+	public static void addOptionalDataSourceId(String... dataSourceId) {
+		dataSourceIds.addAll(Arrays.asList(dataSourceId));
+	}
 
-    public static String getDataSourceType() {
-        return holder.get();
-    }
+	public static void addOptionalDataSourceId(Collection<String> dataSourceId) {
+		dataSourceIds.addAll(dataSourceId);
+	}
 
-    public static void clearDataSourceType() {
-    	holder.remove();
-    }
+	public static String getDataSourceType() {
+		return holder.get();
+	}
 
-    /**
-     * 判断指定DataSrouce当前是否存在
-     * @param dataSourceId
-     */
-    public static boolean contains(String dataSourceId) {
-        return dataSourceIds.contains(dataSourceId);
-    }
+	public static void clearDataSourceType() {
+		holder.remove();
+	}
+
+	/**
+	 * 判断指定DataSrouce当前是否存在
+	 * 
+	 * @param dataSourceId
+	 */
+	public static boolean contains(String dataSourceId) {
+		return dataSourceIds.contains(dataSourceId);
+	}
 }

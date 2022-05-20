@@ -22,9 +22,9 @@ public class NettyHttpServer {
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .option(ChannelOption.SO_BROADCAST, null)
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
-                    .channel(NioServerSocketChannel.class)
-                    .handler(new LocalChannelInitializer())
-                    .childHandler(new RemoteChannelInitializer());
+                    .channel(NioServerSocketChannel.class);
+                    // .handler(new LocalChannelInitializer())
+                    // .childHandler(new RemoteChannelInitializer());
 
             ChannelFuture future = serverBootstrap.bind(port); // io.netty.bootstrap.AbstractBootstrap$PendingRegistrationPromise
             // System.out.println(future.getClass());

@@ -7,12 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.jdbc.datasource.lookup.DataSourceLookup;
 
-public final class DynamicDataSource extends AbstractRoutingDataSource {
-	
-	private static final Logger log = LoggerFactory.getLogger(DynamicDataSource.class);
-	
-
-
 public class DynamicDataSource extends AbstractRoutingDataSource {
 
     private static final Logger log = LoggerFactory.getLogger(DynamicDataSource.class);
@@ -34,21 +28,21 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 		}
 		super.setDefaultTargetDataSource(defaultTargetDataSource);
 	}
-    
+	
     private DataSource createDataSource(Properties props) {
         DataSourceType[] dataSourceTypes = DataSourceType.values();
         DataSource dataSource = null;
         for (DataSourceType type : dataSourceTypes) {
             try {
-                Class<?> dataSourceClass = Class.forName(type.name);
+                Class<?> dataSourceClass = Class.forName(type.getClassName());
                 dataSource = (DataSource) dataSourceClass.newInstance();
                 break;
             } catch (ClassNotFoundException e) {
-                log.info(type.getName() + " does not exists in classpath!");
+                log.info(type.getClassName() + " does not exists in classpath!");
             } catch (InstantiationException e) {
-                log.info(type.getName() + " cannot be instantiated");
+                log.info(type.getClassName() + " cannot be instantiated");
             } catch (IllegalAccessException e) {
-                log.info(type.getName() + " IllegalAccessException");
+                log.info(type.getClassName() + " IllegalAccessException");
             }
         }
         buildDataSource(dataSource, props);

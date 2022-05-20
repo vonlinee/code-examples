@@ -1,0 +1,92 @@
+
+
+
+
+cd D:\Develop\Tools\rocketmq-4.9.3
+.\bin\mqnamesrv.cmd
+
+Java HotSpot(TM) 64-Bit Server VM warning: Using the DefNew young collector with the CMS collector is deprecated and will likely be removed in a future release
+Java HotSpot(TM) 64-Bit Server VM warning: UseCMSCompactAtFullCollection is deprecated and will likely be removed in a future release.
+The Name Server boot success. serializeType=JSON
+
+
+启动Broker
+.\bin\mqbroker.cmd -n localhost:9876 autoCreateTopicEnable=true
+
+The broker[LY202104270120, 172.26.130.47:10911] boot success. serializeType=JSON and name server is localhost:9876
+
+
+rocketmq-console改名为rocketmq-dashboard(https://github.com/apache/rocketmq-dashboard)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//查看仓库级的 config，命令：
+git config –local -l
+//查看全局级的 config，命令：
+git config –global -l
+//查看系统级的 config，命令：
+git config –system -l
+//查看当前生效的配置，  命令：
+git config -l
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

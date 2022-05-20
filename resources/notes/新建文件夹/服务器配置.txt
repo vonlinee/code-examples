@@ -1,0 +1,164 @@
+公网IP：101.33.212.245
+内网IP：10.0.20.5
+
+nacos地址：
+http://101.33.212.245:8848/nacos/#/configurationManagement?dataId=&group=&appName=&namespace=&pageSize=&pageNo=
+
+激活web控制台Activate the web console with: 
+systemctl enable --now cockpit.socket
+
+查看最近登录信息：last -f /var/log/wtmp
+
+账号：
+root/@scqxztzxxx91
+wl/@123456
+远程连接：
+ssh root@101.33.212.245
+ssh wl@101.33.212.245
+
+安装JDK：配置环境变量
+export JAVA_HOME=/home/wl/dev/jdk1.8.0_161
+export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export PATH=$PATH:$JAVA_HOME/bin
+
+校验的工具类：hibernate-validator
+
+传输文件
+scp local_file wl@10.0.20.5:/home/wl/dev/ 
+scp local_file remote_username@remote_ip:remote_file 
+scp local_file remote_ip:remote_folder 
+scp local_file remote_ip:remote_file 
+
+CentOS 下安装7-Zip 以及常用的解压命令
+wget http://nchc.dl.sourceforge.net/sourceforge/p7zip/p7zip_4.65_src_all.tar.bz2
+tar -xjvf p7zip_4.65_src_all.tar.bz2
+cd p7zip_4.65
+make && make install
+
+Linux下解压zip文件
+unzip -d /opt/gradle gradle-7.3.3-bin.zip
+
+安装gradle：
+手动下载，并解压，配置环境变量
+export PATH=$PATH:/home/wl/dev/gradle-7.3.3/bin
+
+gradle -v
+
+防火墙配置
+firewalld
+
+redis
+6379
+redis密码：line@123!! 
+
+
+
+
+修改用户密码
+https://www.cnblogs.com/liuhaidon/p/11772879.html
+
+
+关于 mysql 密码策略相关参数
+
+validate_password_length  固定密码的总长度
+validate_password_dictionary_file 指定密码验证的文件路径
+validate_password_mixed_case_count  整个密码中至少要包含大/小写字母的总个数
+validate_password_number_count  整个密码中至少要包含阿拉伯数字的个数
+validate_password_policy 指定密码的强度验证等级，默认为 MEDIUM
+关于 validate_password_policy 的取值
+0/LOW：只验证长度
+1/MEDIUM：验证长度、数字、大小写、特殊字符
+2/STRONG：验证长度、数字、大小写、特殊字符、字典文件
+validate_password_special_char_count 整个密码中至少要包含特殊字符的个数
+
+mysql8
+validate_password.check_username
+
+
+
+select * from mysql.user;
+
+UPDATE USER SET PASSWORD = PASSWORD ( "line@123!!" ) WHERE USER = "line";
+
+SHOW VARIABLES LIKE 'validate_password%';
+SET GLOBAL validate_password.policy = LOW; # 设置密码的验证强度等级
+ALTER USER "line"@"localhost" IDENTIFIED BY "line@12345!!";
+FLUSH PRIVILEGES; - refresh
+
+
+mysql -uroot -p12345678
+mysql -uline -pline@123!!
+
+
+
+
+
+
+
+
+
+
+
+前端
+WEB + Nginx服务器1
+WEB + Nginx服务器2
+web-VIP
+
+
+MP后端服务器+redis1
+MP后端服务器+redis2
+业务后端服务器1
+业务后端服务器2
+业务后端服务器3
+业务后端服务器4
+业务后端服务器5
+业务后端服务器6
+消息、注册、配置中心服务器1
+消息、注册、配置中心服务器2
+消息、注册、配置中心服务器3
+
+数据库
+业务库-主库
+业务库-从库
+业务库-vip 
+汇总库-主库
+汇总库-从库
+汇总库vip
+监控管理
+
+activitycenter 活动中心
+aftersalecenter 售后中心
+busicen_1  -  业务汇总库
+callcenter 线索中心
+finacecenter  
+ordercenter  订单
+paymentcenter 支付
+productcenter 产品
+report
+scmcenter 备件
+sys
+systemmanage
+usercenter 用户
+
+主库，从库
+
+
+
+
+
+
+
+git clone git@gitee.com:vonlinee/code-samples.git
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,102 @@
+一：Tomcat
+
+class org.apache.coyote.AbstractProtocol
+org.apache.coyote.AbstractProtocol.ConnectionHandler<S>
+
+volatile
+
+marking a Java variable as "stored in main memory".
+Every read operation of volatile variable will be read from the computer's main memory, 
+and not from the CPU cache. And every write operation of a volatile variable will be written to main memory, and not in CPU cache.
+
+Volatile is used to indicate that a variable's value will be modified by different threads. 
+The value of this variable will never be cached thread-locally: all reads and writes will 
+go straight to "main memory".
+
+A Volatile variable is modified asynchronously by concurrently running threads in a Java application. 
+It does not allowed to store local copy of a variable that is different from the value currently held in "main" memory.
+
+When a field is declared volatile, the compiler and runtime are put on notice that this variable is shared.
+And operations on it should not be reordered with other memory operations.
+Volatile variables are not cached in registers or in caches where they are hidden from other processors, 
+so a read of a volatile variable always returns the most recent write by any thread.
+
+Main Memory / Heap Memory
+
+
+
+https://jenkov.com/tutorials/java-concurrency/java-memory-model.html#:~:text=As%20already%20mentioned%2C%20the%20Java%20memory%20model%20and,and%20the%20heap%20are%20located%20in%20main%20memory.
+
+
+
+
+
+
+SQL-92及更早版本不允许select列表、HAVING condition或ORDER BY列表中引用GROUP BY子句中未命名的未聚合列的查询。
+例如，此查询在标准SQL-92中是非法的，因为select列表中的未聚合的列[c.name]未出现在GROUP BY后中
+
+SELECT o.custid, c.name, MAX(o.payment)
+  FROM orders AS o, customers AS c
+  WHERE o.custid = c.custid
+  GROUP BY o.custid;
+
+要使查询在SQL-92中合法，必须从select列表中省略name列，或在GROUP BY子句中添加name列。
+
+SQL:1999及更高版本允许进行此类非聚集，前提是它们在功能上依赖于GROUP BY列
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT 
+	o.prod_id , sum(o.order_num) AS order_num 
+FROM orderitems o 
+GROUP BY o.order_num
+
+prod_id|order_num|
+-------+---------+
+ANV01  |    80020|
+JP2000 |    20006|
+TNT2   |    20007|
+FC     |    20008|
+FB     |    80036|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
