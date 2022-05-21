@@ -1,20 +1,3 @@
-/**
- *
- * Copyright (c) 2014, Deem Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- *
- */
 package com.deem.zkui.controller;
 
 import com.deem.zkui.dao.Dao;
@@ -65,7 +48,6 @@ public class Home extends HttpServlet {
             if (authRole == null) {
                 authRole = ZooKeeperUtil.ROLE_USER;
             }
-
             if (zkPath == null || zkPath.equals("/")) {
                 templateParam.put("zkpath", "/");
                 ZKNode zkNode = ZooKeeperUtil.INSTANCE.listNodeEntries(zk, "/", authRole);
@@ -103,7 +85,6 @@ public class Home extends HttpServlet {
             logger.error(Arrays.toString(ex.getStackTrace()));
             ServletUtil.INSTANCE.renderError(request, response, ex.getMessage());
         }
-
     }
 
     @Override
@@ -170,7 +151,6 @@ public class Home extends HttpServlet {
                     break;
                 case "Delete":
                     if (authRole.equals(ZooKeeperUtil.ROLE_ADMIN)) {
-
                         if (propChkGroup != null) {
                             for (String prop : propChkGroup) {
                                 List delPropLst = Arrays.asList(prop);
@@ -194,7 +174,6 @@ public class Home extends HttpServlet {
                 default:
                     response.sendRedirect("/home");
             }
-
         } catch (InterruptedException | TemplateException | KeeperException ex) {
             logger.error(Arrays.toString(ex.getStackTrace()));
             ServletUtil.INSTANCE.renderError(request, response, ex.getMessage());

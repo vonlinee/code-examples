@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 @RestController
 @RequestMapping(value = "/user/system", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -17,7 +20,11 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/login")
-    public Map<String, Object> login() {
+    public Map<String, Object> login(HttpServletRequest request, HttpServletResponse response) {
+        Properties globalProps = (Properties) request.getServletContext().getAttribute("globalProps");
+        Map<String, Object> templateParam = new HashMap<>();
+        templateParam.put("uptime", globalProps.getProperty("uptime"));
+        templateParam.put("loginMessage", globalProps.getProperty("loginMessage"));
         return new HashMap<>();
     }
 

@@ -39,6 +39,8 @@ import org.mybatis.generator.exception.ShellException;
 import org.mybatis.generator.internal.DefaultShellCallback;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.XmlFileMergerJaxp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is the main interface to MyBatis generator. A typical execution of the tool involves these steps:
@@ -410,6 +412,8 @@ public class MyBatisGenerator {
         }
     }
 
+    public static final Logger log = LoggerFactory.getLogger(MyBatisGenerator.class);
+    
     /**
      * Writes, or overwrites, the contents of the specified file.
      *
@@ -423,6 +427,7 @@ public class MyBatisGenerator {
      *             Signals that an I/O exception has occurred.
      */
     private void writeFile(File file, String content, String fileEncoding) throws IOException {
+    	log.info("写入文件{}，编码{}", file.getAbsolutePath(), fileEncoding);
         try (FileOutputStream fos = new FileOutputStream(file, false)) {
             OutputStreamWriter osw;
             if (fileEncoding == null) {
@@ -430,7 +435,6 @@ public class MyBatisGenerator {
             } else {
                 osw = new OutputStreamWriter(fos, Charset.forName(fileEncoding));
             }
-
             try (BufferedWriter bw = new BufferedWriter(osw)) {
                 bw.write(content);
             }
@@ -439,11 +443,8 @@ public class MyBatisGenerator {
 
     /**
      * Gets the unique file name.
-     *
-     * @param directory
-     *            the directory
-     * @param fileName
-     *            the file name
+     * @param directory the directory
+     * @param fileName the file name
      * @return the unique file name
      */
     private File getUniqueFileName(File directory, String fileName) {
