@@ -27,9 +27,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * This class is used to execute an SQL script before a code generation
- * run.
- *
+ * 用于执行SQL脚本
  * @author Jeff Butler
  */
 public class SqlScriptRunner {

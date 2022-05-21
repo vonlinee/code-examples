@@ -1,4 +1,4 @@
-package io.maker.generator.mybatis.entity;
+package io.maker.codegen.mbp.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

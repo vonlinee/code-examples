@@ -1,4 +1,4 @@
-package io.maker.generator.mybatis.config;
+package io.maker.codegen.mbp.config;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;

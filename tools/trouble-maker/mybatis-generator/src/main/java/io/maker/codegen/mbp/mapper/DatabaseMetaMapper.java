@@ -1,4 +1,4 @@
-package io.maker.generator.mybatis.mapper;
+package io.maker.codegen.mbp.mapper;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package io.maker.generator.mybatis.config;
+package io.maker.codegen.mbp.config;
  
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

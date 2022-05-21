@@ -1,4 +1,4 @@
-package io.maker.generator.mybatis.service;
+package io.maker.codegen.mbp.service;
 
 public interface InformationSchemaService {
 

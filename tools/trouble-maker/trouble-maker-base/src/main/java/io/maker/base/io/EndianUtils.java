@@ -22,7 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Utility code for dealing with different endian systems.
+ * Utility code for dealing with different endian(字节存储次序) systems.
  * <p>
  * Different computer architectures adopt different conventions for
  * byte ordering. In so-called "Little Endian" architectures (eg Intel),
@@ -465,11 +465,9 @@ public class EndianUtils {
     private static int read(InputStream input)
             throws IOException {
         int value = input.read();
-
         if (-1 == value) {
             throw new EOFException("Unexpected EOF reached");
         }
-
         return value;
     }
 }

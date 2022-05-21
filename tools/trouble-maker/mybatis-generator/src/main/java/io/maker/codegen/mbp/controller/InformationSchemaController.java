@@ -1,4 +1,4 @@
-package io.maker.generator.mybatis.controller;
+package io.maker.codegen.mbp.controller;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import io.maker.base.collection.ParamMap;
 import io.maker.base.rest.PageResult;
 import io.maker.base.utils.Validator;
-import io.maker.generator.mybatis.entity.Columns;
-import io.maker.generator.mybatis.entity.Tables;
-import io.maker.generator.mybatis.mapper.InformationSchemaMapper;
+import io.maker.codegen.mbp.entity.Columns;
+import io.maker.codegen.mbp.entity.Tables;
+import io.maker.codegen.mbp.mapper.InformationSchemaMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 

@@ -1,4 +1,4 @@
-package io.maker.generator.mybatis;
+package io.maker.codegen.mbp;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.annotation.MapperScans;
@@ -14,10 +14,10 @@ import org.springframework.context.annotation.ComponentScan;
 		DataSourceAutoConfiguration.class
 })
 @MapperScans(value = {
-		@MapperScan(value = {"io.maker.generator.mybatis.mapper"})
+		@MapperScan(value = {"io.maker.codegen.mbp.mapper"})
 })
 @ComponentScan(basePackages = {
-		"io.maker.generator.mybatis"
+		"io.maker.codegen.mbp"
 })
 public class MybatisGeneratorApplication {
 	

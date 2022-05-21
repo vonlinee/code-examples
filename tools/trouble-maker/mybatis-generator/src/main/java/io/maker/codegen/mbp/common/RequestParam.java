@@ -1,4 +1,4 @@
-package io.maker.generator.mybatis.common;
+package io.maker.codegen.mbp.common;
 
 import io.maker.base.collection.ParamMap;
 

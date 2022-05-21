@@ -1,12 +1,12 @@
-package io.maker.generator.mybatis.mapper;
+package io.maker.codegen.mbp.mapper;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import io.maker.generator.mybatis.entity.Columns;
-import io.maker.generator.mybatis.entity.Tables;
+import io.maker.codegen.mbp.entity.Columns;
+import io.maker.codegen.mbp.entity.Tables;
 
 public interface InformationSchemaMapper {
 

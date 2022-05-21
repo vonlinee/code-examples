@@ -2025,7 +2025,7 @@ public class FileUtils {
 	}
 
 	/**
-	 * 传统方法实现文件拷贝 IO方法实现文件k拷贝
+	 * 传统方法实现文件拷贝 IO方法实现文件拷贝
 	 * 
 	 * @param sourcePath
 	 * @param destPath
