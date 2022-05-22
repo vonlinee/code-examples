@@ -252,6 +252,7 @@ public class MyBatisGenerator {
         // 遍历每个Context
         // 插件会开始运行
         for (Context context : contextsToRun) {
+            // 根据配置准备要生成的数据，即文本内容
             context.generateFiles(callback, generatedJavaFiles,
                     generatedXmlFiles, generatedKotlinFiles, otherGeneratedFiles, warnings);
         }
@@ -260,26 +261,25 @@ public class MyBatisGenerator {
 
         // 填充需要生成的文件
         log.info("开始保存文件 {}", writeFiles);
-
         // now save the files
         if (writeFiles) {
             callback.saveStarted(generatedXmlFiles.size() + generatedJavaFiles.size());
-
+            log.info("开始生成XML文件：共{}个", generatedXmlFiles.size());
             for (GeneratedXmlFile gxf : generatedXmlFiles) {
                 projects.add(gxf.getTargetProject());
                 writeGeneratedXmlFile(gxf, callback);
             }
-
+            log.info("开始生成JAVA文件：共{}个", generatedXmlFiles.size());
             for (GeneratedJavaFile gjf : generatedJavaFiles) {
                 projects.add(gjf.getTargetProject());
                 writeGeneratedJavaFile(gjf, callback);
             }
-
+            log.info("开始生成Kotlin文件：共{}个", generatedXmlFiles.size());
             for (GeneratedKotlinFile gkf : generatedKotlinFiles) {
                 projects.add(gkf.getTargetProject());
                 writeGeneratedFile(gkf, callback);
             }
-
+            log.info("开始生成其他文件：共{}个", otherGeneratedFiles.size());
             for (GeneratedFile gf : otherGeneratedFiles) {
                 projects.add(gf.getTargetProject());
                 writeGeneratedFile(gf, callback);
@@ -289,7 +289,6 @@ public class MyBatisGenerator {
                 shellCallback.refreshProject(project);
             }
         }
-
         callback.done();
     }
 
@@ -374,12 +373,10 @@ public class MyBatisGenerator {
             targetFile = new File(directory, gxf.getFileName());
             if (targetFile.exists()) {
                 if (gxf.isMergeable()) {
-                    source = XmlFileMergerJaxp.getMergedSource(gxf,
-                            targetFile);
+                    source = XmlFileMergerJaxp.getMergedSource(gxf, targetFile);
                 } else if (shellCallback.isOverwriteEnabled()) {
                     source = gxf.getFormattedContent();
-                    warnings.add(getString("Warning.11", //$NON-NLS-1$
-                            targetFile.getAbsolutePath()));
+                    warnings.add(getString("Warning.11", targetFile.getAbsolutePath()));
                 } else {
                     source = gxf.getFormattedContent();
                     targetFile = getUniqueFileName(directory, gxf
@@ -416,7 +413,6 @@ public class MyBatisGenerator {
             } else {
                 osw = new OutputStreamWriter(fos, Charset.forName(fileEncoding));
             }
-
             try (BufferedWriter bw = new BufferedWriter(osw)) {
                 bw.write(content);
             }

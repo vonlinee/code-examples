@@ -17,7 +17,7 @@ package test;
 
 import org.mybatis.generator.api.dom.DefaultJavaFormatter;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.internal.util.StringUtils;
 import org.reflections.Reflections;
 
 import java.io.*;
@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 public class GenerateTestSourceFiles {
 
     public static void main (String[] args) {
-        if (args.length < 1 || !StringUtility.stringHasValue(args[0])) {
+        if (args.length < 1 || !StringUtils.stringHasValue(args[0])) {
             throw new RuntimeException("This class requres one argument which is the location of the output directory");
         }
 

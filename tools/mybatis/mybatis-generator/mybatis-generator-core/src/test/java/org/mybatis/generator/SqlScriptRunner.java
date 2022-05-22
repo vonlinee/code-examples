@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 
 import java.io.BufferedReader;
 import java.io.IOException;

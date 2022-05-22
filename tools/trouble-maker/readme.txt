@@ -80,3 +80,34 @@ Gradle
 
 jaxb
 
+使用gradle打包的时候出现好多警告,如何忽略大部分的警告呢,使用如下配置即可
+
+tasks.withType(JavaCompile) {
+     // Try to turn them all off automatically
+     options.compilerArgs << '-Xlint:none'
+     options.compilerArgs << '-nowarn' // same as '-Xlint:none'
+
+     // Turn them off manually
+     options.compilerArgs << '-Xlint:-auxiliaryclass'
+     options.compilerArgs << '-Xlint:-cast'
+     options.compilerArgs << '-Xlint:-classfile'
+     options.compilerArgs << '-Xlint:-deprecation'
+     options.compilerArgs << '-Xlint:-dep-ann'
+     options.compilerArgs << '-Xlint:-divzero'
+     options.compilerArgs << '-Xlint:-empty'
+     options.compilerArgs << '-Xlint:-fallthrough'
+     options.compilerArgs << '-Xlint:-finally'
+     options.compilerArgs << '-Xlint:-options'
+     options.compilerArgs << '-Xlint:-overloads'
+     options.compilerArgs << '-Xlint:-overrides'
+     options.compilerArgs << '-Xlint:-path'
+     options.compilerArgs << '-Xlint:-processing'
+     options.compilerArgs << '-Xlint:-rawtypes'
+     options.compilerArgs << '-Xlint:-serial'
+     options.compilerArgs << '-Xlint:-static'
+     options.compilerArgs << '-Xlint:-try'
+     options.compilerArgs << '-Xlint:-unchecked'
+     options.compilerArgs << '-Xlint:-varargs'
+}
+
+

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.StringJoiner;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
@@ -15,9 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.google.common.base.Converter;
 
-import io.maker.base.utils.CaseFormat;
 import io.maker.base.utils.Maps;
 import io.maker.codegen.mbp.config.ConstVal;
 import io.maker.codegen.mbp.config.GlobalConfig;
@@ -25,9 +22,8 @@ import io.maker.codegen.mbp.config.OutputFile;
 import io.maker.codegen.mbp.config.StrategyConfig;
 import io.maker.codegen.mbp.config.TemplateConfig;
 import io.maker.codegen.mbp.config.builder.ConfigBuilder;
-import io.maker.codegen.mbp.config.po.TableField;
 import io.maker.codegen.mbp.config.po.TableInfo;
-import io.maker.codegen.mbp.fill.XMLTag;
+import io.maker.codegen.mbp.fill.XMLElement;
 import io.maker.codegen.mbp.util.FileUtils;
 import io.maker.codegen.mbp.util.MapperUtils;
 import io.maker.codegen.mbp.util.RuntimeUtils;
@@ -92,17 +88,14 @@ public abstract class AbstractTemplateEngine {
      */
     protected void outputMapper(TableInfo tableInfo, Map<String, Object> objectMap) {
         logger.info("开始输出Mapper.java");
-
         // MpMapper.java
         String entityName = tableInfo.getEntityName();
         String mapperPath = getPathInfo(OutputFile.mapper);
         if (StringUtils.isNotBlank(tableInfo.getMapperName()) && StringUtils.isNotBlank(mapperPath)) {
             getTemplateFilePath(TemplateConfig::getMapper).ifPresent(mapper -> {
                 String mapperFile = String.format((mapperPath + File.separator + tableInfo.getMapperName() + suffixJavaOrKt()), entityName);
-
                 logger.info("模板文件路径:{}, 输出到文件: {}", mapper, mapperFile);
-                outputFile(new File(mapperFile), objectMap, mapper, getConfigBuilder().getStrategyConfig().mapper()
-                                                                                      .isFileOverride());
+                outputFile(new File(mapperFile), objectMap, mapper, getConfigBuilder().getStrategyConfig().mapper().isFileOverride());
             });
         }
         // MpMapper.xml
@@ -114,10 +107,8 @@ public abstract class AbstractTemplateEngine {
                 logger.info("模板文件路径:{}, 输出到文件: {}", xml, xmlFile);
                 //增加默认的CRUD查询sql语句
                 addDefaultMapperXmlCRUDTag(objectMap);
-
                 ConfigBuilder configBuilder = getConfigBuilder();
-                outputFile(new File(xmlFile), objectMap, xml, configBuilder.getStrategyConfig().mapper()
-                                                                           .isFileOverride());
+                outputFile(new File(xmlFile), objectMap, xml, configBuilder.getStrategyConfig().mapper().isFileOverride());
             });
         }
     }
@@ -128,13 +119,13 @@ public abstract class AbstractTemplateEngine {
      */
     private void addDefaultMapperXmlCRUDTag(Map<String, Object> objectMap) {
         objectMap.put("generateDefaultCrudXmlSQL", true);
-        List<XMLTag> list = new ArrayList<>();
+        List<XMLElement> list = new ArrayList<>();
         objectMap.put("xmlCrudTags", list);
 
         TableInfo tableInfo = Maps.getValue(objectMap, "table");
 
         //Insert
-        XMLTag insertXmlTag = createMapperXmlTag("insert", "AAAA");
+        XMLElement insertXmlTag = createMapperXmlTag("insert", "AAAA");
         insertXmlTag.addAttribute("id", "");
         insertXmlTag.addAttribute("parameterType", "map");
         insertXmlTag.addAttribute("resultType", "int");
@@ -144,7 +135,7 @@ public abstract class AbstractTemplateEngine {
         //TODO 批量新增
 
         //Update
-        XMLTag updateXmlTag = createMapperXmlTag("update", "AAAA");
+        XMLElement updateXmlTag = createMapperXmlTag("update", "AAAA");
         updateXmlTag.addAttribute("id", "");
         updateXmlTag.addAttribute("parameterType", "map");
         updateXmlTag.addAttribute("resultType", "int");
@@ -152,7 +143,7 @@ public abstract class AbstractTemplateEngine {
         list.add(updateXmlTag);
 
         //Select
-        XMLTag selectXmlTag = createMapperXmlTag("select", "AAAA");
+        XMLElement selectXmlTag = createMapperXmlTag("select", "AAAA");
         selectXmlTag.addAttribute("id", "");
         selectXmlTag.addAttribute("parameterType", "map");
         selectXmlTag.addAttribute("resultType", "map");
@@ -160,8 +151,8 @@ public abstract class AbstractTemplateEngine {
         list.add(selectXmlTag);
     }
 
-    private XMLTag createMapperXmlTag(String name, String id) {
-        XMLTag xmlTag = new XMLTag();
+    private XMLElement createMapperXmlTag(String name, String id) {
+        XMLElement xmlTag = new XMLElement();
         xmlTag.setName(name);
         return xmlTag;
     }
@@ -286,9 +277,6 @@ public abstract class AbstractTemplateEngine {
             List<TableInfo> tableInfoList = config.getTableInfoList();
             logger.info("加载数据库表个数：{}", tableInfoList.size());
             tableInfoList.forEach(tableInfo -> {
-                System.out.println(tableInfo.getName());
-            });
-            tableInfoList.forEach(tableInfo -> {
                 Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
                 Optional.ofNullable(config.getInjectionConfig()).ifPresent(t -> {
                     t.beforeOutputFile(tableInfo, objectMap);
@@ -296,12 +284,15 @@ public abstract class AbstractTemplateEngine {
                     outputCustomFile(t.getCustomFile(), tableInfo, objectMap);
                 });
                 // entity
+                logger.info("开始输出Entity");
                 outputEntity(tableInfo, objectMap);
                 // mapper and xml
+                logger.info("开始输出Mapper");
                 outputMapper(tableInfo, objectMap);
                 // service
+                logger.info("开始输出Service");
                 outputService(tableInfo, objectMap);
-                // controller
+                logger.info("开始输出Controller");
                 outputController(tableInfo, objectMap);
             });
         } catch (Exception e) {

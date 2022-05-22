@@ -1,8 +1,10 @@
 buildscript {
+    // 指定构建所需的仓库地址
     repositories {
         maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
         maven { url "https://maven.aliyun.com/nexus/content/repositories/gradle-plugin" }
         mavenCentral()
+        // 本地仓库位置
         maven { url "https://plugins.gradle.org/m2/" }
     }
 
@@ -20,7 +22,6 @@ plugins {
 group 'io.trouble.maker'
 version '1.0-SNAPSHOT'
 
-
 allprojects {
     group = 'io.trouble.maker'
     version = "1.0-SNAPSHOT"
@@ -30,7 +31,14 @@ allprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+//        options.warnings = false
+        // 忽略未检查的，或者过时API的警告，只需要不配置下面的编译参数就可以
+//        options.compilerArgs += ["-nowarn", "-XDenableSunApiLintControl"]
+//        options.compilerArgs += '-Xlint:-deprecation'
+//        options.compilerArgs << "-Xlint:unchecked"
+//        options.compilerArgs << "-Xlint:deprecation"
+        // 指定-Werror会报错
+        // options.compilerArgs << "-Werror"
     }
 }
 

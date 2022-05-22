@@ -54,6 +54,7 @@ public class AutoGenerator {
 
     /**
      * 构造方法
+     *
      * @param dataSourceConfig 数据库配置
      * @since 3.5.0
      */
@@ -64,6 +65,7 @@ public class AutoGenerator {
 
     /**
      * 注入配置
+     *
      * @param injectionConfig 注入配置
      * @return this
      * @since 3.5.0
@@ -75,6 +77,7 @@ public class AutoGenerator {
 
     /**
      * 生成策略
+     *
      * @param strategyConfig 策略配置
      * @return this
      * @since 3.5.0
@@ -86,6 +89,7 @@ public class AutoGenerator {
 
     /**
      * 指定包配置信息
+     *
      * @param packageConfig 包配置
      * @return this
      * @since 3.5.0
@@ -97,6 +101,7 @@ public class AutoGenerator {
 
     /**
      * 指定模板配置
+     *
      * @param templateConfig 模板配置
      * @return this
      * @since 3.5.0
@@ -108,6 +113,7 @@ public class AutoGenerator {
 
     /**
      * 指定全局配置
+     *
      * @param globalConfig 全局配置
      * @return this
      * @see 3.5.0
@@ -119,6 +125,7 @@ public class AutoGenerator {
 
     /**
      * 设置配置汇总
+     *
      * @param configBuilder 配置汇总
      * @return this
      * @since 3.5.0
@@ -137,6 +144,7 @@ public class AutoGenerator {
 
     /**
      * 生成代码
+     *
      * @param templateEngine 模板引擎
      */
     public void execute(AbstractTemplateEngine templateEngine) {
@@ -151,14 +159,16 @@ public class AutoGenerator {
         }
         templateEngine.setConfigBuilder(config);
         // 模板引擎初始化执行文件输出
-        templateEngine.init(config)
-                      .batchOutput()
-                      .open();
-        logger.debug("==========================文件生成完成！！！==========================");
+        templateEngine.init(config);
+        logger.info("==========================开始生成文件...==========================");
+        templateEngine.batchOutput();
+        logger.info("==========================文件生成完成！！！==========================");
+        templateEngine.open();
     }
 
     /**
      * 开放表信息、预留子类重写
+     *
      * @param config 配置信息
      * @return ignore
      */

@@ -11,7 +11,7 @@ import io.maker.codegen.mbp.config.po.TableField;
 import io.maker.codegen.mbp.config.po.TableInfo;
 import io.maker.codegen.mbp.config.querys.DbQueryDecorator;
 import io.maker.codegen.mbp.config.rules.IColumnType;
-import io.maker.codegen.mbp.jdbc.DatabaseMetaDataWrapper;
+import io.maker.codegen.mbp.jdbc.DatabaseMetaDataLoader;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -37,14 +37,14 @@ public class DefaultDatabaseQuery extends AbstractDatabaseQuery {
 
     private final DbQueryDecorator dbQuery;
 
-    private final DatabaseMetaDataWrapper databaseMetaDataWrapper;
+    private final DatabaseMetaDataLoader databaseMetaDataWrapper;
 
     public DefaultDatabaseQuery(@NotNull ConfigBuilder configBuilder) {
         super(configBuilder);
         this.strategyConfig = configBuilder.getStrategyConfig();
         this.dbQuery = new DbQueryDecorator(dataSourceConfig, strategyConfig);
         this.globalConfig = configBuilder.getGlobalConfig();
-        this.databaseMetaDataWrapper = new DatabaseMetaDataWrapper(dbQuery.getConnection());
+        this.databaseMetaDataWrapper = new DatabaseMetaDataLoader(dbQuery.getConnection());
     }
 
     @NotNull
@@ -54,7 +54,6 @@ public class DefaultDatabaseQuery extends AbstractDatabaseQuery {
         boolean isExclude = strategyConfig.getExclude().size() > 0;
         //所有的表信息
         List<TableInfo> tableList = new ArrayList<>();
-
         //需要反向生成或排除的表信息
         List<TableInfo> includeTableList = new ArrayList<>();
         List<TableInfo> excludeTableList = new ArrayList<>();
@@ -62,7 +61,7 @@ public class DefaultDatabaseQuery extends AbstractDatabaseQuery {
             dbQuery.execute(dbQuery.tablesSql(), result -> {
                 String tableName = result.getStringResult(dbQuery.tableName());
                 if (StringUtils.isNotBlank(tableName)) {
-                    DatabaseMetaDataWrapper.Table table = databaseMetaDataWrapper.getTableInfo(tableName);
+                    DatabaseMetaDataLoader.Table table = databaseMetaDataWrapper.getTableInfo(tableName);
                     TableInfo tableInfo = new TableInfo(this.configBuilder, tableName);
                     // 跳过视图
                     if (!(strategyConfig.isSkipView() && table.isView())) {
@@ -114,9 +113,9 @@ public class DefaultDatabaseQuery extends AbstractDatabaseQuery {
     private void convertTableFields(@NotNull TableInfo tableInfo) {
         String tableName = tableInfo.getName();
         try {
-            final Map<String, DatabaseMetaDataWrapper.ColumnsInfo> columnsMetaInfoMap = new HashMap<>();
+            final Map<String, DatabaseMetaDataLoader.ColumnsInfo> columnsMetaInfoMap = new HashMap<>();
             //TODO 增加元数据信息获取,后面查询表字段要改成这个.
-            Map<String, DatabaseMetaDataWrapper.ColumnsInfo> columnsInfoMap =
+            Map<String, DatabaseMetaDataLoader.ColumnsInfo> columnsInfoMap =
                 databaseMetaDataWrapper.getColumnsInfo(tableName);
             if (columnsInfoMap != null && !columnsInfoMap.isEmpty()) {
                 columnsMetaInfoMap.putAll(columnsInfoMap);
@@ -127,7 +126,7 @@ public class DefaultDatabaseQuery extends AbstractDatabaseQuery {
                 String columnName = result.getStringResult(dbQuery.fieldName());
                 TableField field = new TableField(this.configBuilder, columnName);
                 // 避免多重主键设置，目前只取第一个找到ID，并放到list中的索引为0的位置
-                DatabaseMetaDataWrapper.ColumnsInfo columnsInfo = columnsMetaInfoMap.get(columnName.toLowerCase());
+                DatabaseMetaDataLoader.ColumnsInfo columnsInfo = columnsMetaInfoMap.get(columnName.toLowerCase());
                 // 处理ID
                 if (columnsInfo.isPrimaryKey()) {
                     field.primaryKey(columnsInfo.isAutoIncrement());

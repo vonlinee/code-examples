@@ -17,6 +17,9 @@ package org.mybatis.generator.api.dom.xml;
 
 import java.util.Objects;
 
+/**
+ * XML的属性映射
+ */
 public class Attribute {
 
     private final String name;

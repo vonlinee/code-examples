@@ -12,9 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class DatabaseMetaDataWrapper {
+public class DatabaseMetaDataLoader {
 
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseMetaDataWrapper.class);
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseMetaDataLoader.class);
 
     private final DatabaseMetaData databaseMetaData;
 
@@ -24,7 +24,7 @@ public class DatabaseMetaDataWrapper {
     //TODO 暂时只支持一种
     private final String schema;
 
-    public DatabaseMetaDataWrapper(Connection connection) {
+    public DatabaseMetaDataLoader(Connection connection) {
         try {
             this.databaseMetaData = connection.getMetaData();
             this.catalog = connection.getCatalog();

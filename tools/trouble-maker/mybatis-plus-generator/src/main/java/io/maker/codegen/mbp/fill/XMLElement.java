@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * XML标签实体类映射
  */
-public class XMLTag implements Serializable {
+public class XMLElement implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -15,9 +15,9 @@ public class XMLTag implements Serializable {
     private boolean closed = false; // 是否封闭，例如<img src="..."/>，默认为false
     private List<Attribute> attributes;
     private String content;
-    private List<XMLTag> directSubTags;
+    private List<XMLElement> directSubTags;
 
-    public XMLTag() {
+    public XMLElement() {
         this.attributes = new ArrayList<>();
         this.directSubTags = new ArrayList<>();
     }
@@ -54,11 +54,11 @@ public class XMLTag implements Serializable {
         this.content = content;
     }
 
-    public List<XMLTag> getDirectSubTags() {
+    public List<XMLElement> getDirectSubTags() {
         return directSubTags;
     }
 
-    public void setDirectSubTags(List<XMLTag> directSubTags) {
+    public void setDirectSubTags(List<XMLElement> directSubTags) {
         this.directSubTags = directSubTags;
     }
 

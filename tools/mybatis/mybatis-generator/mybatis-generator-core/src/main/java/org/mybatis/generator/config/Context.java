@@ -15,9 +15,9 @@
  */
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualifiedTableName;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.sql.Connection;
@@ -466,7 +466,8 @@ public class Context extends PropertyHolder {
         log.info("开始初始化表的所有对于代码生成有用的数据");
         for (IntrospectedTable introspectedTable : introspectedTables) {
             callback.checkCancel();
-
+            //表初始化化，即准备数据
+            // 实现类IntrospectedTableMyBatis3Impl
             introspectedTable.initialize();
             introspectedTable.calculateGenerators(warnings, callback);
         }
@@ -480,6 +481,7 @@ public class Context extends PropertyHolder {
             //生成的Java文件
             generatedJavaFiles.addAll(pluginAggregator
                     .contextGenerateAdditionalJavaFiles(introspectedTable));
+            //生成的XML文件
             generatedXmlFiles.addAll(pluginAggregator
                     .contextGenerateAdditionalXmlFiles(introspectedTable));
             generatedKotlinFiles.addAll(pluginAggregator

@@ -11,14 +11,6 @@ import java.util.HashSet;
 public class NamingStrategyTest {
 
     @Test
-    void removePrefixTest() {
-        Assertions.assertEquals(NamingStrategy.removePrefix("test_ab", new HashSet() {{
-            add("t_");
-            add("test");
-        }}), "_ab");
-    }
-
-    @Test
     void underlineToCamelTest() {
         Assertions.assertEquals(NamingStrategy.underlineToCamel("Aid"), "aid");
         Assertions.assertEquals(NamingStrategy.underlineToCamel("AId"), "aId");

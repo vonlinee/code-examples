@@ -16,8 +16,8 @@
 package org.mybatis.generator.runtime.kotlin.elements;
 
 import static org.mybatis.generator.api.dom.OutputUtilities.kotlinIndent;
-import static org.mybatis.generator.internal.util.StringUtility.escapeStringForKotlin;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.escapeStringForKotlin;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 
 import java.util.HashSet;
 import java.util.Iterator;

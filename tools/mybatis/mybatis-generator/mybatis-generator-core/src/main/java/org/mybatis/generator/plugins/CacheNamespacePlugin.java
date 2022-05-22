@@ -26,7 +26,7 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.kotlin.KotlinFile;
 import org.mybatis.generator.api.dom.kotlin.KotlinType;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.internal.util.StringUtils;
 
 /**
  * This plugin adds a CacheNamespace annotation to generated Java or Kotlin mapper interfaces.
@@ -145,7 +145,7 @@ public class CacheNamespacePlugin extends PluginAdapter {
                 .map(Optional::get)
                 .collect(Collectors.joining(", ")); //$NON-NLS-1$
 
-        if (StringUtility.stringHasValue(attributes)) {
+        if (StringUtils.stringHasValue(attributes)) {
             return "@CacheNamespace(" + attributes + ")"; //$NON-NLS-1$ //$NON-NLS-2$
         } else {
             return "@CacheNamespace"; //$NON-NLS-1$
@@ -179,7 +179,7 @@ public class CacheNamespacePlugin extends PluginAdapter {
             value = properties.getProperty(propertyName);
         }
 
-        if (StringUtility.stringHasValue(value)) {
+        if (StringUtils.stringHasValue(value)) {
             return Optional.of(value);
         } else {
             return Optional.empty();

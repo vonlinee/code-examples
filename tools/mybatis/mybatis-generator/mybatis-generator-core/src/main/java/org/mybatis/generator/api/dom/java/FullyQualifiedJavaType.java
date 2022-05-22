@@ -15,15 +15,17 @@
  */
 package org.mybatis.generator.api.dom.java;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class FullyQualifiedJavaType implements
-        Comparable<FullyQualifiedJavaType> {
+/**
+ * 符合要求的Java类型，针对Java的类型做出抽象
+ */
+public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType> {
 
     private static final String JAVA_LANG = "java.lang"; //$NON-NLS-1$
 
@@ -37,6 +39,7 @@ public class FullyQualifiedJavaType implements
 
     private static FullyQualifiedJavaType dateInstance = null;
 
+    //criteria标准
     private static FullyQualifiedJavaType criteriaInstance = null;
 
     private static FullyQualifiedJavaType generatedCriteriaInstance = null;
@@ -59,7 +62,7 @@ public class FullyQualifiedJavaType implements
 
     private final List<FullyQualifiedJavaType> typeArguments;
 
-    // the following three values are used for dealing with wildcard types
+    // the following three values are used for dealing with wildcard(通配符) types
     private boolean wildcardType;
 
     private boolean boundedWildcard;

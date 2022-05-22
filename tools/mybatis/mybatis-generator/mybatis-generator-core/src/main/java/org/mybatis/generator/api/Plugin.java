@@ -51,6 +51,7 @@ import org.mybatis.generator.config.Context;
  * called for each introspected table</li>
  * <li>The contextGenerateAdditionalXmlFiles(IntrospectedTable) method is called
  * for each introspected table</li>
+ * contextGenerateAdditionalJavaFiles和contextGenerateAdditionalXmlFiles只调用一次
  * <li>The contextGenerateAdditionalJavaFiles() method is called one time</li>
  * <li>The contextGenerateAdditionalXmlFiles() method is called one time</li>
  * </ol>
@@ -59,6 +60,7 @@ import org.mybatis.generator.config.Context;
  * plugins. If the same plugin is specified in multiple contexts, then each
  * context will hold a unique instance of the plugin.
  *
+ * 插件的顺序：按照在配置文件中定义的顺序
  * <p>Plugins are called, and initialized, in the same order they are specified in
  * the configuration.
  *

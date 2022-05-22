@@ -1,9 +1,10 @@
 package io.maker.codegen.mbp.fill;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.Serializable;
 
+/**
+ * XML的属性
+ */
 public class Attribute implements Serializable, Comparable<Attribute> {
 
     private static final long serialVersionUID = 1L;

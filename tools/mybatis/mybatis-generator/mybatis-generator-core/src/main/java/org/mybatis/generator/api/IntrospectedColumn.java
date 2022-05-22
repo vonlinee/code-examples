@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2021 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.api;
 
 import java.sql.Types;
@@ -20,10 +5,11 @@ import java.util.Properties;
 
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.config.Context;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.internal.util.StringUtils;
 
 /**
  * This class holds information about an introspected column.
+ *
  * @author Jeff Butler
  */
 public class IntrospectedColumn {
@@ -33,6 +19,7 @@ public class IntrospectedColumn {
 
     /**
      * The platform specific data type name as reported from DatabaseMetadata.getColumns()
+     * 根据驱动类型确定
      */
     protected String actualTypeName;
 
@@ -147,7 +134,7 @@ public class IntrospectedColumn {
 
     public void setActualColumnName(String actualColumnName) {
         this.actualColumnName = actualColumnName;
-        isColumnNameDelimited = StringUtility
+        isColumnNameDelimited = StringUtils
                 .stringContainsSpace(actualColumnName);
     }
 
@@ -333,6 +320,7 @@ public class IntrospectedColumn {
      * The platform specific type name as reported by the JDBC driver. This value is determined
      * from the DatabaseMetadata.getColumns() call - specifically ResultSet.getString("TYPE_NAME").
      * This value is platform dependent.
+     *
      * @return the platform specific type name as reported by the JDBC driver
      */
     public String getActualTypeName() {

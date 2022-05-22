@@ -22,7 +22,7 @@ import org.mybatis.generator.config.Context;
 
 /**
  * This class is the default formatter for generated XML.  This class will use the
- * built in document renderer.
+ * built in document renderer. 使用内置的文档渲染
  *
  * @author Jeff Butler
  *

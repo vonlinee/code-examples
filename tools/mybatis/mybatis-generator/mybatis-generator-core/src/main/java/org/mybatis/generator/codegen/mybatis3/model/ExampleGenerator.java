@@ -16,7 +16,7 @@
 package org.mybatis.generator.codegen.mybatis3.model;
 
 import static org.mybatis.generator.internal.util.JavaBeansUtil.getGetterMethodName;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;

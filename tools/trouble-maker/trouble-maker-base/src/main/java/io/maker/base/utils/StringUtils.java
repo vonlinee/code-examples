@@ -1,11 +1,7 @@
 package io.maker.base.utils;
 
 import java.nio.charset.Charset;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.StringTokenizer;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,6 +80,12 @@ public final class StringUtils {
 		return sequence;
 	}
 
+	/**
+	 * 分割字符串
+	 * @param str
+	 * @param delimeter
+	 * @return
+	 */
 	public static String[] split1(String str, String delimeter) {
 		StringTokenizer st = new StringTokenizer(str, delimeter);
 		int i = st.countTokens();
@@ -166,6 +168,23 @@ public final class StringUtils {
 				return str;
 			}
 		}
+	}
+
+	public static boolean containsAlmostOne(String parent, CharSequence ... sequences) {
+		for (CharSequence s : sequences) {
+			if (parent.contains(s)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean in(String target, String ... group) {
+		if (group.length == 0) return false;
+		for (String s : group) {
+			if (target.equals(s)) return true;
+		}
+		return false;
 	}
 
 	private static final int STRING_BUILDER_SIZE = 256;
@@ -263,6 +282,28 @@ public final class StringUtils {
 			return null;
 		}
 		return join(iterable.iterator(), separator);
+	}
+
+	/**
+	 * 使用指定分隔符拼接字符串
+	 * @param separator
+	 * @param items
+	 * @return
+	 */
+	public static String join(final String separator, String ... items) {
+		return join(Arrays.asList(items).iterator(), separator);
+	}
+
+	public static final String DEFAULT_SEPARATOR = ",";
+
+	/**
+	 * 使用指定分隔符拼接字符串
+	 * @param separator
+	 * @param items
+	 * @return
+	 */
+	public static String join(String ... items) {
+		return join(Arrays.asList(items).iterator(), DEFAULT_SEPARATOR);
 	}
 
 	/**

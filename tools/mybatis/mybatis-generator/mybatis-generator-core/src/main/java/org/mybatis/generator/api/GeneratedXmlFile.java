@@ -27,6 +27,7 @@ public class GeneratedXmlFile extends GeneratedFile {
 
     private boolean isMergeable;
 
+    // 格式化XML文件
     private final XmlFormatter xmlFormatter;
 
     public GeneratedXmlFile(Document document, String fileName,

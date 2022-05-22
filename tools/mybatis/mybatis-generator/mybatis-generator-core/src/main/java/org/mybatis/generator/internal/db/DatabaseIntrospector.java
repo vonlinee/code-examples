@@ -15,11 +15,11 @@
  */
 package org.mybatis.generator.internal.db;
 
-import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
-import static org.mybatis.generator.internal.util.StringUtility.stringContainsSQLWildcard;
-import static org.mybatis.generator.internal.util.StringUtility.stringContainsSpace;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualifiedTableName;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.stringContainsSQLWildcard;
+import static org.mybatis.generator.internal.util.StringUtils.stringContainsSpace;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.sql.DatabaseMetaData;

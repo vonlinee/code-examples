@@ -1,14 +1,12 @@
 package samples;
 
+import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
-import org.mybatis.generator.config.Context;
-import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.mybatis.generator.exception.InvalidConfigurationException;
 import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.DefaultShellCallback;
-import org.mybatis.generator.internal.ObjectFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,17 +27,16 @@ public class MySQLGenerator {
                 .getResourceAsStream("generateConfig-mysql5.xml");
         // 解析配置文件，得到配置对象Configuration
         Configuration config = cp.parseConfiguration(is);
-
         //
         DefaultShellCallback callback = new DefaultShellCallback(overwrite);
         // 生成器
         MyBatisGenerator generator = new MyBatisGenerator(config, callback, warnings);
         // 开始生成
         generator.generate(null);
-
         List<IntrospectedTable> tables = config.getContexts().get(0).getIntrospectedTables();
         for (IntrospectedTable table : tables) {
             table.getAttribute("");
         }
+
     }
 }

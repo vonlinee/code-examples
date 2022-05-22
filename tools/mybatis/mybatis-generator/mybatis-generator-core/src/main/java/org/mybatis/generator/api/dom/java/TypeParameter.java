@@ -20,6 +20,9 @@ import java.util.List;
 
 import org.mybatis.generator.api.dom.java.render.TypeParameterRenderer;
 
+/**
+ * 泛型类型参数
+ */
 public class TypeParameter {
 
     private final String name;

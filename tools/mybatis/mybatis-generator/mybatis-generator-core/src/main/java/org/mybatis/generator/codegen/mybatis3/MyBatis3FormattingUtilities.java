@@ -15,8 +15,8 @@
  */
 package org.mybatis.generator.codegen.mybatis3;
 
-import static org.mybatis.generator.internal.util.StringUtility.escapeStringForJava;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.escapeStringForJava;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 

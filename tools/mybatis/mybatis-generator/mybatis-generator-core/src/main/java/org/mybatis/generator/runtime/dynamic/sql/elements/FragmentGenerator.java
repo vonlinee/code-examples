@@ -16,7 +16,7 @@
 package org.mybatis.generator.runtime.dynamic.sql.elements;
 
 import static org.mybatis.generator.api.dom.OutputUtilities.javaIndent;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 
 import java.util.ArrayList;
 import java.util.HashSet;

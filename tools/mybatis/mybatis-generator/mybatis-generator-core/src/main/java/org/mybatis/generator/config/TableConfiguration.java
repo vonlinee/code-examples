@@ -15,9 +15,9 @@
  */
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualifiedTableName;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;

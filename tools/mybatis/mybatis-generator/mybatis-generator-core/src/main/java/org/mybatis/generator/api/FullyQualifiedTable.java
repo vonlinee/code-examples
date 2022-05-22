@@ -15,8 +15,8 @@
  */
 package org.mybatis.generator.api;
 
-import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualifiedTableName;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 
 import java.util.Objects;
 import java.util.regex.Matcher;

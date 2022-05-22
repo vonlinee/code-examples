@@ -32,7 +32,7 @@ import java.util.Properties;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.mybatis.generator.internal.ObjectFactory;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.internal.util.StringUtils;
 import org.mybatis.generator.internal.util.messages.Messages;
 
 /**
@@ -54,15 +54,15 @@ public class SqlScriptRunner {
     public SqlScriptRunner(String sourceFile, String driver, String url,
             String userId, String password) throws MojoExecutionException {
 
-        if (!StringUtility.stringHasValue(sourceFile)) {
+        if (!StringUtils.stringHasValue(sourceFile)) {
             throw new MojoExecutionException("SQL script file is required");
         }
 
-        if (!StringUtility.stringHasValue(driver)) {
+        if (!StringUtils.stringHasValue(driver)) {
             throw new MojoExecutionException("JDBC Driver is required");
         }
 
-        if (!StringUtility.stringHasValue(url)) {
+        if (!StringUtils.stringHasValue(url)) {
             throw new MojoExecutionException("JDBC URL is required");
         }
 
@@ -169,7 +169,7 @@ public class SqlScriptRunner {
                 continue;
             }
 
-            if (!StringUtility.stringHasValue(line)) {
+            if (!StringUtils.stringHasValue(line)) {
                 continue;
             }
 

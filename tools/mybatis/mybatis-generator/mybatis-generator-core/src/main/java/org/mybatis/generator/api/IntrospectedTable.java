@@ -1,22 +1,7 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.api;
 
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -43,6 +28,8 @@ import org.mybatis.generator.internal.rules.ConditionalModelRules;
 import org.mybatis.generator.internal.rules.FlatModelRules;
 import org.mybatis.generator.internal.rules.HierarchicalModelRules;
 import org.mybatis.generator.internal.rules.Rules;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base class for all code generator implementations. This class provides many
@@ -102,6 +89,9 @@ public abstract class IntrospectedTable {
         ATTR_MYBATIS_DYNAMIC_SQL_TABLE_OBJECT_NAME
     }
 
+    /**
+     * 表相关配置
+     */
     protected TableConfiguration tableConfiguration;
 
     protected FullyQualifiedTable fullyQualifiedTable;
@@ -393,10 +383,14 @@ public abstract class IntrospectedTable {
      * 初始化表的数据
      */
     public void initialize() {
+        log.info("IntrospectedTable初始化 => {}", this.getTableConfiguration().getTableName());
+        // 填充内部属性internalAttributes的值
         calculateJavaClientAttributes();
         calculateModelAttributes();
         calculateXmlAttributes();
 
+        log.info("使用Rule => {}", tableConfiguration.getModelType().toString());
+        // CONDITIONAL
         if (tableConfiguration.getModelType() == ModelType.HIERARCHICAL) {
             rules = new HierarchicalModelRules(this);
         } else if (tableConfiguration.getModelType() == ModelType.FLAT) {
@@ -404,19 +398,31 @@ public abstract class IntrospectedTable {
         } else {
             rules = new ConditionalModelRules(this);
         }
-
+        // 初始化插件，获取最开始的插件，然后一个一个调用
         context.getPlugins().initialized(this);
     }
 
+    private static final Logger log = LoggerFactory.getLogger(IntrospectedTable.class);
+
+    // XML标签
+
+    /**
+     * 生成XML的文件需要哪些标签
+     */
     protected void calculateXmlAttributes() {
+        log.info("calculateXmlAttributes == >");
+        // 确定生成的mapper xml文件名: xxx.xml
         setMyBatis3XmlMapperFileName(calculateMyBatis3XmlMapperFileName());
+        // 确定XML文件的包名
         setMyBatis3XmlMapperPackage(calculateSqlMapPackage());
-
+        // 确定XML的namespace，即mapper接口的全限定类名
         setMyBatis3FallbackSqlMapNamespace(calculateMyBatis3FallbackSqlMapNamespace());
-
+        // 确定表名
         setSqlMapFullyQualifiedRuntimeTableName(calculateSqlMapFullyQualifiedRuntimeTableName());
+        // 表别名
         setSqlMapAliasedFullyQualifiedRuntimeTableName(calculateSqlMapAliasedFullyQualifiedRuntimeTableName());
-
+        // 生成XML 标签的ID
+        // Example类
         setCountByExampleStatementId("countByExample"); //$NON-NLS-1$
         setDeleteByExampleStatementId("deleteByExample"); //$NON-NLS-1$
         setDeleteByPrimaryKeyStatementId("deleteByPrimaryKey"); //$NON-NLS-1$
@@ -449,19 +455,15 @@ public abstract class IntrospectedTable {
     }
 
     public void setExampleWhereClauseId(String s) {
-        internalAttributes.put(InternalAttribute.ATTR_EXAMPLE_WHERE_CLAUSE_ID,
-                s);
+        internalAttributes.put(InternalAttribute.ATTR_EXAMPLE_WHERE_CLAUSE_ID, s);
     }
 
     public void setMyBatis3UpdateByExampleWhereClauseId(String s) {
-        internalAttributes.put(
-                InternalAttribute.ATTR_MYBATIS3_UPDATE_BY_EXAMPLE_WHERE_CLAUSE_ID,
-                s);
+        internalAttributes.put(InternalAttribute.ATTR_MYBATIS3_UPDATE_BY_EXAMPLE_WHERE_CLAUSE_ID, s);
     }
 
     public void setResultMapWithBLOBsId(String s) {
-        internalAttributes.put(InternalAttribute.ATTR_RESULT_MAP_WITH_BLOBS_ID,
-                s);
+        internalAttributes.put(InternalAttribute.ATTR_RESULT_MAP_WITH_BLOBS_ID, s);
     }
 
     public void setBaseResultMapId(String s) {
@@ -469,9 +471,7 @@ public abstract class IntrospectedTable {
     }
 
     public void setUpdateByPrimaryKeyWithBLOBsStatementId(String s) {
-        internalAttributes.put(
-                InternalAttribute.ATTR_UPDATE_BY_PRIMARY_KEY_WITH_BLOBS_STATEMENT_ID,
-                s);
+        internalAttributes.put(InternalAttribute.ATTR_UPDATE_BY_PRIMARY_KEY_WITH_BLOBS_STATEMENT_ID, s);
     }
 
     public void setUpdateByPrimaryKeySelectiveStatementId(String s) {

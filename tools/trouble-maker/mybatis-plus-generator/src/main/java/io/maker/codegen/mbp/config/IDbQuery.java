@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.maker.codegen.mbp.config;
 
 import java.sql.ResultSet;
@@ -61,31 +46,24 @@ public interface IDbQuery {
 
     /**
      * 字段注释
-     * @deprecated 3.5.3
      */
-    @Deprecated
     default String fieldComment() {
         return null;
     }
 
     /**
      * 主键字段
-     * @deprecated 3.5.3
      */
-    @Deprecated
     default String fieldKey(){
         return null;
     }
 
     /**
      * 判断主键是否为identity
-     *
      * @param results ResultSet
      * @return 主键是否为identity
      * @throws SQLException ignore
-     * @deprecated 3.5.3
      */
-    @Deprecated
     default boolean isKeyIdentity(ResultSet results) throws SQLException {
         return false;
     }

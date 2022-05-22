@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * 接口类型
+ */
 public class Interface extends InnerInterface implements CompilationUnit {
 
     private final Set<FullyQualifiedJavaType> importedTypes = new TreeSet<>();

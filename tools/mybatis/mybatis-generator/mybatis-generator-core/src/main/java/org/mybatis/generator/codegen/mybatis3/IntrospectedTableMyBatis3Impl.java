@@ -41,11 +41,11 @@ import org.mybatis.generator.codegen.mybatis3.model.RecordWithBLOBsGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.ObjectFactory;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.internal.util.StringUtils;
 
 /**
  * Introspected table implementation for generating MyBatis3 artifacts.
- *
+ * Mybatis3的实现版本
  * @author Jeff Butler
  */
 public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
@@ -214,7 +214,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         String project = context.getJavaModelGeneratorConfiguration().getProperty(
                 PropertyRegistry.MODEL_GENERATOR_EXAMPLE_PROJECT);
 
-        if (StringUtility.stringHasValue(project)) {
+        if (StringUtils.stringHasValue(project)) {
             return project;
         } else {
             return getModelProject();
@@ -247,7 +247,6 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     @Override
     public boolean requiresXMLGenerator() {
         AbstractJavaClientGenerator javaClientGenerator = createJavaClientGenerator();
-
         if (javaClientGenerator == null) {
             return false;
         } else {

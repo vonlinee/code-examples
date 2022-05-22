@@ -33,7 +33,6 @@ public class ClickHouseQuery extends AbstractDbQuery {
         return "name";
     }
 
-
     @Override
     public String fieldType() {
         return "type";
@@ -44,7 +43,6 @@ public class ClickHouseQuery extends AbstractDbQuery {
     public String fieldComment() {
         return "comment";
     }
-
 
     @Override
     public String fieldKey() {

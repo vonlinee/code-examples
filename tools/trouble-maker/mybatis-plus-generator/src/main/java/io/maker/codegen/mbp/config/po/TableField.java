@@ -20,14 +20,13 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.maker.codegen.mbp.config.DataSourceConfig;
 import io.maker.codegen.mbp.config.GlobalConfig;
 import io.maker.codegen.mbp.config.IKeyWordsHandler;
-import io.maker.codegen.mbp.config.StrategyConfig;
 import io.maker.codegen.mbp.config.builder.ConfigBuilder;
 import io.maker.codegen.mbp.config.builder.Entity;
 import io.maker.codegen.mbp.config.rules.IColumnType;
 import io.maker.codegen.mbp.config.rules.NamingStrategy;
 import io.maker.codegen.mbp.fill.Column;
 import io.maker.codegen.mbp.fill.Property;
-import io.maker.codegen.mbp.jdbc.DatabaseMetaDataWrapper;
+import io.maker.codegen.mbp.jdbc.DatabaseMetaDataLoader;
 
 import org.apache.ibatis.type.JdbcType;
 import org.jetbrains.annotations.NotNull;
@@ -308,7 +307,7 @@ public class TableField {
 
         private JdbcType jdbcType;
 
-        public MetaInfo(DatabaseMetaDataWrapper.ColumnsInfo columnsInfo) {
+        public MetaInfo(DatabaseMetaDataLoader.ColumnsInfo columnsInfo) {
             if (columnsInfo != null) {
                 this.length = columnsInfo.getLength();
                 this.nullable = columnsInfo.isNullable();

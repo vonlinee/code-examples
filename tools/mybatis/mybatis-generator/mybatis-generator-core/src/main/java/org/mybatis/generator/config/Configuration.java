@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;
@@ -23,6 +23,9 @@ import java.util.List;
 
 import org.mybatis.generator.exception.InvalidConfigurationException;
 
+/**
+ * 全局配置类，和mybatis的Configuration一样，包含程序的所有配置
+ */
 public class Configuration {
 
     private final List<Context> contexts;
@@ -48,8 +51,7 @@ public class Configuration {
      * implementation classes exist and are of the proper type. It does not do any more complex operations such as:
      * validating that database tables exist or validating that named columns exist
      *
-     * @throws InvalidConfigurationException
-     *             the invalid configuration exception
+     * @throws InvalidConfigurationException the invalid configuration exception
      */
     public void validate() throws InvalidConfigurationException {
         List<String> errors = new ArrayList<>();

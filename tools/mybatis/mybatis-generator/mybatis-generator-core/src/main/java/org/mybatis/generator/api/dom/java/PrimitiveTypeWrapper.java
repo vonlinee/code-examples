@@ -15,6 +15,9 @@
  */
 package org.mybatis.generator.api.dom.java;
 
+/**
+ * 基本类型
+ */
 public class PrimitiveTypeWrapper extends FullyQualifiedJavaType {
     private static PrimitiveTypeWrapper booleanInstance;
     private static PrimitiveTypeWrapper byteInstance;

@@ -22,6 +22,7 @@ package org.mybatis.generator.api;
  */
 public abstract class GeneratedFile {
 
+    // 项目位置，即顶级父目录，往下根据模块名区分
     protected final String targetProject;
 
     protected GeneratedFile(String targetProject) {

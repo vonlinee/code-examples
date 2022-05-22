@@ -2,19 +2,15 @@ package io.maker.codegen.mbp.config.po;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-
+import io.maker.base.annotation.NotNull;
 import io.maker.codegen.mbp.config.DataSourceConfig;
 import io.maker.codegen.mbp.config.INameConvert;
 import io.maker.codegen.mbp.config.StrategyConfig;
 import io.maker.codegen.mbp.config.builder.ConfigBuilder;
 import io.maker.codegen.mbp.config.builder.GeneratorBuilder;
-import io.maker.codegen.mbp.config.po.TableField;
-import io.maker.codegen.mbp.config.po.TableInfo;
 import io.maker.codegen.mbp.config.rules.DbColumnType;
 import io.maker.codegen.mbp.config.rules.NamingStrategy;
 import io.maker.codegen.mbp.fill.Column;
-
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

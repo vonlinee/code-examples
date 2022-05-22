@@ -16,7 +16,7 @@
 package org.mybatis.generator.runtime.dynamic.sql;
 
 import static org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities.getEscapedColumnName;
-import static org.mybatis.generator.internal.util.StringUtility.escapeStringForJava;
+import static org.mybatis.generator.internal.util.StringUtils.escapeStringForJava;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.internal.util.StringUtils;
 import org.mybatis.generator.internal.util.messages.Messages;
 
 public class DynamicSqlSupportClassGenerator {
@@ -161,14 +161,14 @@ public class DynamicSqlSupportClassGenerator {
                 escapeStringForJava(getEscapedColumnName(column)),
                 column.getJdbcTypeName()));
 
-        if (StringUtility.stringHasValue(column.getTypeHandler())) {
+        if (StringUtils.stringHasValue(column.getTypeHandler())) {
             initializationString.append(String.format(", \"%s\")", column.getTypeHandler())); //$NON-NLS-1$
         } else {
             initializationString.append(')'); //$NON-NLS-1$
         }
 
 
-        if (StringUtility.isTrue(
+        if (StringUtils.isTrue(
                 column.getProperties().getProperty(PropertyRegistry.COLUMN_OVERRIDE_FORCE_JAVA_TYPE))) {
             initializationString.append(".withJavaType("); //$NON-NLS-1$
             initializationString.append(javaType.getShortName());

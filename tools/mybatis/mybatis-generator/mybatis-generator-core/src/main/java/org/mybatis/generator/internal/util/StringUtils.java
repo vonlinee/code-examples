@@ -17,12 +17,12 @@ package org.mybatis.generator.internal.util;
 
 import java.util.StringTokenizer;
 
-public class StringUtility {
+public class StringUtils {
 
     /**
      * Utility class. No instances allowed
      */
-    private StringUtility() {
+    private StringUtils() {
         super();
     }
 

@@ -20,20 +20,14 @@ public class Utils {
         Context context = new Context(ModelType.CONDITIONAL);
         context.setId("");
         context.getCommentGenerator();
-        Context context = new Context(ModelType.CONDITIONAL);
         // context.addPluginConfiguration();
         return context;
     }
 
-    private PluginConfiguration newPluginConfiguration(String typeName, Properties props) {
-        return pluginConfiguration;
-    }
-
-
     private static List<PluginConfiguration> newPluginConfigurations() {
-        PluginConfiguration pluginConfiguration = new PluginConfiguration();
-        pluginConfiguration.setConfigurationType(typeName);
-        pluginConfiguration.getProperties().entrySet().addAll(props.entrySet());
+//        PluginConfiguration pluginConfiguration = new PluginConfiguration();
+        // pluginConfiguration.setConfigurationType(typeName);
+//        pluginConfiguration.getProperties().entrySet().addAll(props.entrySet());
         PluginConfiguration pc = new PluginConfiguration();
         pc.setConfigurationType(""); // 插件类的全限定类名
         pc.addProperty("order", "1");

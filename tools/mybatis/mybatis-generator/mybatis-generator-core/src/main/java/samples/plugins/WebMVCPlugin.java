@@ -1,6 +1,7 @@
 package samples.plugins;
 
 import org.mybatis.generator.api.GeneratedJavaFile;
+import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.config.Context;
 import org.slf4j.Logger;
@@ -18,6 +19,11 @@ public class WebMVCPlugin extends PluginAdapter {
 
     public WebMVCPlugin() {
         super();
+    }
+
+    @Override
+    public void initialized(IntrospectedTable introspectedTable) {
+        log.info("WebMVCPlugin initialized {}", introspectedTable.getTableConfiguration().getTableName());
     }
 
     @Override

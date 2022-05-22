@@ -21,7 +21,7 @@ import java.util.Set;
 /**
  * This interface describes methods common to all Java compilation units (Java
  * classes, interfaces, and enums).
- *
+ * 编译单元（类/接口/枚举）
  * @author Jeff Butler
  */
 public interface CompilationUnit {
