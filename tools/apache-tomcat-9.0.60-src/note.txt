@@ -1,0 +1,82 @@
+
+
+Tomcat手动部署：
+https://blog.csdn.net/weixin_44915226/article/details/107295282
+
+<!-- 解决报错额外的依赖 -->
+<dependency>
+	<groupId>org.eclipse.jdt</groupId>
+	<artifactId>ecj</artifactId>
+	<version>3.29.0</version>
+</dependency>
+<dependency>
+	<groupId>biz.aQute.bnd</groupId>
+	<artifactId>biz.aQute.bndlib</artifactId>
+	<version>5.2.0</version>
+	<scope>provided</scope>
+</dependency>
+
+
+
+
+-Dcatalina.home=catalina-home 
+-Dcatalina.base=catalina-home 
+
+
+ 
+
+
+
+-Dcatalina.home=D:/Projects/apache-tomcat-9.0.60-src/home
+-Dcatalina.base=D:/Projects/apache-tomcat-9.0.60-src/home
+-Djava.endorsed.dirs=catalina-home/endorsed
+-Djava.io.tmpdir=catalina-home/temp
+-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+-Djava.util.logging.config.file=D:/Projects/apache-tomcat-9.0.60-src/home/conf/logging.properties
+
+可以使用相对路径-Djava.util.logging.config.file=catalina-home/conf/logging.properties
+
+
+http://localhost:8080/servlet25sample/FirstServlet
+
+
+
+
+访问Servelt的流程
+
+javax.servlet.ServletException: Servlet[custom]的Servlet.init（）引发异常
+	org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:545)
+	org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:687)
+	org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:366)
+	org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:401)
+	org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:894)
+	org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:54)
+	org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1196)
+	org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:661)
+	org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	java.lang.Thread.run(Thread.java:748)
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
