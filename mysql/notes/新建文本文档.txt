@@ -52,3 +52,40 @@ https://blog.csdn.net/hzr0523/article/details/118928185
 
 
 https://blog.csdn.net/shw12357/article/details/108639636?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-108639636-blog-91999015.pc_relevant_paycolumn_v3&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-108639636-blog-91999015.pc_relevant_paycolumn_v3&utm_relevant_index=1
+
+
+
+
+
+
+
+
+
+
+
+Optimizing Subqueries, Derived Tables, and View References with Semijoin Transformations
+
+
+A semijoin is a preparation-time transformation that enables multiple
+execution strategies such as table pullout, duplicate weedout, first match,
+loose scan, and materialization. The optimizer uses semijoin strategies to
+improve subquery execution, as described in this section.
+
+semijoin是预编译时期的转换，可以使用多种执行策略，例如
+table pullout, duplicate weedout, first match, loose scan, and materialization
+优化器使用semijoin策略来提升子查询的执行性能
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

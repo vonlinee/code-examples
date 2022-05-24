@@ -41,9 +41,9 @@ public class MySQLGenerator {
 
     public static void main(String[] args) {
         // 数据源配置
-        StopWatch stopWatch = new StopWatch();
+        StopWatch stopWatch = new StopWatch("配置初始化开始");
 
-        stopWatch.start("配置初始化开始");
+        stopWatch.start("配置");
         DataSourceConfig.Builder dataSourceBuilder = new DataSourceConfig.Builder(URL, USER_NAME, PASSWORD)
                 .dbQuery(new MySqlQuery()) // 数据库查询
                 .schema("mybatis-plus") // 数据库schema(部分数据库适用)
@@ -120,7 +120,12 @@ public class MySQLGenerator {
                             .enableBaseResultMap() // 添加实体类和数据库字段映射，即ResultMap标签
                             .enableBaseCrudTag(); // 生成默认的crud标签
                 }).templateEngine(new FreemarkerTemplateEngine()); // 使用Freemarker引擎模板，默认的是Velocity引擎模板
+        stopWatch.stop();
+        
+        stopWatch.start("生成");
         // 执行生成行为
         generator.execute();
+        stopWatch.stop();
+        System.out.println(stopWatch.prettyPrint());
     }
 }
