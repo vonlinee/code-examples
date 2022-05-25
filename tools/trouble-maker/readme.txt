@@ -110,4 +110,7 @@ tasks.withType(JavaCompile) {
      options.compilerArgs << '-Xlint:-varargs'
 }
 
+mysql教程：https://www.begtut.com/mysql/mysql-memory-leak.html
+
+
 

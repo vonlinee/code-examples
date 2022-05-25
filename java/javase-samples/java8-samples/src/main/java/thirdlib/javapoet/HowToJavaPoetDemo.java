@@ -1,5 +1,17 @@
 package thirdlib.javapoet;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.lang.model.element.Modifier;
+
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
@@ -11,20 +23,14 @@ import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
 import com.squareup.javapoet.WildcardTypeName;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.lang.model.element.Modifier;
-
 /**
- * http://android.walfud.com/javapoet-看这一篇就够了/
+ * https://juejin.cn/post/6844903475776585741 看这一篇就够了/
+ * 
+ * SQL IN 子查询：https://www.cnblogs.com/wxw16/p/6105624.html
  */
 class HowToJavaPoetDemo {
-	public static void main(String[] args) {
+	
+	public static void main(String[] args) throws IOException {
 		TypeSpec clazz = clazz(builtinTypeField(), // int
 				arrayTypeField(), // int[]
 				refTypeField(), // File
@@ -34,8 +40,15 @@ class HowToJavaPoetDemo {
 				constructor(), // 构造函数
 				method(code())); // 普通方法
 		JavaFile javaFile = JavaFile.builder("com.walfud.howtojavapoet", clazz).build();
-
-		System.out.println(javaFile.toString());
+		
+		File file = new File("D:/Temp/");
+		javaFile.writeTo(file);
+		
+		Desktop.getDesktop().open(file);
+		
+		clazz.toString();
+		
+//		System.out.println(javaFile.toString());
 	}
 
 	/**
@@ -47,31 +60,25 @@ class HowToJavaPoetDemo {
 	public static TypeSpec clazz(FieldSpec builtinTypeField, FieldSpec arrayTypeField, FieldSpec refTypeField,
 			FieldSpec typeField, FieldSpec parameterizedTypeField, FieldSpec wildcardTypeField, MethodSpec constructor,
 			MethodSpec methodSpec) {
-		return TypeSpec.classBuilder("Clazz")
+		return TypeSpec.classBuilder("Main")
 				// 限定符
 				.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
 				// 泛型
-				.addTypeVariable(TypeVariableName.get("T"))
-
+				.addTypeVariables(Arrays.asList(TypeVariableName.get("A"), TypeVariableName.get("B")))
 				// 继承与接口
 				.superclass(String.class).addSuperinterface(Serializable.class)
 				.addSuperinterface(ParameterizedTypeName.get(Comparable.class, String.class))
 				.addSuperinterface(ParameterizedTypeName.get(ClassName.get(Map.class), TypeVariableName.get("T"),
 						WildcardTypeName.subtypeOf(String.class)))
-
 				// 初始化块
 				.addStaticBlock(CodeBlock.builder().build()).addInitializerBlock(CodeBlock.builder().build())
-
 				// 属性
 				.addField(builtinTypeField).addField(arrayTypeField).addField(refTypeField).addField(typeField)
 				.addField(parameterizedTypeField).addField(wildcardTypeField)
-
 				// 方法 （构造函数也在此定义）
 				.addMethod(constructor).addMethod(methodSpec)
-
 				// 内部类
 				.addType(TypeSpec.classBuilder("InnerClass").build())
-
 				.build();
 	}
 
