@@ -17,17 +17,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "t_department") // 控制生成的表名
+//@Table(name = "t_department", catalog = "t_department", schema = "db") // 控制生成的表名
 public class Department {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "DEPARTMENT_ID")
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@Column(name = "DEPARTMENT_ID")
 	private Long departmentId;
-	@Column(name = "DEPARTMENT_NAME")
+//	@Column(name = "DEPARTMENT_NAME")
 	private String departmentName;
-	@Column(name = "DEPARTMENT_ADDRESS")
+//	@Column(name = "DEPARTMENT_ADDRESS")
 	private String departmentAddress;
-	@Column(name = "DEPARTMENT_CODE")
+//	@Column(name = "DEPARTMENT_CODE")
 	private String departmentCode;
 }

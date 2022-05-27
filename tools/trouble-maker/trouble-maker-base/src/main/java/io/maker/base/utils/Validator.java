@@ -16,8 +16,6 @@ import java.util.regex.Pattern;
  */
 public abstract class Validator {
 
-    private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
-
     // 默认提示信息
     private static final String DEFAULT_NOT_NAN_EX_MESSAGE = "The validated value is not a number";
     private static final String DEFAULT_FINITE_EX_MESSAGE = "The value is invalid: %f";
@@ -551,10 +549,10 @@ public abstract class Validator {
     public static boolean dateTimeInRange(String s1, String e1, String s2, String e2, String format) {
         boolean result = false;
         try {
-            LocalDateTime dts1 = LocalDateTime.parse(s1, DEFAULT_DATETIME_FORMATTER);
-            LocalDateTime dte1 = LocalDateTime.parse(e1, DEFAULT_DATETIME_FORMATTER);
-            LocalDateTime dts2 = LocalDateTime.parse(s1, DEFAULT_DATETIME_FORMATTER);
-            LocalDateTime dte2 = LocalDateTime.parse(e2, DEFAULT_DATETIME_FORMATTER);
+            LocalDateTime dts1 = LocalDateTime.parse(s1, DateTimes.DT_FORMATTER_YMDHMS);
+            LocalDateTime dte1 = LocalDateTime.parse(e1, DateTimes.DT_FORMATTER_YMDHMS);
+            LocalDateTime dts2 = LocalDateTime.parse(s1, DateTimes.DT_FORMATTER_YMDHMS);
+            LocalDateTime dte2 = LocalDateTime.parse(e2, DateTimes.DT_FORMATTER_YMDHMS);
             // 开始时间大于结束时间
             if (dts1.compareTo(dte2) > 0 || dte1.compareTo(dts2) < 0) {
                 result = true;
@@ -699,6 +697,12 @@ public abstract class Validator {
         return true;
     }
 
+    /**
+     * 字符串长度校验
+     * @param cs
+     * @param i
+     * @return
+     */
     public static boolean lengthBiggerThan(final CharSequence cs, int i) {
         if (cs == null) {
             return false;

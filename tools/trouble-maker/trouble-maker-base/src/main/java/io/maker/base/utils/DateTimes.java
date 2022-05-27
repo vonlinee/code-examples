@@ -5,8 +5,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.Date;
 
-public class DateTimes {
+public final class DateTimes {
 
     private static final int[] BIG_MONTH = {1, 3, 5, 7, 8, 10, 12};
     private static final int[] SMALL_MONTH = {4, 6, 9, 11};
@@ -176,6 +177,24 @@ public class DateTimes {
         return dateTime2String(LocalDateTime.now());
     }
 
+    /**
+     * 解析Object到LocalDateTime对象
+     * @param maybeDateTime
+     * @return
+     */
+    public static LocalDateTime parseObject(Object maybeDateTime) {
+    	if (maybeDateTime instanceof String) {
+			return string2DateTime((String) maybeDateTime);
+		}
+    	if (maybeDateTime instanceof Timestamp) {
+			return ((Timestamp) maybeDateTime).toLocalDateTime();
+		}
+    	if (maybeDateTime instanceof LocalDateTime) {
+			return (LocalDateTime) maybeDateTime;
+		}
+    	throw new IllegalArgumentException("不支持的类型,只支持String, Timestamp, LocalDateTime");
+    }
+    
     public static LocalDateTime now() {
         return LocalDateTime.now();
     }

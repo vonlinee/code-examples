@@ -6,7 +6,7 @@ import java.util.HashMap;
 /**
  * 对JavaBean的映射
  */
-public class BeanMap extends HashMap<String, Object> {
+public final class BeanMap extends HashMap<String, Object> {
 
     private static final long serialVersionUID = 1L;
 

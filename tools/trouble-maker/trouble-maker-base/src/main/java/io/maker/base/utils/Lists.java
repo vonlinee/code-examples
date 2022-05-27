@@ -42,7 +42,6 @@ public final class Lists {
 
     /**
      * 二维数组的长度是第一个数，即E[i][j].length = i
-     *
      * @param array 二维数组
      * @param <E>   元素
      * @return 返回值
@@ -56,6 +55,13 @@ public final class Lists {
         return result;
     }
 
+    /**
+     * 过滤元素
+     * @param <E>
+     * @param list
+     * @param rule
+     * @return
+     */
     public static <E> List<E> doFilter(List<E> list, Predicate<E> rule) {
         return list.stream().filter(rule).collect(Collectors.toList());
     }
@@ -68,7 +74,6 @@ public final class Lists {
                 if (o == null) l.add("NULL");
                 else l.add(o.toString());
             }
-            List<String> l1 = new ArrayList<>();
             l.stream().max(Comparator.comparingInt(String::length)).ifPresent(s -> {
                 l.forEach(item -> {
                     int maxLen = s.length();
@@ -80,18 +85,5 @@ public final class Lists {
     
     public static void printlnMapList(List<Map<?, ?>> list) {
         list.forEach(System.out::println);
-    }
-
-    public static void main(String[] args) {
-        //String[] param = {"Tom",
-        //        "Bob", "Andrew", "Taylor Swift"};
-        //List<List<?>> list = new ArrayList<>();
-        //list.add(Arrays.asList(param));
-        //list.add(Arrays.asList(param));
-        //list.add(Arrays.asList(param));
-        //list.add(Arrays.asList(param));
-
-        String[][] arr = new String[3][4];
-        //println(list);
     }
 }
