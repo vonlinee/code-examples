@@ -32,7 +32,7 @@ public class MySQLGenerator {
         // 生成器
         MyBatisGenerator generator = new MyBatisGenerator(config, callback, warnings);
         // 开始生成
-        generator.generate(null);
+        generator.generate(new DefaultProgressCallback());
         List<IntrospectedTable> tables = config.getContexts().get(0).getIntrospectedTables();
         for (IntrospectedTable table : tables) {
             table.getAttribute("");

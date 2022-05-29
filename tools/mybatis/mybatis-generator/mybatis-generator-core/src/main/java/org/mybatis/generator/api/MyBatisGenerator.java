@@ -1,35 +1,4 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.api;
-
-import static org.mybatis.generator.internal.util.ClassloaderUtility.getCustomClassloader;
-import static org.mybatis.generator.internal.util.messages.Messages.getString;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import org.mybatis.generator.codegen.RootClassInfo;
 import org.mybatis.generator.config.Configuration;
@@ -42,6 +11,17 @@ import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.XmlFileMergerJaxp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.mybatis.generator.internal.util.ClassloaderUtility.getCustomClassloader;
+import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
  * This class is the main interface to MyBatis generator. A typical execution of the tool involves these steps:
@@ -61,6 +41,11 @@ public class MyBatisGenerator {
     private static final Logger log = LoggerFactory.getLogger(MyBatisGenerator.class);
 
     private static final ProgressCallback NULL_PROGRESS_CALLBACK = new ProgressCallback() {
+
+        @Override
+        public void saveStarted(int totalTasks) {
+            log.info("saveStarted => {}", totalTasks);
+        }
     };
 
     private final Configuration configuration;
@@ -236,7 +221,6 @@ public class MyBatisGenerator {
                     fullyQualifiedTableNames);
         }
 
-
         // now run the generates
         totalSteps = 0;
         for (Context context : contextsToRun) {
@@ -250,7 +234,7 @@ public class MyBatisGenerator {
         log.info("callback  {}", callback);
 
         // 遍历每个Context
-        // 插件会开始运行
+        // 这期间插件会开始运行
         for (Context context : contextsToRun) {
             // 根据配置准备要生成的数据，即文本内容
             context.generateFiles(callback, generatedJavaFiles,
@@ -258,7 +242,6 @@ public class MyBatisGenerator {
         }
 
         log.info("上下文初始化完毕");
-
         // 填充需要生成的文件
         log.info("开始保存文件 {}", writeFiles);
         // now save the files
@@ -292,6 +275,13 @@ public class MyBatisGenerator {
         callback.done();
     }
 
+    /**
+     * 写入Java文件
+     * @param gjf
+     * @param callback
+     * @throws InterruptedException
+     * @throws IOException
+     */
     private void writeGeneratedJavaFile(GeneratedJavaFile gjf, ProgressCallback callback)
             throws InterruptedException, IOException {
         File targetFile;
@@ -363,15 +353,15 @@ public class MyBatisGenerator {
         }
     }
 
-    private void writeGeneratedXmlFile(GeneratedXmlFile gxf, ProgressCallback callback)
-            throws InterruptedException, IOException {
+    private void writeGeneratedXmlFile(GeneratedXmlFile gxf, ProgressCallback callback) throws InterruptedException, IOException {
         File targetFile;
         String source;
         try {
-            File directory = shellCallback.getDirectory(gxf
-                    .getTargetProject(), gxf.getTargetPackage());
+            File directory = shellCallback.getDirectory(gxf.getTargetProject(), gxf.getTargetPackage());
             targetFile = new File(directory, gxf.getFileName());
+            // 文件已存在，可能是上次生成的文件
             if (targetFile.exists()) {
+                // 判断是否合并
                 if (gxf.isMergeable()) {
                     source = XmlFileMergerJaxp.getMergedSource(gxf, targetFile);
                 } else if (shellCallback.isOverwriteEnabled()) {
@@ -379,18 +369,15 @@ public class MyBatisGenerator {
                     warnings.add(getString("Warning.11", targetFile.getAbsolutePath()));
                 } else {
                     source = gxf.getFormattedContent();
-                    targetFile = getUniqueFileName(directory, gxf
-                            .getFileName());
-                    warnings.add(getString(
-                            "Warning.2", targetFile.getAbsolutePath())); //$NON-NLS-1$
+                    targetFile = getUniqueFileName(directory, gxf.getFileName());
+                    warnings.add(getString("Warning.2", targetFile.getAbsolutePath())); //$NON-NLS-1$
                 }
             } else {
                 source = gxf.getFormattedContent();
             }
 
             callback.checkCancel();
-            callback.startTask(getString(
-                    "Progress.15", targetFile.getName())); //$NON-NLS-1$
+            callback.startTask(getString("Progress.15", targetFile.getName())); //$NON-NLS-1$
             writeFile(targetFile, source, gxf.getFileEncoding());
         } catch (ShellException e) {
             warnings.add(e.getMessage());

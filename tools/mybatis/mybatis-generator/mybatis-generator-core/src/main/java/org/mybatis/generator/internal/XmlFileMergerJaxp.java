@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2020 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.internal;
 
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
@@ -47,10 +32,10 @@ import org.xml.sax.SAXException;
 
 /**
  * This class handles the task of merging changes into an existing XML file.
- *
- * @author Jeff Butler
+ * 合并发生的改变到存在的XML文件
  */
 public class XmlFileMergerJaxp {
+
     private XmlFileMergerJaxp() {}
 
     private static class NullEntityResolver implements EntityResolver {
@@ -68,9 +53,7 @@ public class XmlFileMergerJaxp {
         }
     }
 
-    public static String getMergedSource(GeneratedXmlFile generatedXmlFile,
-            File existingFile) throws ShellException {
-
+    public static String getMergedSource(GeneratedXmlFile generatedXmlFile, File existingFile) throws ShellException {
         try {
             return getMergedSource(new InputSource(new StringReader(generatedXmlFile.getFormattedContent())),
                 new InputSource(new InputStreamReader(new FileInputStream(existingFile), StandardCharsets.UTF_8)),

@@ -1,5 +1,5 @@
 package org.mybatis.generator;
 
-public class CodeGenerator {
+public interface CodeGeneration {
 
 }
