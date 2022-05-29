@@ -1,11 +1,9 @@
 package io.maker.base.utils;
 
-/**
- * ASCII字符串
- */
 public final class Ascii {
 
-    private Ascii() {}
+    private Ascii() {
+    }
 
     /* The ASCII control characters, per RFC 20. */
     /**
@@ -513,6 +511,7 @@ public final class Ascii {
 
     private static void checkArgument(boolean b, String string, int maxLength, int length) {
         // TODO Auto-generated method stub
+
     }
 
     /**

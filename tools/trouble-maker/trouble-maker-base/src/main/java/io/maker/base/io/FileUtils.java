@@ -315,7 +315,7 @@ public class FileUtils {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public static void createNewEmptyFile(File file) {
 		if (file.exists()) {
 			return;
@@ -421,8 +421,8 @@ public class FileUtils {
 	}
 
 	/**
-	 * 列出文件目录下的所有文件
 	 * TODO 优化内存占用
+	 * 
 	 * @param rootPath 根目录
 	 * @return List
 	 */
@@ -478,25 +478,17 @@ public class FileUtils {
 		List<File> files = listFiles(rootDirectory, filter);
 		System.out.println("共找到 " + files.size() + " 个文件");
 		files.forEach(file -> {
-			if (file.isFile()) {
-				boolean delete = file.delete();
-				if (delete) {
-					System.out.println("删除" + file.getAbsolutePath() + "成功");
-				} else {
-					System.out.println("删除" + file.getAbsolutePath() + "失败");
-				}
-			}
-			if (file.isDirectory()) {
-				try {
-					deleteDirectory(file);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			boolean delete = file.delete();
+			if (delete) {
+				System.out.println("删除" + file.getAbsolutePath() + "成功");
+			} else {
+				System.out.println("删除" + file.getAbsolutePath() + "失败");
 			}
 		});
 	}
 
 	public static String readAsString() {
+
 		return "";
 	}
 
@@ -1068,7 +1060,7 @@ public class FileUtils {
 	// -----------------------------------------------------------------------
 
 	/**
-	 * Recursively delete a directory. 递归删除目录
+	 * Recursively delete a directory.
 	 * 
 	 * @param directory directory to delete
 	 * @throws IOException in case deletion is unsuccessful
@@ -1077,6 +1069,7 @@ public class FileUtils {
 		if (!directory.exists()) {
 			return;
 		}
+
 		cleanDirectory(directory);
 		if (!directory.delete()) {
 			String message = "Unable to delete directory " + directory + ".";
@@ -1085,31 +1078,37 @@ public class FileUtils {
 	}
 
 	/**
-	 * 清除目录但不删除，Clean a directory without deleting it.
+	 * Clean a directory without deleting it.
 	 * 
 	 * @param directory directory to clean
 	 * @throws IOException in case cleaning is unsuccessful
 	 */
 	public static void cleanDirectory(File directory) throws IOException {
 		if (!directory.exists()) {
-			throw new IllegalArgumentException(String.format("[%s] does not exist", directory));
+			String message = directory + " does not exist";
+			throw new IllegalArgumentException(message);
 		}
+
 		if (!directory.isDirectory()) {
-			throw new IllegalArgumentException(directory + " is not a directory");
+			String message = directory + " is not a directory";
+			throw new IllegalArgumentException(message);
 		}
+
 		File[] files = directory.listFiles();
 		if (files == null) { // null if security restricted
 			throw new IOException("Failed to list contents of " + directory);
 		}
+
 		IOException exception = null;
 		for (int i = 0; i < files.length; i++) {
 			File file = files[i];
 			try {
-				forceDelete(file); // 强制删除文件
+				forceDelete(file);
 			} catch (IOException ioe) {
 				exception = ioe;
 			}
 		}
+
 		if (null != exception) {
 			throw exception;
 		}
@@ -1848,7 +1847,6 @@ public class FileUtils {
 
 	/**
 	 * 调用系统接口打开文件
-	 * 
 	 * @param file
 	 */
 	public static void openFile(File file) {
@@ -1865,7 +1863,7 @@ public class FileUtils {
 			showFile(file);
 		}
 	}
-
+	
 	public static void showFile(final File file) {
 		File tmp = null;
 		if (!file.isAbsolute() || file.isHidden() || !file.exists()) {
