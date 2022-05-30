@@ -125,7 +125,6 @@ public class GeneratorAntTask extends Task {
             log(e, Project.MSG_ERR);
             throw new BuildException(e.getMessage());
         }
-
         for (String error : warnings) {
             log(error, Project.MSG_WARN);
         }

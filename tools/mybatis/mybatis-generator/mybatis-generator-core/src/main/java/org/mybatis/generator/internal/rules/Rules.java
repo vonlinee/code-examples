@@ -210,7 +210,7 @@ public interface Rules {
      * class. If you return false from this method, and the table has primary
      * key columns, then the primary key columns will be added to the base
      * class.
-     *
+     * 如果返回false，那么即使有主键，也不会为主键生成实体类字段
      * @return true if a separate primary key class should be generated
      */
     boolean generatePrimaryKeyClass();

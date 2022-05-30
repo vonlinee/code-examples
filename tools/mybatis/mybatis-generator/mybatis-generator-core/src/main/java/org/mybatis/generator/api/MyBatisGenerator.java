@@ -232,10 +232,8 @@ public class MyBatisGenerator {
         log.info("  callback.introspectionStarted(totalSteps)");
         callback.introspectionStarted(totalSteps);
         for (Context context : contextsToRun) {
-            context.introspectTables(callback, warnings,
-                    fullyQualifiedTableNames);
+            context.introspectTables(callback, warnings, fullyQualifiedTableNames);
         }
-
 
         // now run the generates
         totalSteps = 0;

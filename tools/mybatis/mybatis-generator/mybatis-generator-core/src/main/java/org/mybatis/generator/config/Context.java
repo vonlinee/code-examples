@@ -469,12 +469,15 @@ public class Context extends PropertyHolder {
             //表初始化化，即准备数据
             // 实现类IntrospectedTableMyBatis3Impl
             introspectedTable.initialize();
+            //
             introspectedTable.calculateGenerators(warnings, callback);
         }
         log.info("开始添加带生成的文件的元数据，插件开始运行");
         for (IntrospectedTable introspectedTable : introspectedTables) {
             callback.checkCancel();
+            // Example类，实体类，Mapper接口
             generatedJavaFiles.addAll(introspectedTable.getGeneratedJavaFiles());
+            // XML文件
             generatedXmlFiles.addAll(introspectedTable.getGeneratedXmlFiles());
             generatedKotlinFiles.addAll(introspectedTable.getGeneratedKotlinFiles());
 
