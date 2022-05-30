@@ -262,7 +262,6 @@ public class Context extends PropertyHolder {
         if (javaFormatter == null) {
             javaFormatter = ObjectFactory.createJavaFormatter(this);
         }
-
         return javaFormatter;
     }
 

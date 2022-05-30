@@ -37,6 +37,5 @@ public class MySQLGenerator {
         for (IntrospectedTable table : tables) {
             table.getAttribute("");
         }
-
     }
 }

@@ -2,7 +2,7 @@ package io.maker.codegen.context.event;
 
 import java.lang.ref.WeakReference;
 
-public final class WeakEventHandler<T extends Event> implements EventHandler<T> {
+public final class WeakEventHandler<T extends ApplicationEvent> implements EventHandler<T> {
 	private final WeakReference<EventHandler<T>> weakRef;
 
 	public WeakEventHandler(EventHandler<T> var1) {
