@@ -23,6 +23,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Import(BeanValidatorPluginsConfiguration.class)
 public class Knife4jConfiguration {
 
+	/**
+	 * Controller包名
+	 */
 	@Value("${requesthandler.selectors.basepackage:io.maker.generator.mybatis}")
 	private String requestHandlerSelectorsBasePackage;
 	

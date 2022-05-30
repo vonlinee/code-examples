@@ -4,6 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ForkJoinPool;
 
 import org.springframework.core.SpringVersion;
 
@@ -24,7 +26,14 @@ public class Test1 {
 //		test5();
 		
 		
-		System.out.println(String.valueOf(null));
+//		System.out.println(String.valueOf(null));
+		
+		CompletableFuture.runAsync(() -> {}, ForkJoinPool.commonPool());
+		
+		
+		int i = ForkJoinPool.getCommonPoolParallelism();
+		
+		System.out.println(i);
 		
 	}
 	

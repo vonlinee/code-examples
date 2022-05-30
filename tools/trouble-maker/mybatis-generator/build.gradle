@@ -49,15 +49,13 @@ dependencies {
     implementation 'com.alibaba:druid-spring-boot-starter:1.2.9'
 
     implementation libs.mysql5_driver
-
     // https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
-    implementation 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3'
-
+    implementation libs.knife4j_spring_boot_starter
     implementation libs.mybatis_generator_core
     implementation libs.mybatis_dynamic_sql
 
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
-    implementation 'org.apache.logging.log4j:log4j-api:2.17.2'
+    // implementation 'org.apache.logging.log4j:log4j-api:2.17.2'
     // https://mvnrepository.com/artifact/org.assertj/assertj-core
     testImplementation 'org.assertj:assertj-core:3.22.0'
     // https://mvnrepository.com/artifact/org.hsqldb/hsqldb
@@ -65,7 +63,10 @@ dependencies {
 
     implementation 'org.reflections:reflections:0.10.2'
     implementation 'jakarta.annotation:jakarta.annotation-api:2.1.0'
-
+	implementation libs.javax_annotation_api
+	// https://mvnrepository.com/artifact/com.netflix.archaius/archaius-core
+	implementation 'com.netflix.archaius:archaius-core:0.7.7'
+	
 }
 
 test {

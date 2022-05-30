@@ -1,7 +1,6 @@
 package io.maker.base.rest;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -13,10 +12,15 @@ import java.util.function.Predicate;
  */
 public abstract class ResultDescription implements Serializable {
 
-    private static final Integer UNKNOWN_CODE = -128; //未知编码
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -668281217437071389L;
+	
+	private static final Integer UNKNOWN_CODE = -128; //未知编码
     private static final String UNKNOWN_MESSAGE = "NONE"; //未知编码
 
-    protected int code;
+    protected Integer code;
     protected String message;
 
     public ResultDescription(int code, String message) {
@@ -53,7 +57,12 @@ public abstract class ResultDescription implements Serializable {
      */
     private static class HttpOperationImpl extends ResultDescription {
 
-        HttpOperationImpl(int code, String message) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		HttpOperationImpl(int code, String message) {
             super(code, message);
         }
 
@@ -74,6 +83,11 @@ public abstract class ResultDescription implements Serializable {
     private static class CustomDescription extends ResultDescription {
 
         /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		/**
          * 自定义判断状态码是成功还是失败，只针对此实例
          */
         private final Predicate<Integer> rule;
@@ -109,7 +123,12 @@ public abstract class ResultDescription implements Serializable {
      */
     private static class EmptyImpl extends ResultDescription {
 
-        public EmptyImpl() {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public EmptyImpl() {
             super(UNKNOWN_CODE, UNKNOWN_MESSAGE);
         }
 
@@ -148,5 +167,4 @@ public abstract class ResultDescription implements Serializable {
     public static void setGlobalCustomCodeRule(Predicate<Integer> globalRule) {
         CustomDescription.globalRule = globalRule;
     }
-
 }

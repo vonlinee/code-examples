@@ -3,9 +3,11 @@ package io.maker.base.rest;
 import java.io.Serializable;
 import java.util.StringJoiner;
 
-public final class OptResult<T> extends Result<T> implements Serializable {
+public class OptResult<T> extends Result<T> implements Serializable {
 
-    private OptResult(ResultDescription description) {
+	private static final long serialVersionUID = 1L;
+
+	private OptResult(ResultDescription description) {
         super(description);
     }
 

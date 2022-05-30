@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.maker.base.collection.ParamMap;
-import io.maker.base.rest.PageResult;
+import io.maker.base.rest.ListResult;
 import io.maker.base.utils.Validator;
 import io.maker.codegen.mbp.entity.Columns;
 import io.maker.codegen.mbp.entity.Tables;
@@ -30,31 +30,31 @@ public class InformationSchemaController {
 
 	@ApiOperation(value = "修改用户", notes = "根据传入的用户信息修改用户")
 	@PostMapping(value = "/queryColumns.do")
-	public PageResult<Columns> queryColumns(
+	public ListResult<Columns> queryColumns(
 			@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
 			@RequestBody(required = false) ParamMap paramMap) {
 		String tableName = Validator.notBlank(paramMap.getString("tableName"));
 		ParamMap map = new ParamMap();
 		map.put("tableName", tableName);
 		List<Columns> list = informationSchemaMapper.selectColumns(paramMap);
-		return PageResult.<Columns>builder()
-					.data(list)
-					.description(200, tableName)
-					.build();
+		return ListResult.<Columns>builder()
+				.data(list)
+				.description(200, tableName)
+				.build();
 	}
-	
-	@ApiOperation(value = "修改用户", notes = "根据传入的用户信息修改用户")
+
+	@ApiOperation(value = "queryTables", notes = "queryTables")
 	@PostMapping(value = "/queryTables.do")
-	public PageResult<Tables> queryTables(
+	public ListResult<Tables> queryTables(
 			@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication,
 			@RequestBody(required = false) ParamMap paramMap) {
 		String tableName = Validator.notBlank(paramMap.getString("tableName"));
 		ParamMap map = new ParamMap();
 		map.put("tableName", tableName);
 		List<Tables> list = informationSchemaMapper.selectTables(paramMap);
-		return PageResult.<Tables>builder()
-					.data(list)
-					.description(200, "1")
-					.build();
+		return ListResult.<Tables>builder()
+				.data(list)
+				.description(200, "1")
+				.build();
 	}
 }

@@ -14,21 +14,19 @@ import org.springframework.context.annotation.ComponentScan;
 		DataSourceAutoConfiguration.class
 })
 @MapperScans(value = {
-		@MapperScan(value = {"io.maker.codegen.mbp.mapper"})
+		@MapperScan(value = { "io.maker.codegen.mbp.mapper" })
 })
 @ComponentScan(basePackages = {
 		"io.maker.codegen.mbp"
 })
 public class MybatisGeneratorApplication {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(MybatisGeneratorApplication.class);
-	
+
 	@Value("${server.port}")
 	private int port;
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(MybatisGeneratorApplication.class, args);
-		
-		LOGGER.info("localhost:8888/doc.html");
 	}
 }

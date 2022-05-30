@@ -16,14 +16,14 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 public class MyBatisConfiguration {
 
 	private static final String DEFAULT_MAPPER_CLASSPATH_LOCATION = "mybatis/mapping/*.xml";
-	
+
 	@Value(value = "${mybatis.mapper.classpathlocation:" + DEFAULT_MAPPER_CLASSPATH_LOCATION + "}")
 	private String mapperLocationPattern;
-	
+
 	@Bean(name = "sqlSessionFactory")
 	public SqlSessionFactory sqlSessionFactory(DataSource datasource) throws Exception {
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-		bean.setDataSource(datasource); 
+		bean.setDataSource(datasource);
 		// 设置mybatis的xml所在位置
 		bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(mapperLocationPattern));
 		return bean.getObject();
@@ -31,8 +31,7 @@ public class MyBatisConfiguration {
 
 	@Bean("sqlSessionTemplate")
 	@Primary
-	public SqlSessionTemplate sqlSessionTemplate(
-			@Qualifier("sqlSessionFactory") SqlSessionFactory sessionfactory) {
+	public SqlSessionTemplate sqlSessionTemplate(@Qualifier("sqlSessionFactory") SqlSessionFactory sessionfactory) {
 		return new SqlSessionTemplate(sessionfactory);
 	}
 }

@@ -13,14 +13,14 @@ public abstract class Result<T> implements Serializable {
     private static final long serialVersionUID = 2819999455116368072L;
 
     /**
-     * 扩展信息，是否线程安全?
+     * 扩展信息，是否需要线程安全?
      */
     private final Map<String, Object> attachement = new HashMap<>();
 
     /**
      * 创建的时间戳
      */
-    protected String timestamp;
+    protected long timestamp;
 
     /**
      * 结果描述：包括状态码，以及信息
@@ -33,11 +33,11 @@ public abstract class Result<T> implements Serializable {
     protected T data;
 
     Result() {
-        this.timestamp = String.valueOf(System.currentTimeMillis());
+        this.timestamp = System.currentTimeMillis();
     }
 
     Result(ResultDescription description) {
-        this.timestamp = String.valueOf(System.currentTimeMillis());
+        this.timestamp = System.currentTimeMillis();
         this.description = description;
     }
 
@@ -68,5 +68,13 @@ public abstract class Result<T> implements Serializable {
 
     public final void attach(String name, Object item) {
         this.attachement.put(name, item);
+    }
+    
+    /**
+     * 
+     */
+    interface ResultBuilder {
+    	void attach(String name, Object item);
+    	<V> V detach(String name);
     }
 }

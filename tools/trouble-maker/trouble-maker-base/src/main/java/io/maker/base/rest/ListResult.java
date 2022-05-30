@@ -3,11 +3,13 @@ package io.maker.base.rest;
 import java.io.Serializable;
 import java.util.List;
 
-public final class PageResult<T> extends Result<List<T>> implements Serializable {
+public class ListResult<T> extends Result<List<T>> implements Serializable {
 
     private static final long serialVersionUID = 4134449411254581242L;
 
-    public PageResult() {
+    private int records;
+    
+    public ListResult() {
         super();
     }
 
@@ -50,8 +52,8 @@ public final class PageResult<T> extends Result<List<T>> implements Serializable
         }
 
         @SuppressWarnings({"hiding"})
-        public PageResult<T> build() {
-            return new PageResult<>();
+        public ListResult<T> build() {
+            return new ListResult<>();
         }
     }
 }

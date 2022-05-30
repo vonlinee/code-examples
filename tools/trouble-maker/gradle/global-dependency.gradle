@@ -1,3 +1,10 @@
+/*
+ * 单引号是GString，双引号是String
+ * 
+ * 
+ * 
+ * */
+
 // LinkedHashMap
 ext {
     configuration = [javaVersion = JavaVersion.VERSION_1_8]
@@ -89,8 +96,13 @@ ext {
             firebird                   : "org.firebirdsql.jdbc:jaybird:4.0.1.java8",
             //code generator
             swagger_annotations        : "io.swagger:swagger-annotations:1.6.2",
+			// Apache Commons
             commons_io                 : "commons-io:commons-io:2.11.0",
+			// https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
+			javax_annotation_api 	   : 'javax.annotation:javax.annotation-api:1.3.2',
+			knife4j_spring_boot_starter: 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3'
     ]
 }
 
-// 单引号是GString，双引号是String
+
+

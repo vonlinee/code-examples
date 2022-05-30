@@ -1,15 +1,13 @@
 package io.maker.base.rest;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 /**
  * 单条返回结果
  * @param <T>
  * @author line
  */
-public final class EntityResult<T> extends Result<T> implements Serializable {
+public class EntityResult<T> extends Result<T> implements Serializable {
 
     private static final long serialVersionUID = 4134449411254581242L;
 
