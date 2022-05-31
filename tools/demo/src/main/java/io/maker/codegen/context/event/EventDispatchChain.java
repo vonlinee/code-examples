@@ -1,5 +1,31 @@
+/*
+ * Copyright (c) 2010, 2013, Oracle and/or its affiliates. All rights reserved.
+ * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
 package io.maker.codegen.context.event;
 
+// PENDING_DOC_REVIEW
 /**
  * Represents a chain of {@code EventDispatcher} objects, which can dispatch
  * an {@code Event}. The event is dispatched by passing it from one

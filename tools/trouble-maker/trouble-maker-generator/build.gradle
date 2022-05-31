@@ -62,6 +62,12 @@ dependencies {
     implementation libs.mybatis_spring
     implementation libs.mybatis_core
     implementation libs.spring_context
+	
+	
+	// https://mvnrepository.com/artifact/org.openjfx/javafx-base
+	implementation 'org.openjfx:javafx-base:11.0.2'
+	
+	
 }
 
 test {

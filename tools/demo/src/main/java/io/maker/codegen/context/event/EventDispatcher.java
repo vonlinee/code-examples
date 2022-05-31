@@ -1,5 +1,31 @@
+/*
+ * Copyright (c) 2010, 2013, Oracle and/or its affiliates. All rights reserved.
+ * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
 package io.maker.codegen.context.event;
 
+// PENDING_DOC_REVIEW
 /**
  * An {@code EventDispatcher} represents an event dispatching and processing
  * entity. It is used when an {@code Event} needs to be dispatched to the
