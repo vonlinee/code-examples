@@ -1,0 +1,75 @@
+plugins {
+    id 'java'
+}
+
+group 'io.trouble.maker'
+version '0.0.1.SNAPSHOT'
+description 'io.trouble.maker.generator'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.spring.io/release"
+    }
+    maven {
+        url "https://repository.jboss.org/maven2"
+    }
+}
+
+dependencies {
+
+    implementation project(':trouble-maker-base')
+    implementation project(':trouble-maker-extension')
+
+    implementation libs.juint
+    implementation libs.mybatis_plus_core
+    implementation libs.velocity
+    implementation libs.freemarker
+    implementation libs.beetl
+    compileOnly libs.jetbrains_anotations
+    // 生成代码
+    implementation libs.javapoet
+    implementation libs.commons_dbutils
+    implementation libs.freemarker
+    implementation libs.druid
+    // 日志依赖
+    implementation libs.slf4j_api
+    implementation libs.slf4j_log4j12
+    implementation libs.mysql8_driver
+    implementation libs.lombok
+
+    implementation libs.sharding_jdbc_core
+    implementation libs.guava
+    implementation libs.mybatis_plus_core
+    implementation libs.commons_dbutils
+
+    testCompileOnly libs.jetbrains_anotations
+// https://mvnrepository.com/artifact/com.alibaba/fastjson
+    implementation libs.fastjson
+    testImplementation libs.sqlserver
+    testImplementation libs.postgresql
+    testImplementation libs.oracle
+    testImplementation libs.dm
+    //
+    testImplementation libs.kingbase
+    testImplementation libs.h2
+    testImplementation libs.mysql5_driver
+    testImplementation libs.sqlite
+    testImplementation libs.firebird
+    testImplementation libs.swagger_annotations
+    implementation libs.lombok
+    implementation libs.spring_core
+    implementation libs.mybatis_spring
+    implementation libs.mybatis_core
+    implementation libs.spring_context
+	
+	
+	// https://mvnrepository.com/artifact/org.openjfx/javafx-base
+	implementation 'org.openjfx:javafx-base:11.0.2'
+	
+	implementation libs.spring_cloud_starter_openfeign
+}
+
+test {
+    useJUnitPlatform()
+}

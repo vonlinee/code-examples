@@ -12,7 +12,7 @@ repositories {
 dependencies {
     // 基础库
     implementation project(":trouble-maker-base")
-    implementation project(":trouble-maker-generator")
+    implementation project(":trouble-maker-codegen")
 
     implementation libs.mybatis_plus_core
     implementation libs.velocity
