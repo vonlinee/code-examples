@@ -3,7 +3,7 @@
 <mapper namespace="io.maker.codegen.mbp.mapper.InformationSchemaMapper">
 
 	<!-- 字段信息 -->
-    <resultMap id="ColumnsResultMap" type="io.maker.generator.mybatis.entity.Columns">
+    <resultMap id="ColumnsResultMap" type="io.maker.codegen.mbp.entity.Columns">
         <result column="TABLE_CATALOG" property="tableCatalog" />
         <result column="TABLE_SCHEMA" property="tableSchema" />
         <result column="TABLE_NAME" property="tableName" />
@@ -28,7 +28,7 @@
     </resultMap>
 
 	<!-- 表信息 -->
-    <resultMap id="TablesResultMap" type="io.maker.generator.mybatis.entity.Tables">
+    <resultMap id="TablesResultMap" type="io.maker.codegen.mbp.entity.Tables">
         <result column="TABLE_CATALOG" property="tableCatalog" />
         <result column="TABLE_SCHEMA" property="tableSchema" />
         <result column="TABLE_NAME" property="tableName" />

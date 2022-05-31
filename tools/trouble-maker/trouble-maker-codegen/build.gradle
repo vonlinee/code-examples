@@ -19,6 +19,7 @@ repositories {
 dependencies {
 
     implementation project(':trouble-maker-base')
+	implementation project(':trouble-maker-commons')
     implementation project(':trouble-maker-extension')
 
     implementation libs.juint

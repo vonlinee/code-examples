@@ -21,7 +21,6 @@ configurations {
 dependencies {
     // 基础库
     implementation project(":trouble-maker-base")
-    implementation project(":trouble-maker-codegen")
     implementation project(":trouble-maker-extension")
 
     implementation libs.mybatis_plus_core
