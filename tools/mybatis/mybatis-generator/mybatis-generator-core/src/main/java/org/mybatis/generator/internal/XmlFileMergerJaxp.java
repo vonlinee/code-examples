@@ -94,6 +94,7 @@ public class XmlFileMergerJaxp {
         DocumentBuilder builder = factory.newDocumentBuilder();
         builder.setEntityResolver(new NullEntityResolver());
 
+        // org.w3c.dom.Document
         Document existingDocument = builder.parse(existingFile);
         Document newDocument = builder.parse(newFile);
 
@@ -108,7 +109,7 @@ public class XmlFileMergerJaxp {
         Element existingRootElement = existingDocument.getDocumentElement();
         Element newRootElement = newDocument.getDocumentElement();
 
-        // reconcile the root element attributes -
+        // reconcile(调和) the root element attributes -
         // take all attributes from the new element and add to the existing
         // element
 
@@ -168,7 +169,10 @@ public class XmlFileMergerJaxp {
         }
 
         // pretty print the result
-        return prettyPrint(existingDocument);
+        String xmlContent = prettyPrint(existingDocument);
+
+        System.out.println(xmlContent.length());
+        return xmlContent;
     }
 
     private static String prettyPrint(Document document) throws ShellException {

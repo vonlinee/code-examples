@@ -45,6 +45,8 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
     protected XmlElement getSqlMapElement() {
         FullyQualifiedTable table = introspectedTable.getFullyQualifiedTable();
         progressCallback.startTask(getString("Progress.12", table.toString())); //$NON-NLS-1$
+
+        // 生成XML
         XmlElement answer = new XmlElement("mapper"); //$NON-NLS-1$
         String namespace = introspectedTable.getMyBatis3SqlMapNamespace();
         answer.addAttribute(new Attribute("namespace", namespace)); //$NON-NLS-1$
@@ -233,11 +235,9 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         Document document = new Document(XmlConstants.MYBATIS3_MAPPER_PUBLIC_ID,
                 XmlConstants.MYBATIS3_MAPPER_SYSTEM_ID);
         document.setRootElement(getSqlMapElement());
-
         if (!context.getPlugins().sqlMapDocumentGenerated(document, introspectedTable)) {
             document = null;
         }
-
         return document;
     }
 }

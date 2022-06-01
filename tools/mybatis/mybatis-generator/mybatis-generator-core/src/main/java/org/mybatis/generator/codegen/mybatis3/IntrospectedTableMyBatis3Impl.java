@@ -220,6 +220,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 
     @Override
     public List<GeneratedXmlFile> getGeneratedXmlFiles() {
+        log.info("获取生成的XML文件信息");
         List<GeneratedXmlFile> answer = new ArrayList<>();
         if (xmlMapperGenerator != null) {
             Document document = xmlMapperGenerator.getDocument();

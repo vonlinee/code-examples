@@ -204,41 +204,32 @@ public class DomWriter {
         if (node == null) {
             return;
         }
-
         short type = node.getNodeType();
         switch (type) {
         case Node.DOCUMENT_NODE:
             write((Document) node);
             break;
-
         case Node.DOCUMENT_TYPE_NODE:
             write((DocumentType) node);
             break;
-
         case Node.ELEMENT_NODE:
             write((Element) node);
             break;
-
         case Node.ENTITY_REFERENCE_NODE:
             write((EntityReference) node);
             break;
-
         case Node.CDATA_SECTION_NODE:
             write((CDATASection) node);
             break;
-
         case Node.TEXT_NODE:
             write((Text) node);
             break;
-
         case Node.PROCESSING_INSTRUCTION_NODE:
             write((ProcessingInstruction) node);
             break;
-
         case Node.COMMENT_NODE:
             write((Comment) node);
             break;
-
         default:
             throw new ShellException(getString(
                     "RuntimeError.18", Short.toString(type))); //$NON-NLS-1$
@@ -253,7 +244,9 @@ public class DomWriter {
             printWriter.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); //$NON-NLS-1$
         }
         printWriter.flush();
+        // XML首部的DocType
         write(node.getDoctype());
+        // XML的节点
         write(node.getDocumentElement());
     }
 
@@ -283,7 +276,14 @@ public class DomWriter {
         printWriter.println('>');
     }
 
+    /**
+     * 写入文档元素
+     * @param node
+     * @throws ShellException
+     */
     protected void write(Element node) throws ShellException {
+        // 每个元素之间是否空一行
+        // printWriter.print("\n");
         printWriter.print('<');
         printWriter.print(node.getNodeName());
         Attr[] attrs = sortAttributes(node.getAttributes());
@@ -304,6 +304,7 @@ public class DomWriter {
 
             Node child = node.getFirstChild();
             while (child != null) {
+                printWriter.print("\n");
                 writeAnyNode(child);
                 child = child.getNextSibling();
             }

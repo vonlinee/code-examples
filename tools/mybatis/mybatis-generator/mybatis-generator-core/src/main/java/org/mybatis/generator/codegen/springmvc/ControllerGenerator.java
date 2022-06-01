@@ -22,7 +22,6 @@ public class ControllerGenerator extends AbstractJavaGenerator {
 	public List<CompilationUnit> getCompilationUnits() {
 		FullyQualifiedTable fullyQualifiedTable = introspectedTable.getFullyQualifiedTable();
 
-
 		String doName = fullyQualifiedTable.getDomainObjectName();
 
 		FullyQualifiedJavaType fullyQualifiedJavaType = new FullyQualifiedJavaType(controllerName(doName));

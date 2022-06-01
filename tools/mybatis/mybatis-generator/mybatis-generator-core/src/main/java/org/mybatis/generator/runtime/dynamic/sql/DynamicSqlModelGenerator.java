@@ -144,8 +144,7 @@ public class DynamicSqlModelGenerator extends AbstractJavaGenerator {
         context.getCommentGenerator().addGeneralMethodAnnotation(method, introspectedTable,
                 topLevelClass.getImportedTypes());
 
-        List<IntrospectedColumn> constructorColumns = introspectedTable
-                .getAllColumns();
+        List<IntrospectedColumn> constructorColumns = introspectedTable.getAllColumns();
 
         for (IntrospectedColumn introspectedColumn : constructorColumns) {
             method.addParameter(new Parameter(introspectedColumn

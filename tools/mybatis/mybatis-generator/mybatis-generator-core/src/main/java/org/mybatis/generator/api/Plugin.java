@@ -59,7 +59,7 @@ import org.mybatis.generator.config.Context;
  * <p>Plugins are related to contexts - so each context will have its own set of
  * plugins. If the same plugin is specified in multiple contexts, then each
  * context will hold a unique instance of the plugin.
- *
+ * <p>
  * 插件的顺序：按照在配置文件中定义的顺序
  * <p>Plugins are called, and initialized, in the same order they are specified in
  * the configuration.
@@ -1155,7 +1155,7 @@ public interface Plugin {
 
     /**
      * This method is called when the SqlMap file has been generated.
-     *
+     * 
      * @param sqlMap            the generated file (containing the file name, package name,
      *                          and project name)
      * @param introspectedTable The class containing information about the table as
@@ -1174,13 +1174,14 @@ public interface Plugin {
      * This method is called when the SqlMap document has been generated. This
      * method can be used to add additional XML elements the the generated
      * document.
+     * 增加额外的XML元素到生成的XML文档
      *
      * @param document          the generated document (note that this is the MyBatis generator's internal
      *                          Document class - not the w3c XML Document class)
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database
      * @return true if the document should be generated, false if the generated
-     * document should be ignored. In the case of multiple plugins, the
+     * document should be ignored（该document会被置为null）. In the case of multiple plugins, the
      * first plugin returning false will disable the calling of further
      * plugins. Also, if any plugin returns false, then the
      * <code>sqlMapGenerated</code> method will not be called.
