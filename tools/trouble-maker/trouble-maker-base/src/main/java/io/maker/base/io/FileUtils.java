@@ -478,11 +478,20 @@ public class FileUtils {
 		List<File> files = listFiles(rootDirectory, filter);
 		System.out.println("共找到 " + files.size() + " 个文件");
 		files.forEach(file -> {
-			boolean delete = file.delete();
-			if (delete) {
-				System.out.println("删除" + file.getAbsolutePath() + "成功");
-			} else {
-				System.out.println("删除" + file.getAbsolutePath() + "失败");
+			if (file.isFile()) {
+				boolean delete = file.delete();
+				if (delete) {
+					System.out.println("删除" + file.getAbsolutePath() + "成功");
+				} else {
+					System.out.println("删除" + file.getAbsolutePath() + "失败");
+				}
+			} else if (file.isDirectory()) {
+				try {
+					deleteDirectory(file);
+					System.out.println("删除" + file.getAbsolutePath() + "成功");
+				} catch (IOException e) {
+					System.out.println("删除" + file.getAbsolutePath() + "失败," + e.getMessage());
+				}
 			}
 		});
 	}

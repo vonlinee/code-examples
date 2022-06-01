@@ -10,15 +10,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication(exclude = {
-		DataSourceAutoConfiguration.class
-})
-@MapperScans(value = {
-		@MapperScan(value = { "io.maker.codegen.mbp.mapper" })
-})
-@ComponentScan(basePackages = {
-		"io.maker.codegen.mbp"
-})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@MapperScans(value = {@MapperScan(value = { "io.maker.codegen.mbp.mapper" })})
+@ComponentScan(basePackages = {"io.maker.codegen.mbp"})
 public class MybatisGeneratorApplication {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MybatisGeneratorApplication.class);

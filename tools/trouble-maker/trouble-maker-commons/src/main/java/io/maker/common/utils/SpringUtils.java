@@ -39,4 +39,8 @@ public class SpringUtils implements ApplicationContextAware, EnvironmentAware {
 	public static <T> T getBean(String name, Class<T> requiredType) {
 		return applicationContext.getBean(name, requiredType);
 	}
+	
+	public static Environment getEnvironment() {
+		return environment;
+	}
 }

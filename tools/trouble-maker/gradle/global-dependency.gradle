@@ -17,6 +17,7 @@ ext {
         mybatis_spring = "2.2.2"
         spring_version = "5.3.16"
         spring_boot_version = "2.3.12.RELEASE"
+		spring_cloud_version = ""
     }
     // 全局依赖项
     libs = [
@@ -62,7 +63,7 @@ ext {
             mybatis_dynamic_sql        : 'org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.4.0',
             mybatis_spring             : "org.mybatis:mybatis-spring:2.0.7",
             mybatis_plus_core          : "com.baomidou:mybatis-plus:3.4.3.4",
-            // spring相关依赖
+            // spring
             spring_context             : 'org.springframework:spring-context:5.3.16',
             spring_core                : 'org.springframework:spring-core:5.3.16',
             spring_web                 : 'org.springframework:spring-web:5.3.16',
@@ -71,9 +72,11 @@ ext {
             spring_orm                 : 'org.springframework:spring-orm:5.3.16',
             spring_webflux             : 'org.springframework:spring-webflux:5.3.16',
             // springboot
-            spring_boot_starter_web    : 'org.springframework.boot:spring-boot-starter-web:2.3.12.RELEASE',
-            spring_boot_starter_webflux: 'org.springframework.boot:spring-boot-starter-webflux:2.3.12.RELEASE',
-            // log4j: '',
+			spring_boot_dependencies   : 'org.springframework.boot:spring-boot-dependencies:${lib_version.spring_boot_version}',
+            spring_boot_starter_web    : 'org.springframework.boot:spring-boot-starter-web:${lib_version.spring_boot_version}',
+            spring_boot_starter_webflux: 'org.springframework.boot:spring-boot-starter-webflux:${lib_version.spring_boot_version}',
+			spring_boot_starter_logging: 'org.springframework.boot:spring-boot-starter-logging:${lib_version.spring_boot_version}',
+			// log
             slf4j_api                  : 'org.slf4j:slf4j-api:1.7.36',
             slf4j_log4j12              : 'org.slf4j:slf4j-log4j12:1.7.36',
             javapoet                   : 'com.squareup:javapoet:1.13.0',

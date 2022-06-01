@@ -18,6 +18,10 @@ repositories {
 
 dependencies {
 
+	compileOnly libs.jetbrains_anotations
+	
+	testCompileOnly libs.jetbrains_anotations
+	
     implementation project(':trouble-maker-base')
 	implementation project(':trouble-maker-commons')
     implementation project(':trouble-maker-extension')
@@ -27,48 +31,34 @@ dependencies {
     implementation libs.velocity
     implementation libs.freemarker
     implementation libs.beetl
-    compileOnly libs.jetbrains_anotations
     // 生成代码
     implementation libs.javapoet
     implementation libs.commons_dbutils
-    implementation libs.freemarker
     implementation libs.druid
     // 日志依赖
     implementation libs.slf4j_api
     implementation libs.slf4j_log4j12
     implementation libs.mysql8_driver
     implementation libs.lombok
-
     implementation libs.sharding_jdbc_core
     implementation libs.guava
-    implementation libs.mybatis_plus_core
-    implementation libs.commons_dbutils
-
-    testCompileOnly libs.jetbrains_anotations
-// https://mvnrepository.com/artifact/com.alibaba/fastjson
     implementation libs.fastjson
+	implementation libs.lombok
+	implementation libs.mybatis_spring
+	implementation libs.mybatis_core
+	implementation libs.spring_cloud_starter_openfeign
+	
+	
     testImplementation libs.sqlserver
     testImplementation libs.postgresql
     testImplementation libs.oracle
     testImplementation libs.dm
-    //
     testImplementation libs.kingbase
     testImplementation libs.h2
     testImplementation libs.mysql5_driver
     testImplementation libs.sqlite
     testImplementation libs.firebird
     testImplementation libs.swagger_annotations
-    implementation libs.lombok
-    implementation libs.spring_core
-    implementation libs.mybatis_spring
-    implementation libs.mybatis_core
-    implementation libs.spring_context
-	
-	
-	// https://mvnrepository.com/artifact/org.openjfx/javafx-base
-	implementation 'org.openjfx:javafx-base:11.0.2'
-	
-	implementation libs.spring_cloud_starter_openfeign
 }
 
 test {
