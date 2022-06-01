@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "knife4j.requesthandler.selectors.basepackage",
+      "type": "java.lang.String",
+      "description": "Description for knife4j.requesthandler.selectors.basepackage."
+    }
+  ]
+}

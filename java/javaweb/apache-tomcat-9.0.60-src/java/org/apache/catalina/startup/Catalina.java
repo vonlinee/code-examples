@@ -50,6 +50,8 @@ import org.apache.tomcat.util.file.ConfigFileLoader;
 import org.apache.tomcat.util.file.ConfigurationSource;
 import org.apache.tomcat.util.log.SystemLogHandler;
 import org.apache.tomcat.util.res.StringManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 
@@ -74,6 +76,7 @@ import org.xml.sax.InputSource;
  */
 public class Catalina {
 
+	private static final Logger _log = LoggerFactory.getLogger(Catalina.class);
 
     /**
      * The string manager for this package.
@@ -755,7 +758,7 @@ public class Catalina {
      * Start a new server instance.
      */
     public void start() {
-
+    	_log.info("server => {}", getServer()); // StandardServer -> LifecycleBase
         if (getServer() == null) {
             load();
         }
@@ -764,7 +767,7 @@ public class Catalina {
             log.fatal(sm.getString("catalina.noServer"));
             return;
         }
-
+        // StandardServer[8005]
         long t1 = System.nanoTime();
 
         // Start the new server

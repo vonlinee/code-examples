@@ -110,6 +110,7 @@
   <!--                       that RFC 7233 clarified that Range headers are -->
   <!--                       only valid for GET requests. [true]            -->
 
+	<!-- 默认的DefaultServlet -->
     <servlet>
         <servlet-name>default</servlet-name>
         <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
@@ -278,6 +279,19 @@
         <load-on-startup>3</load-on-startup>
     </servlet>
 
+	<servlet>
+	    <servlet-name>custom</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.CustomServlet</servlet-class>
+        <init-param>
+            <param-name>param1</param-name>
+            <param-value>value1</param-value>
+        </init-param>
+        <init-param>
+            <param-name>param2</param-name>
+            <param-value>value2</param-value>
+        </init-param>
+        <load-on-startup>4</load-on-startup>
+	</servlet>
 
   <!-- NOTE: An SSI Filter is also available as an alternative SSI          -->
   <!-- implementation. Use either the Servlet or the Filter but NOT both.   -->
@@ -442,6 +456,12 @@
         <servlet-name>jsp</servlet-name>
         <url-pattern>*.jsp</url-pattern>
         <url-pattern>*.jspx</url-pattern>
+    </servlet-mapping>
+
+	<!-- 自定义 org.apache.catalina.servlets.CustomServlet -->
+    <servlet-mapping>
+        <servlet-name>custom</servlet-name>
+        <url-pattern>/custom/*</url-pattern>
     </servlet-mapping>
 
     <!-- The mapping for the SSI servlet -->

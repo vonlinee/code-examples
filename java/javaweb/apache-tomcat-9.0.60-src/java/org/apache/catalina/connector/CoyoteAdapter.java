@@ -35,6 +35,7 @@ import org.apache.catalina.Host;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.authenticator.AuthenticatorBase;
 import org.apache.catalina.core.AsyncContextImpl;
+import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.util.ServerInfo;
 import org.apache.catalina.util.SessionConfig;
 import org.apache.catalina.util.URLEncoder;
@@ -61,7 +62,10 @@ import utils.LogUtils;
 /**
  * Implementation of a request processor which delegates the processing to a
  * Coyote processor.
- *
+ * 
+ * Adapter连接了Tomcat连接器Connector和容器Container.它的实现类是CoyoteAdapter主要负责的是对请求进行封装,
+ * 构造Request和Response对象.并将请求转发给Container也就是Servlet容器
+ * 
  * @author Craig R. McClanahan
  * @author Remy Maucherat
  */
@@ -70,6 +74,8 @@ public class CoyoteAdapter implements Adapter {
     private static final Log log = LogFactory.getLog(CoyoteAdapter.class);
 
     // -------------------------------------------------------------- Constants
+    
+    private static final Logger _log = LoggerFactory.getLogger(CoyoteAdapter.class);
 
     private static final String POWERED_BY = "Servlet/4.0 JSP/2.3 " +
             "(" + ServerInfo.getServerInfo() + " Java/" +
@@ -319,8 +325,7 @@ public class CoyoteAdapter implements Adapter {
     public void service(org.apache.coyote.Request req, org.apache.coyote.Response res)
             throws Exception {
     	
-        LogUtils.log("class[%s] localAddr[%s] remoteAddr[%s]", this, req.localAddr(), req.remoteAddr());
-        LogUtils.log("url[%s]", req.requestURI());
+    	_log.info("class[{}] localAddr[{}] remoteAddr[{}]", this, req.localAddr(), req.remoteAddr());
     	
         Request request = (Request) req.getNote(ADAPTER_NOTES);
         Response response = (Response) res.getNote(ADAPTER_NOTES);
@@ -359,10 +364,13 @@ public class CoyoteAdapter implements Adapter {
             // request parameters
             postParseSuccess = postParseRequest(req, request, res, response);
             if (postParseSuccess) {
-                //check valves if we support async
+                //check valves if we support async  异步支持
                 request.setAsyncSupported(
                         connector.getService().getContainer().getPipeline().isAsyncSupported());
-                // Calling the container
+                // Calling the container  调用容器Container (响应Servlet)
+                // Service => StandardService
+                // Container => (org.apache.catalina.core.StandardEngine) StandardEngine[Catalina]
+                // StandardEngineValve[StandardEngine[Catalina]]
                 connector.getService().getContainer().getPipeline().getFirst().invoke(
                         request, response);
             }

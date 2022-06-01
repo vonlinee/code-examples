@@ -7,7 +7,7 @@ buildscript {
         // 本地仓库位置
         maven { url "https://plugins.gradle.org/m2/" }
     }
-
+	// 指定构建所需的依赖
     dependencies {
         //noinspection DifferentKotlinGradleVersion
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72'
@@ -22,13 +22,15 @@ plugins {
 group 'io.trouble.maker'
 version '1.0-SNAPSHOT'
 
+apply from: this.rootProject.file('gradle/utils.gradle')
+
 allprojects {
     group = 'io.trouble.maker'
     version = "1.0-SNAPSHOT"
 
     // 引入全局依赖定义脚本
     apply from: this.rootProject.file('gradle/global-dependency.gradle')
-
+	
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
 //        options.warnings = false
@@ -147,7 +149,8 @@ subprojects {
 
     //noinspection GroovyAssignabilityCheck
     task sourcesJar(type: Jar) {
-        archiveClassifier = 'sources'
+        // Gradle 4.10.3 不支持 archiveClassifier
+//        archiveClassifier = 'sources'
         from sourceSets.main.allSource
     }
 
@@ -170,7 +173,7 @@ subprojects {
     }
 
     task javadocJar(type: Jar) {
-        archiveClassifier = 'javadoc'
+        // archiveClassifier = 'javadoc'
         from javadoc
     }
 

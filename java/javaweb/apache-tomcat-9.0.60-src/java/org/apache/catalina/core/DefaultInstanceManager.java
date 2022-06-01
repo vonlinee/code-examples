@@ -54,6 +54,8 @@ import org.apache.tomcat.InstanceManager;
 import org.apache.tomcat.util.ExceptionUtils;
 import org.apache.tomcat.util.collections.ManagedConcurrentWeakHashMap;
 import org.apache.tomcat.util.res.StringManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultInstanceManager implements InstanceManager {
 
@@ -142,12 +144,16 @@ public class DefaultInstanceManager implements InstanceManager {
         return newInstance(clazz.getConstructor().newInstance(), clazz);
     }
 
+    private static final Logger _log = LoggerFactory.getLogger(StandardWrapper.class);
+    
     @Override
     public Object newInstance(String className) throws IllegalAccessException,
             InvocationTargetException, NamingException, InstantiationException,
             ClassNotFoundException, IllegalArgumentException, NoSuchMethodException, SecurityException {
+    	// 加载类
+    	_log.info("使用类加载器[{}]加载{}", classLoader.getClass(), className);
         Class<?> clazz = loadClassMaybePrivileged(className, classLoader);
-        return newInstance(clazz.getConstructor().newInstance(), clazz);
+        return newInstance(clazz.getConstructor().newInstance(), clazz); //  
     }
 
     @Override

@@ -62,6 +62,8 @@ import org.apache.tomcat.util.compat.JrePlatform;
 import org.apache.tomcat.util.net.AbstractEndpoint.Handler.SocketState;
 import org.apache.tomcat.util.net.Acceptor.AcceptorState;
 import org.apache.tomcat.util.net.jsse.JSSESupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * NIO tailored thread pool, providing the following services:
@@ -84,6 +86,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
 
     private static final Log log = LogFactory.getLog(NioEndpoint.class);
 
+    private static final Logger _log = LoggerFactory.getLogger(NioEndpoint.class);
 
     public static final int OP_REGISTER = 0x100; //register interest op
 
@@ -222,10 +225,11 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
     // ----------------------------------------------- Public Lifecycle Methods
 
     /**
-     * Initialize the endpoint.
+     * Initialize the endpoint. 服务端初始化
      */
     @Override
     public void bind() throws Exception {
+    	_log.info("Initialize the endpoint -> bind");
         initServerSocket();
 
         setStopLatch(new CountDownLatch(1));
@@ -233,10 +237,11 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
         // Initialize SSL if needed
         initialiseSsl();
     }
-
+    
     // Separated out to make it easier for folks that extend NioEndpoint to
     // implement custom [server]sockets
     protected void initServerSocket() throws Exception {
+    	_log.info("Initialize the endpoint -> initServerSocket");
         if (getUseInheritedChannel()) {
             // Retrieve the channel provided by the OS
             Channel ic = System.inheritedChannel();
@@ -246,7 +251,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
             if (serverSock == null) {
                 throw new IllegalArgumentException(sm.getString("endpoint.init.bind.inherited"));
             }
-        } else if (getUnixDomainSocketPath() != null) {
+        } else if (getUnixDomainSocketPath() != null) { // Unix系统
             SocketAddress sa = JreCompat.getInstance().getUnixDomainSocketAddress(getUnixDomainSocketPath());
             serverSock = JreCompat.getInstance().openUnixDomainServerSocketChannel();
             serverSock.bind(sa, getAcceptCount());
@@ -273,7 +278,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
             InetSocketAddress addr = new InetSocketAddress(getAddress(), getPortWithOffset());
             serverSock.bind(addr, getAcceptCount());
         }
-        serverSock.configureBlocking(true); //mimic APR behavior
+        serverSock.configureBlocking(true); //mimic APR behavior 模仿APR
     }
 
 
@@ -612,7 +617,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
     }
 
     /**
-     * Poller class.
+     * Poller class. 轮询器
      */
     public class Poller implements Runnable {
 
@@ -1697,12 +1702,16 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
              * in turn can result in unintentionally closing currently active
              * connections.
              */
+        	_log.info("{} 处理Socket: {}", this, socketWrapper.getRemoteAddr());
             Poller poller = NioEndpoint.this.poller;
             if (poller == null) {
                 socketWrapper.close();
                 return;
             }
-
+            
+            // NioSocket 
+            _log.info("socketWrapper[{}] socket => [{}]", socketWrapper.getClass(), socketWrapper.getSocket().getClass());
+            
             try {
                 int handshake = -1;
                 try {
@@ -1740,6 +1749,9 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
                     if (event == null) {
                         state = getHandler().process(socketWrapper, SocketEvent.OPEN_READ);
                     } else {
+                    	// SocketState.OPEN
+                    	// 连接处理：org.apache.coyote.AbstractProtocol$ConnectionHandler
+                    	_log.info("Handler => {}", getHandler());
                         state = getHandler().process(socketWrapper, event);
                     }
                     if (state == SocketState.CLOSED) {
@@ -1748,9 +1760,9 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
                 } else if (handshake == -1 ) {
                     getHandler().process(socketWrapper, SocketEvent.CONNECT_FAIL);
                     poller.cancelledKey(getSelectionKey(), socketWrapper);
-                } else if (handshake == SelectionKey.OP_READ){
+                } else if (handshake == SelectionKey.OP_READ){  // 注册到读
                     socketWrapper.registerReadInterest();
-                } else if (handshake == SelectionKey.OP_WRITE){
+                } else if (handshake == SelectionKey.OP_WRITE){ // 注册到写
                     socketWrapper.registerWriteInterest();
                 }
             } catch (CancelledKeyException cx) {

@@ -96,7 +96,6 @@ import org.xml.sax.ext.EntityResolver2;
  * <p>The default resource-serving servlet for most web applications,
  * used to serve static resources such as HTML pages and images.
  * </p>
- * 默认的资源服务servlet，可以用于多数web应用，用于服务静态资源例如HTML页面和图片
  * <p>
  * This servlet is intended to be mapped to <em>/</em> e.g.:
  * </p>
@@ -139,6 +138,10 @@ public class DefaultServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    public DefaultServlet() {
+    	
+    }
+    
     /**
      * The string manager for this package.
      */
@@ -516,6 +519,7 @@ public class DefaultServlet extends HttpServlet {
                          HttpServletResponse response)
         throws IOException, ServletException {
 
+    	
         // Serve the requested resource, including the data content
         serveResource(request, response, true, fileEncoding);
 

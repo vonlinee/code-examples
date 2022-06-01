@@ -40,15 +40,17 @@ public class MySQLGenerator {
     private static final String[] tables = {"film"};
 
     public static void main(String[] args) {
-        // 数据源配置
-        StopWatch stopWatch = new StopWatch("配置初始化开始");
+        StopWatch stopWatch = new StopWatch("代码生成");
 
-        stopWatch.start("配置");
+        stopWatch.start("数据源配置");
+        // 数据源配置
         DataSourceConfig.Builder dataSourceBuilder = new DataSourceConfig.Builder(URL, USER_NAME, PASSWORD)
                 .dbQuery(new MySqlQuery()) // 数据库查询
                 .schema("mybatis-plus") // 数据库schema(部分数据库适用)
                 .typeConvert(new MySqlTypeConvert()) // 数据库类型转换器 自定义数据库表字段类型转换【可选】
                 .keyWordsHandler(new MySqlKeyWordsHandler());// 数据库关键字处理器
+        stopWatch.stop();
+        stopWatch.start("生成配置");
         FastAutoGenerator generator = FastAutoGenerator.create(dataSourceBuilder);
         generator.globalConfig(builder -> {
                     builder.author(AUTHOR_NAME) // 设置作者
@@ -122,10 +124,10 @@ public class MySQLGenerator {
                 }).templateEngine(new FreemarkerTemplateEngine()); // 使用Freemarker引擎模板，默认的是Velocity引擎模板
         stopWatch.stop();
         
-        stopWatch.start("生成");
+        stopWatch.start("代码生成");
         // 执行生成行为
         generator.execute();
         stopWatch.stop();
-        System.out.println(stopWatch.prettyPrint());
+        System.out.print(stopWatch.prettyPrint());
     }
 }

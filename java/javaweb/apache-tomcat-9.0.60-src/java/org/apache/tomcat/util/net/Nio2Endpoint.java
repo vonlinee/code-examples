@@ -1661,6 +1661,9 @@ public class Nio2Endpoint extends AbstractJsseEndpoint<Nio2Channel,AsynchronousS
 
         @Override
         protected void doRun() {
+        	
+        	log.info(this.getClass() + "");
+        	
             boolean launch = false;
             try {
                 int handshake = -1;

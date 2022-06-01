@@ -389,8 +389,7 @@ public abstract class IntrospectedTable {
         calculateModelAttributes();
         calculateXmlAttributes();
 
-        log.info("使用Rule => {}", tableConfiguration.getModelType().toString());
-        // CONDITIONAL
+        // CONDITIONAL ConditionalModelRules
         if (tableConfiguration.getModelType() == ModelType.HIERARCHICAL) {
             rules = new HierarchicalModelRules(this);
         } else if (tableConfiguration.getModelType() == ModelType.FLAT) {
@@ -398,7 +397,8 @@ public abstract class IntrospectedTable {
         } else {
             rules = new ConditionalModelRules(this);
         }
-        // 初始化插件，获取最开始的插件，然后一个一个调用
+        log.info("使用Rule => {}, {}", tableConfiguration.getModelType().toString(), rules);
+        // 初始化插件，获取最开始的插件，然后一个一个调用initialized方法
         context.getPlugins().initialized(this);
     }
 

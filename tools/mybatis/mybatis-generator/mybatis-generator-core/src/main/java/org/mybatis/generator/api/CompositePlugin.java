@@ -70,9 +70,9 @@ public abstract class CompositePlugin implements Plugin {
         }
     }
 
+    // 初始化所有插件
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
-        // 初始化所有插件
         for (Plugin plugin : plugins) {
             plugin.initialized(introspectedTable);
         }

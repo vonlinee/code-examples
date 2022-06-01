@@ -71,15 +71,19 @@ public abstract class AbstractTemplateEngine {
         String entityName = tableInfo.getEntityName();
         String entityPath = getPathInfo(OutputFile.entity);
         if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
-            getTemplateFilePath(template -> template.getEntity(getConfigBuilder().getGlobalConfig()
-                                                                                 .isKotlin())).ifPresent((entity) -> {
+            getTemplateFilePath(template -> template
+            		.getEntity(getConfigBuilder()
+            		.getGlobalConfig()
+                    .isKotlin())).ifPresent((entity) -> {
                 String entityFile = String.format((entityPath + File.separator + "%s" + suffixJavaOrKt()), entityName);
-                outputFile(new File(entityFile), objectMap, entity, getConfigBuilder().getStrategyConfig().entity()
-                                                                                      .isFileOverride());
+                
+                // 是否覆盖文件
+                boolean override = getConfigBuilder().getStrategyConfig().entity().isFileOverride();
+                outputFile(new File(entityFile), objectMap, entity, override);
             });
         }
     }
-
+    
     /**
      * 输出Mapper文件(含xml)
      * @param tableInfo 表信息
@@ -123,7 +127,6 @@ public abstract class AbstractTemplateEngine {
         objectMap.put("xmlCrudTags", list);
 
         TableInfo tableInfo = Maps.getValue(objectMap, "table");
-
         //Insert
         XMLElement insertXmlTag = createMapperXmlTag("insert", "AAAA");
         insertXmlTag.addAttribute("id", "");
@@ -247,7 +250,6 @@ public abstract class AbstractTemplateEngine {
      * @return 模板路径
      * @since 3.5.0
      */
-
     protected Optional<String> getTemplateFilePath(Function<TemplateConfig, String> function) {
         TemplateConfig templateConfig = getConfigBuilder().getTemplateConfig();
         String filePath = function.apply(templateConfig);

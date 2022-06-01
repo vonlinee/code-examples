@@ -1,6 +1,7 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.12.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    // Spring Boot plugin requires Gradle 5 (5.6.x only) or Gradle 6 (6.3 or later). The current version is Gradle 4.10.3
+    // id 'org.springframework.boot' version '2.3.12.RELEASE'
+    // id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
 }
 

@@ -46,10 +46,15 @@ import org.apache.tomcat.util.ExceptionUtils;
 import org.apache.tomcat.util.collections.SynchronizedStack;
 import org.apache.tomcat.util.modeler.Registry;
 import org.apache.tomcat.util.net.AbstractEndpoint;
+import org.apache.tomcat.util.net.NioEndpoint;
 import org.apache.tomcat.util.net.AbstractEndpoint.Handler;
 import org.apache.tomcat.util.net.SocketEvent;
 import org.apache.tomcat.util.net.SocketWrapperBase;
 import org.apache.tomcat.util.res.StringManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import utils.LogUtils;
 
 public abstract class AbstractProtocol<S> implements ProtocolHandler,
         MBeanRegistration {
@@ -755,6 +760,8 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
 
     protected static class ConnectionHandler<S> implements AbstractEndpoint.Handler<S> {
 
+    	private static final Logger _log = LoggerFactory.getLogger(ConnectionHandler.class);
+    	
         private final AbstractProtocol<S> proto;
         private final RequestGroupInfo global = new RequestGroupInfo();
         private final AtomicLong registerCount = new AtomicLong(0);
@@ -786,10 +793,12 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
         @SuppressWarnings("deprecation")
         @Override
         public SocketState process(SocketWrapperBase<S> wrapper, SocketEvent status) {
+        	_log.info("ConnectionHandler[{}]处理, {}", ConnectionHandler.this, this);
             if (getLog().isDebugEnabled()) {
                 getLog().debug(sm.getString("abstractConnectionHandler.process",
                         wrapper.getSocket(), status));
             }
+            
             if (wrapper == null) {
                 // Nothing to do. Socket has been closed.
                 return SocketState.CLOSED;
@@ -797,6 +806,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
 
             S socket = wrapper.getSocket();
 
+            // coyote
             Processor processor = (Processor) wrapper.getCurrentProcessor();
             if (getLog().isDebugEnabled()) {
                 getLog().debug(sm.getString("abstractConnectionHandler.connectionsGet",
@@ -864,31 +874,34 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                     }
                 }
                 if (processor == null) {
+                	// 从同步栈中获取processor
                     processor = recycledProcessors.pop();
                     if (getLog().isDebugEnabled()) {
                         getLog().debug(sm.getString("abstractConnectionHandler.processorPop", processor));
                     }
                 }
                 if (processor == null) {
+                	// 根据协议创建Processor[org.apache.coyote.http11.Http11Processor@69b45f]
                     processor = getProtocol().createProcessor();
+                    _log.info("根据协议{}创建Processor[{}]", getProtocol(), processor);
                     register(processor);
                     if (getLog().isDebugEnabled()) {
                         getLog().debug(sm.getString("abstractConnectionHandler.processorCreate", processor));
                     }
                 }
-
+                // SSL处理
                 // Can switch to non-deprecated version in Tomcat 10.1.x
                 processor.setSslSupport(
                         wrapper.getSslSupport(getProtocol().getClientCertProvider()));
 
-                // Associate the processor with the connection
+                // Associate the processor with the connection 关联连接（connection）和连接处理逻辑（processor）
                 wrapper.setCurrentProcessor(processor);
 
                 SocketState state = SocketState.CLOSED;
                 do {
                     state = processor.process(wrapper, status);
-
-                    if (state == SocketState.UPGRADING) {
+                    _log.info("处理器处理Socket完毕", processor);
+                    if (state == SocketState.UPGRADING) {  //  http upgrade header
                         // Get the HTTP upgrade handler
                         UpgradeToken upgradeToken = processor.getUpgradeToken();
                         // Restore leftover input to the wrapper so the upgrade
@@ -1052,7 +1065,11 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
             return SocketState.CLOSED;
         }
 
-
+        /**
+         * 长轮询
+         * @param socket
+         * @param processor
+         */
         protected void longPoll(SocketWrapperBase<?> socket, Processor processor) {
             if (!processor.isAsync()) {
                 // This is currently only used with HTTP
@@ -1129,6 +1146,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
             if (getProtocol().getDomain() != null) {
                 synchronized (this) {
                     try {
+                    	// 自增注册数量
                         long count = registerCount.incrementAndGet();
                         RequestInfo rp =
                             processor.getRequest().getRequestProcessor();

@@ -49,6 +49,7 @@ import org.apache.catalina.Server;
 import org.apache.catalina.Service;
 import org.apache.catalina.deploy.NamingResourcesImpl;
 import org.apache.catalina.mbeans.MBeanFactory;
+import org.apache.catalina.startup.Bootstrap;
 import org.apache.catalina.startup.Catalina;
 import org.apache.catalina.util.ExtensionValidator;
 import org.apache.catalina.util.LifecycleMBeanBase;
@@ -60,6 +61,8 @@ import org.apache.tomcat.util.buf.StringCache;
 import org.apache.tomcat.util.modeler.Registry;
 import org.apache.tomcat.util.res.StringManager;
 import org.apache.tomcat.util.threads.TaskThreadFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -905,6 +908,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
         return useNaming;
     }
 
+    private static final Logger _log = LoggerFactory.getLogger(StandardServer.class);
 
     /**
      * Start nested components ({@link Service}s) and implement the requirements
@@ -923,7 +927,10 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
 
         // Start our defined Services
         synchronized (servicesLock) {
+        	_log.info("开始启动服务列表");
+        	// StandardService
             for (Service service : services) {
+            	_log.info("开始启动服务 => {}", service.getClass());
                 service.start();
             }
         }

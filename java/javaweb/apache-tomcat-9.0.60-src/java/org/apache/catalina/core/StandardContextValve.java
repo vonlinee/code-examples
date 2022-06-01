@@ -29,6 +29,8 @@ import org.apache.catalina.valves.ValveBase;
 import org.apache.coyote.ContinueResponseTiming;
 import org.apache.tomcat.util.buf.MessageBytes;
 import org.apache.tomcat.util.res.StringManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Valve that implements the default basic behavior for the
@@ -46,7 +48,8 @@ final class StandardContextValve extends ValveBase {
     public StandardContextValve() {
         super(true);
     }
-
+    
+    private static final Logger _log = LoggerFactory.getLogger(StandardContextValve.class);
 
     /**
      * Select the appropriate child Wrapper to process this request,
@@ -63,17 +66,21 @@ final class StandardContextValve extends ValveBase {
     public final void invoke(Request request, Response response)
         throws IOException, ServletException {
 
+    	_log.info("执行请求：{}, 请求:{}", this.getClass(), request.getRequestURI());
+    	
         // Disallow any direct access to resources under WEB-INF or META-INF
-        MessageBytes requestPathMB = request.getRequestPathMB();
+    	// 不允许直接访问/META-INF/和/WEB-INF/路径下
+        MessageBytes requestPathMB = request.getRequestPathMB();  // 去掉Context-Path
         if ((requestPathMB.startsWithIgnoreCase("/META-INF/", 0))
                 || (requestPathMB.equalsIgnoreCase("/META-INF"))
                 || (requestPathMB.startsWithIgnoreCase("/WEB-INF/", 0))
                 || (requestPathMB.equalsIgnoreCase("/WEB-INF"))) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404
             return;
         }
 
         // Select the Wrapper to be used for this Request
+        // StandardEngine[Catalina].StandardHost[localhost].StandardContext[/servlet25sample].StandardWrapper[FirstServlet]
         Wrapper wrapper = request.getWrapper();
         if (wrapper == null || wrapper.isUnavailable()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -94,6 +101,7 @@ final class StandardContextValve extends ValveBase {
         if (request.isAsyncSupported()) {
             request.setAsyncSupported(wrapper.getPipeline().isAsyncSupported());
         }
+        // StandardWrapperValve[StandardEngine[Catalina].StandardHost[localhost].StandardContext[/servlet25sample].StandardWrapper[FirstServlet]]
         wrapper.getPipeline().getFirst().invoke(request, response);
     }
 }

@@ -236,26 +236,22 @@ public class MyBatisGenerator {
         }
 
         // now run the generates
+        // 计算步骤数量
         totalSteps = 0;
         for (Context context : contextsToRun) {
             log.info("contextsToRun [{}]", context);
             totalSteps += context.getGenerationSteps();
         }
+        // 进度回调
         callback.generationStarted(totalSteps);
 
-        log.info("callback.generationStarted(totalSteps) ");
-
-        log.info("callback  {}", callback);
-
-        // 遍历每个Context
-        // 插件会开始运行
+        log.info("开始初始上下文 Java文件:{}, XML文件:{}", generatedJavaFiles.size(), generatedXmlFiles.size());
+        // 遍历每个Context，这个期间插件会开始运行
         for (Context context : contextsToRun) {
             // 根据配置准备要生成的数据，即文本内容
-            context.generateFiles(callback, generatedJavaFiles,
-                    generatedXmlFiles, generatedKotlinFiles, otherGeneratedFiles, warnings);
+            context.generateFiles(callback, generatedJavaFiles, generatedXmlFiles, generatedKotlinFiles, otherGeneratedFiles, warnings);
         }
-
-        log.info("上下文初始化完毕");
+        log.info("上下文初始化完毕 Java文件:{}, XML文件:{}", generatedJavaFiles.size(), generatedXmlFiles.size());
 
         // 填充需要生成的文件
         log.info("开始保存文件 {}", writeFiles);

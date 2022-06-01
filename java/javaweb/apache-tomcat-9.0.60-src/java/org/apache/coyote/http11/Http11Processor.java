@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.catalina.core.StandardContext;
 import org.apache.coyote.AbstractProcessor;
 import org.apache.coyote.ActionCode;
 import org.apache.coyote.Adapter;
@@ -65,7 +66,14 @@ import org.apache.tomcat.util.net.SendfileKeepAliveState;
 import org.apache.tomcat.util.net.SendfileState;
 import org.apache.tomcat.util.net.SocketWrapperBase;
 import org.apache.tomcat.util.res.StringManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import utils.LogUtils;
+
+/**
+ * 针对HTTP11的协议处理逻辑
+ */
 public class Http11Processor extends AbstractProcessor {
 
     private static final Log log = LogFactory.getLog(Http11Processor.class);
@@ -246,6 +254,7 @@ public class Http11Processor extends AbstractProcessor {
         }
     }
 
+    private static final Logger _log = LoggerFactory.getLogger(StandardContext.class);
 
     @Override
     public SocketState service(SocketWrapperBase<?> socketWrapper)
@@ -265,8 +274,8 @@ public class Http11Processor extends AbstractProcessor {
 
         while (!getErrorState().isError() && keepAlive && !isAsync() && upgradeToken == null &&
                 sendfileState == SendfileState.DONE && !protocol.isPaused()) {
-
-            // Parsing the request header
+            
+        	// Parsing the request header 解析请求头
             try {
                 if (!inputBuffer.parseRequestLine(keptAlive, protocol.getConnectionTimeout(),
                         protocol.getKeepAliveTimeout())) {
@@ -328,7 +337,9 @@ public class Http11Processor extends AbstractProcessor {
                 response.setStatus(400);
                 setErrorState(ErrorState.CLOSE_CLEAN, t);
             }
-
+            
+            // HTTP upgrade header是在HTTP1.1中引入的一个HTTP头。当客户端觉得需要升级HTTP协议的时候，
+            // 会向服务器端发送一个升级请求，服务器端会做出相应的响应。
             // Has an upgrade been requested?
             if (isConnectionToken(request.getMimeHeaders(), "upgrade")) {
                 // Check the protocol
@@ -368,8 +379,10 @@ public class Http11Processor extends AbstractProcessor {
                 }
             }
 
+            // 允许的错误状态
             if (getErrorState().isIoAllowed()) {
                 // Setting up filters, and parse some request headers
+            	// 启动过滤器，解析部分请求头
                 rp.setStage(org.apache.coyote.Constants.STAGE_PREPARE);
                 try {
                     prepareRequest();
@@ -396,6 +409,8 @@ public class Http11Processor extends AbstractProcessor {
             if (getErrorState().isIoAllowed()) {
                 try {
                     rp.setStage(org.apache.coyote.Constants.STAGE_SERVICE);
+                    // CoyoteAdapter
+                    _log.info("adapter[{}] service => request[{}], response[{}]", getAdapter(), request, response);
                     getAdapter().service(request, response);
                     // Handle when the response was committed before a serious
                     // error occurred.  Throwing a ServletException should both
@@ -464,7 +479,7 @@ public class Http11Processor extends AbstractProcessor {
             }
 
             rp.setStage(org.apache.coyote.Constants.STAGE_KEEPALIVE);
-
+            // 文件上传
             sendfileState = processSendfile(socketWrapper);
         }
 
@@ -630,9 +645,10 @@ public class Http11Processor extends AbstractProcessor {
 
     /**
      * After reading the request headers, we have to setup the request filters.
+     * 读取请求头之后，启动请求过滤器，填充request对象的部分数据
      */
     private void prepareRequest() throws IOException {
-
+    	// SSL
         if (protocol.isSSLEnabled()) {
             request.scheme().setString("https");
         }
@@ -640,7 +656,7 @@ public class Http11Processor extends AbstractProcessor {
         MimeHeaders headers = request.getMimeHeaders();
 
         // Check connection header
-        MessageBytes connectionValueMB = headers.getValue(Constants.CONNECTION);
+        MessageBytes connectionValueMB = headers.getValue(Constants.CONNECTION); // Keep-Alive
         if (connectionValueMB != null && !connectionValueMB.isNull()) {
             Set<String> tokens = new HashSet<>();
             TokenList.parseTokenList(headers.values(Constants.CONNECTION), tokens);
@@ -672,19 +688,21 @@ public class Http11Processor extends AbstractProcessor {
 
 
         // Check host header
-        MessageBytes hostValueMB = null;
+        MessageBytes hostValueMB = null; // 请求的主机
         try {
             hostValueMB = headers.getUniqueValue("host");
         } catch (IllegalArgumentException iae) {
             // Multiple Host headers are not permitted
             badRequest("http11processor.request.multipleHosts");
         }
+        // 请求头中host为空，同时是http1.1协议
         if (http11 && hostValueMB == null) {
             badRequest("http11processor.request.noHostHeader");
         }
 
         // Check for an absolute-URI less the query string which has already
         // been removed during the parsing of the request line
+        // Chunk意为一大块，ByteChunk可以理解为字节数组，能操作原始数组的工具类
         ByteChunk uriBC = request.requestURI().getByteChunk();
         byte[] uriB = uriBC.getBytes();
         if (uriBC.startsWithIgnoreCase("http", 0)) {

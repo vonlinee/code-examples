@@ -9,6 +9,7 @@ import java.util.concurrent.ForkJoinPool;
 
 import org.springframework.core.SpringVersion;
 
+import io.maker.base.io.FileUtils;
 import io.maker.base.lang.meta.ClassDefinition;
 import io.maker.base.lang.meta.MetadataUtils;
 import io.maker.base.lang.meta.TestClass;
@@ -28,12 +29,15 @@ public class Test1 {
 		
 //		System.out.println(String.valueOf(null));
 		
-		CompletableFuture.runAsync(() -> {}, ForkJoinPool.commonPool());
+//		CompletableFuture.runAsync(() -> {}, ForkJoinPool.commonPool());
+//		
+//		
+//		int i = ForkJoinPool.getCommonPoolParallelism();
+//		
+//		System.out.println(i);
 		
 		
-		int i = ForkJoinPool.getCommonPoolParallelism();
-		
-		System.out.println(i);
+		FileUtils.deleteProjectFiles("C:\\Users\\ly-wangliang\\Desktop\\code-samples\\java");
 		
 	}
 	

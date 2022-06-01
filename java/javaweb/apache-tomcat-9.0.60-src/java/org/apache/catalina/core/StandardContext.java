@@ -134,6 +134,10 @@ import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
 import org.apache.tomcat.util.scan.StandardJarScanner;
 import org.apache.tomcat.util.security.PrivilegedGetTccl;
 import org.apache.tomcat.util.security.PrivilegedSetTccl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import utils.LogUtils;
 
 /**
  * Standard implementation of the <b>Context</b> interface.  Each
@@ -4922,6 +4926,7 @@ public class StandardContext extends ContainerBase
         return ok;
     }
 
+    private static final Logger _log = LoggerFactory.getLogger(StandardContext.class);
 
     /**
      * Load and initialize all servlets marked "load on startup" in the
@@ -4937,6 +4942,9 @@ public class StandardContext extends ContainerBase
         TreeMap<Integer, ArrayList<Wrapper>> map = new TreeMap<>();
         for (Container child : children) {
             Wrapper wrapper = (Wrapper) child;
+            
+            _log.info("加载Servlet [{}]", wrapper.getServletClass());
+            // 获取加载优先级，在web.xml里配置，或者注解上配置
             int loadOnStartup = wrapper.getLoadOnStartup();
             if (loadOnStartup < 0) {
                 continue;
@@ -4949,12 +4957,12 @@ public class StandardContext extends ContainerBase
             }
             list.add(wrapper);
         }
-
+        // 启动时加载的servlet(在web.xml中配置)加载完毕，封装成Wrapper
         // Load the collected "load on startup" servlets
         for (ArrayList<Wrapper> list : map.values()) {
             for (Wrapper wrapper : list) {
                 try {
-                    wrapper.load();
+                    wrapper.load(); // StandardWrapper.load() 加载并初始化，调用init方法
                 } catch (ServletException e) {
                     getLogger().error(sm.getString("standardContext.loadOnStartup.loadException",
                           getName(), wrapper.getName()), StandardWrapper.getRootCause(e));
@@ -4972,7 +4980,6 @@ public class StandardContext extends ContainerBase
 
     }
 
-
     /**
      * Start this component and implement the requirements
      * of {@link org.apache.catalina.util.LifecycleBase#startInternal()}.
@@ -4987,7 +4994,7 @@ public class StandardContext extends ContainerBase
             log.debug("Starting " + getBaseName());
         }
 
-        // Send j2ee.state.starting notification
+        // Send j2ee.state.starting notification  发送广播事件
         if (this.getObjectName() != null) {
             Notification notification = new Notification("j2ee.state.starting",
                     this.getObjectName(), sequenceNumber.getAndIncrement());
@@ -5056,7 +5063,7 @@ public class StandardContext extends ContainerBase
         String useNamingProperty = System.getProperty("catalina.useNaming");
         if ((useNamingProperty != null)
             && (useNamingProperty.equals("false"))) {
-            useNaming = false;
+            useNaming = false; // 默认为true
         }
 
         if (ok && isUseNaming()) {
@@ -5132,6 +5139,7 @@ public class StandardContext extends ContainerBase
                 }
 
                 // Notify our interested LifecycleListeners
+                // 通知监听者：配置开始
                 fireLifecycleEvent(Lifecycle.CONFIGURE_START_EVENT, null);
 
                 // Start our child containers, if not already started
@@ -5258,7 +5266,9 @@ public class StandardContext extends ContainerBase
                     ok = false;
                 }
             }
-
+            
+            _log.info("加载并初始化所有在启动时需要加载的servlet");
+            
             // Load and initialize all "load on startup" servlets
             if (ok) {
                 if (!loadOnStartup(findChildren())){

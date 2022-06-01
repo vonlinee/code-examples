@@ -16,28 +16,40 @@
   limitations under the License.
 -->
 <!-- Note:  A "Server" is not itself a "Container", so you may not
-     define subcomponents such as "Valves" at this level.
-     Documentation at /docs/config/server.html
+     define subcomponents such as "Valves" at this level. Documentation at /docs/config/server.html
+     
+     server.xml配置服务器的整体配置，Server不是Container
+ -->
+ <!-- 
+	 server.xml位于$TOMCAT_HOME/conf目录下，作为整个 tomcat 服务器最核心的配置文件，
+	 server.xml的每一个元素都对应了 tomcat中的一个组件，通过对xml中元素的配置，实现对 tomcat中的各个组件和端口的配置 
+	 
+	 任何一个人telnet这个Tomcat服务器的8005端口,然后输入"SHUTDOWN"(区分大小写),然后回车,Tomcat就立即被关闭了
+	 
+	8005 关闭tomcat进程所用。当执行shutdown.sh关闭tomcat时就是连接8005端口执行“SHUTDOWN”命令 由此，我们直接telnet8005端口执行“SHUTDOWN”（要大写，小写没用；不运只能telnet 127.0.0.1 8005其他地址telnet都不能连接）也可以成功关闭tomcat.
+           同时反之如果8005端口未监听那么tomcat无法用shutdown.sh关闭。
+	8009 httpd等反向代理tomcat时就可以使用使用ajp协议反向代理到该端口。虽然我们经常都是使用http反向代理到8080端口，但由于ajp建立tcp连接后一般长时间保持，从而减少了http反复进行tcp连接和断开的开销，所以反向代理中ajp是比http高效的。
+	8080 默认的http监听端口。
+	8443 默认的https监听端口。默认未开启，如果要开启由于tomcat不自带证书所以除了取消注释之外，还要自己生成证书并在<Connector>中指定方可。
  -->
 <Server port="8005" shutdown="SHUTDOWN">
+
+	<!-- 监听器配置，继承自LifecycleListener -->
   <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
-  <!-- Security listener. Documentation at /docs/config/listeners.html
+  <!-- 安全监听器 Security listener. Documentation at /docs/config/listeners.html
   <Listener className="org.apache.catalina.security.SecurityListener" />
   -->
-  <!-- APR library loader. Documentation at /docs/apr.html -->
+  <!-- 加载APR的依赖库：APR library loader. Documentation at /docs/apr.html -->
   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <!-- 阻止内存泄漏 -->
   <!-- Prevent memory leaks due to use of particular java/javax APIs-->
   <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
   <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
   <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
 
-  <!-- Global JNDI resources
-       Documentation at /docs/jndi-resources-howto.html
-  -->
+  <!-- 配置全局JNDI资源：Global JNDI resources Documentation at /docs/jndi-resources-howto.html -->
   <GlobalNamingResources>
-    <!-- Editable user database that can also be used by
-         UserDatabaseRealm to authenticate users
-    -->
+    <!-- Editable user database that can also be used by UserDatabaseRealm to authenticate users -->
     <Resource name="UserDatabase" auth="Container"
               type="org.apache.catalina.UserDatabase"
               description="User database that can be updated and saved"
@@ -45,7 +57,9 @@
               pathname="conf/tomcat-users.xml" />
   </GlobalNamingResources>
 
-  <!-- A "Service" is a collection of one or more "Connectors" that share
+  <!--
+  	Service组件，
+  	 A "Service" is a collection of one or more "Connectors" that share
        a single "Container" Note:  A "Service" is not itself a "Container",
        so you may not define subcomponents such as "Valves" at this level.
        Documentation at /docs/config/service.html

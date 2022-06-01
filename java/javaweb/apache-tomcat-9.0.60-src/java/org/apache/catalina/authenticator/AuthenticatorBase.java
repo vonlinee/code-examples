@@ -501,7 +501,7 @@ public abstract class AuthenticatorBase extends ValveBase
     @Override
     public void invoke(Request request, Response response) throws IOException, ServletException {
 
-    	LogUtils.info("[%s] => [%s]", this.getClass(), request.getRequestURL());
+    	
     	
         if (log.isDebugEnabled()) {
             log.debug("Security checking request " + request.getMethod() + " " +

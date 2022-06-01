@@ -24,10 +24,13 @@ import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.LifecycleState;
+import org.apache.catalina.startup.Catalina;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.util.ExceptionUtils;
 import org.apache.tomcat.util.res.StringManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base implementation of the {@link Lifecycle} interface that implements the
@@ -149,6 +152,7 @@ public abstract class LifecycleBase implements Lifecycle {
      */
     protected abstract void initInternal() throws LifecycleException;
 
+    private static final Logger _log = LoggerFactory.getLogger(Catalina.class);
 
     /**
      * {@inheritDoc}
@@ -156,6 +160,9 @@ public abstract class LifecycleBase implements Lifecycle {
     @Override
     public final synchronized void start() throws LifecycleException {
 
+    	_log.info("{} => {}", this, "start");
+    	
+    	// INITIALIZED
         if (LifecycleState.STARTING_PREP.equals(state) || LifecycleState.STARTING.equals(state) ||
                 LifecycleState.STARTED.equals(state)) {
 
@@ -180,7 +187,7 @@ public abstract class LifecycleBase implements Lifecycle {
 
         try {
             setStateInternal(LifecycleState.STARTING_PREP, null, false);
-            startInternal();
+            startInternal(); // 此方法由子类重写
             if (state.equals(LifecycleState.FAILED)) {
                 // This is a 'controlled' failure. The component put itself into the
                 // FAILED state so call stop() to complete the clean-up.

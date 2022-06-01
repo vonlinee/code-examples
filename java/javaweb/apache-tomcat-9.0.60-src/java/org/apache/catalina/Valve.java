@@ -24,11 +24,12 @@ import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 
 /**
- * <p>A <b>Valve</b> is a request processing component associated with a
+ * <p>A <b>Valve（阀门）</b> is a request processing component associated with a
  * particular Container.  A series of Valves are generally associated with
- * each other into a Pipeline.  The detailed contract for a Valve is included
+ * each other into a Pipeline（org.apache.catalina.Pipeline）.  The detailed contract for a Valve is included
  * in the description of the <code>invoke()</code> method below.</p>
- *
+ * 
+ * Valve名字的由来：在现实世界中，value(阀门)是用于控制流经pipeline(管道)的流量的东西
  * <b>HISTORICAL NOTE</b>:  The "Valve" name was assigned to this concept
  * because a valve is what you use in a real world pipeline to control and/or
  * modify flows through it.
@@ -39,6 +40,9 @@ import org.apache.catalina.connector.Response;
  */
 public interface Valve {
 
+	/**
+	 * pipeline是一个链表，节点即为Valve，重要的是invoke方法
+	 */
 
     //-------------------------------------------------------------- Properties
 
@@ -60,7 +64,7 @@ public interface Valve {
 
 
     /**
-     * Execute a periodic task, such as reloading, etc. This method will be
+     * Execute a periodic（周期的） task, such as reloading, etc. This method will be
      * invoked inside the classloading context of this container. Unexpected
      * throwables will be caught and logged.
      */

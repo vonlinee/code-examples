@@ -25,6 +25,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /*
+ * 服务器端操作原始字节数组很重要，不必转化为字符，一些协议只支持ASCII，另外一些可以使用不同的非Unicode编码，
+ * 服务端不能预先知道客户端发送的编码，甚至可能在协议执行的过程中发生改变，例如multipart message可能每个部分都有不同的编码
  * In a server it is very important to be able to operate on
  * the original byte[] without converting everything to chars.
  * Some protocols are ASCII only, and some allow different
@@ -32,7 +34,7 @@ import java.nio.charset.StandardCharsets;
  * and can even change during the execution of the protocol.
  * ( for example a multipart message may have parts with different
  *  encoding )
- *
+ * 对于HTTP来说，如何确定RequestURI和mime的值的编码的方式是不明确的，但是能够在不转换为字符串的情况下解析请求是一个很大的优势。
  * For HTTP it is not very clear how the encoding of RequestURI
  * and mime values can be determined, but it is a great advantage
  * to be able to parse the request without converting to string.

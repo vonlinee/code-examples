@@ -444,7 +444,7 @@ public class Context extends PropertyHolder {
                               List<GeneratedFile> otherGeneratedFiles,
                               List<String> warnings)
             throws InterruptedException {
-        // 聚合插件
+        // 聚合插件，集成了多个插件
         pluginAggregator = new PluginAggregator();
 
         // 生成所有插件实例
@@ -462,13 +462,12 @@ public class Context extends PropertyHolder {
         // 初始化表的所有对于代码生成有用的数据
         // initialize everything first before generating. This allows plugins to know about other
         // items in the configuration.
-        log.info("开始初始化表的所有对于代码生成有用的数据");
+        log.info("IntrospectedTable开始");
         for (IntrospectedTable introspectedTable : introspectedTables) {
             callback.checkCancel();
-            //表初始化化，即准备数据
-            // 实现类IntrospectedTableMyBatis3Impl
+            // 表初始化，即准备数据 introspectedTable实现类IntrospectedTableMyBatis3Impl
             introspectedTable.initialize();
-            //
+            log.info("{} calculateGenerators", introspectedTable);
             introspectedTable.calculateGenerators(warnings, callback);
         }
         log.info("开始添加带生成的文件的元数据，插件开始运行");
@@ -481,11 +480,9 @@ public class Context extends PropertyHolder {
             generatedKotlinFiles.addAll(introspectedTable.getGeneratedKotlinFiles());
 
             //生成的Java文件
-            generatedJavaFiles.addAll(pluginAggregator
-                    .contextGenerateAdditionalJavaFiles(introspectedTable));
+            generatedJavaFiles.addAll(pluginAggregator.contextGenerateAdditionalJavaFiles(introspectedTable));
             //生成的XML文件
-            generatedXmlFiles.addAll(pluginAggregator
-                    .contextGenerateAdditionalXmlFiles(introspectedTable));
+            generatedXmlFiles.addAll(pluginAggregator.contextGenerateAdditionalXmlFiles(introspectedTable));
             generatedKotlinFiles.addAll(pluginAggregator
                     .contextGenerateAdditionalKotlinFiles(introspectedTable));
             otherGeneratedFiles.addAll(pluginAggregator

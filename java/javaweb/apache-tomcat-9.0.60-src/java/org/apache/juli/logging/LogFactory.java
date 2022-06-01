@@ -75,20 +75,21 @@ public class LogFactory {
      */
     private LogFactory() {
         /*
-         * Work-around known a JRE bug.
+         * Work-around(变通) known a JRE bug.
          * https://bugs.openjdk.java.net/browse/JDK-8194653
          *
          * Pre-load the default file system. No performance impact as we need to
          * load the default file system anyway. Just do it earlier to avoid the
          * potential deadlock.
          *
-         * This can be removed once the oldest JRE supported by Tomcat includes
+         * This can be removed once the oldest（更大的） JRE supported by Tomcat includes
          * a fix.
          */
         FileSystems.getDefault();
 
         // Look via a ServiceLoader for a Log implementation that has a
         // constructor taking the String name.
+        // ServiceLoader的load方法将在META-INF/services/com.study.SPIService中配置的子类都进行了加载。
         ServiceLoader<Log> logLoader = ServiceLoader.load(Log.class);
         Constructor<? extends Log> m=null;
         for (Log log: logLoader) {

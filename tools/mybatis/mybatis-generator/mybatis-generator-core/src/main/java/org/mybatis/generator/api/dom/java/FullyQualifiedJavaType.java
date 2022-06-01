@@ -72,8 +72,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
     /**
      * Use this constructor to construct a generic type with the specified type parameters.
      *
-     * @param fullTypeSpecification
-     *            the full type specification
+     * @param fullTypeSpecification the full type specification(全类名)
      */
     public FullyQualifiedJavaType(String fullTypeSpecification) {
         super();
@@ -100,7 +99,6 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
                 } else {
                     sb.append(" super "); //$NON-NLS-1$
                 }
-
                 sb.append(baseQualifiedName);
             }
         } else {

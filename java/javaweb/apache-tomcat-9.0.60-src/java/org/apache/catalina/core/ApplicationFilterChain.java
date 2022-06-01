@@ -135,7 +135,7 @@ public final class ApplicationFilterChain implements FilterChain {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response)
         throws IOException, ServletException {
-
+    	// 安全策略
         if( Globals.IS_SECURITY_ENABLED ) {
             final ServletRequest req = request;
             final ServletResponse res = response;
@@ -163,14 +163,14 @@ public final class ApplicationFilterChain implements FilterChain {
         }
     }
 
-    private void internalDoFilter(ServletRequest request,
-                                  ServletResponse response)
+    private void internalDoFilter(ServletRequest request, ServletResponse response)
         throws IOException, ServletException {
 
         // Call the next filter if there is one
         if (pos < n) {
             ApplicationFilterConfig filterConfig = filters[pos++];
             try {
+            	// 从过滤器链中获取过滤器
                 Filter filter = filterConfig.getFilter();
 
                 if (request.isAsyncSupported() && "false".equalsIgnoreCase(
@@ -186,6 +186,7 @@ public final class ApplicationFilterChain implements FilterChain {
                     Object[] args = new Object[]{req, res, this};
                     SecurityUtil.doAsPrivilege ("doFilter", filter, classType, args, principal);
                 } else {
+                	// 调用doFilter方法，在filter中调用共chain.doFilter方法
                     filter.doFilter(request, response, this);
                 }
             } catch (IOException | ServletException | RuntimeException e) {
@@ -199,12 +200,13 @@ public final class ApplicationFilterChain implements FilterChain {
         }
 
         // We fell off the end of the chain -- call the servlet instance
+        // 直接到过滤器链的末尾，开始调用servlet
         try {
             if (ApplicationDispatcher.WRAP_SAME_OBJECT) {
                 lastServicedRequest.set(request);
                 lastServicedResponse.set(response);
             }
-
+            // 异步请求
             if (request.isAsyncSupported() && !servletSupportsAsync) {
                 request.setAttribute(Globals.ASYNC_SUPPORTED_ATTR,
                         Boolean.FALSE);
@@ -224,6 +226,7 @@ public final class ApplicationFilterChain implements FilterChain {
                                            args,
                                            principal);
             } else {
+            	// 调用service
                 servlet.service(request, response);
             }
         } catch (IOException | ServletException | RuntimeException e) {

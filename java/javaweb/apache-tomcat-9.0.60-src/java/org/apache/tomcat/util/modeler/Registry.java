@@ -53,9 +53,9 @@ import org.apache.tomcat.util.res.StringManager;
 */
 
 /**
- * Registry for modeler MBeans.
+ * Registry for modeler MBeans.  MBean注册
  *
- * This is the main entry point into modeler. It provides methods to create and
+ * This is the main entry point into modeler（）. It provides methods to create and
  * manipulate model mbeans and simplify their use.
  *
  * This class is itself an mbean.

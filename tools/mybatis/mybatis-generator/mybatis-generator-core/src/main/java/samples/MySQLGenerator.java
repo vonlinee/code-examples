@@ -1,6 +1,7 @@
 package samples;
 
 import org.mybatis.generator.config.xml.ConfigurationParser;
+import org.apache.commons.io.FileUtils;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
@@ -37,5 +38,8 @@ public class MySQLGenerator {
         for (IntrospectedTable table : tables) {
             table.getAttribute("");
         }
+
+        String targetProject = config.getContexts().get(0).getJavaClientGeneratorConfiguration().getTargetProject();
+        Utils.showInFileExplorer(targetProject);
     }
 }

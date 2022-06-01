@@ -30,10 +30,18 @@ public class FullyQualifiedTable {
 
     private final String introspectedCatalog;
     private final String introspectedSchema;
+
+    /**
+     * 原始表名
+     */
     private final String introspectedTableName;
     private final String runtimeCatalog;
     private final String runtimeSchema;
     private final String runtimeTableName;
+
+    /**
+     * ORM 实体类名
+     */
     private String domainObjectName;
     private String domainObjectSubPackage;
     private final String alias;

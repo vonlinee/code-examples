@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2021 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.codegen.mybatis3.model;
 
 import static org.mybatis.generator.internal.util.JavaBeansUtil.getGetterMethodName;
@@ -37,8 +22,15 @@ import org.mybatis.generator.api.dom.java.Parameter;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * 生成Example类
+ */
 public class ExampleGenerator extends AbstractJavaGenerator {
+
+	private static final Logger log = LoggerFactory.getLogger(ExampleGenerator.class);
 
     public ExampleGenerator(String project) {
         super(project);
@@ -48,9 +40,18 @@ public class ExampleGenerator extends AbstractJavaGenerator {
     public List<CompilationUnit> getCompilationUnits() {
         FullyQualifiedTable table = introspectedTable.getFullyQualifiedTable();
         progressCallback.startTask(getString("Progress.6", table.toString())); //$NON-NLS-1$
-        CommentGenerator commentGenerator = context.getCommentGenerator();
 
+        // org.mybatis.generator.internal.DefaultCommentGenerator@62ddbd7e
+        CommentGenerator commentGenerator = context.getCommentGenerator();
+        // 全类名
+        log.info("ExampleGenerator => {}", introspectedTable.getExampleType());
+
+
+
+
+        //
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(introspectedTable.getExampleType());
+
         TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
         commentGenerator.addJavaFileComment(topLevelClass);

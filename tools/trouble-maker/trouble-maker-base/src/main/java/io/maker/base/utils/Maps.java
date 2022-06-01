@@ -26,7 +26,7 @@ public final class Maps {
         return sb.substring(0, sb.length()) + "\n";
     }
 
-    public static <K, V> Map<K, V> doFilterKey(final Map<K, V> map, Predicate<K> rule) {
+    public static <K, V> Map<K, V> filterKey(final Map<K, V> map, Predicate<K> rule) {
         Map<K, V> newMap = new HashMap<>();
         map.keySet().stream().filter(rule).forEach(k -> {
             newMap.put(k, map.get(k));
@@ -34,7 +34,7 @@ public final class Maps {
         return newMap;
     }
 
-    public static <K, V> Map<K, V> doFilterValue(Map<K, V> map, Predicate<V> rule) {
+    public static <K, V> Map<K, V> filterValue(Map<K, V> map, Predicate<V> rule) {
         Map<K, V> newMap = new HashMap<>();
         map.forEach((k, v) -> {
             if (!rule.test(v)) {
@@ -45,43 +45,13 @@ public final class Maps {
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> K[] keys(Map<K, ?> map) {
+    public static <K> K[] keys(final Map<K, ?> map) {
         return (K[]) map.keySet().toArray();
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> K[] values(Map<K, ?> map) {
+    public static <K> K[] values(final Map<K, ?> map) {
         return (K[]) map.values().toArray();
-    }
-
-    /**
-     * 拷贝Map元素，不影响原来的Map
-     * @param <K>
-     * @param <V>
-     */
-    public static class MapCopier<K, V> {
-
-        private List<K> fromKeys;
-        private List<K> toKeys;
-
-        public MapCopier() {
-            this.fromKeys = new ArrayList<>();
-            this.toKeys = new ArrayList<>();
-        }
-
-        public MapCopier<K, V> addKey(K fromKey, K toKey) {
-            fromKeys.add(fromKey);
-            toKeys.add(toKey);
-            return MapCopier.this;
-        }
-
-        public <T extends Map<K, V>> Map<K, V> copy(final T fromMap) {
-            Map<K, V> newMap = new HashMap<>();
-            for (int i = 0; i < fromKeys.size(); i++) {
-                newMap.put(toKeys.get(i), fromMap.get(fromKeys.get(i)));
-            }
-            return newMap;
-        }
     }
 
     public static <K, V> MapCopier<K, V> copier() {
@@ -131,6 +101,15 @@ public final class Maps {
     	return (T) v;
     }
     
+    /**
+     * 
+     * @param <K>
+     * @param <V>
+     * @param <T>
+     * @param map
+     * @param key
+     * @return
+     */
     public static <K, V, T> T getValue(Map<K, V> map, K key) {
     	return getValue(map, key, null);
     }
@@ -174,7 +153,7 @@ public final class Maps {
         return map;
     }
 
-    public static <K, V> Map<K, V> setValues(Map<K, V> map, Predicate<K> rule, V value) {
+    public static <K, V> Map<K, V> batchSetValue(Map<K, V> map, Predicate<K> rule, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (rule.test(entry.getKey())) {
                 entry.setValue(value);
@@ -182,17 +161,18 @@ public final class Maps {
         }
         return map;
     }
-
-    public static <K, V> Map<K, V> setValues(Map<K, V> map, V value) {
+    
+    /**
+     * 设置Map的所有key的值为同一个
+     * @param <K>
+     * @param <V>
+     * @param map
+     * @param value
+     * @return
+     */
+    public static <K, V> Map<K, V> batchSetValue(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
             entry.setValue(value);
-        }
-        return map;
-    }
-
-    public static <K, V> Map<K, V> setNullValues(Map<K, V> map) {
-        for (Map.Entry<K, V> entry : map.entrySet()) {
-            entry.setValue(null);
         }
         return map;
     }
@@ -309,6 +289,36 @@ public final class Maps {
                 putAll(map, keys, values);
             }
             return map;
+        }
+    }
+    
+    /**
+     * 拷贝Map元素，不影响原来的Map
+     * @param <K>
+     * @param <V>
+     */
+    public static class MapCopier<K, V> {
+
+        private List<K> fromKeys;
+        private List<K> toKeys;
+
+        public MapCopier() {
+            this.fromKeys = new ArrayList<>();
+            this.toKeys = new ArrayList<>();
+        }
+
+        public MapCopier<K, V> addKey(K fromKey, K toKey) {
+            fromKeys.add(fromKey);
+            toKeys.add(toKey);
+            return MapCopier.this;
+        }
+
+        public <T extends Map<K, V>> Map<K, V> copy(final T fromMap) {
+            Map<K, V> newMap = new HashMap<>();
+            for (int i = 0; i < fromKeys.size(); i++) {
+                newMap.put(toKeys.get(i), fromMap.get(fromKeys.get(i)));
+            }
+            return newMap;
         }
     }
 }

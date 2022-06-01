@@ -53,11 +53,13 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     @Override
     public void calculateGenerators(List<String> warnings,
             ProgressCallback progressCallback) {
+    	// Java实体类生成
         calculateJavaModelGenerators(warnings, progressCallback);
-
+        // org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator@c730b35
+        // Mapper类生成，根据不同的类型不同的实例
         AbstractJavaClientGenerator javaClientGenerator =
                 calculateClientGenerators(warnings, progressCallback);
-
+        // XML生成
         calculateXmlMapperGenerator(javaClientGenerator, warnings, progressCallback);
     }
 
@@ -86,7 +88,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         if (javaGenerator == null) {
             return null;
         }
-
+        // 初始化
         initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
         javaGenerators.add(javaGenerator);
 
@@ -97,34 +99,38 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         if (context.getJavaClientGeneratorConfiguration() == null) {
             return null;
         }
-
-        String type = context.getJavaClientGeneratorConfiguration()
-                .getConfigurationType();
+        // 客户端的类型
+        String type = context.getJavaClientGeneratorConfiguration().getConfigurationType();
         log.info("创建JavaClientGenerator, type:{}", type);
         AbstractJavaClientGenerator javaGenerator;
-        if ("XMLMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
+        if ("XMLMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$  基于XML和Mapper接口
             javaGenerator = new JavaMapperGenerator(getClientProject());
         } else if ("MIXEDMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
             javaGenerator = new MixedClientGenerator(getClientProject());
-        } else if ("ANNOTATEDMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
+        } else if ("ANNOTATEDMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$  基于注解和Mapper接口
             javaGenerator = new AnnotatedClientGenerator(getClientProject());
         } else if ("MAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
             javaGenerator = new JavaMapperGenerator(getClientProject());
         } else {
             javaGenerator = (AbstractJavaClientGenerator) ObjectFactory.createInternalObject(type);
         }
-
         return javaGenerator;
     }
 
+    /**
+     * Java对象生成的个数
+     * @param warnings
+     * @param progressCallback
+     */
     protected void calculateJavaModelGenerators(List<String> warnings,
             ProgressCallback progressCallback) {
     	// 生成EXAMPLE类
-//        if (getRules().generateExampleClass()) {
-//            AbstractJavaGenerator javaGenerator = new ExampleGenerator(getExampleProject());
-//            initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
-//            javaGenerators.add(javaGenerator);
-//        }
+    	log.info("javaGenerators {}个", javaGenerators.size());
+        if (getRules().generateExampleClass()) {
+            AbstractJavaGenerator javaGenerator = new ExampleGenerator(getExampleProject());
+            initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
+            javaGenerators.add(javaGenerator);
+        }
 
         if (getRules().generatePrimaryKeyClass()) {
             AbstractJavaGenerator javaGenerator = new PrimaryKeyGenerator(getModelProject());
@@ -143,11 +149,12 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
             initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
             javaGenerators.add(javaGenerator);
         }
+        log.info("javaGenerators {}个", javaGenerators.size());
+        log.info("{}", javaGenerators);
     }
 
     protected void initializeAbstractGenerator(AbstractGenerator abstractGenerator,
-    		List<String> warnings,
-                                               ProgressCallback progressCallback) {
+    		List<String> warnings, ProgressCallback progressCallback) {
         if (abstractGenerator == null) {
             return;
         }
@@ -160,9 +167,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     @Override
     public List<GeneratedJavaFile> getGeneratedJavaFiles() {
         List<GeneratedJavaFile> answer = new ArrayList<>();
-
         log.info("javaGenerators {}", javaGenerators);
-
         for (AbstractJavaGenerator javaGenerator : javaGenerators) {
             List<CompilationUnit> compilationUnits = javaGenerator.getCompilationUnits();
             // TopLevelClass, Interface, Enum

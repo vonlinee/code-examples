@@ -21,8 +21,11 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.apache.catalina.core.StandardContext;
 import org.apache.juli.logging.Log;
 import org.apache.tomcat.util.net.AbstractEndpoint.Handler.SocketState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.tomcat.util.net.DispatchType;
 import org.apache.tomcat.util.net.SocketEvent;
 import org.apache.tomcat.util.net.SocketWrapperBase;
@@ -30,17 +33,18 @@ import org.apache.tomcat.util.net.SocketWrapperBase;
 /**
  * This is a light-weight abstract processor implementation that is intended as
  * a basis for all Processor implementations from the light-weight upgrade
- * processors to the HTTP/AJP processors.
+ * processors to the HTTP/AJP processors. (轻量级的处理器)
  */
 public abstract class AbstractProcessorLight implements Processor {
 
     private Set<DispatchType> dispatches = new CopyOnWriteArraySet<>();
 
+    private static final Logger _log = LoggerFactory.getLogger(AbstractProcessorLight.class);
 
     @Override
     public SocketState process(SocketWrapperBase<?> socketWrapper, SocketEvent status)
             throws IOException {
-
+    	// status = OPEN_READ
         SocketState state = SocketState.CLOSED;
         Iterator<DispatchType> dispatches = null;
         do {
@@ -58,10 +62,11 @@ public abstract class AbstractProcessorLight implements Processor {
             } else if (isAsync() || isUpgrade() || state == SocketState.ASYNC_END) {
                 state = dispatch(status);
                 state = checkForPipelinedData(state, socketWrapper);
-            } else if (status == SocketEvent.OPEN_WRITE) {
+            } else if (status == SocketEvent.OPEN_WRITE) {  // 写
                 // Extra write event likely after async, ignore
                 state = SocketState.LONG;
-            } else if (status == SocketEvent.OPEN_READ) {
+            } else if (status == SocketEvent.OPEN_READ) { // 读
+            	_log.info("Processor[{}]处理Socket:[{}]  service ", this, socketWrapper.getSocket());
                 state = service(socketWrapper);
             } else if (status == SocketEvent.CONNECT_FAIL) {
                 logAccess(socketWrapper);

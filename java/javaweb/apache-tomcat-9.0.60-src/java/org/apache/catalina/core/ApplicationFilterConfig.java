@@ -249,13 +249,18 @@ public final class ApplicationFilterConfig implements FilterConfig, Serializable
         // Identify the class loader we will be using
         String filterClass = filterDef.getFilterClass();
         this.filter = (Filter) context.getInstanceManager().newInstance(filterClass);
-
+        
+        log.info("开始初始化过滤器" + filterClass);
         initFilter();
 
         return this.filter;
 
     }
 
+    /**
+     * 调用Filter#init方法
+     * @throws ServletException
+     */
     private void initFilter() throws ServletException {
         if (context instanceof StandardContext &&
                 context.getSwallowOutput()) {
@@ -269,7 +274,7 @@ public final class ApplicationFilterConfig implements FilterConfig, Serializable
                 }
             }
         } else {
-            filter.init(this);
+            filter.init(this); // 调用init方法
         }
 
         // Expose filter via JMX

@@ -34,10 +34,13 @@ import org.apache.catalina.Service;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.mapper.Mapper;
 import org.apache.catalina.mapper.MapperListener;
+import org.apache.catalina.startup.Catalina;
 import org.apache.catalina.util.LifecycleMBeanBase;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.util.res.StringManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -53,6 +56,7 @@ public class StandardService extends LifecycleMBeanBase implements Service {
     private static final Log log = LogFactory.getLog(StandardService.class);
     private static final StringManager sm = StringManager.getManager(StandardService.class);
 
+    private static final Logger _log = LoggerFactory.getLogger(StandardService.class);
 
     // ----------------------------------------------------- Instance Variables
 
@@ -428,6 +432,7 @@ public class StandardService extends LifecycleMBeanBase implements Service {
 
         // Start our defined Container first
         if (engine != null) {
+        	// 启动容器
             synchronized (engine) {
                 engine.start();
             }

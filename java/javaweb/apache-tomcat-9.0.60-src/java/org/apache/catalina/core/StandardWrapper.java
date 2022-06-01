@@ -61,6 +61,8 @@ import org.apache.tomcat.util.ExceptionUtils;
 import org.apache.tomcat.util.log.SystemLogHandler;
 import org.apache.tomcat.util.modeler.Registry;
 import org.apache.tomcat.util.modeler.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Standard implementation of the <b>Wrapper</b> interface that represents
@@ -76,6 +78,8 @@ public class StandardWrapper extends ContainerBase
 
     private final Log log = LogFactory.getLog(StandardWrapper.class); // must not be static
 
+    private static final Logger _log = LoggerFactory.getLogger(StandardWrapper.class);
+    
     protected static final String[] DEFAULT_SERVLET_METHODS = new String[] {
                                                     "GET", "HEAD", "POST" };
 
@@ -183,7 +187,7 @@ public class StandardWrapper extends ContainerBase
     /**
      * Does this servlet implement the SingleThreadModel interface?
      *
-     * @deprecated This will be removed in Tomcat 10.1 onwards.
+     * @deprecated This will be removed in Tomcat 10.1 onwards(向前).
      */
     @Deprecated
     protected volatile boolean singleThreadModel = false;
@@ -1007,8 +1011,9 @@ public class StandardWrapper extends ContainerBase
      */
     @Override
     public synchronized void load() throws ServletException {
+    	// 加载servlet
         instance = loadServlet();
-
+        // 首次初始化
         if (!instanceInitialized) {
             initServlet(instance);
         }
@@ -1036,6 +1041,8 @@ public class StandardWrapper extends ContainerBase
 
 
     /**
+     * 在服务器启动(startup)时，如果没有已经存在的初始化过的servlet实例，那么会调用此方法加载并实例化该servlet
+     * 此方法会被用来加载在部署描述符里标记的servlet
      * Load and initialize an instance of this servlet, if there is not already
      * at least one initialized instance.  This can be used, for example, to
      * load servlets that are marked in the deployment descriptor to be loaded
@@ -1045,19 +1052,23 @@ public class StandardWrapper extends ContainerBase
      */
     public synchronized Servlet loadServlet() throws ServletException {
 
+    	_log.info("开始加载servlet => {}", this.getServletClass());
+    	
+    	// Servlet是单例的，每个Wrapper里都有一个单例的Servlet,缓存
         // Nothing to do if we already have an instance or an instance pool
         if (!singleThreadModel && (instance != null)) {
             return instance;
         }
 
+        // 隐藏异常
         PrintStream out = System.out;
-        if (swallowOutput) {
+        if (swallowOutput) { // 默认false
             SystemLogHandler.startCapture();
         }
 
         Servlet servlet;
         try {
-            long t1=System.currentTimeMillis();
+            long t1 = System.currentTimeMillis();
             // Complain if no servlet class has been specified
             if (servletClass == null) {
                 unavailable(null);
@@ -1065,6 +1076,7 @@ public class StandardWrapper extends ContainerBase
                     (sm.getString("standardWrapper.notClass", getName()));
             }
 
+            // org.apache.catalina.core.DefaultInstanceManager
             InstanceManager instanceManager = ((StandardContext)getParent()).getInstanceManager();
             try {
                 servlet = (Servlet) instanceManager.newInstance(servletClass);
@@ -1113,7 +1125,7 @@ public class StandardWrapper extends ContainerBase
                 }
                 singleThreadModel = true;
             }
-
+            // 初始化Servlet实例
             initServlet(servlet);
 
             fireContainerEvent("load", this);
@@ -1138,7 +1150,7 @@ public class StandardWrapper extends ContainerBase
 
     private synchronized void initServlet(Servlet servlet)
             throws ServletException {
-
+    	_log.info("initServlet => {}", servlet);
         if (instanceInitialized && !singleThreadModel) {
             return;
         }

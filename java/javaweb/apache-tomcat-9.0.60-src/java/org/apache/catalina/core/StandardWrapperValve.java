@@ -40,6 +40,8 @@ import org.apache.tomcat.util.ExceptionUtils;
 import org.apache.tomcat.util.buf.MessageBytes;
 import org.apache.tomcat.util.log.SystemLogHandler;
 import org.apache.tomcat.util.res.StringManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Valve that implements the default basic behavior for the
@@ -70,6 +72,7 @@ final class StandardWrapperValve extends ValveBase {
     private final AtomicInteger requestCount = new AtomicInteger(0);
     private final AtomicInteger errorCount = new AtomicInteger(0);
 
+    private static final Logger _log = LoggerFactory.getLogger(StandardWrapperValve.class);
 
     // --------------------------------------------------------- Public Methods
 
@@ -87,6 +90,8 @@ final class StandardWrapperValve extends ValveBase {
     public final void invoke(Request request, Response response)
         throws IOException, ServletException {
 
+    	_log.info("执行请求: {}", this);
+    	
         // Initialize local variables we may need
         boolean unavailable = false;
         Throwable throwable = null;

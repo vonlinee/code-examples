@@ -21,9 +21,12 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 
 import org.apache.catalina.Host;
+import org.apache.catalina.connector.CoyoteAdapter;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Valve that implements the default basic behavior for the
@@ -41,6 +44,7 @@ final class StandardEngineValve extends ValveBase {
         super(true);
     }
 
+    private static final Logger _log = LoggerFactory.getLogger(StandardEngineValve.class);
 
     // --------------------------------------------------------- Public Methods
 
@@ -59,6 +63,8 @@ final class StandardEngineValve extends ValveBase {
     public final void invoke(Request request, Response response)
         throws IOException, ServletException {
 
+    	_log.info("执行请求");
+    	
         // Select the Host to be used for this Request
         Host host = request.getHost();
         if (host == null) {
@@ -75,6 +81,8 @@ final class StandardEngineValve extends ValveBase {
         }
 
         // Ask this Host to process this request
+        // StandardEngine[Catalina].StandardHost[localhost]
+        // AccessLogValve[StandardEngine[Catalina].StandardHost[localhost]]
         host.getPipeline().getFirst().invoke(request, response);
     }
 }

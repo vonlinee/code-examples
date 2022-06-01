@@ -44,6 +44,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.tomcat.util.res.StringManager;
 
+import utils.LogUtils;
+
 /**
  * An {@link java.util.concurrent.ExecutorService}
  * that executes each submitted task using
@@ -1167,6 +1169,9 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      */
     @SuppressWarnings("null")  // task cannot be null
     final void runWorker(Worker w) {
+    	
+    	LogUtils.log("[%s] method[%s] [%s]", this.getClass(), "runWorker", w);
+    	
         Thread wt = Thread.currentThread();
         Runnable task = w.firstTask;
         w.firstTask = null;

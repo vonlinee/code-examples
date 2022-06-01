@@ -123,8 +123,6 @@ import org.xml.sax.SAXException;
  * http://host:port/context/content using
  * http://host:port/context/webdavedit/content
  *
- * 教程：https://blog.csdn.net/weixin_34137799/article/details/91594893
- *
  * @author Remy Maucherat
  *
  * @see <a href="https://tools.ietf.org/html/rfc4918">RFC 4918</a>

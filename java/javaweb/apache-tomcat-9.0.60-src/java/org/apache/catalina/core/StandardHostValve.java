@@ -38,6 +38,8 @@ import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.util.ExceptionUtils;
 import org.apache.tomcat.util.descriptor.web.ErrorPage;
 import org.apache.tomcat.util.res.StringManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Valve that implements the default basic behavior for the
@@ -81,6 +83,7 @@ final class StandardHostValve extends ValveBase {
         super(true);
     }
 
+    private static final Logger _log = LoggerFactory.getLogger(StandardHostValve.class);
 
     // --------------------------------------------------------- Public Methods
 
@@ -99,7 +102,10 @@ final class StandardHostValve extends ValveBase {
     public final void invoke(Request request, Response response)
         throws IOException, ServletException {
 
+    	_log.info("{} invoke request", this);
+    	
         // Select the Context to be used for this Request
+    	// StandardEngine[Catalina].StandardHost[localhost].StandardContext[请求URL]
         Context context = request.getContext();
         if (context == null) {
             // Don't overwrite an existing error
@@ -132,6 +138,8 @@ final class StandardHostValve extends ValveBase {
             // application for processing.
             try {
                 if (!response.isErrorReportRequired()) {
+                	// FormAuthenticator[StandardEngine[Catalina].StandardHost[localhost].StandardContext[/servlet25sample]]
+                	// StandardContext
                     context.getPipeline().getFirst().invoke(request, response);
                 }
             } catch (Throwable t) {

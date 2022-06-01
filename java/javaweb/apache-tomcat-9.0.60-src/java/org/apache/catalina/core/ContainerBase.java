@@ -1279,6 +1279,7 @@ public abstract class ContainerBase extends LifecycleMBeanBase implements Contai
      * session timeouts.
      */
     protected void threadStart() {
+    	log.info("启动检查session超时的后台线程 " + this);
         if (backgroundProcessorDelay > 0
                 && (getState().isAvailable() || LifecycleState.STARTING_PREP.equals(getState()))
                 && (backgroundProcessorFuture == null || backgroundProcessorFuture.isDone())) {

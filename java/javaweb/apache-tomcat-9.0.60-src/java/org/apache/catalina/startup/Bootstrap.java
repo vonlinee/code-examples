@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,6 +33,8 @@ import org.apache.catalina.startup.ClassLoaderFactory.Repository;
 import org.apache.catalina.startup.ClassLoaderFactory.RepositoryType;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Bootstrap loader for Catalina.  This application constructs a class loader
@@ -48,6 +51,8 @@ import org.apache.juli.logging.LogFactory;
 public final class Bootstrap {
 
     private static final Log log = LogFactory.getLog(Bootstrap.class);
+    
+    private static final Logger _log = LoggerFactory.getLogger(Bootstrap.class);
 
     /**
      * Daemon object used by main.
@@ -61,13 +66,14 @@ public final class Bootstrap {
     private static final Pattern PATH_PATTERN = Pattern.compile("(\"[^\"]*\")|(([^,])*)");
 
     static {
+    	
         // Will always be non-null
         String userDir = System.getProperty("user.dir");
 
-        // Home first
+        // Home first  "catalina.home"
         String home = System.getProperty(Constants.CATALINA_HOME_PROP); // catalina.home
         File homeFile = null;
-
+        
         if (home != null) {
             File f = new File(home);
             try {
@@ -106,7 +112,7 @@ public final class Bootstrap {
         System.setProperty(
                 Constants.CATALINA_HOME_PROP, catalinaHomeFile.getPath());
 
-        // Then base
+        // Then base  "catalina.base"
         String base = System.getProperty(Constants.CATALINA_BASE_PROP);
         if (base == null) {
             catalinaBaseFile = catalinaHomeFile;
@@ -326,7 +332,7 @@ public final class Bootstrap {
      * @throws Exception Fatal initialization error
      */
     public void init(String[] arguments) throws Exception {
-
+    	log.info("Load the Catalina daemon >>>>>>>>>>>>>>>>>>>> ");
         init();
         load(arguments);
     }
@@ -340,7 +346,8 @@ public final class Bootstrap {
         if (catalinaDaemon == null) {
             init();
         }
-
+        // org.apache.catalina.startup.Catalina@60015ef5
+        _log.info("server start ");
         Method method = catalinaDaemon.getClass().getMethod("start", (Class [])null);
         method.invoke(catalinaDaemon, (Object [])null);
     }

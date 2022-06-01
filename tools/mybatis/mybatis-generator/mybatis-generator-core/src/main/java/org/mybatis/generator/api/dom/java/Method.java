@@ -22,6 +22,9 @@ import java.util.Optional;
 
 public class Method extends JavaElement {
 
+	/**
+	 * 方法的语句行
+	 */
     private final List<String> bodyLines = new ArrayList<>();
 
     private boolean constructor;
