@@ -59,6 +59,7 @@ public class DomWriter {
         swCopy = sw;
         printWriter = new PrintWriter(sw);
         write(document);
+
         return sw.toString();
     }
 
@@ -253,9 +254,7 @@ public class DomWriter {
         // XML首部的DocType
         write(node.getDoctype());
         // XML的节点
-        System.out.println(swCopy.toString());
         write(node.getDocumentElement());
-        System.out.println(swCopy.toString());
     }
 
     protected void write(DocumentType node) {
@@ -282,6 +281,8 @@ public class DomWriter {
             printWriter.print(']');
         }
         printWriter.println('>');
+        //
+        printWriter.println();
     }
 
     /**
@@ -317,12 +318,18 @@ public class DomWriter {
 
                 writeAnyNode(child);
 
-                printWriter.write("\n");
                 child = child.getNextSibling();
             }
 
+            String nodeName = node.getNodeName();
+
             printWriter.print("</"); //$NON-NLS-1$
-            printWriter.print(node.getNodeName());
+            printWriter.print(nodeName);
+
+            if (nodeName.equals("") || nodeName.equals("") || nodeName.equals("")) {
+
+			}
+
             printWriter.print('>');
             printWriter.flush();
         }
