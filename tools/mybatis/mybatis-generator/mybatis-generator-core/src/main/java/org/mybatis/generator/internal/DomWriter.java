@@ -51,16 +51,22 @@ public class DomWriter {
         super();
     }
 
+    private StringWriter swCopy = null;
+
     public synchronized String toString(Document document)
             throws ShellException {
         StringWriter sw = new StringWriter();
+        swCopy = sw;
         printWriter = new PrintWriter(sw);
         write(document);
         return sw.toString();
     }
 
-    protected Attr[] sortAttributes(NamedNodeMap attrs) {
+    private void printStringWriter() {
+    	System.out.println(swCopy.toString());
+    }
 
+    protected Attr[] sortAttributes(NamedNodeMap attrs) {
         int len = (attrs != null) ? attrs.getLength() : 0;
         Attr[] array = new Attr[len];
         for (int i = 0; i < len; i++) {
@@ -247,7 +253,9 @@ public class DomWriter {
         // XML首部的DocType
         write(node.getDoctype());
         // XML的节点
+        System.out.println(swCopy.toString());
         write(node.getDocumentElement());
+        System.out.println(swCopy.toString());
     }
 
     protected void write(DocumentType node) {
@@ -302,10 +310,14 @@ public class DomWriter {
             printWriter.print('>');
             printWriter.flush();
 
+            // 子节点
+
             Node child = node.getFirstChild();
             while (child != null) {
-                printWriter.print("\n");
+
                 writeAnyNode(child);
+
+                printWriter.write("\n");
                 child = child.getNextSibling();
             }
 

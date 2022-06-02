@@ -54,6 +54,6 @@ typesafe
 
 
 
-
+org.springframework.context.SmartLifecycle
 
 

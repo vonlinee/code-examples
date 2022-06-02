@@ -1155,7 +1155,7 @@ public interface Plugin {
 
     /**
      * This method is called when the SqlMap file has been generated.
-     * 
+     *
      * @param sqlMap            the generated file (containing the file name, package name,
      *                          and project name)
      * @param introspectedTable The class containing information about the table as
