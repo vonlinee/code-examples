@@ -8,7 +8,7 @@
     <!--    <properties resource="db.properties"/>-->
     <!--加载文件-->
     <!--    <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip"/>-->
-    <context id="mysqlTables" targetRuntime="MyBatis3">
+    <context isEnable="true" id="mysqlTables" targetRuntime="MyBatis3">
         <!--插件-->
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
         <!--自定义插件-->

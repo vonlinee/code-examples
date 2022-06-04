@@ -194,7 +194,7 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
         runScriptIfNecessary();
 
         Set<String> fullyqualifiedTables = new HashSet<>();
-        if (StringUtils.stringHasValue(tableNames)) {
+        if (StringUtils.isNotEmpty(tableNames)) {
             StringTokenizer st = new StringTokenizer(tableNames, ","); //$NON-NLS-1$
             while (st.hasMoreTokens()) {
                 String s = st.nextToken().trim();
@@ -205,7 +205,7 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
         }
 
         Set<String> contextsToRun = new HashSet<>();
-        if (StringUtils.stringHasValue(contexts)) {
+        if (StringUtils.isNotEmpty(contexts)) {
             StringTokenizer st = new StringTokenizer(contexts, ","); //$NON-NLS-1$
             while (st.hasMoreTokens()) {
                 String s = st.nextToken().trim();

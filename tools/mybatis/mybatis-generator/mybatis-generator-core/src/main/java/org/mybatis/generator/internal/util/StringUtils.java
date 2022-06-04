@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2020 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.internal.util;
 
 import java.util.StringTokenizer;
@@ -32,7 +17,7 @@ public class StringUtils {
      * @param s
      * @return
      */
-    public static boolean stringHasValue(String s) {
+    public static boolean isNotEmpty(String s) {
         return s != null && s.length() > 0;
     }
 
@@ -40,12 +25,12 @@ public class StringUtils {
                                                         String schema, String tableName, char separator) {
         StringBuilder sb = new StringBuilder();
 
-        if (stringHasValue(catalog)) {
+        if (isNotEmpty(catalog)) {
             sb.append(catalog);
             sb.append(separator);
         }
 
-        if (stringHasValue(schema)) {
+        if (isNotEmpty(schema)) {
             sb.append(schema);
             sb.append(separator);
         } else {
@@ -53,14 +38,32 @@ public class StringUtils {
                 sb.append(separator);
             }
         }
-
         sb.append(tableName);
-
         return sb.toString();
     }
 
-    public static boolean stringContainsSpace(String s) {
+    /**
+     * 字符串包含空格
+     * @param s
+     * @return
+     */
+    public static boolean containsSpace(String s) {
         return s != null && s.indexOf(' ') != -1;
+    }
+
+    /**
+     * 一个字符串和多个字符串进行Equals比较，只有有一个为true时返回true，否则返回false
+     * @param str
+     * @param targets
+     * @return
+     */
+    public static boolean equalsAny(String str, String... targets) {
+        for (String target : targets) {
+            if (str.equals(target)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static String escapeStringForJava(String s) {
@@ -103,7 +106,6 @@ public class StringUtils {
         if (s == null) {
             return false;
         }
-
         return s.indexOf('%') != -1 || s.indexOf('_') != -1;
     }
 }

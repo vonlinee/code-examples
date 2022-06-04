@@ -3,18 +3,18 @@ package org.mybatis.generator.codegen;
 /**
  * This class exists to that Java client generators can specify whether
  * an XML generator is required to match the methods in the
- * Java client.  For example, a Java client built entirely with
+ * Java client.  For example, a Java client（Java Mapper） built entirely with
  * annotations does not need matching XML.
  * 1.完全基于注解的Mapper
  * 2.基于Mapper接口和XML
  * @author Jeff Butler
  *
  */
-public abstract class AbstractJavaClientGenerator extends AbstractJavaGenerator {
+public abstract class AbstractMapperGenerator extends AbstractJavaGenerator {
 
     private final boolean requiresXMLGenerator;
 
-    protected AbstractJavaClientGenerator(String project, boolean requiresXMLGenerator) {
+    protected AbstractMapperGenerator(String project, boolean requiresXMLGenerator) {
         super(project);
         this.requiresXMLGenerator = requiresXMLGenerator;
     }

@@ -1,6 +1,7 @@
 package samples.plugins;
 
 import org.mybatis.generator.api.GeneratedJavaFile;
+import org.mybatis.generator.api.GeneratedXmlFile;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.config.Context;
@@ -47,5 +48,16 @@ public class WebMVCPlugin extends PluginAdapter {
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles() {
         // 多个插件顺序执行
         return super.contextGenerateAdditionalJavaFiles();
+    }
+
+    @Override
+    public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
+        // 添加生成Controller和Service
+        return super.contextGenerateAdditionalJavaFiles(introspectedTable);
+    }
+
+    @Override
+    public List<GeneratedXmlFile> contextGenerateAdditionalXmlFiles(IntrospectedTable introspectedTable) {
+        return super.contextGenerateAdditionalXmlFiles(introspectedTable);
     }
 }

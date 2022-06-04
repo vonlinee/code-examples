@@ -115,7 +115,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
         }
 
         String dateFormatString = properties.getProperty(PropertyRegistry.COMMENT_GENERATOR_DATE_FORMAT);
-        if (StringUtils.stringHasValue(dateFormatString)) {
+        if (StringUtils.isNotEmpty(dateFormatString)) {
             dateFormat = new SimpleDateFormat(dateFormatString);
         }
     }
@@ -210,7 +210,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
         topLevelClass.addJavaDocLine("/**"); //$NON-NLS-1$
 
         String remarks = introspectedTable.getRemarks();
-        if (addRemarkComments && StringUtils.stringHasValue(remarks)) {
+        if (addRemarkComments && StringUtils.isNotEmpty(remarks)) {
             topLevelClass.addJavaDocLine(" * Database Table Remarks:"); //$NON-NLS-1$
             String[] remarkLines = remarks.split(System.getProperty("line.separator")); //$NON-NLS-1$
             for (String remarkLine : remarkLines) {
@@ -258,7 +258,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
         field.addJavaDocLine("/**"); //$NON-NLS-1$
 
         String remarks = introspectedColumn.getRemarks();
-        if (addRemarkComments && StringUtils.stringHasValue(remarks)) {
+        if (addRemarkComments && StringUtils.isNotEmpty(remarks)) {
             field.addJavaDocLine(" * Database Column Remarks:"); //$NON-NLS-1$
             String[] remarkLines = remarks.split(System.getProperty("line.separator")); //$NON-NLS-1$
             for (String remarkLine : remarkLines) {
@@ -424,7 +424,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
         if (!suppressAllComments && addRemarkComments) {
             String remarks = introspectedColumn.getRemarks();
-            if (addRemarkComments && StringUtils.stringHasValue(remarks)) {
+            if (addRemarkComments && StringUtils.isNotEmpty(remarks)) {
                 field.addJavaDocLine("/**"); //$NON-NLS-1$
                 field.addJavaDocLine(" * Database Column Remarks:"); //$NON-NLS-1$
                 String[] remarkLines = remarks.split(System.getProperty("line.separator")); //$NON-NLS-1$

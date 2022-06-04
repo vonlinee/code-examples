@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2021 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.codegen.mybatis3.javamapper.elements;
 
 import static org.mybatis.generator.api.dom.OutputUtilities.javaIndent;
@@ -21,7 +6,7 @@ import static org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities
 import static org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities.getRenamedColumnNameForResultMap;
 import static org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities.getSelectListPhrase;
 import static org.mybatis.generator.internal.util.StringUtils.escapeStringForJava;
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +26,15 @@ import org.mybatis.generator.codegen.AbstractGenerator;
 import org.mybatis.generator.codegen.mybatis3.ListUtilities;
 import org.mybatis.generator.config.GeneratedKey;
 
+/**
+ * 生成Java Mapper中的方法
+ */
 public abstract class AbstractJavaMapperMethodGenerator extends AbstractGenerator {
+
+    /**
+     *
+     * @param interfaze Mapper接口
+     */
     public abstract void addInterfaceElements(Interface interfaze);
 
     protected AbstractJavaMapperMethodGenerator() {
@@ -66,7 +59,7 @@ public abstract class AbstractJavaMapperMethodGenerator extends AbstractGenerato
             sb.append('\"');
         }
 
-        if (stringHasValue(introspectedColumn.getTypeHandler())) {
+        if (isNotEmpty(introspectedColumn.getTypeHandler())) {
             FullyQualifiedJavaType fqjt = new FullyQualifiedJavaType(introspectedColumn.getTypeHandler());
             interfaze.addImportedType(fqjt);
             sb.append(", typeHandler="); //$NON-NLS-1$

@@ -19,7 +19,7 @@ package org.mybatis.generator.config;
  * This class holds constants for all properties recognized by the different
  * configuration elements. This helps document and maintain the different
  * properties, and helps to avoid spelling errors.
- *
+ * 维护属性的常量值
  * @author Jeff Butler
  *
  */

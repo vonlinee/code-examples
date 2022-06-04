@@ -47,7 +47,7 @@ public class SimpleSelectAllElementGenerator extends AbstractXmlElementGenerator
 
         String orderByClause = introspectedTable.getTableConfigurationProperty(
                 PropertyRegistry.TABLE_SELECT_ALL_ORDER_BY_CLAUSE);
-        boolean hasOrderBy = StringUtils.stringHasValue(orderByClause);
+        boolean hasOrderBy = StringUtils.isNotEmpty(orderByClause);
         if (hasOrderBy) {
             sb.setLength(0);
             sb.append("order by "); //$NON-NLS-1$

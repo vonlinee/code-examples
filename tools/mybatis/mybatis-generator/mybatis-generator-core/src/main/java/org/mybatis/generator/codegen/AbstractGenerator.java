@@ -8,9 +8,24 @@ import org.mybatis.generator.config.Context;
 
 public abstract class AbstractGenerator {
 
+    /**
+     * 上下文，包含配置选项
+     */
     protected Context context;
+
+    /**
+     * 表信息
+     */
     protected IntrospectedTable introspectedTable;
+
+    /**
+     * 警告信息
+     */
     protected List<String> warnings;
+
+    /**
+     * 进度回调
+     */
     protected ProgressCallback progressCallback;
 
     protected AbstractGenerator() {

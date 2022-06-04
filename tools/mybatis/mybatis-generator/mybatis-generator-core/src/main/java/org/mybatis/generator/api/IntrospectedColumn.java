@@ -135,7 +135,7 @@ public class IntrospectedColumn {
     public void setActualColumnName(String actualColumnName) {
         this.actualColumnName = actualColumnName;
         isColumnNameDelimited = StringUtils
-                .stringContainsSpace(actualColumnName);
+                .containsSpace(actualColumnName);
     }
 
     public boolean isIdentity() {

@@ -1,0 +1,261 @@
+package samples;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.mybatis.generator.api.GeneratedJavaFile;
+import org.mybatis.generator.api.GeneratedKotlinFile;
+import org.mybatis.generator.api.GeneratedXmlFile;
+import org.mybatis.generator.api.IntrospectedTable;
+import org.mybatis.generator.api.ProgressCallback;
+import org.mybatis.generator.api.dom.java.CompilationUnit;
+import org.mybatis.generator.api.dom.kotlin.KotlinFile;
+import org.mybatis.generator.api.dom.xml.Document;
+import org.mybatis.generator.codegen.AbstractGenerator;
+import org.mybatis.generator.codegen.AbstractMapperGenerator;
+import org.mybatis.generator.codegen.AbstractJavaGenerator;
+import org.mybatis.generator.codegen.AbstractKotlinGenerator;
+import org.mybatis.generator.codegen.AbstractXmlGenerator;
+import org.mybatis.generator.codegen.mybatis3.javamapper.AnnotatedMapperGenerator;
+import org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator;
+import org.mybatis.generator.codegen.mybatis3.javamapper.MixedMapperGenerator;
+import org.mybatis.generator.codegen.mybatis3.model.BaseRecordGenerator;
+import org.mybatis.generator.codegen.mybatis3.model.ExampleGenerator;
+import org.mybatis.generator.codegen.mybatis3.model.PrimaryKeyGenerator;
+import org.mybatis.generator.codegen.mybatis3.model.RecordWithBLOBsGenerator;
+import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
+import org.mybatis.generator.config.PropertyRegistry;
+import org.mybatis.generator.internal.ObjectFactory;
+import org.mybatis.generator.internal.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * 自定义实现版本
+ */
+public class TableMetaData extends IntrospectedTable {
+
+    private static final Logger log = LoggerFactory.getLogger(TableMetaData.class);
+
+    protected final List<AbstractJavaGenerator> javaGenerators = new ArrayList<>();
+
+    protected final List<AbstractKotlinGenerator> kotlinGenerators = new ArrayList<>();
+
+    protected AbstractXmlGenerator xmlMapperGenerator;
+
+    public TableMetaData() {
+        super(TargetRuntime.MYBATIS3);
+    }
+
+    @Override
+    public void calculateGenerators(List<String> warnings,
+                                    ProgressCallback progressCallback) {
+        // Java实体类生成器
+        calculateJavaModelGenerators(warnings, progressCallback);
+        // org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator@c730b35
+        // Mapper类生成，根据不同的类型不同的实例
+        AbstractMapperGenerator javaClientGenerator =
+                calculateClientGenerators(warnings, progressCallback);
+        // XML生成
+        log.info("添加JavaGenerator => {}", javaClientGenerator);
+        calculateXmlMapperGenerator(javaClientGenerator, warnings, progressCallback);
+    }
+
+    protected void calculateXmlMapperGenerator(AbstractMapperGenerator javaClientGenerator,
+                                               List<String> warnings,
+                                               ProgressCallback progressCallback) {
+        if (javaClientGenerator == null) {
+            if (context.getSqlMapGeneratorConfiguration() != null) {
+                xmlMapperGenerator = new XMLMapperGenerator();
+            }
+        } else {
+            xmlMapperGenerator = javaClientGenerator.getMatchedXMLGenerator();
+        }
+        log.info("添加XmlMapperGenerator => {}", xmlMapperGenerator);
+        initializeAbstractGenerator(xmlMapperGenerator, warnings,
+                progressCallback);
+    }
+
+    protected AbstractMapperGenerator calculateClientGenerators(List<String> warnings,
+                                                                ProgressCallback progressCallback) {
+        if (!rules.generateJavaClient()) {
+            return null;
+        }
+
+        AbstractMapperGenerator javaGenerator = createJavaClientGenerator();
+        if (javaGenerator == null) {
+            return null;
+        }
+        // 初始化
+        initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
+        javaGenerators.add(javaGenerator);
+
+        return javaGenerator;
+    }
+
+    protected AbstractMapperGenerator createJavaClientGenerator() {
+        if (context.getJavaClientGeneratorConfiguration() == null) {
+            return null;
+        }
+        // 客户端的类型
+        String type = context.getJavaClientGeneratorConfiguration().getConfigurationType();
+        log.info("创建JavaClientGenerator, type:{}", type);
+        AbstractMapperGenerator javaGenerator;
+        if ("XMLMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$  基于XML和Mapper接口
+            javaGenerator = new JavaMapperGenerator(getClientProject());
+        } else if ("MIXEDMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
+            javaGenerator = new MixedMapperGenerator(getClientProject());
+        } else if ("ANNOTATEDMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$  基于注解和Mapper接口
+            javaGenerator = new AnnotatedMapperGenerator(getClientProject());
+        } else if ("MAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
+            javaGenerator = new JavaMapperGenerator(getClientProject());
+        } else {
+            javaGenerator = (AbstractMapperGenerator) ObjectFactory.createInternalObject(type);
+        }
+        return javaGenerator;
+    }
+
+    /**
+     * Java对象生成的个数
+     *
+     * @param warnings
+     * @param progressCallback
+     */
+    protected void calculateJavaModelGenerators(List<String> warnings,
+                                                ProgressCallback progressCallback) {
+        // 生成EXAMPLE类
+        log.info("javaGenerators {}个", javaGenerators.size());
+        if (getRules().generateExampleClass()) {
+            AbstractJavaGenerator javaGenerator = new ExampleGenerator(getExampleProject());
+            initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
+            javaGenerators.add(javaGenerator);
+            log.info("添加JavaGenerator => {}", javaGenerator);
+        }
+
+        if (getRules().generatePrimaryKeyClass()) {
+            AbstractJavaGenerator javaGenerator = new PrimaryKeyGenerator(getModelProject());
+            initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
+            javaGenerators.add(javaGenerator);
+            log.info("添加JavaGenerator => {}", javaGenerator);
+        }
+
+        if (getRules().generateBaseRecordClass()) {
+            AbstractJavaGenerator javaGenerator = new BaseRecordGenerator(getModelProject());
+            initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
+            javaGenerators.add(javaGenerator);
+            log.info("添加JavaGenerator => {}", javaGenerator);
+        }
+
+        if (getRules().generateRecordWithBLOBsClass()) {
+            AbstractJavaGenerator javaGenerator = new RecordWithBLOBsGenerator(getModelProject());
+            initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
+            javaGenerators.add(javaGenerator);
+            log.info("添加JavaGenerator => {}", javaGenerator);
+        }
+    }
+
+    /**
+     * 初始化Generator，注入上下文
+     * @param abstractGenerator
+     * @param warnings
+     * @param progressCallback
+     */
+    protected void initializeAbstractGenerator(AbstractGenerator abstractGenerator,
+                                               List<String> warnings, ProgressCallback progressCallback) {
+        if (abstractGenerator == null) {
+            return;
+        }
+        abstractGenerator.setContext(context);
+        abstractGenerator.setIntrospectedTable(this);
+        abstractGenerator.setProgressCallback(progressCallback);
+        abstractGenerator.setWarnings(warnings);
+    }
+
+    @Override
+    public List<GeneratedJavaFile> getGeneratedJavaFiles() {
+        List<GeneratedJavaFile> answer = new ArrayList<>();
+        log.info("javaGenerators {}", javaGenerators);
+        for (AbstractJavaGenerator javaGenerator : javaGenerators) {
+            // 确定生成的文件的内容
+            List<CompilationUnit> compilationUnits = javaGenerator.getCompilationUnits();
+            // TopLevelClass, Interface, Enum
+            for (CompilationUnit compilationUnit : compilationUnits) {
+                GeneratedJavaFile gjf = new GeneratedJavaFile(compilationUnit,
+                        javaGenerator.getProject(),
+                        context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
+                        context.getJavaFormatter());
+                answer.add(gjf);
+            }
+        }
+        return answer;
+    }
+
+    @Override
+    public List<GeneratedKotlinFile> getGeneratedKotlinFiles() {
+        List<GeneratedKotlinFile> answer = new ArrayList<>();
+
+        for (AbstractKotlinGenerator kotlinGenerator : kotlinGenerators) {
+            List<KotlinFile> kotlinFiles = kotlinGenerator.getKotlinFiles();
+            for (KotlinFile kotlinFile : kotlinFiles) {
+                GeneratedKotlinFile gjf = new GeneratedKotlinFile(kotlinFile,
+                        kotlinGenerator.getProject(),
+                        context.getProperty(PropertyRegistry.CONTEXT_KOTLIN_FILE_ENCODING),
+                        context.getKotlinFormatter());
+                answer.add(gjf);
+            }
+        }
+
+        return answer;
+    }
+
+    protected String getClientProject() {
+        return context.getJavaClientGeneratorConfiguration().getTargetProject();
+    }
+
+    protected String getModelProject() {
+        return context.getJavaModelGeneratorConfiguration().getTargetProject();
+    }
+
+    protected String getExampleProject() {
+        String project = context.getJavaModelGeneratorConfiguration().getProperty(
+                PropertyRegistry.MODEL_GENERATOR_EXAMPLE_PROJECT);
+        if (StringUtils.isNotEmpty(project)) {
+            return project;
+        } else {
+            return getModelProject();
+        }
+    }
+
+    @Override
+    public List<GeneratedXmlFile> getGeneratedXmlFiles() {
+        log.info("获取生成的XML文件信息");
+        List<GeneratedXmlFile> answer = new ArrayList<>();
+        if (xmlMapperGenerator != null) {
+            Document document = xmlMapperGenerator.getDocument();
+            GeneratedXmlFile gxf = new GeneratedXmlFile(document,
+                    getMyBatis3XmlMapperFileName(), getMyBatis3XmlMapperPackage(),
+                    context.getSqlMapGeneratorConfiguration().getTargetProject(),
+                    true, context.getXmlFormatter());
+            if (context.getPlugins().sqlMapGenerated(gxf, this)) {
+                answer.add(gxf);
+            }
+        }
+
+        return answer;
+    }
+
+    @Override
+    public int getGenerationSteps() {
+        return javaGenerators.size() + (xmlMapperGenerator == null ? 0 : 1);
+    }
+
+    @Override
+    public boolean requiresXMLGenerator() {
+        AbstractMapperGenerator javaClientGenerator = createJavaClientGenerator();
+        if (javaClientGenerator == null) {
+            return false;
+        } else {
+            return javaClientGenerator.requiresXMLGenerator();
+        }
+    }
+}

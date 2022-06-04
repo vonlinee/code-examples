@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.codegen.mybatis3.xmlmapper.elements;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.xml.Attribute;
@@ -74,7 +74,7 @@ public class ExampleWhereClauseElementGenerator extends AbstractXmlElementGenera
         trimElement.addElement(getMiddleForEachElement(null));
 
         for (IntrospectedColumn introspectedColumn : introspectedTable.getNonBLOBColumns()) {
-            if (stringHasValue(introspectedColumn.getTypeHandler())) {
+            if (isNotEmpty(introspectedColumn.getTypeHandler())) {
                 trimElement.addElement(getMiddleForEachElement(introspectedColumn));
             }
         }

@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.internal;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.net.URL;
@@ -49,6 +49,8 @@ import org.mybatis.generator.runtime.dynamic.sql.IntrospectedTableMyBatis3Dynami
 import org.mybatis.generator.runtime.kotlin.IntrospectedTableKotlinImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import samples.strategy.IntrospectedTableStrategy;
+import samples.strategy.impl.DefaultIntrospectedTableTypeStrategy;
 
 /**
  * This class creates the different objects needed by the generator.
@@ -260,7 +262,7 @@ public class ObjectFactory {
 
     public static JavaFormatter createJavaFormatter(Context context) {
         String type = context.getProperty(PropertyRegistry.CONTEXT_JAVA_FORMATTER);
-        if (!stringHasValue(type)) {
+        if (!isNotEmpty(type)) {
             type = DefaultJavaFormatter.class.getName();
         }
 
@@ -273,7 +275,7 @@ public class ObjectFactory {
 
     public static KotlinFormatter createKotlinFormatter(Context context) {
         String type = context.getProperty(PropertyRegistry.CONTEXT_KOTLIN_FORMATTER);
-        if (!stringHasValue(type)) {
+        if (!isNotEmpty(type)) {
             type = DefaultKotlinFormatter.class.getName();
         }
 
@@ -286,22 +288,21 @@ public class ObjectFactory {
 
     public static XmlFormatter createXmlFormatter(Context context) {
         String type = context.getProperty(PropertyRegistry.CONTEXT_XML_FORMATTER);
-        if (!stringHasValue(type)) {
+        if (!isNotEmpty(type)) {
             type = DefaultXmlFormatter.class.getName();
         }
-
         XmlFormatter answer = (XmlFormatter) createInternalObject(type);
-
         answer.setContext(context);
-
+        log.info("使用XmlFormatter => {}", answer.getClass());
         return answer;
     }
+
+    static IntrospectedTableStrategy strategy = new DefaultIntrospectedTableTypeStrategy();
 
     public static IntrospectedTable createIntrospectedTable(
             TableConfiguration tableConfiguration, FullyQualifiedTable table,
             Context context) {
-
-        IntrospectedTable answer = createIntrospectedTableForValidation(context);
+        IntrospectedTable answer = strategy.createIntrospectedTableForValidation(context);
         answer.setFullyQualifiedTable(table);
         answer.setTableConfiguration(tableConfiguration);
 
@@ -316,7 +317,7 @@ public class ObjectFactory {
      */
     public static IntrospectedTable createIntrospectedTableForValidation(Context context) {
         String type = context.getTargetRuntime();
-        if (!stringHasValue(type)) {
+        if (!isNotEmpty(type)) {
             type = IntrospectedTableMyBatis3DynamicSqlImpl.class.getName();
         } else if ("MyBatis3".equalsIgnoreCase(type)) { //$NON-NLS-1$
             type = IntrospectedTableMyBatis3Impl.class.getName();
@@ -336,7 +337,7 @@ public class ObjectFactory {
 
     public static IntrospectedColumn createIntrospectedColumn(Context context) {
         String type = context.getIntrospectedColumnImpl();
-        if (!stringHasValue(type)) {
+        if (!isNotEmpty(type)) {
             type = IntrospectedColumn.class.getName();
         }
 

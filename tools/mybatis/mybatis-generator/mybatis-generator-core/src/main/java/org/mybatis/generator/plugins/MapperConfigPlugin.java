@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.plugins;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public class MapperConfigPlugin extends PluginAdapter {
     public boolean validate(List<String> warnings) {
         boolean valid = true;
 
-        if (!stringHasValue(properties
+        if (!isNotEmpty(properties
                 .getProperty("targetProject"))) { //$NON-NLS-1$
             warnings.add(getString("ValidationError.18", //$NON-NLS-1$
                     "MapperConfigPlugin", //$NON-NLS-1$
@@ -71,7 +71,7 @@ public class MapperConfigPlugin extends PluginAdapter {
             valid = false;
         }
 
-        if (!stringHasValue(properties
+        if (!isNotEmpty(properties
                 .getProperty("targetPackage"))) { //$NON-NLS-1$
             warnings.add(getString("ValidationError.18", //$NON-NLS-1$
                     "MapperConfigPlugin", //$NON-NLS-1$

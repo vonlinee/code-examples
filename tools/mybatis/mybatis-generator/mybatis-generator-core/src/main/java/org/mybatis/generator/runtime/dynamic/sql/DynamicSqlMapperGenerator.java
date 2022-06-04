@@ -1,6 +1,6 @@
 package org.mybatis.generator.runtime.dynamic.sql;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
-import org.mybatis.generator.codegen.AbstractJavaClientGenerator;
+import org.mybatis.generator.codegen.AbstractMapperGenerator;
 import org.mybatis.generator.codegen.AbstractXmlGenerator;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
@@ -44,7 +44,7 @@ import org.mybatis.generator.runtime.dynamic.sql.elements.UpdateSelectiveColumns
 /**
  * 生成XML Mapper文件
  */
-public class DynamicSqlMapperGenerator extends AbstractJavaClientGenerator {
+public class DynamicSqlMapperGenerator extends AbstractMapperGenerator {
 
     // record type for insert, select, update
     protected FullyQualifiedJavaType recordType;
@@ -137,12 +137,12 @@ public class DynamicSqlMapperGenerator extends AbstractJavaClientGenerator {
 
         String rootInterface = introspectedTable
                 .getTableConfigurationProperty(PropertyRegistry.ANY_ROOT_INTERFACE);
-        if (!stringHasValue(rootInterface)) {
+        if (!isNotEmpty(rootInterface)) {
             rootInterface = context.getJavaClientGeneratorConfiguration()
                     .getProperty(PropertyRegistry.ANY_ROOT_INTERFACE);
         }
 
-        if (stringHasValue(rootInterface)) {
+        if (isNotEmpty(rootInterface)) {
             FullyQualifiedJavaType fqjt = new FullyQualifiedJavaType(rootInterface);
             interfaze.addSuperInterface(fqjt);
             interfaze.addImportedType(fqjt);

@@ -54,15 +54,15 @@ public class SqlScriptRunner {
     public SqlScriptRunner(String sourceFile, String driver, String url,
             String userId, String password) throws MojoExecutionException {
 
-        if (!StringUtils.stringHasValue(sourceFile)) {
+        if (!StringUtils.isNotEmpty(sourceFile)) {
             throw new MojoExecutionException("SQL script file is required");
         }
 
-        if (!StringUtils.stringHasValue(driver)) {
+        if (!StringUtils.isNotEmpty(driver)) {
             throw new MojoExecutionException("JDBC Driver is required");
         }
 
-        if (!StringUtils.stringHasValue(url)) {
+        if (!StringUtils.isNotEmpty(url)) {
             throw new MojoExecutionException("JDBC URL is required");
         }
 
@@ -169,7 +169,7 @@ public class SqlScriptRunner {
                 continue;
             }
 
-            if (!StringUtils.stringHasValue(line)) {
+            if (!StringUtils.isNotEmpty(line)) {
                 continue;
             }
 

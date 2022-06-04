@@ -18,8 +18,8 @@ package org.mybatis.generator.internal.db;
 import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualifiedTableName;
 import static org.mybatis.generator.internal.util.StringUtils.isTrue;
 import static org.mybatis.generator.internal.util.StringUtils.stringContainsSQLWildcard;
-import static org.mybatis.generator.internal.util.StringUtils.stringContainsSpace;
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.containsSpace;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.sql.DatabaseMetaData;
@@ -165,6 +165,7 @@ public class DatabaseIntrospector {
 
     /**
      * Returns a List of IntrospectedTable elements that matches the specified table configuration.
+     *
      * @param tc the table configuration
      * @return a list of introspected tables
      * @throws SQLException if any errors in introspection
@@ -227,7 +228,7 @@ public class DatabaseIntrospector {
         for (Map.Entry<ActualTableName, List<IntrospectedColumn>> entry : columns
                 .entrySet()) {
             Iterator<IntrospectedColumn> tableColumns = entry.getValue()
-                                                             .iterator();
+                    .iterator();
             while (tableColumns.hasNext()) {
                 IntrospectedColumn introspectedColumn = tableColumns.next();
                 if (tc
@@ -251,7 +252,7 @@ public class DatabaseIntrospector {
         String replaceString = null;
         if (tc.getColumnRenamingRule() != null) {
             pattern = Pattern.compile(tc.getColumnRenamingRule()
-                                        .getSearchString());
+                    .getSearchString());
             replaceString = tc.getColumnRenamingRule().getReplaceString();
             replaceString = replaceString == null ? "" : replaceString; //$NON-NLS-1$
         }
@@ -302,7 +303,7 @@ public class DatabaseIntrospector {
                     ColumnOverride co = tc.getColumnOverride(introspectedColumn
                             .getActualColumnName());
                     if (co != null
-                            && stringHasValue(co.getJavaType())) {
+                            && isNotEmpty(co.getJavaType())) {
                         warn = false;
                     }
 
@@ -378,26 +379,26 @@ public class DatabaseIntrospector {
                                         .getKey().toString()));
                     }
 
-                    if (stringHasValue(columnOverride
+                    if (isNotEmpty(columnOverride
                             .getJavaProperty())) {
                         introspectedColumn.setJavaProperty(columnOverride
                                 .getJavaProperty());
                     }
 
-                    if (stringHasValue(columnOverride
+                    if (isNotEmpty(columnOverride
                             .getJavaType())) {
                         introspectedColumn
                                 .setFullyQualifiedJavaType(new FullyQualifiedJavaType(
                                         columnOverride.getJavaType()));
                     }
 
-                    if (stringHasValue(columnOverride
+                    if (isNotEmpty(columnOverride
                             .getJdbcType())) {
                         introspectedColumn.setJdbcTypeName(columnOverride
                                 .getJdbcType());
                     }
 
-                    if (stringHasValue(columnOverride
+                    if (isNotEmpty(columnOverride
                             .getTypeHandler())) {
                         introspectedColumn.setTypeHandler(columnOverride
                                 .getTypeHandler());
@@ -424,9 +425,9 @@ public class DatabaseIntrospector {
         String localTableName;
 
         boolean delimitIdentifiers = tc.isDelimitIdentifiers()
-                || stringContainsSpace(tc.getCatalog())
-                || stringContainsSpace(tc.getSchema())
-                || stringContainsSpace(tc.getTableName());
+                || containsSpace(tc.getCatalog())
+                || containsSpace(tc.getSchema())
+                || containsSpace(tc.getTableName());
 
         if (delimitIdentifiers) {
             localCatalog = tc.getCatalog();
@@ -579,9 +580,9 @@ public class DatabaseIntrospector {
             TableConfiguration tc,
             Map<ActualTableName, List<IntrospectedColumn>> columns) {
         boolean delimitIdentifiers = tc.isDelimitIdentifiers()
-                || stringContainsSpace(tc.getCatalog())
-                || stringContainsSpace(tc.getSchema())
-                || stringContainsSpace(tc.getTableName());
+                || containsSpace(tc.getCatalog())
+                || containsSpace(tc.getSchema())
+                || containsSpace(tc.getTableName());
 
         List<IntrospectedTable> answer = new ArrayList<>();
 
@@ -597,8 +598,8 @@ public class DatabaseIntrospector {
             // configuration, then some sort of DB default is being returned
             // and we don't want that in our SQL
             FullyQualifiedTable table = new FullyQualifiedTable(
-                    stringHasValue(tc.getCatalog()) ? atn.getCatalog() : null,
-                    stringHasValue(tc.getSchema()) ? atn.getSchema() : null,
+                    isNotEmpty(tc.getCatalog()) ? atn.getCatalog() : null,
+                    isNotEmpty(tc.getSchema()) ? atn.getSchema() : null,
                     atn.getTableName(),
                     tc.getDomainObjectName(),
                     tc.getAlias(),
@@ -610,9 +611,8 @@ public class DatabaseIntrospector {
                     tc.getDomainObjectRenamingRule(),
                     context);
 
-            IntrospectedTable introspectedTable = ObjectFactory
-                    .createIntrospectedTable(tc, table, context);
-
+            IntrospectedTable introspectedTable = ObjectFactory.createIntrospectedTable(tc, table, context);
+            log.info("IntrospectedTable => {}", introspectedTable);
             for (IntrospectedColumn introspectedColumn : entry.getValue()) {
                 introspectedTable.addColumn(introspectedColumn);
             }
@@ -632,6 +632,7 @@ public class DatabaseIntrospector {
      * such as remarks associated with the table and the type.
      *
      * <p>If there is any error, we just add a warning and continue.
+     *
      * @param introspectedTable the introspected table to enhance
      */
     private void enhanceIntrospectedTable(IntrospectedTable introspectedTable) {

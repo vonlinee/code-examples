@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.List;
@@ -71,7 +71,7 @@ public class DomainObjectRenamingRule {
     }
 
     public void validate(List<String> errors, String tableName) {
-        if (!stringHasValue(searchString)) {
+        if (!isNotEmpty(searchString)) {
             errors.add(getString("ValidationError.28", tableName)); //$NON-NLS-1$
         }
     }

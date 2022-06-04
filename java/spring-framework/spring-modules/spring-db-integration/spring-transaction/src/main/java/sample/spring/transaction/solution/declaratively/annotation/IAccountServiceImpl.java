@@ -15,22 +15,11 @@ public class IAccountServiceImpl implements IAccountService {
 	public IAccountDao accountDao;
 
 	@Override
-	@Transactional(
-			value = "", 
-			transactionManager="", /*=value*/
-			isolation = Isolation.REPEATABLE_READ, 
-			readOnly = false, 
-			timeout = -1, 
-			propagation = Propagation.REQUIRED,
-			noRollbackFor= {},
-			noRollbackForClassName= {},
-			rollbackFor= {},
-			rollbackForClassName= {}
-	)
+	@Transactional
 	public void transferMoney(String from, String to, BigDecimal money, boolean throwException) {
 		accountDao.outMoney(from, money);
 		if (throwException) {
-			throw new RuntimeException(String.format("transferMoney [%s]->[%to]: [%s]", from, to, money));
+			throw new RuntimeException(String.format("transferMoney [%s]->[%s]: [%s]", from, to, money));
 		}
 		accountDao.inMoney(to, money);
 	}

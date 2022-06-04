@@ -17,6 +17,10 @@ import org.mybatis.generator.config.PropertyRegistry;
  */
 public abstract class AbstractJavaGenerator extends AbstractGenerator {
 
+    /**
+     * 确定要生成哪些Java元素
+     * @return
+     */
     public abstract List<CompilationUnit> getCompilationUnits();
 
     private final String project;

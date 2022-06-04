@@ -6,15 +6,27 @@ import java.util.Set;
 /**
  * This interface describes methods common to all Java compilation units (Java
  * classes, interfaces, and enums).
- * 编译单元（类/接口/枚举）
+ * 编译单元（类/接口/枚举）  此接口描述所有Java编译单元通用的方法
  * @author Jeff Butler
  */
 public interface CompilationUnit {
 
+    /**
+     * 导入的类型
+     * @return
+     */
     Set<FullyQualifiedJavaType> getImportedTypes();
 
+    /**
+     * 静态导入
+     * @return
+     */
     Set<String> getStaticImports();
 
+    /**
+     * Java类型
+     * @return
+     */
     FullyQualifiedJavaType getType();
 
     void addImportedType(FullyQualifiedJavaType importedType);
@@ -35,5 +47,11 @@ public interface CompilationUnit {
 
     List<String> getFileCommentLines();
 
+    /**
+     * 访问者模式遍历
+     * @param visitor
+     * @param <R>
+     * @return
+     */
     <R> R accept(CompilationUnitVisitor<R> visitor);
 }

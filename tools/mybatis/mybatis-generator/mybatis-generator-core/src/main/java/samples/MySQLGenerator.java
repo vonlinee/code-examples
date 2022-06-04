@@ -1,5 +1,6 @@
 package samples;
 
+import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.apache.commons.io.FileUtils;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -19,6 +20,7 @@ public class MySQLGenerator {
 
     public static void main(String[] args) throws XMLParserException, IOException, InvalidConfigurationException, SQLException, InterruptedException {
         List<String> warnings = new ArrayList<>();
+
         // 如果已经存在生成过的文件是否进行覆盖
         boolean overwrite = true;
         // File configFile = new File("ClassPath路径/generator-configuration.xml");
@@ -28,6 +30,10 @@ public class MySQLGenerator {
                 .getResourceAsStream("generateConfig-mysql5.xml");
         // 解析配置文件，得到配置对象Configuration
         Configuration config = cp.parseConfiguration(is);
+
+        config.getContexts().forEach(context -> {
+            context.addProperty(PropertyRegistry.CONTEXT_XML_FORMATTER, "samples.MyXmlFormatter");
+        });
         //
         DefaultShellCallback callback = new DefaultShellCallback(overwrite);
         // 生成器

@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 public class GenerateTestSourceFiles {
 
     public static void main (String[] args) {
-        if (args.length < 1 || !StringUtils.stringHasValue(args[0])) {
+        if (args.length < 1 || !StringUtils.isNotEmpty(args[0])) {
             throw new RuntimeException("This class requres one argument which is the location of the output directory");
         }
 

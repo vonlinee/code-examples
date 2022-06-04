@@ -17,7 +17,7 @@ package org.mybatis.generator.codegen.mybatis3.xmlmapper;
 
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
-public class MixedMapperGenerator extends XMLMapperGenerator {
+public class MixedXMLMapperGenerator extends XMLMapperGenerator {
 
     @Override
     protected void addSelectByPrimaryKeyElement(XmlElement parentElement) {
