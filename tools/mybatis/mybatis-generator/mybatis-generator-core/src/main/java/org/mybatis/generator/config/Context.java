@@ -114,7 +114,6 @@ public class Context extends PropertyHolder {
     }
 
     public void addPluginConfiguration(PluginConfiguration pluginConfiguration) {
-        log.info("增加插件配置{}", pluginConfiguration.getConfigurationType());
         pluginConfigurations.add(pluginConfiguration);
     }
 
@@ -375,7 +374,7 @@ public class Context extends PropertyHolder {
                 String tableName = composeFullyQualifiedTableName(tc.getCatalog(), tc
                         .getSchema(), tc.getTableName(), '.');
 
-                log.info("tableName => {}", tableName);
+                log.info("[加载数据库表] => {}", tableName);
 
                 if (fullyQualifiedTableNames != null
                         && !fullyQualifiedTableNames.isEmpty()
@@ -451,16 +450,17 @@ public class Context extends PropertyHolder {
         // 初始化表的所有对于代码生成有用的数据
         // initialize everything first before generating. This allows plugins to know about other
         // items in the configuration.
-        log.info("IntrospectedTable开始");
+
         for (IntrospectedTable introspectedTable : introspectedTables) {
+
             callback.checkCancel();
             // 表初始化，即准备数据 introspectedTable实现类IntrospectedTableMyBatis3Impl
+            log.info("[IntrospectedTable初始化] => {}", introspectedTable);
             introspectedTable.initialize();
-            log.info("{} calculateGenerators", introspectedTable);
+            log.info("[确定生成器] => {}", introspectedTable);
             // 计算生成器个数  一个生成器用于生成一种类型的文件
             introspectedTable.calculateGenerators(warnings, callback);
         }
-        log.info("开始添加带生成的文件的元数据，插件开始运行");
         for (IntrospectedTable introspectedTable : introspectedTables) {
             callback.checkCancel();
 

@@ -24,6 +24,8 @@ import org.mybatis.generator.codegen.mybatis3.model.ExampleGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.PrimaryKeyGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.RecordWithBLOBsGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
+import org.mybatis.generator.codegen.springmvc.BusinessServiceGenerator;
+import org.mybatis.generator.codegen.springmvc.ControllerGenerator;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.util.StringUtils;
@@ -59,8 +61,9 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         // Mapper类生成，根据不同的类型不同的实例
         AbstractMapperGenerator javaClientGenerator =
                 calculateClientGenerators(warnings, progressCallback);
+
+        log.info("[添加Mapper生成器] => {}", javaClientGenerator);
         // XML生成
-        log.info("添加JavaGenerator => {}", javaClientGenerator);
         calculateXmlMapperGenerator(javaClientGenerator, warnings, progressCallback);
     }
 
@@ -74,7 +77,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         } else {
             xmlMapperGenerator = javaClientGenerator.getMatchedXMLGenerator();
         }
-        log.info("添加XmlMapperGenerator => {}", xmlMapperGenerator);
+        log.info("[添加XML生成器] => {}", xmlMapperGenerator);
         initializeAbstractGenerator(xmlMapperGenerator, warnings,
                 progressCallback);
     }
@@ -102,7 +105,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         }
         // 客户端的类型
         String type = context.getJavaClientGeneratorConfiguration().getConfigurationType();
-        log.info("创建JavaClientGenerator, type:{}", type);
+
         AbstractMapperGenerator javaGenerator;
         if ("XMLMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$  基于XML和Mapper接口
             javaGenerator = new JavaMapperGenerator(getClientProject());
@@ -115,6 +118,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         } else {
             javaGenerator = (AbstractMapperGenerator) ObjectFactory.createInternalObject(type);
         }
+        log.info("[创建Mapper生成器] => {} {}", type, javaGenerator);
         return javaGenerator;
     }
 
@@ -127,38 +131,50 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     protected void calculateJavaModelGenerators(List<String> warnings,
                                                 ProgressCallback progressCallback) {
         // 生成EXAMPLE类
-        log.info("javaGenerators {}个", javaGenerators.size());
         if (getRules().generateExampleClass()) {
             AbstractJavaGenerator javaGenerator = new ExampleGenerator(getExampleProject());
             initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
             javaGenerators.add(javaGenerator);
-            log.info("添加JavaGenerator => {}", javaGenerator);
+            log.info("[添加Java生成器] => {}", javaGenerator);
         }
 
         if (getRules().generatePrimaryKeyClass()) {
             AbstractJavaGenerator javaGenerator = new PrimaryKeyGenerator(getModelProject());
             initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
             javaGenerators.add(javaGenerator);
-            log.info("添加JavaGenerator => {}", javaGenerator);
+            log.info("[添加Java生成器] => {}", javaGenerator);
         }
 
         if (getRules().generateBaseRecordClass()) {
             AbstractJavaGenerator javaGenerator = new BaseRecordGenerator(getModelProject());
             initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
             javaGenerators.add(javaGenerator);
-            log.info("添加JavaGenerator => {}", javaGenerator);
+            log.info("[添加Java生成器] => {}", javaGenerator);
         }
 
         if (getRules().generateRecordWithBLOBsClass()) {
             AbstractJavaGenerator javaGenerator = new RecordWithBLOBsGenerator(getModelProject());
             initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
             javaGenerators.add(javaGenerator);
-            log.info("添加JavaGenerator => {}", javaGenerator);
+            log.info("[添加Java生成器] => {}", javaGenerator);
         }
+
+        // 生成Controller和Service层代码
+        // 新添加的功能
+        AbstractJavaGenerator mvcControllerGenerator = new ControllerGenerator(getModelProject());
+        initializeAbstractGenerator(mvcControllerGenerator, warnings, progressCallback);
+        javaGenerators.add(mvcControllerGenerator);
+        log.info("[添加Java生成器] => {}", mvcControllerGenerator);
+
+        AbstractJavaGenerator mvcServiceGenerator = new BusinessServiceGenerator(getModelProject());
+        initializeAbstractGenerator(mvcServiceGenerator, warnings, progressCallback);
+        javaGenerators.add(mvcServiceGenerator);
+        log.info("[添加Java生成器] => {}", mvcServiceGenerator);
     }
 
     /**
      * 初始化Generator，注入上下文
+     *
      * @param abstractGenerator
      * @param warnings
      * @param progressCallback
@@ -177,16 +193,19 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     @Override
     public List<GeneratedJavaFile> getGeneratedJavaFiles() {
         List<GeneratedJavaFile> answer = new ArrayList<>();
-        log.info("javaGenerators {}", javaGenerators);
+
         for (AbstractJavaGenerator javaGenerator : javaGenerators) {
+            log.info("[获取待生成的编译单元] => {}", javaGenerator);
             // 确定生成的文件的内容
             List<CompilationUnit> compilationUnits = javaGenerator.getCompilationUnits();
             // TopLevelClass, Interface, Enum
+            // 针对编译单元构造文件信息，然后进行生成
             for (CompilationUnit compilationUnit : compilationUnits) {
                 GeneratedJavaFile gjf = new GeneratedJavaFile(compilationUnit,
                         javaGenerator.getProject(),
                         context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
                         context.getJavaFormatter());
+                log.info("[生成文件信息] => {}", gjf.getTargetProject() + "/" + gjf.getFileName());
                 answer.add(gjf);
             }
         }
@@ -231,7 +250,6 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 
     @Override
     public List<GeneratedXmlFile> getGeneratedXmlFiles() {
-        log.info("获取生成的XML文件信息");
         List<GeneratedXmlFile> answer = new ArrayList<>();
         if (xmlMapperGenerator != null) {
             Document document = xmlMapperGenerator.getDocument();

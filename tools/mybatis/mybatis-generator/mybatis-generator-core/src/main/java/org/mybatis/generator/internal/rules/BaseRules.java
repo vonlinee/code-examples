@@ -24,6 +24,7 @@ import org.mybatis.generator.config.TableConfiguration;
 import org.mybatis.generator.internal.util.StringUtils;
 
 /**
+ * 集中所有代码生成规则
  * This class centralizes all the rules related to code generation - including
  * the methods and objects to create, and certain attributes related to those
  * objects.
@@ -58,7 +59,6 @@ public abstract class BaseRules implements Rules {
         if (isModelOnly) {
             return false;
         }
-
         return tableConfiguration.isInsertStatementEnabled();
     }
 

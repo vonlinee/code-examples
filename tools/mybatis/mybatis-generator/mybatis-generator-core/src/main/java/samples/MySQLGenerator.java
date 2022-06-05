@@ -30,9 +30,10 @@ public class MySQLGenerator {
                 .getResourceAsStream("generateConfig-mysql5.xml");
         // 解析配置文件，得到配置对象Configuration
         Configuration config = cp.parseConfiguration(is);
-
+        // 改变XML Formatter实现
         config.getContexts().forEach(context -> {
             context.addProperty(PropertyRegistry.CONTEXT_XML_FORMATTER, "samples.MyXmlFormatter");
+            context.addProperty(PropertyRegistry.CODE_GENERATION_RULE_IMPL, "");
         });
         //
         DefaultShellCallback callback = new DefaultShellCallback(overwrite);

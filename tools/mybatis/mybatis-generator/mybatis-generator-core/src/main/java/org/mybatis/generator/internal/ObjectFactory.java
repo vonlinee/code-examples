@@ -105,9 +105,7 @@ public class ObjectFactory {
      */
     public static Class<?> externalClassForName(String type)
             throws ClassNotFoundException {
-
         Class<?> clazz;
-
         for (ClassLoader classLoader : externalClassLoaders) {
             try {
                 clazz = Class.forName(type, true, classLoader);
@@ -116,7 +114,6 @@ public class ObjectFactory {
                 // ignore - fail safe below
             }
         }
-
         return internalClassForName(type);
     }
 
@@ -210,7 +207,7 @@ public class ObjectFactory {
 
     public static Plugin createPlugin(Context context,
                                       PluginConfiguration pluginConfiguration) {
-        log.info("开始通过反射创建Plugin对象并注入Context和配置Properties => {}", pluginConfiguration.getConfigurationType());
+        log.info("[创建Plugin实例] => {}", pluginConfiguration.getConfigurationType());
         Plugin plugin = (Plugin) createInternalObject(pluginConfiguration.getConfigurationType());
         plugin.setContext(context);
         plugin.setProperties(pluginConfiguration.getProperties());
@@ -293,7 +290,7 @@ public class ObjectFactory {
         }
         XmlFormatter answer = (XmlFormatter) createInternalObject(type);
         answer.setContext(context);
-        log.info("使用XmlFormatter => {}", answer.getClass());
+        log.info("[使用XmlFormatter] => {}", answer.getClass());
         return answer;
     }
 

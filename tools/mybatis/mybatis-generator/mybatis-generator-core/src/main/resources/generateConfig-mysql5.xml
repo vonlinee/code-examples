@@ -13,7 +13,7 @@
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
         <!--自定义插件-->
         <plugin type="samples.plugins.WebMVCPlugin">
-            <property name="name" value="孙允珠"/>
+            <property name="name" value="xxx"/>
             <property name="age" value="30"/>
         </plugin>
 
@@ -31,21 +31,22 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
         <!--实体类-->
-        <javaModelGenerator targetPackage="test.model" targetProject="D:/MBGTestProject/src">
+        <javaModelGenerator targetPackage="test.model" targetProject="D:/MBGTestProject">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
-        <!--Mapper-->
-        <sqlMapGenerator targetPackage="test.xml" targetProject="D:/MBGTestProject/src">
+        <!--XML文件-->
+        <sqlMapGenerator targetPackage="test.xml" targetProject="D:/MBGTestProject">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
-        <!--客户端生成器-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="test.dao" targetProject="D:/MBGTestProject/src">
+        <!--Mapper接口生成器-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="test.dao" targetProject="D:/MBGTestProject">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!--生成的表配置 -->
         <!-- schema：数据库名  tableName：表名  -->
-        <table schema="db_mysql" tableName="course" domainObjectName="Course" enableCountByExample="false"
+        <table modelType="flat" schema="db_mysql" tableName="course" domainObjectName="Course"
+               enableCountByExample="false"
                enableDeleteByExample="false" enableInsert="true" enableSelectByExample="false" mapperName="UserMapper">
             <property name="useActualColumnNames" value="true"/>
             <!--主键-->

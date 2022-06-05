@@ -43,12 +43,6 @@ public class ExampleGenerator extends AbstractJavaGenerator {
 
         // org.mybatis.generator.internal.DefaultCommentGenerator@62ddbd7e
         CommentGenerator commentGenerator = context.getCommentGenerator();
-        // 全类名
-        log.info("ExampleGenerator => {}", introspectedTable.getExampleType());
-
-
-
-
         //
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(introspectedTable.getExampleType());
 

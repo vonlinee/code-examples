@@ -172,7 +172,7 @@ public class DatabaseIntrospector {
      */
     public List<IntrospectedTable> introspectTables(TableConfiguration tc)
             throws SQLException {
-        logger.debug("开始获取表信息" + tc.getTableName());
+        logger.debug("[获取表信息] => " + tc.getTableName());
         // get the raw columns from the DB
         Map<ActualTableName, List<IntrospectedColumn>> columns = getColumns(tc);
         if (columns.isEmpty()) {
@@ -612,7 +612,8 @@ public class DatabaseIntrospector {
                     context);
 
             IntrospectedTable introspectedTable = ObjectFactory.createIntrospectedTable(tc, table, context);
-            log.info("IntrospectedTable => {}", introspectedTable);
+
+            log.info("[IntrospectedTable] => {}", introspectedTable);
             for (IntrospectedColumn introspectedColumn : entry.getValue()) {
                 introspectedTable.addColumn(introspectedColumn);
             }

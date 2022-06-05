@@ -563,13 +563,14 @@ public class MyBatisGeneratorConfigurationParser {
     private static final Logger log = LoggerFactory.getLogger(MyBatisGeneratorConfigurationParser.class);
 
     private void parsePlugin(Context context, Node node) {
-        log.info("开始解析插件配置");
         PluginConfiguration pluginConfiguration = new PluginConfiguration();
 
         context.addPluginConfiguration(pluginConfiguration);
 
         Properties attributes = parseAttributes(node);
         String type = attributes.getProperty("type"); //$NON-NLS-1$
+
+        log.info("[配置加载] Plugin => {}", type);
 
         pluginConfiguration.setConfigurationType(type);
 

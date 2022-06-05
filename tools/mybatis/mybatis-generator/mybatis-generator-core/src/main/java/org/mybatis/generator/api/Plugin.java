@@ -199,7 +199,7 @@ public interface Plugin {
      * This method is called when the entire client has been generated.
      * Implement this method to add additional methods or fields to a generated
      * client interface or implementation.
-     *
+     * 所谓的client指的就是Mapper，生成之后调用
      * @param interfaze         the generated interface if any, may be null
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database

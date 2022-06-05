@@ -16,7 +16,7 @@ import java.util.Properties;
  */
 public class WebMVCPlugin extends PluginAdapter {
 
-    private static final Logger log = LoggerFactory.getLogger(WebMVCPlugin.class);
+    private static final Logger _log = LoggerFactory.getLogger(WebMVCPlugin.class);
 
     public WebMVCPlugin() {
         super();
@@ -24,7 +24,7 @@ public class WebMVCPlugin extends PluginAdapter {
 
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
-        log.info("WebMVCPlugin initialized {}", introspectedTable.getTableConfiguration().getTableName());
+
     }
 
     @Override
@@ -36,7 +36,6 @@ public class WebMVCPlugin extends PluginAdapter {
     @Override
     public void setContext(Context context) {
         super.setContext(context);
-        // 先调
     }
 
     @Override
@@ -45,19 +44,8 @@ public class WebMVCPlugin extends PluginAdapter {
     }
 
     @Override
-    public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles() {
-        // 多个插件顺序执行
-        return super.contextGenerateAdditionalJavaFiles();
-    }
-
-    @Override
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
         // 添加生成Controller和Service
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
-    }
-
-    @Override
-    public List<GeneratedXmlFile> contextGenerateAdditionalXmlFiles(IntrospectedTable introspectedTable) {
-        return super.contextGenerateAdditionalXmlFiles(introspectedTable);
     }
 }
