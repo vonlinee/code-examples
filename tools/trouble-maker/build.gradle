@@ -22,8 +22,6 @@ plugins {
 group 'io.trouble.maker'
 version '1.0-SNAPSHOT'
 
-apply from: this.rootProject.file('gradle/utils.gradle')
-
 allprojects {
     group = 'io.trouble.maker'
     version = "1.0-SNAPSHOT"
