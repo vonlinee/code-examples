@@ -25,11 +25,8 @@
 
 	<aop:aspectj-autoproxy />
 
-	<bean id="audience" class="com.springinaction.springidol.Audience">
-	</bean>
+	<bean id="audience" class="sample.spring.aop.annotation.joinpoint.Audience"/>
 
-	<bean id="performer"
-		class="com.springinaction.springidol.Performer">
-	</bean>
+	<bean id="performer" class="sample.spring.aop.annotation.joinpoint.Performer"/>
 
-</beans>  
+</beans>

@@ -38,12 +38,14 @@ import net.sf.cglib.proxy.NoOp;
 public class TestCglib {
 
 	public static void main(String[] args) {
+		showDebugLocation();
+		test1();
+	}
+	
+	public static void test5() {
+		int[] array = (int[]) Array.newInstance(int.class, 10);
 		
-		System.out.println(int.class == Integer.class);
-		System.out.println(int.class == Integer.TYPE);
-		
-		System.identityHashCode(LinkageError.class);
-		
+		System.out.println(array[1]);
 	}
 
 	public static void test1() {
@@ -54,11 +56,8 @@ public class TestCglib {
 		Callback callback = new TargetInterceptor();
 		enhancer.setCallback(callback); // 设置怎么代理，代理回调
 		
-		Object array = Array.newInstance(int.class, 0);
-		
-		
 		TargetObject proxy = (TargetObject) enhancer.create(); // 获取代理类实例
-		//sample.spring.aop.cglib.TargetObject$$EnhancerByCGLIB$$d923bb46 => TargetObject(父类)
+		// sample.spring.aop.cglib.TargetObject$$EnhancerByCGLIB$$d923bb46 => TargetObject(父类)
 		
 		String returnValue = proxy.method("zs");
 		System.out.println("returnValue = " + returnValue);

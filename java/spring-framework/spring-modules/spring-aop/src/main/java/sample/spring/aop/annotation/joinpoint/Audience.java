@@ -9,15 +9,15 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class Audience {
 
-	@Pointcut("execution(* com.springinaction.springidol.Performer.*(..))")
+	@Pointcut("execution(* sample.spring.aop.annotation.joinpoint.Performer.*(..))")
 	public void performance() {}
 
 	@Before("performance()")
 	public void takeSeats(JoinPoint jp) { // before advice
 		System.out.println("BEFORE ADVICE : The audience is taking their seats and turning off their cellphones");
 		System.out.println("Pointcut info : " + jp.toString());
-		Performer performer = (Performer) jp.getTarget(); // returns the object of the class which causes takeSeats()
-															// method to be called.
+		// returns the object of the class which causes takeSeats() method to be called.
+		Performer performer = (Performer) jp.getTarget();
 		System.out.println("Pointcut target object : " + performer);
 	}
 

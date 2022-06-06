@@ -132,6 +132,9 @@ public class MapperUtils {
             string = string.substring(0, lastIndexOf);
         }
         String selectContent = "\tUPDATE " + tableName + " SET\n" + string;
+        
+        // WHERE条件
+        
         return selectContent;
     }
 

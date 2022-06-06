@@ -35,9 +35,9 @@ public class MySQLGenerator {
     // 作者
     private static final String AUTHOR_NAME = "xx";
     // table前缀
-    private static final String[] ignoredTablePrefix = {"t_"};
+    private static final String[] tablePrefixToBeIgnored = {"t_"};
     // 要生成的表名
-    private static final String[] tables = {"film"};
+    private static final String[] tableNamesToBeGenerated = {"film"};
 
     public static void main(String[] args) {
         StopWatch stopWatch = new StopWatch("代码生成");
@@ -91,8 +91,8 @@ public class MySQLGenerator {
                             .build();
                 }).strategyConfig(builder -> {
                     // 策略配置
-                    builder.addInclude(tables) // 设置需要生成的表名
-                            .addTablePrefix(ignoredTablePrefix); // 设置过滤表前缀
+                    builder.addInclude(tableNamesToBeGenerated) // 设置需要生成的表名
+                            .addTablePrefix(tablePrefixToBeIgnored); // 设置过滤表前缀
                     // 实体类输出配置
                     builder.entityBuilder()
                             //.superClass(BaseEntity.class)
