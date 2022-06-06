@@ -4,6 +4,9 @@ import org.springframework.context.ApplicationContext;
 
 import sample.spring.aop.SpringUtils;
 
+/**
+ * @Aspect注解的使用
+ */
 public class Main {
 	private static ApplicationContext context;
 

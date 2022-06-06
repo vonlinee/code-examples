@@ -14,17 +14,17 @@ public class Audience implements InitializingBean {
 	
 	@Before("performance()")
 	public void takeSeats() {			// before advice
-		System.out.println("BEFORE ADVICE : The audience is taking their seats and turning off their cellphones");
+		System.out.println("前置 : The audience is taking their seats and turning off their cellphones");
 	}
 	
 	@Before("performance()")
 	public void turnOffCellPhones() {		// before advice
-		System.out.println("BEFORE ADVICE : The audience is turning off their cellphones");
+		System.out.println("前置 : The audience is turning off their cellphones");
 	}
 	
 	@After("performance()")
 	public void applaud() {		// after advice
-		System.out.println("AFTER ADVICE : CLAP CLAP CLAP CLAP CLAP");
+		System.out.println("后置 : CLAP CLAP CLAP CLAP CLAP");
 	}
 
 	@Override

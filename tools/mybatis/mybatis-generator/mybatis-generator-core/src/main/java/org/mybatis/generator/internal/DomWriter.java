@@ -304,21 +304,17 @@ public class DomWriter {
             String nodeName = node.getNodeName();
 
             printWriter.print("</"); //$NON-NLS-1$
-<<<<<<< HEAD
             printWriter.print(nodeName);
 
             if (nodeName.equals("") || nodeName.equals("") || nodeName.equals("")) {
 
 			}
 
-=======
-
             if (StringUtils.equalsAny(node.getNodeName(), "sql", "resultMap", "insert", "delete", "update", "select")) {
                 printWriter.println();
             }
 
             printWriter.print(node.getNodeName());
->>>>>>> 43bae03d344afa3b95fad3ff4da35697b3b4c48f
             printWriter.print('>');
             printWriter.flush();
         }

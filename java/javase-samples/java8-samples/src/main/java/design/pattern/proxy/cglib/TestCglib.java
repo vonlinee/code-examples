@@ -1,9 +1,12 @@
 package design.pattern.proxy.cglib;
 
+import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+
 import net.sf.cglib.core.DebuggingClassWriter;
 import net.sf.cglib.proxy.Enhancer;
-
-import java.io.File;
 
 public class TestCglib {
 
@@ -21,14 +24,42 @@ public class TestCglib {
         enhancer.setCallback(new TargetInterceptor());
 
         // 调试看不出
+        // 代理对象 design.pattern.proxy.cglib.TargetObject$$EnhancerByCGLIB$$651090fd
         Object proxy = enhancer.create();
 
+        System.out.println("===========================================");
+        Class<? extends Object> clazz = proxy.getClass();
+        Method[] methods = clazz.getMethods();
+        for (Method method : methods) {
+			System.out.println(method.getName());
+		}
+        Field[] fields = clazz.getFields();
+        for (Field field : fields) {
+			System.out.println(field.getName());
+		}
+        
+        
+        System.out.println(proxy instanceof Enhancer);
+        System.out.println(proxy instanceof TargetObject);
+        
+        Class<?> superclass = clazz.getSuperclass();
+        System.out.println(superclass);
+     
+        Class<?>[] interfaces = clazz.getInterfaces();
+        for (Class<?> interfaceItem : interfaces) {
+			System.out.println(interfaceItem.getName()); // net.sf.cglib.proxy.Factory
+		}
+        
+        Type genericSuperclass = clazz.getGenericSuperclass();
+        System.out.println(genericSuperclass);
+        
+        System.out.println("===========================================");
+        
         TargetObject targetObject2 = (TargetObject) proxy;
 
 
-
         System.out.println(targetObject2);
-        System.out.println(targetObject2.method1("mmm1"));
+        System.out.println(targetObject2.method1("xxx"));
         System.out.println(targetObject2.method2(100));
         System.out.println(targetObject2.method3(200));
     }

@@ -26,9 +26,10 @@ public class DeclarativeTransactionAnnotation {
 			DataSourceConfiguration.class);
 
 	public static void main(String[] args) {
-//		printDataSourceInformation();
-		test1();
+		printDataSourceInformation();
+//		test1();
 		// test2();
+		test5();
 	}
 
 	/**
@@ -64,6 +65,17 @@ public class DeclarativeTransactionAnnotation {
 		// serviceImpl.transferMoney("zs", "ls", 200.0);
 		serviceImpl.transferMoney("zs", "ls", BigDecimal.valueOf(200.0));
 	}
+	
+	/**
+	 * @Transactional 加在类上原理
+	 */
+	public static void test5() {
+		// 加了@Transactional就会生成代理
+		AccountService serviceImpl = context.getBean(AccountService.class);
+		// serviceImpl.transferMoney("zs", "ls", 200.0);
+		// 在非@Transactional方法中调用@Transactional方法也会生成代理
+		serviceImpl.transferMoney("zs", "ls", BigDecimal.valueOf(200.0), true);
+	}
 
 	public static void printDataSourceInformation() {
 		DataSource dataSource = null;
@@ -82,6 +94,7 @@ public class DeclarativeTransactionAnnotation {
 						try (Connection connection = dataSource.getConnection()) {
 							System.out.println(connection);
 						} catch (Exception e2) {
+							e2.printStackTrace();
 							System.exit(0);
 						}
 					}

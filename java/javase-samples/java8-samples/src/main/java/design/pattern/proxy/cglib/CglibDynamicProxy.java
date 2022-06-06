@@ -6,12 +6,15 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
  
-public class DynamicProxy implements MethodInterceptor {
+public class CglibDynamicProxy implements MethodInterceptor {
  
 	//真实对象
 	Object targetObject;
 	
 	public Object getProxyObject(Object object){
+		if (object == null) {
+			throw new NullPointerException("object != null");
+		}
 		this.targetObject = object;
 		//增强器，动态代码生成器
 		Enhancer enhancer = new Enhancer();

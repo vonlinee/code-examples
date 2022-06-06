@@ -14,4 +14,12 @@ public class SpringUtils {
 		}
 		return new FileSystemXmlApplicationContext(resource.toExternalForm());
 	}
+	
+	public static ApplicationContext loadContext(String xml) {
+		URL resource = Thread.currentThread().getContextClassLoader().getResource(xml);
+		if (resource == null) {
+			throw new NullPointerException(String.format("无法加载XML文件%s", xml));
+		}
+		return new FileSystemXmlApplicationContext(resource.toExternalForm());
+	}
 }
