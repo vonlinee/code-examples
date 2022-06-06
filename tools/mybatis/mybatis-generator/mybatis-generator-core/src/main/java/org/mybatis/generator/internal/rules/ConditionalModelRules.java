@@ -18,7 +18,7 @@ package org.mybatis.generator.internal.rules;
 import org.mybatis.generator.api.IntrospectedTable;
 
 /**
- * This class encapsulates all the code generation rules for a table using the
+ * This class encapsulates（包括） all the code generation rules for a table using the
  * conditional model. In this model we do not generate primary key or record
  * with BLOBs classes if the class would only hold one field.
  *
@@ -44,6 +44,7 @@ public class ConditionalModelRules extends BaseRules {
      */
     @Override
     public boolean generatePrimaryKeyClass() {
+        // 存在主键
         return introspectedTable.getPrimaryKeyColumns().size() > 1;
     }
 

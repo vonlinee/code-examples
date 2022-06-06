@@ -1,20 +1,8 @@
-/*
- *    Copyright 2006-2020 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.api.dom.xml.render;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,12 +12,30 @@ import org.mybatis.generator.api.dom.xml.Document;
 
 public class DocumentRenderer {
 
+    /**
+     * 将文档直接渲染成字符串
+     *
+     * @param document
+     * @return
+     */
     public String render(Document document) {
-        return Stream.of(renderXmlHeader(),
-                renderDocType(document),
-                renderRootElement(document))
-                .flatMap(Function.identity())
-                .collect(Collectors.joining(System.getProperty("line.separator"))); //$NON-NLS-1$
+        Stream<Stream<String>> stream = Stream.of(renderXmlHeader(), renderDocType(document), renderRootElement(document));
+        Stream<String> stream1 = stream.flatMap(Function.identity());
+
+        List<String> list = new ArrayList<>();
+
+        stream1.forEach(s -> {
+            if (s.contains("</resultMap") || s.contains("</sql") || s.contains("</insert")
+                    || s.contains("</update") || s.contains("</delete") || s.contains("</select")) {
+                list.add(s + "\n"); // 换行
+            } else {
+                list.add(s);
+            }
+        });
+
+        // String documentString = stream1.collect(Collectors.joining(System.getProperty("line.separator")));//$NON-NLS-1$
+        // System.out.println(documentString);
+        return String.join("\n", list);
     }
 
     private Stream<String> renderXmlHeader() {

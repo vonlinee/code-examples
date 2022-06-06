@@ -47,7 +47,7 @@ dependencies {
 	implementation libs.mybatis_spring
 	implementation libs.mybatis_core
 	implementation libs.spring_cloud_starter_openfeign
-	
+	implementation(libs.knife4j_spring_boot_starter)
 	
     testImplementation libs.sqlserver
     testImplementation libs.postgresql
@@ -59,6 +59,7 @@ dependencies {
     testImplementation libs.sqlite
     testImplementation libs.firebird
     testImplementation libs.swagger_annotations
+
 }
 
 test {

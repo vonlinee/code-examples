@@ -1,7 +1,7 @@
 package org.mybatis.generator.codegen.mybatis3.model;
 
 import static org.mybatis.generator.internal.util.JavaBeansUtil.getGetterMethodName;
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;
@@ -43,12 +43,6 @@ public class ExampleGenerator extends AbstractJavaGenerator {
 
         // org.mybatis.generator.internal.DefaultCommentGenerator@62ddbd7e
         CommentGenerator commentGenerator = context.getCommentGenerator();
-        // 全类名
-        log.info("ExampleGenerator => {}", introspectedTable.getExampleType());
-
-
-
-
         //
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(introspectedTable.getExampleType());
 
@@ -322,7 +316,7 @@ public class ExampleGenerator extends AbstractJavaGenerator {
         criteriaLists.add("criteria"); //$NON-NLS-1$
 
         for (IntrospectedColumn introspectedColumn : introspectedTable.getNonBLOBColumns()) {
-            if (stringHasValue(introspectedColumn.getTypeHandler())) {
+            if (isNotEmpty(introspectedColumn.getTypeHandler())) {
                 String name = addTypeHandledObjectsAndMethods(introspectedColumn, method, answer);
                 criteriaLists.add(name);
             }
@@ -655,7 +649,7 @@ public class ExampleGenerator extends AbstractJavaGenerator {
             sb.append("addCriterionForJDBCDate(\""); //$NON-NLS-1$
         } else if (introspectedColumn.isJDBCTimeColumn()) {
             sb.append("addCriterionForJDBCTime(\""); //$NON-NLS-1$
-        } else if (stringHasValue(introspectedColumn.getTypeHandler())) {
+        } else if (isNotEmpty(introspectedColumn.getTypeHandler())) {
             sb.append("add"); //$NON-NLS-1$
             sb.append(introspectedColumn.getJavaProperty());
             sb.setCharAt(3, Character.toUpperCase(sb.charAt(3)));

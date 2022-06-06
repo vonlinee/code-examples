@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.plugins;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.List;
@@ -62,18 +62,18 @@ public class RenameExampleClassPlugin extends PluginAdapter {
         String searchString = properties.getProperty("searchString"); //$NON-NLS-1$
         replaceString = properties.getProperty("replaceString"); //$NON-NLS-1$
 
-        boolean valid = stringHasValue(searchString)
-                && stringHasValue(replaceString);
+        boolean valid = isNotEmpty(searchString)
+                && isNotEmpty(replaceString);
 
         if (valid) {
             pattern = Pattern.compile(searchString);
         } else {
-            if (!stringHasValue(searchString)) {
+            if (!isNotEmpty(searchString)) {
                 warnings.add(getString("ValidationError.18", //$NON-NLS-1$
                         "RenameExampleClassPlugin", //$NON-NLS-1$
                         "searchString")); //$NON-NLS-1$
             }
-            if (!stringHasValue(replaceString)) {
+            if (!isNotEmpty(replaceString)) {
                 warnings.add(getString("ValidationError.18", //$NON-NLS-1$
                         "RenameExampleClassPlugin", //$NON-NLS-1$
                         "replaceString")); //$NON-NLS-1$

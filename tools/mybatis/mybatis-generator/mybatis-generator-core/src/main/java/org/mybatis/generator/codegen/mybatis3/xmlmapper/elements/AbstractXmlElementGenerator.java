@@ -1,6 +1,6 @@
 package org.mybatis.generator.codegen.mybatis3.xmlmapper.elements;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -181,7 +181,7 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
             resultElement.addAttribute(new Attribute("property", introspectedColumn.getJavaProperty())); //$NON-NLS-1$
             resultElement.addAttribute(new Attribute("jdbcType", introspectedColumn.getJdbcTypeName())); //$NON-NLS-1$
 
-            if (stringHasValue(introspectedColumn.getTypeHandler())) {
+            if (isNotEmpty(introspectedColumn.getTypeHandler())) {
                 resultElement.addAttribute(
                         new Attribute("typeHandler", introspectedColumn.getTypeHandler())); //$NON-NLS-1$
             }
@@ -204,7 +204,7 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
             resultElement.addAttribute(new Attribute("javaType", //$NON-NLS-1$
                     introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName()));
 
-            if (stringHasValue(introspectedColumn.getTypeHandler())) {
+            if (isNotEmpty(introspectedColumn.getTypeHandler())) {
                 resultElement.addAttribute(
                         new Attribute("typeHandler", introspectedColumn.getTypeHandler())); //$NON-NLS-1$
             }
@@ -240,7 +240,7 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
                         introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName()));
             }
 
-            if (stringHasValue(introspectedColumn.getTypeHandler())) {
+            if (isNotEmpty(introspectedColumn.getTypeHandler())) {
                 resultElement.addAttribute(new Attribute(
                         "typeHandler", introspectedColumn.getTypeHandler())); //$NON-NLS-1$
             }

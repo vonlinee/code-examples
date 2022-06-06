@@ -16,7 +16,7 @@
 package org.mybatis.generator.runtime.dynamic.sql.elements;
 
 import static org.mybatis.generator.api.dom.OutputUtilities.javaIndent;
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -219,7 +219,7 @@ public class FragmentGenerator {
                                            boolean idColumn) {
         StringBuilder sb = new StringBuilder();
 
-        if (stringHasValue(introspectedColumn.getTypeHandler())) {
+        if (isNotEmpty(introspectedColumn.getTypeHandler())) {
             FullyQualifiedJavaType fqjt =
                     new FullyQualifiedJavaType(introspectedColumn.getTypeHandler());
             imports.add(fqjt);

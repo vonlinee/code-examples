@@ -42,6 +42,7 @@ import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.XmlFileMergerJaxp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import samples.config.ReadOnlyConfiguration;
 
 /**
  * This class is the main interface to MyBatis generator. A typical execution of the tool involves these steps:
@@ -210,13 +211,11 @@ public class MyBatisGenerator {
             contextsToRun = new ArrayList<>();
             for (Context context : configuration.getContexts()) {
                 if (contextIds.contains(context.getId())) {
+                    log.info("[加载上下文] => {} {}", context.getId(), context);
                     contextsToRun.add(context);
                 }
             }
         }
-
-        log.info("contextsToRun  {}", contextsToRun);
-
         // setup custom classloader if required
         if (!configuration.getClassPathEntries().isEmpty()) {
             ClassLoader classLoader = getCustomClassloader(configuration.getClassPathEntries());
@@ -229,7 +228,6 @@ public class MyBatisGenerator {
             totalSteps += context.getIntrospectionSteps();
         }
 
-        log.info("  callback.introspectionStarted(totalSteps)");
         callback.introspectionStarted(totalSteps);
         for (Context context : contextsToRun) {
             context.introspectTables(callback, warnings, fullyQualifiedTableNames);
@@ -239,42 +237,40 @@ public class MyBatisGenerator {
         // 计算步骤数量
         totalSteps = 0;
         for (Context context : contextsToRun) {
-            log.info("contextsToRun [{}]", context);
             totalSteps += context.getGenerationSteps();
         }
         // 进度回调
         callback.generationStarted(totalSteps);
 
-        log.info("开始初始上下文 Java文件:{}, XML文件:{}", generatedJavaFiles.size(), generatedXmlFiles.size());
+        log.info("[确定生成的文件信息] => Java:{} XML:{}", generatedJavaFiles.size(), generatedXmlFiles.size());
         // 遍历每个Context，这个期间插件会开始运行
         for (Context context : contextsToRun) {
             // 根据配置准备要生成的数据，即文本内容
             context.generateFiles(callback, generatedJavaFiles, generatedXmlFiles, generatedKotlinFiles, otherGeneratedFiles, warnings);
         }
-        log.info("上下文初始化完毕 Java文件:{}, XML文件:{}", generatedJavaFiles.size(), generatedXmlFiles.size());
+        log.info("[上下文初始化完毕] Java:{}, XML:{}", generatedJavaFiles.size(), generatedXmlFiles.size());
 
-        // 填充需要生成的文件
-        log.info("开始保存文件 {}", writeFiles);
         // now save the files
         if (writeFiles) {
             callback.saveStarted(generatedXmlFiles.size() + generatedJavaFiles.size());
-            log.info("开始生成XML文件：共{}个", generatedXmlFiles.size());
             for (GeneratedXmlFile gxf : generatedXmlFiles) {
+                log.info("[生成XML文件] => {}",gxf.getFileName());
                 projects.add(gxf.getTargetProject());
                 writeGeneratedXmlFile(gxf, callback);
             }
-            log.info("开始生成JAVA文件：共{}个", generatedXmlFiles.size());
+
             for (GeneratedJavaFile gjf : generatedJavaFiles) {
+                log.info("[生成JAVA文件] => {}", gjf.getFileName());
                 projects.add(gjf.getTargetProject());
                 writeGeneratedJavaFile(gjf, callback);
             }
-            log.info("开始生成Kotlin文件：共{}个", generatedXmlFiles.size());
             for (GeneratedKotlinFile gkf : generatedKotlinFiles) {
+                log.info("[生成Kotlin文件] => {}", gkf.getFileName());
                 projects.add(gkf.getTargetProject());
                 writeGeneratedFile(gkf, callback);
             }
-            log.info("开始生成其他文件：共{}个", otherGeneratedFiles.size());
             for (GeneratedFile gf : otherGeneratedFiles) {
+                log.info("[生成其他文件] => {}", gf.getFileName());
                 projects.add(gf.getTargetProject());
                 writeGeneratedFile(gf, callback);
             }
@@ -291,7 +287,6 @@ public class MyBatisGenerator {
         File targetFile;
         String source;
         try {
-            log.info("{}, {}", gjf.getTargetProject(), gjf.getTargetPackage());
             File directory = shellCallback.getDirectory(gjf.getTargetProject(), gjf.getTargetPackage());
             targetFile = new File(directory, gjf.getFileName());
             if (targetFile.exists()) {
@@ -366,17 +361,18 @@ public class MyBatisGenerator {
                     .getTargetProject(), gxf.getTargetPackage());
             targetFile = new File(directory, gxf.getFileName());
             if (targetFile.exists()) {
+                log.info("设置为不可合并");
+                gxf.setMergeable(false);
                 if (gxf.isMergeable()) {
+                    System.out.println("开始合并" + targetFile.getAbsolutePath());
                     source = XmlFileMergerJaxp.getMergedSource(gxf, targetFile);
                 } else if (shellCallback.isOverwriteEnabled()) {
                     source = gxf.getFormattedContent();
                     warnings.add(getString("Warning.11", targetFile.getAbsolutePath()));
                 } else {
                     source = gxf.getFormattedContent();
-                    targetFile = getUniqueFileName(directory, gxf
-                            .getFileName());
-                    warnings.add(getString(
-                            "Warning.2", targetFile.getAbsolutePath())); //$NON-NLS-1$
+                    targetFile = getUniqueFileName(directory, gxf.getFileName());
+                    warnings.add(getString("Warning.2", targetFile.getAbsolutePath())); //$NON-NLS-1$
                 }
             } else {
                 source = gxf.getFormattedContent();

@@ -29,9 +29,8 @@ public class DefaultShellCallback implements ShellCallback {
         // targetProject is interpreted as a directory that must exist
         //
         // targetPackage is interpreted as a sub directory, but in package
-        // format (with dots instead of slashes). The sub directory will be
-        // created
-        // if it does not already exist
+        // format (with dots(.) instead of slashes(/或者\\)). The sub directory will be
+        // created if it does not already exist
 
         File project = new File(targetProject);
 
@@ -64,7 +63,6 @@ public class DefaultShellCallback implements ShellCallback {
                         directory.getAbsolutePath()));
             }
         }
-
         return directory;
     }
 

@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.api.dom.java;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;
@@ -465,7 +465,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         }
 
         String finalType = sb.toString();
-        if (stringHasValue(finalType)) {
+        if (isNotEmpty(finalType)) {
             typeArguments.add(new FullyQualifiedJavaType(finalType));
         }
     }

@@ -1,23 +1,8 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.config;
 
 import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualifiedTableName;
 import static org.mybatis.generator.internal.util.StringUtils.isTrue;
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.sql.Connection;
@@ -47,6 +32,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Context extends PropertyHolder {
+
+    /**
+     * 是否被启用，默认启用
+     */
+    private boolean isEnable = true;
 
     private String id;
 
@@ -124,7 +114,6 @@ public class Context extends PropertyHolder {
     }
 
     public void addPluginConfiguration(PluginConfiguration pluginConfiguration) {
-        log.info("增加插件配置{}", pluginConfiguration.getConfigurationType());
         pluginConfigurations.add(pluginConfiguration);
     }
 
@@ -135,7 +124,7 @@ public class Context extends PropertyHolder {
      * @param errors the errors
      */
     public void validate(List<String> errors) {
-        if (!stringHasValue(id)) {
+        if (!isNotEmpty(id)) {
             errors.add(getString("ValidationError.16")); //$NON-NLS-1$
         }
 
@@ -245,7 +234,7 @@ public class Context extends PropertyHolder {
         } else if (PropertyRegistry.CONTEXT_ENDING_DELIMITER.equals(name)) {
             endingDelimiter = value;
         } else if (PropertyRegistry.CONTEXT_AUTO_DELIMIT_KEYWORDS.equals(name)
-                && stringHasValue(value)) {
+                && isNotEmpty(value)) {
             autoDelimitKeywords = isTrue(value);
         }
     }
@@ -277,7 +266,6 @@ public class Context extends PropertyHolder {
         if (xmlFormatter == null) {
             xmlFormatter = ObjectFactory.createXmlFormatter(this);
         }
-
         return xmlFormatter;
     }
 
@@ -386,7 +374,7 @@ public class Context extends PropertyHolder {
                 String tableName = composeFullyQualifiedTableName(tc.getCatalog(), tc
                         .getSchema(), tc.getTableName(), '.');
 
-                log.info("tableName => {}", tableName);
+                log.info("[加载数据库表] => {}", tableName);
 
                 if (fullyQualifiedTableNames != null
                         && !fullyQualifiedTableNames.isEmpty()
@@ -428,7 +416,7 @@ public class Context extends PropertyHolder {
 
     /**
      * 核心方法，准备好所有需要生成的文件 => 扩展点
-     *
+     * 确定要生成哪些文件
      * @param callback
      * @param generatedJavaFiles
      * @param generatedXmlFiles
@@ -462,23 +450,28 @@ public class Context extends PropertyHolder {
         // 初始化表的所有对于代码生成有用的数据
         // initialize everything first before generating. This allows plugins to know about other
         // items in the configuration.
-        log.info("IntrospectedTable开始");
+
         for (IntrospectedTable introspectedTable : introspectedTables) {
+
             callback.checkCancel();
             // 表初始化，即准备数据 introspectedTable实现类IntrospectedTableMyBatis3Impl
+            log.info("[IntrospectedTable初始化] => {}", introspectedTable);
             introspectedTable.initialize();
-            log.info("{} calculateGenerators", introspectedTable);
+            log.info("[确定生成器] => {}", introspectedTable);
+            // 计算生成器个数  一个生成器用于生成一种类型的文件
             introspectedTable.calculateGenerators(warnings, callback);
         }
-        log.info("开始添加带生成的文件的元数据，插件开始运行");
         for (IntrospectedTable introspectedTable : introspectedTables) {
             callback.checkCancel();
+
+            // 这里是默认的会生成哪些文件
             // Example类，实体类，Mapper接口
             generatedJavaFiles.addAll(introspectedTable.getGeneratedJavaFiles());
             // XML文件
             generatedXmlFiles.addAll(introspectedTable.getGeneratedXmlFiles());
             generatedKotlinFiles.addAll(introspectedTable.getGeneratedKotlinFiles());
 
+            // 运行插件，扩展其余生成的文件
             //生成的Java文件
             generatedJavaFiles.addAll(pluginAggregator.contextGenerateAdditionalJavaFiles(introspectedTable));
             //生成的XML文件
@@ -542,5 +535,13 @@ public class Context extends PropertyHolder {
 
     public void setConnectionFactoryConfiguration(ConnectionFactoryConfiguration connectionFactoryConfiguration) {
         this.connectionFactoryConfiguration = connectionFactoryConfiguration;
+    }
+
+    public boolean isEnable() {
+        return isEnable;
+    }
+
+    public void setEnable(boolean enable) {
+        isEnable = enable;
     }
 }

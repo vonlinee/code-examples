@@ -28,6 +28,20 @@ import org.mybatis.generator.config.Context;
  * @author Jeff Butler
  */
 public abstract class PluginAdapter implements Plugin {
+
+    /**
+     * 是否启用此插件
+     */
+    protected boolean enabled;
+
+    public final void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public final boolean isEnabled() {
+        return enabled;
+    }
+
     protected Context context;
     protected final Properties properties = new Properties();
 

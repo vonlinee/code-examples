@@ -11,6 +11,9 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 /**
  * 1.需要DataSource 2.需要TransactionManager
+ *
+ * 1.Transactional注解原理
+ * 2.Transactional注解失效的情况分析
  */
 public class DeclarativeTransactionAnnotation {
 
@@ -23,7 +26,7 @@ public class DeclarativeTransactionAnnotation {
 			DataSourceConfiguration.class);
 
 	public static void main(String[] args) {
-		printDataSourceInformation();
+//		printDataSourceInformation();
 		test1();
 		// test2();
 	}
@@ -33,7 +36,7 @@ public class DeclarativeTransactionAnnotation {
 	 */
 	public static void test1() {
 		IAccountService serviceImpl = context.getBean(IAccountService.class);
-		serviceImpl.transferMoney("zs", "ls", 200.0);
+		serviceImpl.transferMoney("zs", "ls", BigDecimal.valueOf(200.0), true);
 	}
 
 	/**
@@ -41,7 +44,7 @@ public class DeclarativeTransactionAnnotation {
 	 */
 	public static void test2() {
 		IAccountService serviceImpl = context.getBean(IAccountService.class);
-		 serviceImpl.transferMoney("zs", "ls", 200.0);
+		serviceImpl.transferMoney("zs", "ls", 200.0);
 	}
 
 	/**

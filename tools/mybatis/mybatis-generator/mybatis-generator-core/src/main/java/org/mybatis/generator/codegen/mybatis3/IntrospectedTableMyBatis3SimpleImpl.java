@@ -3,7 +3,7 @@ package org.mybatis.generator.codegen.mybatis3;
 import java.util.List;
 
 import org.mybatis.generator.api.ProgressCallback;
-import org.mybatis.generator.codegen.AbstractJavaClientGenerator;
+import org.mybatis.generator.codegen.AbstractMapperGenerator;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
 import org.mybatis.generator.codegen.mybatis3.javamapper.SimpleAnnotatedClientGenerator;
 import org.mybatis.generator.codegen.mybatis3.javamapper.SimpleJavaClientGenerator;
@@ -24,9 +24,9 @@ public class IntrospectedTableMyBatis3SimpleImpl extends IntrospectedTableMyBati
     }
 
     @Override
-    protected void calculateXmlMapperGenerator(AbstractJavaClientGenerator javaClientGenerator,
-            List<String> warnings,
-            ProgressCallback progressCallback) {
+    protected void calculateXmlMapperGenerator(AbstractMapperGenerator javaClientGenerator,
+                                               List<String> warnings,
+                                               ProgressCallback progressCallback) {
         if (javaClientGenerator == null) {
             if (context.getSqlMapGeneratorConfiguration() != null) {
                 xmlMapperGenerator = new SimpleXMLMapperGenerator();
@@ -39,13 +39,13 @@ public class IntrospectedTableMyBatis3SimpleImpl extends IntrospectedTableMyBati
     }
 
     @Override
-    protected AbstractJavaClientGenerator createJavaClientGenerator() {
+    protected AbstractMapperGenerator createJavaClientGenerator() {
         if (context.getJavaClientGeneratorConfiguration() == null) {
             return null;
         }
         String type = context.getJavaClientGeneratorConfiguration().getConfigurationType();
 
-        AbstractJavaClientGenerator javaGenerator;
+        AbstractMapperGenerator javaGenerator;
         if ("XMLMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
             javaGenerator = new SimpleJavaClientGenerator(getClientProject());
         } else if ("ANNOTATEDMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
@@ -53,7 +53,7 @@ public class IntrospectedTableMyBatis3SimpleImpl extends IntrospectedTableMyBati
         } else if ("MAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
             javaGenerator = new SimpleJavaClientGenerator(getClientProject());
         } else {
-            javaGenerator = (AbstractJavaClientGenerator) ObjectFactory.createInternalObject(type);
+            javaGenerator = (AbstractMapperGenerator) ObjectFactory.createInternalObject(type);
         }
 
         return javaGenerator;

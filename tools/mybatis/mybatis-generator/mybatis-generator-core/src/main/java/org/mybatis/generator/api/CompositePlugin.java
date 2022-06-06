@@ -43,13 +43,13 @@ import org.slf4j.LoggerFactory;
  * @author Jeff Butler
  */
 public abstract class CompositePlugin implements Plugin {
+
     private final List<Plugin> plugins = new ArrayList<>();
 
     private static final Logger log = LoggerFactory.getLogger(CompositePlugin.class);
 
     protected CompositePlugin() {
         super();
-        log.info("CompositePlugin => {}", this);
     }
 
     public void addPlugin(Plugin plugin) {
@@ -150,7 +150,6 @@ public abstract class CompositePlugin implements Plugin {
                 return false;
             }
         }
-
         return true;
     }
 

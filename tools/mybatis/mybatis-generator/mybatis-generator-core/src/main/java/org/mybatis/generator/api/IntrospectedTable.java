@@ -1,7 +1,7 @@
 package org.mybatis.generator.api;
 
 import static org.mybatis.generator.internal.util.StringUtils.isTrue;
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -24,6 +24,7 @@ import org.mybatis.generator.config.PropertyHolder;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.config.SqlMapGeneratorConfiguration;
 import org.mybatis.generator.config.TableConfiguration;
+import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.rules.ConditionalModelRules;
 import org.mybatis.generator.internal.rules.FlatModelRules;
 import org.mybatis.generator.internal.rules.HierarchicalModelRules;
@@ -383,22 +384,27 @@ public abstract class IntrospectedTable {
      * 初始化表的数据
      */
     public void initialize() {
-        log.info("IntrospectedTable初始化 => {}", this.getTableConfiguration().getTableName());
         // 填充内部属性internalAttributes的值
         calculateJavaClientAttributes();
         calculateModelAttributes();
         calculateXmlAttributes();
 
-        // CONDITIONAL ConditionalModelRules
-        if (tableConfiguration.getModelType() == ModelType.HIERARCHICAL) {
-            rules = new HierarchicalModelRules(this);
-        } else if (tableConfiguration.getModelType() == ModelType.FLAT) {
-            rules = new FlatModelRules(this);
+        String rulesImpl = context.getProperty(PropertyRegistry.CODE_GENERATION_RULE_IMPL);
+        if (isNotEmpty(rulesImpl)) {
+            rules = (Rules) ObjectFactory.createInternalObject(rulesImpl);
         } else {
-            rules = new ConditionalModelRules(this);
+            // CONDITIONAL ConditionalModelRules
+            if (tableConfiguration.getModelType() == ModelType.HIERARCHICAL) {
+                rules = new HierarchicalModelRules(this);
+            } else if (tableConfiguration.getModelType() == ModelType.FLAT) {
+                rules = new FlatModelRules(this);
+            } else {
+                rules = new ConditionalModelRules(this);
+            }
         }
-        log.info("使用Rule => {}, {}", tableConfiguration.getModelType().toString(), rules);
+        log.info("[选择Rule实现] => {} {}", tableConfiguration.getModelType().toString(), rules);
         // 初始化插件，获取最开始的插件，然后一个一个调用initialized方法
+        log.info("[初始化插件] => {} {}", context, tableConfiguration.getModelType().toString());
         context.getPlugins().initialized(this);
     }
 
@@ -410,7 +416,6 @@ public abstract class IntrospectedTable {
      * 生成XML的文件需要哪些标签
      */
     protected void calculateXmlAttributes() {
-        log.info("calculateXmlAttributes == >");
         // 确定生成的mapper xml文件名: xxx.xml
         setMyBatis3XmlMapperFileName(calculateMyBatis3XmlMapperFileName());
         // 确定XML文件的包名
@@ -686,7 +691,7 @@ public abstract class IntrospectedTable {
         }
 
         String packkage = config.getProperty(PropertyRegistry.CLIENT_DYNAMIC_SQL_SUPPORT_PACKAGE);
-        if (stringHasValue(packkage)) {
+        if (isNotEmpty(packkage)) {
             return packkage + fullyQualifiedTable.getSubPackageForClientOrSqlMap(isSubPackagesEnabled(config));
         } else {
             return calculateJavaClientInterfacePackage();
@@ -701,10 +706,10 @@ public abstract class IntrospectedTable {
         StringBuilder sb = new StringBuilder();
         sb.append(calculateJavaClientInterfacePackage());
         sb.append('.');
-        if (stringHasValue(tableConfiguration.getMapperName())) {
+        if (isNotEmpty(tableConfiguration.getMapperName())) {
             sb.append(tableConfiguration.getMapperName());
         } else {
-            if (stringHasValue(fullyQualifiedTable.getDomainObjectSubPackage())) {
+            if (isNotEmpty(fullyQualifiedTable.getDomainObjectSubPackage())) {
                 sb.append(fullyQualifiedTable.getDomainObjectSubPackage());
                 sb.append('.');
             }
@@ -716,10 +721,10 @@ public abstract class IntrospectedTable {
         sb.setLength(0);
         sb.append(calculateJavaClientInterfacePackage());
         sb.append('.');
-        if (stringHasValue(tableConfiguration.getSqlProviderName())) {
+        if (isNotEmpty(tableConfiguration.getSqlProviderName())) {
             sb.append(tableConfiguration.getSqlProviderName());
         } else {
-            if (stringHasValue(fullyQualifiedTable.getDomainObjectSubPackage())) {
+            if (isNotEmpty(fullyQualifiedTable.getDomainObjectSubPackage())) {
                 sb.append(fullyQualifiedTable.getDomainObjectSubPackage());
                 sb.append('.');
             }
@@ -731,10 +736,10 @@ public abstract class IntrospectedTable {
         sb.setLength(0);
         sb.append(calculateDynamicSqlSupportPackage());
         sb.append('.');
-        if (stringHasValue(tableConfiguration.getDynamicSqlSupportClassName())) {
+        if (isNotEmpty(tableConfiguration.getDynamicSqlSupportClassName())) {
             sb.append(tableConfiguration.getDynamicSqlSupportClassName());
         } else {
-            if (stringHasValue(fullyQualifiedTable.getDomainObjectSubPackage())) {
+            if (isNotEmpty(fullyQualifiedTable.getDomainObjectSubPackage())) {
                 sb.append(fullyQualifiedTable.getDomainObjectSubPackage());
                 sb.append('.');
             }
@@ -743,7 +748,7 @@ public abstract class IntrospectedTable {
         }
         setMyBatisDynamicSqlSupportType(sb.toString());
 
-        if (stringHasValue(tableConfiguration.getDynamicSqlTableObjectName())) {
+        if (isNotEmpty(tableConfiguration.getDynamicSqlTableObjectName())) {
             setMyBatisDynamicSQLTableObjectName(tableConfiguration.getDynamicSqlTableObjectName());
         } else {
             setMyBatisDynamicSQLTableObjectName(fullyQualifiedTable.getDomainObjectName());
@@ -805,7 +810,7 @@ public abstract class IntrospectedTable {
     protected String calculateJavaModelExamplePackage() {
         JavaModelGeneratorConfiguration config = context.getJavaModelGeneratorConfiguration();
         String exampleTargetPackage = config.getProperty(PropertyRegistry.MODEL_GENERATOR_EXAMPLE_PACKAGE);
-        if (!stringHasValue(exampleTargetPackage)) {
+        if (!isNotEmpty(exampleTargetPackage)) {
             return calculateJavaModelPackage();
         }
 
@@ -822,13 +827,13 @@ public abstract class IntrospectedTable {
         if (config != null) {
             sb.append(config.getTargetPackage());
             sb.append(fullyQualifiedTable.getSubPackageForClientOrSqlMap(isSubPackagesEnabled(config)));
-            if (stringHasValue(tableConfiguration.getMapperName())) {
+            if (isNotEmpty(tableConfiguration.getMapperName())) {
                 String mapperName = tableConfiguration.getMapperName();
                 int ind = mapperName.lastIndexOf('.');
                 if (ind != -1) {
                     sb.append('.').append(mapperName, 0, ind);
                 }
-            } else if (stringHasValue(fullyQualifiedTable.getDomainObjectSubPackage())) {
+            } else if (isNotEmpty(fullyQualifiedTable.getDomainObjectSubPackage())) {
                 sb.append('.').append(fullyQualifiedTable.getDomainObjectSubPackage());
             }
         }
@@ -838,7 +843,7 @@ public abstract class IntrospectedTable {
 
     protected String calculateMyBatis3XmlMapperFileName() {
         StringBuilder sb = new StringBuilder();
-        if (stringHasValue(tableConfiguration.getMapperName())) {
+        if (isNotEmpty(tableConfiguration.getMapperName())) {
             String mapperName = tableConfiguration.getMapperName();
             int ind = mapperName.lastIndexOf('.');
             if (ind == -1) {
@@ -858,7 +863,7 @@ public abstract class IntrospectedTable {
         StringBuilder sb = new StringBuilder();
         sb.append(calculateSqlMapPackage());
         sb.append('.');
-        if (stringHasValue(tableConfiguration.getMapperName())) {
+        if (isNotEmpty(tableConfiguration.getMapperName())) {
             sb.append(tableConfiguration.getMapperName());
         } else {
             sb.append(fullyQualifiedTable.getDomainObjectName());
@@ -933,10 +938,11 @@ public abstract class IntrospectedTable {
 
     /**
      * This method exists to give plugins the opportunity to replace the calculated rules if necessary.
-     *
+     * 这方法的存在是为了让插件有机会在必要时替换计算出的规则。
      * @param rules the new rules
      */
     public void setRules(Rules rules) {
+        log.info("设置Rules => {}", rules);
         this.rules = rules;
     }
 

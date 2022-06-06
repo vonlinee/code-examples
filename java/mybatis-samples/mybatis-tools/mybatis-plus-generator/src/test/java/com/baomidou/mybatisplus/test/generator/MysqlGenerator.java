@@ -98,7 +98,7 @@ public class MysqlGenerator extends GeneratorTest {
             // .setMapperName("%sDao")
             // .setXmlName("%sDao")
              .setServiceName("I%sBiz")
-            .setServiceImplName("%sBiz")
+             .setServiceImplName("%sBiz")
              .setControllerName("%sService")
              .setGraphqlName("%s.0")
              .setGraphql1Name("%s.1")

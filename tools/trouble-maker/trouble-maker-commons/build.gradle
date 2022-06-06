@@ -42,10 +42,10 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web:2.3.12.RELEASE'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    // testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter
-    implementation 'com.alibaba:druid-spring-boot-starter:1.2.9'
+    implementation libs.druid_spring_boot_starter
 
     implementation libs.mysql5_driver
 	

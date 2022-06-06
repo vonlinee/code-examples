@@ -144,9 +144,6 @@ public class ConfigurationParser {
             if (document == null || !parseErrors.isEmpty()) {
                 throw new XMLParserException(parseErrors);
             }
-
-            log.debug("解析XML到文档成功，无解析错误");
-
             Configuration config;
             Element rootNode = document.getDocumentElement();
             DocumentType docType = document.getDoctype();
@@ -171,7 +168,6 @@ public class ConfigurationParser {
 
     private Configuration parseMyBatisGeneratorConfiguration(Element rootNode)
             throws XMLParserException {
-        log.debug("开始解析MyBatis生成器配置");
         MyBatisGeneratorConfigurationParser parser = new MyBatisGeneratorConfigurationParser(extraProperties);
         return parser.parseConfiguration(rootNode);
     }
