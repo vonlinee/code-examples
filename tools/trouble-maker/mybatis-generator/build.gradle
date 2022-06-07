@@ -40,7 +40,7 @@ dependencies {
     testImplementation libs.mysql5_driver
     testImplementation libs.sqlite
     testImplementation libs.firebird
-    testImplementation libs.swagger_annotations
+    // testImplementation libs.swagger_annotations
 
     implementation 'org.springframework.boot:spring-boot-starter-web:2.3.12.RELEASE'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'

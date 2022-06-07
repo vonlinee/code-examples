@@ -12,6 +12,10 @@ public class MyBatisPlusConfiguration {
 		"com.github.pagehelper.PageHelper"
 	};
 	
+	/**
+	 * 分页插件
+	 * @return
+	 */
 	@Bean
 	public Object paginationInterceptor() {
 		try {
@@ -23,10 +27,9 @@ public class MyBatisPlusConfiguration {
 					break;
 				}
 			}
-			if (clazz == null) {
-				// 使用自定义的分页插件
+			if (clazz == null) { // 使用自定义的分页插件
 				return null;
-			} 
+			}
 			return clazz.newInstance();
 		} catch (ClassNotFoundException | LinkageError e) {
 			e.printStackTrace();

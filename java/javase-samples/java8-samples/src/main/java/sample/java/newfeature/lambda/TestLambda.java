@@ -13,6 +13,7 @@ import java.util.function.Predicate;
  *
  * 生成的类如1.txt所示文本
  */
+@SuppressWarnings("restriction")
 public class TestLambda {
 
     public static void main(String[] args) {

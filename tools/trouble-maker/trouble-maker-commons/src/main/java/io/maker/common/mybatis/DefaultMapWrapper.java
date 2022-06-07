@@ -13,9 +13,8 @@ public class DefaultMapWrapper extends MapWrapper {
 
 	@Override
 	public String findProperty(String name, boolean useCamelCaseMapping) {
-		if (useCamelCaseMapping
-				&& ((name.charAt(0) >= 'A' && name.charAt(0) <= 'Z')
-						|| name.contains("_"))) {
+		if (useCamelCaseMapping 
+				&& ((name.charAt(0) >= 'A' && name.charAt(0) <= 'Z') || name.contains("_"))) {
 			return underlineToCamelhump(name);
 		}
 		return name;

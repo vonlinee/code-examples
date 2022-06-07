@@ -5,8 +5,7 @@
     <select id="showTableStatus" parameterType="map"
             resultType="map">
         SHOW TABLE status WHERE 1 = 1
-        <if
-                test="mapParam.tableNameList !=null and mapParam.tableNameList !=''">
+        <if test="mapParam.tableNameList !=null and mapParam.tableNameList !=''">
             AND NAME IN
             <foreach collection="mapParam.tableNameList" item="item"
                      open="(" separator="," close=")">

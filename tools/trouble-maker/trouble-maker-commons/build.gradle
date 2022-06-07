@@ -70,6 +70,10 @@ dependencies {
     implementation 'org.reflections:reflections:0.10.2'
     implementation 'jakarta.annotation:jakarta.annotation-api:2.1.0'
 
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.3.12.RELEASE'
+	
+	
 }
 
 test {
