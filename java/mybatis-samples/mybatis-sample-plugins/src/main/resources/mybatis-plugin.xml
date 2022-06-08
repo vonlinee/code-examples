@@ -16,6 +16,7 @@
 		<plugin interceptor="sample.mybatis.interceptor.StatementHandlerInterceptor">
 			<property name="id" value="12"/>
 		</plugin>
+		<plugin interceptor="sample.mybatis.interceptor.MyBatisSqlRebuildPlugin"/>
 		<plugin interceptor="sample.mybatis.interceptor.ExecutorInterceptor">
 			<property name="id" value="12"/>
 		</plugin>

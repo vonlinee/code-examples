@@ -19,6 +19,16 @@
 	</resultMap>
 
 	<select id="queryAll" resultMap="BaseResultMap">
-		SELECT * FROM t_student
+		SELECT
+			S.STU_ID,
+			S.STU_NO,
+			S.STU_AGE,
+			S.STU_SEX,
+			S.STU_SEX 
+		FROM
+			`t_student` S
+		WHERE S.STU_AGE <![CDATA[ < ]]> 40 AND S.STU_SEX IN ('男', '女')
+		GROUP BY S.STU_NAME
+		ORDER BY S.STU_NO
 	</select>
 </mapper>

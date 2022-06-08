@@ -1,13 +1,17 @@
 package io.maker.test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
+
 import org.apache.calcite.adapter.jdbc.JdbcSchema;
 import org.apache.calcite.jdbc.CalciteConnection;
 import org.apache.calcite.schema.Schema;
 import org.apache.calcite.schema.SchemaPlus;
 import org.apache.commons.dbcp2.BasicDataSource;
-
-import java.sql.*;
-import java.util.Properties;
 
 public class CalciteTest {
 
@@ -34,16 +38,16 @@ public class CalciteTest {
         rootSchema.add("hr", schema);
 //执行查询
         Statement statement = calciteConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery(
-                "select d.deptno, min(e.empid)\n"
-                        + "from hr.emps as e\n"
-                        + "join hr.depts as d\n"
-                        + "  on e.deptno = d.deptno\n"
-                        + "group by d.deptno\n"
-                        + "having count(*) > 1");
+        
+        String sql = "select * from t1";
+        
+        ResultSet resultSet = statement.executeQuery(sql);
         resultSet.close();
         statement.close();
         connection.close();
     }
 
+    public static void sqlParse() {
+    	
+    }
 }

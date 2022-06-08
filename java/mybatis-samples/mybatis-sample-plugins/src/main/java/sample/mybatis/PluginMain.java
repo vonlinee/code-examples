@@ -9,6 +9,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.session.defaults.DefaultSqlSession;
 
 import com.github.pagehelper.PageHelper;
 
@@ -42,7 +43,10 @@ public class PluginMain {
 			System.out.println(student);
 		}
 
-		session.selectList("");
+		if (session instanceof DefaultSqlSession) {
+			DefaultSqlSession sqlSession = (DefaultSqlSession) session;
+			List<Student> selectList = sqlSession.selectList("queryAll");
+		}
 
 		closeQuitely(session);
 	}

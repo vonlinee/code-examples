@@ -4,6 +4,8 @@ import code.sample.spring.jdbc.dao.UserDao;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.alibaba.druid.support.jconsole.DruidSQLPanel;
+
 public class Main {
     private static ApplicationContext context;
 
@@ -12,6 +14,7 @@ public class Main {
         context = new ClassPathXmlApplicationContext("spring-config.xml");
         UserDao userDao = (UserDao) context.getBean("userDaoImpl");
         userDao.displayData();
+        
     }
 
 
