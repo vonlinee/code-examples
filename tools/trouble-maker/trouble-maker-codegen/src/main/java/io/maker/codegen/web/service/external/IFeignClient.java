@@ -16,4 +16,8 @@ public interface IFeignClient {
 
 	@PostMapping("/mysql/meta/informationschema/queryColumns.do")
 	ListResult<Columns> queryColumns(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication, @RequestBody(required = false) Map<String, Object> dateInfo);
+
+	@PostMapping("/mysql/meta/informationschema/queryColumns.do")
+	ListResult<Columns> queryColumns(@RequestHeader(HttpHeaders.AUTHORIZATION) String authentication, @RequestBody(required = false) Map<String, Object> dateInfo);
+
 }
