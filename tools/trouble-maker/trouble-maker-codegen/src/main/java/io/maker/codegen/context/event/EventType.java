@@ -51,10 +51,10 @@ public final class EventType<T extends Event> implements Serializable{
      * super type and the name set to {@code null}.
      * @deprecated Do not use this constructor, as only one such EventType can exist
      */
-//    @Deprecated
-//    public EventType() {
-//        this(ROOT, null);
-//    }
+    @Deprecated
+    public EventType() {
+        this(ROOT, null);
+    }
 
     /**
      * Constructs a new {@code EventType} with the specified name and the

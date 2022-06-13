@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.builder.xml.XMLConfigBuilder;
+import org.apache.ibatis.executor.CachingExecutor;
+import org.apache.ibatis.executor.SimpleExecutor;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -16,6 +19,8 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 
 import code.example.mybatis.mapper.TeacherMapper;
+import org.apache.ibatis.session.SqlSessionManager;
+import org.apache.ibatis.session.defaults.DefaultSqlSession;
 
 public class Main {
 
@@ -33,6 +38,22 @@ public class Main {
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         //4.通过会话工厂创建SqlSession会话
         return sqlSessionFactory.openSession();
+    }
+
+    public static void test5() {
+        //1.指定MyBatis主配置文件位置
+        String resource = "mybatis-typehandle.xml";
+        //2.加载配置文件
+        InputStream inputStream = null;
+        try {
+            inputStream = Resources.getResourceAsStream(resource);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        SqlSession session = SqlSessionManager.newInstance(inputStream);
+
+        session.select("", null);
+
     }
 
     public static void main(String[] args) throws IOException, SQLException {
@@ -71,11 +92,9 @@ public class Main {
 //    	org.apache.ibatis.session.defaults.DefaultSqlSession
     	
 //    	org.apache.ibatis.binding.MapperProxy
-    	
     	TeacherMapper teacherMapper = sqlSession.getMapper(TeacherMapper.class);
     	
     	teacherMapper.queryAllTeacher();
-    	
     	sqlSession.close();
     }
     

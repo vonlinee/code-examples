@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2021 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.api.dom.java;
 
 import static org.mybatis.generator.internal.util.StringUtils.isNotEmpty;
@@ -24,6 +9,7 @@ import java.util.StringTokenizer;
 
 /**
  * 符合要求的Java类型，针对Java的类型做出抽象
+ * 完全限定的Java类型
  */
 public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType> {
 
@@ -44,10 +30,14 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
 
     private static FullyQualifiedJavaType generatedCriteriaInstance = null;
 
-    /** The short name without any generic arguments. */
+    /**
+     * The short name without any generic arguments.
+     */
     private String baseShortName;
 
-    /** The fully qualified name without any generic arguments. */
+    /**
+     * The fully qualified name without any generic arguments.
+     */
     private String baseQualifiedName;
 
     private boolean explicitlyImported;
@@ -327,9 +317,15 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         typeArguments.add(type);
     }
 
+    /**
+     * 类型名
+     * java.util.List
+     *
+     * @param fullTypeSpecification
+     */
     private void parse(String fullTypeSpecification) {
         String spec = fullTypeSpecification.trim();
-
+        // 泛型通配符
         if (spec.startsWith("?")) { //$NON-NLS-1$
             wildcardType = true;
             spec = spec.substring(1).trim();
@@ -358,7 +354,6 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
                 }
                 genericParse(fullTypeSpecification.substring(index, endIndex + 1));
             }
-
             // this is far from a perfect test for detecting arrays, but is close
             // enough for most cases.  It will not detect an improperly specified
             // array type like byte], but it will detect byte[] and byte[   ]
@@ -371,13 +366,11 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         baseQualifiedName = typeSpecification.trim();
         if (baseQualifiedName.contains(".")) { //$NON-NLS-1$
             packageName = getPackage(baseQualifiedName);
-            baseShortName = baseQualifiedName
-                    .substring(packageName.length() + 1);
+            baseShortName = baseQualifiedName.substring(packageName.length() + 1);
             int index = baseShortName.lastIndexOf('.');
             if (index != -1) {
                 baseShortName = baseShortName.substring(index + 1);
             }
-
             //$NON-NLS-1$
             explicitlyImported = !JAVA_LANG.equals(packageName);
         } else {
@@ -386,44 +379,52 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
             packageName = ""; //$NON-NLS-1$
 
             switch (baseQualifiedName) {
-            case "byte":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getByteInstance();
-                break;
-            case "short":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getShortInstance();
-                break;
-            case "int":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getIntegerInstance();
-                break;
-            case "long":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getLongInstance();
-                break;
-            case "char":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getCharacterInstance();
-                break;
-            case "float":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getFloatInstance();
-                break;
-            case "double":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getDoubleInstance();
-                break;
-            case "boolean":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getBooleanInstance();
-                break;
-            default:
-                primitive = false;
-                primitiveTypeWrapper = null;
-                break;
+                case "byte":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getByteInstance();
+                    break;
+                case "short":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getShortInstance();
+                    break;
+                case "int":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getIntegerInstance();
+                    break;
+                case "long":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getLongInstance();
+                    break;
+                case "char":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getCharacterInstance();
+                    break;
+                case "float":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getFloatInstance();
+                    break;
+                case "double":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getDoubleInstance();
+                    break;
+                case "boolean":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getBooleanInstance();
+                    break;
+                default:
+                    primitive = false;
+                    primitiveTypeWrapper = null;
+                    break;
             }
         }
+    }
+
+    /**
+     * 新增
+     * @param packageName
+     */
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     private void genericParse(String genericSpecification) {
@@ -458,12 +459,10 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
                 sb.append(token);
             }
         }
-
         if (openCount != 0) {
             throw new RuntimeException(getString(
                     "RuntimeError.22", genericSpecification)); //$NON-NLS-1$
         }
-
         String finalType = sb.toString();
         if (isNotEmpty(finalType)) {
             typeArguments.add(new FullyQualifiedJavaType(finalType));
@@ -477,8 +476,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
      * element. Therefore, it does not support fully qualified inner classes. Not totally fool proof, but correct in
      * most instances.
      *
-     * @param baseQualifiedName
-     *            the base qualified name
+     * @param baseQualifiedName the base qualified name
      * @return the package
      */
     private static String getPackage(String baseQualifiedName) {

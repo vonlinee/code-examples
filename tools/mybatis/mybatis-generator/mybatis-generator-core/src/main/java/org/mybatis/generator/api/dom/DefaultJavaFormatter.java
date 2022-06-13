@@ -13,7 +13,7 @@ import org.mybatis.generator.config.Context;
 
 /**
  * This class is the default formatter for generated Java.  This class will use the
- * built in DOM renderers.
+ * built in DOM renderers. 使用内置的Dom渲染
  *
  * @author Jeff Butler
  *

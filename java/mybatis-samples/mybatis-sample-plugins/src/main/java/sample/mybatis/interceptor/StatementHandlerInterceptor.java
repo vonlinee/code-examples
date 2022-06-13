@@ -44,10 +44,9 @@ public class StatementHandlerInterceptor implements Interceptor {
 	@Override
 	public Object plugin(Object target) {
 		Object proxy = Plugin.wrap(target, this);
-		LOGGER.info("target{} => proxy{}", target, proxy);
+		LOGGER.info("target {} => proxy {}", target, proxy);
 		// 元对象
 		// MetaObject metaObject = SystemMetaObject.forObject(target);
-		
 		return proxy;
 	}
 

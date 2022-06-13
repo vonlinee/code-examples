@@ -20,7 +20,7 @@ import org.mybatis.generator.codegen.AbstractJavaGenerator;
 public class ControllerGenerator extends AbstractJavaGenerator {
 
     public ControllerGenerator(String project) {
-        super(project);
+        super(project + "/" + "test/controller/");
     }
 
     @Override
@@ -30,8 +30,11 @@ public class ControllerGenerator extends AbstractJavaGenerator {
         String doName = fullyQualifiedTable.getDomainObjectName();
 
         FullyQualifiedJavaType fullyQualifiedJavaType = new FullyQualifiedJavaType(controllerName(doName));
+
+        fullyQualifiedJavaType.setPackageName("test.controller");
         //
         TopLevelClass controllerClass = new TopLevelClass(fullyQualifiedJavaType);
+
         controllerClass.setVisibility(JavaVisibility.PUBLIC);
         controllerClass.addAnnotation("@RestController");
         controllerClass.addAnnotation("@RequestMapping");

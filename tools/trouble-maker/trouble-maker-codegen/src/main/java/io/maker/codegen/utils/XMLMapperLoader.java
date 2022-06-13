@@ -19,23 +19,33 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 /**
+ * 启动项目自动加载 XML
+ * <p>
  * https://blog.csdn.net/liaominyu/article/details/108263435
+ * </p>
+ *
+ * 此类主要将项目启动时xml文件加载到 sqlSessionFactory 中的 Configuration缓存清除,再扫描本地xml加入到该缓存中,
+ * 从而达到,xml没有经过编译也可以实现实时更新(网上也有其他的加载的编译后的xml,也就是build路径加的xml,
+ * 但如果项目没有编译,xml无法实时更新,注意scanMapperXml()方法的路径你要换成自己对应的XML文件路径
  */
 public class XMLMapperLoader {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private SqlSessionFactory sqlSessionFactory;
+    private static final Logger logger = LoggerFactory.getLogger(XMLMapperLoader.class);
+    private final SqlSessionFactory sqlSessionFactory;
     private Resource[] mapperLocations;
     private String packageSearchPath = "/mapper";
 
     public XMLMapperLoader(SqlSessionFactory sqlSessionFactory, String packageSearchPath) {
         this.sqlSessionFactory = sqlSessionFactory;
-        if (packageSearchPath != null && packageSearchPath != "") {
+        if (packageSearchPath != null && !"".equals(packageSearchPath)) {
             this.packageSearchPath = packageSearchPath;
         }
         startThreadListener();
     }
 
+    /**
+     * 如果只需要执行一次可以将监听线程重写或者删除XMLMapperLoader ().startThreadListener()
+     */
     public void startThreadListener() {
         ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
         //每10秒执行一次
@@ -53,40 +63,31 @@ public class XMLMapperLoader {
             Configuration configuration = sqlSessionFactory.getConfiguration();
             // 扫描文件
             this.scanMapperXml();
-            if (true) {
-                // 清空configuration map的数据
-                this.removeConfig(configuration);
-                // 将xml 重新加载
-                for (Resource configLocation : mapperLocations) {
-                    if ("TestMapper.xml".equals(configLocation.getFilename())) {
-
-                        try {
-                            XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(configLocation.getInputStream(), configuration, configLocation.toString(), configuration.getSqlFragments());
-                            xmlMapperBuilder.parse();
-                            logger.debug("mapper文件[" + configLocation.getFilename() + "]缓存加载成功");
-                        } catch (IOException e) {
-                            logger.debug("mapper文件[" + configLocation.getFilename() + "]不存在或内容格式不对");
-                            continue;
-                        }
+            // 清空configuration map的数据
+            this.removeConfig(configuration);
+            // 将xml 重新加载
+            for (Resource configLocation : mapperLocations) {
+                if ("TestMapper.xml".equals(configLocation.getFilename())) {
+                    try (InputStream is = configLocation.getInputStream()) {
+                        XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(is, configuration, configLocation.toString(), configuration.getSqlFragments());
+                        xmlMapperBuilder.parse();
+                        logger.debug("mapper文件[" + configLocation.getFilename() + "]缓存加载成功");
+                    } catch (IOException e) {
+                        logger.debug("mapper文件[" + configLocation.getFilename() + "]不存在或内容格式不对");
                     }
                 }
             }
-
             return "refresh mybatis xml succssful ";
         } catch (Exception e) {
-            e.printStackTrace();
             return "refresh mybatis xml fail";
         }
     }
 
-
     /**
      * 扫描xml文件所在的路径
-     *
-     * @throws IOException
      */
     private void scanMapperXml() {
-        //根据自己项目的实际路径查替换,最终是找到非编译的 xml所在的文件夹路径
+        //根据自己项目的实际路径查替换, 最终是找到非编译的 xml所在的文件夹路径
         String fileUrl = this.getClass()
                 .getResource(packageSearchPath)
                 .getPath()
@@ -107,7 +108,7 @@ public class XMLMapperLoader {
     /**
      * 清空Configuration中几个重要的缓存
      *
-     * @param configuration
+     * @param configuration MyBatis配置类
      * @throws Exception
      */
     private void removeConfig(Configuration configuration) throws Exception {
@@ -119,17 +120,23 @@ public class XMLMapperLoader {
         clearMap(classConfig, configuration, "keyGenerators");
         clearMap(classConfig, configuration, "sqlFragments");
         clearSet(classConfig, configuration, "loadedResources");
-
     }
 
+    /**
+     * @param classConfig   配置类
+     * @param configuration MyBatis配置类
+     * @param fieldName     字段名
+     * @throws Exception
+     */
     private void clearMap(Class<?> classConfig, Configuration configuration, String fieldName) throws Exception {
-        Field field = null;
+        Field field;
         if (configuration.getClass().getName().equals("com.baomidou.mybatisplus.core.MybatisConfiguration")) {
             field = classConfig.getSuperclass().getDeclaredField(fieldName);
         } else {
-            field = classConfig.getClass().getDeclaredField(fieldName);
+            field = classConfig.getDeclaredField(fieldName);
         }
         field.setAccessible(true);
+        @SuppressWarnings("rawuse")
         Map mapConfig = (Map) field.get(configuration);
         mapConfig.clear();
     }
@@ -139,7 +146,7 @@ public class XMLMapperLoader {
         if (configuration.getClass().getName().equals("com.baomidou.mybatisplus.core.MybatisConfiguration")) {
             field = classConfig.getSuperclass().getDeclaredField(fieldName);
         } else {
-            field = classConfig.getClass().getDeclaredField(fieldName);
+            field = classConfig.getDeclaredField(fieldName);
         }
         field.setAccessible(true);
         Set setConfig = (Set) field.get(configuration);

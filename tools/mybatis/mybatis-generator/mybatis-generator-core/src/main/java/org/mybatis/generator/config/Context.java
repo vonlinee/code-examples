@@ -250,6 +250,7 @@ public class Context extends PropertyHolder {
     public JavaFormatter getJavaFormatter() {
         if (javaFormatter == null) {
             javaFormatter = ObjectFactory.createJavaFormatter(this);
+            log.info("[使用JavaFormatter] => {}", javaFormatter);
         }
         return javaFormatter;
     }

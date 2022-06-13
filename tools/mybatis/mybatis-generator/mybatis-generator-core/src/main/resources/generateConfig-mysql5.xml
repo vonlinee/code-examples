@@ -5,22 +5,20 @@
 <!--https://blog.csdn.net/weixin_44368212/article/details/109283097-->
 <generatorConfiguration>
     <!--加载外部属性配置文件-->
-    <!--    <properties resource="db.properties"/>-->
+    <!-- <properties resource="db.properties"/>-->
     <!--加载文件-->
-    <!--    <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip"/>-->
+    <!-- <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip"/>-->
     <context isEnable="true" id="mysqlTables" targetRuntime="MyBatis3">
-        <!--插件-->
+        <!--插件配置-->
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
         <!--自定义插件-->
-        <plugin type="samples.plugins.WebMVCPlugin">
-            <property name="name" value="xxx"/>
-            <property name="age" value="30"/>
-        </plugin>
-
+        <plugin type="samples.plugins.WebMVCPlugin"/>
+        <!--生成注释-->
         <commentGenerator>
             <property name="suppressDate" value="true"/>
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
+        <!--数据库配置-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/db_mysql?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=GMT%2B8"
                         userId="root"

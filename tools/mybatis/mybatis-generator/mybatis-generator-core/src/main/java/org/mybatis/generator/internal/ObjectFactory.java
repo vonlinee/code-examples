@@ -248,11 +248,8 @@ public class ObjectFactory {
         if (!isNotEmpty(type)) {
             type = DefaultJavaFormatter.class.getName();
         }
-
         JavaFormatter answer = (JavaFormatter) createInternalObject(type);
-
         answer.setContext(context);
-
         return answer;
     }
 

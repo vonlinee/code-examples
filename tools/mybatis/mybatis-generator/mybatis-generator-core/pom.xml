@@ -151,6 +151,24 @@
 	</build>
 
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-dependencies</artifactId>
+			<version>2.3.12.RELEASE</version>
+			<type>pom</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>2.3.12.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.shijingsh</groupId>
+			<artifactId>knife4j-spring-boot-starter</artifactId>
+			<version>3.0.5</version>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
@@ -255,8 +273,13 @@
 			<version>2.6.0</version>
 			<scope>compile</scope>
 		</dependency>
-
-	</dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 	<distributionManagement>
 		<site>

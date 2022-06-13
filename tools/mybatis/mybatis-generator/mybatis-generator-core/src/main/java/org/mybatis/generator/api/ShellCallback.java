@@ -6,10 +6,9 @@ import org.mybatis.generator.exception.ShellException;
 
 /**
  * This interface defines methods that a shell should support to enable
- * the generator
- * to work. A "shell" is defined as the execution environment (i.e. an
+ * the generator to work. A "shell" is defined as the execution environment (i.e. an
  * Eclipse plugin, and Ant task, a NetBeans plugin, etc.)
- *
+ * （shell）表示执行环境，比如Eclipse插件，Ant任务或者NetBeans插件等
  * <p>The default ShellCallback that is very low function and does
  * not support the merging of Java files. The default shell callback is
  * appropriate for use in well controlled environments where no changes
@@ -43,8 +42,7 @@ public interface ShellCallback {
      *             generator will not save the file it is currently working on. The generator will add the exception
      *             message to the list of warnings automatically.
      */
-    File getDirectory(String targetProject, String targetPackage)
-            throws ShellException;
+    File getDirectory(String targetProject, String targetPackage) throws ShellException;
 
     /**
      * This method is called if a newly generated Java file would

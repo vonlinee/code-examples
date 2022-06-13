@@ -23,7 +23,7 @@
 <generatorConfiguration>
   <properties resource="database.properties"/>
 
-  <context id="FlatJava5" defaultModelType="flat" targetRuntime="MyBatis3">
+  <context id="FlatJava5" defaultModelType="flat" targetRuntime="MyBatis3" isEnable="true">
     <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
     <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin" />
     <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />

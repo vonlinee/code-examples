@@ -31,13 +31,13 @@ public class InnerInterfaceRenderer {
         lines.addAll(innerInterface.getJavaDocLines());
         lines.addAll(innerInterface.getAnnotations());
         lines.add(renderFirstLine(innerInterface, compilationUnit));
-        lines.addAll(RenderingUtilities.renderFields(innerInterface.getFields(), compilationUnit));
-        lines.addAll(RenderingUtilities.renderInterfaceMethods(innerInterface.getMethods(), compilationUnit));
-        lines.addAll(RenderingUtilities.renderInnerClasses(innerInterface.getInnerClasses(), compilationUnit));
-        lines.addAll(RenderingUtilities.renderInnerInterfaces(innerInterface.getInnerInterfaces(), compilationUnit));
-        lines.addAll(RenderingUtilities.renderInnerEnums(innerInterface.getInnerEnums(), compilationUnit));
+        lines.addAll(DomRender.renderFields(innerInterface.getFields(), compilationUnit));
+        lines.addAll(DomRender.renderInterfaceMethods(innerInterface.getMethods(), compilationUnit));
+        lines.addAll(DomRender.renderInnerClasses(innerInterface.getInnerClasses(), compilationUnit));
+        lines.addAll(DomRender.renderInnerInterfaces(innerInterface.getInnerInterfaces(), compilationUnit));
+        lines.addAll(DomRender.renderInnerEnums(innerInterface.getInnerEnums(), compilationUnit));
 
-        lines = RenderingUtilities.removeLastEmptyLine(lines);
+        lines = DomRender.removeLastEmptyLine(lines);
 
         lines.add("}"); //$NON-NLS-1$
 
@@ -55,7 +55,7 @@ public class InnerInterfaceRenderer {
 
         sb.append("interface "); //$NON-NLS-1$
         sb.append(innerInterface.getType().getShortName());
-        sb.append(RenderingUtilities.renderTypeParameters(innerInterface.getTypeParameters(), compilationUnit));
+        sb.append(DomRender.renderTypeParameters(innerInterface.getTypeParameters(), compilationUnit));
         sb.append(renderSuperInterfaces(innerInterface, compilationUnit));
         sb.append(" {"); //$NON-NLS-1$
 

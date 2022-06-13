@@ -254,7 +254,7 @@ public class MyBatisGenerator {
         if (writeFiles) {
             callback.saveStarted(generatedXmlFiles.size() + generatedJavaFiles.size());
             for (GeneratedXmlFile gxf : generatedXmlFiles) {
-                log.info("[生成XML文件] => {}",gxf.getFileName());
+                log.info("[生成XML文件] => {}", gxf.getFileName());
                 projects.add(gxf.getTargetProject());
                 writeGeneratedXmlFile(gxf, callback);
             }
@@ -290,6 +290,7 @@ public class MyBatisGenerator {
             File directory = shellCallback.getDirectory(gjf.getTargetProject(), gjf.getTargetPackage());
             targetFile = new File(directory, gjf.getFileName());
             if (targetFile.exists()) {
+                // 默认的ShellCallBack不支持合并Java文件
                 if (shellCallback.isMergeSupported()) {
                     source = shellCallback.mergeJavaFile(gjf
                                     .getFormattedContent(), targetFile,
@@ -303,8 +304,7 @@ public class MyBatisGenerator {
                     source = gjf.getFormattedContent();
                     targetFile = getUniqueFileName(directory, gjf
                             .getFileName());
-                    warnings.add(getString(
-                            "Warning.2", targetFile.getAbsolutePath())); //$NON-NLS-1$
+                    warnings.add(getString("Warning.2", targetFile.getAbsolutePath())); //$NON-NLS-1$
                 }
             } else {
                 source = gjf.getFormattedContent();

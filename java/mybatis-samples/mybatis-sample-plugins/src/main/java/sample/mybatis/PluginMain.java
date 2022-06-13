@@ -33,21 +33,17 @@ public class PluginMain {
 		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 		// 4.通过会话工厂创建SqlSession会话
 		SqlSession session = sqlSessionFactory.openSession();
-
 		// 返回Mapper接口的代理对象 org.apache.ibatis.binding.MapperProxy@337d0578
 		StudentMapper studentMapper = session.getMapper(StudentMapper.class);
 		System.out.println("代理类 => " + studentMapper); // 执行代理类的toString方法
 		List<Student> students = studentMapper.queryAll();
-
 		for (Student student : students) {
 			System.out.println(student);
 		}
-
 		if (session instanceof DefaultSqlSession) {
 			DefaultSqlSession sqlSession = (DefaultSqlSession) session;
 			List<Student> selectList = sqlSession.selectList("queryAll");
 		}
-
 		closeQuitely(session);
 	}
 

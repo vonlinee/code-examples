@@ -18,6 +18,6 @@ NOTE: You only need to do one of the above things in order for the server to sta
 	at redis.clients.jedis.Connection.readProtocolWithCheckingBroken(Connection.java:316)
 	at redis.clients.jedis.Connection.getStatusCodeReply(Connection.java:243)
 	at redis.clients.jedis.Jedis.ping(Jedis.java:354)
-	at code.sample.jedis.Test.main(Test.java:12)
+	at code.sample.Test.main(Test.java:12)
 
 Process finished with exit code 1
