@@ -1,14 +1,15 @@
 package io.maker.base.utils;
 
+import com.google.common.base.Strings;
+
+import java.util.LinkedList;
 import java.util.List;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-
 /**
- * @author Jason Song(song_s@ctrip.com)
+ * 异常工具类
  */
 public class ExceptionUtils {
+
     /**
      * Assemble the detail message for the throwable with all of its cause included (at most 10 causes).
      *
@@ -16,11 +17,11 @@ public class ExceptionUtils {
      * @return the message along with its causes
      */
     public static String getDetailMessage(Throwable ex) {
-        if (ex == null || Strings.isNullOrEmpty(ex.getMessage())) {
+        if (ex == null || Validator.isNullOrEmpty(ex.getMessage())) {
             return "";
         }
         StringBuilder builder = new StringBuilder(ex.getMessage());
-        List<Throwable> causes = Lists.newLinkedList();
+        List<Throwable> causes = new LinkedList<>();
         int counter = 0;
         Throwable current = ex;
         //retrieve up to 10 causes
@@ -31,7 +32,7 @@ public class ExceptionUtils {
             counter++;
         }
         for (Throwable cause : causes) {
-            if (Strings.isNullOrEmpty(cause.getMessage())) {
+            if (Validator.isNullOrEmpty(cause.getMessage())) {
                 counter--;
                 continue;
             }

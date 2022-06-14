@@ -745,4 +745,16 @@ public abstract class Validator {
         }
         return cs.length() > (i > 0 ? i : 1);
     }
+
+    public static void whenTrue(boolean expression, String format, Object args) {
+        if (expression) {
+            throw new IllegalArgumentException(String.format(format, args));
+        }
+    }
+
+    public static void whenFalse(boolean expression, String format, Object args) {
+        if (!expression) {
+            throw new IllegalArgumentException(String.format(format, args));
+        }
+    }
 }

@@ -205,4 +205,7 @@ public class ConfigUtils {
     }
 
 
+    public boolean isInLocalMode() {
+        return false;
+    }
 }

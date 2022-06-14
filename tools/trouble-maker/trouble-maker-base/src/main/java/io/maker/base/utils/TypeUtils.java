@@ -63,11 +63,4 @@ public final class TypeUtils {
 	public static <V> V cast(Object object) {
 		return (V) object;
 	}
-    
-
-    public static void main(String[] args) {
-        Integer i = TypeUtils.toInterger(1203L, 12);
-        System.out.println(i);
-    }
-
 }

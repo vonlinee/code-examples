@@ -53,6 +53,7 @@ public class StringEscaper {
 
     /**
      * 转义字符串
+     *
      * @param escapeStr
      * @return
      */
@@ -109,6 +110,6 @@ public class StringEscaper {
             }
             parameterAsString = buf.toString();
         }
-        return "\'" + parameterAsString + "\'";
+        return "'" + parameterAsString + "'";
     }
 }
