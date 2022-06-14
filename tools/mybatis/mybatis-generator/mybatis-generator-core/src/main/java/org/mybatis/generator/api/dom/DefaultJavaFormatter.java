@@ -22,6 +22,8 @@ public class DefaultJavaFormatter implements JavaFormatter, CompilationUnitVisit
 
     protected Context context;
 
+    private final TopLevelEnumerationRenderer topLevelEnumerationRenderer = new TopLevelEnumerationRenderer();
+
     @Override
     public String getFormattedContent(CompilationUnit compilationUnit) {
         return compilationUnit.accept(this);
@@ -39,7 +41,7 @@ public class DefaultJavaFormatter implements JavaFormatter, CompilationUnitVisit
 
     @Override
     public String visit(TopLevelEnumeration topLevelEnumeration) {
-        return new TopLevelEnumerationRenderer().render(topLevelEnumeration);
+        return topLevelEnumerationRenderer.render(topLevelEnumeration);
     }
 
     @Override

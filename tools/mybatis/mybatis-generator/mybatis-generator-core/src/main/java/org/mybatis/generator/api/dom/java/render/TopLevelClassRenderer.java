@@ -22,6 +22,7 @@ public class TopLevelClassRenderer {
         lines.addAll(renderPackage(topLevelClass));
         lines.addAll(renderStaticImports(topLevelClass));
         lines.addAll(renderImports(topLevelClass));
+        // 无缩进
         lines.addAll(renderInnerClassNoIndent(topLevelClass, topLevelClass));
         return lines.stream().collect(Collectors.joining(System.getProperty("line.separator"))); //$NON-NLS-1$
     }

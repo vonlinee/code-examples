@@ -40,13 +40,10 @@ public class PrimitiveTypeWrapper extends FullyQualifiedJavaType {
         if (this == obj) {
             return true;
         }
-
         if (!(obj instanceof PrimitiveTypeWrapper)) {
             return false;
         }
-
         PrimitiveTypeWrapper other = (PrimitiveTypeWrapper) obj;
-
         return getFullyQualifiedName().equals(other.getFullyQualifiedName());
     }
 
@@ -60,7 +57,6 @@ public class PrimitiveTypeWrapper extends FullyQualifiedJavaType {
             booleanInstance = new PrimitiveTypeWrapper("java.lang.Boolean", //$NON-NLS-1$
                     "booleanValue()"); //$NON-NLS-1$
         }
-
         return booleanInstance;
     }
 
@@ -69,7 +65,6 @@ public class PrimitiveTypeWrapper extends FullyQualifiedJavaType {
             byteInstance = new PrimitiveTypeWrapper("java.lang.Byte", //$NON-NLS-1$
                     "byteValue()"); //$NON-NLS-1$
         }
-
         return byteInstance;
     }
 

@@ -1,9 +1,9 @@
 package io.maker.base.utils;
 
 /**
- * StringEscape ，数据库字符串转义
+ * StringEscaper ，数据库字符串转义
  */
-public class StringEscape {
+public class StringEscaper {
 
     /**
      * <p>
@@ -111,5 +111,4 @@ public class StringEscape {
         }
         return "\'" + parameterAsString + "\'";
     }
-
 }

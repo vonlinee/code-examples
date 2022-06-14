@@ -40,12 +40,21 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
      */
     private String baseQualifiedName;
 
+    /**
+     * 明确地被导入，比如java.lang.String不需要写在import列表里，默认导入
+     */
     private boolean explicitlyImported;
 
     private String packageName;
 
+    /**
+     * 是否是基本类型
+     */
     private boolean primitive;
 
+    /**
+     * 是否是数组
+     */
     private boolean isArray;
 
     private PrimitiveTypeWrapper primitiveTypeWrapper;
@@ -235,7 +244,6 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         if (intInstance == null) {
             intInstance = new FullyQualifiedJavaType("int"); //$NON-NLS-1$
         }
-
         return intInstance;
     }
 
@@ -320,7 +328,6 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
     /**
      * 类型名
      * java.util.List
-     *
      * @param fullTypeSpecification
      */
     private void parse(String fullTypeSpecification) {
@@ -362,6 +369,10 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         }
     }
 
+    /**
+     * 不带有泛型的类型
+     * @param typeSpecification
+     */
     private void simpleParse(String typeSpecification) {
         baseQualifiedName = typeSpecification.trim();
         if (baseQualifiedName.contains(".")) { //$NON-NLS-1$
@@ -421,6 +432,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
 
     /**
      * 新增
+     *
      * @param packageName
      */
     public void setPackageName(String packageName) {

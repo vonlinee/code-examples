@@ -5,13 +5,7 @@ import java.util.Map;
 /**
  * 配置只支持一对一的KV结构
  */
-public interface ConfigRepository extends Map<String, Object> {
-
-    void initialize();
-
-    void refresh();
-
+public interface ConfigRepository<V> extends Map<String, V> {
     String name();
-
-    <V> Map<String, V> getConfig();
 }
+

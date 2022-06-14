@@ -41,6 +41,7 @@ public class ControllerGenerator extends AbstractJavaGenerator {
         // 导入的类型
         controllerClass.addStaticImports(controllerImportedTypes());
 
+
         // 控制器方法
         Method method = new Method("query");
         method.setVisibility(JavaVisibility.PUBLIC);

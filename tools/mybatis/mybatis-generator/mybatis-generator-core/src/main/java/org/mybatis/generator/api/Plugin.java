@@ -1,24 +1,10 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.api;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import javafx.event.EventDispatchChain;
 import org.mybatis.generator.api.dom.java.Field;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
@@ -36,7 +22,7 @@ import org.mybatis.generator.config.Context;
  * the code generation process. These methods can be used to extend or modify
  * the generated code. Clients may implement this interface in its entirety, or
  * extend the PluginAdapter (highly recommended).
- *
+ * 定义了代码生成过程中不同时期调用的方法，这些方法可以用于扩展代码生成
  * <p>Plugins have a lifecycle. In general, the lifecycle is this:
  *
  * <ol>
@@ -47,15 +33,15 @@ import org.mybatis.generator.config.Context;
  * <li>The providerXXX methods are called for each introspected table</li>
  * <li>The modelXXX methods are called for each introspected table</li>
  * <li>The sqlMapXXX methods are called for each introspected table</li>
- * <li>The contextGenerateAdditionalJavaFiles(IntrospectedTable) method is
- * called for each introspected table</li>
- * <li>The contextGenerateAdditionalXmlFiles(IntrospectedTable) method is called
- * for each introspected table</li>
- * contextGenerateAdditionalJavaFiles和contextGenerateAdditionalXmlFiles只调用一次
+ * <li>The contextGenerateAdditionalJavaFiles(IntrospectedTable) method is called for each introspected table</li>
+ * <li>The contextGenerateAdditionalXmlFiles(IntrospectedTable) method is called for each introspected table</li>
  * <li>The contextGenerateAdditionalJavaFiles() method is called one time</li>
  * <li>The contextGenerateAdditionalXmlFiles() method is called one time</li>
  * </ol>
+ * contextGenerateAdditionalJavaFiles和contextGenerateAdditionalXmlFiles只调用一次
  *
+ * 插件与Context有关，所有上下文有它自己的插件集合
+ * 因此方法执行的相关代码都是在Context类内部
  * <p>Plugins are related to contexts - so each context will have its own set of
  * plugins. If the same plugin is specified in multiple contexts, then each
  * context will hold a unique instance of the plugin.
@@ -109,8 +95,7 @@ public interface Plugin {
      *
      * @param introspectedTable the introspected table
      */
-    default void initialized(IntrospectedTable introspectedTable) {
-    }
+    default void initialized(IntrospectedTable introspectedTable) {}
 
     /**
      * This method is called after all the setXXX methods are called, but before
@@ -200,6 +185,7 @@ public interface Plugin {
      * Implement this method to add additional methods or fields to a generated
      * client interface or implementation.
      * 所谓的client指的就是Mapper，生成之后调用
+     *
      * @param interfaze         the generated interface if any, may be null
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database

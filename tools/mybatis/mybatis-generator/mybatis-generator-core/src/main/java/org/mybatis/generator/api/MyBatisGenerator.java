@@ -42,7 +42,6 @@ import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.XmlFileMergerJaxp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import samples.config.ReadOnlyConfiguration;
 
 /**
  * This class is the main interface to MyBatis generator. A typical execution of the tool involves these steps:

@@ -33,6 +33,18 @@ public interface CompilationUnit {
 
     void addImportedTypes(Set<FullyQualifiedJavaType> importedTypes);
 
+    /**
+     * 新增，直接添加字面量
+     * @param importedItem
+     */
+    // void addImported(String importedItem);
+
+    /**
+     * 新增，直接添加字面量
+     * @param importedCollection
+     */
+    // void addImported(Set<String> importedCollection);
+
     void addStaticImport(String staticImport);
 
     void addStaticImports(Set<String> staticImports);
