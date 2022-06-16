@@ -62,8 +62,4 @@ public class Reflective {
     public static ClassLoader getThreadClassLoader() {
         return Thread.currentThread().getContextClassLoader();
     }
-
-    public static void main(String[] args) {
-        System.out.println(getCallerClass());
-    }
 }

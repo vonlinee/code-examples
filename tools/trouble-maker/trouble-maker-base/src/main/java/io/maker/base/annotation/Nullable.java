@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
  * @author Juergen Hoeller
  * @since 5.0
  */
-@Target({ ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD })
+@Target({ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD, ElementType.TYPE_USE, ElementType.TYPE_PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Nullable {

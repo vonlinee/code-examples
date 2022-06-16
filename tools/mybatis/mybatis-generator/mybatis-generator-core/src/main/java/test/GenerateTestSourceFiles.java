@@ -15,33 +15,36 @@
  */
 package test;
 
+import com.google.common.collect.Lists;
 import org.mybatis.generator.api.dom.DefaultJavaFormatter;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
 import org.mybatis.generator.internal.util.StringUtils;
 import org.reflections.Reflections;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class GenerateTestSourceFiles {
 
     public static void main (String[] args) {
-        if (args.length < 1 || !StringUtils.isNotEmpty(args[0])) {
-            throw new RuntimeException("This class requres one argument which is the location of the output directory");
-        }
 
-        String outputDirectory = args[0];
+        final Iterator<Object> iterator = new ArrayList<>().iterator();
+        Lists.newArrayList(iterator);
 
-        GenerateTestSourceFiles app = new GenerateTestSourceFiles();
 
-        try {
-            app.run(new File(outputDirectory));
-        } catch (Exception e) {
-            throw new RuntimeException("Exception creating test classes", e);
-        }
+//        if (args.length < 1 || !StringUtils.isNotEmpty(args[0])) {
+//            throw new RuntimeException("This class requres one argument which is the location of the output directory");
+//        }
+//
+//        String outputDirectory = args[0];
+//
+//        GenerateTestSourceFiles app = new GenerateTestSourceFiles();
+//
+//        try {
+//            app.run(new File(outputDirectory));
+//        } catch (Exception e) {
+//            throw new RuntimeException("Exception creating test classes", e);
+//        }
     }
 
     private void gatherGenerators(List<CompilationUnitGenerator> generators) throws InstantiationException, IllegalAccessException {

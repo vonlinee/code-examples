@@ -22,6 +22,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2
     implementation 'org.apache.commons:commons-dbcp2:2.9.0'
     implementation(libs.mysql5_driver)
+
+    // https://mvnrepository.com/artifact/org.antlr/ST4
+    compile group: 'org.antlr', name: 'ST4', version: '4.3.3'
 }
 
 test {

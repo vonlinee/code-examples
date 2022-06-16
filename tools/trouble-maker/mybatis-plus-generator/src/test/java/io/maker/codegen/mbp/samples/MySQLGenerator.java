@@ -3,6 +3,9 @@ package io.maker.codegen.mbp.samples;
 import io.maker.codegen.mbp.FastAutoGenerator;
 import io.maker.codegen.mbp.config.DataSourceConfig;
 import io.maker.codegen.mbp.config.TemplateType;
+import io.maker.codegen.mbp.config.builder.Controller;
+import io.maker.codegen.mbp.config.builder.Entity;
+import io.maker.codegen.mbp.config.builder.Mapper;
 import io.maker.codegen.mbp.config.converts.MySqlTypeConvert;
 import io.maker.codegen.mbp.config.querys.MySqlQuery;
 import io.maker.codegen.mbp.engine.FreemarkerTemplateEngine;
@@ -94,36 +97,43 @@ public class MySQLGenerator {
             builder.addInclude(tableNamesToBeGenerated); // 设置需要生成的表名
             builder.addTablePrefix(tablePrefixToBeIgnored); // 设置过滤表前缀
             // 实体类输出配置
-            builder.entityBuilder()
-                    //.superClass(BaseEntity.class)
-                    .disableSerialVersionUUID() // 禁用生成serialVersionUUID
-                    //.enableChainModel()
-                    //.enableLombok()
-                    .fileOverride()
-                    //.enableRemoveIsPrefix()
-                    //.enableTableFieldAnnotation()
-                    //.enableActiveRecord()
-                    //.versionColumnName("version")
-                    //.versionPropertyName("version")
-                    //.logicDeleteColumnName("deleted")
-                    //.logicDeletePropertyName("deleteFlag")
-                    //.naming(NamingStrategy.no_change)
-                    //.columnNaming(NamingStrategy.underline_to_camel)
-                    //.addSuperEntityColumns("id", "created_by", "created_time", "updated_by", "updated_time") //
-                    //.addIgnoreColumns("age") // 忽略的列
-                    //.addTableFills(new Column("create_time", FieldFill.INSERT))
-                    //.addTableFills(new Property("updateTime", FieldFill.INSERT_UPDATE)).idType(IdType.AUTO)
-                    // .formatFileName("%sEntity") // 格式化命名
-                    .build();
-            // Mapper XML配置
-            builder.mapperBuilder()
-                    .fileOverride() // 是否覆盖之前的mapper.xml文件
-                    .enableBaseColumnList() // 添加字段列表，即sql标签
-                    .enableBaseResultMap() // 添加实体类和数据库字段映射，即ResultMap标签
-                    .enableBaseCrudTag(); // 生成默认的crud标签
-        }).templateEngine(new FreemarkerTemplateEngine()); // 使用Freemarker引擎模板，默认的是Velocity引擎模板
-        stopWatch.stop();
+            Entity.Builder entityBuilder = builder.entityBuilder();
+            //.superClass(BaseEntity.class)
+            entityBuilder.disableSerialVersionUUID(); // 禁用生成serialVersionUUID
+            //.enableChainModel()
+            //.enableLombok()
+            entityBuilder.fileOverride();
+            //.enableRemoveIsPrefix()
+            //.enableTableFieldAnnotation()
+            //.enableActiveRecord()
+            //.versionColumnName("version")
+            //.versionPropertyName("version")
+            //.logicDeleteColumnName("deleted")
+            //.logicDeletePropertyName("deleteFlag")
+            //.naming(NamingStrategy.no_change)
+            //.columnNaming(NamingStrategy.underline_to_camel)
+            //.addSuperEntityColumns("id", "created_by", "created_time", "updated_by", "updated_time") //
+            //.addIgnoreColumns("age") // 忽略的列
+            //.addTableFills(new Column("create_time", FieldFill.INSERT))
+            //.addTableFills(new Property("updateTime", FieldFill.INSERT_UPDATE)).idType(IdType.AUTO)
+            // .formatFileName("%sEntity") // 格式化命名
 
+            // Mapper XML配置
+            Mapper.Builder mapperBuilder = builder.mapperBuilder();
+            mapperBuilder.fileOverride(); // 是否覆盖之前的mapper.xml文件
+            mapperBuilder.enableBaseColumnList(); // 添加字段列表，即sql标签
+            mapperBuilder.enableBaseCrudTag(); // 生成默认的crud标签
+            mapperBuilder.enableBaseResultMap(); // 添加实体类和数据库字段映射，即ResultMap标签
+
+            Controller.Builder controllerBuilder = builder.controllerBuilder();
+            controllerBuilder.enableRestStyle();
+            controllerBuilder.enableHyphenStyle();
+            controllerBuilder.fileOverride();
+            builder.build();
+        });
+        // 使用Freemarker引擎模板，默认的是Velocity引擎模板
+        generator.templateEngine(new FreemarkerTemplateEngine());
+        stopWatch.stop();
         stopWatch.start("代码生成");
         // 执行生成行为
         generator.execute();

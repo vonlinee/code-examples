@@ -1,10 +1,8 @@
 package io.maker.base.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import io.maker.base.annotation.Nullable;
+
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -77,9 +75,42 @@ public final class Lists {
             });
         });
     }
-    
+
     public static void printlnMapList(List<Map<?, ?>> list) {
         list.forEach(System.out::println);
+    }
+
+    /**
+     * Creates a <i>mutable</i> {@code ArrayList} instance containing the given
+     * elements; a very thin shortcut for creating an empty list and then calling
+     * {@link Iterators#addAll}.
+     *
+     * <p>
+     * <b>Note:</b> if mutability is not required and the elements are non-null, use
+     * {@link ImmutableList#copyOf(Iterator)} instead.
+     */
+    public static <E extends @Nullable Object> ArrayList<E> newArrayList(Iterator<? extends E> elements) {
+        ArrayList<E> list = newArrayList();
+        addAll(list, elements);
+        return list;
+    }
+
+    public static <E extends @Nullable Object> ArrayList<E> newArrayList() {
+        return new ArrayList<>();
+    }
+
+    public static <E extends @Nullable Object> LinkedList<E> newLinkedList() {
+        return new LinkedList<>();
+    }
+
+    public static <T extends @Nullable Object> boolean addAll(Collection<T> addTo, Iterator<? extends T> iterator) {
+        Objects.requireNonNull(addTo);
+        Objects.requireNonNull(iterator);
+        boolean wasModified = false;
+        while (iterator.hasNext()) {
+            wasModified |= addTo.add(iterator.next());
+        }
+        return wasModified;
     }
 
     public static void main(String[] args) {
