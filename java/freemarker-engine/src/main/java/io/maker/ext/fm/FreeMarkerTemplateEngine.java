@@ -1,5 +1,6 @@
 package io.maker.ext.fm;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,9 +36,9 @@ public class FreeMarkerTemplateEngine {
 		Template template = configuration.getTemplate("class.java.ftl");
 
 		// 第五步：创建一个模板使用的数据集，可以是pojo也可以是map。一般是Map。
-		Map<String, Object> dataModel = new HashMap<>();
+		Map<String, Object> dataModel = new HashMap<>(10);
 		// 向数据集中添加数据
-
+		Map<String, Object> dataModel1 = new HashMap<>();
 		
 		JavaClassDefinition definition = new JavaClassDefinition();
 		
@@ -48,16 +49,18 @@ public class FreeMarkerTemplateEngine {
 		
 		definition.setImportList(dataList);
 		definition.setHasCopyRight(false);
-		definition.setTypeModifier(Modifier.PUBLIC);
+		// definition.setTypeModifier();
 		
-		
+		File file = new File("D:/Temp/hello.txt");
 		// 第六步：创建一个Writer对象，一般创建一FileWriter对象，指定生成的文件名。
-		Writer out = new FileWriter(new File("D:/Temp/hello.txt"));
+		Writer out = new FileWriter(file);
 
 		// 第七步：调用模板对象的process方法输出文件。
 		template.process(definition, out);
 
 		// 第八步：关闭流。
 		out.close();
+		
+		Desktop.getDesktop().open(file);
 	}
 }
