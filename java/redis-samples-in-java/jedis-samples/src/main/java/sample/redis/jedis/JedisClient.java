@@ -1,15 +1,17 @@
-package sample.jedis;
+package sample.redis.jedis;
 
 import redis.clients.jedis.*;
 
 import java.util.Set;
 
-public class Test {
+import org.junit.jupiter.api.Test;
+
+public class JedisClient {
 
     public static final String PASSWORD = "line@123!!";
 
     public static void main(String[] args) {
-        test2();
+        // test2();
     }
 
     public static Jedis getConnection() {
@@ -28,23 +30,24 @@ public class Test {
 
     public static void test1() {
         Jedis jedis = getConnection();
+        
+        
+        Set<String> keys1 = jedis.keys("*");
+        System.out.println(keys1);
+        System.out.println("=========================");
+        
         // 如果 Redis 服务设置了密码，需要下面这行，没有就不需要
         System.out.println("连接成功");
         //查看服务是否运行
         System.out.println("服务正在运行: " + jedis.ping());
-
         jedis.set("name", "孙允珠");
         jedis.set("age", "29");
-
         String name = jedis.get("name");
-
         System.out.println(name);
-
         Set<String> keys = jedis.keys("*");
         for (String key : keys) {
             System.out.println(key + " => " + jedis.get(key));
         }
-
         String watch = jedis.watch("name");
         System.out.println(watch);
         String unwatch = jedis.unwatch();
@@ -74,5 +77,38 @@ public class Test {
         JedisPoolConfig jpc = new JedisPoolConfig();
         jpc.setBlockWhenExhausted(true);
 
+    }
+    
+    /**
+     * 上锁：SET resource-name anystring NX EX max-lock-time
+     * 
+     * @param resourceName
+     * @param value
+     */
+    public void lock(Jedis jedis, String resourceName, String value, long milliseconds) {
+    	boolean lockFlag = false;
+    	while (!lockFlag) {
+    		try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    		lockFlag = jedis.setnx(resourceName, value) == 1;
+    		long expire = jedis.expire(resourceName, milliseconds);
+		}
+		System.out.println("上锁成功");
+    }
+    
+    public void unlock(String resourceName) {
+    	
+    }
+    
+    @Test
+    public void test4() {
+    	Jedis jedis = getConnection();
+    	
+    	long result = jedis.setnx("name", "25");
+    	System.out.println(result);
+    	
     }
 }

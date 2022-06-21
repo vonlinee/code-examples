@@ -2,6 +2,10 @@ package leetcode.algorithm;
 
 import java.util.Arrays;
 
+/**
+ * https://blog.csdn.net/qq_40813329/article/details/120835007
+ *
+ */
 public class SortAlgorithm {
 
 	public static void main(String[] args) {
@@ -21,18 +25,44 @@ public class SortAlgorithm {
 		if (arr == null || arr.length < 2) {
 			return;
 		}
-		int len = arr.length;
-		for (int i = 0; i < len; i++) {
+		// 最末尾就是最后一个当前的新值
+		for (int i = 0; i < arr.length - 1; i++) {
 			// 当前的最小值的索引
 			int minValueIndex = i;
 			// 对剩下的n-i个数进行选择排序
-			for (int j = i + 1; j < len; j++) {
-				minValueIndex = arr[j] < arr[minValueIndex] ? j : minValueIndex;
-				swap(arr, i, minValueIndex);
+			for (int j = i + 1; j < arr.length; j++) {
+				if (arr[j] <= arr[minValueIndex]) { // 升序排列
+					minValueIndex = j;
+				}
 			}
+			// 交换放在外面
+			swap(arr, i, minValueIndex);
 		}
 	}
 
+	// 
+	public static void selectionSort(int[] arr) {
+		/*判断数组为空或为一个元素的情况，即边界检查*/
+		if (arr == null || arr.length < 2) {
+			return;
+		}
+		/*每次要进行比较的两个数，的前面那个数的下标*/
+		for (int i = 0; i < arr.length - 1; i++) { 
+			//min变量保存该趟比较过程中，最小元素所对应的索引，
+			//先假设前面的元素为最小元素
+			int minIndex = i;
+			/*每趟比较，将前面的元素与其后的元素逐个比较*/
+			for (int j = i + 1; j < arr.length; j++) {
+				//如果后面的元素小，将后面元素的索引极为最小值的索引
+				if(arr[j] < arr[minIndex]) {
+					minIndex = j;
+				}
+			}
+			//然后交换此次查找到的最小值和原始的最小值
+			swap(arr, i, minIndex);
+		}
+	}
+	
 	/**
 	 * 冒泡排序
 	 * 
@@ -76,11 +106,11 @@ public class SortAlgorithm {
 				// 交换
 				swap(arr, newIndex - 1, newIndex);
 				// 左移一个
-				newIndex --;
+				newIndex--;
 			}
 		}
 	}
-	
+
 	/**
 	 * 插入排序
 	 * 
@@ -102,8 +132,7 @@ public class SortAlgorithm {
 			}
 		}
 	}
-	
-	
+
 	public static void printArray(int[] arr) {
 		System.out.println(Arrays.toString(arr));
 	}
@@ -116,8 +145,8 @@ public class SortAlgorithm {
 	 * @param j
 	 */
 	public static void swap(int[] arr, int i, int j) {
-		int tmp = arr[j];
-		arr[j] = arr[i];
-		arr[i] = tmp;
+		int tmp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = tmp;
 	}
 }
