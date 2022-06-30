@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public interface HandleMethod {
-    public Lines apply(Lines input);
+    Lines apply(Lines input);
 
     //去除空行
     HandleMethod removeBlankLines = input -> {

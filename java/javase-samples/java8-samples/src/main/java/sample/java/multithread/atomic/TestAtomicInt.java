@@ -2,7 +2,7 @@ package sample.java.multithread.atomic;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import sample.java.multithread.utils.Sleep;
+import sample.java.multithread.utils.Utils;
 
 /**
  * 原子类都是基于cas进行的
@@ -17,7 +17,7 @@ public class TestAtomicInt {
             while (true) {
                 int i = integer.getAndIncrement();
                 System.out.println(Thread.currentThread().getName() + "  " + i);
-                Sleep.seconds(2);
+                Utils.sleepSeconds(2);
             }
         }, "add-thread-1").start();
 
@@ -25,7 +25,7 @@ public class TestAtomicInt {
             while (true) {
                 int i = integer.decrementAndGet();
                 System.out.println(Thread.currentThread().getName() + "  " + i);
-                Sleep.seconds(2);
+                Utils.sleepSeconds(2);
             }
         }, "sub-thread-1").start();
     }

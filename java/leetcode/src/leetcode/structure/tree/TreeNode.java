@@ -193,7 +193,6 @@ public class TreeNode {
 				res[i][j] = " ";
 			}
 		}
-
 		// 从根节点开始，递归处理整个树
 		// res[0][(arrayWidth + 1)/ 2] = (char)(root.val + '0');
 		writeArray(root, 0, arrayWidth / 2, res, treeDepth);
@@ -215,7 +214,7 @@ public class TreeNode {
 
 	public static void test1() {
 		// 根据给定的数组创建一棵树
-		TreeNode root = create(new Integer[] { 1, 2, null, 4, 5, 6, 7 });
+		TreeNode root = create(new Integer[] { 1, 2, 3, 4, 5, null, null, 6, 7 });
 		// 将刚刚创建的树打印出来
 		show(root);
 		

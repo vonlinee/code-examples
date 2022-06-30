@@ -10,7 +10,6 @@ public class TestClassPath {
 	public static void main(String[] args) throws Exception {
 
 		TestClassPath test = new TestClassPath();
-		
 		test.getClasspath();
 	}
 	

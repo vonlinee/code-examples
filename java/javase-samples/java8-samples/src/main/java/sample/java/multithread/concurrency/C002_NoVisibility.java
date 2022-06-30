@@ -3,7 +3,7 @@ package sample.java.multithread.concurrency;
 /**
  * 可见性分析
  */
-public class NoVisibility {
+public class C002_NoVisibility {
 
     private static boolean ready;
     private static int number;

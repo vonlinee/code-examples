@@ -1,6 +1,6 @@
 package sample.java.multithread.threadapi;
 
-import sample.java.multithread.utils.Sleep;
+import sample.java.multithread.utils.Utils;
 
 public class ThreadSleepTest {
 
@@ -12,7 +12,7 @@ public class ThreadSleepTest {
                 synchronized (lock) {
                     System.out.println(Thread.currentThread().getName() + " holds the lock " + Thread.holdsLock(lock));
                 }
-                Sleep.seconds(10);
+                Utils.sleepSeconds(10);
             }, "thread-" + i).start();
         }
     }

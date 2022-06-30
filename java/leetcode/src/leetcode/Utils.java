@@ -1,7 +1,9 @@
 package leetcode;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * 
@@ -127,6 +129,14 @@ public class Utils {
 		int[] arr = new int[nums.length];
 		for (int i = 0; i < nums.length; i++) {
 			arr[i] = Integer.parseInt(nums[i]);
+		}
+		return arr;
+	}
+	
+	public static Integer[] valueOf(int[] nums) {
+		Integer[] arr = new Integer[nums.length];
+		for (int i = 0; i < nums.length; i++) {
+			arr[i] = nums[i];
 		}
 		return arr;
 	}

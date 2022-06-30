@@ -1,5 +1,8 @@
 package sample.java.primary.generic;
 
+import sample.java.primary.generic.bean.Apple;
+import sample.java.primary.generic.bean.Fruit;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

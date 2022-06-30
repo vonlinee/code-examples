@@ -3,12 +3,12 @@ package sample.java.multithread.concurrency;
 /**
  * 共享数据
  */
-public class ShareDataVolatile {
+public class C003_ShareDataVolatile {
 
 	static volatile int count = 0;
 
 	public static void main(String[] args) {
-		final ShareDataVolatile data = new ShareDataVolatile();
+		final C003_ShareDataVolatile data = new C003_ShareDataVolatile();
 		for (int i = 0; i < 10; i++) {
 			new Thread(() -> {
 				try {
