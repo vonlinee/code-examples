@@ -32,11 +32,9 @@ public class SimpleInterfaceGenerator implements CompilationUnitGenerator {
     @Override
     public List<CompilationUnit> generate() {
         List<CompilationUnit> answer = new ArrayList<>();
-
         Interface interfaze = generateInterface();
         answer.add(interfaze);
         answer.add(generateClass(interfaze));
-
         return answer;
     }
 

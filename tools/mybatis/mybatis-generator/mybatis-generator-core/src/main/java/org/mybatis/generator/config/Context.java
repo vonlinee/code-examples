@@ -411,13 +411,13 @@ public class Context extends PropertyHolder {
         for (IntrospectedTable introspectedTable : introspectedTables) {
             steps += introspectedTable.getGenerationSteps();
         }
-
         return steps;
     }
 
     /**
      * 核心方法，准备好所有需要生成的文件 => 扩展点
      * 确定要生成哪些文件
+     *
      * @param callback
      * @param generatedJavaFiles
      * @param generatedXmlFiles
@@ -436,6 +436,9 @@ public class Context extends PropertyHolder {
         // 聚合插件，集成了多个插件
         pluginAggregator = new PluginAggregator();
 
+        if (log.isDebugEnabled()) {
+            log.debug("第一步: 生成所有插件实例");
+        }
         // 生成所有插件实例
         for (PluginConfiguration pluginConfiguration : pluginConfigurations) {
             // 根据插件配置及全局上下文生成插件实例
@@ -453,18 +456,17 @@ public class Context extends PropertyHolder {
         // items in the configuration.
 
         for (IntrospectedTable introspectedTable : introspectedTables) {
-
             callback.checkCancel();
             // 表初始化，即准备数据 introspectedTable实现类IntrospectedTableMyBatis3Impl
             log.info("[IntrospectedTable初始化] => {}", introspectedTable);
             introspectedTable.initialize();
             log.info("[确定生成器] => {}", introspectedTable);
-            // 计算生成器个数  一个生成器用于生成一种类型的文件
+            // 计算生成器个数  一个生成器用于生成一种类型的文件，比如Entity，Java Mapper或者XML Mapper
             introspectedTable.calculateGenerators(warnings, callback);
         }
+
         for (IntrospectedTable introspectedTable : introspectedTables) {
             callback.checkCancel();
-
             // 这里是默认的会生成哪些文件
             // Example类，实体类，Mapper接口
             generatedJavaFiles.addAll(introspectedTable.getGeneratedJavaFiles());

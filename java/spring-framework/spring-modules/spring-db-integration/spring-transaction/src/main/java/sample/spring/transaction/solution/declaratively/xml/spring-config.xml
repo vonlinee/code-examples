@@ -20,7 +20,7 @@
 		<property name="locations">
 			<list>
 				<!--要是有多个配置文件，只需在这里继续添加即可 -->
-				<value>classpath:properties/*.properties</value>
+				<value>classpath:*.properties</value>
 				<value>classpath:*.xml</value>
 			</list>
 		</property>

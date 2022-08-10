@@ -29,7 +29,7 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.kotlin.FullyQualifiedKotlinType;
 import org.mybatis.generator.api.dom.kotlin.JavaToKotlinTypeConverter;
 import org.mybatis.generator.api.dom.kotlin.KotlinArg;
-import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.utils.Lists;
 import org.mybatis.generator.config.GeneratedKey;
 import org.mybatis.generator.runtime.kotlin.KotlinDynamicSqlSupportClassGenerator;
 
@@ -216,7 +216,7 @@ public class KotlinFragmentGenerator {
 
         KotlinFunctionParts.Builder builder = new KotlinFunctionParts.Builder();
 
-        List<IntrospectedColumn> columns = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(columnList);
+        List<IntrospectedColumn> columns = Lists.removeIdentityAndGeneratedAlwaysColumns(columnList);
         for (IntrospectedColumn column : columns) {
             AbstractKotlinFunctionGenerator.FieldNameAndImport fieldNameAndImport =
                     AbstractKotlinFunctionGenerator.calculateFieldNameAndImport(tableFieldName,
@@ -234,7 +234,7 @@ public class KotlinFragmentGenerator {
 
         KotlinFunctionParts.Builder builder = new KotlinFunctionParts.Builder();
 
-        List<IntrospectedColumn> columns = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(columnList);
+        List<IntrospectedColumn> columns = Lists.removeIdentityAndGeneratedAlwaysColumns(columnList);
         for (IntrospectedColumn column : columns) {
             AbstractKotlinFunctionGenerator.FieldNameAndImport fieldNameAndImport =
                     AbstractKotlinFunctionGenerator.calculateFieldNameAndImport(tableFieldName,

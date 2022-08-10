@@ -19,7 +19,7 @@ import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
-import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.utils.Lists;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 
 public class InsertSelectiveElementGenerator extends AbstractXmlElementGenerator {
@@ -52,7 +52,7 @@ public class InsertSelectiveElementGenerator extends AbstractXmlElementGenerator
         answer.addElement(valuesTrimElement);
 
         for (IntrospectedColumn introspectedColumn :
-                ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns())) {
+                Lists.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns())) {
 
             if (introspectedColumn.isSequenceColumn()
                     || introspectedColumn.getFullyQualifiedJavaType().isPrimitive()) {

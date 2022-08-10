@@ -23,7 +23,7 @@ import org.mybatis.generator.api.dom.OutputUtilities;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
-import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.utils.Lists;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 
 public class InsertElementGenerator extends AbstractXmlElementGenerator {
@@ -57,7 +57,7 @@ public class InsertElementGenerator extends AbstractXmlElementGenerator {
 
         List<String> valuesClauses = new ArrayList<>();
         List<IntrospectedColumn> columns =
-                ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
+                Lists.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
         for (int i = 0; i < columns.size(); i++) {
             IntrospectedColumn introspectedColumn = columns.get(i);
 

@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: gateway-demo
+  cloud:
+    zookeeper:
+      connect-string: 101.33.212.245:2181
+    gateway:
+      enabled: true
+      routes:
+        - id: path_route
+          predicates:
+            - Path=/payment/*
+          uri: http://localhost:8004/
+          filters:
+            - AddRequestHeader=X-Request-Red, Blue
+server:
+  port: 9527

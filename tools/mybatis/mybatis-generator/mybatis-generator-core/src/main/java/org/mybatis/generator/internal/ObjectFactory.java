@@ -277,7 +277,7 @@ public class ObjectFactory {
         return answer;
     }
 
-    static IntrospectedTableStrategy strategy = new DefaultIntrospectedTableTypeStrategy();
+    private static IntrospectedTableStrategy strategy = new DefaultIntrospectedTableTypeStrategy();
 
     public static IntrospectedTable createIntrospectedTable(
             TableConfiguration tableConfiguration, FullyQualifiedTable table,

@@ -617,14 +617,10 @@ public class DatabaseIntrospector {
             for (IntrospectedColumn introspectedColumn : entry.getValue()) {
                 introspectedTable.addColumn(introspectedColumn);
             }
-
             calculatePrimaryKey(table, introspectedTable);
-
             enhanceIntrospectedTable(introspectedTable);
-
             answer.add(introspectedTable);
         }
-
         return answer;
     }
 

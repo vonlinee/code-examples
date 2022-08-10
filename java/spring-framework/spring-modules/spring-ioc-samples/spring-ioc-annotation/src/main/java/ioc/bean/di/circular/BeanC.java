@@ -2,7 +2,7 @@ package ioc.bean.di.circular;
 
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class BeanC {
 
 	private BeanD beanD;

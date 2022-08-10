@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.maker.codegen.mbp.mapper.InformationSchemaMapper">
+
+	<!-- 字段信息 -->
+    <resultMap id="ColumnsResultMap" type="io.maker.codegen.mbp.entity.Columns">
+        <result column="TABLE_CATALOG" property="tableCatalog" />
+        <result column="TABLE_SCHEMA" property="tableSchema" />
+        <result column="TABLE_NAME" property="tableName" />
+        <result column="COLUMN_NAME" property="columnName" />
+        <result column="ORDINAL_POSITION" property="ordinalPosition" />
+        <result column="COLUMN_DEFAULT" property="columnDefault" />
+        <result column="IS_NULLABLE" property="isNullable" />
+        <result column="DATA_TYPE" property="dataType" />
+        <result column="CHARACTER_MAXIMUM_LENGTH" property="characterMaximumLength" />
+        <result column="CHARACTER_OCTET_LENGTH" property="characterOctetLength" />
+        <result column="NUMERIC_PRECISION" property="numericPrecision" />
+        <result column="NUMERIC_SCALE" property="numericScale" />
+        <result column="DATETIME_PRECISION" property="datetimePrecision" />
+        <result column="CHARACTER_SET_NAME" property="characterSetName" />
+        <result column="COLLATION_NAME" property="collationName" />
+        <result column="COLUMN_TYPE" property="columnType" />
+        <result column="COLUMN_KEY" property="columnKey" />
+        <result column="EXTRA" property="extra" />
+        <result column="PRIVILEGES" property="privileges" />
+        <result column="COLUMN_COMMENT" property="columnComment" />
+        <result column="GENERATION_EXPRESSION" property="generationExpression" />
+    </resultMap>
+
+	<!-- 表信息 -->
+    <resultMap id="TablesResultMap" type="io.maker.codegen.mbp.entity.Tables">
+        <result column="TABLE_CATALOG" property="tableCatalog" />
+        <result column="TABLE_SCHEMA" property="tableSchema" />
+        <result column="TABLE_NAME" property="tableName" />
+        <result column="TABLE_TYPE" property="tableType" />
+        <result column="ENGINE" property="engine" />
+        <result column="VERSION" property="version" />
+        <result column="ROW_FORMAT" property="rowFormat" />
+        <result column="TABLE_ROWS" property="tableRows" />
+        <result column="AVG_ROW_LENGTH" property="avgRowLength" />
+        <result column="DATA_LENGTH" property="dataLength" />
+        <result column="MAX_DATA_LENGTH" property="maxDataLength" />
+        <result column="INDEX_LENGTH" property="indexLength" />
+        <result column="DATA_FREE" property="dataFree" />
+        <result column="AUTO_INCREMENT" property="autoIncrement" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="CHECK_TIME" property="checkTime" />
+        <result column="TABLE_COLLATION" property="tableCollation" />
+        <result column="CHECKSUM" property="checksum" />
+        <result column="CREATE_OPTIONS" property="createOptions" />
+        <result column="TABLE_COMMENT" property="tableComment" />
+    </resultMap>
+
+    <sql id="columnsColumnList">
+        TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE, ENGINE, VERSION, ROW_FORMAT, TABLE_ROWS, AVG_ROW_LENGTH, DATA_LENGTH, MAX_DATA_LENGTH, INDEX_LENGTH, DATA_FREE, AUTO_INCREMENT, CREATE_TIME, UPDATE_TIME, CHECK_TIME, TABLE_COLLATION, CHECKSUM, CREATE_OPTIONS, TABLE_COMMENT
+    </sql>
+
+    <sql id="tablesColumnList">
+        TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, ORDINAL_POSITION, COLUMN_DEFAULT, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, CHARACTER_OCTET_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE, DATETIME_PRECISION, CHARACTER_SET_NAME, COLLATION_NAME, COLUMN_TYPE, COLUMN_KEY, EXTRA, PRIVILEGES, COLUMN_COMMENT, GENERATION_EXPRESSION
+    </sql>
+
+	<select id="selectColumns" parameterType="map" resultMap="ColumnsResultMap">
+		SELECT * FROM `information_schema`.`COLUMNS`
+		WHERE 1 = 1
+		<if test="mapParam.tableName != null and mapParam.tableName != ''">
+			AND TABLE_NAME = #{mapParam.tableName}
+		</if>
+	</select>
+
+	<select id="selectTables" parameterType="map" resultMap="TablesResultMap">
+		SELECT * FROM `information_schema`.`TABLES`
+	</select>
+	
+	<select id="querySysTableIndex" parameterType="map" resultType="map">
+		SELECT
+			T.TABLE_ID,
+			T.NAME,
+			T.FLAG
+		FROM `information_schema`.`INNODB_SYS_TABLES` AS T
+		JOIN `information_schema`.`INNODB_SYS_INDEXES` AS I ON T.TABLE_ID = I.TABLE_ID
+		LEFT JOIN `information_schema`.`INNODB_SYS_FIELDS` AS F ON I.INDEX_ID = F.INDEX_ID
+	</select>
+	
+	<select id="queryColumnMetaInformation" parameterType="map" resultType="map">
+		SELECT
+			*
+		FROM `information_schema`.`TABLES` AS T
+			JOIN `information_schema`.`COLUMNS` AS C ON T.TABLE_NAME = C.TABLE_NAME
+		WHERE 1 = 1
+		<if test="mapParam.tableName != null and mapParam.tableName != ''">
+			AND INSTR(T.TABLE_NAME, #{mapParam.tableSchema}) <![CDATA[ > ]]> 0
+		</if>
+		<if test="mapParam.tableSchema != null and mapParam.tableName != ''">
+			AND INSTR(T.TABLE_SCHEMA, #{mapParam.tableSchema}) <![CDATA[ > ]]> 0
+		</if>
+	</select>
+</mapper>
+

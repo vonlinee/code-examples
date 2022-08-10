@@ -24,7 +24,7 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
-import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.utils.Lists;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
 
 public class InsertSelectiveMethodGenerator extends AbstractMethodGenerator {
@@ -51,7 +51,7 @@ public class InsertSelectiveMethodGenerator extends AbstractMethodGenerator {
         method.addBodyLine("return MyBatis3Utils.insert(this::insert, row, " + tableFieldName //$NON-NLS-1$
                 + ", c ->"); //$NON-NLS-1$
 
-        List<IntrospectedColumn> columns = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(
+        List<IntrospectedColumn> columns = Lists.removeIdentityAndGeneratedAlwaysColumns(
                 introspectedTable.getAllColumns());
         boolean first = true;
         for (IntrospectedColumn column : columns) {

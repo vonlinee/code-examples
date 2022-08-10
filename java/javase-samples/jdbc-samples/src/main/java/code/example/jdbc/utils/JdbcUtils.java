@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import javax.sql.DataSource;
-
 import org.apache.commons.dbutils.DbUtils;
 
 public final class JdbcUtils {
@@ -29,12 +27,16 @@ public final class JdbcUtils {
      */
     public static Connection getConnection(String dataBaseName) {
         if (flag) {
-
+        	
         }
         return null;
     }
+    
+    public static Connection getLocalMySQLConnection(String dataBaseName) {
+        return getMySQLConnection(dataBaseName, "localhost", 3306, USERNAME, PASSWORD);
+    }
 
-    public static Connection getConnection(String dbName, String ip, int port, String userName, String password) {
+    public static Connection getMySQLConnection(String dbName, String ip, int port, String userName, String password) {
         try {
             return DriverManager.getConnection(MYSQL_URL_PREFIX + dbName + MYSQL_URL_SUFFIX, USERNAME, PASSWORD);
         } catch (SQLException e) {

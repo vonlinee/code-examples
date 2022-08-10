@@ -12,7 +12,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.support.TransactionTemplate;
-import sample.spring.transaction.solution.declaratively.annotation.SpringContext;
+import sample.spring.transaction.utils.SpringUtils;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -23,7 +23,7 @@ import java.sql.SQLException;
         @ComponentScan("sample.spring.transaction.utils")
 })
 @PropertySource("classpath:jdbc.properties")
-@Import(SpringContext.class)
+@Import(SpringUtils.class)
 @EnableTransactionManagement
 public class DataSourceConfiguration {
 

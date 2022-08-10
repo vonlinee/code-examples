@@ -672,6 +672,7 @@ public abstract class IntrospectedTable {
         return isTrue(propertyHolder.getProperty(PropertyRegistry.ANY_ENABLE_SUB_PACKAGES));
     }
 
+    // javaClientGenerator标签
     protected String calculateJavaClientInterfacePackage() {
         JavaClientGeneratorConfiguration config = context
                 .getJavaClientGeneratorConfiguration();
@@ -702,7 +703,6 @@ public abstract class IntrospectedTable {
         if (context.getJavaClientGeneratorConfiguration() == null) {
             return;
         }
-
         StringBuilder sb = new StringBuilder();
         sb.append(calculateJavaClientInterfacePackage());
         sb.append('.');
@@ -939,6 +939,7 @@ public abstract class IntrospectedTable {
     /**
      * This method exists to give plugins the opportunity to replace the calculated rules if necessary.
      * 这方法的存在是为了让插件有机会在必要时替换计算出的规则。
+     *
      * @param rules the new rules
      */
     public void setRules(Rules rules) {

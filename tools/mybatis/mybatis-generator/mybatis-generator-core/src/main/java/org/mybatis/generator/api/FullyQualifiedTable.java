@@ -274,7 +274,6 @@ public class FullyQualifiedTable {
                 sb.append('.');
                 sb.append(introspectedCatalog.toLowerCase());
             }
-
             if (isNotEmpty(runtimeSchema)) {
                 sb.append('.');
                 sb.append(runtimeSchema.toLowerCase());
@@ -283,7 +282,6 @@ public class FullyQualifiedTable {
                 sb.append(introspectedSchema.toLowerCase());
             }
         }
-
         // TODO - strip characters that are not valid in package names
         return sb.toString();
     }

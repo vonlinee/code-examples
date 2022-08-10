@@ -1,0 +1,74 @@
+plugins {
+    // Spring Boot plugin requires Gradle 5 (5.6.x only) or Gradle 6 (6.3 or later). The current version is Gradle 4.10.3
+    // id 'org.springframework.boot' version '2.3.12.RELEASE'
+    // id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group 'io.trouble.maker'
+version '0.0.1.SNAPSHOT'
+description '生成器带web界面'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    // 基础库
+    implementation project(":devpl-base")
+    implementation project(":devpl-codegen")
+    implementation project(":trouble-maker-extension")
+
+    implementation libs.mybatis_plus_core
+    implementation libs.velocity
+    implementation libs.freemarker
+    implementation libs.beetl
+
+    compileOnly libs.jetbrains_anotations
+    testImplementation libs.sqlserver
+    testImplementation libs.postgresql
+    testImplementation libs.oracle as ConfigurableFileTree
+    testImplementation libs.dm as ConfigurableFileTree
+    testImplementation libs.kingbase as ConfigurableFileTree
+    testImplementation libs.h2
+    testImplementation libs.mysql5_driver
+    testImplementation libs.sqlite
+    testImplementation libs.firebird
+    // testImplementation libs.swagger_annotations
+
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.3.12.RELEASE'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+    // annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    // https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter
+    implementation 'com.alibaba:druid-spring-boot-starter:1.2.9'
+
+    implementation libs.mysql5_driver
+    // https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter
+    implementation libs.knife4j_spring_boot_starter
+    implementation libs.mybatis_generator_core
+    implementation libs.mybatis_dynamic_sql
+
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
+    // implementation 'org.apache.logging.log4j:log4j-api:2.17.2'
+    // https://mvnrepository.com/artifact/org.assertj/assertj-core
+    testImplementation 'org.assertj:assertj-core:3.22.0'
+    // https://mvnrepository.com/artifact/org.hsqldb/hsqldb
+    testImplementation 'org.hsqldb:hsqldb:2.5.1'
+
+    implementation 'org.reflections:reflections:0.10.2'
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.0'
+	implementation libs.javax_annotation_api
+	// https://mvnrepository.com/artifact/com.netflix.archaius/archaius-core
+	implementation 'com.netflix.archaius:archaius-core:0.7.7'
+	
+}
+
+test {
+    useJUnitPlatform()
+}

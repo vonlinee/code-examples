@@ -8,6 +8,14 @@ public class C001_ThreadLocal {
 
     public static void main(String[] args) {
         test1();
+        
+        ThreadLocal.withInitial(null);
+        
+        int i = ThreadLocal.class.getConstructors().length;
+        System.out.println(i);
+        
+        ThreadLocal.withInitial(() -> 10);
+        
     }
 
     public static void test1() {

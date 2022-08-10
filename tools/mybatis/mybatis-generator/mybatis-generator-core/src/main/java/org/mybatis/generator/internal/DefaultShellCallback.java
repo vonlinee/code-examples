@@ -35,7 +35,7 @@ public class DefaultShellCallback implements ShellCallback {
 		File project = new File(targetProject);
 
 		if (!project.exists()) {
-			log.info("{}不存在，自动创建", project.getAbsolutePath());
+			log.info("目录{}不存在，自动创建", project.getAbsolutePath());
 			try {
 				FileUtils.forceMkdir(project);
 			} catch (IOException e) {

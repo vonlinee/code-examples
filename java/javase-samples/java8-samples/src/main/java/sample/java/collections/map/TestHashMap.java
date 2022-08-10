@@ -21,6 +21,7 @@ public class TestHashMap {
 		Hero h5 = hashMap.put("3", new Hero("C"));
 		U.println(hashMap);
 		System.out.println("1232".hashCode());
+
 	}
 	
 	public static void test2() {

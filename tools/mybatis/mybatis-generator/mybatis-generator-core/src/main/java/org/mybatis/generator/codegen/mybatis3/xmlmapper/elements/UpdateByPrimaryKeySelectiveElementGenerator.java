@@ -19,7 +19,7 @@ import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
-import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.utils.Lists;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 
 public class UpdateByPrimaryKeySelectiveElementGenerator extends AbstractXmlElementGenerator {
@@ -57,7 +57,7 @@ public class UpdateByPrimaryKeySelectiveElementGenerator extends AbstractXmlElem
         answer.addElement(dynamicElement);
 
         for (IntrospectedColumn introspectedColumn :
-                ListUtilities.removeGeneratedAlwaysColumns(introspectedTable.getNonPrimaryKeyColumns())) {
+                Lists.removeGeneratedAlwaysColumns(introspectedTable.getNonPrimaryKeyColumns())) {
             sb.setLength(0);
             sb.append(introspectedColumn.getJavaProperty());
             sb.append(" != null"); //$NON-NLS-1$

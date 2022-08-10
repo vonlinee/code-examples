@@ -1,13 +1,25 @@
 package code.example.jdbc.primary;
 
 public class DataSourceTest {
-	
-	//驱动包内有DataSource的实现：MysqlDataSource
-	//A JNDI DataSource for a Mysql JDBC connection
-	
+
+	// 驱动包内有DataSource的实现：MysqlDataSource
+	// A JNDI DataSource for a Mysql JDBC connection
+
 	public static void main(String[] args) {
-		
-		
+		for (int i = 0; i < 10000; i++) {
+			new Thread(() -> method()).start();
+		}
+	}
+
+	public static void method() {
+		long t21, t22;
+		long t11 = System.currentTimeMillis();
+		synchronized (DataSourceTest.class) {
+			t21 = System.currentTimeMillis();
+			t22 = System.currentTimeMillis();
+		}
+		long t12 = System.currentTimeMillis();
+		System.out.println("" + (t12 - t11) + " " + (t22 - t21));
 	}
 }
 //作为 DriverManager 工具的替代项，DataSource 对象是获取连接的首选方法。

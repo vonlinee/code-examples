@@ -16,7 +16,7 @@
 package org.mybatis.generator.runtime.dynamic.sql.elements;
 
 import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.utils.Lists;
 import org.mybatis.generator.config.GeneratedKey;
 
 public class Utils {
@@ -46,7 +46,7 @@ public class Utils {
     }
 
     public static boolean generateUpdateByPrimaryKey(IntrospectedTable introspectedTable) {
-        if (ListUtilities.removeGeneratedAlwaysColumns(introspectedTable.getNonPrimaryKeyColumns()).isEmpty()) {
+        if (Lists.removeGeneratedAlwaysColumns(introspectedTable.getNonPrimaryKeyColumns()).isEmpty()) {
             return false;
         }
 

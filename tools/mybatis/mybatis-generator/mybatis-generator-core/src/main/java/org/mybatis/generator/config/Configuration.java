@@ -47,6 +47,7 @@ public class Configuration {
     }
 
     /**
+     * 简单的校验
      * This method does a simple validate, it makes sure that all required fields have been filled in and that all
      * implementation classes exist and are of the proper type. It does not do any more complex operations such as:
      * validating that database tables exist or validating that named columns exist
@@ -55,7 +56,6 @@ public class Configuration {
      */
     public void validate() throws InvalidConfigurationException {
         List<String> errors = new ArrayList<>();
-
         for (String classPathEntry : classPathEntries) {
             if (!isNotEmpty(classPathEntry)) {
                 errors.add(getString("ValidationError.19")); //$NON-NLS-1$
@@ -63,7 +63,6 @@ public class Configuration {
                 break;
             }
         }
-
         if (contexts.isEmpty()) {
             errors.add(getString("ValidationError.11")); //$NON-NLS-1$
         } else {
@@ -71,7 +70,6 @@ public class Configuration {
                 context.validate(errors);
             }
         }
-
         if (!errors.isEmpty()) {
             throw new InvalidConfigurationException(errors);
         }

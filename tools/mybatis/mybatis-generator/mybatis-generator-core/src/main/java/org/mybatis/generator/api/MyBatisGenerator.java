@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.api;
 
-import static org.mybatis.generator.internal.util.ClassloaderUtility.getCustomClassloader;
+import static org.mybatis.generator.internal.util.ClassloaderUtils.getCustomClassloader;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.io.BufferedWriter;
@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -203,6 +202,7 @@ public class MyBatisGenerator {
         RootClassInfo.reset();
 
         // calculate the contexts to run
+        // contextIds：选择执行哪些上下文
         List<Context> contextsToRun;
         if (contextIds == null || contextIds.isEmpty()) {
             contextsToRun = configuration.getContexts();

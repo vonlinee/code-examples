@@ -41,12 +41,15 @@ public class MySQLGenerator {
             context.addProperty(PropertyRegistry.CODE_GENERATION_RULE_IMPL, "");
         });
         stopWatch.stop();
-        //
+        // 进度指示器
         DefaultShellCallback callback = new DefaultShellCallback(overwrite);
         // 生成器
         stopWatch.start("代码生成");
         MyBatisGenerator generator = new MyBatisGenerator(config, callback, warnings);
         // 开始生成
+        // 调用此方法：
+        // 1.加载数据库表
+        // 2.生成相应的Generator实例
         generator.generate(null);
         List<IntrospectedTable> tables = config.getContexts().get(0).getIntrospectedTables();
         for (IntrospectedTable table : tables) {

@@ -71,7 +71,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zookeeper-discovery</artifactId>
-            <version>2.2.2.RELEASE</version>
             <!--        <exclusions>-->
             <!--先排除自带的zookeeper3.5.3-->
             <!--            <exclusion>-->
@@ -79,6 +78,10 @@
             <!--                <artifactId>zookeeper</artifactId>-->
             <!--            </exclusion>-->
             <!--        </exclusions>-->
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
 
         <!--添加zookeeper3.4.9版本（引入对应版本的依赖）-->

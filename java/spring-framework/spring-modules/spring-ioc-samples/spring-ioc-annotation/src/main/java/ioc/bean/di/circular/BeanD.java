@@ -1,5 +1,8 @@
 package ioc.bean.di.circular;
 
+import org.springframework.stereotype.Component;
+
+//@Component
 public class BeanD {
 
 	private BeanC beanC;

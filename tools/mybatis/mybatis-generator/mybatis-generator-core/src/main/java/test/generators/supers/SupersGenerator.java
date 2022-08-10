@@ -74,8 +74,6 @@ public class SupersGenerator implements CompilationUnitGenerator {
         FullyQualifiedJavaType fqjt = new FullyQualifiedJavaType(BASE_PACKAGE + ".BaseInterface");
         Interface ifc = new Interface(fqjt);
         ifc.setVisibility(JavaVisibility.PUBLIC);
-
         return ifc;
     }
-
 }

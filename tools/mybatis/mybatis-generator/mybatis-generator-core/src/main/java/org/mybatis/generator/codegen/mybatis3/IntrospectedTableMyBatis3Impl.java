@@ -193,7 +193,6 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     @Override
     public List<GeneratedJavaFile> getGeneratedJavaFiles() {
         List<GeneratedJavaFile> answer = new ArrayList<>();
-
         for (AbstractJavaGenerator javaGenerator : javaGenerators) {
             log.info("[获取待生成的编译单元] => {}", javaGenerator);
             // 确定生成的文件的内容

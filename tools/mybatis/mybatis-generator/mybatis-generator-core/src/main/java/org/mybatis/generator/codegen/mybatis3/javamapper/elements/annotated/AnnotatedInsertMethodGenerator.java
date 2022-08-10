@@ -28,7 +28,7 @@ import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
-import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.utils.Lists;
 import org.mybatis.generator.codegen.mybatis3.javamapper.elements.InsertMethodGenerator;
 
 public class AnnotatedInsertMethodGenerator extends InsertMethodGenerator {
@@ -56,7 +56,7 @@ public class AnnotatedInsertMethodGenerator extends InsertMethodGenerator {
 
         List<String> valuesClauses = new ArrayList<>();
         Iterator<IntrospectedColumn> iter =
-                ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns())
+                Lists.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns())
                 .iterator();
         boolean hasFields = false;
         while (iter.hasNext()) {

@@ -29,7 +29,7 @@ import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Parameter;
-import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.utils.Lists;
 import org.mybatis.generator.config.GeneratedKey;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
 
@@ -281,7 +281,7 @@ public class FragmentGenerator {
     private List<String> getSetLines(List<IntrospectedColumn> columnList, String firstLinePrefix,
                                  String subsequentLinePrefix, boolean terminate, String fragment) {
         List<String> lines = new ArrayList<>();
-        List<IntrospectedColumn> columns = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(columnList);
+        List<IntrospectedColumn> columns = Lists.removeIdentityAndGeneratedAlwaysColumns(columnList);
         Iterator<IntrospectedColumn> iter = columns.iterator();
         boolean first = true;
         while (iter.hasNext()) {

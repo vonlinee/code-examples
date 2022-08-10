@@ -9,6 +9,7 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.util.Objects;
 
 @Component("spring-utils")
@@ -24,6 +25,10 @@ public class SpringUtils implements ApplicationContextAware, EnvironmentAware {
     }
 
     private static SpringUtils utils; //singleton instance
+
+    public static <T> T getBean(String name, Class<T> requiredType) {
+        return utils.getApplicationContext().getBean(name, requiredType);
+    }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

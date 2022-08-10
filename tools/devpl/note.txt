@@ -1,0 +1,18 @@
+
+grade dependencies
+
+使用命令[gradle -q dependencies {项目名}:dependencies]查看项目的依赖信息
+1.gradle -q dependencies trouble-maker-base:dependencies
+2.gradle -q dependencies mybatis-generator:dependencies
+
+gradle -q dependencies api:dependencies webapp:dependencies
+
+过滤依赖信息testCompile
+gradle -q {项目名}:dependencies --configuration testCompile
+
+
+
+
+
+
+

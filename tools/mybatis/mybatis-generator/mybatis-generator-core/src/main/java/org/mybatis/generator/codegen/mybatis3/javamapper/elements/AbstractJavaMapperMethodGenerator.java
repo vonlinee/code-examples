@@ -23,7 +23,7 @@ import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
 import org.mybatis.generator.codegen.AbstractGenerator;
-import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.utils.Lists;
 import org.mybatis.generator.config.GeneratedKey;
 
 /**
@@ -188,7 +188,7 @@ public abstract class AbstractJavaMapperMethodGenerator extends AbstractGenerato
         javaIndent(sb, 1);
         sb.append("\"set "); //$NON-NLS-1$
 
-        Iterator<IntrospectedColumn> iter = ListUtilities.removeGeneratedAlwaysColumns(columnList).iterator();
+        Iterator<IntrospectedColumn> iter = Lists.removeGeneratedAlwaysColumns(columnList).iterator();
         while (iter.hasNext()) {
             IntrospectedColumn introspectedColumn = iter.next();
 

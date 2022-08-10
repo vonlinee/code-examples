@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import sample.spring.transaction.utils.SpringUtils;
 
 /**
  * 1.需要DataSource 2.需要TransactionManager
@@ -80,7 +81,7 @@ public class DeclarativeTransactionAnnotation {
 	public static void printDataSourceInformation() {
 		DataSource dataSource = null;
 		try {
-			dataSource = SpringContext.getBean(DataSource.class);
+			dataSource = SpringUtils.getBean(DataSource.class);
 		} catch (Exception e) {
 			if (e instanceof NoUniqueBeanDefinitionException) {
 				String message = e.getMessage();
@@ -89,7 +90,7 @@ public class DeclarativeTransactionAnnotation {
 					String trim = split[split.length - 1].trim();
 					String[] split2 = trim.split(",");
 					for (String beanName : split2) {
-						dataSource = SpringContext.getBean(beanName.trim(), DataSource.class);
+						dataSource = SpringUtils.getBean(beanName.trim(), DataSource.class);
 						System.out.println(dataSource.toString());
 						try (Connection connection = dataSource.getConnection()) {
 							System.out.println(connection);
