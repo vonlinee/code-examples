@@ -11,49 +11,162 @@ import java.util.*;
 @Data
 public class ClassDefinition implements Serializable, Comparable<ClassDefinition> {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private boolean isInner = false; // 是否是内部类
+	private boolean isInner = false; // 是否是内部类
 
-    /**
-     * Class-1, Interface-2, Annotation-4, Array-8
-     */
-    private int classType;
+	/**
+	 * Class-1, Interface-2, Annotation-4, Array-8
+	 */
+	private int classType;
 
-    private String className; // 类名
-    private String packageName; // 包名
-    private String documentation; // 类上的注释信息,暂时以文本存储
-    private int modifier; // 修饰符
+	private String className; // 类名
+	private String packageName; // 包名
+	private String documentation; // 类上的注释信息,暂时以文本存储
+	private int modifier; // 修饰符
 
-    /*
-     * inherit metadata
-     */
-    private Map<String, String> superInterfaces; // 父接口
-    private Map<String, String> superClasses; // 父类只有1个
-    private Map<String, String> declaredAnnotations; // 类上的注解
+	/*
+	 * inherit metadata
+	 */
+	private Map<String, String> superInterfaces; // 父接口
+	private Map<String, String> superClasses; // 父类只有1个
+	private Map<String, String> declaredAnnotations; // 类上的注解
 
-    private Set<String> importList; // 导入列表
+	private Set<String> importList; // 导入列表
 
-    /**
-     *
-     */
-    private ClassDefinition outerClassDefinition;
-    private List<ClassDefinition> innerClassDefinitions;
-    private List<FieldDefinition> fieldDefinitions;
-    private List<MethodDefinition> methodDefinitions;
+	/**
+	 *
+	 */
+	private ClassDefinition outerClassDefinition;
+	private List<ClassDefinition> innerClassDefinitions;
+	private List<FieldDefinition> fieldDefinitions;
+	private List<MethodDefinition> methodDefinitions;
 
-    public ClassDefinition() {
-        superInterfaces = new HashMap<>();
-        superClasses = new HashMap<>(1);
-        declaredAnnotations = new HashMap<>();
-        importList = new HashSet<>();
-        innerClassDefinitions = new ArrayList<>();
-        fieldDefinitions = new ArrayList<>();
-        methodDefinitions = new ArrayList<>();
-    }
+	public ClassDefinition() {
+		superInterfaces = new HashMap<>();
+		superClasses = new HashMap<>(1);
+		declaredAnnotations = new HashMap<>();
+		importList = new HashSet<>();
+		innerClassDefinitions = new ArrayList<>();
+		fieldDefinitions = new ArrayList<>();
+		methodDefinitions = new ArrayList<>();
+	}
 
-    @Override
-    public int compareTo(ClassDefinition o) {
-        return 0;
-    }
+	@Override
+	public int compareTo(ClassDefinition o) {
+		return 0;
+	}
+
+	public boolean isInner() {
+		return isInner;
+	}
+
+	public void setInner(boolean isInner) {
+		this.isInner = isInner;
+	}
+
+	public int getClassType() {
+		return classType;
+	}
+
+	public void setClassType(int classType) {
+		this.classType = classType;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+
+	public String getDocumentation() {
+		return documentation;
+	}
+
+	public void setDocumentation(String documentation) {
+		this.documentation = documentation;
+	}
+
+	public int getModifier() {
+		return modifier;
+	}
+
+	public void setModifier(int modifier) {
+		this.modifier = modifier;
+	}
+
+	public Map<String, String> getSuperInterfaces() {
+		return superInterfaces;
+	}
+
+	public void setSuperInterfaces(Map<String, String> superInterfaces) {
+		this.superInterfaces = superInterfaces;
+	}
+
+	public Map<String, String> getSuperClasses() {
+		return superClasses;
+	}
+
+	public void setSuperClasses(Map<String, String> superClasses) {
+		this.superClasses = superClasses;
+	}
+
+	public Map<String, String> getDeclaredAnnotations() {
+		return declaredAnnotations;
+	}
+
+	public void setDeclaredAnnotations(Map<String, String> declaredAnnotations) {
+		this.declaredAnnotations = declaredAnnotations;
+	}
+
+	public Set<String> getImportList() {
+		return importList;
+	}
+
+	public void setImportList(Set<String> importList) {
+		this.importList = importList;
+	}
+
+	public ClassDefinition getOuterClassDefinition() {
+		return outerClassDefinition;
+	}
+
+	public void setOuterClassDefinition(ClassDefinition outerClassDefinition) {
+		this.outerClassDefinition = outerClassDefinition;
+	}
+
+	public List<ClassDefinition> getInnerClassDefinitions() {
+		return innerClassDefinitions;
+	}
+
+	public void setInnerClassDefinitions(List<ClassDefinition> innerClassDefinitions) {
+		this.innerClassDefinitions = innerClassDefinitions;
+	}
+
+	public List<FieldDefinition> getFieldDefinitions() {
+		return fieldDefinitions;
+	}
+
+	public void setFieldDefinitions(List<FieldDefinition> fieldDefinitions) {
+		this.fieldDefinitions = fieldDefinitions;
+	}
+
+	public List<MethodDefinition> getMethodDefinitions() {
+		return methodDefinitions;
+	}
+
+	public void setMethodDefinitions(List<MethodDefinition> methodDefinitions) {
+		this.methodDefinitions = methodDefinitions;
+	}
+
 }

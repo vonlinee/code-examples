@@ -9,17 +9,10 @@ import java.util.Map;
 
 import io.maker.codegen.core.db.meta.column.ColumnMetaData;
 import io.maker.codegen.core.db.meta.index.IndexMetaData;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
 
 /**
  * Table meta data.
  */
-@Getter
-@EqualsAndHashCode
-@ToString
 public class TableMetaData {
 
     private boolean autoIncrement = false;
@@ -29,7 +22,6 @@ public class TableMetaData {
 
     private final Map<String, IndexMetaData> indexes;
 
-    @Getter(AccessLevel.NONE)
     private final List<String> columnNames = new ArrayList<>();
 
     private final List<String> primaryKeyColumns = new ArrayList<>();
@@ -111,4 +103,24 @@ public class TableMetaData {
     public void setCaseSensitive(boolean caseSensitive) {
         this.caseSensitive = caseSensitive;
     }
+
+	public boolean isAutoIncrement() {
+		return autoIncrement;
+	}
+
+	public boolean isCaseSensitive() {
+		return caseSensitive;
+	}
+
+	public Map<String, ColumnMetaData> getColumns() {
+		return columns;
+	}
+
+	public Map<String, IndexMetaData> getIndexes() {
+		return indexes;
+	}
+
+	public List<String> getPrimaryKeyColumns() {
+		return primaryKeyColumns;
+	}
 }

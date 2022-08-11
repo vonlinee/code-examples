@@ -13,7 +13,6 @@ import lombok.Data;
 /**
  * Java的类定义：用于FreeMarker的模板文件映射
  */
-@Data
 public class ClassDefinition implements Serializable, Comparable<ClassDefinition> {
 
     private static final long serialVersionUID = 1L;
@@ -61,4 +60,117 @@ public class ClassDefinition implements Serializable, Comparable<ClassDefinition
     public int compareTo(ClassDefinition o) {
         return 0;
     }
+
+	public boolean isInner() {
+		return isInner;
+	}
+
+	public void setInner(boolean isInner) {
+		this.isInner = isInner;
+	}
+
+	public int getClassType() {
+		return classType;
+	}
+
+	public void setClassType(int classType) {
+		this.classType = classType;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+
+	public String getDocumentation() {
+		return documentation;
+	}
+
+	public void setDocumentation(String documentation) {
+		this.documentation = documentation;
+	}
+
+	public int getModifier() {
+		return modifier;
+	}
+
+	public void setModifier(int modifier) {
+		this.modifier = modifier;
+	}
+
+	public Map<String, String> getSuperInterfaces() {
+		return superInterfaces;
+	}
+
+	public void setSuperInterfaces(Map<String, String> superInterfaces) {
+		this.superInterfaces = superInterfaces;
+	}
+
+	public Map<String, String> getSuperClasses() {
+		return superClasses;
+	}
+
+	public void setSuperClasses(Map<String, String> superClasses) {
+		this.superClasses = superClasses;
+	}
+
+	public Map<String, String> getDeclaredAnnotations() {
+		return declaredAnnotations;
+	}
+
+	public void setDeclaredAnnotations(Map<String, String> declaredAnnotations) {
+		this.declaredAnnotations = declaredAnnotations;
+	}
+
+	public Set<String> getImportList() {
+		return importList;
+	}
+
+	public void setImportList(Set<String> importList) {
+		this.importList = importList;
+	}
+
+	public ClassDefinition getOuterClassDefinition() {
+		return outerClassDefinition;
+	}
+
+	public void setOuterClassDefinition(ClassDefinition outerClassDefinition) {
+		this.outerClassDefinition = outerClassDefinition;
+	}
+
+	public List<ClassDefinition> getInnerClassDefinitions() {
+		return innerClassDefinitions;
+	}
+
+	public void setInnerClassDefinitions(List<ClassDefinition> innerClassDefinitions) {
+		this.innerClassDefinitions = innerClassDefinitions;
+	}
+
+	public List<FieldDefinition> getFieldDefinitions() {
+		return fieldDefinitions;
+	}
+
+	public void setFieldDefinitions(List<FieldDefinition> fieldDefinitions) {
+		this.fieldDefinitions = fieldDefinitions;
+	}
+
+	public List<MethodDefinition> getMethodDefinitions() {
+		return methodDefinitions;
+	}
+
+	public void setMethodDefinitions(List<MethodDefinition> methodDefinitions) {
+		this.methodDefinitions = methodDefinitions;
+	}
+    
 }
