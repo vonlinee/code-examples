@@ -1,0 +1,5 @@
+rootProject.name = 'devpl'
+include 'devpl-codegen'
+include 'devpl-base'
+include 'devpl-commons'
+
