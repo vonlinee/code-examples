@@ -12,7 +12,7 @@ import code.example.springboot.interceptor.RequestInterceptor;
 @Configuration
 public class WebAppConfigurer implements WebMvcConfigurer {
 
-	private Logger log = LoggerFactory.getLogger(WebAppConfigurer.class);
+	private final Logger log = LoggerFactory.getLogger(WebAppConfigurer.class);
 	
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

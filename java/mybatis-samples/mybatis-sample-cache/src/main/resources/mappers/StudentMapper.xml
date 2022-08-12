@@ -3,7 +3,8 @@
 <mapper namespace="code.example.mybatis.mapper.StudentMapper">
 
 	<!-- cache配置 -->
-	<cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true" />
+	<cache/>
+<!--	<cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true" />-->
 
 	<resultMap id="BaseResultMap"
 		type="code.example.mybatis.entity.Student">
@@ -23,9 +24,13 @@
 	<select id="queryByStuId" resultMap="BaseResultMap">
 		SELECT * FROM t_student WHERE STU_ID = #{stuId}
 	</select>
-	
+
+	<select id="queryByStuNo" resultMap="BaseResultMap">
+		SELECT * FROM t_student WHERE STU_NO = #{stuNo}
+	</select>
+
 	<!-- 在 mapper 文件配置支持 cache 后，如果需要对个别查询进行调整，可以单独设置 cache -->
-	<select id="queryByStuNo" resultMap="BaseResultMap" useCache="true">
+	<select id="queryByStuNoUseCache" resultMap="BaseResultMap" useCache="true">
 		SELECT * FROM t_student WHERE STU_NO = #{stuNo}
 	</select>
 </mapper>

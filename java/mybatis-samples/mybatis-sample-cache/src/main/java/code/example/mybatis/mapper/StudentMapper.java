@@ -11,4 +11,5 @@ public interface StudentMapper {
     List<Student> queryAll();
     Student queryByStuId(@Param("stuId") String stuId);
     Student queryByStuNo(@Param("stuNo") String stuNo);
+    Student queryByStuNoUseCache(@Param("stuNo") String stuNo);
 }
