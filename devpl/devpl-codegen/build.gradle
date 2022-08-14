@@ -7,8 +7,6 @@ sourceCompatibility = '11'
 group 'org.example'
 version '1.0-SNAPSHOT'
 
-
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
