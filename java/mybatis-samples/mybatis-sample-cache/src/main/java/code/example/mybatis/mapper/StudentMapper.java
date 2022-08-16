@@ -12,4 +12,6 @@ public interface StudentMapper {
     Student queryByStuId(@Param("stuId") String stuId);
     Student queryByStuNo(@Param("stuNo") String stuNo);
     Student queryByStuNoUseCache(@Param("stuNo") String stuNo);
+
+    int updateById();
 }

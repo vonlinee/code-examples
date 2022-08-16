@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.apache.ibatis.executor.CachingExecutor;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -22,6 +23,8 @@ public class CacheTest {
     public static final String MYBATIS_CONFIGURATION_FILE_PATH = "mybatis-cache.xml";
 
     private SqlSession session;
+
+    CachingExecutor executor;
 
     SqlSessionFactory sqlSessionFactory;
 
@@ -87,27 +90,61 @@ public class CacheTest {
         sqlSession2.commit();
         System.out.println(stu1 == stu2); // false, 一级缓存
     }
-opppppoo
+
+    /**
+     * 1.全局配置文件中 <setting name="cacheEnabled" value="false"/>
+     * 2.mapper.xml里没有<cache/>标签
+     * 3.select标签useCache为true/false都无影响，与它无关
+     */
     @Test
     public void test1() {
         StudentMapper studentMapper = session.getMapper(StudentMapper.class);
-
         Student stu1 = studentMapper.queryByStuId("7b838d7a-741a-11ec-9b88-38142830461b");
-        System.out.println(stu1);
         System.out.println("使用同一个Session再执行一次");
         Student stu2 = studentMapper.queryByStuId("7b838d7a-741a-11ec-9b88-38142830461b");  //不会执行sql
-        System.out.println(stu2);
 
+        // 每个SqlSession内部的Executor中的缓存localCache
 
 //      第一个 SqlSession 实际只发生过一次查询，而第二次查询就从缓存中取出了，也就是 SqlSession 层面的一级缓存。
 //      为了克服这个问题，我们往往需要配置二级缓存，使得缓存在 SqlSessionFactory 层面上能够提供给各个 SqlSession 对象共享
         System.out.println(stu1 == stu2); // true
 
-        System.out.println("现在创建一个新的SqlSeesion对象在执行一次");
+        System.out.println("现在创建一个新的SqlSeesion对象再执行一次");
         SqlSession session2 = sqlSessionFactory.openSession();
-        Student stu3 = session2.selectOne("code.example.mybatis.mapper.StudentMapper.queryByStuId", "7b838d7a-741a-11ec-9b88-38142830461b");
-        System.out.println(stu3);
+
+        StudentMapper mapper = session2.getMapper(StudentMapper.class);
+        Student stu3 = mapper.queryByStuId("7b838d7a-741a-11ec-9b88-38142830461b");
         System.out.println(stu3 == stu1); // false
+        //请注意，当我们使用二级缓存的时候，sqlSession调用了commit方法后才会生效
+        session2.commit();
+
+    }
+
+    /**
+     * 1.全局配置文件中 <setting name="cacheEnabled" value="true"/>
+     * 2.开启二级缓存：mapper.xml里有<cache/>标签
+     * 3.select标签useCache为true，表示使用缓存
+     */
+    @Test
+    public void test2() {
+        StudentMapper studentMapper = session.getMapper(StudentMapper.class);
+        Student stu1 = studentMapper.queryByStuId("7b838d7a-741a-11ec-9b88-38142830461b");
+        System.out.println("使用同一个Session再执行一次");
+        Student stu2 = studentMapper.queryByStuId("7b838d7a-741a-11ec-9b88-38142830461b");  //不会执行sql
+
+        // 每个SqlSession内部的Executor中的缓存localCache
+
+//      第一个 SqlSession 实际只发生过一次查询，而第二次查询就从缓存中取出了，也就是 SqlSession 层面的一级缓存。
+//      为了克服这个问题，我们往往需要配置二级缓存，使得缓存在 SqlSessionFactory 层面上能够提供给各个 SqlSession 对象共享
+        System.out.println(stu1 == stu2); // true
+
+        System.out.println("现在创建一个新的SqlSeesion对象再执行一次");
+        SqlSession session2 = sqlSessionFactory.openSession();
+
+        StudentMapper mapper = session2.getMapper(StudentMapper.class);
+        Student stu3 = mapper.queryByStuId("7b838d7a-741a-11ec-9b88-38142830461b");
+        System.out.println(stu3 == stu1); // false
+        //请注意，当我们使用二级缓存的时候，sqlSession调用了commit方法后才会生效
         //请注意，当我们使用二级缓存的时候，sqlSession调用了commit方法后才会生效
         session2.commit();
     }

@@ -12,7 +12,15 @@ API文档编写，前后端代码调试
 
 
 
+SELECT unix_timestamp()
 
+-- 如果参数date满足yyyy-MM-dd HH:mm:ss形式，则可以直接unix_timestamp(string date) 得到参数对应的时间戳
+SELECT unix_timestamp('2022-08-15 10:08:02')
+
+SELECT date_format(now(), '%Y-%m-%d %H:%m:%s')
+
+-- 如果参数date满足yyyy-MM-dd HH:mm:ss形式，则我们需要指定date的形式，在进行转换
+SELECT unix_timestamp('2009-03-20')
 
 
 

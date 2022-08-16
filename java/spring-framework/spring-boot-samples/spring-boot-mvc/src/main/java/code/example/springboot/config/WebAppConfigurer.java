@@ -18,7 +18,7 @@ public class WebAppConfigurer implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 可添加多个
     	log.info("WebAppConfigurer#addInterceptors");
-        registry.addInterceptor(new LogInterceptor()).addPathPatterns("/**");
-        registry.addWebRequestInterceptor(new RequestInterceptor()).addPathPatterns("/**");
+//        registry.addInterceptor(new LogInterceptor()).addPathPatterns("/**");
+//        registry.addWebRequestInterceptor(new RequestInterceptor()).addPathPatterns("/**");
     }
 }

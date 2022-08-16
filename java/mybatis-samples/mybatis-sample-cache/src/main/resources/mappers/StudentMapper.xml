@@ -21,7 +21,7 @@
 		SELECT * FROM t_student
 	</select>
 
-	<select id="queryByStuId" resultMap="BaseResultMap">
+	<select id="queryByStuId" resultMap="BaseResultMap" flushCache="false" useCache="true">
 		SELECT * FROM t_student WHERE STU_ID = #{stuId}
 	</select>
 
@@ -33,4 +33,8 @@
 	<select id="queryByStuNoUseCache" resultMap="BaseResultMap" useCache="true">
 		SELECT * FROM t_student WHERE STU_NO = #{stuNo}
 	</select>
+
+	<update id="updateById" flushCache="true">
+
+	</update>
 </mapper>
