@@ -13,7 +13,6 @@ public class DataSourceConfiguration {
 
 	@Bean
 	public DataSource dataSource() {
-		DynamicDataSource dataSource = new DynamicDataSource();
-		return dataSource;
+		return null;
 	}
 }
