@@ -1,5 +1,7 @@
 package io.devpl.commons.db.jdbc;
 
+import io.devpl.commons.utils.SpringUtils;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.lang.Nullable;
@@ -17,17 +19,23 @@ import java.util.Map;
  *
  * @see org.springframework.jdbc.datasource.lookup.MapDataSourceLookup
  */
-@Component
+@Component(value = "dataSourceRegistry")
 public class DataSourceRegistry implements DataSourceLookup, InitializingBean {
 
-	private final Map<String, DataSourceProperties> dataSourceMetadatas = new HashMap<>(4);
-	
+    /**
+     * 存储数据源的元数据信息
+     */
+    private final Map<String, DataSourceProperties> dataSourceMetadatas = new HashMap<>(4);
+
+    /**
+     * 存放数据源实例
+     */
     private final Map<String, DataSource> dataSources = new HashMap<>(4);
 
     public DataSourceRegistry() {
-    	
+
     }
-    
+
     public DataSourceRegistry(Map<String, DataSource> dataSources) {
         setDataSources(dataSources);
     }
@@ -88,8 +96,21 @@ public class DataSourceRegistry implements DataSourceLookup, InitializingBean {
         return dataSources.size();
     }
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		
-	}
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        try {
+            Map<String, DataSourceProperties> dataSourcePropertiesMap = SpringUtils.getBeansOfType(DataSourceProperties.class);
+            this.dataSourceMetadatas.putAll(dataSourcePropertiesMap);
+            dataSourcePropertiesMap.forEach((name, props) -> {
+                DataSource dataSource = props.initializeDataSourceBuilder().build();
+                this.dataSources.put(name, dataSource);
+            });
+        } catch (BeanCreationException exception) {
+            throw new RuntimeException(exception.getMessage());
+        }
+    }
+
+    public DataSourceProperties getMetaInfomation(String dataSourceName) {
+        return dataSourceMetadatas.get(dataSourceName);
+    }
 }

@@ -4,6 +4,7 @@ package io.devpl.utils;
  * An attribute which allows to store a value reference. It may be updated atomically and so is thread-safe.
  *
  * @param <T> the type of the value it holds.
+ * @see io.netty.util.Attribute
  */
 public interface Attribute<T> {
 
