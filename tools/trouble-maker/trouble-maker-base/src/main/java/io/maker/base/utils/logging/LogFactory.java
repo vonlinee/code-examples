@@ -51,7 +51,7 @@ public class LogFactory {
 
     private static final LogFactory singleton = new LogFactory();
 
-    private final Constructor<? extends Logger> discoveredLogConstructor;
+    private final Constructor<? extends Log> discoveredLogConstructor;
 
     /**
      * Private constructor that is not available for public use.
@@ -73,10 +73,10 @@ public class LogFactory {
         // Look via a ServiceLoader for a Log implementation that has a
         // constructor taking the String name.
         // ServiceLoader的load方法将在META-INF/services/com.study.SPIService中配置的子类都进行了加载。
-        ServiceLoader<Logger> logLoader = ServiceLoader.load(Logger.class);
-        Constructor<? extends Logger> m = null;
-        for (Logger log : logLoader) {
-            Class<? extends Logger> c = log.getClass();
+        ServiceLoader<Log> logLoader = ServiceLoader.load(Log.class);
+        Constructor<? extends Log> m = null;
+        for (Log log : logLoader) {
+            Class<? extends Log> c = log.getClass();
             try {
                 m = c.getConstructor(String.class);
                 break;
@@ -111,7 +111,7 @@ public class LogFactory {
      * @throws LogConfigurationException if a suitable <code>Log</code> instance
      *                                   cannot be returned
      */
-    public Logger getInstance(String name) throws LogConfigurationException {
+    public Log getInstance(String name) throws LogConfigurationException {
         if (discoveredLogConstructor == null) {
             return DirectJDKLog.getInstance(name);
         }
@@ -132,7 +132,7 @@ public class LogFactory {
      * @throws LogConfigurationException if a suitable <code>Log</code> instance
      *                                   cannot be returned
      */
-    public Logger getInstance(Class<?> clazz) throws LogConfigurationException {
+    public Log getInstance(Class<?> clazz) throws LogConfigurationException {
         return getInstance(clazz.getName());
     }
 
@@ -183,7 +183,7 @@ public class LogFactory {
      * @throws LogConfigurationException if a suitable <code>Log</code> instance
      *                                   cannot be returned
      */
-    public static Logger getLog(Class<?> clazz)
+    public static Log getLog(Class<?> clazz)
             throws LogConfigurationException {
         return getFactory().getInstance(clazz);
     }
@@ -199,7 +199,7 @@ public class LogFactory {
      * @throws LogConfigurationException if a suitable <code>Log</code> instance
      *                                   cannot be returned
      */
-    public static Logger getLog(String name)
+    public static Log getLog(String name)
             throws LogConfigurationException {
         return getFactory().getInstance(name);
     }

@@ -1,5 +1,9 @@
 package io.maker.base.utils;
 
+/**
+ * @see io.netty.util.Constant
+ * @param <T>
+ */
 public interface Constant<T extends Constant<T>> extends Comparable<T> {
 
 	/**

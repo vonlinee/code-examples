@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+
+group 'io.trouble.maker'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // 基础库
+    implementation project(":trouble-maker-base")
+    implementation project(":trouble-maker-codegen")
+    implementation project(":mybatis-plus-generator")
+
+    implementation libs.spring_boot_dependencies
+    implementation libs.spring_boot_starter_web
+
+    // spring_boot_starter_thymeleaf和spring_boot_starter_web之间有冲突
+    // implementation libs.spring_boot_starter_thymeleaf
+
+    implementation libs.slf4j_log4j12
+    implementation libs.slf4j_api
+}
+
+test {
+    useJUnitPlatform()
+}

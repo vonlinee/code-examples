@@ -31,12 +31,12 @@ allprojects {
 	
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-//        options.warnings = false
+        options.warnings = false
         // 忽略未检查的，或者过时API的警告，只需要不配置下面的编译参数就可以
-//        options.compilerArgs += ["-nowarn", "-XDenableSunApiLintControl"]
-//        options.compilerArgs += '-Xlint:-deprecation'
-//        options.compilerArgs << "-Xlint:unchecked"
-//        options.compilerArgs << "-Xlint:deprecation"
+        options.compilerArgs += ["-nowarn", "-XDenableSunApiLintControl"]
+        options.compilerArgs += '-Xlint:-deprecation'
+        options.compilerArgs << "-Xlint:unchecked"
+        options.compilerArgs << "-Xlint:deprecation"
         // 指定-Werror会报错
         // options.compilerArgs << "-Werror"
     }

@@ -41,7 +41,7 @@ package io.maker.base.utils.logging;
  * @author Juergen Hoeller (for the {@code spring-jcl} variant)
  * @since 5.0
  */
-public interface Logger {
+public interface Log {
 
     /**
      * Is fatal logging currently enabled?

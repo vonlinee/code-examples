@@ -555,7 +555,7 @@ public final class StringUtils {
         } catch (Exception e) {
             // Default toString() behavior - see Object.toString()
             String objectToString = o.getClass().getName() + '@' + Integer.toHexString(System.identityHashCode(o));
-            // Logger is created inline with fixed name to avoid forcing Proguard to create another class.
+            // Log is created inline with fixed name to avoid forcing Proguard to create another class.
             return "<" + objectToString + " threw " + e.getClass().getName() + ">";
         }
     }

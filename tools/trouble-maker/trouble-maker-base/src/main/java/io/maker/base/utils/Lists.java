@@ -15,9 +15,31 @@ public final class Lists {
         return list == null || list.isEmpty();
     }
 
+    /**
+     * Arrays.asList(items)
+     * @param items
+     * @param <E>
+     * @return
+     */
     @SafeVarargs
-    public static <E> List<E> of(E... items) {
+    public static <E> List<E> asList(E... items) {
         return Arrays.asList(items);
+    }
+
+    /**
+     * 手动拷贝数组对象到集合
+     * Arrays.asList(items)构造的List是不可变的，因此使用此方法构造一个普通的ArrayList
+     * @param items
+     * @param <E>
+     * @return
+     */
+    @SafeVarargs
+    public static <E> List<E> of(E ... items) {
+        List<E> list = new ArrayList<>();
+        for (E item : items) {
+            list.add(item);
+        }
+        return list;
     }
 
     @SafeVarargs
@@ -95,8 +117,12 @@ public final class Lists {
         return list;
     }
 
-    public static <E extends @Nullable Object> ArrayList<E> newArrayList() {
+    public static <T> ArrayList<T> newArrayList() {
         return new ArrayList<>();
+    }
+
+    public static <T> ArrayList<T> newArrayList(int initialCapacity) {
+        return new ArrayList<>(initialCapacity);
     }
 
     public static <E extends @Nullable Object> LinkedList<E> newLinkedList() {
@@ -111,18 +137,5 @@ public final class Lists {
             wasModified |= addTo.add(iterator.next());
         }
         return wasModified;
-    }
-
-    public static void main(String[] args) {
-        //String[] param = {"Tom",
-        //        "Bob", "Andrew", "Taylor Swift"};
-        //List<List<?>> list = new ArrayList<>();
-        //list.add(Arrays.asList(param));
-        //list.add(Arrays.asList(param));
-        //list.add(Arrays.asList(param));
-        //list.add(Arrays.asList(param));
-
-        String[][] arr = new String[3][4];
-        //println(list);
     }
 }

@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A pool of {@link Constant}s.
- *
+ * @see io.netty.util.ConstantPool
  * @param <T> the type of the constant
  */
 public abstract class ConstantPool<T extends Constant<T>> {

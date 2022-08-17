@@ -7,9 +7,12 @@
 
 // LinkedHashMap
 ext {
-    configuration = [javaVersion = JavaVersion.VERSION_1_8]
+    configuration = [
+            javaVersion = JavaVersion.VERSION_1_8
+    ]
 
     // 全局依赖项版本
+    // lib_version也是Map结构
     lib_version = {
         juint_version = "5.6.2"
         druid_version = "1.2.9"
@@ -19,6 +22,7 @@ ext {
         spring_boot_version = "2.3.12.RELEASE"
         spring_cloud_version = ""
     }
+
     // 全局依赖项
     libs = [
             //test
@@ -72,10 +76,14 @@ ext {
             spring_orm                    : 'org.springframework:spring-orm:5.3.16',
             spring_webflux                : 'org.springframework:spring-webflux:5.3.16',
             // springboot
-            spring_boot_dependencies      : 'org.springframework.boot:spring-boot-dependencies:${lib_version.spring_boot_version}',
-            spring_boot_starter_web       : 'org.springframework.boot:spring-boot-starter-web:${lib_version.spring_boot_version}',
-            spring_boot_starter_webflux   : 'org.springframework.boot:spring-boot-starter-webflux:${lib_version.spring_boot_version}',
-            spring_boot_starter_logging   : 'org.springframework.boot:spring-boot-starter-logging:${lib_version.spring_boot_version}',
+            spring_boot_dependencies      : 'org.springframework.boot:spring-boot-dependencies:2.3.12.RELEASE',
+            spring_boot_starter_web       : 'org.springframework.boot:spring-boot-starter-web:2.3.12.RELEASE',
+            spring_boot_starter_webflux   : 'org.springframework.boot:spring-boot-starter-webflux:2.3.12.RELEASE',
+            spring_boot_starter_logging   : 'org.springframework.boot:spring-boot-starter-logging:2.3.12.RELEASE',
+            // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf
+            spring_boot_starter_thymeleaf : 'org.springframework.boot:spring-boot-starter-thymeleaf:2.3.12.RELEASE',
+
+
             // log
             slf4j_api                     : 'org.slf4j:slf4j-api:1.7.36',
             slf4j_log4j12                 : 'org.slf4j:slf4j-log4j12:1.7.36',
@@ -107,10 +115,7 @@ ext {
 
             druid_spring_boot_starter     : 'com.alibaba:druid-spring-boot-starter:1.2.9',
 
-
             // spring-cloud
             spring_cloud_starter_openfeign: 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.3'
-
-
     ]
 }

@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
+/**
+ * 日期时间工具类
+ */
 public class DateTimes {
 
     private static final int[] BIG_MONTH = {1, 3, 5, 7, 8, 10, 12};
@@ -15,19 +18,19 @@ public class DateTimes {
     public static final String DT_FORMAT_YMD = "yy-MM-dd";
     public static final DateTimeFormatter DT_FORMATTER_YMDHMS = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");
     public static final DateTimeFormatter DT_FORMATTER_YMD = DateTimeFormatter.ofPattern("yy-MM-dd");
-    
+
     private static final int BIG_MONTH_DAY = 30;
     private static final int SMALL_MONTH_DAY = 31;
     private static final int DAY1 = 28;
     private static final int DAY2 = 39;
-    
+
     /**
      * 日期时间单位
      */
     public enum Unit {
         YEAR, MONTH, WEEK, DAY, HOUR, MINUTE, SECONDS, MILLS, NANOS
     }
-    
+
     private static final DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder();
 
     static {
@@ -85,6 +88,7 @@ public class DateTimes {
 
     /**
      * 是否是闰年
+     *
      * @param year
      * @return
      */
@@ -114,6 +118,7 @@ public class DateTimes {
 
     /**
      * 解析对象类型为LocalDateTime类型
+     *
      * @param dateTime
      * @return
      */
