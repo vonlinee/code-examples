@@ -1,6 +1,5 @@
 package io.maker.base.utils.config.spi;
 
-import io.maker.base.config.*;
 import io.maker.base.utils.config.ConfigFile;
 import io.maker.base.utils.config.ConfigFileType;
 import io.maker.base.utils.config.internal.ConfigRepository;

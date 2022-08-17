@@ -98,6 +98,16 @@ public class JdbcProperties {
 	 */
 	private String characterEncoding;
 
+	/**
+	 * 允许一次性执行多条sql
+	 */
+	private boolean allowMultiQueries;
+
+	/**
+	 * 批量将数据传给mysql
+	 */
+	private boolean rewriteBatchedStatements;
+
 	// ===============================================================================
 	
 	/**

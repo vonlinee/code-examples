@@ -19,35 +19,38 @@ import java.util.Collections;
  */
 public class MySQLGenerator {
 
-    public static final String URL1 = "jdbc:mysql://localhost:3306/information_schema?createDatabaseIfNotExists=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false";
-
-    public static final String OUTPUT_ROOT_DIR = "D://Temp";
-
     // 数据库连接信息配置
-    private static final String MYSQL5_DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
-    private static final String MYSQL8_DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
+    public static final String URL1 = "jdbc:mysql://localhost:3306/information_schema?createDatabaseIfNotExists=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false";
+    public static final String URL3 = "jdbc:mysql://192.168.129.30:3306/lgdb_excellent_courses?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8";
     private static final String URL2 = "jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8";
     public static final String URL = "jdbc:mysql://localhost:3306/sakila?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false";
+    // 驱动类型
+    private static final String MYSQL5_DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
+    private static final String MYSQL8_DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
+    // 用户名密码
     private static final String USER_NAME = "root";
     private static final String PASSWORD = "123456";
 
+    // 生成器配置
+
+    // 输出文件根目录
+    public static final String OUTPUT_ROOT_DIR = "D://Temp";
     // 生成文件所在项目路径
-    private static String baseProjectPath = "C:\\Users\\xx\\Desktop\\demo";
+    private static final String baseProjectPath = "C:\\Users\\xx\\Desktop\\demo";
     // 基本包名
-    private static String basePackage = "com.example";
+    private static final String basePackage = "com.lancoo.schoolexcellentcourse";
     // 作者
-    private static final String AUTHOR_NAME = "xx";
+    private static final String AUTHOR_NAME = "";
     // table前缀
-    private static final String[] tablePrefixToBeIgnored = {"t_"};
+    private static final String[] tablePrefixToBeIgnored = {""};
     // 要生成的表名
-    private static final String[] tableNamesToBeGenerated = {"film"};
+    private static final String[] tableNamesToBeGenerated = {"user_operation_log"};
 
     public static void main(String[] args) {
         StopWatch stopWatch = new StopWatch("代码生成");
-
         stopWatch.start("数据源配置");
         // 数据源配置
-        DataSourceConfig.Builder dataSourceBuilder = new DataSourceConfig.Builder(URL, USER_NAME, PASSWORD)
+        DataSourceConfig.Builder dataSourceBuilder = new DataSourceConfig.Builder(URL3, "admin", "LancooECP")
                 .dbQuery(new MySqlQuery()) // 数据库查询
                 .schema("mybatis-plus") // 数据库schema(部分数据库适用)
                 .typeConvert(new MySqlTypeConvert()) // 数据库类型转换器 自定义数据库表字段类型转换【可选】
@@ -73,9 +76,8 @@ public class MySQLGenerator {
         }).injectionConfig(builder -> {
             // 注入配置
             builder.beforeOutputFile((tableInfo, objectMap) -> {
-                        System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
-                    })
-                    .customMap(Collections.singletonMap("test", "baomidou"))
+                System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
+            }).customMap(Collections.singletonMap("test", "baomidou"))
                     .customFile(Collections.singletonMap("test.txt", "/templates/test.vm")).build();
         }).packageConfig(builder -> {
             // 包配置：需要自定义
@@ -85,7 +87,7 @@ public class MySQLGenerator {
                     .entity("entities") // 实体类所在文件夹名
                     .service("service") // service接口所在文件夹名
                     .serviceImpl("service.impl") // service实现类所在文件夹名
-                    .mapper("dao.mapper")  // dao层的mapper接口目录
+                    .mapper("mapper")  // dao层的mapper接口目录
                     .xml("mybatis.mapping")
                     .controller("controller")
                     .other("other")
@@ -101,7 +103,7 @@ public class MySQLGenerator {
             //.superClass(BaseEntity.class)
             entityBuilder.disableSerialVersionUUID(); // 禁用生成serialVersionUUID
             //.enableChainModel()
-            //.enableLombok()
+            entityBuilder.enableLombok();
             entityBuilder.fileOverride();
             //.enableRemoveIsPrefix()
             //.enableTableFieldAnnotation()

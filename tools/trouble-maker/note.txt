@@ -11,8 +11,11 @@ gradle -q dependencies api:dependencies webapp:dependencies
 gradle -q {项目名}:dependencies --configuration testCompile
 
 
+mybatis-plus批处理
+https://blog.csdn.net/qq_32419139/article/details/124636847
 
 
-
+1.抛异常还是返回错误信息
+2.Map传参还是实体类
 
 

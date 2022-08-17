@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import io.spring.boot.common.datasource.mapper.StudentMapper;
 import io.spring.boot.common.db.TargetDataSource;
 import io.spring.boot.common.web.entity.Student;
 
@@ -12,6 +13,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 
 /**
  * Student Service
@@ -23,6 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("studentService")
 @Transactional
 public class StudentService implements IStudentService {
+
+    @Resource
+    StudentMapper studentMapper;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
