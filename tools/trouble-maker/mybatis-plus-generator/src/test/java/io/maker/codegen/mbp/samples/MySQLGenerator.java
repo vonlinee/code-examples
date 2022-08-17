@@ -21,7 +21,6 @@ public class MySQLGenerator {
 
     // 数据库连接信息配置
     public static final String URL1 = "jdbc:mysql://localhost:3306/information_schema?createDatabaseIfNotExists=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false";
-    public static final String URL3 = "jdbc:mysql://192.168.129.30:3306/lgdb_excellent_courses?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8";
     private static final String URL2 = "jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8";
     public static final String URL = "jdbc:mysql://localhost:3306/sakila?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false";
     // 驱动类型
@@ -50,7 +49,7 @@ public class MySQLGenerator {
         StopWatch stopWatch = new StopWatch("代码生成");
         stopWatch.start("数据源配置");
         // 数据源配置
-        DataSourceConfig.Builder dataSourceBuilder = new DataSourceConfig.Builder(URL3, "admin", "LancooECP")
+        DataSourceConfig.Builder dataSourceBuilder = new DataSourceConfig.Builder(URL1, USER_NAME, PASSWORD)
                 .dbQuery(new MySqlQuery()) // 数据库查询
                 .schema("mybatis-plus") // 数据库schema(部分数据库适用)
                 .typeConvert(new MySqlTypeConvert()) // 数据库类型转换器 自定义数据库表字段类型转换【可选】
