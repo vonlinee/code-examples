@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.api.dom.java.render;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 
 import java.util.ArrayList;
 import java.util.Collections;

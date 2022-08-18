@@ -59,4 +59,24 @@ public class Log4j2Impl implements Log {
         log.warn(s);
     }
 
+    @Override
+    public void info(String msg) {
+
+    }
+
+    @Override
+    public void info(String format, Object arg) {
+
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void info(String format, Object... arguments) {
+
+    }
+
 }

@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.internal;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.sql.Connection;
@@ -67,26 +67,22 @@ public class JDBCConnectionFactory implements ConnectionFactory {
 
     @Override
     public Connection getConnection() throws SQLException {
-
         Properties props = new Properties();
-
         if (stringHasValue(userId)) {
             props.setProperty("user", userId); //$NON-NLS-1$
         }
-
+        if (otherProperties.containsKey("username")) {
+            props.setProperty("user", otherProperties.getProperty("username"));
+        }
         if (stringHasValue(password)) {
             props.setProperty("password", password); //$NON-NLS-1$
         }
-
         props.putAll(otherProperties);
-
         Driver driver = getDriver();
         Connection conn = driver.connect(connectionURL, props);
-
         if (conn == null) {
             throw new SQLException(getString("RuntimeError.7")); //$NON-NLS-1$
         }
-
         return conn;
     }
 

@@ -338,7 +338,6 @@ public abstract class AbstractTemplateEngine {
      * @param tableInfo 表信息对象
      * @return ignore
      */
-
     public Map<String, Object> getObjectMap(ConfigBuilder config, TableInfo tableInfo) {
         StrategyConfig strategyConfig = config.getStrategyConfig();
         Map<String, Object> controllerData = strategyConfig.controller().renderData(tableInfo);
@@ -420,11 +419,9 @@ public abstract class AbstractTemplateEngine {
         return getConfigBuilder().getGlobalConfig().isKotlin() ? ConstVal.KT_SUFFIX : ConstVal.JAVA_SUFFIX;
     }
 
-
     public ConfigBuilder getConfigBuilder() {
         return configBuilder;
     }
-
 
     public AbstractTemplateEngine setConfigBuilder(ConfigBuilder configBuilder) {
         this.configBuilder = configBuilder;

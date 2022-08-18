@@ -16,7 +16,7 @@
 package org.mybatis.generator.codegen.mybatis3.javamapper.elements.annotated;
 
 import static org.mybatis.generator.api.dom.OutputUtilities.javaIndent;
-import static org.mybatis.generator.internal.util.StringUtility.escapeStringForJava;
+import static org.mybatis.generator.internal.util.StringUtils.escapeStringForJava;
 
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;

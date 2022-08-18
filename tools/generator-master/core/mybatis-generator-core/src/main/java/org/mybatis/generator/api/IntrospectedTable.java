@@ -15,8 +15,8 @@
  */
 package org.mybatis.generator.api;
 
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -48,9 +48,7 @@ import org.mybatis.generator.internal.rules.Rules;
  * Base class for all code generator implementations. This class provides many
  * of the housekeeping methods needed to implement a code generator, with only
  * the actual code generation methods left unimplemented.
- *
  * @author Jeff Butler
- *
  */
 public abstract class IntrospectedTable {
 
@@ -66,9 +64,13 @@ public abstract class IntrospectedTable {
         ATTR_EXAMPLE_TYPE,
         ATTR_MYBATIS3_XML_MAPPER_PACKAGE,
         ATTR_MYBATIS3_XML_MAPPER_FILE_NAME,
-        /** also used as XML Mapper namespace if a Java mapper is generated. */
+        /**
+         * also used as XML Mapper namespace if a Java mapper is generated.
+         */
         ATTR_MYBATIS3_JAVA_MAPPER_TYPE,
-        /** used as XML Mapper namespace if no client is generated. */
+        /**
+         * used as XML Mapper namespace if no client is generated.
+         */
         ATTR_MYBATIS3_FALLBACK_SQL_MAP_NAMESPACE,
         ATTR_FULLY_QUALIFIED_TABLE_NAME_AT_RUNTIME,
         ATTR_ALIASED_FULLY_QUALIFIED_TABLE_NAME_AT_RUNTIME,
@@ -121,7 +123,9 @@ public abstract class IntrospectedTable {
      */
     protected final Map<String, Object> attributes = new HashMap<>();
 
-    /** Internal attributes are used to store commonly accessed items by all code generators. */
+    /**
+     * Internal attributes are used to store commonly accessed items by all code generators.
+     */
     protected final Map<IntrospectedTable.InternalAttribute, String> internalAttributes =
             new EnumMap<>(InternalAttribute.class);
 
@@ -173,7 +177,6 @@ public abstract class IntrospectedTable {
     /**
      * Returns true if any of the columns in the table are JDBC Dates (as
      * opposed to timestamps).
-     *
      * @return true if the table contains DATE columns
      */
     public boolean hasJDBCDateColumns() {
@@ -185,7 +188,6 @@ public abstract class IntrospectedTable {
     /**
      * Returns true if any of the columns in the table are JDBC Times (as
      * opposed to timestamps).
-     *
      * @return true if the table contains TIME columns
      */
     public boolean hasJDBCTimeColumns() {
@@ -198,7 +200,6 @@ public abstract class IntrospectedTable {
      * Returns the columns in the primary key. If the generatePrimaryKeyClass()
      * method returns false, then these columns will be iterated as the
      * parameters of the selectByPrimaryKay and deleteByPrimaryKey methods
-     *
      * @return a List of ColumnDefinition objects for columns in the primary key
      */
     public List<IntrospectedColumn> getPrimaryKeyColumns() {
@@ -216,7 +217,6 @@ public abstract class IntrospectedTable {
     /**
      * Returns all columns in the table (for use by the select by primary key and
      * select by example with BLOBs methods).
-     *
      * @return a List of ColumnDefinition objects for all columns in the table
      */
     public List<IntrospectedColumn> getAllColumns() {
@@ -227,7 +227,6 @@ public abstract class IntrospectedTable {
 
     /**
      * Returns all columns except BLOBs (for use by the select by example without BLOBs method).
-     *
      * @return a List of ColumnDefinition objects for columns in the table that are non BLOBs
      */
     public List<IntrospectedColumn> getNonBLOBColumns() {
@@ -272,9 +271,8 @@ public abstract class IntrospectedTable {
 
     /**
      * Gets the base record type.
-     *
      * @return the type for the record (the class that holds non-primary key and non-BLOB fields). Note that the value
-     *         will be calculated regardless of whether the table has these columns or not.
+     * will be calculated regardless of whether the table has these columns or not.
      */
     public String getBaseRecordType() {
         return internalAttributes.get(InternalAttribute.ATTR_BASE_RECORD_TYPE);
@@ -286,7 +284,6 @@ public abstract class IntrospectedTable {
 
     /**
      * Gets the example type.
-     *
      * @return the type for the example class.
      */
     public String getExampleType() {
@@ -295,9 +292,8 @@ public abstract class IntrospectedTable {
 
     /**
      * Gets the record with blo bs type.
-     *
      * @return the type for the record with BLOBs class. Note that the value will be calculated regardless of whether
-     *         the table has BLOB columns or not.
+     * the table has BLOB columns or not.
      */
     public String getRecordWithBLOBsType() {
         return internalAttributes
@@ -568,8 +564,7 @@ public abstract class IntrospectedTable {
     }
 
     public String getBaseResultMapId() {
-        return internalAttributes
-                .get(InternalAttribute.ATTR_BASE_RESULT_MAP_ID);
+        return internalAttributes.get(InternalAttribute.ATTR_BASE_RESULT_MAP_ID);
     }
 
     public String getUpdateByPrimaryKeyWithBLOBsStatementId() {
@@ -791,7 +786,6 @@ public abstract class IntrospectedTable {
     /**
      * If property exampleTargetPackage specified for example use the specified value, else
      * use default value (targetPackage).
-     *
      * @return the calculated package
      */
     protected String calculateJavaModelExamplePackage() {
@@ -882,20 +876,16 @@ public abstract class IntrospectedTable {
      *
      * <p>This method is called after all the setX methods, but before getNumberOfSubtasks(), getGeneratedJavaFiles, and
      * getGeneratedXmlFiles.
-     *
-     * @param warnings
-     *            the warnings
-     * @param progressCallback
-     *            the progress callback
+     * @param warnings         the warnings
+     * @param progressCallback the progress callback
      */
     public abstract void calculateGenerators(List<String> warnings,
-            ProgressCallback progressCallback);
+                                             ProgressCallback progressCallback);
 
     /**
      * This method should return a list of generated Java files related to this
      * table. This list could include various types of model classes, as well as
      * DAO classes.
-     *
      * @return the list of generated Java files for this table
      */
     public abstract List<GeneratedJavaFile> getGeneratedJavaFiles();
@@ -904,7 +894,6 @@ public abstract class IntrospectedTable {
      * This method should return a list of generated XML files related to this
      * table. Most implementations will only return one file - the generated
      * SqlMap file.
-     *
      * @return the list of generated XML files for this table
      */
     public abstract List<GeneratedXmlFile> getGeneratedXmlFiles();
@@ -912,7 +901,6 @@ public abstract class IntrospectedTable {
     /**
      * This method should return a list of generated Kotlin files related to this
      * table. This list could include a data classes, a mapper interface, extension methods, etc.
-     *
      * @return the list of generated Kotlin files for this table
      */
     public abstract List<GeneratedKotlinFile> getGeneratedKotlinFiles();
@@ -920,16 +908,13 @@ public abstract class IntrospectedTable {
     /**
      * This method should return the number of progress messages that will be
      * send during the generation phase.
-     *
      * @return the number of progress messages
      */
     public abstract int getGenerationSteps();
 
     /**
      * This method exists to give plugins the opportunity to replace the calculated rules if necessary.
-     *
-     * @param rules
-     *            the new rules
+     * @param rules the new rules
      */
     public void setRules(Rules rules) {
         this.rules = rules;
@@ -1073,7 +1058,6 @@ public abstract class IntrospectedTable {
      * Should return true if an XML generator is required for this table. This method will be called during validation
      * of the configuration, so it should not rely on database introspection. This method simply tells the validator if
      * an XML configuration is normally required for this implementation.
-     *
      * @return true, if successful
      */
     public abstract boolean requiresXMLGenerator();

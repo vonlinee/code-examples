@@ -1,23 +1,8 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualifiedTableName;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.sql.Connection;
@@ -43,8 +28,12 @@ import org.mybatis.generator.internal.JDBCConnectionFactory;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.PluginAggregator;
 import org.mybatis.generator.internal.db.DatabaseIntrospector;
+import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.LogFactory;
 
 public class Context extends PropertyHolder {
+
+    private static final Log log = LogFactory.getLog(Context.class);
 
     private String id;
 
@@ -129,9 +118,7 @@ public class Context extends PropertyHolder {
     /**
      * This method does a simple validate, it makes sure that all required fields have been filled in. It does not do
      * any more complex operations such as validating that database tables exist or validating that named columns exist
-     *
-     * @param errors
-     *            the errors
+     * @param errors the errors
      */
     public void validate(List<String> errors) {
         if (!stringHasValue(id)) {
@@ -149,24 +136,20 @@ public class Context extends PropertyHolder {
         } else {
             connectionFactoryConfiguration.validate(errors);
         }
-
         if (javaModelGeneratorConfiguration == null) {
             errors.add(getString("ValidationError.8", id)); //$NON-NLS-1$
         } else {
             javaModelGeneratorConfiguration.validate(errors, id);
         }
-
         if (javaClientGeneratorConfiguration != null) {
             javaClientGeneratorConfiguration.validate(errors, id);
         }
-
         IntrospectedTable it = null;
         try {
             it = ObjectFactory.createIntrospectedTableForValidation(this);
         } catch (Exception e) {
             errors.add(getString("ValidationError.25", id)); //$NON-NLS-1$
         }
-
         if (it != null && it.requiresXMLGenerator()) {
             if (sqlMapGeneratorConfiguration == null) {
                 errors.add(getString("ValidationError.9", id)); //$NON-NLS-1$
@@ -174,7 +157,6 @@ public class Context extends PropertyHolder {
                 sqlMapGeneratorConfiguration.validate(errors, id);
             }
         }
-
         if (tableConfigurations.isEmpty()) {
             errors.add(getString("ValidationError.3", id)); //$NON-NLS-1$
         } else {
@@ -184,7 +166,6 @@ public class Context extends PropertyHolder {
                 tc.validate(errors, i);
             }
         }
-
         for (PluginConfiguration pluginConfiguration : pluginConfigurations) {
             pluginConfiguration.validate(errors, id);
         }
@@ -238,7 +219,6 @@ public class Context extends PropertyHolder {
     @Override
     public void addProperty(String name, String value) {
         super.addProperty(name, value);
-
         if (PropertyRegistry.CONTEXT_BEGINNING_DELIMITER.equals(name)) {
             beginningDelimiter = value;
         } else if (PropertyRegistry.CONTEXT_ENDING_DELIMITER.equals(name)) {
@@ -253,7 +233,6 @@ public class Context extends PropertyHolder {
         if (commentGenerator == null) {
             commentGenerator = ObjectFactory.createCommentGenerator(this);
         }
-
         return commentGenerator;
     }
 
@@ -261,7 +240,6 @@ public class Context extends PropertyHolder {
         if (javaFormatter == null) {
             javaFormatter = ObjectFactory.createJavaFormatter(this);
         }
-
         return javaFormatter;
     }
 
@@ -269,7 +247,6 @@ public class Context extends PropertyHolder {
         if (kotlinFormatter == null) {
             kotlinFormatter = ObjectFactory.createKotlinFormatter(this);
         }
-
         return kotlinFormatter;
     }
 
@@ -277,7 +254,6 @@ public class Context extends PropertyHolder {
         if (xmlFormatter == null) {
             xmlFormatter = ObjectFactory.createXmlFormatter(this);
         }
-
         return xmlFormatter;
     }
 
@@ -325,10 +301,9 @@ public class Context extends PropertyHolder {
     /**
      * This method could be useful for users that use the library for introspection only
      * and not for code generation.
-     *
      * @return a list containing the results of table introspection. The list will be empty
-     *     if this method is called before introspectTables(), or if no tables are found that
-     *     match the configuration
+     * if this method is called before introspectTables(), or if no tables are found that
+     * match the configuration
      */
     public List<IntrospectedTable> getIntrospectedTables() {
         return introspectedTables;
@@ -351,37 +326,28 @@ public class Context extends PropertyHolder {
     /**
      * Introspect tables based on the configuration specified in the
      * constructor. This method is long running.
-     *
-     * @param callback
-     *            a progress callback if progress information is desired, or
-     *            <code>null</code>
-     * @param warnings
-     *            any warning generated from this method will be added to the
-     *            List. Warnings are always Strings.
-     * @param fullyQualifiedTableNames
-     *            a set of table names to generate. The elements of the set must
-     *            be Strings that exactly match what's specified in the
-     *            configuration. For example, if table name = "foo" and schema =
-     *            "bar", then the fully qualified table name is "foo.bar". If
-     *            the Set is null or empty, then all tables in the configuration
-     *            will be used for code generation.
-     *
-     * @throws SQLException
-     *             if some error arises while introspecting the specified
-     *             database tables.
-     * @throws InterruptedException
-     *             if the progress callback reports a cancel
+     * @param callback                 a progress callback if progress information is desired, or
+     *                                 <code>null</code>
+     * @param warnings                 any warning generated from this method will be added to the
+     *                                 List. Warnings are always Strings.
+     * @param fullyQualifiedTableNames a set of table names to generate. The elements of the set must
+     *                                 be Strings that exactly match what's specified in the
+     *                                 configuration. For example, if table name = "foo" and schema =
+     *                                 "bar", then the fully qualified table name is "foo.bar". If
+     *                                 the Set is null or empty, then all tables in the configuration
+     *                                 will be used for code generation.
+     * @throws SQLException         if some error arises while introspecting the specified
+     *                              database tables.
+     * @throws InterruptedException if the progress callback reports a cancel
      */
     public void introspectTables(ProgressCallback callback,
-            List<String> warnings, Set<String> fullyQualifiedTableNames)
+                                 List<String> warnings, Set<String> fullyQualifiedTableNames)
             throws SQLException, InterruptedException {
 
         introspectedTables.clear();
-        JavaTypeResolver javaTypeResolver = ObjectFactory
-                .createJavaTypeResolver(this, warnings);
+        JavaTypeResolver javaTypeResolver = ObjectFactory.createJavaTypeResolver(this, warnings);
 
         Connection connection = null;
-
         try {
             callback.startTask(getString("Progress.0")); //$NON-NLS-1$
             connection = getConnection();
@@ -391,7 +357,7 @@ public class Context extends PropertyHolder {
 
             for (TableConfiguration tc : tableConfigurations) {
                 String tableName = composeFullyQualifiedTableName(tc.getCatalog(), tc
-                                .getSchema(), tc.getTableName(), '.');
+                        .getSchema(), tc.getTableName(), '.');
 
                 if (fullyQualifiedTableNames != null
                         && !fullyQualifiedTableNames.isEmpty()
@@ -403,7 +369,6 @@ public class Context extends PropertyHolder {
                     warnings.add(getString("Warning.0", tableName)); //$NON-NLS-1$
                     continue;
                 }
-
                 callback.startTask(getString("Progress.1", tableName)); //$NON-NLS-1$
                 List<IntrospectedTable> tables = databaseIntrospector
                         .introspectTables(tc);
@@ -411,7 +376,6 @@ public class Context extends PropertyHolder {
                 if (tables != null) {
                     introspectedTables.addAll(tables);
                 }
-
                 callback.checkCancel();
             }
         } finally {
@@ -430,24 +394,27 @@ public class Context extends PropertyHolder {
     }
 
     public void generateFiles(ProgressCallback callback,
-            List<GeneratedJavaFile> generatedJavaFiles,
-            List<GeneratedXmlFile> generatedXmlFiles,
-            List<GeneratedKotlinFile> generatedKotlinFiles,
-            List<GeneratedFile> otherGeneratedFiles,
-            List<String> warnings)
+                              List<GeneratedJavaFile> generatedJavaFiles,
+                              List<GeneratedXmlFile> generatedXmlFiles,
+                              List<GeneratedKotlinFile> generatedKotlinFiles,
+                              List<GeneratedFile> otherGeneratedFiles,
+                              List<String> warnings)
             throws InterruptedException {
 
         pluginAggregator = new PluginAggregator();
         for (PluginConfiguration pluginConfiguration : pluginConfigurations) {
             Plugin plugin = ObjectFactory.createPlugin(this,
                     pluginConfiguration);
+            // 校验通过
             if (plugin.validate(warnings)) {
+                log.info("添加Plugin => {}", plugin);
                 pluginAggregator.addPlugin(plugin);
             } else {
                 warnings.add(getString("Warning.24", //$NON-NLS-1$
                         pluginConfiguration.getConfigurationType(), id));
             }
         }
+        // IntrospectedTableMyBatis3Impl
 
         // initialize everything first before generating. This allows plugins to know about other
         // items in the configuration.
@@ -457,33 +424,23 @@ public class Context extends PropertyHolder {
             introspectedTable.calculateGenerators(warnings, callback);
         }
 
+        // TODO 计算生成的表
         for (IntrospectedTable introspectedTable : introspectedTables) {
             callback.checkCancel();
-            generatedJavaFiles.addAll(introspectedTable
-                    .getGeneratedJavaFiles());
-            generatedXmlFiles.addAll(introspectedTable
-                    .getGeneratedXmlFiles());
-            generatedKotlinFiles.addAll(introspectedTable
-                    .getGeneratedKotlinFiles());
+            generatedJavaFiles.addAll(introspectedTable.getGeneratedJavaFiles());
+            generatedXmlFiles.addAll(introspectedTable.getGeneratedXmlFiles());
+            generatedKotlinFiles.addAll(introspectedTable.getGeneratedKotlinFiles());
 
-            generatedJavaFiles.addAll(pluginAggregator
-                    .contextGenerateAdditionalJavaFiles(introspectedTable));
-            generatedXmlFiles.addAll(pluginAggregator
-                    .contextGenerateAdditionalXmlFiles(introspectedTable));
-            generatedKotlinFiles.addAll(pluginAggregator
-                    .contextGenerateAdditionalKotlinFiles(introspectedTable));
-            otherGeneratedFiles.addAll(pluginAggregator
-                    .contextGenerateAdditionalFiles(introspectedTable));
+            generatedJavaFiles.addAll(pluginAggregator.contextGenerateAdditionalJavaFiles(introspectedTable));
+            generatedXmlFiles.addAll(pluginAggregator.contextGenerateAdditionalXmlFiles(introspectedTable));
+            generatedKotlinFiles.addAll(pluginAggregator.contextGenerateAdditionalKotlinFiles(introspectedTable));
+            otherGeneratedFiles.addAll(pluginAggregator.contextGenerateAdditionalFiles(introspectedTable));
         }
 
-        generatedJavaFiles.addAll(pluginAggregator
-                .contextGenerateAdditionalJavaFiles());
-        generatedXmlFiles.addAll(pluginAggregator
-                .contextGenerateAdditionalXmlFiles());
-        generatedKotlinFiles.addAll(pluginAggregator
-                .contextGenerateAdditionalKotlinFiles());
-        otherGeneratedFiles.addAll(pluginAggregator
-                .contextGenerateAdditionalFiles());
+        generatedJavaFiles.addAll(pluginAggregator.contextGenerateAdditionalJavaFiles());
+        generatedXmlFiles.addAll(pluginAggregator.contextGenerateAdditionalXmlFiles());
+        generatedKotlinFiles.addAll(pluginAggregator.contextGenerateAdditionalKotlinFiles());
+        otherGeneratedFiles.addAll(pluginAggregator.contextGenerateAdditionalFiles());
     }
 
     /**
@@ -491,7 +448,6 @@ public class Context extends PropertyHolder {
      * If you call this method, then you are responsible
      * for closing the connection (See {@link Context#closeConnection(Connection)}). If you do not
      * close the connection, then there could be connection leaks.
-     *
      * @return a new connection created from the values in the configuration file
      * @throws SQLException if any error occurs while creating the connection
      */
@@ -509,7 +465,6 @@ public class Context extends PropertyHolder {
     /**
      * This method closes a JDBC connection and ignores any errors. If the passed connection is null,
      * then the method does nothing.
-     *
      * @param connection a JDBC connection to close, may be null
      */
     public void closeConnection(Connection connection) {

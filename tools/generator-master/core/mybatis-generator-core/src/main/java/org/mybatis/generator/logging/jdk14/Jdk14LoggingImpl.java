@@ -53,4 +53,24 @@ public class Jdk14LoggingImpl implements Log {
         log.log(Level.WARNING, s);
     }
 
+    @Override
+    public void info(String msg) {
+
+    }
+
+    @Override
+    public void info(String format, Object arg) {
+
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void info(String format, Object... arguments) {
+
+    }
+
 }

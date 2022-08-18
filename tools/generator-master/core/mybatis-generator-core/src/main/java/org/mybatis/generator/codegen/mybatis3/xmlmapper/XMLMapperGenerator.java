@@ -50,9 +50,15 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         super();
     }
 
+    /**
+     *
+     * @return
+     */
     protected XmlElement getSqlMapElement() {
         FullyQualifiedTable table = introspectedTable.getFullyQualifiedTable();
         progressCallback.startTask(getString("Progress.12", table.toString())); //$NON-NLS-1$
+
+        // 根标签
         XmlElement answer = new XmlElement("mapper"); //$NON-NLS-1$
         String namespace = introspectedTable.getMyBatis3SqlMapNamespace();
         answer.addAttribute(new Attribute("namespace", namespace)); //$NON-NLS-1$
@@ -79,7 +85,6 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         addUpdateByPrimaryKeySelectiveElement(answer);
         addUpdateByPrimaryKeyWithBLOBsElement(answer);
         addUpdateByPrimaryKeyWithoutBLOBsElement(answer);
-
         return answer;
     }
 
@@ -223,8 +228,7 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         }
     }
 
-    protected void initializeAndExecuteGenerator(AbstractXmlElementGenerator elementGenerator,
-                                                 XmlElement parentElement) {
+    protected void initializeAndExecuteGenerator(AbstractXmlElementGenerator elementGenerator, XmlElement parentElement) {
         elementGenerator.setContext(context);
         elementGenerator.setIntrospectedTable(introspectedTable);
         elementGenerator.setProgressCallback(progressCallback);
@@ -232,16 +236,18 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         elementGenerator.addElements(parentElement);
     }
 
+    /**
+     * 生成文档的内容
+     * @return
+     */
     @Override
     public Document getDocument() {
-        Document document = new Document(XmlConstants.MYBATIS3_MAPPER_PUBLIC_ID,
-                XmlConstants.MYBATIS3_MAPPER_SYSTEM_ID);
-        document.setRootElement(getSqlMapElement());
-
+        Document document = new Document(XmlConstants.MYBATIS3_MAPPER_PUBLIC_ID, XmlConstants.MYBATIS3_MAPPER_SYSTEM_ID);
+        XmlElement sqlMapElement = getSqlMapElement();
+        document.setRootElement(sqlMapElement);
         if (!context.getPlugins().sqlMapDocumentGenerated(document, introspectedTable)) {
             document = null;
         }
-
         return document;
     }
 }

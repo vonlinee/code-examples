@@ -21,14 +21,16 @@ import java.util.stream.Stream;
 
 import org.mybatis.generator.api.dom.xml.DocType;
 import org.mybatis.generator.api.dom.xml.Document;
+import org.mybatis.generator.api.dom.xml.XmlElement;
 
 public class DocumentRenderer {
 
     public String render(Document document) {
-        return Stream.of(renderXmlHeader(),
-                renderDocType(document),
-                renderRootElement(document))
-                .flatMap(Function.identity())
+        Stream<String> xmlHeader = renderXmlHeader();
+        Stream<String> docType = renderDocType(document);
+        // 根标签
+        Stream<String> rootElement = renderRootElement(document);
+        return Stream.of(xmlHeader, docType, rootElement).flatMap(Function.identity())
                 .collect(Collectors.joining(System.getProperty("line.separator"))); //$NON-NLS-1$
     }
 
@@ -47,7 +49,13 @@ public class DocumentRenderer {
         return " " + docType.accept(new DocTypeRenderer()); //$NON-NLS-1$
     }
 
+    /**
+     * 访问者模式
+     * @param document
+     * @return
+     */
     private Stream<String> renderRootElement(Document document) {
-        return document.getRootElement().accept(new ElementRenderer());
+        XmlElement rootElement = document.getRootElement();
+        return rootElement.accept(new ElementRenderer());
     }
 }

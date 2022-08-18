@@ -25,23 +25,41 @@ import org.mybatis.generator.logging.slf4j.Slf4jLoggingLogFactory;
 
 /**
  * Factory for creating loggers.
- *
  * @author Jeff Butler
- *
  */
 public class LogFactory {
     private static AbstractLogFactory theFactory;
     public static final String MARKER = "MYBATIS-GENERATOR"; //$NON-NLS-1$
 
     static {
-        tryImplementation(new Slf4jLoggingLogFactory());
-        tryImplementation(new JakartaCommonsLoggingLogFactory());
-        tryImplementation(new Log4j2LoggingLogFactory());
-        tryImplementation(new Jdk14LoggingLogFactory());
-        tryImplementation(new NoLoggingLogFactory());
+        tryMultiLogImpl();
     }
 
-    private LogFactory() {}
+    private static void tryMultiLogImpl() {
+        if (tryImplementation(new Slf4jLoggingLogFactory())) {
+            System.out.println("Slf4jLoggingLogFactory");
+            return;
+        }
+        if (tryImplementation(new JakartaCommonsLoggingLogFactory())) {
+            System.out.println("JakartaCommonsLoggingLogFactory");
+            return;
+        }
+        if (tryImplementation(new Log4j2LoggingLogFactory())) {
+            System.out.println("Log4j2LoggingLogFactory");
+            return;
+        }
+        if (tryImplementation(new Jdk14LoggingLogFactory())) {
+            System.out.println("Jdk14LoggingLogFactory");
+            return;
+        }
+        if (tryImplementation(new NoLoggingLogFactory())) {
+            System.out.println("NoLoggingLogFactory");
+            return;
+        }
+    }
+
+    private LogFactory() {
+    }
 
     public static Log getLog(Class<?> clazz) {
         try {
@@ -84,14 +102,16 @@ public class LogFactory {
         setImplementation(logFactory);
     }
 
-    private static void tryImplementation(AbstractLogFactory factory) {
+    private static boolean tryImplementation(AbstractLogFactory factory) {
         if (theFactory == null) {
             try {
                 setImplementation(factory);
             } catch (LogException e) {
                 // ignore
+                return false;
             }
         }
+        return true;
     }
 
     private static void setImplementation(AbstractLogFactory factory) {

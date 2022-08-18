@@ -21,7 +21,7 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.codegen.mybatis3.ListUtilities;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.config.TableConfiguration;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.internal.util.StringUtils;
 
 /**
  * This class centralizes all the rules related to code generation - including
@@ -43,7 +43,7 @@ public abstract class BaseRules implements Rules {
         this.introspectedTable = introspectedTable;
         this.tableConfiguration = introspectedTable.getTableConfiguration();
         String modelOnly = tableConfiguration.getProperty(PropertyRegistry.TABLE_MODEL_ONLY);
-        isModelOnly = StringUtility.isTrue(modelOnly);
+        isModelOnly = StringUtils.isTrue(modelOnly);
     }
 
     /**

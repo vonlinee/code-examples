@@ -20,7 +20,7 @@ import java.util.Properties;
 
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.config.Context;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.internal.util.StringUtils;
 
 /**
  * This class holds information about an introspected column.
@@ -148,7 +148,7 @@ public class IntrospectedColumn {
 
     public void setActualColumnName(String actualColumnName) {
         this.actualColumnName = actualColumnName;
-        isColumnNameDelimited = StringUtility
+        isColumnNameDelimited = StringUtils
                 .stringContainsSpace(actualColumnName);
     }
 

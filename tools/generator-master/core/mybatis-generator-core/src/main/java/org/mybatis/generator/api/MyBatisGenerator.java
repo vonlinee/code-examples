@@ -39,6 +39,8 @@ import org.mybatis.generator.exception.ShellException;
 import org.mybatis.generator.internal.DefaultShellCallback;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.XmlFileMergerJaxp;
+import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.LogFactory;
 
 /**
  * This class is the main interface to MyBatis generator. A typical execution of the tool involves these steps:
@@ -54,6 +56,8 @@ import org.mybatis.generator.internal.XmlFileMergerJaxp;
  * @see org.mybatis.generator.config.xml.ConfigurationParser
  */
 public class MyBatisGenerator {
+
+    private static final Log log = LogFactory.getLog(MyBatisGenerator.class);
 
     private static final ProgressCallback NULL_PROGRESS_CALLBACK = new ProgressCallback() {};
 
@@ -217,11 +221,9 @@ public class MyBatisGenerator {
     public void generate(ProgressCallback callback, Set<String> contextIds,
             Set<String> fullyQualifiedTableNames, boolean writeFiles) throws SQLException,
             IOException, InterruptedException {
-
         if (callback == null) {
             callback = NULL_PROGRESS_CALLBACK;
         }
-
         generatedJavaFiles.clear();
         generatedXmlFiles.clear();
         ObjectFactory.reset();
@@ -254,8 +256,7 @@ public class MyBatisGenerator {
         callback.introspectionStarted(totalSteps);
 
         for (Context context : contextsToRun) {
-            context.introspectTables(callback, warnings,
-                    fullyQualifiedTableNames);
+            context.introspectTables(callback, warnings, fullyQualifiedTableNames);
         }
 
         // now run the generates
@@ -264,10 +265,10 @@ public class MyBatisGenerator {
             totalSteps += context.getGenerationSteps();
         }
         callback.generationStarted(totalSteps);
-
+        // 填充生成的文本
         for (Context context : contextsToRun) {
-            context.generateFiles(callback, generatedJavaFiles,
-                    generatedXmlFiles, generatedKotlinFiles, otherGeneratedFiles, warnings);
+            showGeneratedTaskDetail(context);
+            context.generateFiles(callback, generatedJavaFiles, generatedXmlFiles, generatedKotlinFiles, otherGeneratedFiles, warnings);
         }
 
         // now save the files
@@ -299,8 +300,26 @@ public class MyBatisGenerator {
                 shellCallback.refreshProject(project);
             }
         }
-
         callback.done();
+    }
+
+    private void showGeneratedTaskDetail(Context context) {
+        StringBuilder sb = new StringBuilder();
+        String targetRuntime = context.getTargetRuntime();
+        String id = context.getId();
+        sb.append(id).append(" ").append(targetRuntime);
+        List<IntrospectedTable> introspectedTables = context.getIntrospectedTables();
+        for (IntrospectedTable introspectedTable : introspectedTables) {
+            sb.append(introspectedTable.getRemarks());
+        }
+        sb.append("\n\t");
+        sb.append("警告: ").append(warnings.size()).append(" ");
+        sb.append("Java: ").append(generatedJavaFiles.size()).append(" ");
+        sb.append("XML: ").append(generatedXmlFiles.size()).append(" ");
+        sb.append("Kotlin: ").append(generatedKotlinFiles.size()).append(" ");
+        sb.append("其他: ").append(otherGeneratedFiles.size()).append(" ");
+
+        log.info(sb.toString());
     }
 
     private void writeGeneratedJavaFile(GeneratedJavaFile gjf, ProgressCallback callback)

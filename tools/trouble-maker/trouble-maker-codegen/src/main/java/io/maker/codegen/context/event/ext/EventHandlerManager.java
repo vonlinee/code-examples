@@ -55,6 +55,7 @@ public class EventHandlerManager extends BasicEventDispatcher {
 		validateEventType(eventType);
 		validateEventHandler(eventHandler);
 
+		@SuppressWarnings("unchecked")
 		final CompositeEventHandler<T> compositeEventHandler = (CompositeEventHandler<T>) eventHandlerMap
 				.get(eventType);
 
@@ -95,7 +96,7 @@ public class EventHandlerManager extends BasicEventDispatcher {
 			final EventHandler<? super T> eventFilter) {
 		validateEventType(eventType);
 		validateEventFilter(eventFilter);
-
+		@SuppressWarnings("unchecked")
 		final CompositeEventHandler<T> compositeEventHandler = (CompositeEventHandler<T>) eventHandlerMap
 				.get(eventType);
 
@@ -117,7 +118,7 @@ public class EventHandlerManager extends BasicEventDispatcher {
 			final EventType<T> eventType,
 			final EventHandler<? super T> eventHandler) {
 		validateEventType(eventType);
-
+		@SuppressWarnings("unchecked")
 		CompositeEventHandler<T> compositeEventHandler = (CompositeEventHandler<T>) eventHandlerMap.get(eventType);
 
 		if (compositeEventHandler == null) {
@@ -133,6 +134,7 @@ public class EventHandlerManager extends BasicEventDispatcher {
 
 	public final <T extends Event> EventHandler<? super T> getEventHandler(
 			final EventType<T> eventType) {
+		@SuppressWarnings("unchecked")
 		final CompositeEventHandler<T> compositeEventHandler = (CompositeEventHandler<T>) eventHandlerMap
 				.get(eventType);
 
@@ -164,12 +166,12 @@ public class EventHandlerManager extends BasicEventDispatcher {
 	}
 
 	private <T extends Event> CompositeEventHandler<T> createGetCompositeEventHandler(final EventType<T> eventType) {
+		@SuppressWarnings("unchecked")
 		CompositeEventHandler<T> compositeEventHandler = (CompositeEventHandler<T>) eventHandlerMap.get(eventType);
 		if (compositeEventHandler == null) {
 			compositeEventHandler = new CompositeEventHandler<T>();
 			eventHandlerMap.put(eventType, compositeEventHandler);
 		}
-
 		return compositeEventHandler;
 	}
 

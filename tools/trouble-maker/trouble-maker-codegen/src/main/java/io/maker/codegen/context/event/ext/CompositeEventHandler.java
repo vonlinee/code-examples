@@ -46,8 +46,8 @@ public final class CompositeEventHandler<T extends Event> {
     }
 
     public void dispatchBubblingEvent(final Event event) {
+        @SuppressWarnings("unchecked")
         final T specificEvent = (T) event;
-
         EventProcessorRecord<T> record = firstRecord;
         while (record != null) {
             if (record.isDisconnected()) {
@@ -63,6 +63,7 @@ public final class CompositeEventHandler<T extends Event> {
     }
 
     public void dispatchCapturingEvent(final Event event) {
+        @SuppressWarnings("unchecked")
         final T specificEvent = (T) event;
         EventProcessorRecord<T> record = firstRecord;
         while (record != null) {

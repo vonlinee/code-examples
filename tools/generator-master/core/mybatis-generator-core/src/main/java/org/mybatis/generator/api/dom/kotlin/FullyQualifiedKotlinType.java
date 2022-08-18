@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.api.dom.kotlin;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;

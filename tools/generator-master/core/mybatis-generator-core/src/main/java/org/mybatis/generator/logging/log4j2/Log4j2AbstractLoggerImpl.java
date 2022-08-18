@@ -62,4 +62,24 @@ public class Log4j2AbstractLoggerImpl implements Log {
         log.logIfEnabled(FQCN, Level.WARN, MARKER, (Message) new SimpleMessage(s), null);
     }
 
+    @Override
+    public void info(String msg) {
+
+    }
+
+    @Override
+    public void info(String format, Object arg) {
+
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void info(String format, Object... arguments) {
+
+    }
+
 }

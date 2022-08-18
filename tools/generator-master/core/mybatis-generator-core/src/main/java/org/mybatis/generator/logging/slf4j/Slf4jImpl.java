@@ -19,6 +19,7 @@ import org.mybatis.generator.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
+import org.slf4j.helpers.NOPLogger;
 import org.slf4j.spi.LocationAwareLogger;
 
 public class Slf4jImpl implements Log {
@@ -26,8 +27,12 @@ public class Slf4jImpl implements Log {
     private Log log;
 
     public Slf4jImpl(Class<?> clazz) {
+        // SLF4j
         Logger logger = LoggerFactory.getLogger(clazz);
-
+        if (logger instanceof NOPLogger) {
+            System.out.println("未引入slf4j-impl，比如slf4j-log4j12");
+        }
+        // org.slf4j.spi.LocationAwareLogger
         if (logger instanceof LocationAwareLogger) {
             try {
                 // check for slf4j >= 1.6 method signature
@@ -39,7 +44,6 @@ public class Slf4jImpl implements Log {
                 // fail-back to Slf4jLoggerImpl
             }
         }
-
         // Logger is not LocationAwareLogger or slf4j version < 1.6
         log = new Slf4jLoggerImpl(logger);
     }
@@ -67,6 +71,26 @@ public class Slf4jImpl implements Log {
     @Override
     public void warn(String s) {
         log.warn(s);
+    }
+
+    @Override
+    public void info(String msg) {
+
+    }
+
+    @Override
+    public void info(String format, Object arg) {
+
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void info(String format, Object... arguments) {
+
     }
 
 }

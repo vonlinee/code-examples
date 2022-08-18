@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import org.mybatis.generator.exception.InvalidConfigurationException;
 
 public class Configuration {
 
-    private final List<Context> contexts;
+    private List<Context> contexts;
 
     private final List<String> classPathEntries;
 
@@ -47,9 +47,7 @@ public class Configuration {
      * This method does a simple validate, it makes sure that all required fields have been filled in and that all
      * implementation classes exist and are of the proper type. It does not do any more complex operations such as:
      * validating that database tables exist or validating that named columns exist
-     *
-     * @throws InvalidConfigurationException
-     *             the invalid configuration exception
+     * @throws InvalidConfigurationException the invalid configuration exception
      */
     public void validate() throws InvalidConfigurationException {
         List<String> errors = new ArrayList<>();
@@ -81,5 +79,13 @@ public class Configuration {
 
     public void addContext(Context context) {
         contexts.add(context);
+    }
+
+    public void removeContext(Context context) {
+        contexts.remove(context);
+    }
+
+    public void setContexts(List<Context> contexts) {
+        this.contexts = contexts;
     }
 }

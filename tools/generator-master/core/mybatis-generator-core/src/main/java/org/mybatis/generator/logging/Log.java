@@ -26,4 +26,12 @@ public interface Log {
     void debug(String s);
 
     void warn(String s);
+
+    void info(String msg);
+
+    void info(String format, Object arg);
+
+    void info(String format, Object arg1, Object arg2);
+
+    void info(String format, Object... arguments);
 }

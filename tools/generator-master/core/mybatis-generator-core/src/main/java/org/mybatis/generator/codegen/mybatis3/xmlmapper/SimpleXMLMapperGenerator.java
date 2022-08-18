@@ -17,6 +17,7 @@ package org.mybatis.generator.codegen.mybatis3.xmlmapper;
 
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
+import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.FullyQualifiedTable;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.Document;
@@ -37,15 +38,21 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
         super();
     }
 
+    /**
+     * <mapper></mapper>标签的内容
+     * @return
+     */
     protected XmlElement getSqlMapElement() {
         FullyQualifiedTable table = introspectedTable.getFullyQualifiedTable();
         progressCallback.startTask(getString("Progress.12", table.toString())); //$NON-NLS-1$
+        // 根标签
         XmlElement answer = new XmlElement("mapper"); //$NON-NLS-1$
         String namespace = introspectedTable.getMyBatis3SqlMapNamespace();
         answer.addAttribute(new Attribute("namespace", namespace)); //$NON-NLS-1$
-
-        context.getCommentGenerator().addRootComment(answer);
-
+        // 添加注释
+        CommentGenerator commentGenerator = context.getCommentGenerator();
+        commentGenerator.addRootComment(answer);
+        // ResultMap标签
         addResultMapElement(answer);
         addDeleteByPrimaryKeyElement(answer);
         addInsertElement(answer);
@@ -57,9 +64,11 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
     }
 
     protected void addResultMapElement(XmlElement parentElement) {
+        // 是否生成BaseResultMap
         if (introspectedTable.getRules().generateBaseResultMap()) {
             AbstractXmlElementGenerator elementGenerator = new ResultMapWithoutBLOBsElementGenerator(true);
             initializeAndExecuteGenerator(elementGenerator, parentElement);
+
         }
     }
 
@@ -96,8 +105,7 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
         }
     }
 
-    protected void initializeAndExecuteGenerator(AbstractXmlElementGenerator elementGenerator,
-                                                 XmlElement parentElement) {
+    protected void initializeAndExecuteGenerator(AbstractXmlElementGenerator elementGenerator, XmlElement parentElement) {
         elementGenerator.setContext(context);
         elementGenerator.setIntrospectedTable(introspectedTable);
         elementGenerator.setProgressCallback(progressCallback);
@@ -107,14 +115,12 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
 
     @Override
     public Document getDocument() {
-        Document document = new Document(XmlConstants.MYBATIS3_MAPPER_PUBLIC_ID,
-                XmlConstants.MYBATIS3_MAPPER_SYSTEM_ID);
+        Document document = new Document(XmlConstants.MYBATIS3_MAPPER_PUBLIC_ID, XmlConstants.MYBATIS3_MAPPER_SYSTEM_ID);
         document.setRootElement(getSqlMapElement());
 
         if (!context.getPlugins().sqlMapDocumentGenerated(document, introspectedTable)) {
             document = null;
         }
-
         return document;
     }
 }

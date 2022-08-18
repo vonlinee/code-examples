@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.internal.db;
 
-import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
+import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualifiedTableName;
 
 /**
  * This class holds the actual catalog, schema, and table name returned from the

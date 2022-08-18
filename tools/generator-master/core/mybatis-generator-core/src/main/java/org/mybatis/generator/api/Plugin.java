@@ -1309,8 +1309,7 @@ public interface Plugin {
      *         first plugin returning false will disable the calling of further
      *         plugins.
      */
-    default boolean sqlMapGenerated(GeneratedXmlFile sqlMap,
-            IntrospectedTable introspectedTable) {
+    default boolean sqlMapGenerated(GeneratedXmlFile sqlMap, IntrospectedTable introspectedTable) {
         return true;
     }
 

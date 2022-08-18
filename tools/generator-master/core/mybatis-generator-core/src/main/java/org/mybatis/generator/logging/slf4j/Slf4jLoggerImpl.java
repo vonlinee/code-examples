@@ -51,4 +51,23 @@ class Slf4jLoggerImpl implements Log {
         log.warn(s);
     }
 
+    @Override
+    public void info(String msg) {
+        log.info(msg);
+    }
+
+    @Override
+    public void info(String format, Object arg) {
+        log.info(format, arg);
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2) {
+        log.info(format, arg1, arg2);
+    }
+
+    @Override
+    public void info(String format, Object... arguments) {
+        log.info(format, arguments);
+    }
 }

@@ -23,9 +23,7 @@ import org.mybatis.generator.config.Context;
 /**
  * This class is the default formatter for generated XML.  This class will use the
  * built in document renderer.
- *
- * @author Jeff Butler
- *
+ * 负责将Document渲染成字符串
  */
 public class DefaultXmlFormatter implements XmlFormatter {
     protected Context context;

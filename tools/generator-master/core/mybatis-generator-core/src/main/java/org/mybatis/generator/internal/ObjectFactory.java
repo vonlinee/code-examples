@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.internal;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.net.URL;

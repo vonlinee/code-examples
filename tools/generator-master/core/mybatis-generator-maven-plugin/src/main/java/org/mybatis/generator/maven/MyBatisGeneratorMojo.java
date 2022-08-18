@@ -41,7 +41,7 @@ import org.mybatis.generator.exception.InvalidConfigurationException;
 import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.util.ClassloaderUtility;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.internal.util.StringUtils;
 import org.mybatis.generator.internal.util.messages.Messages;
 import org.mybatis.generator.logging.LogFactory;
 
@@ -195,7 +195,7 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
         runScriptIfNecessary();
 
         Set<String> fullyqualifiedTables = new HashSet<>();
-        if (StringUtility.stringHasValue(tableNames)) {
+        if (StringUtils.stringHasValue(tableNames)) {
             StringTokenizer st = new StringTokenizer(tableNames, ","); //$NON-NLS-1$
             while (st.hasMoreTokens()) {
                 String s = st.nextToken().trim();
@@ -206,7 +206,7 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
         }
 
         Set<String> contextsToRun = new HashSet<>();
-        if (StringUtility.stringHasValue(contexts)) {
+        if (StringUtils.stringHasValue(contexts)) {
             StringTokenizer st = new StringTokenizer(contexts, ","); //$NON-NLS-1$
             while (st.hasMoreTokens()) {
                 String s = st.nextToken().trim();

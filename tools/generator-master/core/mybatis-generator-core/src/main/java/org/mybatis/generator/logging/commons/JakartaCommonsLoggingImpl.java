@@ -51,4 +51,24 @@ public class JakartaCommonsLoggingImpl implements org.mybatis.generator.logging.
         log.warn(s);
     }
 
+    @Override
+    public void info(String msg) {
+
+    }
+
+    @Override
+    public void info(String format, Object arg) {
+
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void info(String format, Object... arguments) {
+
+    }
+
 }

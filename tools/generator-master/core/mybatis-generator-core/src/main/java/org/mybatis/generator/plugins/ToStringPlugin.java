@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.plugins;
 
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
 
 import java.util.List;
 import java.util.Properties;

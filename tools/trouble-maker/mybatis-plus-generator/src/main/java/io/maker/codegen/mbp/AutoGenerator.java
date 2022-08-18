@@ -154,13 +154,16 @@ public class AutoGenerator {
             config = new ConfigBuilder(packageInfo, dataSource, strategy, template, globalConfig, injection);
         }
         if (null == templateEngine) {
+            logger.info("采用 Velocity 引擎");
             // 为了兼容之前逻辑，采用 Velocity 引擎 【 默认 】
             templateEngine = new VelocityTemplateEngine();
+        } else {
+            logger.info("采用 FreeMarker 引擎");
         }
         templateEngine.setConfigBuilder(config);
         // 模板引擎初始化执行文件输出
         templateEngine.init(config);
-        logger.info("==========================开始生成文件...==========================");
+        logger.info("========================== 开始生成文件 ==========================");
         templateEngine.batchOutput();
         logger.info("==========================文件生成完成！！！==========================");
         templateEngine.open();
