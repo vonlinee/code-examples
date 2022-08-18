@@ -17,6 +17,8 @@ package org.mybatis.generator.logging;
 
 public interface Log {
 
+    boolean isPrepared();
+
     boolean isDebugEnabled();
 
     void error(String s, Throwable e);

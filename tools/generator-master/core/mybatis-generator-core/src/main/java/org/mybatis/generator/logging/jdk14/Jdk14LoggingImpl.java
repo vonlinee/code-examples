@@ -29,6 +29,11 @@ public class Jdk14LoggingImpl implements Log {
     }
 
     @Override
+    public boolean isPrepared() {
+        return false;
+    }
+
+    @Override
     public boolean isDebugEnabled() {
         return log.isLoggable(Level.FINE);
     }

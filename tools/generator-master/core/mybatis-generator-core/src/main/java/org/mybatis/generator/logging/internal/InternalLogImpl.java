@@ -1,11 +1,11 @@
-package org.mybatis.generator.logging.nologging;
+package org.mybatis.generator.logging.internal;
 
 import org.mybatis.generator.logging.Log;
 
-public class NoLoggingImpl implements Log {
+public class InternalLogImpl implements Log {
 
-    public NoLoggingImpl() {
-        // Do Nothing
+    public InternalLogImpl(Class<?> targetClass) {
+
     }
 
     @Override
@@ -20,22 +20,22 @@ public class NoLoggingImpl implements Log {
 
     @Override
     public void error(String s, Throwable e) {
-        // Do Nothing
+
     }
 
     @Override
     public void error(String s) {
-        // Do Nothing
+
     }
 
     @Override
     public void debug(String s) {
-        // Do Nothing
+
     }
 
     @Override
     public void warn(String s) {
-        // Do Nothing
+
     }
 
     @Override

@@ -27,6 +27,11 @@ class Slf4jLoggerImpl implements Log {
     }
 
     @Override
+    public boolean isPrepared() {
+        return false;
+    }
+
+    @Override
     public boolean isDebugEnabled() {
         return log.isDebugEnabled();
     }

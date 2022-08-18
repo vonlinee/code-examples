@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2021 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.logging;
 
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
@@ -23,10 +8,6 @@ import org.mybatis.generator.logging.log4j2.Log4j2LoggingLogFactory;
 import org.mybatis.generator.logging.nologging.NoLoggingLogFactory;
 import org.mybatis.generator.logging.slf4j.Slf4jLoggingLogFactory;
 
-/**
- * Factory for creating loggers.
- * @author Jeff Butler
- */
 public class LogFactory {
     private static AbstractLogFactory theFactory;
     public static final String MARKER = "MYBATIS-GENERATOR"; //$NON-NLS-1$
@@ -53,8 +34,7 @@ public class LogFactory {
             return;
         }
         if (tryImplementation(new NoLoggingLogFactory())) {
-            System.out.println("NoLoggingLogFactory");
-            return;
+            System.err.println("[WARNING] Logging initialized using instance of '" + NoLoggingLogFactory.class + "' adapter.");
         }
     }
 
@@ -105,7 +85,8 @@ public class LogFactory {
     private static boolean tryImplementation(AbstractLogFactory factory) {
         if (theFactory == null) {
             try {
-                setImplementation(factory);
+                // 为theFactory赋值
+                return setImplementation(factory);
             } catch (LogException e) {
                 // ignore
                 return false;
@@ -114,15 +95,18 @@ public class LogFactory {
         return true;
     }
 
-    private static void setImplementation(AbstractLogFactory factory) {
+    private static boolean setImplementation(AbstractLogFactory factory) {
         try {
+            // 获取Log门面，如果获取
             Log log = factory.getLog(LogFactory.class);
-            if (log.isDebugEnabled()) {
-                log.debug("Logging initialized using '" + factory + "' adapter."); //$NON-NLS-1$ //$NON-NLS-2$
+            if (!log.isPrepared()) {
+                return false;
             }
+            log.debug("Logging initialized using '" + factory + "' adapter."); //$NON-NLS-1$ //$NON-NLS-2$
             theFactory = factory;
         } catch (Throwable t) {
             throw new LogException("Error setting Log implementation.  Cause: " + t.getMessage(), t); //$NON-NLS-1$
         }
+        return true;
     }
 }

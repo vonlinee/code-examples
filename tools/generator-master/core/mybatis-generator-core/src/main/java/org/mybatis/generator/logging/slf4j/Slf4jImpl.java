@@ -26,11 +26,28 @@ public class Slf4jImpl implements Log {
 
     private Log log;
 
+    private boolean prepared;
+
+    @Override
+    public boolean isPrepared() {
+        return prepared;
+    }
+
     public Slf4jImpl(Class<?> clazz) {
-        // SLF4j
+        // 优先slf4j进行检查
+        try {
+            // StaticLoggerBinder不存在，则slf4j没有实现
+            Class.forName("org.slf4j.impl.StaticLoggerBinder");
+        } catch (ClassNotFoundException exception) {
+            prepared = false; // 初始化失败
+            return;
+        }
+        // SLF4j门面可能有不同实现
         Logger logger = LoggerFactory.getLogger(clazz);
-        if (logger instanceof NOPLogger) {
-            System.out.println("未引入slf4j-impl，比如slf4j-log4j12");
+        if (logger instanceof NOPLogger) { // 针对slf4j-log4j12
+            // 未初始化正确，比如未配置
+            prepared = false;
+            return;
         }
         // org.slf4j.spi.LocationAwareLogger
         if (logger instanceof LocationAwareLogger) {
@@ -39,6 +56,7 @@ public class Slf4jImpl implements Log {
                 logger.getClass().getMethod("log", Marker.class, String.class, int.class, //$NON-NLS-1$
                         String.class, Object[].class, Throwable.class);
                 log = new Slf4jLocationAwareLoggerImpl((LocationAwareLogger) logger);
+                prepared = true;
                 return;
             } catch (SecurityException | NoSuchMethodException e) {
                 // fail-back to Slf4jLoggerImpl
