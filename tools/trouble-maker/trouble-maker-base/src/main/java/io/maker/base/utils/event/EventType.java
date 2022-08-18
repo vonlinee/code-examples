@@ -1,4 +1,4 @@
-package io.maker.codegen.context.event;
+package io.maker.base.utils.event;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectStreamException;
@@ -12,10 +12,13 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 /**
+ * 事件类型，关联Event
  * This class represents a specific event type associated with an {@code Event}.
  * <p>
  * Event types form a hierarchy with the {@link EventType#ROOT} (equals to
- * {@link Event#ANY}) as its root. This is useful in event filter / handler
+ * {@link Event#ANY}) as its root.
+ *
+ * This is useful in event filter / handler
  * registration where a single event filter / handler can be registered to a
  * super event type and will be receiving its sub type events as well.
  * Note that you cannot construct two different EventType objects with the same
@@ -26,20 +29,21 @@ import java.util.WeakHashMap;
  * (e.g. as part of {@link Event} deserialization), need to exist at the time of
  * deserialization. Deserialization of EventType will not create new EventType
  * objects.
- *
  * @param <T> the event class to which this type applies
  * @since JavaFX 2.0
  */
-public final class EventType<T extends Event> implements Serializable{
+public final class EventType<T extends Event> implements Serializable {
 
     /**
      * The root event type. All other event types are either direct or
      * indirect sub types of it. It is also the only event type which
      * has its super event type set to {@code null}.
      */
-    public static final EventType<Event> ROOT =
-            new EventType<Event>("EVENT", null);
+    public static final EventType<Event> ROOT = new EventType<>("EVENT", null);
 
+    /**
+     *
+     */
     private WeakHashMap<EventType<? extends T>, Void> subTypes;
 
     private final EventType<? super T> superType;
@@ -59,10 +63,9 @@ public final class EventType<T extends Event> implements Serializable{
     /**
      * Constructs a new {@code EventType} with the specified name and the
      * {@code EventType.ROOT} as its super type.
-     *
      * @param name the name
      * @throws IllegalArgumentException if an EventType with the same name and
-     * {@link EventType#ROOT}/{@link Event#ANY} as parent
+     *                                  {@link EventType#ROOT}/{@link Event#ANY} as parent
      */
     public EventType(final String name) {
         this(ROOT, name);
@@ -71,10 +74,9 @@ public final class EventType<T extends Event> implements Serializable{
     /**
      * Constructs a new {@code EventType} with the specified super type and
      * the name set to {@code null}.
-     *
      * @param superType the event super type
      * @throws IllegalArgumentException if an EventType with "null" name and
-     * under this supertype exists
+     *                                  under this supertype exists
      */
     public EventType(final EventType<? super T> superType) {
         this(superType, null);
@@ -83,19 +85,17 @@ public final class EventType<T extends Event> implements Serializable{
     /**
      * Constructs a new {@code EventType} with the specified super type and
      * name.
-     *
      * @param superType the event super type
-     * @param name the name
+     * @param name      the name
      * @throws IllegalArgumentException if an EventType with the same name and
-     * superType exists
+     *                                  superType exists
      */
     public EventType(final EventType<? super T> superType,
-            final String name) {
+                     final String name) {
         if (superType == null) {
             throw new NullPointerException(
                     "Event super type must not be null!");
         }
-
         this.superType = superType;
         this.name = name;
         superType.register(this);
@@ -104,14 +104,15 @@ public final class EventType<T extends Event> implements Serializable{
     /**
      * Internal constructor that skips various checks
      */
-    EventType(final String name,
-                      final EventType<? super T> superType) {
+    EventType(final String name, final EventType<? super T> superType) {
         this.superType = superType;
         this.name = name;
         if (superType != null) {
             if (superType.subTypes != null) {
-                for (Iterator i = superType.subTypes.keySet().iterator(); i.hasNext();) {
-                    EventType t  = (EventType) i.next();
+                @SuppressWarnings("unchecked")
+                Iterator<EventType<?>> i = (Iterator<EventType<?>>) superType.subTypes.keySet().iterator();
+                while (i.hasNext()) {
+                    EventType<?> t = i.next();
                     if (name == null && t.name == null || (name != null && name.equals(t.name))) {
                         i.remove();
                     }
@@ -124,7 +125,6 @@ public final class EventType<T extends Event> implements Serializable{
     /**
      * Gets the super type of this event type. The returned value is
      * {@code null} only for the {@code EventType.ROOT}.
-     *
      * @return the super type
      */
     public final EventType<? super T> getSuperType() {
@@ -133,7 +133,6 @@ public final class EventType<T extends Event> implements Serializable{
 
     /**
      * Gets the name of this event type.
-     *
      * @return the name
      */
     public final String getName() {
@@ -149,61 +148,72 @@ public final class EventType<T extends Event> implements Serializable{
         return (name != null) ? name : super.toString();
     }
 
+    /**
+     * 注册事件子类型
+     * @param subType 子类型
+     */
     private void register(EventType<? extends T> subType) {
         if (subTypes == null) {
-            subTypes = new WeakHashMap<EventType<? extends T>, Void>();
+            subTypes = new WeakHashMap<>();
         }
         for (EventType<? extends T> t : subTypes.keySet()) {
             if (((t.name == null && subType.name == null) || (t.name != null && t.name.equals(subType.name)))) {
                 throw new IllegalArgumentException("EventType \"" + subType + "\""
-                        + "with parent \"" + subType.getSuperType()+"\" already exists");
+                        + "with parent \"" + subType.getSuperType() + "\" already exists");
             }
         }
         subTypes.put(subType, null);
     }
 
     private Object writeReplace() throws ObjectStreamException {
-        Deque<String> path = new LinkedList<String>();
+        Deque<String> path = new LinkedList<>();
         EventType<?> t = this;
         while (t != ROOT) {
             path.addFirst(t.name);
             t = t.superType;
         }
-        return new EventTypeSerialization(new ArrayList<String>(path));
+        return new EventTypeSerialization(new ArrayList<>(path));
     }
 
     static class EventTypeSerialization implements Serializable {
-        private List<String> path;
+
+        private final List<String> path;
 
         public EventTypeSerialization(List<String> path) {
             this.path = path;
         }
 
         private Object readResolve() throws ObjectStreamException {
-            EventType t = ROOT;
-//            for (int i = 0; i < path.size(); ++i) {
-//                String p = path.get(i);
-//                if (t.subTypes != null) {
-//                    EventType s = findSubType;(t.subTypes.keySet(), p);
-//                    if (s == null) {
-//                        throw new InvalidObjectException("Cannot find event type \"" + p + "\" (of " + t + ")");
-//                    }
-//                    t = s;
-//                } else {
-//                    throw new InvalidObjectException("Cannot find event type \"" + p + "\" (of " + t + ")");
-//                }
-//            }
+            EventType<?> t = ROOT;
+            for (String p : path) {
+                if (t.subTypes != null) {
+                    @SuppressWarnings("unchecked")
+                    Set<EventType<?>> subTypes = (Set<EventType<?>>) t.subTypes.keySet();
+                    EventType<?> s = findSubType(subTypes, p);
+                    if (s == null) {
+                        throw new InvalidObjectException("Cannot find event type \"" + p + "\" (of " + t + ")");
+                    }
+                    t = s;
+                } else {
+                    throw new InvalidObjectException("Cannot find event type \"" + p + "\" (of " + t + ")");
+                }
+            }
             return t;
         }
 
-        private EventType findSubType(Set<EventType> subTypes, String name) {
-            for (EventType t : subTypes) {
+        /**
+         * 类似于枚举
+         * @param subTypes 子类型
+         * @param name 子类型
+         * @return
+         */
+        private EventType<?> findSubType(Set<EventType<?>> subTypes, String name) {
+            for (EventType<?> t : subTypes) {
                 if (((t.name == null && name == null) || (t.name != null && t.name.equals(name)))) {
                     return t;
                 }
             }
             return null;
         }
-
     }
 }

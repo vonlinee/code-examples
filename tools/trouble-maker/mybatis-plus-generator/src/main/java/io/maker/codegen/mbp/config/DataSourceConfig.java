@@ -33,6 +33,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.Properties;
 
 /**
  * 数据库配置
@@ -294,6 +295,23 @@ public class DataSourceConfig {
          */
         public Builder(@NotNull String url, String username, String password) {
             this();
+            if (StringUtils.isBlank(url)) {
+                throw new RuntimeException("无法创建文件，请正确输入 url 配置信息！");
+            }
+            this.dataSourceConfig.url = url;
+            this.dataSourceConfig.username = username;
+            this.dataSourceConfig.password = password;
+        }
+
+        /**
+         *
+         * @param properties
+         */
+        public Builder(Properties properties) {
+            this();
+            String url = (String) properties.get("url");
+            String username = (String) properties.get("username");
+            String password = (String) properties.get("password");
             if (StringUtils.isBlank(url)) {
                 throw new RuntimeException("无法创建文件，请正确输入 url 配置信息！");
             }

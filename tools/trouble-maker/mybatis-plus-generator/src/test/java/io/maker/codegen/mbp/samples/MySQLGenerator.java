@@ -1,5 +1,6 @@
 package io.maker.codegen.mbp.samples;
 
+import io.maker.base.utils.PropertiesUtils;
 import io.maker.codegen.mbp.FastAutoGenerator;
 import io.maker.codegen.mbp.config.DataSourceConfig;
 import io.maker.codegen.mbp.config.TemplateType;
@@ -13,6 +14,7 @@ import io.maker.codegen.mbp.keywords.MySqlKeyWordsHandler;
 import org.springframework.util.StopWatch;
 
 import java.util.Collections;
+import java.util.Properties;
 
 /**
  * https://github.com/baomidou/generator
@@ -45,11 +47,16 @@ public class MySQLGenerator {
     // 要生成的表名
     private static final String[] tableNamesToBeGenerated = {"user_operation_log"};
 
+    private static final String LOCAL_CONNECTION_PROPERTIES_FILE = "C:\\Users\\Administrator\\Desktop\\jdbc.properties";
+
     public static void main(String[] args) {
         StopWatch stopWatch = new StopWatch("代码生成");
         stopWatch.start("数据源配置");
+
+        Properties properties = PropertiesUtils.loadProperties(LOCAL_CONNECTION_PROPERTIES_FILE);
+
         // 数据源配置
-        DataSourceConfig.Builder dataSourceBuilder = new DataSourceConfig.Builder(URL1, USER_NAME, PASSWORD)
+        DataSourceConfig.Builder dataSourceBuilder = new DataSourceConfig.Builder(properties)
                 .dbQuery(new MySqlQuery()) // 数据库查询
                 .schema("mybatis-plus") // 数据库schema(部分数据库适用)
                 .typeConvert(new MySqlTypeConvert()) // 数据库类型转换器 自定义数据库表字段类型转换【可选】
