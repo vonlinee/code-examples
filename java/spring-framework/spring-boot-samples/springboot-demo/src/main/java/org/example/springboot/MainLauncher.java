@@ -9,6 +9,7 @@ import org.example.springboot.transaction.AccountService3;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -25,13 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 //      JpaRepositoriesAutoConfiguration.class,
 //      HibernateJpaAutoConfiguration.class })
 @SpringBootApplication
-@Import(value = { DataSourceConfiguration.class, OptionalBeanConfiguration.class })
+//@Import(value = { DataSourceConfiguration.class, OptionalBeanConfiguration.class })
 // 开启事务管理
 @EnableTransactionManagement(proxyTargetClass = true) // 启用注解事务，即可以使用@Transactional注解来控制事务等同于xml配置方式的
 														// <tx:annotation-driven />
 @EnableAspectJAutoProxy // 允许AspectJ自动生成代理
 // @ServletComponentScan(value="")
 // @ImportResource(locations= {"classpath:xmlconfig/bean.xml"})
+@EnableFeignClients // 开启Feign客户端
 @RestController
 @RequestMapping("/main")
 public class MainLauncher {

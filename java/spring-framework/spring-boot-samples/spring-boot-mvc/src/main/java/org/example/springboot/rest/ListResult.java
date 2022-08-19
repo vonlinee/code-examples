@@ -1,7 +1,9 @@
-package io.devpl.commons.web.rest;
+package org.example.springboot.rest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ListResult<T> extends AbstractResult<List<T>> {
 
@@ -41,5 +43,20 @@ public class ListResult<T> extends AbstractResult<List<T>> {
 	@Override
 	protected String serialize() {
 		return data.toString();
+	}
+	
+	public void addTestData() {
+		if (data == null) {
+			data = new ArrayList<>();
+		}
+		if (data.isEmpty()) {
+			for (int i = 0; i < 2; i++) {
+				Map<String, Object> map = new HashMap<>();
+				for (int j = 0; j < 5; j++) {
+					map.put("key" + i + "" + j, "value" + i + "" + j);
+				}
+				data.add((T) map);
+			}
+		}
 	}
 }

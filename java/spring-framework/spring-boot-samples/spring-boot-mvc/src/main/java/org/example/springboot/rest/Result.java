@@ -1,4 +1,4 @@
-package io.devpl.commons.web.rest;
+package org.example.springboot.rest;
 
 import java.util.Map;
 

@@ -14,10 +14,10 @@ import java.util.LinkedHashMap;
 @DevplApplication
 public class Main8888 {
     public static void main(String[] args) {
-//        SpringApplication app = new SpringApplication(Main8888.class);
-//        app.setWebApplicationType(WebApplicationType.SERVLET);
-//        app.addInitializers(new AppContextInitializer());
-//        ConfigurableApplicationContext context = app.run(args);
+        SpringApplication app = new SpringApplication(Main8888.class);
+        app.setWebApplicationType(WebApplicationType.SERVLET);
+        app.addInitializers(new AppContextInitializer());
+        ConfigurableApplicationContext context = app.run(args);
 
     }
 }

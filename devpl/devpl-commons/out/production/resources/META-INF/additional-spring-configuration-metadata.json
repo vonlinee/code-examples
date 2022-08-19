@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "devpl.datasource.url",
+      "type": "java.lang.String",
+      "description": "Description for devpl.datasource.url."
+    },
+    {
+      "name": "devpl.datasource.driverClassName",
+      "type": "java.lang.String",
+      "description": "Description for devpl.datasource.driverClassName."
+    },
+    {
+      "name": "devpl.datasource.username",
+      "type": "java.lang.String",
+      "description": "Description for devpl.datasource.username."
+    },
+    {
+      "name": "devpl.datasource.password",
+      "type": "java.lang.String",
+      "description": "Description for devpl.datasource.password."
+    }
+  ]
+}

@@ -8,7 +8,6 @@ public class MyBeanDefinition implements BeanDefinition {
 
 	@Override
 	public void setAttribute(String name, Object value) {
-		// TODO Auto-generated method stub
 		
 	}
 

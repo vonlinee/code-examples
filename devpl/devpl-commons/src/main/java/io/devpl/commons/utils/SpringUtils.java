@@ -9,6 +9,9 @@ import org.springframework.lang.Nullable;
 
 import java.util.Map;
 
+/**
+ * ApplicationContextAware: Context refresh之后才会进行注入
+ */
 public final class SpringUtils implements ApplicationContextAware {
 
     private static final Logger log = LoggerFactory.getLogger(SpringUtils.class);
