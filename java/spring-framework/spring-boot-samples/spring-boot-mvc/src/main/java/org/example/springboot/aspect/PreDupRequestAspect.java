@@ -22,7 +22,7 @@ public class PreDupRequestAspect {
      * @return
      * @throws RuntimeException 抛出自定义异常，由全局异常处理捕获
      */
-    @Before("execution(public * code.example.springboot.controller.*Controller.*(..)) && @annotation(code.example.springboot.anno.DuplicatedRequest)")
+    // @Before("execution(public * code.example.springboot.controller.*Controller.*(..)) && @annotation(code.example.springboot.anno.DuplicatedRequest)")
     public void before() throws RuntimeException {
         try {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

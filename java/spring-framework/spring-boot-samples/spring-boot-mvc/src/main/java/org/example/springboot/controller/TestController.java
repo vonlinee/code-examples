@@ -31,7 +31,6 @@ public class TestController {
         throw new IllegalArgumentException(this.getClass().getName() + " test");
     }
     
-    
     @RequestMapping(value = "/test1", method = RequestMethod.GET)
     @ResponseBody
     public ListResult<Map<String, Object>> test22() {
@@ -44,10 +43,15 @@ public class TestController {
 	@Value("${server.port}")
 	private int port;
     
+	// 测试Feign序列化
     @PostMapping("/serialzie")
     @ResponseBody
     public SerializableModel serialize(SerializableModel remoteModel) {
-    	LOG.info("" + port + " => " + remoteModel);
+    	System.out.println("接收方: " + port);
+    	System.out.println(remoteModel);
         return remoteModel;
     }
 }
+
+// org.springframework.web.client.HttpMessageConverterExtractor<T>
+

@@ -28,9 +28,21 @@ public class TestController {
     @ResponseBody
     public SerializableModel serialize() {
     	SerializableModel localModel = new SerializableModel();
-    	LOG.info("{} => {}", port, localModel);
+    	System.out.println("发送方: " + port);
+    	
+    	localModel.setAge(30);
+    	localModel.setName("孙允珠");
+    	
     	// 通过网络序列化传输
+    	// 对面会将数据原样返回
         SerializableModel remoteModel = feignClient.serialzie(localModel);
+        
+        System.out.println(localModel);
+        System.out.println(remoteModel);
+        
         return remoteModel;
     }
 }
+
+
+// HttpTracerFilter

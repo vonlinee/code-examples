@@ -2,7 +2,7 @@ package org.example.springboot.di.bean;
 
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class Animal {
 	private String name;
 	private String color;
