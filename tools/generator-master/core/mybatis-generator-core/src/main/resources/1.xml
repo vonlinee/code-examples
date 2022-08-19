@@ -1,0 +1,26 @@
+<resultMap id="BaseResultMap" type="mbg.test.mb3.generated.flat.model.Student">
+    <id column="T_STU_ID" jdbcType="VARCHAR" property="stuId"/>
+    <result column="T_STU_NO" jdbcType="VARCHAR" property="stuNo"/>
+    <result column="T_STU_SEX" jdbcType="CHAR" property="stuSex"/>
+    <result column="T_STU_NAME" jdbcType="VARCHAR" property="stuName"/>
+    <result column="T_NATIVE_PLACE" jdbcType="VARCHAR" property="nativePlace"/>
+    <result column="T_STU_DEPART_NO" jdbcType="VARCHAR" property="stuDepartNo"/>
+    <result column="T_STU_CLASS_NO" jdbcType="VARCHAR" property="stuClassNo"/>
+</resultMap><delete id="deleteByPrimaryKey" parameterType="java.lang.String">delete from t_student where STU_ID =
+#{stuId,jdbcType=VARCHAR}
+</delete><insert id="insert" parameterType="mbg.test.mb3.generated.flat.model.Student">insert into t_student (STU_ID,
+STU_NO, STU_SEX, STU_NAME, NATIVE_PLACE, STU_DEPART_NO, STU_CLASS_NO) values (#{stuId,jdbcType=VARCHAR},
+#{stuNo,jdbcType=VARCHAR}, #{stuSex,jdbcType=CHAR}, #{stuName,jdbcType=VARCHAR}, #{nativePlace,jdbcType=VARCHAR},
+#{stuDepartNo,jdbcType=VARCHAR}, #{stuClassNo,jdbcType=VARCHAR})
+</insert><update id="updateByPrimaryKey" parameterType="mbg.test.mb3.generated.flat.model.Student">update t_student set
+STU_NO = #{stuNo,jdbcType=VARCHAR}, STU_SEX = #{stuSex,jdbcType=CHAR}, STU_NAME = #{stuName,jdbcType=VARCHAR},
+NATIVE_PLACE = #{nativePlace,jdbcType=VARCHAR}, STU_DEPART_NO = #{stuDepartNo,jdbcType=VARCHAR}, STU_CLASS_NO =
+#{stuClassNo,jdbcType=VARCHAR} where STU_ID = #{stuId,jdbcType=VARCHAR}
+</update><select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">select T.STU_ID as
+T_STU_ID, T.STU_NO as T_STU_NO, T.STU_SEX as T_STU_SEX, T.STU_NAME as T_STU_NAME, T.NATIVE_PLACE as T_NATIVE_PLACE,
+T.STU_DEPART_NO as T_STU_DEPART_NO, T.STU_CLASS_NO as T_STU_CLASS_NO from t_student T where STU_ID =
+#{stuId,jdbcType=VARCHAR}
+</select><select id="selectAll" resultMap="BaseResultMap">select T.STU_ID as T_STU_ID, T.STU_NO as T_STU_NO, T.STU_SEX
+as T_STU_SEX, T.STU_NAME as T_STU_NAME, T.NATIVE_PLACE as T_NATIVE_PLACE, T.STU_DEPART_NO as T_STU_DEPART_NO,
+T.STU_CLASS_NO as T_STU_CLASS_NO from t_student T
+</select>

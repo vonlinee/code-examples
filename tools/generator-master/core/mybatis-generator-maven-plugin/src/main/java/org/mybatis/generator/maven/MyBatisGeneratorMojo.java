@@ -40,7 +40,7 @@ import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.mybatis.generator.exception.InvalidConfigurationException;
 import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.ObjectFactory;
-import org.mybatis.generator.internal.util.ClassloaderUtility;
+import org.mybatis.generator.internal.util.ClassloaderUtils;
 import org.mybatis.generator.internal.util.StringUtils;
 import org.mybatis.generator.internal.util.messages.Messages;
 import org.mybatis.generator.logging.LogFactory;
@@ -177,7 +177,7 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
         for (Resource resource: resources) {
             resourceDirectories.add(resource.getDirectory());
         }
-        ClassLoader cl = ClassloaderUtility.getCustomClassloader(resourceDirectories);
+        ClassLoader cl = ClassloaderUtils.getCustomClassloader(resourceDirectories);
         ObjectFactory.addExternalClassLoader(cl);
 
         if (configurationFile == null) {
@@ -288,7 +288,7 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
                 entries.remove(project.getBuild().getOutputDirectory());
                 entries.remove(project.getBuild().getTestOutputDirectory());
 
-                ClassLoader contextClassLoader = ClassloaderUtility.getCustomClassloader(entries);
+                ClassLoader contextClassLoader = ClassloaderUtils.getCustomClassloader(entries);
                 Thread.currentThread().setContextClassLoader(contextClassLoader);
             } catch (DependencyResolutionRequiredException e) {
                 throw new MojoExecutionException("Dependency Resolution Required", e);

@@ -28,7 +28,7 @@ import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
-import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.codegen.mybatis3.Lists;
 
 public class ProviderInsertSelectiveMethodGenerator extends AbstractJavaProviderMethodGenerator {
 
@@ -50,7 +50,7 @@ public class ProviderInsertSelectiveMethodGenerator extends AbstractJavaProvider
                 escapeStringForJava(introspectedTable.getFullyQualifiedTableNameAtRuntime())));
 
         for (IntrospectedColumn introspectedColumn :
-                ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns())) {
+                Lists.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns())) {
 
             method.addBodyLine(""); //$NON-NLS-1$
             if (!introspectedColumn.getFullyQualifiedJavaType().isPrimitive()

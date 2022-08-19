@@ -1,6 +1,9 @@
 package org.mybatis.generator.api.dom.xml.render;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.mybatis.generator.api.dom.xml.Attribute;
@@ -23,7 +26,10 @@ public class ElementRenderer implements ElementVisitor<Stream<String>> {
     @Override
     public Stream<String> visit(XmlElement element) {
         if (element.hasChildren()) {
-            return renderWithChildren(element);
+            // 渲染子标签
+            Stream<String> children = renderWithChildren(element);
+
+            return children;
         } else {
             return renderWithoutChildren(element);
         }
@@ -38,6 +44,8 @@ public class ElementRenderer implements ElementVisitor<Stream<String>> {
 
     public Stream<String> renderWithChildren(XmlElement element) {
         Stream<String> open = renderOpen(element);
+
+        // TODO 控制子标签之间的排版，是否有空行等
         Stream<String> children = renderChildren(element);
         Stream<String> close = renderClose(element);
         return Stream.of(open, children, close).flatMap(s -> s);
@@ -57,10 +65,34 @@ public class ElementRenderer implements ElementVisitor<Stream<String>> {
                 + ">"); //$NON-NLS-1$
     }
 
+    /**
+     * 渲染子标签
+     * @param element
+     * @return
+     */
     private Stream<String> renderChildren(XmlElement element) {
-        return element.getElements().stream()
-                .flatMap(this::renderChild)
-                .map(this::indent);
+        List<VisitableElement> elements = element.getElements();
+
+        Stream<VisitableElement> elementStream = elements.stream();
+        Stream<String> stringStream = elementStream.flatMap(this::renderChild);
+        Stream<String> stream = stringStream.map(this::indent);
+
+        // stream.forEach(System.out::println);
+
+        List<String> streamCopy = stream.collect(Collectors.toList());
+
+        // TODO 二级标签之间添加空行
+        if (element.getName().equals("mapper")) {
+            List<String> newArrayList = new ArrayList<>();
+            for (String s : streamCopy) {
+                newArrayList.add("\n");
+                newArrayList.add(s);
+                // System.out.println(s);
+            }
+            System.out.println(newArrayList.size());
+            streamCopy = newArrayList;
+        }
+        return streamCopy.stream();
     }
 
     private Stream<String> renderChild(VisitableElement child) {

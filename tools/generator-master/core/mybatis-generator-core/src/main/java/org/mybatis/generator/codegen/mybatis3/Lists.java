@@ -30,9 +30,9 @@ import org.mybatis.generator.api.IntrospectedColumn;
  * @author Jeff Butler
  *
  */
-public class ListUtilities {
+public class Lists {
 
-    private ListUtilities() {}
+    private Lists() {}
 
     public static List<IntrospectedColumn> removeGeneratedAlwaysColumns(List<IntrospectedColumn> columns) {
         return columns.stream()

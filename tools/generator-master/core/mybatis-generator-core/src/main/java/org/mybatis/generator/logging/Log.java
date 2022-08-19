@@ -1,22 +1,11 @@
-/*
- *    Copyright 2006-2020 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.logging;
 
 public interface Log {
 
+    /**
+     * 日志组件是否可用，可用的标准在于是否能正常进行日志打印的功能
+     * @return true
+     */
     boolean isPrepared();
 
     boolean isDebugEnabled();
@@ -29,11 +18,31 @@ public interface Log {
 
     void warn(String s);
 
+    /**
+     *
+     * @param msg
+     */
     void info(String msg);
 
+    /**
+     *
+     * @param format
+     * @param arg
+     */
     void info(String format, Object arg);
 
+    /**
+     *
+     * @param format
+     * @param arg1
+     * @param arg2
+     */
     void info(String format, Object arg1, Object arg2);
 
+    /**
+     *
+     * @param format
+     * @param arguments
+     */
     void info(String format, Object... arguments);
 }

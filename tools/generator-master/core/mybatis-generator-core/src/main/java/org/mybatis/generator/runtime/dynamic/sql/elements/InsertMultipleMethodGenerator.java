@@ -24,7 +24,7 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
-import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.codegen.mybatis3.Lists;
 
 public class InsertMultipleMethodGenerator extends AbstractMethodGenerator {
     private final FullyQualifiedJavaType recordType;
@@ -68,7 +68,7 @@ public class InsertMultipleMethodGenerator extends AbstractMethodGenerator {
                 + ", c ->"); //$NON-NLS-1$
 
         List<IntrospectedColumn> columns =
-                ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
+                Lists.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
         boolean first = true;
         for (IntrospectedColumn column : columns) {
             String fieldName = calculateFieldName(column);

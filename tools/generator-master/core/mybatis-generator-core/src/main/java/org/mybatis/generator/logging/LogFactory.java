@@ -2,6 +2,8 @@ package org.mybatis.generator.logging;
 
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
+import org.mybatis.generator.internal.util.JavaVersion;
+import org.mybatis.generator.internal.util.RuntimeUtils;
 import org.mybatis.generator.logging.commons.JakartaCommonsLoggingLogFactory;
 import org.mybatis.generator.logging.jdk14.Jdk14LoggingLogFactory;
 import org.mybatis.generator.logging.log4j2.Log4j2LoggingLogFactory;
@@ -29,12 +31,12 @@ public class LogFactory {
             System.out.println("Log4j2LoggingLogFactory");
             return;
         }
-        if (tryImplementation(new Jdk14LoggingLogFactory())) {
-            System.out.println("Jdk14LoggingLogFactory");
+        // JDK >= 14
+        if (RuntimeUtils.getJvmVersion().compareTo(JavaVersion.JAVA_14) >= 0 && tryImplementation(new Jdk14LoggingLogFactory())) {
             return;
         }
         if (tryImplementation(new NoLoggingLogFactory())) {
-            System.err.println("[WARNING] Logging initialized using instance of '" + NoLoggingLogFactory.class + "' adapter.");
+            System.err.println("[WARNING " + MARKER + "] Logging initialized using instance of '" + NoLoggingLogFactory.class + "' adapter.");
         }
     }
 

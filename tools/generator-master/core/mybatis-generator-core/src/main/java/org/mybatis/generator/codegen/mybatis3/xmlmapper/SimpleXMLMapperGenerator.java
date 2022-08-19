@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2021 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.codegen.mybatis3.xmlmapper;
 
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
@@ -31,8 +16,12 @@ import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ResultMapWithou
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.SimpleSelectAllElementGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.SimpleSelectByPrimaryKeyElementGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.UpdateByPrimaryKeyWithoutBLOBsElementGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
+
+    private static final Logger logger = LoggerFactory.getLogger(SimpleXMLMapperGenerator.class);
 
     public SimpleXMLMapperGenerator() {
         super();
@@ -47,6 +36,10 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
         progressCallback.startTask(getString("Progress.12", table.toString())); //$NON-NLS-1$
         // 根标签
         XmlElement answer = new XmlElement("mapper"); //$NON-NLS-1$
+
+        answer.setBlankBetweenChildren(true);
+        logger.info("初始化<mapper></mapper>");
+
         String namespace = introspectedTable.getMyBatis3SqlMapNamespace();
         answer.addAttribute(new Attribute("namespace", namespace)); //$NON-NLS-1$
         // 添加注释
@@ -54,6 +47,8 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
         commentGenerator.addRootComment(answer);
         // ResultMap标签
         addResultMapElement(answer);
+
+        // 添加XML Mapper标签
         addDeleteByPrimaryKeyElement(answer);
         addInsertElement(answer);
         addUpdateByPrimaryKeyElement(answer);
@@ -116,8 +111,10 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
     @Override
     public Document getDocument() {
         Document document = new Document(XmlConstants.MYBATIS3_MAPPER_PUBLIC_ID, XmlConstants.MYBATIS3_MAPPER_SYSTEM_ID);
-        document.setRootElement(getSqlMapElement());
-
+        // 根标签
+        XmlElement sqlMapElement = getSqlMapElement();
+        document.setRootElement(sqlMapElement);
+        // 执行插件生命周期
         if (!context.getPlugins().sqlMapDocumentGenerated(document, introspectedTable)) {
             document = null;
         }

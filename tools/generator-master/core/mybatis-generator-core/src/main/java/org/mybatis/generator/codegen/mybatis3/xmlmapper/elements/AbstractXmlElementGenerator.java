@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2021 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.codegen.mybatis3.xmlmapper.elements;
 
 import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
@@ -20,6 +5,7 @@ import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.OutputUtilities;
@@ -28,11 +14,24 @@ import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.AbstractGenerator;
-import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.codegen.mybatis3.Lists;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import org.mybatis.generator.config.GeneratedKey;
 
+/**
+ *
+ */
 public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
+
+    /**
+     * 控制单个文件所有的注释生成开关
+     */
+    protected boolean isGlobalCommentEnabled;
+
+    /**
+     * 将参数的XML元素作为父标签，并将自身生成的XML元素添加进去
+     * @param parentElement 父标签
+     */
     public abstract void addElements(XmlElement parentElement);
 
     protected AbstractXmlElementGenerator() {
@@ -42,15 +41,12 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
     /**
      * This method should return an XmlElement for the select key used to
      * automatically generate keys.
-     *
-     * @param introspectedColumn
-     *            the column related to the select key statement
-     * @param generatedKey
-     *            the generated key for the current table
+     * @param introspectedColumn the column related to the select key statement
+     * @param generatedKey       the generated key for the current table
      * @return the selectKey element
      */
     protected XmlElement getSelectKey(IntrospectedColumn introspectedColumn,
-            GeneratedKey generatedKey) {
+                                      GeneratedKey generatedKey) {
         String identityColumnType = introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName();
 
         XmlElement answer = new XmlElement("selectKey"); //$NON-NLS-1$
@@ -150,29 +146,36 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
 
     protected XmlElement buildInitialInsert(String statementId, FullyQualifiedJavaType parameterType) {
         XmlElement answer = new XmlElement("insert"); //$NON-NLS-1$
-
         answer.addAttribute(new Attribute("id", statementId)); //$NON-NLS-1$
-
+        // TODO parameterType 为固定的数据库表的映射实体类型，可以改成自定义类型
         answer.addAttribute(new Attribute("parameterType", parameterType.getFullyQualifiedName())); //$NON-NLS-1$
+        // TODO 1:控制是否为每个标签添加注释; 2:自定义注释文本
+        if (isGlobalCommentEnabled) {
+            context.getCommentGenerator().addComment(answer);
+        }
 
-        context.getCommentGenerator().addComment(answer);
+        Optional<GeneratedKey> generatedKey = introspectedTable.getGeneratedKey();
 
-        introspectedTable.getGeneratedKey().ifPresent(gk ->
-                introspectedTable.getColumn(gk.getColumn()).ifPresent(introspectedColumn -> {
-                    // if the column is null, then it's a configuration error. The
-                    // warning has already been reported
-                    if (gk.isJdbcStandard()) {
-                        answer.addAttribute(new Attribute("useGeneratedKeys", "true")); //$NON-NLS-1$ //$NON-NLS-2$
-                        answer.addAttribute(
-                                new Attribute("keyProperty", introspectedColumn.getJavaProperty())); //$NON-NLS-1$
-                        answer.addAttribute(
-                                new Attribute("keyColumn", introspectedColumn.getActualColumnName())); //$NON-NLS-1$
-                    } else {
-                        answer.addElement(getSelectKey(introspectedColumn, gk));
-                    }
-                })
-        );
+        // 在Lambda里打断点进不去
 
+        if (generatedKey.isPresent()) {
+            GeneratedKey gk = generatedKey.get();
+            Optional<IntrospectedColumn> column = introspectedTable.getColumn(gk.getColumn());
+            if (column.isPresent()) {
+                IntrospectedColumn introspectedColumn = column.get();
+                // if the column is null, then it's a configuration error. The
+                // warning has already been reported
+                if (gk.isJdbcStandard()) {
+                    answer.addAttribute(new Attribute("useGeneratedKeys", "true")); //$NON-NLS-1$ //$NON-NLS-2$
+                    answer.addAttribute(
+                            new Attribute("keyProperty", introspectedColumn.getJavaProperty())); //$NON-NLS-1$
+                    answer.addAttribute(
+                            new Attribute("keyColumn", introspectedColumn.getActualColumnName())); //$NON-NLS-1$
+                } else {
+                    answer.addElement(getSelectKey(introspectedColumn, gk));
+                }
+            }
+        }
         return answer;
     }
 
@@ -288,7 +291,7 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
         sb.setLength(0);
         sb.append("set "); //$NON-NLS-1$
 
-        Iterator<IntrospectedColumn> iter = ListUtilities.removeGeneratedAlwaysColumns(columns).iterator();
+        Iterator<IntrospectedColumn> iter = Lists.removeGeneratedAlwaysColumns(columns).iterator();
         while (iter.hasNext()) {
             IntrospectedColumn introspectedColumn = iter.next();
 
@@ -331,7 +334,7 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
         sb.setLength(0);
         sb.append("set "); //$NON-NLS-1$
 
-        Iterator<IntrospectedColumn> iter = ListUtilities.removeGeneratedAlwaysColumns(columns).iterator();
+        Iterator<IntrospectedColumn> iter = Lists.removeGeneratedAlwaysColumns(columns).iterator();
         while (iter.hasNext()) {
             IntrospectedColumn introspectedColumn = iter.next();
 

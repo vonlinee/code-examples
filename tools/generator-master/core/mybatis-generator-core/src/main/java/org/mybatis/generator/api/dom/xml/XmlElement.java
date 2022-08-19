@@ -5,6 +5,44 @@ import java.util.List;
 
 public class XmlElement implements VisitableElement {
 
+    /**
+     * 嵌套层级
+     */
+    private int level;
+
+    private enum CommentLocation {
+        AT_START,
+        EMBED_FIRSTLINE
+    }
+
+    /**
+     * 子标签之间是否添加空行，一般只有第二层标签添加空行，即<insert> <update> <delete> <select>
+     */
+    private boolean blankBetweenChildren = false;
+
+    public boolean isBlankBetweenChildren() {
+        return blankBetweenChildren;
+    }
+
+    public void setBlankBetweenChildren(boolean blankBetweenChildren) {
+        this.blankBetweenChildren = blankBetweenChildren;
+    }
+
+    /**
+     * 注释
+     */
+    private String comment;
+
+    /**
+     * 注释位置
+     */
+    private CommentLocation commentLocation = CommentLocation.AT_START;
+
+    /**
+     * 是否有注释
+     */
+    private boolean hasComment;
+
     private final List<Attribute> attributes = new ArrayList<>();
 
     private final List<VisitableElement> elements = new ArrayList<>();

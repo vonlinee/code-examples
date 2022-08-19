@@ -229,6 +229,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     public List<GeneratedXmlFile> getGeneratedXmlFiles() {
         List<GeneratedXmlFile> answer = new ArrayList<>();
         if (xmlMapperGenerator != null) {
+            //
             Document document = xmlMapperGenerator.getDocument();
             String mapperXmlFileName = getMyBatis3XmlMapperFileName();
             String mapperXmlPackage = getMyBatis3XmlMapperPackage();

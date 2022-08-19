@@ -1,20 +1,6 @@
-/*
- *    Copyright 2006-2020 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.logging.slf4j;
 
+import org.mybatis.generator.internal.util.ClassloaderUtils;
 import org.mybatis.generator.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +20,9 @@ public class Slf4jImpl implements Log {
     }
 
     public Slf4jImpl(Class<?> clazz) {
-        // 优先slf4j进行检查
-        try {
-            // StaticLoggerBinder不存在，则slf4j没有实现
-            Class.forName("org.slf4j.impl.StaticLoggerBinder");
-        } catch (ClassNotFoundException exception) {
+        // 优先于slf4j自身进行检查
+        // StaticLoggerBinder不存在，则slf4j没有实现
+        if (!ClassloaderUtils.isClassExists("org.slf4j.impl.StaticLoggerBinder")) {
             prepared = false; // 初始化失败
             return;
         }

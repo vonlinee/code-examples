@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2020 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.internal.util;
 
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
@@ -25,23 +10,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang3.JavaVersion;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
 
 /**
  * This class holds methods useful for constructing custom classloaders.
- *
  * @author Jeff Butler
- *
  */
-public class ClassloaderUtility {
+public class ClassloaderUtils {
 
-    private static final Log LOG = LogFactory.getLog(ClassloaderUtility.class);
+    private static final Log LOG = LogFactory.getLog(ClassloaderUtils.class);
 
     /**
      * Utility Class - No Instances.
      */
-    private ClassloaderUtility() {
+    private ClassloaderUtils() {
     }
 
     public static ClassLoader getCustomClassloader(Collection<String> entries) {
@@ -55,7 +39,6 @@ public class ClassloaderUtility {
                     LOG.warn(getString("Warning.31", classPathEntry)); //$NON-NLS-1$
                     continue;
                 }
-
                 try {
                     urls.add(file.toURI().toURL());
                 } catch (MalformedURLException e) {
@@ -65,9 +48,16 @@ public class ClassloaderUtility {
                 }
             }
         }
-
         ClassLoader parent = Thread.currentThread().getContextClassLoader();
+        return new URLClassLoader(urls.toArray(new URL[0]), parent);
+    }
 
-        return new URLClassLoader(urls.toArray(new URL[urls.size()]), parent);
+    public static boolean isClassExists(String className) {
+        try {
+            Class.forName(className);
+        } catch (ClassNotFoundException exception) {
+            return false;
+        }
+        return true;
     }
 }

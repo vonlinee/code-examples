@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2021 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.internal.util;
 
 import static org.mybatis.generator.internal.util.StringUtils.isTrue;
@@ -41,52 +26,40 @@ public class JavaBeansUtil {
     /**
      * Computes a getter method name.  Warning - does not check to see that the property is a valid
      * property.  Call getValidPropertyName first.
-     *
-     * @param property
-     *            the property
-     * @param fullyQualifiedJavaType
-     *            the fully qualified java type
+     * @param property               the property
+     * @param fullyQualifiedJavaType the fully qualified java type
      * @return the getter method name
      */
-    public static String getGetterMethodName(String property,
-            FullyQualifiedJavaType fullyQualifiedJavaType) {
+    public static String getGetterMethodName(String property, FullyQualifiedJavaType fullyQualifiedJavaType) {
         StringBuilder sb = new StringBuilder();
-
         sb.append(property);
         if (Character.isLowerCase(sb.charAt(0))
                 && (sb.length() == 1 || !Character.isUpperCase(sb.charAt(1)))) {
             sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
         }
-
         if (fullyQualifiedJavaType.equals(FullyQualifiedJavaType
                 .getBooleanPrimitiveInstance())) {
             sb.insert(0, "is"); //$NON-NLS-1$
         } else {
             sb.insert(0, "get"); //$NON-NLS-1$
         }
-
         return sb.toString();
     }
 
     /**
      * Computes a setter method name.  Warning - does not check to see that the property is a valid
      * property.  Call getValidPropertyName first.
-     *
-     * @param property
-     *            the property
+     * @param property the property
      * @return the setter method name
      */
     public static String getSetterMethodName(String property) {
         StringBuilder sb = new StringBuilder();
-
         sb.append(property);
         if (Character.isLowerCase(sb.charAt(0))
                 && (sb.length() == 1 || !Character.isUpperCase(sb.charAt(1)))) {
             sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
         }
-
         sb.insert(0, "set"); //$NON-NLS-1$
-
         return sb.toString();
     }
 
@@ -97,35 +70,33 @@ public class JavaBeansUtil {
     }
 
     public static String getCamelCaseString(String inputString,
-            boolean firstCharacterUppercase) {
+                                            boolean firstCharacterUppercase) {
         StringBuilder sb = new StringBuilder();
 
         boolean nextUpperCase = false;
         for (int i = 0; i < inputString.length(); i++) {
             char c = inputString.charAt(i);
-
             switch (c) {
-            case '_':
-            case '-':
-            case '@':
-            case '$':
-            case '#':
-            case ' ':
-            case '/':
-            case '&':
-                if (sb.length() > 0) {
-                    nextUpperCase = true;
-                }
-                break;
-
-            default:
-                if (nextUpperCase) {
-                    sb.append(Character.toUpperCase(c));
-                    nextUpperCase = false;
-                } else {
-                    sb.append(Character.toLowerCase(c));
-                }
-                break;
+                case '_':
+                case '-':
+                case '@':
+                case '$':
+                case '#':
+                case ' ':
+                case '/':
+                case '&':
+                    if (sb.length() > 0) {
+                        nextUpperCase = true;
+                    }
+                    break;
+                default:
+                    if (nextUpperCase) {
+                        sb.append(Character.toUpperCase(c));
+                        nextUpperCase = false;
+                    } else {
+                        sb.append(Character.toLowerCase(c));
+                    }
+                    break;
             }
         }
 
@@ -159,9 +130,7 @@ public class JavaBeansUtil {
      *   <li>B &gt; b</li>
      *   <li>Yaxis &gt; yaxis</li>
      * </ul>
-     *
-     * @param inputString
-     *            the input string
+     * @param inputString the input string
      * @return the valid property name
      */
     public static String getValidPropertyName(String inputString) {
@@ -180,20 +149,19 @@ public class JavaBeansUtil {
                 answer = inputString;
             }
         }
-
         return answer;
     }
 
     public static Method getJavaBeansGetter(IntrospectedColumn introspectedColumn,
-            Context context,
-            IntrospectedTable introspectedTable) {
+                                            Context context,
+                                            IntrospectedTable introspectedTable) {
         Method method = getBasicJavaBeansGetter(introspectedColumn);
         addGeneratedGetterJavaDoc(method, introspectedColumn, context, introspectedTable);
         return method;
     }
 
     public static Method getJavaBeansGetterWithGeneratedAnnotation(IntrospectedColumn introspectedColumn,
-            Context context, IntrospectedTable introspectedTable, CompilationUnit compilationUnit) {
+                                                                   Context context, IntrospectedTable introspectedTable, CompilationUnit compilationUnit) {
         Method method = getBasicJavaBeansGetter(introspectedColumn);
         addGeneratedGetterAnnotation(method, introspectedColumn, context, introspectedTable, compilationUnit);
         return method;
@@ -215,30 +183,30 @@ public class JavaBeansUtil {
     }
 
     private static void addGeneratedGetterJavaDoc(Method method, IntrospectedColumn introspectedColumn,
-            Context context, IntrospectedTable introspectedTable) {
+                                                  Context context, IntrospectedTable introspectedTable) {
         context.getCommentGenerator().addGetterComment(method,
                 introspectedTable, introspectedColumn);
     }
 
     private static void addGeneratedGetterAnnotation(Method method, IntrospectedColumn introspectedColumn,
-            Context context,
-            IntrospectedTable introspectedTable, CompilationUnit compilationUnit) {
+                                                     Context context,
+                                                     IntrospectedTable introspectedTable, CompilationUnit compilationUnit) {
         context.getCommentGenerator().addGeneralMethodAnnotation(method, introspectedTable, introspectedColumn,
                 compilationUnit.getImportedTypes());
     }
 
     public static Field getJavaBeansField(IntrospectedColumn introspectedColumn,
-            Context context,
-            IntrospectedTable introspectedTable) {
+                                          Context context,
+                                          IntrospectedTable introspectedTable) {
         Field field = getBasicJavaBeansField(introspectedColumn);
         addGeneratedJavaDoc(field, context, introspectedColumn, introspectedTable);
         return field;
     }
 
     public static Field getJavaBeansFieldWithGeneratedAnnotation(IntrospectedColumn introspectedColumn,
-            Context context,
-            IntrospectedTable introspectedTable,
-            CompilationUnit compilationUnit) {
+                                                                 Context context,
+                                                                 IntrospectedTable introspectedTable,
+                                                                 CompilationUnit compilationUnit) {
         Field field = getBasicJavaBeansField(introspectedColumn);
         addGeneratedAnnotation(field, context, introspectedColumn, introspectedTable, compilationUnit);
         return field;
@@ -256,28 +224,28 @@ public class JavaBeansUtil {
     }
 
     private static void addGeneratedJavaDoc(Field field, Context context, IntrospectedColumn introspectedColumn,
-            IntrospectedTable introspectedTable) {
+                                            IntrospectedTable introspectedTable) {
         context.getCommentGenerator().addFieldComment(field,
                 introspectedTable, introspectedColumn);
     }
 
     private static void addGeneratedAnnotation(Field field, Context context, IntrospectedColumn introspectedColumn,
-            IntrospectedTable introspectedTable, CompilationUnit compilationUnit) {
+                                               IntrospectedTable introspectedTable, CompilationUnit compilationUnit) {
         context.getCommentGenerator().addFieldAnnotation(field, introspectedTable, introspectedColumn,
                 compilationUnit.getImportedTypes());
     }
 
     public static Method getJavaBeansSetter(IntrospectedColumn introspectedColumn,
-            Context context,
-            IntrospectedTable introspectedTable) {
+                                            Context context,
+                                            IntrospectedTable introspectedTable) {
         Method method = getBasicJavaBeansSetter(introspectedColumn);
         addGeneratedSetterJavaDoc(method, introspectedColumn, context, introspectedTable);
         return method;
     }
 
     public static Method getJavaBeansSetterWithGeneratedAnnotation(IntrospectedColumn introspectedColumn,
-            Context context,
-            IntrospectedTable introspectedTable, CompilationUnit compilationUnit) {
+                                                                   Context context,
+                                                                   IntrospectedTable introspectedTable, CompilationUnit compilationUnit) {
         Method method = getBasicJavaBeansSetter(introspectedColumn);
         addGeneratedSetterAnnotation(method, introspectedColumn, context, introspectedTable, compilationUnit);
         return method;
@@ -315,14 +283,14 @@ public class JavaBeansUtil {
     }
 
     private static void addGeneratedSetterJavaDoc(Method method, IntrospectedColumn introspectedColumn, Context context,
-            IntrospectedTable introspectedTable) {
+                                                  IntrospectedTable introspectedTable) {
         context.getCommentGenerator().addSetterComment(method,
                 introspectedTable, introspectedColumn);
     }
 
     private static void addGeneratedSetterAnnotation(Method method, IntrospectedColumn introspectedColumn,
-            Context context,
-            IntrospectedTable introspectedTable, CompilationUnit compilationUnit) {
+                                                     Context context,
+                                                     IntrospectedTable introspectedTable, CompilationUnit compilationUnit) {
         context.getCommentGenerator().addGeneralMethodAnnotation(method, introspectedTable, introspectedColumn,
                 compilationUnit.getImportedTypes());
     }
