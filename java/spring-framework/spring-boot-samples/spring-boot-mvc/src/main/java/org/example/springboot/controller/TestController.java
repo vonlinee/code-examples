@@ -35,7 +35,6 @@ public class TestController {
     @ResponseBody
     public ListResult<Map<String, Object>> test22() {
         ListResult<Map<String, Object>> list = new ListResult<>();
-        
         list.addTestData();
         return list;
     }
