@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListResult<T> extends AbstractResult<List<T>> {
+public class ListResult<T> extends Result<List<T>> {
 
 	/**
 	 * 

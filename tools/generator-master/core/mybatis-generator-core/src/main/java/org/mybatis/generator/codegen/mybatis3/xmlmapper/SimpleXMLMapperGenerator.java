@@ -16,12 +16,14 @@ import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ResultMapWithou
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.SimpleSelectAllElementGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.SimpleSelectByPrimaryKeyElementGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.UpdateByPrimaryKeyWithoutBLOBsElementGenerator;
+import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
 
-    private static final Logger logger = LoggerFactory.getLogger(SimpleXMLMapperGenerator.class);
+    private static final Log logger = LogFactory.getLog(SimpleXMLMapperGenerator.class);
 
     public SimpleXMLMapperGenerator() {
         super();

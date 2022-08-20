@@ -5,14 +5,21 @@ import static org.mybatis.generator.internal.util.messages.Messages.getString;
 import org.mybatis.generator.internal.util.JavaVersion;
 import org.mybatis.generator.internal.util.RuntimeUtils;
 import org.mybatis.generator.logging.commons.JakartaCommonsLoggingLogFactory;
+import org.mybatis.generator.logging.internal.InternalLogFactory;
 import org.mybatis.generator.logging.jdk14.Jdk14LoggingLogFactory;
 import org.mybatis.generator.logging.log4j2.Log4j2LoggingLogFactory;
+import org.mybatis.generator.logging.logback.LogbackLogfactory;
 import org.mybatis.generator.logging.nologging.NoLoggingLogFactory;
 import org.mybatis.generator.logging.slf4j.Slf4jLoggingLogFactory;
 
 public class LogFactory {
     private static AbstractLogFactory theFactory;
     public static final String MARKER = "MYBATIS-GENERATOR"; //$NON-NLS-1$
+
+    /**
+     * 是否使用内部的日志
+     */
+    private static final boolean useInternalLogImpl = System.getProperty("useInternalLogImpl") == null;
 
     static {
         tryMultiLogImpl();
@@ -22,6 +29,9 @@ public class LogFactory {
         if (tryImplementation(new Slf4jLoggingLogFactory())) {
             System.out.println("Slf4jLoggingLogFactory");
             return;
+        }
+        if (tryImplementation(new LogbackLogfactory())) {
+            System.out.println("=======================");
         }
         if (tryImplementation(new JakartaCommonsLoggingLogFactory())) {
             System.out.println("JakartaCommonsLoggingLogFactory");
@@ -33,6 +43,10 @@ public class LogFactory {
         }
         // JDK >= 14
         if (RuntimeUtils.getJvmVersion().compareTo(JavaVersion.JAVA_14) >= 0 && tryImplementation(new Jdk14LoggingLogFactory())) {
+            return;
+        }
+        if (useInternalLogImpl && tryImplementation(new InternalLogFactory())) {
+            // 使用内部日志实现
             return;
         }
         if (tryImplementation(new NoLoggingLogFactory())) {
@@ -99,8 +113,8 @@ public class LogFactory {
 
     private static boolean setImplementation(AbstractLogFactory factory) {
         try {
-            // 获取Log门面，如果获取
-            Log log = factory.getLog(LogFactory.class);
+            // 获取LogFactory门面，如果获取成功
+            Log log = factory.getLog(LogFactory.class); // 可能抛异常
             if (!log.isPrepared()) {
                 return false;
             }

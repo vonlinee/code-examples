@@ -19,13 +19,15 @@ public class Slf4jImpl implements Log {
         return prepared;
     }
 
+    // 先加载日志门面
     public Slf4jImpl(Class<?> clazz) {
         // 优先于slf4j自身进行检查
         // StaticLoggerBinder不存在，则slf4j没有实现
-        if (!ClassloaderUtils.isClassExists("org.slf4j.impl.StaticLoggerBinder")) {
+        if (!ClassloaderUtils.isClassExisted("org.slf4j.impl.StaticLoggerBinder")) {
             prepared = false; // 初始化失败
             return;
         }
+        // 必须要引入slf4j-api的依赖才能使用
         // SLF4j门面可能有不同实现
         Logger logger = LoggerFactory.getLogger(clazz);
         if (logger instanceof NOPLogger) { // 针对slf4j-log4j12
@@ -43,7 +45,7 @@ public class Slf4jImpl implements Log {
                 prepared = true;
                 return;
             } catch (SecurityException | NoSuchMethodException e) {
-                // fail-back to Slf4jLoggerImpl
+                // fail-back to Slf4jLoggerImpl 使用Slf4jLoggerImpl进行兜底
             }
         }
         // Logger is not LocationAwareLogger or slf4j version < 1.6

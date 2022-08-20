@@ -29,6 +29,7 @@ public class MySQLGenerator {
         DefaultShellCallback shellCallback = new DefaultShellCallback(true);
         MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, shellCallback, warnings);
         myBatisGenerator.generate(null, null, null, false);
+
         List<GeneratedXmlFile> generatedXmlFiles = myBatisGenerator.getGeneratedXmlFiles();
 
         for (int i = 0; i < generatedXmlFiles.size(); i++) {

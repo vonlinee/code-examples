@@ -52,7 +52,7 @@ public class ClassloaderUtils {
         return new URLClassLoader(urls.toArray(new URL[0]), parent);
     }
 
-    public static boolean isClassExists(String className) {
+    public static boolean isClassExisted(String className) {
         try {
             Class.forName(className);
         } catch (ClassNotFoundException exception) {
@@ -60,4 +60,5 @@ public class ClassloaderUtils {
         }
         return true;
     }
+
 }

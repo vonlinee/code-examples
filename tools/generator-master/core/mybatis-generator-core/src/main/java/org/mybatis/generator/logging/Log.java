@@ -1,9 +1,13 @@
 package org.mybatis.generator.logging;
 
+/**
+ * 日志接口
+ */
 public interface Log {
 
     /**
      * 日志组件是否可用，可用的标准在于是否能正常进行日志打印的功能
+     * 仅仅在内部调用
      * @return true
      */
     boolean isPrepared();
@@ -19,20 +23,17 @@ public interface Log {
     void warn(String s);
 
     /**
-     *
      * @param msg
      */
     void info(String msg);
 
     /**
-     *
      * @param format
      * @param arg
      */
     void info(String format, Object arg);
 
     /**
-     *
      * @param format
      * @param arg1
      * @param arg2
@@ -40,7 +41,6 @@ public interface Log {
     void info(String format, Object arg1, Object arg2);
 
     /**
-     *
      * @param format
      * @param arguments
      */

@@ -24,10 +24,9 @@ public class TestUnsafe {
 //            System.out.println(l / 1024 / 1024);
 //        });
 
-        optionalUnsafe().ifPresent(unsafe -> {
-
-        });
-
+        @SuppressWarnings("restriction")
+		Unsafe unsafe = Unsafe.getUnsafe(); //Exception
+        System.out.println(unsafe);
     }
 
 //    public static void doUnsafe(Consumer<Unsafe> unsafeConsumer) {

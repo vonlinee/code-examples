@@ -15,12 +15,19 @@
  */
 package org.mybatis.generator.logging.slf4j;
 
+import org.mybatis.generator.internal.util.ClassloaderUtils;
 import org.mybatis.generator.logging.AbstractLogFactory;
 import org.mybatis.generator.logging.Log;
 
 public class Slf4jLoggingLogFactory implements AbstractLogFactory {
+
+    private static final String SLF4J_LOG = "org.slf4j.Logger";
+
     @Override
-    public Log getLog(Class<?> clazz) {
+    public Log getLog(Class<?> clazz) throws Exception {
+        if (!ClassloaderUtils.isClassExisted(SLF4J_LOG)) {
+            throw new ClassNotFoundException(SLF4J_LOG);
+        }
         return new Slf4jImpl(clazz);
     }
 }

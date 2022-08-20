@@ -4,6 +4,11 @@ import java.lang.reflect.Field;
 
 import sun.misc.Unsafe;
 
+/**
+ * https://tech.meituan.com/2019/02/14/talk-about-java-magic-class-unsafe.html
+ * @author Administrator
+ *
+ */
 public class UnsafeOps {
 
 	@SuppressWarnings("restriction")

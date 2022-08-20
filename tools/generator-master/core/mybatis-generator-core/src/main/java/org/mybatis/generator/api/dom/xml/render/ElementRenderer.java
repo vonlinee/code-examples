@@ -77,8 +77,6 @@ public class ElementRenderer implements ElementVisitor<Stream<String>> {
         Stream<String> stringStream = elementStream.flatMap(this::renderChild);
         Stream<String> stream = stringStream.map(this::indent);
 
-        // stream.forEach(System.out::println);
-
         List<String> streamCopy = stream.collect(Collectors.toList());
 
         // TODO 二级标签之间添加空行
