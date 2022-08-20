@@ -18,6 +18,7 @@ public class ListResult<T> extends AbstractResult<List<T>> {
 	
 	public ListResult(int code, String message) {
 		this();
+		this.timestamp = System.currentTimeMillis();
 		this.code = code;
 		this.msg = message;
 		if (this.data == null) {
