@@ -1,5 +1,13 @@
-import org.gradle.initialization.DefaultProjectDescriptor
-
 rootProject.name = 'gradle-sample'
 
+println " >>>> settings.gradle >>>> "
+include 'api'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'commons-codec', name: 'commons-codec', version: '1.2'
+    }
+}

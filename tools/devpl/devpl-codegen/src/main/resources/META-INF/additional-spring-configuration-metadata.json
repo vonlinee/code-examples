@@ -1,9 +1,0 @@
-{
-  "properties": [
-    {
-      "name": "refer.url.codegen",
-      "type": "java.lang.String",
-      "description": "Description for refer.url.codegen."
-    }
-  ]
-}
