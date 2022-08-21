@@ -1,5 +1,9 @@
 package sample.java.multithread.concurrency;
 
+/**
+ * https://stackoverflow.com/questions/106591/what-is-the-volatile-keyword-useful-for
+ * http://web.archive.org/web/20210221170926/https://www.ibm.com/developerworks/java/library/j-jtp06197/
+ */
 public class TestVolatile {
 
     static int i = 0;

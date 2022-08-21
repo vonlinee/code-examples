@@ -1,4 +1,4 @@
-package sample.java.multithread.juc.queue;
+package sample.java.multithread.juc.container;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
