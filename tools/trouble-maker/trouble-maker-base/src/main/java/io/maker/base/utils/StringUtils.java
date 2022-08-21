@@ -28,7 +28,7 @@ public final class StringUtils {
      *
      * @return
      */
-    public static String randomUUID() {
+    public static String simpleUUID() {
         return UUID.randomUUID().toString();
     }
 

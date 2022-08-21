@@ -16,4 +16,8 @@ public class ResouceConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/result/**").addResourceLocations("file:" + path + "/result/");
         super.addResourceHandlers(registry);
     }
+
+    public static void main(String[] args) {
+
+    }
 }

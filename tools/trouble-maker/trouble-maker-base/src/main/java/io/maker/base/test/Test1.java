@@ -1,15 +1,18 @@
 package io.maker.base.test;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 
 import io.maker.base.utils.StringUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.SpringVersion;
 
 import io.maker.base.io.FileUtils;
@@ -43,6 +46,21 @@ public class Test1 {
 //		FileUtils.deleteProjectFiles("C:\\Users\\ly-wangliang\\Desktop\\code-samples\\java");
 
         System.out.println(StringUtils.valueOf(null));
+
+
+        List<File> files = FileUtils.listFiles(new File("D:\\Download\\venus\\video\\新建文件夹 (8)"), (file) -> file.isFile() && (file.getName().endsWith(".mp4") || file.getName().endsWith(".webm")));
+
+        files.forEach(file -> {
+            if (file.getName().startsWith("videoplayback")) {
+                String extension = FilenameUtils.getExtension(file.getAbsolutePath());
+                String uuid = StringUtils.simpleUUID();
+                boolean b = file.renameTo(new File(file.getParent() + uuid + "." + extension));
+                if (b) {
+                    System.out.println(file.getAbsolutePath());
+                }
+            }
+        });
+
     }
 
 
