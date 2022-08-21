@@ -1,19 +1,19 @@
 package io.devpl.webui.controller.codegen;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
-/**
- * @description: 前端控制器
- * @author: xu zhihao
- * @create: 2019-06-14 10:36
- */
 @RestController
+@RequestMapping(value = "/index", produces = MediaType.APPLICATION_JSON_VALUE)
 public class IndexController {
 
-    @GetMapping("")
-    public String index() {
-        return "index.html";
+    @GetMapping("/index")
+    public ModelAndView index(ModelAndView mv) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index.html");
+        return modelAndView;
     }
-
 }

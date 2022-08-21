@@ -6,6 +6,7 @@ import java.util.Map;
 
 /**
  * 抽象结果类
+ *
  * @param <T>
  */
 public abstract class Result<T> implements Serializable {
@@ -69,12 +70,13 @@ public abstract class Result<T> implements Serializable {
     public final void attach(String name, Object item) {
         this.attachement.put(name, item);
     }
-    
+
     /**
-     * 
+     * Builder Pattern
      */
     interface ResultBuilder {
-    	void attach(String name, Object item);
-    	<V> V detach(String name);
+        void attach(String name, Object item);
+
+        <V> V detach(String name);
     }
 }
