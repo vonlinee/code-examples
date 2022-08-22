@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * ResultTemplate参与序列化
@@ -30,6 +31,9 @@ public abstract class ResultTemplate extends Result<Object> implements Serializa
      */
     public abstract String serialize();
 
+    /**
+     * 结果模板 Builder
+     */
     protected static abstract class Builder {
 
         protected int code;

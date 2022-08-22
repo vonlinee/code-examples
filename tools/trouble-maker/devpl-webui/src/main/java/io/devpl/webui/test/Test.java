@@ -51,6 +51,5 @@ public class Test {
 
         System.out.println(gson.toJson(template));
 
-        JsonObject returnData = new JsonParser().parse(replyString).getAsJsonObject();
     }
 }
