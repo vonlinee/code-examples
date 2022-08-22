@@ -34,6 +34,8 @@ import org.apache.commons.io.FilenameUtils;
 
 import io.maker.base.utils.Validator;
 
+import static io.maker.base.utils.Validator.isEmpty;
+
 /**
  * Copied from Apache Commons-io FileUtils
  */
@@ -355,7 +357,7 @@ public class FileUtils {
 
     public static List<File> listFilesOf(File directory, FileFilter filter) {
         File[] files = directory.listFiles(filter);
-        if (Validator.isEmpty(files)) {
+        if (isEmpty(files)) {
             return new ArrayList<>(0);
         }
         return Arrays.asList(files);

@@ -4,9 +4,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static io.maker.base.utils.Validator.checkNonEmpty;
+import static io.maker.base.utils.Validator.checkNotNull;
+
 /**
  * A pool of {@link Constant}s.
- * @see io.netty.util.ConstantPool
+ *
  * @param <T> the type of the constant
  */
 public abstract class ConstantPool<T extends Constant<T>> {
@@ -19,7 +22,10 @@ public abstract class ConstantPool<T extends Constant<T>> {
      * Shortcut of {@link #valueOf(String) valueOf(firstNameComponent.getName() + "#" + secondNameComponent)}.
      */
     public T valueOf(Class<?> firstNameComponent, String secondNameComponent) {
-        return valueOf(firstNameComponent.getName() + '#' + secondNameComponent);
+        return valueOf(
+                checkNotNull(firstNameComponent, "firstNameComponent").getName() +
+                        '#' +
+                        checkNotNull(secondNameComponent, "secondNameComponent"));
     }
 
     /**
@@ -31,8 +37,7 @@ public abstract class ConstantPool<T extends Constant<T>> {
      * @param name the name of the {@link Constant}
      */
     public T valueOf(String name) {
-        checkNotNullAndNotEmpty(name);
-        return getOrCreate(name);
+        return getOrCreate(checkNonEmpty(name, "name"));
     }
 
     /**
@@ -49,7 +54,6 @@ public abstract class ConstantPool<T extends Constant<T>> {
                 return tempConstant;
             }
         }
-
         return constant;
     }
 
@@ -57,8 +61,7 @@ public abstract class ConstantPool<T extends Constant<T>> {
      * Returns {@code true} if a {@link AttributeKey} exists for the given {@code name}.
      */
     public boolean exists(String name) {
-        checkNotNullAndNotEmpty(name);
-        return constants.containsKey(name);
+        return constants.containsKey(checkNonEmpty(name, "name"));
     }
 
     /**
@@ -66,8 +69,7 @@ public abstract class ConstantPool<T extends Constant<T>> {
      * {@link IllegalArgumentException} if a {@link Constant} for the given {@code name} exists.
      */
     public T newInstance(String name) {
-        checkNotNullAndNotEmpty(name);
-        return createOrThrow(name);
+        return createOrThrow(checkNonEmpty(name, "name"));
     }
 
     /**
@@ -84,15 +86,8 @@ public abstract class ConstantPool<T extends Constant<T>> {
                 return tempConstant;
             }
         }
-        throw new IllegalArgumentException(String.format("'%s' is already in use", name));
-    }
 
-    private static String checkNotNullAndNotEmpty(String name) {
-        Validator.whenNull(name, "name");
-        if (name.isEmpty()) {
-            throw new IllegalArgumentException("empty name");
-        }
-        return name;
+        throw new IllegalArgumentException(String.format("'%s' is already in use", name));
     }
 
     protected abstract T newConstant(int id, String name);

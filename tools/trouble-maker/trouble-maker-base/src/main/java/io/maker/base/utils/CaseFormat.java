@@ -3,8 +3,8 @@ package io.maker.base.utils;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Converter;
 
-import static io.maker.base.utils.Validator.isBlank;
-import static io.maker.base.utils.Validator.notNull;
+import static io.maker.base.utils.Assert.notNull;
+import static io.maker.base.utils.StringUtils.isBlank;
 import static java.util.Objects.requireNonNull;
 
 import java.io.Serializable;

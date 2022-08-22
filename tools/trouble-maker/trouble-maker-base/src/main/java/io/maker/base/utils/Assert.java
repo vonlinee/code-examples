@@ -210,7 +210,6 @@ public abstract class Assert {
 	 * Assert that an object is not {@code null}.
 	 * @deprecated as of 4.3.7, in favor of {@link #notNull(Object, String)}
 	 */
-	@Deprecated
 	public static void notNull(@Nullable Object object) {
 		notNull(object, "[Assertion failed] - this argument is required; it must not be null");
 	}
