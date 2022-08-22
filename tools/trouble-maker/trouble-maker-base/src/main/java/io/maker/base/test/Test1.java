@@ -1,65 +1,20 @@
 package io.maker.base.test;
 
-import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ForkJoinPool;
+import java.util.*;
 
+import com.google.gson.Gson;
 import io.maker.base.utils.StringUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.core.SpringVersion;
 
-import io.maker.base.io.FileUtils;
-import io.maker.base.lang.meta.ClassDefinition;
-import io.maker.base.lang.meta.MetadataUtils;
-import io.maker.base.lang.meta.TestClass;
 import lombok.Data;
 
 public class Test1 {
 
     public static void main(String[] args) {
 
-//		ClassDefinition cd = MetadataUtils.parse(TestClass.class);
-//		
-//		String documentation = cd.getDocumentation();
-//		
-
-//		test5();
-
-
-//		System.out.println(String.valueOf(null));
-
-//		CompletableFuture.runAsync(() -> {}, ForkJoinPool.commonPool());
-//		
-//		
-//		int i = ForkJoinPool.getCommonPoolParallelism();
-//		
-//		System.out.println(i);
-
-
-//		FileUtils.deleteProjectFiles("C:\\Users\\ly-wangliang\\Desktop\\code-samples\\java");
-
-        System.out.println(StringUtils.valueOf(null));
-
-
-        List<File> files = FileUtils.listFiles(new File("D:\\Download\\venus\\video\\新建文件夹 (2)"), (file) -> file.isFile() && (file.getName().endsWith(".mp4") || file.getName().endsWith(".webm")));
-
-        files.forEach(file -> {
-            if (file.getName().startsWith("videoplayback")) {
-                String extension = FilenameUtils.getExtension(file.getAbsolutePath());
-                String uuid = StringUtils.simpleUUID();
-                boolean b = file.renameTo(new File(file.getParent() + uuid + "." + extension));
-                if (b) {
-                    System.out.println(file.getAbsolutePath());
-                }
-            }
-        });
 
     }
 
@@ -106,5 +61,24 @@ public class Test1 {
         System.out.println(i11 == i22); // false
         System.out.println(i22 == i33); // true
         System.out.println(i11 == i33); // false
+    }
+
+
+    public static void test2() {
+        System.out.println(StringUtils.valueOf(null));
+//
+//
+//        List<File> files = FileUtils.listFiles(new File("D:\\Download\\venus\\video\\新建文件夹 (2)"), (file) -> file.isFile() && (file.getName().endsWith(".mp4") || file.getName().endsWith(".webm")));
+//
+//        files.forEach(file -> {
+//            if (file.getName().startsWith("videoplayback")) {
+//                String extension = FilenameUtils.getExtension(file.getAbsolutePath());
+//                String uuid = StringUtils.simpleUUID();
+//                boolean b = file.renameTo(new File(file.getParent() + uuid + "." + extension));
+//                if (b) {
+//                    System.out.println(file.getAbsolutePath());
+//                }
+//            }
+//        });
     }
 }

@@ -19,14 +19,21 @@ dependencies {
     implementation libs.spring_boot_dependencies
     implementation libs.spring_boot_starter_web
 
+    implementation libs.spring_boot_starter_jdbc
+
     // spring_boot_starter_thymeleaf和spring_boot_starter_web之间有冲突
     // implementation libs.spring_boot_starter_thymeleaf
 
     implementation libs.logback_classic
     implementation libs.slf4j_api
+// https://mvnrepository.com/artifact/com.alibaba/fastjson
+    implementation 'com.alibaba:fastjson:2.0.12'
+// https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation 'com.google.code.gson:gson:2.9.1'
 
-    // https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.1'
+
+// https://mvnrepository.com/artifact/com.h2database/h2
+    implementation 'com.h2database:h2:2.1.214'
 
     compile libs.lombok
 

@@ -11,8 +11,6 @@ ext {
             javaVersion = JavaVersion.VERSION_1_8
     ]
 
-    println(this)
-
     // 全局依赖项版本
     // lib_version也是Map结构
     lib_version = {
@@ -82,6 +80,8 @@ ext {
             spring_boot_starter_web        : 'org.springframework.boot:spring-boot-starter-web:2.3.12.RELEASE',
             spring_boot_starter_webflux    : 'org.springframework.boot:spring-boot-starter-webflux:2.3.12.RELEASE',
             spring_boot_starter_logging    : 'org.springframework.boot:spring-boot-starter-logging:2.3.12.RELEASE',
+            spring_boot_starter_jdbc       : 'org.springframework.boot:spring-boot-starter-jdbc:2.3.12.RELEASE',
+            spring_boot_starter_jpa       : 'org.springframework.boot:spring-boot-starter-jpa:2.3.12.RELEASE',
             // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf
             spring_boot_starter_thymeleaf  : 'org.springframework.boot:spring-boot-starter-thymeleaf:2.3.12.RELEASE',
 

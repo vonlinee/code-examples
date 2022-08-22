@@ -37,12 +37,12 @@ public abstract class AbstractConstant<T extends AbstractConstant<T>> implements
     }
 
     @Override
-    public final String name() {
+    public String name() {
         return name;
     }
 
     @Override
-    public final int id() {
+    public int id() {
         return id;
     }
 
@@ -66,24 +66,18 @@ public abstract class AbstractConstant<T extends AbstractConstant<T>> implements
         if (this == o) {
             return 0;
         }
-
-        @SuppressWarnings("UnnecessaryLocalVariable")
         AbstractConstant<T> other = o;
         int returnCode;
-
         returnCode = hashCode() - other.hashCode();
         if (returnCode != 0) {
             return returnCode;
         }
-
         if (uniquifier < other.uniquifier) {
             return -1;
         }
         if (uniquifier > other.uniquifier) {
             return 1;
         }
-
         throw new Error("failed to compare two different constants");
     }
-
 }
