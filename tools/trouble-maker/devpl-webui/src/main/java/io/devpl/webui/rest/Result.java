@@ -1,7 +1,5 @@
 package io.devpl.webui.rest;
 
-import lombok.Data;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -9,9 +7,15 @@ import java.io.StringWriter;
 
 /**
  * 抽象结果类
+ *
  * @param <T>
  */
 public abstract class Result<T> implements Serializable {
+
+    /**
+     * 是否输出异常栈到返回结果
+     */
+    protected static final boolean STACK_TRACE_ENABLED = true;
 
     public Result() {
         this(System.currentTimeMillis());

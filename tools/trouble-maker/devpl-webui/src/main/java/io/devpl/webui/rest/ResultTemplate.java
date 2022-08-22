@@ -12,17 +12,40 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 public abstract class ResultTemplate extends Result<Object> implements Serializable {
 
-    protected int code;
+    protected Integer code;
+
     protected String message;
+
     protected String description;
 
+    /**
+     * 异常调用栈
+     */
+    protected String stacktrace;
+
+    /**
+     * 自定义序列化为JSON字符串的方式
+     *
+     * @return
+     */
     public abstract String serialize();
 
-    static abstract class Builder {
+    protected static abstract class Builder {
+
         protected int code;
+
         protected String message;
+
         protected String description;
 
+        /**
+         * 异常调用栈
+         */
+        protected String stackTrace;
+
+        /**
+         * @return
+         */
         abstract ResultTemplate build();
     }
 }
