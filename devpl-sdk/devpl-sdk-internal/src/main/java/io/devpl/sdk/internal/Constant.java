@@ -1,4 +1,4 @@
-package io.devpl.sdk.internal.utils.enums;
+package io.devpl.sdk.internal;
 
 /**
  * A singleton which is safe to compare via the {@code ==} operator. Created and

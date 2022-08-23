@@ -1,4 +1,4 @@
-package io.devpl.sdk.internal.utils.enums;
+package io.devpl.sdk.internal;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;

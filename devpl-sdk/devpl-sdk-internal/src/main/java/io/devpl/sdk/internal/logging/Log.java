@@ -15,7 +15,7 @@ public interface Log {
 	 * 
 	 * @return name of this logger instance
 	 */
-	public String getName();
+	String getName();
 
 	/**
 	 * Is the logger instance enabled for the TRACE level?
@@ -23,7 +23,7 @@ public interface Log {
 	 * @return True if this Logger is enabled for the TRACE level, false otherwise.
 	 * @since 1.4
 	 */
-	public boolean isTraceEnabled();
+	boolean isTraceEnabled();
 
 	/**
 	 * Log a message at the TRACE level.
@@ -31,7 +31,7 @@ public interface Log {
 	 * @param msg the message string to be logged
 	 * @since 1.4
 	 */
-	public void trace(String msg);
+	void trace(String msg);
 
 	/**
 	 * Log a message at the TRACE level according to the specified format and
@@ -46,7 +46,7 @@ public interface Log {
 	 * @param arg    the argument
 	 * @since 1.4
 	 */
-	public void trace(String format, Object arg);
+	void trace(String format, Object arg);
 
 	/**
 	 * Log a message at the TRACE level according to the specified format and
@@ -62,7 +62,7 @@ public interface Log {
 	 * @param arg2   the second argument
 	 * @since 1.4
 	 */
-	public void trace(String format, Object arg1, Object arg2);
+	void trace(String format, Object arg1, Object arg2);
 
 	/**
 	 * Log a message at the TRACE level according to the specified format and
@@ -81,7 +81,7 @@ public interface Log {
 	 * @param arguments a list of 3 or more arguments
 	 * @since 1.4
 	 */
-	public void trace(String format, Object... arguments);
+	void trace(String format, Object... arguments);
 
 	/**
 	 * Log an exception (throwable) at the TRACE level with an accompanying message.
@@ -90,7 +90,7 @@ public interface Log {
 	 * @param t   the exception (throwable) to log
 	 * @since 1.4
 	 */
-	public void trace(String msg, Throwable t);
+	void trace(String msg, Throwable t);
 
 	/**
 	 * Similar to {@link #isTraceEnabled()} method except that the marker data is
@@ -101,7 +101,7 @@ public interface Log {
 	 * 
 	 * @since 1.4
 	 */
-	public boolean isTraceEnabled(Marker marker);
+	boolean isTraceEnabled(Marker marker);
 
 	/**
 	 * Log a message with the specific Marker at the TRACE level.
@@ -110,7 +110,7 @@ public interface Log {
 	 * @param msg    the message string to be logged
 	 * @since 1.4
 	 */
-	public void trace(Marker marker, String msg);
+	void trace(Marker marker, String msg);
 
 	/**
 	 * This method is similar to {@link #trace(String, Object)} method except that
@@ -121,7 +121,7 @@ public interface Log {
 	 * @param arg    the argument
 	 * @since 1.4
 	 */
-	public void trace(Marker marker, String format, Object arg);
+	void trace(Marker marker, String format, Object arg);
 
 	/**
 	 * This method is similar to {@link #trace(String, Object, Object)} method
@@ -133,7 +133,7 @@ public interface Log {
 	 * @param arg2   the second argument
 	 * @since 1.4
 	 */
-	public void trace(Marker marker, String format, Object arg1, Object arg2);
+	void trace(Marker marker, String format, Object arg1, Object arg2);
 
 	/**
 	 * This method is similar to {@link #trace(String, Object...)} method except
@@ -144,7 +144,7 @@ public interface Log {
 	 * @param argArray an array of arguments
 	 * @since 1.4
 	 */
-	public void trace(Marker marker, String format, Object... argArray);
+	void trace(Marker marker, String format, Object... argArray);
 
 	/**
 	 * This method is similar to {@link #trace(String, Throwable)} method except
@@ -155,21 +155,21 @@ public interface Log {
 	 * @param t      the exception (throwable) to log
 	 * @since 1.4
 	 */
-	public void trace(Marker marker, String msg, Throwable t);
+	void trace(Marker marker, String msg, Throwable t);
 
 	/**
 	 * Is the logger instance enabled for the DEBUG level?
 	 *
 	 * @return True if this Logger is enabled for the DEBUG level, false otherwise.
 	 */
-	public boolean isDebugEnabled();
+	boolean isDebugEnabled();
 
 	/**
 	 * Log a message at the DEBUG level.
 	 *
 	 * @param msg the message string to be logged
 	 */
-	public void debug(String msg);
+	void debug(String msg);
 
 	/**
 	 * Log a message at the DEBUG level according to the specified format and
@@ -183,7 +183,7 @@ public interface Log {
 	 * @param format the format string
 	 * @param arg    the argument
 	 */
-	public void debug(String format, Object arg);
+	void debug(String format, Object arg);
 
 	/**
 	 * Log a message at the DEBUG level according to the specified format and
@@ -198,7 +198,7 @@ public interface Log {
 	 * @param arg1   the first argument
 	 * @param arg2   the second argument
 	 */
-	public void debug(String format, Object arg1, Object arg2);
+	void debug(String format, Object arg1, Object arg2);
 
 	/**
 	 * Log a message at the DEBUG level according to the specified format and
@@ -216,7 +216,7 @@ public interface Log {
 	 * @param format    the format string
 	 * @param arguments a list of 3 or more arguments
 	 */
-	public void debug(String format, Object... arguments);
+	void debug(String format, Object... arguments);
 
 	/**
 	 * Log an exception (throwable) at the DEBUG level with an accompanying message.
@@ -224,7 +224,7 @@ public interface Log {
 	 * @param msg the message accompanying the exception
 	 * @param t   the exception (throwable) to log
 	 */
-	public void debug(String msg, Throwable t);
+	void debug(String msg, Throwable t);
 
 	/**
 	 * Similar to {@link #isDebugEnabled()} method except that the marker data is
@@ -233,7 +233,7 @@ public interface Log {
 	 * @param marker The marker data to take into consideration
 	 * @return True if this Logger is enabled for the DEBUG level, false otherwise.
 	 */
-	public boolean isDebugEnabled(Marker marker);
+	boolean isDebugEnabled(Marker marker);
 
 	/**
 	 * Log a message with the specific Marker at the DEBUG level.
@@ -241,7 +241,7 @@ public interface Log {
 	 * @param marker the marker data specific to this log statement
 	 * @param msg    the message string to be logged
 	 */
-	public void debug(Marker marker, String msg);
+	void debug(Marker marker, String msg);
 
 	/**
 	 * This method is similar to {@link #debug(String, Object)} method except that
@@ -251,7 +251,7 @@ public interface Log {
 	 * @param format the format string
 	 * @param arg    the argument
 	 */
-	public void debug(Marker marker, String format, Object arg);
+	void debug(Marker marker, String format, Object arg);
 
 	/**
 	 * This method is similar to {@link #debug(String, Object, Object)} method
@@ -262,7 +262,7 @@ public interface Log {
 	 * @param arg1   the first argument
 	 * @param arg2   the second argument
 	 */
-	public void debug(Marker marker, String format, Object arg1, Object arg2);
+	void debug(Marker marker, String format, Object arg1, Object arg2);
 
 	/**
 	 * This method is similar to {@link #debug(String, Object...)} method except
@@ -272,7 +272,7 @@ public interface Log {
 	 * @param format    the format string
 	 * @param arguments a list of 3 or more arguments
 	 */
-	public void debug(Marker marker, String format, Object... arguments);
+	void debug(Marker marker, String format, Object... arguments);
 
 	/**
 	 * This method is similar to {@link #debug(String, Throwable)} method except
@@ -282,21 +282,21 @@ public interface Log {
 	 * @param msg    the message accompanying the exception
 	 * @param t      the exception (throwable) to log
 	 */
-	public void debug(Marker marker, String msg, Throwable t);
+	void debug(Marker marker, String msg, Throwable t);
 
 	/**
 	 * Is the logger instance enabled for the INFO level?
 	 *
 	 * @return True if this Logger is enabled for the INFO level, false otherwise.
 	 */
-	public boolean isInfoEnabled();
+	boolean isInfoEnabled();
 
 	/**
 	 * Log a message at the INFO level.
 	 *
 	 * @param msg the message string to be logged
 	 */
-	public void info(String msg);
+	void info(String msg);
 
 	/**
 	 * Log a message at the INFO level according to the specified format and
@@ -310,7 +310,7 @@ public interface Log {
 	 * @param format the format string
 	 * @param arg    the argument
 	 */
-	public void info(String format, Object arg);
+	void info(String format, Object arg);
 
 	/**
 	 * Log a message at the INFO level according to the specified format and
@@ -325,7 +325,7 @@ public interface Log {
 	 * @param arg1   the first argument
 	 * @param arg2   the second argument
 	 */
-	public void info(String format, Object arg1, Object arg2);
+	void info(String format, Object arg1, Object arg2);
 
 	/**
 	 * Log a message at the INFO level according to the specified format and
@@ -343,7 +343,7 @@ public interface Log {
 	 * @param format    the format string
 	 * @param arguments a list of 3 or more arguments
 	 */
-	public void info(String format, Object... arguments);
+	void info(String format, Object... arguments);
 
 	/**
 	 * Log an exception (throwable) at the INFO level with an accompanying message.
@@ -351,7 +351,7 @@ public interface Log {
 	 * @param msg the message accompanying the exception
 	 * @param t   the exception (throwable) to log
 	 */
-	public void info(String msg, Throwable t);
+	void info(String msg, Throwable t);
 
 	/**
 	 * Similar to {@link #isInfoEnabled()} method except that the marker data is
@@ -360,7 +360,7 @@ public interface Log {
 	 * @param marker The marker data to take into consideration
 	 * @return true if this logger is warn enabled, false otherwise
 	 */
-	public boolean isInfoEnabled(Marker marker);
+	boolean isInfoEnabled(Marker marker);
 
 	/**
 	 * Log a message with the specific Marker at the INFO level.
@@ -368,7 +368,7 @@ public interface Log {
 	 * @param marker The marker specific to this log statement
 	 * @param msg    the message string to be logged
 	 */
-	public void info(Marker marker, String msg);
+	void info(Marker marker, String msg);
 
 	/**
 	 * This method is similar to {@link #info(String, Object)} method except that
@@ -378,7 +378,7 @@ public interface Log {
 	 * @param format the format string
 	 * @param arg    the argument
 	 */
-	public void info(Marker marker, String format, Object arg);
+	void info(Marker marker, String format, Object arg);
 
 	/**
 	 * This method is similar to {@link #info(String, Object, Object)} method except

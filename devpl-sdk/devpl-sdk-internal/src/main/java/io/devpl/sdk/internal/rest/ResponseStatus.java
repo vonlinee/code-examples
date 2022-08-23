@@ -3,6 +3,10 @@ package io.devpl.sdk.internal.rest;
 import io.devpl.sdk.internal.AbstractConstant;
 import io.devpl.sdk.internal.ConstantPool;
 
+/**
+ * 状态码常量
+ * @param <T>
+ */
 public final class ResponseStatus<T> extends AbstractConstant<ResponseStatus<T>> {
 
     /**
@@ -40,7 +44,6 @@ public final class ResponseStatus<T> extends AbstractConstant<ResponseStatus<T>>
 
     /**
      * Creates a new instance.
-     *
      * @param id
      * @param name
      */
