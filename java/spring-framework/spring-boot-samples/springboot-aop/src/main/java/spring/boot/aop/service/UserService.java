@@ -7,7 +7,6 @@ public class UserService implements IUserService {
 
 	@Override
 	public void login(String username, String password) {
-		int i = 1 / 0;
 		System.out.println("UserService::login => " + username + ", " + password);
 	}
 }

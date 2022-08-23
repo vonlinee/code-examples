@@ -13,7 +13,6 @@
 		<maven.compiler.target>8</maven.compiler.target>
 	</properties>
 
-
 	<dependencies>
 		<!-- 日志门面 -->
 		<dependency>
@@ -31,7 +30,18 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.36</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
+		</dependency>
+<!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>druid</artifactId>
+    <version>1.2.11</version>
+</dependency>
 
 	</dependencies>
-
 </project>

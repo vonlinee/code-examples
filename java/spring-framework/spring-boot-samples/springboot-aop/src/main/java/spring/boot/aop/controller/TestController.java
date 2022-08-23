@@ -10,6 +10,7 @@ import spring.boot.aop.service.UserCheckService;
 import spring.boot.aop.service.UserService;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 @RestController
 @RequestMapping("/user")
@@ -25,13 +26,8 @@ public class TestController {
 
     //	http://localhost:8080/test/1
     @GetMapping("/login")
-    public void login() {
+    public void login() throws NoSuchMethodException {
         userService.login("zs", "123");
-
-
-        Field[] declaredFields = userService.getClass().getDeclaredFields();
-
-
     }
 
     @GetMapping("/point")
