@@ -7,7 +7,6 @@ import java.io.StringWriter;
 
 /**
  * 抽象结果类
- *
  * @param <T>
  */
 public abstract class Result<T> implements Serializable {

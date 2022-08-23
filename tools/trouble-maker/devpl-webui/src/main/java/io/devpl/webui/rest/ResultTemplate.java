@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * ResultTemplate参与序列化
@@ -26,7 +25,6 @@ public abstract class ResultTemplate extends Result<Object> implements Serializa
 
     /**
      * 自定义序列化为JSON字符串的方式
-     *
      * @return
      */
     public abstract String serialize();
