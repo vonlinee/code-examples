@@ -14,7 +14,4 @@ public final class Lists {
         return new ArrayList<>(o);
     }
 
-    public static void main(String[] args) {
-
-    }
 }

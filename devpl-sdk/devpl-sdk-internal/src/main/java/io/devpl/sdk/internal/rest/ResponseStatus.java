@@ -47,7 +47,7 @@ public final class ResponseStatus<T> extends AbstractConstant<ResponseStatus<T>>
      * @param id
      * @param name
      */
-    protected ResponseStatus(int id, String name) {
+    private ResponseStatus(int id, String name) {
         super(id, name);
     }
 
