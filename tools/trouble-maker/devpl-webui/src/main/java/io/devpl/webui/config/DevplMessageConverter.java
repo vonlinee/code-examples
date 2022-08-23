@@ -3,7 +3,6 @@ package io.devpl.webui.config;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONException;
 import com.alibaba.fastjson2.support.config.FastJsonConfig;
-import io.devpl.webui.rest.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
@@ -110,7 +109,8 @@ public class DevplMessageConverter extends AbstractHttpMessageConverter<Object>
 
     @Override
     public boolean canWrite(Type type, Class<?> clazz, MediaType mediaType) {
-        return clazz.isAssignableFrom(Result.class);
+        // return clazz.isAssignableFrom(Result.class);
+        return false;
     }
 
     @Override

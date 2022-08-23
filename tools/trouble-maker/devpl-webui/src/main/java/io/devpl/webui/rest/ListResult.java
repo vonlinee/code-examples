@@ -51,16 +51,17 @@ public class ListResult<T> extends ResultTemplate.Builder {
      * @return
      */
     public ListResult<T> throwable(Throwable throwable, boolean update) {
-        if (!Result.STACK_TRACE_ENABLED) {
+        //if (!Result.STACK_TRACE_ENABLED) {
             return this;
-        }
-        if (stackTrace == null || stackTrace.length() == 0) {
-            stackTrace = Result.throwToStr(throwable);
-        }
-        if (stackTrace != null && stackTrace.length() != 0 && update) {
-            stackTrace = Result.throwToStr(throwable);
-        }
-        return this;
+        // }
+//        if (stackTrace == null || stackTrace.length() == 0) {
+//            // TODO 提取工具类
+//            // stackTrace = Result.throwToStr(throwable);
+//        }
+//        if (stackTrace != null && stackTrace.length() != 0 && update) {
+//            // stackTrace = Result.throwToStr(throwable);
+//        }
+       // return this;
     }
 
     /**
@@ -70,7 +71,7 @@ public class ListResult<T> extends ResultTemplate.Builder {
      * @return
      */
     public ListResult<T> throwable(Throwable throwable) {
-        this.stackTrace = Result.throwToStr(throwable);
+        // this.stackTrace = Result.throwToStr(throwable);
         return this;
     }
 

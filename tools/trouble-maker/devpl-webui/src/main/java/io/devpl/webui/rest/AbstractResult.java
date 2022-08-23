@@ -9,18 +9,18 @@ import java.io.StringWriter;
  * 抽象结果类
  * @param <T>
  */
-public abstract class Result<T> implements Serializable {
+public abstract class AbstractResult<T> implements Serializable {
 
     /**
      * 是否输出异常栈到返回结果
      */
     protected static final boolean STACK_TRACE_ENABLED = true;
 
-    public Result() {
+    public AbstractResult() {
         this(System.currentTimeMillis());
     }
 
-    public Result(long timestamp) {
+    public AbstractResult(long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -87,4 +87,6 @@ public abstract class Result<T> implements Serializable {
             return "";
         }
     }
+
+
 }

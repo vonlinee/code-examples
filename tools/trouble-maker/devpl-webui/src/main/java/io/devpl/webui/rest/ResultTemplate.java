@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class ResultTemplate extends Result<Object> implements Serializable {
+public abstract class ResultTemplate extends AbstractResult<Object> implements Serializable {
 
     protected Integer code;
 

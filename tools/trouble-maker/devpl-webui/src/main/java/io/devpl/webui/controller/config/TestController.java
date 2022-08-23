@@ -1,7 +1,6 @@
 package io.devpl.webui.controller.config;
 
 import io.devpl.webui.rest.ListResult;
-import io.devpl.webui.rest.Result;
 import io.devpl.webui.rest.ResultTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
