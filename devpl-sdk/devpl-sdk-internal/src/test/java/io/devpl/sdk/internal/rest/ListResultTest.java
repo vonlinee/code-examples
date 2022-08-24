@@ -1,12 +1,15 @@
 package io.devpl.sdk.internal.rest;
 
-import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 class ListResultTest {
 
     @Test
     void getPages() {
-        Lists.newArrayListWithCapacity(10);
+
+        ListResult.Builder<Map<String, Object>> builder = ListResult.builder();
+
     }
 }
