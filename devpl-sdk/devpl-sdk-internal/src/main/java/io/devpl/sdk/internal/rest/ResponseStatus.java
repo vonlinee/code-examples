@@ -92,4 +92,10 @@ public final class ResponseStatus<T> extends AbstractConstant<ResponseStatus<T>>
     public static final ResponseStatus<Integer> HTTP_404 = valueOf(404, "资源不存在");
     public static final ResponseStatus<Integer> HTTP_500 = valueOf(500, "服务器内部异常");
     public static final ResponseStatus<Integer> HTTP_3XX = valueOf(300, "重定向");
+
+    /**
+     * 业务定义状态码
+     */
+    public static final ResponseStatus<Integer> WRONG_PASSWORD = valueOf(200, "密码错误");
+    public static final ResponseStatus<Integer> NO_PRIVELEGE = valueOf(200, "权限不足");
 }

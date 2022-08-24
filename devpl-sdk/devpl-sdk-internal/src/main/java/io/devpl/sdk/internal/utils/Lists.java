@@ -8,10 +8,7 @@ import java.util.List;
  */
 public final class Lists {
 
-    private Lists() {}
-
-    public static <T extends List<?>> List<?> wrap(T o) {
-        return new ArrayList<>(o);
+    private Lists() {
     }
 
 }
