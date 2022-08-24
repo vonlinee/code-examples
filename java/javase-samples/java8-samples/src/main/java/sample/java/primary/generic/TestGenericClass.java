@@ -1,7 +1,5 @@
 package sample.java.primary.generic;
 
-import sample.java.primary.generic.bean.Child;
-
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Type;
@@ -9,6 +7,9 @@ import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import sample.java.primary.generic.bean.Child;
+import sample.java.primary.generic.bean.Fruit;
 
 public class TestGenericClass {
 
@@ -28,7 +29,15 @@ public class TestGenericClass {
 
             getBounds(typeVariable);
 
+            ArrayList<Object> strings = new ArrayList<>();
+            strings.<String>add("");
         }
+
+        TestGenericClass.<String>name();
+    }
+
+    public static <T> void name() {
+
     }
 
     public static void getBounds(TypeVariable<? extends GenericDeclaration> typeVariable) {
@@ -65,4 +74,22 @@ public class TestGenericClass {
         Number number = list.get(1);
         return result;
     }
+    
+    
+    
+    private void printList(List<Fruit> list) {
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

@@ -38,4 +38,7 @@ public class C02_Generic {
         apples.add(new Apple());
 //        apples.add(new RedApple());
     }
+
+
+
 }

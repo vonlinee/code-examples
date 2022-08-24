@@ -16,8 +16,5 @@ public class ListResult<T> extends RestfulResultTemplate implements Serializable
 
     private PageInfo pageInfo;
     private List<T> data;
-
-    interface InternalBuilder<T> extends io.devpl.sdk.internal.rest.Builder<ListResult<T>> {
-        void setData(T data);
-    }
+}
 
