@@ -10,17 +10,19 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import io.netty.util.concurrent.DefaultThreadFactory;
+import org.junit.jupiter.api.Test;
 
 public class TestFutureTask {
-	
-	private ThreadFactory namedThreadFactory = new DefaultThreadFactory("thread-start-runner-%d");
-	private ExecutorService service = new ThreadPoolExecutor(10, 20, 800, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
-	
-	public static void main(String[] args) throws Exception {
-		task1();
-	}
-	
-	public static void task1() throws InterruptedException, ExecutionException {
+
+    private ThreadFactory namedThreadFactory = new DefaultThreadFactory("thread-start-runner-%d");
+    private ExecutorService service = new ThreadPoolExecutor(10, 20, 800, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+
+    public static void main(String[] args) throws Exception {
+        task1();
+    }
+
+    @Test
+    public static void task1() throws InterruptedException, ExecutionException {
         Callable<Integer> call = new Callable<Integer>() {
             @Override
             public Integer call() throws Exception {
@@ -30,13 +32,12 @@ public class TestFutureTask {
             }
         };
         FutureTask<Integer> task = new FutureTask<>(call);
-        
-        
+
         Thread thread = new Thread(task);
         thread.start();
         // do something
         System.out.println(" 干点别的...");
         Integer result = task.get();  //主线程堵塞，直到FutureTask线程拿到结果
-        System.out.println("拿到的结果为：" + result);	
-	}
+        System.out.println("拿到的结果为：" + result);
+    }
 }
