@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 
-public class TypeParameter<, V> extends HashMap<K, V> {
+public class TypeParameter<K, V> extends HashMap<K, V> {
 
     @Test
     public void test1() {

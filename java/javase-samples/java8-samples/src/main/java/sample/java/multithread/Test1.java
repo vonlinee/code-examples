@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Test1 {
 
     private static volatile int times = 0;
-    private static AtomicInteger count = new AtomicInteger(0);
+    private static final AtomicInteger count = new AtomicInteger(0);
     private static final Lock lock = new ReentrantLock();
 
     public static void main(String[] args) {
