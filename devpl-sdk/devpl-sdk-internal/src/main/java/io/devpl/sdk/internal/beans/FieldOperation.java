@@ -1,10 +1,16 @@
 package io.devpl.sdk.internal.beans;
 
+import java.lang.reflect.Modifier;
+
 public interface FieldOperation<V> {
 
-    void set(V value);
+    int modifier();
 
-    V getAndSet(V value);
+    String name();
 
-    V get();
+    void setAccessible(boolean accessible);
+
+    boolean isAccessible();
+
+    Class<V> type();
 }
