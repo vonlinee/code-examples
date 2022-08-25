@@ -8,9 +8,13 @@ package io.devpl.sdk.internal.beans;
  * Alternate implementations may perform any logic to obtain the value.
  * @see org.joda.beans.Property
  */
-public interface Field {
+public interface Field<V> {
 
     String id();
+
+    String name();
+
+    String description();
 
     boolean equals(Object obj);
 

@@ -1,7 +1,5 @@
 package io.devpl.sdk.internal.beans;
 
-import java.lang.reflect.Modifier;
-
 public interface FieldOperation<V> {
 
     int modifier();
@@ -13,4 +11,10 @@ public interface FieldOperation<V> {
     boolean isAccessible();
 
     Class<V> type();
+
+    void set(V value);
+
+    V get();
+
+    void description(String description);
 }

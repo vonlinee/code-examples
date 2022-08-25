@@ -13,7 +13,7 @@ public interface DynamicBean extends Bean {
         return "";
     }
 
-    boolean equals(Object obj);
+    boolean equals(Bean obj);
 
     int hashCode();
 }

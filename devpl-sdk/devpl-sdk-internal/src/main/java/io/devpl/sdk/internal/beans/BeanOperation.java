@@ -16,7 +16,7 @@ public interface BeanOperation {
      * @param fieldName the field name to retrieve, not null
      * @return the property, not null
      */
-    Field lookup(String fieldName);
+    <V, T extends Field<V>> T lookup(String fieldName);
 
     /**
      * Adds a property to those allowed to be stored in the bean.
@@ -26,7 +26,7 @@ public interface BeanOperation {
      * @param fieldName the property name to check, not empty, not null
      * @param type      the property type, not null
      */
-    void define(String fieldName, Class<?> type);
+    <V> void define(String fieldName, Class<V> type);
 
     /**
      * Removes a property by name.

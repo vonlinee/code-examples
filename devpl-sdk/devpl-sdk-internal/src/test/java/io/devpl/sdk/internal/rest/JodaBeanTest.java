@@ -3,6 +3,8 @@ package io.devpl.sdk.internal.rest;
 import com.google.gson.Gson;
 import org.joda.beans.DynamicBean;
 import org.joda.beans.DynamicMetaBean;
+import org.joda.beans.MetaProperty;
+import org.joda.beans.Property;
 import org.joda.beans.impl.flexi.FlexiBean;
 import org.joda.beans.impl.map.MapBean;
 import org.junit.jupiter.api.Test;
@@ -46,5 +48,15 @@ public class JodaBeanTest {
         // Field name = clazz.getField("name");
 
         System.out.println(clazz);
+    }
+
+    @Test
+    public void test3() {
+        FlexiBean bean = new FlexiBean();
+
+        Property<Object> property = bean.property("name");
+
+
+
     }
 }
