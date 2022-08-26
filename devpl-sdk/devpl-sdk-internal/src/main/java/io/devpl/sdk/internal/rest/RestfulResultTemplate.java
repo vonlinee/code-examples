@@ -20,6 +20,10 @@ public abstract class RestfulResultTemplate extends ResultTemplate {
     private String message;
     private String description;
     private String stacktrace;
+
+    /**
+     * 如果使用Jackson还是会被序列化
+     */
     private transient Throwable throwable;
 
     public RestfulResultTemplate() {

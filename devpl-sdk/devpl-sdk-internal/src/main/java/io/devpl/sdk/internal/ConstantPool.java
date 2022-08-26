@@ -26,8 +26,6 @@ public abstract class ConstantPool<T extends Constant<T>> {
         return Object.class;
     }
 
-    ;
-
     protected Class<?> checkNotNull(String secondNameComponent, String string) {
         return Object.class;
     }
@@ -60,7 +58,7 @@ public abstract class ConstantPool<T extends Constant<T>> {
     }
 
     /**
-     * Returns {@code true} if a {@link AttributeKey} exists for the given
+     * Returns {@code true} if a {@link } exists for the given
      * {@code name}.
      */
     public boolean exists(String name) {
@@ -77,7 +75,10 @@ public abstract class ConstantPool<T extends Constant<T>> {
     }
 
     protected String checkNonEmpty(String name, String string) {
-        return "";
+        if (name == null ||name.isEmpty()) {
+            return string;
+        }
+        return name;
     }
 
     /**
@@ -99,7 +100,6 @@ public abstract class ConstantPool<T extends Constant<T>> {
 
     protected abstract T newConstant(int id, String name);
 
-    @Deprecated
     public final int nextId() {
         return nextId.getAndIncrement();
     }

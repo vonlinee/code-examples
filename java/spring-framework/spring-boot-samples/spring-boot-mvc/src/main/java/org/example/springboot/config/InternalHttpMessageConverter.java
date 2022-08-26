@@ -1,9 +1,9 @@
 package org.example.springboot.config;
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import org.example.springboot.rest.MapBean;
 import org.example.springboot.rest.Result;
 import org.example.springboot.support.json.JsonOperation;
+import org.joda.beans.impl.map.MapBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpInputMessage;

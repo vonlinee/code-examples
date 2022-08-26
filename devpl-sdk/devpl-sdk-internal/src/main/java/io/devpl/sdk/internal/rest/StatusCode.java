@@ -3,11 +3,17 @@ package io.devpl.sdk.internal.rest;
 import io.devpl.sdk.internal.AbstractConstant;
 import io.devpl.sdk.internal.ConstantPool;
 
+import java.util.Random;
+
 /**
  * 状态码常量
  * @param <T>
  */
-public final class ResponseStatus<T> extends AbstractConstant<ResponseStatus<T>> {
+public final class StatusCode<T> extends AbstractConstant<StatusCode<T>> {
+
+    private StatusCode() {
+        super(new Random().nextInt(), "");
+    }
 
     /**
      * 唯一业务编码
@@ -35,10 +41,10 @@ public final class ResponseStatus<T> extends AbstractConstant<ResponseStatus<T>>
         this.message = message;
     }
 
-    private static final ConstantPool<ResponseStatus<Object>> pool = new ConstantPool<ResponseStatus<Object>>() {
+    private static final ConstantPool<StatusCode<Object>> pool = new ConstantPool<StatusCode<Object>>() {
         @Override
-        protected ResponseStatus<Object> newConstant(int id, String name) {
-            return new ResponseStatus<>(id, name);
+        protected StatusCode<Object> newConstant(int id, String name) {
+            return new StatusCode<>(id, name);
         }
     };
 
@@ -47,13 +53,13 @@ public final class ResponseStatus<T> extends AbstractConstant<ResponseStatus<T>>
      * @param id
      * @param name
      */
-    private ResponseStatus(int id, String name) {
+    private StatusCode(int id, String name) {
         super(id, name);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> ResponseStatus<T> valueOf(T code, String message) {
-        ResponseStatus<T> status = (ResponseStatus<T>) pool.valueOf(nameOf(code));
+    public static <T> StatusCode<T> valueOf(T code, String message) {
+        StatusCode<T> status = (StatusCode<T>) pool.valueOf(nameOf(code));
         status.code = code;
         status.message = message;
         return status;
@@ -64,8 +70,8 @@ public final class ResponseStatus<T> extends AbstractConstant<ResponseStatus<T>>
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> ResponseStatus<T> put(T code, String message) {
-        ResponseStatus<T> status = (ResponseStatus<T>) pool.newInstance(nameOf(code));
+    public static <T> StatusCode<T> put(T code, String message) {
+        StatusCode<T> status = (StatusCode<T>) pool.newInstance(nameOf(code));
         status.code = code;
         status.message = message;
         return status;
@@ -88,14 +94,14 @@ public final class ResponseStatus<T> extends AbstractConstant<ResponseStatus<T>>
     /**
      * 常见的状态码
      */
-    public static final ResponseStatus<Integer> HTTP_200 = valueOf(200, "响应正常");
-    public static final ResponseStatus<Integer> HTTP_404 = valueOf(404, "资源不存在");
-    public static final ResponseStatus<Integer> HTTP_500 = valueOf(500, "服务器内部异常");
-    public static final ResponseStatus<Integer> HTTP_3XX = valueOf(300, "重定向");
+    public static final StatusCode<Integer> HTTP_200 = valueOf(200, "响应正常");
+    public static final StatusCode<Integer> HTTP_404 = valueOf(404, "资源不存在");
+    public static final StatusCode<Integer> HTTP_500 = valueOf(500, "服务器内部异常");
+    public static final StatusCode<Integer> HTTP_3XX = valueOf(300, "重定向");
 
     /**
      * 业务定义状态码
      */
-    public static final ResponseStatus<Integer> WRONG_PASSWORD = valueOf(200, "密码错误");
-    public static final ResponseStatus<Integer> NO_PRIVELEGE = valueOf(200, "权限不足");
+    public static final StatusCode<Integer> WRONG_PASSWORD = valueOf(200, "密码错误");
+    public static final StatusCode<Integer> NO_PRIVELEGE = valueOf(200, "权限不足");
 }

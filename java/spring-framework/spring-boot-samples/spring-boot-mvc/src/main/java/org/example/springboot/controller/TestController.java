@@ -1,12 +1,15 @@
 package org.example.springboot.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.example.springboot.rest.ListResult;
+import org.example.springboot.rest.Result;
 import org.example.springboot.serialize.SerializableModel;
 import org.example.springboot.service.HelloService;
+import org.joda.beans.impl.flexi.FlexiBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +36,7 @@ public class TestController {
     
     @RequestMapping(value = "/test1", method = RequestMethod.GET)
     @ResponseBody
-    public ListResult<Map<String, Object>> test22() {
+    public Result<List<Map<String, Object>>> test22() {
         ListResult<Map<String, Object>> list = new ListResult<>();
         list.addTestData();
         return list;
@@ -50,6 +53,26 @@ public class TestController {
     	System.out.println(remoteModel);
         return remoteModel;
     }
+
+
+
+
+    // 测试Feign序列化
+    @PostMapping("/jodabean")
+    @ResponseBody
+    public Map<String, Object> serialize(FlexiBean flexiBean) {
+        System.out.println(flexiBean);
+        return flexiBean.toMap();
+    }
+
+
+
+
+
+
+
+
+
 }
 
 // org.springframework.web.client.HttpMessageConverterExtractor<T>

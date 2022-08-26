@@ -11,6 +11,7 @@
     <modules>
         <module>devpl-sdk-internal</module>
         <module>devpl-sdk-support</module>
+        <module>devpl-sdk-api</module>
     </modules>
 
     <properties>
