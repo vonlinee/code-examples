@@ -1,5 +1,6 @@
 package io.devpl.sdk.support.spring.context;
 
+import io.devpl.sdk.support.spring.DevplApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
@@ -11,14 +12,14 @@ import org.springframework.core.env.ConfigurableEnvironment;
  * 在整个启动流程中接收不同执行点事件通知的监听者
  */
 @Slf4j
-public class DevplSpringRunListener implements SpringApplicationRunListener {
+public class DevplBootstrapListener implements SpringApplicationRunListener {
 
-    private final SpringApplication application;
+    private final DevplApplication application;
     private final String[] args;
 
     // 必须定义此构造，否则会报错
-    public DevplSpringRunListener(SpringApplication application, String[] args) {
-        this.application = application;
+    public DevplBootstrapListener(SpringApplication application, String[] args) {
+        this.application = (DevplApplication) application;
         this.args = args;
     }
 
@@ -34,12 +35,12 @@ public class DevplSpringRunListener implements SpringApplicationRunListener {
 
     @Override
     public void contextPrepared(ConfigurableApplicationContext context) {
-        log.info("contextPrepared");
+        log.info("【上下文准备完毕】 BeanDefinitionLoader");
     }
 
     @Override
     public void contextLoaded(ConfigurableApplicationContext context) {
-        log.info("contextLoaded");
+        log.info("【上下文加载完毕】");
     }
 
     @Override
@@ -49,7 +50,7 @@ public class DevplSpringRunListener implements SpringApplicationRunListener {
 
     @Override
     public void running(ConfigurableApplicationContext context) {
-        log.info("running");
+        log.info("【{}】 is running", application.getAppName());
     }
 
     @Override

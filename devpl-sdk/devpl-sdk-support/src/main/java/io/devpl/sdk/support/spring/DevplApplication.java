@@ -1,13 +1,24 @@
 package io.devpl.sdk.support.spring;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class DevplApplication extends SpringApplication {
+
+    private String appName;
 
     public DevplApplication(Class<?>... primarySources) {
         super(null, primarySources);
+    }
+
+    @Override
+    protected void refresh(ConfigurableApplicationContext applicationContext) {
+        applicationContext.refresh();
     }
 
     /**
