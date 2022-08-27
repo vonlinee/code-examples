@@ -1,10 +1,8 @@
 package io.devpl.sdk.internal.rest;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * 分页信息

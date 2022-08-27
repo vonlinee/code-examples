@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class RestfulResultTemplate extends ResultTemplate {
+public abstract class Result extends ResultTemplate {
 
     private static final long serialVersionUID = -5385265639294136547L;
 
@@ -26,7 +26,7 @@ public abstract class RestfulResultTemplate extends ResultTemplate {
      */
     private transient Throwable throwable;
 
-    public RestfulResultTemplate() {
+    public Result() {
         super();
     }
 }

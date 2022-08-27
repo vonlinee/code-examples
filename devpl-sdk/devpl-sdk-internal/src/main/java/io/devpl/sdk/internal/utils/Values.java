@@ -5,6 +5,7 @@ public final class Values {
     private Values() {
     }
 
+    @SuppressWarnings("unchecked")
     public static <V> V safeCast(Object val, Class<V> type, V option, boolean throwException, String message) {
         try {
             if (val == null) return null;

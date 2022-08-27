@@ -75,7 +75,7 @@ public abstract class ConstantPool<T extends Constant<T>> {
     }
 
     protected String checkNonEmpty(String name, String string) {
-        if (name == null ||name.isEmpty()) {
+        if (name == null || name.isEmpty()) {
             return string;
         }
         return name;
