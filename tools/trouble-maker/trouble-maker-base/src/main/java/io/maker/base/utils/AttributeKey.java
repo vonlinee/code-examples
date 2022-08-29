@@ -1,5 +1,7 @@
 package io.maker.base.utils;
 
+import io.maker.base.db.Model;
+
 /**
  * Key which can be used to access {@link Attribute} out of the {@link AttributeMap}. Be aware that it is not be
  * possible to have multiple keys with the same name.
@@ -10,6 +12,11 @@ package io.maker.base.utils;
 public final class AttributeKey<T> extends AbstractConstant<AttributeKey<T>> {
 
     private static final ConstantPool<AttributeKey<Object>> pool = new ConstantPool<AttributeKey<Object>>() {
+        @Override
+        protected Model checkNotNull(String secondNameComponent, String secondNameComponent1) {
+            return null;
+        }
+
         @Override
         protected AttributeKey<Object> newConstant(int id, String name) {
             return new AttributeKey<Object>(id, name);

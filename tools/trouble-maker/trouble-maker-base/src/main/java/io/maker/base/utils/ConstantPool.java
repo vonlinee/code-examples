@@ -1,11 +1,11 @@
 package io.maker.base.utils;
 
+import io.maker.base.db.Model;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static io.maker.base.utils.Validator.checkNonEmpty;
-import static io.maker.base.utils.Validator.checkNotNull;
 
 /**
  * A pool of {@link Constant}s.
@@ -22,11 +22,14 @@ public abstract class ConstantPool<T extends Constant<T>> {
      * Shortcut of {@link #valueOf(String) valueOf(firstNameComponent.getName() + "#" + secondNameComponent)}.
      */
     public T valueOf(Class<?> firstNameComponent, String secondNameComponent) {
-        return valueOf(
-                checkNotNull(firstNameComponent, "firstNameComponent").getName() +
-                        '#' +
-                        checkNotNull(secondNameComponent, "secondNameComponent"));
+//        return valueOf(
+//                checkNotNull(firstNameComponent, "firstNameComponent").getName() +
+//                        '#' +
+//                        checkNotNull(secondNameComponent, "secondNameComponent"));
+        return null;
     }
+
+    protected abstract Model checkNotNull(String secondNameComponent, String secondNameComponent1);
 
     /**
      * Returns the {@link Constant} which is assigned to the specified {@code name}.
@@ -37,7 +40,8 @@ public abstract class ConstantPool<T extends Constant<T>> {
      * @param name the name of the {@link Constant}
      */
     public T valueOf(String name) {
-        return getOrCreate(checkNonEmpty(name, "name"));
+        // return getOrCreate(checkNonEmpty(name, "name"));
+        return null;
     }
 
     /**
@@ -61,7 +65,8 @@ public abstract class ConstantPool<T extends Constant<T>> {
      * Returns {@code true} if a {@link AttributeKey} exists for the given {@code name}.
      */
     public boolean exists(String name) {
-        return constants.containsKey(checkNonEmpty(name, "name"));
+//        return constants.containsKey(checkNonEmpty(name, "name"));
+        return false;
     }
 
     /**
@@ -69,7 +74,8 @@ public abstract class ConstantPool<T extends Constant<T>> {
      * {@link IllegalArgumentException} if a {@link Constant} for the given {@code name} exists.
      */
     public T newInstance(String name) {
-        return createOrThrow(checkNonEmpty(name, "name"));
+        // return createOrThrow(checkNonEmpty(name, "name"));
+        return null;
     }
 
     /**

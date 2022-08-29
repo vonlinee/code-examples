@@ -1,35 +1,37 @@
 package io.devpl.sdk.internal.rest;
 
-import io.devpl.sdk.internal.AbstractConstant;
-import io.devpl.sdk.internal.ConstantPool;
+import io.devpl.sdk.internal.enumx.KeyedEnumPool;
 
-import java.util.Random;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
- * 状态码常量
- * @param <T>
+ * 响应状态编码
  */
-public final class StatusCode<T> extends AbstractConstant<StatusCode<T>> {
-
-    private StatusCode() {
-        super(new Random().nextInt(), "");
-    }
+public final class StatusCode implements Serializable {
 
     /**
-     * 唯一业务编码
+     * 响应编码
      */
-    private T code;
+    private int code;
 
     /**
-     * 提示信息
+     * 描述信息
      */
     private String message;
 
-    public T getCode() {
+    private StatusCode(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    public int getCode() {
         return code;
     }
 
-    public void setCode(T code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
@@ -41,67 +43,82 @@ public final class StatusCode<T> extends AbstractConstant<StatusCode<T>> {
         this.message = message;
     }
 
-    private static final ConstantPool<StatusCode<Object>> pool = new ConstantPool<StatusCode<Object>>() {
+    @Override
+    public String toString() {
+        return "[Status] " + code + " " + message;
+    }
+
+    /**
+     * 枚举常量池
+     */
+    private static final KeyedEnumPool<Integer, StatusCode> pool = new KeyedEnumPool<>() {
         @Override
-        protected StatusCode<Object> newConstant(int id, String name) {
-            return new StatusCode<>(id, name);
+        public StatusCode put(Integer key, StatusCode instance) {
+            StatusCode oldStatus = enumerations.put(key, instance);
+            if (oldStatus == null) {
+                return instance;
+            }
+            return oldStatus;
         }
     };
 
-    /**
-     * Creates a new instance.
-     * @param id
-     * @param name
-     */
-    private StatusCode(int id, String name) {
-        super(id, name);
+    public static StatusCode valueOf(int code, String message, boolean putIfNotExists) {
+        StatusCode status = pool.get(code);
+        if (status == null) {
+            if (putIfNotExists) {
+                return pool.put(code, new StatusCode(code, message));
+            }
+        }
+        throw new NoSuchElementException(String.format("状态码[%s]不存在", code));
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> StatusCode<T> valueOf(T code, String message) {
-        StatusCode<T> status = (StatusCode<T>) pool.valueOf(nameOf(code));
-        status.code = code;
-        status.message = message;
-        return status;
+    public static StatusCode valueOf(int code, String message) {
+        return valueOf(code, message, true);
     }
 
-    public static <T> boolean exists(T code) {
-        return pool.exists(nameOf(code));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> StatusCode<T> put(T code, String message) {
-        StatusCode<T> status = (StatusCode<T>) pool.newInstance(nameOf(code));
-        status.code = code;
-        status.message = message;
-        return status;
-    }
-
-    @Override
-    public int id() {
-        return super.id();
-    }
-
-    @Override
-    public String name() {
-        return nameOf(code);
-    }
-
-    public static <T> String nameOf(T code) {
-        return "status-" + code;
+    public static StatusCode valueOf(int code) {
+        return valueOf(code, "", false);
     }
 
     /**
-     * 常见的状态码
+     * 更新状态码定义
+     *
+     * @param code
+     * @param message
+     * @param putIfNotExists
      */
-    public static final StatusCode<Integer> HTTP_200 = valueOf(200, "响应正常");
-    public static final StatusCode<Integer> HTTP_404 = valueOf(404, "资源不存在");
-    public static final StatusCode<Integer> HTTP_500 = valueOf(500, "服务器内部异常");
-    public static final StatusCode<Integer> HTTP_3XX = valueOf(300, "重定向");
+    public static void update(int code, String message, boolean putIfNotExists) {
+        StatusCode status = pool.get(code);
+        if (status == null) {
+            if (putIfNotExists) {
+                pool.put(code, new StatusCode(code, message));
+            }
+        }
+    }
+
+    public static void add(int code, String message, boolean update) {
+        StatusCode status = pool.get(code);
+        if (status != null) {
+            if (update) {
+                status.setCode(code);
+                status.setMessage(message);
+            }
+        }
+    }
+
+    public static List<StatusCode> listAll() {
+        return new ArrayList<>(pool.values());
+    }
 
     /**
-     * 业务定义状态码
+     * 预定义的常量
      */
-    public static final StatusCode<Integer> WRONG_PASSWORD = valueOf(200, "密码错误");
-    public static final StatusCode<Integer> NO_PRIVELEGE = valueOf(200, "权限不足");
+    public static final StatusCode HTTP_200 = valueOf(200, "响应正常");
+    public static final StatusCode HTTP_404 = valueOf(404, "资源不存在");
+    public static final StatusCode HTTP_500 = valueOf(500, "服务器内部异常");
+
+    /**
+     * 业务异常
+     */
+    public static final StatusCode UNCORRECT_PASSWORD = valueOf(10000, "密码错误");
 }

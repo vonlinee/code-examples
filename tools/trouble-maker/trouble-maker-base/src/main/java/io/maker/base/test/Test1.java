@@ -1,20 +1,24 @@
 package io.maker.base.test;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.gson.Gson;
+import io.maker.base.io.FileUtils;
 import io.maker.base.utils.StringUtils;
 
 import lombok.Data;
+import org.apache.commons.io.FilenameUtils;
 
 public class Test1 {
 
     public static void main(String[] args) {
-
+        test2();
 
     }
 
@@ -65,20 +69,19 @@ public class Test1 {
 
 
     public static void test2() {
-        System.out.println(StringUtils.valueOf(null));
-//
-//
-//        List<File> files = FileUtils.listFiles(new File("D:\\Download\\venus\\video\\新建文件夹 (2)"), (file) -> file.isFile() && (file.getName().endsWith(".mp4") || file.getName().endsWith(".webm")));
-//
-//        files.forEach(file -> {
-//            if (file.getName().startsWith("videoplayback")) {
-//                String extension = FilenameUtils.getExtension(file.getAbsolutePath());
-//                String uuid = StringUtils.simpleUUID();
-//                boolean b = file.renameTo(new File(file.getParent() + uuid + "." + extension));
-//                if (b) {
-//                    System.out.println(file.getAbsolutePath());
-//                }
-//            }
-//        });
+        List<File> files = FileUtils.listFiles(new File("D:\\Download\\venus\\video\\girl\\Yurian"), (file) -> file.isFile() && (file.getName().endsWith(".mp4") || file.getName().endsWith(".webm")));
+        AtomicInteger integer = new AtomicInteger();
+        files.forEach(file -> {
+            if (file.getName().length() > 8){
+            //if (file.getName().startsWith("videoplayback")) {
+                String extension = FilenameUtils.getExtension(file.getAbsolutePath());
+                String baseName = FilenameUtils.getBaseName(file.getAbsolutePath());
+                String uuid = StringUtils.simpleUUID();
+                boolean b = file.renameTo(new File(file.getParent() + File.separator + uuid + "." + extension));
+                if (b) {
+                    System.out.println(file.getAbsolutePath());
+                }
+            }
+        });
     }
 }
