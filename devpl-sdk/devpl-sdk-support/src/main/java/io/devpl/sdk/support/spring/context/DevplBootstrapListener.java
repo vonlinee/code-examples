@@ -14,12 +14,12 @@ import org.springframework.core.env.ConfigurableEnvironment;
 @Slf4j
 public class DevplBootstrapListener implements SpringApplicationRunListener {
 
-    private final DevplApplication application;
+    private final SpringApplication application;
     private final String[] args;
 
     // 必须定义此构造，否则会报错
     public DevplBootstrapListener(SpringApplication application, String[] args) {
-        this.application = (DevplApplication) application;
+        this.application = application;
         this.args = args;
     }
 
@@ -50,7 +50,7 @@ public class DevplBootstrapListener implements SpringApplicationRunListener {
 
     @Override
     public void running(ConfigurableApplicationContext context) {
-        log.info("【{}】 is running", application.getAppName());
+
     }
 
     @Override

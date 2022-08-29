@@ -45,4 +45,19 @@
         GROUP BY T.TEACHER_ID
         ORDER BY T.TEACHER_ID DESC
     </select>
+
+    <!--新增1条老师记录-->
+    <insert id="insertTeacher" parameterType="code.example.mybatis.entity.Teacher">
+        INSERT INTO t_teacher
+            (TEACHER_ID, TEACHER_NO, TEACHER_SEX, NATIVE_PLACE, TEACHER_NAME, DEPART_NO,  DEPART_NAME, TITLE, TELE_PHONE)
+        VALUES(uuid(),
+               #{teacher.teacherNo},
+               #{teacher.teacherSex},
+               #{teacher.nativePlace},
+               #{teacher.teacherName},
+               #{teacher.departNo},
+               #{teacher.departName},
+               #{teacher.title},
+               #{teacher.telePhone});
+    </insert>
 </mapper>

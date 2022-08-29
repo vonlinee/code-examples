@@ -23,7 +23,13 @@ public class DevplApplication extends SpringApplication {
 
     @Override
     protected void refresh(ConfigurableApplicationContext applicationContext) {
-        applicationContext.refresh();
+        log.info("refresh Spring ApplicationContext [{}]", applicationContext.getClass().getSimpleName());
+        try {
+            applicationContext.refresh();
+        } catch (Exception exception) {
+            log.error("刷新ApplicationContext失败，退出", exception);
+            System.exit(0);
+        }
     }
 
     /**
@@ -35,6 +41,7 @@ public class DevplApplication extends SpringApplication {
     @Override
     protected void afterRefresh(ConfigurableApplicationContext context, ApplicationArguments args) {
         log.info("afterRefresh ======================");
+        log.info("{} afterRefresh", this);
     }
 
     public static ConfigurableApplicationContext run(Class<?>[] primarySources, String[] args) {
