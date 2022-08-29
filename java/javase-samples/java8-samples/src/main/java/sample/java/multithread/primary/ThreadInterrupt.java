@@ -1,10 +1,14 @@
 package sample.java.multithread.primary;
 
-<<<<<<< HEAD
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.locks.LockSupport;
+
 /**
  * @author vonline
  * @since 2022-08-25 23:30
  */
+@Slf4j
 public class ThreadInterrupt {
 
     public static void main(String[] args) throws InterruptedException {
@@ -41,19 +45,4 @@ public class ThreadInterrupt {
         Thread.sleep(1000);
         t3.interrupt();
     }
-
-=======
-public class ThreadInterrupt {
-
-
-    public static void main(String[] args) {
-        if (Thread.interrupted())  {
-            try {
-                throw new InterruptedException();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
->>>>>>> a0daecb8e92f85e360640922a54e05ddb9c36867
 }

@@ -3,6 +3,7 @@ package code.example.mybatis.mapper;
 import java.util.List;
 import java.util.Map;
 
+import code.example.mybatis.entity.Teacher;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,4 +23,6 @@ public interface TeacherMapper {
     List<Map<String, Object>> queryTeacherAll();
 
     List<Map<String, String>> queryTeacherAllBlob();
+
+    int insertTeacher(@Param("teacher") Teacher teacher);
 }
