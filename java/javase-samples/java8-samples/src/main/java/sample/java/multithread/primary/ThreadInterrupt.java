@@ -4,10 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.locks.LockSupport;
 
-/**
- * @author vonline
- * @since 2022-08-25 23:30
- */
 @Slf4j
 public class ThreadInterrupt {
 
