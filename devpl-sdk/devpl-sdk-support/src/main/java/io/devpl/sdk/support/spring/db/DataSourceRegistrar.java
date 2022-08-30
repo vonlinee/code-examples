@@ -17,7 +17,6 @@ public class DataSourceRegistrar implements ImportBeanDefinitionRegistrar {
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry, BeanNameGenerator importBeanNameGenerator) {
         Set<String> annotationTypes = importingClassMetadata.getAnnotationTypes();
-        System.out.println(annotationTypes);
     }
 
     @Override

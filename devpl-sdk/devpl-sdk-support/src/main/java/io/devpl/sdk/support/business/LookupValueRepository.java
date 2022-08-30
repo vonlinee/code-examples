@@ -1,6 +1,5 @@
-package io.devpl.sdk.support.spring.jpa;
+package io.devpl.sdk.support.business;
 
-import io.devpl.sdk.support.business.LookupedValue;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

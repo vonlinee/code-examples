@@ -1,11 +1,9 @@
 package io.devpl.sdk.api.controller;
 
-import feign.Feign;
 import feign.Target;
 import io.devpl.sdk.api.service.remote.RemoteFeignClient;
 import io.devpl.sdk.internal.rest.ListResult;
 import io.devpl.sdk.api.entity.Model;
-import io.devpl.sdk.support.spring.jpa.LookupValueRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
