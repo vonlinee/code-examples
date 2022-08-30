@@ -15,15 +15,14 @@ import sample.spring.boot.service.ITestService;
 @SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class
 })
-@SpringBootConfiguration
 @PropertySource(value = "classpath:jdbc.properties")
 public class MainLauncher {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(MainLauncher.class);
         ConfigurableApplicationContext context = app.run(args);
-
         TestController controller = context.getBean(TestController.class);
-
         controller.test();
+
+        SpringApplication.run(MainLauncher.class, args);
     }
 }
