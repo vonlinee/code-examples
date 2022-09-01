@@ -33,7 +33,7 @@ public class Main {
         try {
         	server.start();
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
         System.out.println("浏览器访问：http://localhost:9999/");
     }

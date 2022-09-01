@@ -21,10 +21,14 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 处理Socket
+ * @param <S>
+ */
 public abstract class SocketProcessorBase<S> implements Runnable {
 
 	private static final Logger logger = LoggerFactory.getLogger(SocketProcessorBase.class);
-	
+
     protected SocketWrapperBase<S> socketWrapper;
     protected SocketEvent event;
 
@@ -50,13 +54,12 @@ public abstract class SocketProcessorBase<S> implements Runnable {
             if (socketWrapper.isClosed()) {
                 return;
             }
-            
+
             // 默认使用NIO进行处理：org.apache.tomcat.util.net.NioEndpoint$SocketProcessor
             logger.info("开始处理Socket => {} {}", this.getClass(), socketWrapper.getRemoteAddr());
             doRun();
         }
     }
-
 
     protected abstract void doRun();
 }

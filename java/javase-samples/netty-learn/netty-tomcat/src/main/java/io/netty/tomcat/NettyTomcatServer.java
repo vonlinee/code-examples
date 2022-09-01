@@ -24,7 +24,7 @@ public class NettyTomcatServer {
 
 	private int port = 8080;
 
-	private Map<String, GPServlet> servletMapping = new HashMap<String, GPServlet>();
+	private Map<String, GPServlet> servletMapping = new HashMap<>();
 
 	private Properties webxml = new Properties();
 
@@ -104,7 +104,7 @@ public class NettyTomcatServer {
 		public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
 			if (msg instanceof HttpRequest) {
-				System.out.println("hello");
+				// System.out.println("hello");
 				HttpRequest req = (HttpRequest) msg;
 				// 转交给我们自己的request实现
 				GPRequest request = new GPRequest(ctx, req);

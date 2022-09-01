@@ -761,7 +761,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
     protected static class ConnectionHandler<S> implements AbstractEndpoint.Handler<S> {
 
     	private static final Logger _log = LoggerFactory.getLogger(ConnectionHandler.class);
-    	
+
         private final AbstractProtocol<S> proto;
         private final RequestGroupInfo global = new RequestGroupInfo();
         private final AtomicLong registerCount = new AtomicLong(0);
@@ -798,7 +798,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                 getLog().debug(sm.getString("abstractConnectionHandler.process",
                         wrapper.getSocket(), status));
             }
-            
+
             if (wrapper == null) {
                 // Nothing to do. Socket has been closed.
                 return SocketState.CLOSED;
@@ -900,7 +900,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                 SocketState state = SocketState.CLOSED;
                 do {
                     state = processor.process(wrapper, status);
-                    _log.info("处理器处理Socket完毕", processor);
+                    _log.info("处理器处理Socket完毕 {}", processor);
                     if (state == SocketState.UPGRADING) {  //  http upgrade header
                         // Get the HTTP upgrade handler
                         UpgradeToken upgradeToken = processor.getUpgradeToken();

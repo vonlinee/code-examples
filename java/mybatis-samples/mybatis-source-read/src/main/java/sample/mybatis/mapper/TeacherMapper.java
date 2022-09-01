@@ -1,9 +1,9 @@
-package code.example.mybatis.mapper;
+package sample.mybatis.mapper;
 
 import java.util.List;
 import java.util.Map;
 
-import code.example.mybatis.entity.Teacher;
+import sample.mybatis.entity.Teacher;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 

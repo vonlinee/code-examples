@@ -254,6 +254,7 @@ public abstract class SocketWrapperBase<E> {
         }
         return remoteHost;
     }
+
     protected abstract void populateRemoteHost();
 
     public String getRemoteAddr() {
@@ -262,6 +263,7 @@ public abstract class SocketWrapperBase<E> {
         }
         return remoteAddr;
     }
+
     protected abstract void populateRemoteAddr();
 
     public int getRemotePort() {
@@ -270,6 +272,7 @@ public abstract class SocketWrapperBase<E> {
         }
         return remotePort;
     }
+
     protected abstract void populateRemotePort();
 
     public String getLocalName() {

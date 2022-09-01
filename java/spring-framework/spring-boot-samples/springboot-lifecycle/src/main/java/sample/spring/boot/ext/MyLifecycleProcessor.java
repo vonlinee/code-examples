@@ -1,4 +1,4 @@
-package sample.spring.boot;
+package sample.spring.boot.ext;
 
 import org.springframework.context.LifecycleProcessor;
 

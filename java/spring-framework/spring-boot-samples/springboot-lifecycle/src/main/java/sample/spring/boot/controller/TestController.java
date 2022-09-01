@@ -10,6 +10,10 @@ import javax.annotation.Resource;
 @RequestMapping("/test")
 public class TestController {
 
+    public TestController() {
+        System.out.println("TestController实例化");
+    }
+
     @Resource
     ITestService testService;
 

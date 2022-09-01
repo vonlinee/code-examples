@@ -19,6 +19,9 @@ public class DevplApplication extends SpringApplication {
 
     public DevplApplication(Class<?>... primarySources) {
         super(null, primarySources);
+        setLogStartupInfo(false);
+        setLazyInitialization(false);
+        setHeadless(false);
     }
 
     @Override

@@ -237,7 +237,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
         // Initialize SSL if needed
         initialiseSsl();
     }
-    
+
     // Separated out to make it easier for folks that extend NioEndpoint to
     // implement custom [server]sockets
     protected void initServerSocket() throws Exception {
@@ -1708,13 +1708,14 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
                 socketWrapper.close();
                 return;
             }
-            
-            // NioSocket 
+
+            // NioSocket
             _log.info("socketWrapper[{}] socket => [{}]", socketWrapper.getClass(), socketWrapper.getSocket().getClass());
-            
+            // NioSocketWrapper
             try {
                 int handshake = -1;
                 try {
+                    // NioChannel
                     if (socketWrapper.getSocket().isHandshakeComplete()) {
                         // No TLS handshaking required. Let the handler
                         // process this socket / event combination.

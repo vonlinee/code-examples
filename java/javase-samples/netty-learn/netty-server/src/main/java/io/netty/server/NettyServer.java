@@ -49,6 +49,7 @@ public class NettyServer {
                         client.pipeline().addLast(new HttpResponseEncoder());// HttpResponseEncoder 编码器
                         client.pipeline().addLast(new HttpRequestDecoder()); // HttpRequestDecoder 解码器
                         client.pipeline().addLast(new MyNettyHandler());
+                        client.pipeline().addLast(new MyOutboundHandler());
                     }
                 })
                 .handler(new ServerOutboundHandler())

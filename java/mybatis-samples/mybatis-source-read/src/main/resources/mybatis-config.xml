@@ -23,7 +23,7 @@
 	</typeAliases>
 	
 <!--	<typeHandlers>-->
-<!--		<typeHandler handler="code.example.mybatis.typehandler.JsonTypeHandler" javaType="java.util.Map" />-->
+<!--		<typeHandler handler="JsonTypeHandler" javaType="java.util.Map" />-->
 <!--	</typeHandlers>-->
 	<!-- 数据库环境配置 -->
 	<environments default="development">
@@ -41,5 +41,6 @@
 	<mappers>
 		<!-- 使用相对于类路径的资源引用 -->
 		<mapper resource="mappers/TeacherMapper.xml" />  <!-- resources目录 -->
+		<mapper resource="mappers/StudentMapper.xml" />
 	</mappers>
 </configuration>

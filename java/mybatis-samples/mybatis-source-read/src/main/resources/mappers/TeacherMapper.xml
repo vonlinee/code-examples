@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="code.example.mybatis.mapper.TeacherMapper">
+<mapper namespace="sample.mybatis.mapper.TeacherMapper">
 
     <select id="queryAll" resultType="map">
         SELECT * FROM t_teacher
@@ -47,7 +47,7 @@
     </select>
 
     <!--新增1条老师记录-->
-    <insert id="insertTeacher" parameterType="code.example.mybatis.entity.Teacher">
+    <insert id="insertTeacher" parameterType="sample.mybatis.entity.Teacher">
         INSERT INTO t_teacher
             (TEACHER_ID, TEACHER_NO, TEACHER_SEX, NATIVE_PLACE, TEACHER_NAME, DEPART_NO,  DEPART_NAME, TITLE, TELE_PHONE)
         VALUES(uuid(),
@@ -60,4 +60,5 @@
                #{teacher.title},
                #{teacher.telePhone});
     </insert>
+
 </mapper>

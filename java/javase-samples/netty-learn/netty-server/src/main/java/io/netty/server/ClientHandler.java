@@ -4,9 +4,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.FullHttpMessage;
 import io.netty.util.CharsetUtil;
 
-public class ClientHandler extends SimpleChannelInboundHandler {
+public class ClientHandler extends SimpleChannelInboundHandler<FullHttpMessage> {
 
     @Override
     public void channelActive(ChannelHandlerContext channelHandlerContext) {
@@ -20,7 +21,7 @@ public class ClientHandler extends SimpleChannelInboundHandler {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, FullHttpMessage msg) throws Exception {
         ByteBuf in = null;
         if (msg instanceof ByteBuf) {
             in = (ByteBuf) msg;
@@ -28,4 +29,6 @@ public class ClientHandler extends SimpleChannelInboundHandler {
         assert in != null;
         System.out.println("Client received: " + in.toString(CharsetUtil.UTF_8));
     }
+
+
 }

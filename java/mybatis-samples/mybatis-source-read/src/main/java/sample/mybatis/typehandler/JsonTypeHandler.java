@@ -1,4 +1,4 @@
-package code.example.mybatis.typehandler;
+package sample.mybatis.typehandler;
 
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;

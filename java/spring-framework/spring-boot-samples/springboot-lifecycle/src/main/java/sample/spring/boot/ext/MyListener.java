@@ -1,4 +1,4 @@
-package sample.spring.boot;
+package sample.spring.boot.ext;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEvent;
@@ -15,6 +15,6 @@ public class MyListener implements ApplicationListener<ApplicationEvent> {
     }
 
     private void printApplicationEvent(ApplicationEvent event) {
-        log.info("{}, {}, {}", event.getTimestamp(), event.getSource(), event.getClass());
+        log.info("[处理事件] {}, {}, {}", event.getTimestamp(), event.getSource(), event.getClass());
     }
 }

@@ -5,10 +5,10 @@
 <configuration>
 	<!-- 加载外部配置文件：https://www.cnblogs.com/chenyanbin/p/11655095.html -->
 	<properties resource="jdbc.properties" />
-	<settings>
-		<setting name="logImpl" value="STDOUT_LOGGING" /> <!-- 使用标准输出打印SQL日志 -->
-		<!-- <setting name="logImpl" value="LOG4J"/> -->   <!-- 使用log4j打印SQL日志，需要引入log4j -->
-	</settings>
+<!--	<settings>-->
+<!--		<setting name="logImpl" value="STDOUT_LOGGING" /> &lt;!&ndash; 使用标准输出打印SQL日志 &ndash;&gt;-->
+<!--		&lt;!&ndash; <setting name="logImpl" value="LOG4J"/> &ndash;&gt;   &lt;!&ndash; 使用log4j打印SQL日志，需要引入log4j &ndash;&gt;-->
+<!--	</settings>-->
 	
 	<typeAliases>
 		<!--定义别名,避免写全限定类名 -->
@@ -22,7 +22,7 @@
 	</typeAliases>
 	
 <!--	<typeHandlers>-->
-<!--		<typeHandler handler="code.example.mybatis.typehandler.JsonTypeHandler" javaType="java.util.Map" />-->
+<!--		<typeHandler handler="JsonTypeHandler" javaType="java.util.Map" />-->
 <!--	</typeHandlers>-->
 	<!-- 数据库环境配置 -->
 	<environments default="development">
@@ -40,5 +40,6 @@
 	<mappers>
 		<!-- 使用相对于类路径的资源引用 -->
 		<mapper resource="mappers/TeacherMapper.xml" />  <!-- resources目录 -->
+		<mapper resource="mappers/StudentMapper.xml" />
 	</mappers>
 </configuration>

@@ -28,6 +28,7 @@ public class SocketAccepter implements Runnable {
 	@Override
 	public void run() {
 		try {
+			// ServerSocketChannelImpl package-private
 			this.serverSocket = ServerSocketChannel.open();
 			this.serverSocket.bind(new InetSocketAddress(tcpPort));
 		} catch (IOException e) {
@@ -38,7 +39,7 @@ public class SocketAccepter implements Runnable {
 			try {
 				// 获取客户端连接
 				SocketChannel socketChannel = this.serverSocket.accept();
-				System.out.println("Socket accepted: " + socketChannel);
+				LOG.info("Socket accepted: " + socketChannel.getRemoteAddress());
 				// TODO 检查队列是否能容纳新的Socket
 				socketQueue.add(new Socket(socketChannel)); // 客户端入队
 			} catch (IOException e) {
