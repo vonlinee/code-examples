@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import sample.mybatis.mapper.TeacherMapper;
 import org.apache.ibatis.session.defaults.DefaultSqlSession;
 import org.junit.jupiter.api.Test;
+import sample.mybatis.plugin.MyInterceptor;
 
 public class Main {
 
@@ -118,7 +119,7 @@ public class Main {
         sqlSession.close();
     }
 
-    int rowCount = 10000;
+    int rowCount = 2;
 
     List<Student> studentList = prepareStudentData(rowCount);
 
@@ -126,6 +127,12 @@ public class Main {
     public void testBatchInsert() {
         // batchInsert1();
         // batchInsert2();
+        batchInsert3();
+    }
+
+    @Test
+    public void testInterceptor() {
+        configuration.addInterceptor(new MyInterceptor());
         batchInsert3();
     }
 
@@ -158,7 +165,6 @@ public class Main {
     private void batchInsert3() {
         SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
         StudentMapper mapper = sqlSession.getMapper(StudentMapper.class);
-
         BatchExecutor executor = null;
         long start = System.currentTimeMillis();
         for (Student student : studentList) {

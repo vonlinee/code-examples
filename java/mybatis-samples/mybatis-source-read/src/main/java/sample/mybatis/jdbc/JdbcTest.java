@@ -6,6 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import sample.mybatis.entity.Student;
 
+import javax.accessibility.AccessibleAction;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,7 @@ public class JdbcTest {
         String sql = "INSERT INTO students (name, gender, grade, score) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             // 对同一个PreparedStatement反复设置参数并调用addBatch():
+            long start = System.currentTimeMillis();
             for (Student s : studentList) {
                 ps.setString(1, s.getName());
                 ps.setBoolean(2, s.getGender());
@@ -41,9 +45,11 @@ public class JdbcTest {
             }
             // 执行batch:
             int[] ns = ps.executeBatch();
+            long end = System.currentTimeMillis();
             for (int n : ns) {
-                System.out.println("insert " + n + " row"); // 每个batch中每个SQL执行的结果数量
+                // System.out.println("insert " + n + " row"); // 每个batch中每个SQL执行的结果数量
             }
+            System.out.println("插入" + ns.length + "行，耗时" + (end - start) + "ms");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -51,13 +57,16 @@ public class JdbcTest {
 
     @Test
     public void testBatch() throws SQLException {
-        Connection conn = getConnection();
+        batchInsert(getConnection(), prepareBatchStudents(100000));
+    }
+
+    public List<Student> prepareBatchStudents(int count) {
         List<Student> studentList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < count; i++) {
             Student student = new Student("name" + i, i < 3, i, 90 + i);
             studentList.add(student);
         }
-        batchInsert(conn, studentList);
+        return studentList;
     }
 
     @Test
@@ -70,5 +79,7 @@ public class JdbcTest {
         jdbcConnection.setAutoDeserialize(true);
         StatementImpl stmt = (StatementImpl) jdbcConnection.createStatement();
         System.out.println(stmt);
+
+        jdbcConnection.rollback();
     }
 }
