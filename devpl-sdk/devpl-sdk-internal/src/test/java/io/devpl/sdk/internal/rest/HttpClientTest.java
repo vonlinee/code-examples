@@ -1,11 +1,9 @@
 package io.devpl.sdk.internal.rest;
 
-import io.devpl.sdk.internal.Requests;
+import io.devpl.sdk.internal.http.Requests;
 
 import java.io.IOException;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 public class HttpClientTest {
 

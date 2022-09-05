@@ -8,4 +8,6 @@ import java.lang.annotation.*;
 public @interface DevplComponent {
 
     boolean enabled() default false;
+
+    String id();
 }

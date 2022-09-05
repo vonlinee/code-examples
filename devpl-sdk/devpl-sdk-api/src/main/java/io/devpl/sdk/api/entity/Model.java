@@ -7,5 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class Model {
     private int age;
-    private String name;
+    private String aaname;
+
+
 }

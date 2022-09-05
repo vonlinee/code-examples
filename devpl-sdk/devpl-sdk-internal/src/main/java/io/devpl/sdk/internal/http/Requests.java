@@ -1,4 +1,4 @@
-package io.devpl.sdk.internal;
+package io.devpl.sdk.internal.http;
 
 import java.io.IOException;
 import java.net.CookieManager;
