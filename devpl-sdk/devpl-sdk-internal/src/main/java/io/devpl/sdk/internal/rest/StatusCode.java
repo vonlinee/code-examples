@@ -12,6 +12,8 @@ import java.util.NoSuchElementException;
  */
 public final class StatusCode implements Serializable {
 
+    private static final long serialVersionUID = 8188825397312417945L;
+
     /**
      * 响应编码
      */

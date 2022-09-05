@@ -3,6 +3,8 @@ package io.devpl.sdk.internal.rest;
 import org.joda.beans.DynamicBean;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 class ListResultTest {
@@ -12,6 +14,7 @@ class ListResultTest {
         ListResult.Builder<Map<String, Object>> builder = ListResult.builder();
 
         DynamicBean bean;
+
     }
 
     @Test

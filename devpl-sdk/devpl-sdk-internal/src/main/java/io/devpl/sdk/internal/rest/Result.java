@@ -29,4 +29,12 @@ public abstract class Result extends ResultTemplate {
     public Result() {
         super();
     }
+
+    interface Builder {
+        Builder code(int code);
+
+        Builder message(String message);
+
+        Builder stacktrace(String stacktrace);
+    }
 }

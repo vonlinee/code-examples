@@ -16,6 +16,6 @@ public class ListResult<E> extends Result implements Serializable {
 
     private PageInfo pageInfo;
 
-    private List<E> data;
+    private List<Object> data;
 }
 
