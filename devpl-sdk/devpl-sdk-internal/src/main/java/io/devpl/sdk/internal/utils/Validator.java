@@ -14,8 +14,7 @@ import java.util.regex.Pattern;
  */
 public abstract class Validator {
 
-    private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter
-            .ofPattern("yyyy-MM-dd hh:mm:ss");
+    private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
 
     // 默认提示信息
     private static final String DEFAULT_NOT_NAN_EX_MESSAGE = "The validated value is not a number";
@@ -179,8 +178,7 @@ public abstract class Validator {
         return array;
     }
 
-    public static <T extends Iterable<?>> T noNullElements(final T iterable, final String message,
-                                                           final Object... values) {
+    public static <T extends Iterable<?>> T noNullElements(final T iterable, final String message, final Object... values) {
         notNull(iterable);
         int i = 0;
         for (final Iterator<?> it = iterable.iterator(); it.hasNext(); i++) {
@@ -213,8 +211,7 @@ public abstract class Validator {
         return notEmpty(array, DEFAULT_NOT_EMPTY_ARRAY_EX_MESSAGE);
     }
 
-    public static <T extends Collection<?>> T notEmpty(final T collection, final String message,
-                                                       final Object... values) {
+    public static <T extends Collection<?>> T notEmpty(final T collection, final String message, final Object... values) {
         Objects.requireNonNull(collection, () -> String.format(message, values));
         if (collection.isEmpty()) {
             throw new IllegalArgumentException(String.format(message, values));
@@ -278,8 +275,7 @@ public abstract class Validator {
         }
     }
 
-    public static <T extends Map<K, ? extends CharSequence>, K> void notBlankValue(final T map, K key,
-                                                                                   final String message) {
+    public static <T extends Map<K, ? extends CharSequence>, K> void notBlankValue(final T map, K key, final String message) {
         notNull(map);
         notEmpty(map);
         notExistKey(map, key);
@@ -340,8 +336,7 @@ public abstract class Validator {
         return validIndex(array, index, DEFAULT_VALID_INDEX_ARRAY_EX_MESSAGE, Integer.valueOf(index));
     }
 
-    public static <T extends Collection<?>> T validIndex(final T collection, final int index, final String message,
-                                                         final Object... values) {
+    public static <T extends Collection<?>> T validIndex(final T collection, final int index, final String message, final Object... values) {
         notNull(collection);
         if (index < 0 || index >= collection.size()) {
             throw new IndexOutOfBoundsException(String.format(message, values));
@@ -353,8 +348,7 @@ public abstract class Validator {
         return validIndex(collection, index, DEFAULT_VALID_INDEX_COLLECTION_EX_MESSAGE, Integer.valueOf(index));
     }
 
-    public static <T extends CharSequence> T validIndex(final T chars, final int index, final String message,
-                                                        final Object... values) {
+    public static <T extends CharSequence> T validIndex(final T chars, final int index, final String message, final Object... values) {
         notNull(chars);
         if (index < 0 || index >= chars.length()) {
             throw new IndexOutOfBoundsException(String.format(message, values));
@@ -387,8 +381,7 @@ public abstract class Validator {
         }
     }
 
-    public static void matchesPattern(final CharSequence input, final String pattern, final String message,
-                                      final Object... values) {
+    public static void matchesPattern(final CharSequence input, final String pattern, final String message, final Object... values) {
         // TODO when breaking BC, consider returning input
         if (!Pattern.matches(pattern, input)) {
             throw new IllegalArgumentException(String.format(message, values));
@@ -425,8 +418,7 @@ public abstract class Validator {
         }
     }
 
-    public static <T> void inclusiveBetween(final T start, final T end, final Comparable<T> value, final String message,
-                                            final Object... values) {
+    public static <T> void inclusiveBetween(final T start, final T end, final Comparable<T> value, final String message, final Object... values) {
         // TODO when breaking BC, consider returning value
         if (value.compareTo(start) < 0 || value.compareTo(end) > 0) {
             throw new IllegalArgumentException(String.format(message, values));
@@ -456,8 +448,7 @@ public abstract class Validator {
         }
     }
 
-    public static void inclusiveBetween(final double start, final double end, final double value,
-                                        final String message) {
+    public static void inclusiveBetween(final double start, final double end, final double value, final String message) {
         // TODO when breaking BC, consider returning value
         if (value < start || value > end) {
             throw new IllegalArgumentException(message);
@@ -471,8 +462,7 @@ public abstract class Validator {
         }
     }
 
-    public static <T> void exclusiveBetween(final T start, final T end, final Comparable<T> value, final String message,
-                                            final Object... values) {
+    public static <T> void exclusiveBetween(final T start, final T end, final Comparable<T> value, final String message, final Object... values) {
         // TODO when breaking BC, consider returning value
         if (value.compareTo(start) <= 0 || value.compareTo(end) >= 0) {
             throw new IllegalArgumentException(String.format(message, values));
@@ -502,8 +492,7 @@ public abstract class Validator {
         }
     }
 
-    public static void exclusiveBetween(final double start, final double end, final double value,
-                                        final String message) {
+    public static void exclusiveBetween(final double start, final double end, final double value, final String message) {
         // TODO when breaking BC, consider returning value
         if (value <= start || value >= end) {
             throw new IllegalArgumentException(message);
@@ -513,13 +502,12 @@ public abstract class Validator {
     public static void isInstanceOf(final Class<?> type, final Object obj) {
         // TODO when breaking BC, consider returning obj
         if (!type.isInstance(obj)) {
-            throw new IllegalArgumentException(String.format(DEFAULT_IS_INSTANCE_OF_EX_MESSAGE, type.getName(),
-                    obj == null ? "null" : obj.getClass().getName()));
+            throw new IllegalArgumentException(String.format(DEFAULT_IS_INSTANCE_OF_EX_MESSAGE, type.getName(), obj == null ? "null" : obj.getClass()
+                    .getName()));
         }
     }
 
-    public static void isInstanceOf(final Class<?> type, final Object obj, final String message,
-                                    final Object... values) {
+    public static void isInstanceOf(final Class<?> type, final Object obj, final String message, final Object... values) {
         // TODO when breaking BC, consider returning obj
         if (!type.isInstance(obj)) {
             throw new IllegalArgumentException(String.format(message, values));
@@ -530,13 +518,11 @@ public abstract class Validator {
     public static void isAssignableFrom(final Class<?> superType, final Class<?> type) {
         // TODO when breaking BC, consider returning type
         if (!superType.isAssignableFrom(type)) {
-            throw new IllegalArgumentException(String.format(DEFAULT_IS_ASSIGNABLE_EX_MESSAGE,
-                    type == null ? "null" : type.getName(), superType.getName()));
+            throw new IllegalArgumentException(String.format(DEFAULT_IS_ASSIGNABLE_EX_MESSAGE, type == null ? "null" : type.getName(), superType.getName()));
         }
     }
 
-    public static void isAssignableFrom(final Class<?> superType, final Class<?> type, final String message,
-                                        final Object... values) {
+    public static void isAssignableFrom(final Class<?> superType, final Class<?> type, final String message, final Object... values) {
         // TODO when breaking BC, consider returning type
         if (!superType.isAssignableFrom(type)) {
             throw new IllegalArgumentException(String.format(message, values));
@@ -588,8 +574,7 @@ public abstract class Validator {
         try {
             return LocalDateTime.parse(dt, DateTimeFormatter.ofPattern(format));
         } catch (Exception e) {
-            throw new IllegalArgumentException(
-                    String.format("datetime :{} is not suitable for the format:{}", dt, format));
+            throw new IllegalArgumentException(String.format("datetime :{} is not suitable for the format:{}", dt, format));
         }
     }
 
@@ -647,8 +632,7 @@ public abstract class Validator {
     }
 
     public static boolean hasLength(final Object maybeCharSequence) {
-        if (maybeCharSequence == null)
-            return true;
+        if (maybeCharSequence == null) return true;
         if (maybeCharSequence instanceof CharSequence) {
             CharSequence sequence = (CharSequence) maybeCharSequence;
             return sequence.length() > 0;
@@ -671,22 +655,18 @@ public abstract class Validator {
             throw new NullPointerException(String.format("the validated map does not contains the key[%s]", key));
         }
         V v = map.get(key);
-        if (v == null)
-            throw new IllegalArgumentException(message);
+        if (v == null) throw new IllegalArgumentException(message);
         // cast
-        if (valueType == null)
-            throw new IllegalArgumentException("the target type of value cannot be null");
+        if (valueType == null) throw new IllegalArgumentException("the target type of value cannot be null");
         if (valueType == String.class) {
             String val = (String) v;
-            if (val.length() > 0)
-                return (T) val;
+            if (val.length() > 0) return (T) val;
             throw new IllegalArgumentException(message);
         }
         try {
             return (T) v;
         } catch (ClassCastException exception) {
-            throw new IllegalArgumentException(String
-                    .format("the value[%s] of validated map cannot be cast to the type [%s]", v.getClass(), valueType));
+            throw new IllegalArgumentException(String.format("the value[%s] of validated map cannot be cast to the type [%s]", v.getClass(), valueType));
         }
     }
 
@@ -696,8 +676,7 @@ public abstract class Validator {
         }
         V v = map.get(key);
         if (v == null)
-            throw new IllegalArgumentException(
-                    String.format("the validated map contains null value of the key[%s]", key));
+            throw new IllegalArgumentException(String.format("the validated map contains null value of the key[%s]", key));
         return v;
     }
 
@@ -717,16 +696,13 @@ public abstract class Validator {
             throw new NullPointerException(String.format("the validated map does not contains the key[%s]", key));
         }
         V v = map.get(key);
-        if (v == null)
-            throw new IllegalArgumentException(message);
+        if (v == null) throw new IllegalArgumentException(message);
         // cast
-        if (valueType == null)
-            throw new IllegalArgumentException("the target type of value cannot be null");
+        if (valueType == null) throw new IllegalArgumentException("the target type of value cannot be null");
         try {
             return (T) v;
         } catch (ClassCastException exception) {
-            throw new IllegalArgumentException(
-                    String.format("the value[%s] cannot be cast to the type [%s]", v.getClass(), valueType));
+            throw new IllegalArgumentException(String.format("the value[%s] cannot be cast to the type [%s]", v.getClass(), valueType));
         }
     }
 
