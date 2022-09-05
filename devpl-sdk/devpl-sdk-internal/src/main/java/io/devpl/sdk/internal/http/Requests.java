@@ -1,6 +1,10 @@
 package io.devpl.sdk.internal.http;
 
+import cn.hutool.core.io.FastByteArrayOutputStream;
+import cn.hutool.core.io.IoUtil;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.CookieManager;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -62,7 +66,8 @@ public final class Requests {
     public <T> T send(String url, String method, String body, Map<String, String> header) {
         HttpRequest request = buildRequest(url, method, body, header);
         try {
-            HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+            HttpResponse<InputStream> response = client.send(request, new ResponseBodyHandler());
+
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
