@@ -1,6 +1,5 @@
 rootProject.name = 'gradle-sample'
 
-println " >>>> settings.gradle >>>> "
 include 'api'
 
 buildscript {
