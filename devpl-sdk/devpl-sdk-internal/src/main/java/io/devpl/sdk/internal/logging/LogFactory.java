@@ -50,7 +50,7 @@ public class LogFactory {
 		try {
 			Resources.classForName(testClassName);
 			Class implClass = Resources.classForName(implClassName);
-			logConstructor = implClass.getConstructor(new Class[] { String.class });
+			logConstructor = implClass.getConstructor(String.class);
 			Class<?> declareClass = logConstructor.getDeclaringClass();
 			if (!Log.class.isAssignableFrom(declareClass)) {
 				logConstructor = null;
@@ -85,7 +85,7 @@ public class LogFactory {
 		try {
 			Resources.classForName("org.apache.log4j.Logger");
 			Class implClass = Resources.classForName("com.alibaba.druid.support.logging.Log4jImpl");
-			logConstructor = implClass.getConstructor(new Class[] { String.class });
+			logConstructor = implClass.getConstructor(String.class);
 		} catch (Throwable t) {
 			// ignore
 		}
@@ -96,7 +96,7 @@ public class LogFactory {
 		try {
 			Resources.classForName("java.util.logging.Logger");
 			Class implClass = Resources.classForName("com.alibaba.druid.support.logging.Jdk14LoggingImpl");
-			logConstructor = implClass.getConstructor(new Class[] { String.class });
+			logConstructor = implClass.getConstructor(String.class);
 		} catch (Throwable t) {
 			// ignore
 		}

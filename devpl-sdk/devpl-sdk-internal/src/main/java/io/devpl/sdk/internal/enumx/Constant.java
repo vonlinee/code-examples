@@ -1,4 +1,4 @@
-package io.devpl.sdk.internal;
+package io.devpl.sdk.internal.enumx;
 
 /**
  * 单例常量通过 == 运算符进行比较
