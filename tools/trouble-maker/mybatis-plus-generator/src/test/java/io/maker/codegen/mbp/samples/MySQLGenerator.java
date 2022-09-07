@@ -3,6 +3,7 @@ package io.maker.codegen.mbp.samples;
 import io.maker.base.utils.PropertiesUtils;
 import io.maker.codegen.mbp.FastAutoGenerator;
 import io.maker.codegen.mbp.config.DataSourceConfig;
+import io.maker.codegen.mbp.config.OutputFile;
 import io.maker.codegen.mbp.config.TemplateType;
 import io.maker.codegen.mbp.config.builder.Controller;
 import io.maker.codegen.mbp.config.builder.Entity;
@@ -41,18 +42,25 @@ public class MySQLGenerator {
     // 基本包名
     private static final String basePackage = "com.lancoo.schoolexcellentcourse";
     // 作者
-    private static final String AUTHOR_NAME = "";
+    private static final String AUTHOR_NAME = "Lancoo";
     // table前缀
     private static final String[] tablePrefixToBeIgnored = {""};
     // 要生成的表名
-    private static final String[] tableNamesToBeGenerated = {"user_operation_log"};
+    private static final String[] tableNamesToBeGenerated = {"tch_age_range_report",
+            "tch_baseinfo_report",
+            "tch_edu_report",
+            "tch_teach_info_report",
+            "tch_title_report"};
 
+    /**
+     * 数据库信息从本地文件加载，三个字段：url、username、password
+     */
     private static final String LOCAL_CONNECTION_PROPERTIES_FILE = "C:\\Users\\Administrator\\Desktop\\jdbc.properties";
 
     public static void main(String[] args) {
         StopWatch stopWatch = new StopWatch("代码生成");
         stopWatch.start("数据源配置");
-
+        System.out.println("开始配置");
         Properties properties = PropertiesUtils.loadProperties(LOCAL_CONNECTION_PROPERTIES_FILE);
 
         // 数据源配置
@@ -66,7 +74,7 @@ public class MySQLGenerator {
         FastAutoGenerator generator = FastAutoGenerator.create(dataSourceBuilder);
         generator.globalConfig(builder -> {
             builder.author(AUTHOR_NAME) // 设置作者
-                    .enableSwagger() // 开启 swagger 模式
+                    // .enableSwagger() // 开启 swagger 模式
                     .fileOverride() // 覆盖文件，全局配置，可以针对单一类型的文件进行覆盖
                     .outputDir(OUTPUT_ROOT_DIR); // 指定输出根目录，即项目路径
         }).templateConfig(builder -> {
@@ -88,19 +96,21 @@ public class MySQLGenerator {
         }).packageConfig(builder -> {
             // 包配置：需要自定义
             // 项目根目录 + 父包名 + 模块名 + 具体的目录名即为真实的文件路径
-            builder.parent("") // 设置父包名
-                    .moduleName("mybatis") // 设置父包模块名
+            // TODO 根据需要设置
+            builder.parent("org.lancoo.educenter") // 设置父包名
+                    .moduleName("") // 设置父包模块名
                     .entity("entities") // 实体类所在文件夹名
                     .service("service") // service接口所在文件夹名
                     .serviceImpl("service.impl") // service实现类所在文件夹名
                     .mapper("mapper")  // dao层的mapper接口目录
-                    .xml("mybatis.mapping")
+                    .xml("mapper")
                     .controller("controller")
                     .other("other")
                     // pathInfo用于指定绝对路径
-                    // .pathInfo(Collections.singletonMap(OutputFile.xml, "D://Temp"))// 设置mapperXml生成路径
+                    .pathInfo(Collections.singletonMap(OutputFile.xml, "D://Temp"))// 设置mapperXml生成路径
                     .build();
         }).strategyConfig(builder -> {
+
             // 策略配置
             builder.addInclude(tableNamesToBeGenerated); // 设置需要生成的表名
             builder.addTablePrefix(tablePrefixToBeIgnored); // 设置过滤表前缀
