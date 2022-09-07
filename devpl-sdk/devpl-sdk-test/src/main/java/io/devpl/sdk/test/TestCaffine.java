@@ -2,19 +2,28 @@ package io.devpl.sdk.test;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.springframework.cache.caffeine.CaffeineCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
+/**
+ * TODO 封装日志门面
+ */
 public class TestCaffine {
 
-    ThreadLocal<Integer> local = ThreadLocal.withInitial(() -> 20);
+    static final Logger logger = LoggerFactory.getLogger(TestCaffine.class);
 
     public static void main(String[] args) {
 
+        System.out.println(logger.getClass()); // ch.qos.logback.classic.Logger
 
+        logger.info("main");
 
+        ch.qos.logback.classic.Logger log = (ch.qos.logback.classic.Logger) logger;
+
+        log.debug("message", new RuntimeException());
     }
 
     /**

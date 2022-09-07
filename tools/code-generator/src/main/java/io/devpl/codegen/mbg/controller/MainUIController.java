@@ -154,7 +154,6 @@ public class MainUIController extends BaseFXController {
         });
         leftDBTree.setCellFactory((TreeView<String> tv) -> {
             TreeCell<String> cell = defaultCellFactory.call(tv);
-
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 int level = leftDBTree.getTreeItemLevel(cell.getTreeItem());
                 @SuppressWarnings("unchecked")
@@ -211,7 +210,7 @@ public class MainUIController extends BaseFXController {
     }
 
     /**
-     * 初始化控件的默认值
+     * 初始化文本控件的默认值
      */
     private void initializePlaceholderValue() {
         mapperTargetPackage.setText("mapping");
@@ -518,7 +517,6 @@ public class MainUIController extends BaseFXController {
 
     /**
      * 检查并创建不存在的文件夹
-     *
      * @return
      */
     private boolean checkDirs(GeneratorConfig config) {

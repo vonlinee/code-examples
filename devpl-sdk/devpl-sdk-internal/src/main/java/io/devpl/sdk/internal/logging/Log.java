@@ -8,7 +8,7 @@ public interface Log {
 	 *
 	 * @since 1.3
 	 */
-	final public String ROOT_LOGGER_NAME = "ROOT";
+	String ROOT_LOGGER_NAME = "ROOT";
 
 	/**
 	 * Return the name of this <code>Logger</code> instance.
@@ -389,7 +389,7 @@ public interface Log {
 	 * @param arg1   the first argument
 	 * @param arg2   the second argument
 	 */
-	public void info(Marker marker, String format, Object arg1, Object arg2);
+	void info(Marker marker, String format, Object arg1, Object arg2);
 
 	/**
 	 * This method is similar to {@link #info(String, Object...)} method except that
@@ -399,7 +399,7 @@ public interface Log {
 	 * @param format    the format string
 	 * @param arguments a list of 3 or more arguments
 	 */
-	public void info(Marker marker, String format, Object... arguments);
+	void info(Marker marker, String format, Object... arguments);
 
 	/**
 	 * This method is similar to {@link #info(String, Throwable)} method except that
@@ -409,21 +409,21 @@ public interface Log {
 	 * @param msg    the message accompanying the exception
 	 * @param t      the exception (throwable) to log
 	 */
-	public void info(Marker marker, String msg, Throwable t);
+	void info(Marker marker, String msg, Throwable t);
 
 	/**
 	 * Is the logger instance enabled for the WARN level?
 	 *
 	 * @return True if this Logger is enabled for the WARN level, false otherwise.
 	 */
-	public boolean isWarnEnabled();
+	boolean isWarnEnabled();
 
 	/**
 	 * Log a message at the WARN level.
 	 *
 	 * @param msg the message string to be logged
 	 */
-	public void warn(String msg);
+	void warn(String msg);
 
 	/**
 	 * Log a message at the WARN level according to the specified format and
@@ -437,7 +437,7 @@ public interface Log {
 	 * @param format the format string
 	 * @param arg    the argument
 	 */
-	public void warn(String format, Object arg);
+	void warn(String format, Object arg);
 
 	/**
 	 * Log a message at the WARN level according to the specified format and
@@ -455,7 +455,7 @@ public interface Log {
 	 * @param format    the format string
 	 * @param arguments a list of 3 or more arguments
 	 */
-	public void warn(String format, Object... arguments);
+	void warn(String format, Object... arguments);
 
 	/**
 	 * Log a message at the WARN level according to the specified format and
@@ -470,7 +470,7 @@ public interface Log {
 	 * @param arg1   the first argument
 	 * @param arg2   the second argument
 	 */
-	public void warn(String format, Object arg1, Object arg2);
+	void warn(String format, Object arg1, Object arg2);
 
 	/**
 	 * Log an exception (throwable) at the WARN level with an accompanying message.
@@ -478,7 +478,7 @@ public interface Log {
 	 * @param msg the message accompanying the exception
 	 * @param t   the exception (throwable) to log
 	 */
-	public void warn(String msg, Throwable t);
+	void warn(String msg, Throwable t);
 
 	/**
 	 * Similar to {@link #isWarnEnabled()} method except that the marker data is
@@ -487,7 +487,7 @@ public interface Log {
 	 * @param marker The marker data to take into consideration
 	 * @return True if this Logger is enabled for the WARN level, false otherwise.
 	 */
-	public boolean isWarnEnabled(Marker marker);
+	boolean isWarnEnabled(Marker marker);
 
 	/**
 	 * Log a message with the specific Marker at the WARN level.
@@ -495,7 +495,7 @@ public interface Log {
 	 * @param marker The marker specific to this log statement
 	 * @param msg    the message string to be logged
 	 */
-	public void warn(Marker marker, String msg);
+	void warn(Marker marker, String msg);
 
 	/**
 	 * This method is similar to {@link #warn(String, Object)} method except that
@@ -505,7 +505,7 @@ public interface Log {
 	 * @param format the format string
 	 * @param arg    the argument
 	 */
-	public void warn(Marker marker, String format, Object arg);
+	void warn(Marker marker, String format, Object arg);
 
 	/**
 	 * This method is similar to {@link #warn(String, Object, Object)} method except
@@ -516,7 +516,7 @@ public interface Log {
 	 * @param arg1   the first argument
 	 * @param arg2   the second argument
 	 */
-	public void warn(Marker marker, String format, Object arg1, Object arg2);
+	void warn(Marker marker, String format, Object arg1, Object arg2);
 
 	/**
 	 * This method is similar to {@link #warn(String, Object...)} method except that
@@ -526,7 +526,7 @@ public interface Log {
 	 * @param format    the format string
 	 * @param arguments a list of 3 or more arguments
 	 */
-	public void warn(Marker marker, String format, Object... arguments);
+	void warn(Marker marker, String format, Object... arguments);
 
 	/**
 	 * This method is similar to {@link #warn(String, Throwable)} method except that
@@ -536,21 +536,21 @@ public interface Log {
 	 * @param msg    the message accompanying the exception
 	 * @param t      the exception (throwable) to log
 	 */
-	public void warn(Marker marker, String msg, Throwable t);
+	void warn(Marker marker, String msg, Throwable t);
 
 	/**
 	 * Is the logger instance enabled for the ERROR level?
 	 *
 	 * @return True if this Logger is enabled for the ERROR level, false otherwise.
 	 */
-	public boolean isErrorEnabled();
+	boolean isErrorEnabled();
 
 	/**
 	 * Log a message at the ERROR level.
 	 *
 	 * @param msg the message string to be logged
 	 */
-	public void error(String msg);
+	void error(String msg);
 
 	/**
 	 * Log a message at the ERROR level according to the specified format and
@@ -564,7 +564,7 @@ public interface Log {
 	 * @param format the format string
 	 * @param arg    the argument
 	 */
-	public void error(String format, Object arg);
+	void error(String format, Object arg);
 
 	/**
 	 * Log a message at the ERROR level according to the specified format and
@@ -579,7 +579,7 @@ public interface Log {
 	 * @param arg1   the first argument
 	 * @param arg2   the second argument
 	 */
-	public void error(String format, Object arg1, Object arg2);
+	void error(String format, Object arg1, Object arg2);
 
 	/**
 	 * Log a message at the ERROR level according to the specified format and
@@ -597,7 +597,7 @@ public interface Log {
 	 * @param format    the format string
 	 * @param arguments a list of 3 or more arguments
 	 */
-	public void error(String format, Object... arguments);
+	void error(String format, Object... arguments);
 
 	/**
 	 * Log an exception (throwable) at the ERROR level with an accompanying message.
@@ -605,7 +605,7 @@ public interface Log {
 	 * @param msg the message accompanying the exception
 	 * @param t   the exception (throwable) to log
 	 */
-	public void error(String msg, Throwable t);
+	void error(String msg, Throwable t);
 
 	/**
 	 * Similar to {@link #isErrorEnabled()} method except that the marker data is
@@ -614,7 +614,7 @@ public interface Log {
 	 * @param marker The marker data to take into consideration
 	 * @return True if this Logger is enabled for the ERROR level, false otherwise.
 	 */
-	public boolean isErrorEnabled(Marker marker);
+	boolean isErrorEnabled(Marker marker);
 
 	/**
 	 * Log a message with the specific Marker at the ERROR level.
@@ -622,7 +622,7 @@ public interface Log {
 	 * @param marker The marker specific to this log statement
 	 * @param msg    the message string to be logged
 	 */
-	public void error(Marker marker, String msg);
+	void error(Marker marker, String msg);
 
 	/**
 	 * This method is similar to {@link #error(String, Object)} method except that
@@ -632,7 +632,7 @@ public interface Log {
 	 * @param format the format string
 	 * @param arg    the argument
 	 */
-	public void error(Marker marker, String format, Object arg);
+	void error(Marker marker, String format, Object arg);
 
 	/**
 	 * This method is similar to {@link #error(String, Object, Object)} method
@@ -643,7 +643,7 @@ public interface Log {
 	 * @param arg1   the first argument
 	 * @param arg2   the second argument
 	 */
-	public void error(Marker marker, String format, Object arg1, Object arg2);
+	void error(Marker marker, String format, Object arg1, Object arg2);
 
 	/**
 	 * This method is similar to {@link #error(String, Object...)} method except
@@ -653,7 +653,7 @@ public interface Log {
 	 * @param format    the format string
 	 * @param arguments a list of 3 or more arguments
 	 */
-	public void error(Marker marker, String format, Object... arguments);
+	void error(Marker marker, String format, Object... arguments);
 
 	/**
 	 * This method is similar to {@link #error(String, Throwable)} method except
@@ -663,6 +663,5 @@ public interface Log {
 	 * @param msg    the message accompanying the exception
 	 * @param t      the exception (throwable) to log
 	 */
-	public void error(Marker marker, String msg, Throwable t);
-
+	void error(Marker marker, String msg, Throwable t);
 }

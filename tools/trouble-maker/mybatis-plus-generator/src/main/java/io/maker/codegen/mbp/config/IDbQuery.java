@@ -29,7 +29,7 @@ public interface IDbQuery {
      * 表注释
      * @deprecated 3.5.3
      */
-    @Deprecated
+    // TODO @Deprecated
     default String tableComment() {
         return null;
     }

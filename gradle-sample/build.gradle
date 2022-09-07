@@ -1,4 +1,8 @@
+plugins {
+    id 'java'
+}
 
+<<<<<<< HEAD
 
 
 
@@ -17,4 +21,8 @@ dependencies {
 
 repositories {
     mavenCentral()
+=======
+tasks.register('cleanSql', Delete) {
+    
+>>>>>>> 031f3fe926a3cbd5850fbd770807f4a8082128ad
 }

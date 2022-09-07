@@ -1,0 +1,21 @@
+
+
+
+decl(type, name, value) ::= "<type> <name><init(value)>;"
+init(v) ::= "<if(v)> = <v><endif>"
+
+test(name) ::= "<name:bracket(), bracket1()>" // apply bracket template to each name
+
+test2(name) ::= "<name , name , name>:bracket()}"
+
+bracket(x) ::= "[<x>]"            // surround parameter with square brackets
+bracket1(x) ::= "[<x>1]"
+
+test1(name) ::= "<name:bracket(); separator=\",\n\">"
+
+// 匿名模板
+
+say(name) ::= "hello, <name:{x|[<x>]};separator=\",\">"
+
+
+template() ::= "{age}"
