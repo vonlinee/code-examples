@@ -1,17 +1,17 @@
 package io.maker.codegen.mbp.samples;
 
+import com.baomidou.mybatisplus.generator.FastAutoGenerator;
+import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
+import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.TemplateType;
+import com.baomidou.mybatisplus.generator.config.builder.Controller;
+import com.baomidou.mybatisplus.generator.config.builder.Entity;
+import com.baomidou.mybatisplus.generator.config.builder.Mapper;
+import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
+import com.baomidou.mybatisplus.generator.config.querys.MySqlQuery;
+import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.baomidou.mybatisplus.generator.keywords.MySqlKeyWordsHandler;
 import io.maker.base.utils.PropertiesUtils;
-import io.maker.codegen.mbp.FastAutoGenerator;
-import io.maker.codegen.mbp.config.DataSourceConfig;
-import io.maker.codegen.mbp.config.OutputFile;
-import io.maker.codegen.mbp.config.TemplateType;
-import io.maker.codegen.mbp.config.builder.Controller;
-import io.maker.codegen.mbp.config.builder.Entity;
-import io.maker.codegen.mbp.config.builder.Mapper;
-import io.maker.codegen.mbp.config.converts.MySqlTypeConvert;
-import io.maker.codegen.mbp.config.querys.MySqlQuery;
-import io.maker.codegen.mbp.engine.FreemarkerTemplateEngine;
-import io.maker.codegen.mbp.keywords.MySqlKeyWordsHandler;
 import org.springframework.util.StopWatch;
 
 import java.util.Collections;
@@ -90,8 +90,8 @@ public class MySQLGenerator {
         }).injectionConfig(builder -> {
             // 注入配置
             builder.beforeOutputFile((tableInfo, objectMap) -> {
-                System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
-            }).customMap(Collections.singletonMap("test", "baomidou"))
+                        System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
+                    }).customMap(Collections.singletonMap("test", "baomidou"))
                     .customFile(Collections.singletonMap("test.txt", "/templates/test.vm")).build();
         }).packageConfig(builder -> {
             // 包配置：需要自定义
@@ -117,7 +117,8 @@ public class MySQLGenerator {
             // 实体类输出配置
             Entity.Builder entityBuilder = builder.entityBuilder();
             //.superClass(BaseEntity.class)
-            entityBuilder.disableSerialVersionUUID(); // 禁用生成serialVersionUUID
+            // TODO 是否生成序列化ID
+            // entityBuilder.disableSerialVersionUUID(); // 禁用生成serialVersionUUID
             //.enableChainModel()
             entityBuilder.enableLombok();
             entityBuilder.fileOverride();
@@ -140,7 +141,9 @@ public class MySQLGenerator {
             Mapper.Builder mapperBuilder = builder.mapperBuilder();
             mapperBuilder.fileOverride(); // 是否覆盖之前的mapper.xml文件
             mapperBuilder.enableBaseColumnList(); // 添加字段列表，即sql标签
-            mapperBuilder.enableBaseCrudTag(); // 生成默认的crud标签
+
+            // TODO 默认生成增删改查的XML标签
+            // mapperBuilder.enableBaseCrudTag(); // 生成默认的crud标签
             mapperBuilder.enableBaseResultMap(); // 添加实体类和数据库字段映射，即ResultMap标签
 
             Controller.Builder controllerBuilder = builder.controllerBuilder();

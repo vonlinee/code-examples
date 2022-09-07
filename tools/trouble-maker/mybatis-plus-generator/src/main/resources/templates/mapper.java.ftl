@@ -2,8 +2,8 @@ package ${package.Mapper};
 
 import ${package.Entity}.${entity};
 import ${superMapperClassPackage};
-<#if mapperAnnotationClass??>
-import ${mapperAnnotationClass.name};
+<#if mapperAnnotation>
+import org.apache.ibatis.annotations.Mapper;
 </#if>
 
 /**
@@ -14,8 +14,8 @@ import ${mapperAnnotationClass.name};
  * @author ${author}
  * @since ${date}
  */
-<#if mapperAnnotationClass??>
-@${mapperAnnotationClass.simpleName}
+<#if mapperAnnotation>
+@Mapper
 </#if>
 <#if kotlin>
 interface ${table.mapperName} : ${superMapperClass}<${entity}>
