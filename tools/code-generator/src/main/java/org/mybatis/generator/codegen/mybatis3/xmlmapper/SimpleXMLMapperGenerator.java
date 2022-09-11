@@ -31,6 +31,7 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
 
     /**
      * <mapper></mapper>标签的内容
+     *
      * @return
      */
     protected XmlElement getSqlMapElement() {

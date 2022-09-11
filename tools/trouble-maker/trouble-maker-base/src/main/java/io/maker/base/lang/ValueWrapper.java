@@ -2,7 +2,7 @@ package io.maker.base.lang;
 
 import java.io.Serializable;
 
-public class Value implements Serializable {
+public class ValueWrapper implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -10,13 +10,13 @@ public class Value implements Serializable {
 
     private final TypeMetaHolder holder;
 
-    protected Value(Object value) {
+    protected ValueWrapper(Object value) {
         this.value = value;
         this.holder = new TypeMetaHolder(value);
     }
 
-    public static Value wrap(Object val) {
-        return new Value(val);
+    public static ValueWrapper wrap(Object val) {
+        return new ValueWrapper(val);
     }
 
     public final boolean isNull() {

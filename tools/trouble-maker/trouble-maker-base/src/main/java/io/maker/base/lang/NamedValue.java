@@ -1,6 +1,6 @@
 package io.maker.base.lang;
 
-public final class NamedValue extends Value {
+public final class NamedValue extends ValueWrapper {
 
     /**
      * serialVersionUID

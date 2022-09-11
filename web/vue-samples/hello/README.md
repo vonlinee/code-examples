@@ -1,6 +1,6 @@
 # hello
 
-> vue-cli hello world
+> A Vue.js project
 
 ## Build Setup
 

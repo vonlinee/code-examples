@@ -21,26 +21,27 @@ import java.net.URL;
  */
 public class MainUI extends Application {
 
-	private static final Logger _LOG = LoggerFactory.getLogger(MainUI.class);
+    private static final Logger _LOG = LoggerFactory.getLogger(MainUI.class);
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		ConfigHelper.createEmptyFiles();
-		URL url = Thread.currentThread().getContextClassLoader().getResource("fxml/MainUI.fxml");
-		FXMLLoader fxmlLoader = new FXMLLoader(url);
-		Parent root = fxmlLoader.load();
-		primaryStage.setResizable(true);
-		primaryStage.setScene(new Scene(root));
-		primaryStage.setTitle("Mybatis Generator GUI");
-		Image imageIcon = new Image("icons/mybatis-logo.png");
-		primaryStage.getIcons().add(imageIcon);
-		primaryStage.show();
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        ConfigHelper.createEmptyFiles();
+        URL url = Thread.currentThread().getContextClassLoader().getResource("fxml/MainUI.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(url);
+        Parent root = fxmlLoader.load();
+        primaryStage.setResizable(true);
+        primaryStage.setScene(new Scene(root));
+        primaryStage.setTitle("Mybatis Generator GUI");
+        Image imageIcon = new Image("icons/mybatis-logo.png");
+        primaryStage.getIcons().add(imageIcon);
+        primaryStage.show();
 
-		MainUIController controller = fxmlLoader.getController();
-		controller.setPrimaryStage(primaryStage);
-	}
+        MainUIController controller = fxmlLoader.getController();
+        controller.setPrimaryStage(primaryStage);
+    }
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+    // JavaFX 11 运行此类不行，会提示缺少JavaFX运行时组件
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

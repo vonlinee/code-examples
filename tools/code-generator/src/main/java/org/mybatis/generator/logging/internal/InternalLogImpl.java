@@ -3,7 +3,7 @@ package org.mybatis.generator.logging.internal;
 import org.mybatis.generator.logging.Log;
 
 /**
- * 内部日志实现
+ * TODO 内部日志实现，暂时用简单的控制台打印代替
  */
 public class InternalLogImpl implements Log {
 
@@ -15,7 +15,7 @@ public class InternalLogImpl implements Log {
 
     @Override
     public boolean isPrepared() {
-        // 始终可用
+        // 内部日志实现始终可用
         return true;
     }
 

@@ -3,7 +3,7 @@ package io.maker.extension.poi;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.maker.base.lang.Value;
+import io.maker.base.lang.ValueWrapper;
 
 /**
  * Excel Sheet表
@@ -72,13 +72,13 @@ public class ExcelSheet {
 	 * @param columnNum
 	 * @return
 	 */
-	public List<Value> getColumnData(int columnNum) {
+	public List<ValueWrapper> getColumnData(int columnNum) {
 		rangeCheck(columnNum);
-		List<Value> columnValue = new ArrayList<>();
-		columnValue.add(0, Value.wrap(titles.get(columnNum)));
+		List<ValueWrapper> columnValue = new ArrayList<>();
+		columnValue.add(0, ValueWrapper.wrap(titles.get(columnNum)));
 		int dataRowCount = data.size();
 		for (int i = 0; i < dataRowCount; i++) {
-			columnValue.add(i + 1, Value.wrap(data.get(i).get(columnNum)));
+			columnValue.add(i + 1, ValueWrapper.wrap(data.get(i).get(columnNum)));
 		}
 		return columnValue;
 	}

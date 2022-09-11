@@ -88,14 +88,12 @@ public class JDBCConnectionFactory implements ConnectionFactory {
 
     private Driver getDriver() {
         Driver driver;
-
         try {
             Class<?> clazz = ObjectFactory.externalClassForName(driverClass);
             driver = (Driver) clazz.getConstructor().newInstance();
         } catch (Exception e) {
             throw new RuntimeException(getString("RuntimeError.8"), e); //$NON-NLS-1$
         }
-
         return driver;
     }
 

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.mybatis.generator.api.CommentGenerator;
@@ -79,12 +80,7 @@ public class Context extends PropertyHolder {
 
     public Context(ModelType defaultModelType) {
         super();
-
-        if (defaultModelType == null) {
-            this.defaultModelType = ModelType.CONDITIONAL;
-        } else {
-            this.defaultModelType = defaultModelType;
-        }
+        this.defaultModelType = Objects.requireNonNullElse(defaultModelType, ModelType.CONDITIONAL);
 
         tableConfigurations = new ArrayList<>();
         pluginConfigurations = new ArrayList<>();

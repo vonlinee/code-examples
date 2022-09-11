@@ -20,7 +20,7 @@ public class Pair<K, V> implements Serializable {
     }
 
     /**
-     * Value of this this <code>Pair</code>.
+     * ValueWrapper of this this <code>Pair</code>.
      */
     private V value;
 

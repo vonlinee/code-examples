@@ -1,16 +1,13 @@
 package io.maker.extension.poi;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.maker.base.lang.ValueWrapper;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
-import io.maker.base.lang.Value;
-import io.maker.base.utils.DateTimes;
 
 public class Test {
 
@@ -21,7 +18,7 @@ public class Test {
 
     	ExcelWriter writer = new ExcelWriter();
     	for (int i = 0; i < excelSheets.size(); i++) {
-    		List<Value> list = excelSheets.get(i).getColumnData(1);
+    		List<ValueWrapper> list = excelSheets.get(i).getColumnData(1);
 //    		String filename = "D:/Temp/" + DateTimes.nowAsString().replace(":", "").replace(" ", "_") + ".xlsx";
 //    		System.out.printf("开始写入" + filename);
 //    		long start = System.currentTimeMillis();
