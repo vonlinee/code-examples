@@ -13,6 +13,7 @@
         <module>devpl-sdk-support</module>
         <module>devpl-sdk-api</module>
         <module>devpl-sdk-test</module>
+        <module>devpl-codegen</module>
     </modules>
 
     <properties>
