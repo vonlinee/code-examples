@@ -29,7 +29,6 @@ import java.util.Map;
 
 /**
  * Freemarker 模板引擎实现文件输出
- *
  * @author nieqiurong
  * @since 2018-01-11
  */
@@ -44,7 +43,6 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
         return this;
     }
 
-
     @Override
     public void writer(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception {
         Template template = configuration.getTemplate(templatePath);
@@ -52,7 +50,6 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
             template.process(objectMap, new OutputStreamWriter(fileOutputStream, ConstVal.UTF8));
         }
     }
-
 
     @Override
     public @NotNull String templateFilePath(@NotNull String filePath) {

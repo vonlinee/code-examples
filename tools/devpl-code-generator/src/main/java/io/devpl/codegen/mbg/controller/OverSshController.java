@@ -5,8 +5,8 @@ import com.jcraft.jsch.Session;
 
 import io.devpl.codegen.mbg.model.DatabaseConfig;
 import io.devpl.codegen.mbg.utils.ConfigHelper;
-import io.devpl.codegen.mbg.utils.DbUtil;
-import io.devpl.codegen.mbg.view.AlertUtil;
+import io.devpl.codegen.mbg.utils.DbUtils;
+import io.devpl.codegen.mbg.view.Alerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -198,7 +198,7 @@ public class OverSshController extends DbConnectionController {
                 databaseConfig.getEncoding(),
                 databaseConfig.getDbType(),
                 databaseConfig.getSchema())) {
-            AlertUtil.showWarnAlert("密码以外其他字段必填");
+            Alerts.showWarnAlert("密码以外其他字段必填");
             return;
         }
         try {
@@ -207,15 +207,15 @@ public class OverSshController extends DbConnectionController {
             mainUIController.loadLeftDBTree();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            AlertUtil.showErrorAlert(e.getMessage());
+            Alerts.showErrorAlert(e.getMessage());
         }
     }
 
     @FXML
     public void testSSH() {
-        Session session = DbUtil.getSSHSession(extractConfigFromUi());
+        Session session = DbUtils.getSSHSession(extractConfigFromUi());
         if (session == null) {
-            AlertUtil.showErrorAlert("请检查主机，端口，用户名，以及密码/秘钥是否填写正确");
+            Alerts.showErrorAlert("请检查主机，端口，用户名，以及密码/秘钥是否填写正确");
             return;
         }
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -234,12 +234,12 @@ public class OverSshController extends DbConnectionController {
                 throw new TimeoutException("连接超时");
             }
             result.get();
-            AlertUtil.showInfoAlert("连接SSH服务器成功，恭喜你可以使用OverSSH功能");
+            Alerts.showInfoAlert("连接SSH服务器成功，恭喜你可以使用OverSSH功能");
             recoverNotice();
         } catch (Exception e) {
-            AlertUtil.showErrorAlert("请检查主机，端口，用户名，以及密码/秘钥是否填写正确: " + e.getMessage());
+            Alerts.showErrorAlert("请检查主机，端口，用户名，以及密码/秘钥是否填写正确: " + e.getMessage());
         } finally {
-            DbUtil.shutdownPortForwarding(session);
+            DbUtils.shutdownPortForwarding(session);
         }
     }
 

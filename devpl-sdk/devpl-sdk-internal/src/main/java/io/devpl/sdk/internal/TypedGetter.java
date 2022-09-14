@@ -92,6 +92,13 @@ public interface TypedGetter<K> {
     BigDecimal getBigDecimal(K key);
 
     /**
+     * 获取Number型属性值
+     * @param key
+     * @return
+     */
+    Number getNumber(K key);
+
+    /**
      * 获取BigInteger型属性值
      * @param key 属性名
      * @return 属性值
@@ -116,7 +123,19 @@ public interface TypedGetter<K> {
      */
     Date getDate(K key);
 
+    /**
+     * 获取LocalDateTime类型值
+     * @param key
+     * @return
+     */
     LocalDateTime getLocalDateTime(K key);
 
+    /**
+     * 获取自定义类型
+     * @param key
+     * @param type
+     * @param <V>
+     * @return
+     */
     <V> V get(K key, Class<V> type);
 }

@@ -11,7 +11,7 @@
 <BorderPane prefHeight="613.0" prefWidth="918.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/11"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.codegen.mbg.controller.MainUIController">
     <top>
-        <VBox>
+        <VBox style="-fx-background-color: red">
             <ToolBar minHeight="70.0" prefHeight="81.0" prefWidth="918.0" BorderPane.alignment="CENTER">
                 <Label fx:id="connectionLabel" contentDisplay="TOP" text="数据库连接">
                     <cursor>
@@ -25,6 +25,11 @@
                     </padding>
                 </Label>
                 <Label fx:id="configsLabel" contentDisplay="TOP" text="配置">
+                    <padding>
+                        <Insets right="10.0"/>
+                    </padding>
+                </Label>
+                <Label fx:id="dictConfigLabel" contentDisplay="TOP" text="字典配置">
                     <padding>
                         <Insets right="10.0"/>
                     </padding>

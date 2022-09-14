@@ -9,12 +9,12 @@ import org.slf4j.LoggerFactory;
 
 import io.devpl.codegen.mbg.model.DatabaseConfig;
 import io.devpl.codegen.mbg.utils.ConfigHelper;
-import io.devpl.codegen.mbg.view.AlertUtil;
+import io.devpl.codegen.mbg.view.Alerts;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class DbConnectionController extends BaseFXController {
+public class DbConnectionController extends FXControllerBase {
 
     private static final Logger _LOG = LoggerFactory.getLogger(DbConnectionController.class);
 
@@ -54,7 +54,7 @@ public class DbConnectionController extends BaseFXController {
             mainUIController.loadLeftDBTree();
         } catch (Exception e) {
             _LOG.error(e.getMessage(), e);
-            AlertUtil.showErrorAlert(e.getMessage());
+            Alerts.showErrorAlert(e.getMessage());
         }
     }
 
@@ -86,7 +86,7 @@ public class DbConnectionController extends BaseFXController {
         config.setSchema(schema);
         config.setEncoding(encoding);
         if (StringUtils.isAnyEmpty(name, host, port, userName, encoding, dbType, schema)) {
-            AlertUtil.showWarnAlert("密码以外其他字段必填");
+            Alerts.showWarnAlert("密码以外其他字段必填");
             return null;
         }
         return config;

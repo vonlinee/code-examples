@@ -10,17 +10,17 @@ import javafx.beans.property.StringProperty;
  */
 public class UITableColumnVO {
 
-    private BooleanProperty checked = new SimpleBooleanProperty(true); // Default set to true
+    private final BooleanProperty checked = new SimpleBooleanProperty(true); // Default set to true
 
-    private StringProperty columnName = new SimpleStringProperty();
+    private final StringProperty columnName = new SimpleStringProperty();
 
-    private StringProperty javaType = new SimpleStringProperty();
+    private final StringProperty javaType = new SimpleStringProperty();
 
-    private StringProperty jdbcType = new SimpleStringProperty();
+    private final StringProperty jdbcType = new SimpleStringProperty();
 
-    private StringProperty propertyName = new SimpleStringProperty();
+    private final StringProperty propertyName = new SimpleStringProperty();
 
-    private StringProperty typeHandle = new SimpleStringProperty();
+    private final StringProperty typeHandle = new SimpleStringProperty();
 
     public String getColumnName() {
         return columnName.get();

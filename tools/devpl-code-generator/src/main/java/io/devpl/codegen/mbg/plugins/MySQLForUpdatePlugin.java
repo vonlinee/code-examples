@@ -49,7 +49,6 @@ public class MySQLForUpdatePlugin extends PluginAdapter {
         element.addElement(forUpdateElement);
     }
 
-
     @Override
     public boolean sqlMapSelectByExampleWithoutBLOBsElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
         appendForUpdate(element, introspectedTable);

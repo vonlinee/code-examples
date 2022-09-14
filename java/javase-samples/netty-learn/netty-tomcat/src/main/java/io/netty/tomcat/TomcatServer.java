@@ -26,7 +26,7 @@ public class TomcatServer {
 
     private int port = 8080;
 
-    private Map<String, GPServlet> servletMapping = new HashMap<String, GPServlet>();
+    private final Map<String, GPServlet> servletMapping = new HashMap<String, GPServlet>();
 
     private Properties webxml = new Properties();
 

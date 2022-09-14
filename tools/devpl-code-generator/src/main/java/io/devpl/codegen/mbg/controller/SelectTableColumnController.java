@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Owen on 6/20/16.
  */
-public class SelectTableColumnController extends BaseFXController {
+public class SelectTableColumnController extends FXControllerBase {
 
     @FXML
     private TableView<UITableColumnVO> columnListView;

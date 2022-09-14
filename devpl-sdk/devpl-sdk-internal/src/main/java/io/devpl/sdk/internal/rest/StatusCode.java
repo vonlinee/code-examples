@@ -84,7 +84,6 @@ public final class StatusCode implements Serializable {
 
     /**
      * 更新状态码定义
-     *
      * @param code
      * @param message
      * @param putIfNotExists
@@ -123,4 +122,6 @@ public final class StatusCode implements Serializable {
      * 业务异常
      */
     public static final StatusCode UNCORRECT_PASSWORD = valueOf(10000, "密码错误");
+    public static final StatusCode NO_PASSWORD = valueOf(10001, "请输入密码");
+    public static final StatusCode TOKEN_EXPIRED = valueOf(10001, "用户TOKEN已过期");
 }

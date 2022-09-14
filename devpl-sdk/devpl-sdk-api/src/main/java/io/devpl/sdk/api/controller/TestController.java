@@ -42,13 +42,8 @@ public class TestController {
         for (int i = 0; i < 5; i++) {
             modelList.add(new Model(i, "model-" + i));
         }
-        ListResult<Model> result = ListResult.<Model>builder()
-                .data(modelList)
-                .build();
-        result.setCode(200);
-        result.setMessage("查询成功");
-        result.setDescription("描述信息");
-        return result;
+
+        return null;
     }
 
     @PostMapping("/testfeign")

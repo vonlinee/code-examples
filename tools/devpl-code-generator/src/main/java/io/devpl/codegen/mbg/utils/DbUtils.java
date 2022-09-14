@@ -8,7 +8,7 @@ import io.devpl.codegen.mbg.exception.DbDriverLoadingException;
 import io.devpl.codegen.mbg.model.DatabaseConfig;
 import io.devpl.codegen.mbg.model.DbType;
 import io.devpl.codegen.mbg.model.UITableColumnVO;
-import io.devpl.codegen.mbg.view.AlertUtil;
+import io.devpl.codegen.mbg.view.Alerts;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -19,22 +19,21 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Owen on 6/12/16.
  */
-public class DbUtil {
+public class DbUtils {
 
-    private static final Logger _LOG = LoggerFactory.getLogger(DbUtil.class);
+    private static final Logger _LOG = LoggerFactory.getLogger(DbUtils.class);
     private static final int DB_CONNECTION_TIMEOUTS_SECONDS = 1;
 
-    private static Map<DbType, Driver> drivers = new HashMap<>();
+    private static final Map<DbType, Driver> drivers = new HashMap<>();
 
-    private static ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private static volatile boolean portForwaring = false;
-    private static Map<Integer, Session> portForwardingSession = new ConcurrentHashMap<>();
+    private static final Map<Integer, Session> portForwardingSession = new ConcurrentHashMap<>();
 
     public static Session getSSHSession(DatabaseConfig databaseConfig) {
         if (StringUtils.isBlank(databaseConfig.getSshHost())
@@ -48,7 +47,7 @@ public class DbUtil {
         Session session = null;
         try {
             //Set StrictHostKeyChecking property to no to avoid UnknownHostKey issue
-            Properties config = new java.util.Properties();
+            Properties config = new Properties();
             config.put("StrictHostKeyChecking", "no");
             JSch jsch = new JSch();
             Integer sshPort = NumberUtils.createInteger(databaseConfig.getSshPort());
@@ -110,7 +109,7 @@ public class DbUtil {
                 }
 
                 _LOG.info("executorService isShutdown:{}", executorService.isShutdown());
-                AlertUtil.showErrorAlert("OverSSH 失败，请检查连接设置:" + e.getMessage());
+                Alerts.showErrorAlert("OverSSH 失败，请检查连接设置:" + e.getMessage());
             }
         }
     }

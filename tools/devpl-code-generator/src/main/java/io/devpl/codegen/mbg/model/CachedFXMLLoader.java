@@ -1,5 +1,10 @@
 package io.devpl.codegen.mbg.model;
 
-public class CachedFXMLLoader {
+import javafx.fxml.FXMLLoader;
 
+public class CachedFXMLLoader extends FXMLLoader {
+
+    public void loadFXML() {
+        
+    }
 }

@@ -3,8 +3,8 @@ package io.devpl.codegen.mbg.controller;
 import com.jcraft.jsch.Session;
 
 import io.devpl.codegen.mbg.model.DatabaseConfig;
-import io.devpl.codegen.mbg.utils.DbUtil;
-import io.devpl.codegen.mbg.view.AlertUtil;
+import io.devpl.codegen.mbg.utils.DbUtils;
+import io.devpl.codegen.mbg.view.Alerts;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
  *
  * @author github.com/slankka on 2019/1/22.
  */
-public class TabPaneController extends BaseFXController {
+public class TabPaneController extends FXControllerBase {
     private static Logger logger = LoggerFactory.getLogger(TabPaneController.class);
 
     @FXML
@@ -102,10 +102,10 @@ public class TabPaneController extends BaseFXController {
                 config.getEncoding(),
                 config.getDbType(),
                 config.getSchema())) {
-            AlertUtil.showWarnAlert("密码以外其他字段必填");
+            Alerts.showWarnAlert("密码以外其他字段必填");
             return;
         }
-        Session sshSession = DbUtil.getSSHSession(config);
+        Session sshSession = DbUtils.getSSHSession(config);
         if (isOverssh && sshSession != null) {
             PictureProcessStateController pictureProcessState = new PictureProcessStateController();
             pictureProcessState.setDialogStage(getDialogStage());
@@ -114,8 +114,8 @@ public class TabPaneController extends BaseFXController {
             Task task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    DbUtil.engagePortForwarding(sshSession, config);
-                    DbUtil.getConnection(config);
+                    DbUtils.engagePortForwarding(sshSession, config);
+                    DbUtils.getConnection(config);
                     return null;
                 }
             };
@@ -134,17 +134,17 @@ public class TabPaneController extends BaseFXController {
                 if (e.getCause() instanceof EOFException) {
                     pictureProcessState.playFailState("连接失败, 请检查数据库的主机名，并且检查端口和目标端口是否一致", true);
                     //端口转发已经成功，但是数据库连接不上，故需要释放连接
-                    DbUtil.shutdownPortForwarding(sshSession);
+                    DbUtils.shutdownPortForwarding(sshSession);
                     return;
                 }
                 pictureProcessState.playFailState("连接失败:" + e.getMessage(), true);
                 //可能是端口转发已经成功，但是数据库连接不上，故需要释放连接
-                DbUtil.shutdownPortForwarding(sshSession);
+                DbUtils.shutdownPortForwarding(sshSession);
             });
             task.setOnSucceeded(event -> {
                 try {
                     pictureProcessState.playSuccessState("连接成功", true);
-                    DbUtil.shutdownPortForwarding(sshSession);
+                    DbUtils.shutdownPortForwarding(sshSession);
                     tabControlBController.recoverNotice();
                 } catch (Exception e) {
                     logger.error("", e);
@@ -153,14 +153,14 @@ public class TabPaneController extends BaseFXController {
             new Thread(task).start();
         } else {
             try {
-                DbUtil.getConnection(config);
-                AlertUtil.showInfoAlert("连接成功");
+                DbUtils.getConnection(config);
+                Alerts.showInfoAlert("连接成功");
             } catch (RuntimeException e) {
                 logger.error("", e);
-                AlertUtil.showWarnAlert("连接失败, " + e.getMessage());
+                Alerts.showWarnAlert("连接失败, " + e.getMessage());
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
-                AlertUtil.showWarnAlert("连接失败");
+                Alerts.showWarnAlert("连接失败");
             }
         }
     }

@@ -6,9 +6,7 @@ package io.devpl.codegen.mbg.utils;
 public class MyStringUtils {
 
     /**
-     *
      * convert string from slash style to camel style, such as my_course will convert to MyCourse
-     *
      * @param str
      * @return
      */
@@ -38,5 +36,4 @@ public class MyStringUtils {
         }
         return null;
     }
-
 }

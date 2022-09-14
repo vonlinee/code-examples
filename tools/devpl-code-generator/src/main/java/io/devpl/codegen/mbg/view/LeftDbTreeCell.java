@@ -1,5 +1,6 @@
 package io.devpl.codegen.mbg.view;
 
+import io.devpl.codegen.mbg.model.DatabaseConfig;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.WeakInvalidationListener;
@@ -9,12 +10,8 @@ import javafx.scene.layout.HBox;
 
 import java.lang.ref.WeakReference;
 
-import io.devpl.codegen.mbg.model.DatabaseConfig;
-
-/**
- * Created by Owen on 6/14/16.
- */
 public class LeftDbTreeCell extends TreeCell<DatabaseConfig> {
+
     private HBox hbox;
 
     private WeakReference<TreeItem<DatabaseConfig>> treeItemRef;
@@ -30,7 +27,6 @@ public class LeftDbTreeCell extends TreeCell<DatabaseConfig> {
             if (oldTreeItem != null) {
                 oldTreeItem.graphicProperty().removeListener(weakTreeItemGraphicListener);
             }
-
             TreeItem<DatabaseConfig> newTreeItem = getTreeItem();
             if (newTreeItem != null) {
                 newTreeItem.graphicProperty().addListener(weakTreeItemGraphicListener);
@@ -39,7 +35,7 @@ public class LeftDbTreeCell extends TreeCell<DatabaseConfig> {
         }
     };
 
-    private WeakInvalidationListener weakTreeItemGraphicListener =
+    private final WeakInvalidationListener weakTreeItemGraphicListener =
             new WeakInvalidationListener(treeItemGraphicListener);
 
     private WeakInvalidationListener weakTreeItemListener =

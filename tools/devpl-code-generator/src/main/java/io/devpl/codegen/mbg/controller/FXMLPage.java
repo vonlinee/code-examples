@@ -11,9 +11,9 @@ public enum FXMLPage {
     SELECT_TABLE_COLUMN("fxml/selectTableColumn.fxml"),
     TABLE_COLUMN_CONFIG("fxml/tableColumnConfigs.fxml"),
     GENERATOR_CONFIG("fxml/generatorConfigs.fxml"),
-    ;
+    DICT_CONFIG("fxml/dictConfig.fxml");
 
-    private String fxml;
+    private final String fxml;
 
     FXMLPage(String fxml) {
         this.fxml = fxml;

@@ -19,6 +19,7 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 
 /**
+ * 代码生成规则
  * This interface centralizes all the rules related to code generation -
  * including the methods and objects to create, and certain attributes related
  * to those objects.

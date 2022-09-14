@@ -90,8 +90,8 @@ public class MySQLGenerator {
         }).injectionConfig(builder -> {
             // 注入配置
             builder.beforeOutputFile((tableInfo, objectMap) -> {
-                        System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
-                    }).customMap(Collections.singletonMap("test", "baomidou"))
+                System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
+            }).customMap(Collections.singletonMap("test", "baomidou"))
                     .customFile(Collections.singletonMap("test.txt", "/templates/test.vm")).build();
         }).packageConfig(builder -> {
             // 包配置：需要自定义
@@ -110,7 +110,6 @@ public class MySQLGenerator {
                     .pathInfo(Collections.singletonMap(OutputFile.xml, "D://Temp"))// 设置mapperXml生成路径
                     .build();
         }).strategyConfig(builder -> {
-
             // 策略配置
             builder.addInclude(tableNamesToBeGenerated); // 设置需要生成的表名
             builder.addTablePrefix(tablePrefixToBeIgnored); // 设置过滤表前缀

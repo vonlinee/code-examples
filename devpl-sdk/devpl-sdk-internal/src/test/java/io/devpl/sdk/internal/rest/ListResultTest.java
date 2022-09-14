@@ -14,9 +14,7 @@ class ListResultTest {
 
     @Test
     void getPages() {
-        ListResult.Builder<Map<String, Object>> builder = ListResult.builder();
 
-        DynamicBean bean;
 
     }
 

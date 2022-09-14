@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.devpl.codegen.mbg.utils.DbUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.api.ProgressCallback;
@@ -34,7 +35,6 @@ import io.devpl.codegen.mbg.model.DbType;
 import io.devpl.codegen.mbg.model.GeneratorConfig;
 import io.devpl.codegen.mbg.plugins.DbRemarksCommentGenerator;
 import io.devpl.codegen.mbg.utils.ConfigHelper;
-import io.devpl.codegen.mbg.utils.DbUtil;
 
 /**
  * The bridge between GUI and the mybatis generator. All the operation to  mybatis generator should proceed through this
@@ -156,7 +156,7 @@ public class MybatisGeneratorBridge {
             jdbcConfig.addProperty("useInformationSchema", "true");
         }
         jdbcConfig.setDriverClass(DbType.valueOf(dbType).getDriverClass());
-        jdbcConfig.setConnectionURL(DbUtil.getConnectionUrlWithSchema(selectedDatabaseConfig));
+        jdbcConfig.setConnectionURL(DbUtils.getConnectionUrlWithSchema(selectedDatabaseConfig));
         jdbcConfig.setUserId(selectedDatabaseConfig.getUsername());
         jdbcConfig.setPassword(selectedDatabaseConfig.getPassword());
         if (DbType.Oracle.name().equals(dbType)) {
@@ -266,6 +266,19 @@ public class MybatisGeneratorBridge {
                 context.addPluginConfiguration(pluginConfiguration);
             }
         }
+
+        if (generatorConfig.isSwaggerSupport()) {
+            log.info("enable swagger");
+        }
+
+        if (generatorConfig.isFullMVCSupport()) {
+            log.info("support mvc");
+            PluginConfiguration pluginConfiguration = new PluginConfiguration();
+            pluginConfiguration.addProperty("type", "io.devpl.codegen.mbg.plugins.FullMVCSupportPlugin");
+            pluginConfiguration.setConfigurationType("io.devpl.codegen.mbg.plugins.FullMVCSupportPlugin");
+            context.addPluginConfiguration(pluginConfiguration);
+        }
+
         // 设置运行时环境
         context.setTargetRuntime("MyBatis3");
 

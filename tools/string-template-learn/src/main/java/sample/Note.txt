@@ -1,0 +1,33 @@
+
+
+
+
+
+decl(type, name, value) ::= "<type> <name><init(value)>;"
+init(v) ::= "<if(v)> = <v><endif>"
+
+
+模板引用
+必需把模板加入同一个模板组,才能相互之间调用模板.
+通过$模板名()$来调用模板
+
+模板传参数
+$模板名(参数名=参数值,参数名=参数值)$
+
+
+
+
+<if(attribute)>subtemplate
+<else>subtemplate2
+<endif>
+
+
+
+
+
+
+
+
+
+
+

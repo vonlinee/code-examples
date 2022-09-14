@@ -3,6 +3,8 @@ package io.devpl.sdk.internal.rest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * Restful风格的请求结果封装
  * <p>
@@ -20,9 +22,10 @@ public abstract class Result extends ResultTemplate {
     private String message;
     private String description;
     private String stacktrace;
+    private Object data;
 
     /**
-     * 如果使用Jackson还是会被序列化
+     * 如果使用Jackson此字段还是会被序列化
      */
     private transient Throwable throwable;
 
@@ -30,11 +33,8 @@ public abstract class Result extends ResultTemplate {
         super();
     }
 
-    interface Builder {
-        Builder code(int code);
-
-        Builder message(String message);
-
-        Builder stacktrace(String stacktrace);
+    public static <E> ResultBuilder builder(List<E> list) {
+        return new ListResult<>(list);
     }
+
 }

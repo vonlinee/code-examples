@@ -32,13 +32,14 @@ public class Test1 {
     // .stg 模板组文件
     @Test
     public void test3() {
-        STGroup group = new STGroupFile("");
+        STGroup group = new STGroupFile(FILE);
         ST st = group.getInstanceOf("decl");
         st.add("type", "int");
         st.add("name", "x");
-        st.add("value", 0);
+        // st.add("value", 1);
         String result = st.render(); // yields "int x = 0;"
-        System.out.println(result);
+
+        System.out.println(st.render());
     }
 
     @Test

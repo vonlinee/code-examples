@@ -2,6 +2,9 @@ package io.devpl.sdk.internal.rest;
 
 import java.io.Serializable;
 
+/**
+ * 通用结果模板，附带一个时间戳
+ */
 public abstract class ResultTemplate implements Serializable {
 
     private static final long serialVersionUID = -6110075435780788111L;
