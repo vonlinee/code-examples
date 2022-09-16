@@ -9,6 +9,7 @@ import io.netty.handler.codec.http.*;
 import io.netty.tomcat.http.GPRequest;
 import io.netty.tomcat.http.GPResponse;
 import io.netty.tomcat.http.GPServlet;
+import lombok.SneakyThrows;
 
 import java.io.FileInputStream;
 import java.util.HashMap;
@@ -22,9 +23,9 @@ public class NettyTomcatServer {
 
     private int port = 8080;
 
-    private Map<String, GPServlet> servletMapping = new HashMap<>();
+    private final Map<String, GPServlet> servletMapping = new HashMap<>();
 
-    private Properties webxml = new Properties();
+    private final Properties webxml = new Properties();
 
     private void init() {
         // 加载web.xml文件,同时初始化 ServletMapping对象
@@ -122,13 +123,10 @@ public class NettyTomcatServer {
             }
         }
 
+        @SneakyThrows
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-
+            cause.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        new NettyTomcatServer().start();
     }
 }

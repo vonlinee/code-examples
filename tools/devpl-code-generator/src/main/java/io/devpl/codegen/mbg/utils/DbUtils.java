@@ -5,10 +5,10 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import io.devpl.codegen.mbg.exception.DbDriverLoadingException;
-import io.devpl.codegen.mbg.model.DatabaseConfig;
-import io.devpl.codegen.mbg.model.DbType;
-import io.devpl.codegen.mbg.model.UITableColumnVO;
-import io.devpl.codegen.mbg.view.Alerts;
+import io.devpl.codegen.mbg.config.DatabaseConfig;
+import io.devpl.codegen.mbg.config.DbType;
+import io.devpl.codegen.mbg.fx.model.UITableColumnVO;
+import io.devpl.codegen.mbg.fx.utils.Alerts;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;

@@ -9,9 +9,11 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
+        HttpRequest req = null;
         if (msg instanceof HttpRequest) {
-            HttpRequest req = (HttpRequest) msg;
-            System.out.println(req);
+            req = (HttpRequest) msg;
         }
+        // 传递到下一个
+        ctx.fireChannelRead(req);
     }
 }

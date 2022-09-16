@@ -25,9 +25,6 @@ public class NettyHttpServer {
 	private void start() throws InterruptedException {
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {
-
-			Bootstrap bootstrap;
-
 			// Bootstrap用于配置启动项
 			ServerBootstrap serverBootstrap = new ServerBootstrap()
 					.group(group)

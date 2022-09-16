@@ -3,16 +3,16 @@
 <!--字典配置-->
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="io.devpl.codegen.mbg.controller.DictConfigController"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="io.devpl.codegen.mbg.fx.controller.DictConfigController"
+      prefHeight="400.0" prefWidth="600.0">
 
     <TableView fx:id="dictConfigTable" layoutX="47.0" layoutY="53.0" prefHeight="200.0" prefWidth="200.0"
                AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                AnchorPane.topAnchor="0.0">
         <columns>
-            <TableColumn fx:id="nameColumn" sortable="false" prefWidth="75.0" text="名称" minWidth="25.0" />
+            <TableColumn fx:id="nameColumn" sortable="false" prefWidth="75.0" text="名称" minWidth="25.0"/>
             <TableColumn fx:id="valueColumn" sortable="false" text="值" minWidth="25.0"/>
             <TableColumn fx:id="descColumn" editable="false" prefWidth="75.0" sortable="false" text="描述信息"/>
         </columns>
@@ -20,4 +20,8 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
         </columnResizePolicy>
     </TableView>
-</AnchorPane>
+
+    <HBox>
+        <Button text="新增"></Button>
+    </HBox>
+</VBox>
