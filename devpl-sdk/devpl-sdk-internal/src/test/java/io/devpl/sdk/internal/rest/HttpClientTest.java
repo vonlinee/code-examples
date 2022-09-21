@@ -1,13 +1,12 @@
 package io.devpl.sdk.internal.rest;
 
-import cn.hutool.core.compiler.JavaSourceCompiler;
 import io.devpl.sdk.internal.http.Requests;
 
 import java.io.IOException;
 import java.net.http.HttpRequest;
+import java.text.MessageFormat;
 
 public class HttpClientTest {
-
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -16,6 +15,7 @@ public class HttpClientTest {
 
         Requests http = new Requests();
 
+        MessageFormat format = new MessageFormat("");
     }
 
 }
