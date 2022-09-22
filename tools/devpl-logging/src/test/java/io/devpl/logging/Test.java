@@ -13,7 +13,11 @@ public class Test {
     public static void main(String[] args) {
 
         Logger logger = LogManager.getLogger(Test.class);
-        logger.error("测试 {}", "============");
+
+        org.apache.logging.log4j.core.Logger log = (org.apache.logging.log4j.core.Logger) logger;
+
+        log.error("测试 {}", "zs");
+
 //        Reload4jLoggerAdapter adapter;
 //        // Log4j12LoggerAdapter adapter1;
 //        logger.info("name = {}, age = {}", "zs", 30);
@@ -21,7 +25,6 @@ public class Test {
 //        java.util.logging.Logger log = java.util.logging.Logger.getLogger("zs");
 //
 //        log.info("11111");
-
 
 //        java.util.logging.Logger jdklogger = java.util.logging.Logger.getLogger("zs");
 //

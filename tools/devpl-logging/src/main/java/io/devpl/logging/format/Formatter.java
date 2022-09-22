@@ -1,5 +1,7 @@
 package io.devpl.logging.format;
 
+import io.devpl.logging.internal.Message;
+
 public interface Formatter<T> {
-    T format(LogMessage message);
+    T format(Message message);
 }

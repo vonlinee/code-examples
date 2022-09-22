@@ -1,8 +1,8 @@
 package com.ruoyi.quartz.util;
 
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.quartz.domain.SysJob;
+import io.devpl.spring.SpringUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

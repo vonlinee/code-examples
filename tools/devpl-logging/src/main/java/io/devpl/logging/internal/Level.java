@@ -27,7 +27,16 @@ public interface Level extends Serializable {
 
     <T extends Level> T getThis();
 
+    /**
+     * 等同于
+     * @param other subclass of Level
+     * @return int
+     * @see Comparable#compareTo(Object)
+     */
     default int compareTo(final Level other) {
+        if (other == null) {
+            return 1;
+        }
         return Integer.compare(intLevel(), other.intLevel());
     }
 

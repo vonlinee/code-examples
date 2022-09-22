@@ -1,7 +1,7 @@
 package com.ruoyi.framework.manager;
 
 import com.ruoyi.common.utils.Threads;
-import com.ruoyi.common.utils.spring.SpringUtils;
+import io.devpl.spring.SpringUtils;
 
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledExecutorService;

@@ -1,6 +1,5 @@
-package com.ruoyi.common.utils.spring;
+package io.devpl.spring;
 
-import com.ruoyi.common.utils.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
  *
  * @author ruoyi
  */
-@Component
+@Component(value = "spring-context")
 public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationContextAware {
     /**
      * Spring应用上下文环境
@@ -116,7 +115,7 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
      */
     public static String getActiveProfile() {
         final String[] activeProfiles = getActiveProfiles();
-        return StringUtils.isNotEmpty(activeProfiles) ? activeProfiles[0] : null;
+        return activeProfiles.length != 0 ? activeProfiles[0] : null;
     }
 
     /**

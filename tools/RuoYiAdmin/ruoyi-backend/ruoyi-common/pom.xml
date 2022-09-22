@@ -124,6 +124,12 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>devpl-spring</artifactId>
+            <version>3.8.3</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 

@@ -91,8 +91,4 @@ public class NormalizedParameters {
         }
 
     }
-
-    public static NormalizedParameters normalize(LogMessage msg) {
-        return normalize(msg.getMessage(), msg.getArguments(), msg.getThrowable());
-    }
 }

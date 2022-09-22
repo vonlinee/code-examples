@@ -1,6 +1,6 @@
 package com.ruoyi.common.utils;
 
-import com.ruoyi.common.utils.spring.SpringUtils;
+import io.devpl.spring.SpringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 

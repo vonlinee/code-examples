@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.core.redis.RedisCache;
-import com.ruoyi.common.utils.spring.SpringUtils;
+import io.devpl.spring.SpringUtils;
 
 import java.util.Collection;
 import java.util.List;
