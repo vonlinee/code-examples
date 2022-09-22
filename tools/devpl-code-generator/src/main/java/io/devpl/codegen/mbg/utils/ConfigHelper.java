@@ -43,7 +43,8 @@ public class ConfigHelper {
     }
 
     static void createEmptyXMLFile(File uiConfigFile) throws IOException {
-        try (InputStream fis = Thread.currentThread().getContextClassLoader().getResourceAsStream("sqlite3.db"); FileOutputStream fos = new FileOutputStream(uiConfigFile)) {
+        try (InputStream fis = Thread.currentThread().getContextClassLoader().getResourceAsStream("sqlite3.db");
+             FileOutputStream fos = new FileOutputStream(uiConfigFile)) {
             byte[] buffer = new byte[1024];
             int byteread = 0;
             while (true) {

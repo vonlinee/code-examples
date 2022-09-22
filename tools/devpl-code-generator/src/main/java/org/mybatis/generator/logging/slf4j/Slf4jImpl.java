@@ -1,37 +1,27 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       https://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.logging.slf4j;
 
 import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.Marker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
 import org.slf4j.spi.LocationAwareLogger;
 
 public class Slf4jImpl implements Log {
 
     private Log log;
 
+    /**
+     * 两种实现
+     * Slf4jLocationAwareLoggerImpl
+     * Slf4jLoggerImpl
+     * @param clazz
+     */
     public Slf4jImpl(Class<?> clazz) {
         Logger logger = LoggerFactory.getLogger(clazz);
-
         if (logger instanceof LocationAwareLogger) {
             try {
                 // check for slf4j >= 1.6 method signature
-                logger.getClass().getMethod("log", Marker.class, String.class, int.class, //$NON-NLS-1$
+                logger.getClass().getMethod("log", org.slf4j.Marker.class, String.class, int.class, //$NON-NLS-1$
                         String.class, Object[].class, Throwable.class);
                 log = new Slf4jLocationAwareLoggerImpl((LocationAwareLogger) logger);
                 return;
@@ -39,9 +29,73 @@ public class Slf4jImpl implements Log {
                 // fail-back to Slf4jLoggerImpl
             }
         }
-
         // Logger is not LocationAwareLogger or slf4j version < 1.6
         log = new Slf4jLoggerImpl(logger);
+    }
+
+    @Override
+    public String getName() {
+        return log.getName();
+    }
+
+    @Override
+    public boolean isTraceEnabled() {
+        return log.isTraceEnabled();
+    }
+
+    @Override
+    public void trace(String msg) {
+        log.trace(msg);
+    }
+
+    @Override
+    public void trace(String format, Object arg) {
+        log.trace(format, arg);
+    }
+
+    @Override
+    public void trace(String format, Object arg1, Object arg2) {
+        log.trace(format, arg1, arg2);
+    }
+
+    @Override
+    public void trace(String format, Object... arguments) {
+        log.trace(format, arguments);
+    }
+
+    @Override
+    public void trace(String msg, Throwable t) {
+        log.trace(msg, t);
+    }
+
+    @Override
+    public boolean isTraceEnabled(Marker marker) {
+        return log.isTraceEnabled(marker);
+    }
+
+    @Override
+    public void trace(Marker marker, String msg) {
+        log.trace(marker, msg);
+    }
+
+    @Override
+    public void trace(Marker marker, String format, Object arg) {
+
+    }
+
+    @Override
+    public void trace(Marker marker, String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void trace(Marker marker, String format, Object... argArray) {
+
+    }
+
+    @Override
+    public void trace(Marker marker, String msg, Throwable t) {
+
     }
 
     @Override
@@ -55,8 +109,48 @@ public class Slf4jImpl implements Log {
     }
 
     @Override
+    public void error(org.mybatis.generator.logging.Marker marker, String msg) {
+
+    }
+
+    @Override
+    public void error(org.mybatis.generator.logging.Marker marker, String format, Object arg) {
+
+    }
+
+    @Override
+    public void error(org.mybatis.generator.logging.Marker marker, String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void error(org.mybatis.generator.logging.Marker marker, String format, Object... arguments) {
+
+    }
+
+    @Override
+    public void error(org.mybatis.generator.logging.Marker marker, String msg, Throwable t) {
+
+    }
+
+    @Override
     public void error(String s) {
         log.error(s);
+    }
+
+    @Override
+    public void error(String format, Object arg) {
+
+    }
+
+    @Override
+    public void error(String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void error(String format, Object... arguments) {
+
     }
 
     @Override
@@ -65,8 +159,152 @@ public class Slf4jImpl implements Log {
     }
 
     @Override
+    public void debug(String format, Object arg) {
+
+    }
+
+    @Override
+    public void debug(String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void debug(String format, Object... arguments) {
+
+    }
+
+    @Override
+    public void debug(String msg, Throwable t) {
+
+    }
+
+    @Override
+    public boolean isDebugEnabled(Marker marker) {
+        return false;
+    }
+
+    @Override
+    public void debug(Marker marker, String msg) {
+
+    }
+
+    @Override
+    public void debug(Marker marker, String format, Object arg) {
+
+    }
+
+    @Override
+    public void debug(Marker marker, String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void debug(Marker marker, String format, Object... arguments) {
+
+    }
+
+    @Override
+    public void debug(Marker marker, String msg, Throwable t) {
+
+    }
+
+    @Override
     public void warn(String s) {
         log.warn(s);
     }
 
+    @Override
+    public boolean isInfoEnabled() {
+        return log.isInfoEnabled();
+    }
+
+    @Override
+    public void info(String msg) {
+
+    }
+
+    @Override
+    public void info(String format, Object arg) {
+
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void info(String format, Object... arguments) {
+
+    }
+
+    @Override
+    public void info(String msg, Throwable t) {
+
+    }
+
+    @Override
+    public boolean isWarnEnabled() {
+        return false;
+    }
+
+    @Override
+    public void warn(String format, Object arg) {
+
+    }
+
+    @Override
+    public void warn(String format, Object... arguments) {
+
+    }
+
+    @Override
+    public void warn(String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void warn(String msg, Throwable t) {
+
+    }
+
+    @Override
+    public boolean isWarnEnabled(org.mybatis.generator.logging.Marker marker) {
+        return false;
+    }
+
+    @Override
+    public void warn(org.mybatis.generator.logging.Marker marker, String msg) {
+
+    }
+
+    @Override
+    public void warn(org.mybatis.generator.logging.Marker marker, String format, Object arg) {
+
+    }
+
+    @Override
+    public void warn(org.mybatis.generator.logging.Marker marker, String format, Object arg1, Object arg2) {
+
+    }
+
+    @Override
+    public void warn(org.mybatis.generator.logging.Marker marker, String format, Object... arguments) {
+
+    }
+
+    @Override
+    public void warn(org.mybatis.generator.logging.Marker marker, String msg, Throwable t) {
+
+    }
+
+    @Override
+    public boolean isErrorEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isErrorEnabled(org.mybatis.generator.logging.Marker marker) {
+        return false;
+    }
 }

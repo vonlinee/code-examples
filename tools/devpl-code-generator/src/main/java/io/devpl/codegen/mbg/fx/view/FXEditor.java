@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbg.fx.view;
 
 import io.devpl.codegen.mbg.fx.controller.MainPageController;
-import io.devpl.codegen.mbg.utils.ResourceLoader;
+import io.devpl.codegen.mbg.utils.Resources;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -25,13 +25,15 @@ public class FXEditor extends Application {
     public void start(Stage stage) throws Exception {
         // stage.initStyle(StageStyle.TRANSPARENT);
         FXMLLoader loader = new FXMLLoader();
+        System.out.println("=============");
         loader.setBuilderFactory(new JavaFXBuilderFactory());
-        loader.setLocation(ResourceLoader.load("fxml/MainPage.fxml"));
-        try (InputStream in = ResourceLoader.loadStream("fxml/MainPage.fxml")) {
+        loader.setLocation(Resources.getResource("static/fxml/MainPage.fxml"));
+        try (InputStream in = Resources.getResourcesAsStream("static/fxml/MainPage.fxml")) {
             root = loader.load(in);
         } catch (Exception exception) {
-            exception.printStackTrace();
+
         }
+        System.out.println("222222222222222222");
         MainPageController mainpage = loader.getController();
         mainpage.setEditor(this, stage);
         mainpage.setPath(path);
@@ -39,7 +41,7 @@ public class FXEditor extends Application {
         // Parent root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
         Scene scene = new Scene(root);
         mainpage.setScene(scene);
-        scene.getStylesheets().add("/css/AppleView.css");
+        scene.getStylesheets().add("/static/css/AppleView.css");
         // scene.setFill(Color.TRANSPARENT);
 //        stage.setWidth(1200);
 //        stage.setHeight(900);

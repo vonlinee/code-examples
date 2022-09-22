@@ -26,13 +26,13 @@ public class MainUI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ConfigHelper.createEmptyFiles();
-        URL url = Thread.currentThread().getContextClassLoader().getResource("fxml/MainUI.fxml");
+        URL url = Thread.currentThread().getContextClassLoader().getResource("static/fxml/MainUI.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(url);
         Parent root = fxmlLoader.load();
         primaryStage.setResizable(true);
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle(MAIN_WINDOW_TITLE);
-        Image imageIcon = new Image("icons/mybatis-logo.png");
+        Image imageIcon = new Image("static/icons/mybatis-logo.png");
         primaryStage.getIcons().add(imageIcon);
         primaryStage.show();
 

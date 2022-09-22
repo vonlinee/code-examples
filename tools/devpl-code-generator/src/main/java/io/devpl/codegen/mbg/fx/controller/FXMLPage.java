@@ -7,11 +7,11 @@ package io.devpl.codegen.mbg.fx.controller;
  */
 public enum FXMLPage {
 
-    NEW_CONNECTION("fxml/newConnection.fxml"),
-    SELECT_TABLE_COLUMN("fxml/selectTableColumn.fxml"),
-    TABLE_COLUMN_CONFIG("fxml/tableColumnConfigs.fxml"),
-    GENERATOR_CONFIG("fxml/generatorConfigs.fxml"),
-    DICT_CONFIG("fxml/dictConfig.fxml");
+    NEW_CONNECTION("static/fxml/newConnection.fxml"),
+    SELECT_TABLE_COLUMN("static/fxml/selectTableColumn.fxml"),
+    TABLE_COLUMN_CONFIG("static/fxml/tableColumnConfigs.fxml"),
+    GENERATOR_CONFIG("static/fxml/generatorConfigs.fxml"),
+    DICT_CONFIG("static/fxml/dictConfig.fxml");
 
     private final String fxml;
 

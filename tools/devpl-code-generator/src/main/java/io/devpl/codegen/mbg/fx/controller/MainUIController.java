@@ -2,7 +2,7 @@ package io.devpl.codegen.mbg.fx.controller;
 
 import com.jcraft.jsch.Session;
 import io.devpl.codegen.mbg.bridge.MyBatisCodeGenerator;
-import io.devpl.codegen.mbg.fx.utils.FXControls;
+import io.devpl.codegen.mbg.fx.utils.FXUtils;
 import io.devpl.codegen.mbg.config.DatabaseConfig;
 import io.devpl.codegen.mbg.config.GeneratorConfig;
 import io.devpl.codegen.mbg.fx.model.UITableColumnVO;
@@ -117,7 +117,7 @@ public class MainUIController extends FXControllerBase {
     public void initialize(URL location, ResourceBundle resources) {
         initializePlaceholderValue();
         // 新建连接
-        ImageView dbImage = FXControls.loadImageView("icons/computer.png", 40, 40);
+        ImageView dbImage = FXUtils.loadImageView("static/icons/computer.png", 40, 40);
         connectionLabel.setGraphic(dbImage);
         connectionLabel.setOnMouseClicked(event -> {
             TabPaneController controller = (TabPaneController) loadFXMLPage("新建数据库连接", FXMLPage.NEW_CONNECTION, false);
@@ -131,7 +131,7 @@ public class MainUIController extends FXControllerBase {
         });
 
         // 生成配置管理
-        ImageView configImage = FXControls.loadImageView("icons/config-list.png", 40, 40);
+        ImageView configImage = FXUtils.loadImageView("static/icons/config-list.png", 40, 40);
 
         configsLabel.setGraphic(configImage);
         configsLabel.setOnMouseClicked(event -> {
@@ -141,7 +141,7 @@ public class MainUIController extends FXControllerBase {
         });
 
         // 字典配置
-        configImage = FXControls.loadImageView("icons/config-list.png", 40, 40);
+        configImage = FXUtils.loadImageView("static/icons/config-list.png", 40, 40);
         dictConfigLabel.setGraphic(configImage);
 
         useExample.setOnMouseClicked(event -> {
@@ -245,7 +245,7 @@ public class MainUIController extends FXControllerBase {
                 children.clear();
                 for (String tableName : tables) {
                     TreeItem<String> newTreeItem = new TreeItem<>();
-                    ImageView imageView = new ImageView("icons/table.png");
+                    ImageView imageView = new ImageView("static/icons/table.png");
                     imageView.setFitHeight(16);
                     imageView.setFitWidth(16);
                     newTreeItem.setGraphic(imageView);
@@ -256,13 +256,13 @@ public class MainUIController extends FXControllerBase {
                 treeItem.getChildren().clear();
             }
             if (org.apache.commons.lang3.StringUtils.isNotBlank(filter)) {
-                ImageView imageView = new ImageView("icons/filter.png");
+                ImageView imageView = new ImageView("static/icons/filter.png");
                 imageView.setFitHeight(16);
                 imageView.setFitWidth(16);
                 imageView.setUserData(treeItem.getGraphic().getUserData());
                 treeItem.setGraphic(imageView);
             } else {
-                ImageView dbImage = new ImageView("icons/computer.png");
+                ImageView dbImage = new ImageView("static/icons/computer.png");
                 dbImage.setFitHeight(16);
                 dbImage.setFitWidth(16);
                 dbImage.setUserData(treeItem.getGraphic().getUserData());
@@ -287,7 +287,7 @@ public class MainUIController extends FXControllerBase {
         overrideXML.setTooltip(new Tooltip("重新生成时把原XML文件覆盖，否则是追加"));
         useDAOExtendStyle.setTooltip(new Tooltip("将通用接口方法放在公共接口中，DAO接口留空"));
         forUpdateCheckBox.setTooltip(new Tooltip("在Select语句中增加for update后缀"));
-        FXControls.setTooltip(useLombokPlugin, "实体类使用Lombok @Data简化代码");
+        FXUtils.setTooltip(useLombokPlugin, "实体类使用Lombok @Data简化代码");
     }
 
     void loadLeftDBTree() {
@@ -298,7 +298,7 @@ public class MainUIController extends FXControllerBase {
             for (DatabaseConfig dbConfig : dbConfigs) {
                 TreeItem<String> treeItem = new TreeItem<>();
                 treeItem.setValue(dbConfig.getName());
-                ImageView dbImage = FXControls.loadImageView("icons/computer.png", 16, 16);
+                ImageView dbImage = FXUtils.loadImageView("static/icons/computer.png", 16, 16);
                 dbImage.setUserData(dbConfig);
                 treeItem.setGraphic(dbImage);
                 rootTreeItem.getChildren().add(treeItem);

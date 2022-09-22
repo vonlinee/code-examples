@@ -1,11 +1,8 @@
 package spring.boot.aop.aspect;
 
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,6 +11,10 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class LogAspect {
+
+    public LogAspect() {
+        // throw new RuntimeException();
+    }
 
     // org.aspectj.lang.annotation.Pointcut
     // @Pointcut("execution(public * com.aismall.testaop.controller.*.*(..))")

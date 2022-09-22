@@ -2,7 +2,6 @@ package io.devpl.codegen.mbg.fx.controller;
 
 import io.devpl.codegen.mbg.fx.model.SysDictData;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -31,10 +30,6 @@ public class DictConfigController extends FXControllerBase {
         valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         descColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 
-        ObservableList<SysDictData> data = FXCollections.observableArrayList(
-                new SysDictData("K1", "V1", "描述信息"),
-                new SysDictData("K1", "V1", "描述信息"),
-                new SysDictData("K2", "V2", "描述信息"));
-        dictConfigTable.setItems(data);
+        dictConfigTable.setItems(FXCollections.observableArrayList());
     }
 }

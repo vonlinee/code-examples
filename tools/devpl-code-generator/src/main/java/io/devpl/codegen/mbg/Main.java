@@ -2,6 +2,7 @@ package io.devpl.codegen.mbg;
 
 import io.devpl.codegen.mbg.fx.MainUI;
 import io.devpl.codegen.mbg.fx.view.FXEditor;
+import io.devpl.codegen.mbg.fx.view.FXTestApplication;
 import javafx.application.Application;
 
 /**
@@ -10,6 +11,6 @@ import javafx.application.Application;
  */
 public class Main {
     public static void main(String[] args) {
-        Application.launch(FXEditor.class);
+        Application.launch(MainUI.class);
     }
 }
