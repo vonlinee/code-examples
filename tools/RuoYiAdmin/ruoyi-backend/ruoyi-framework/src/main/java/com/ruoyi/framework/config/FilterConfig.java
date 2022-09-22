@@ -20,6 +20,7 @@ import java.util.Map;
  */
 @Configuration
 public class FilterConfig {
+
     @Value("${xss.excludes}")
     private String excludes;
 
@@ -52,5 +53,4 @@ public class FilterConfig {
         registration.setOrder(FilterRegistrationBean.LOWEST_PRECEDENCE);
         return registration;
     }
-
 }

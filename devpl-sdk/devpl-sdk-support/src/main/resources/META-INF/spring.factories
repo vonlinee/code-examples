@@ -1,1 +1,1 @@
-org.springframework.boot.SpringApplicationRunListener=io.devpl.sdk.support.spring.context.DevplBootstrapListener
+org.springframework.boot.SpringApplicationRunListener=io.devpl.sdk.support.spring.context.DevplRunLifecycleListener
