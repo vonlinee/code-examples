@@ -2,6 +2,7 @@ package com.ruoyi.generator.util;
 
 import com.ruoyi.common.constant.Constants;
 import org.apache.velocity.app.Velocity;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.util.Properties;
 
@@ -18,7 +19,7 @@ public class VelocityInitializer {
         Properties p = new Properties();
         try {
             // 加载classpath目录下的vm文件
-            p.setProperty("resource.loader.file.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+            p.setProperty("resource.loader.file.class", ClasspathResourceLoader.class.getName());
             // 定义字符集
             p.setProperty(Velocity.INPUT_ENCODING, Constants.UTF8);
             // 初始化Velocity引擎，指定配置Properties

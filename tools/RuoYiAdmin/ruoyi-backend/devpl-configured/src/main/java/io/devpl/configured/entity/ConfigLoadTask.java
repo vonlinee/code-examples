@@ -1,59 +1,45 @@
 package io.devpl.configured.entity;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.Hibernate;
+import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * 配置加载任务项实体类
  */
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
 @Entity
 @Table(name = "t_config_load_task")
-public class ConfigLoadTask {
+public class ConfigLoadTask implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "TASK_ID", nullable = false)
-    private Integer taskId;
+    @Column(name = "TASK_ID", columnDefinition = "VARCHAR(36) COMMENT '任务主键ID'")
+    private String taskId;
 
-    @Column(name = "TASK_NAME", length = 200)
+    @Column(name = "TASK_CODE", columnDefinition = "VARCHAR(32) COMMENT '任务编码'")
+    private String taskCode;
+
+    @Column(name = "TASK_NAME", columnDefinition = "VARCHAR(32) COMMENT '任务名称'")
     private String taskName;
 
-    @Column(name = "QUERY_SQL", length = 200)
+    @Column(name = "QUERY_SQL", columnDefinition = "VARCHAR(256) COMMENT '配置数据SQL'")
     private String querySql;
 
-    @Column(name = "ORDER_NUM")
+    @Column(name = "ORDER_NUM", columnDefinition = "int(2) COMMENT '排序号'")
     private Integer orderNum;
 
-    @Column(name = "IS_ENABLE")
+    @Column(name = "IS_ENABLE", columnDefinition = "tinyint(1) DEFAULT 1 COMMENT '逻辑删除字段'")
     private boolean isEnable;
 
-    @Column(name = "CREATE_TIME", columnDefinition = "创建时间")
+    @Column(name = "CREATE_TIME", columnDefinition = "datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'")
     private LocalDateTime createTime;
 
-    @Column(name = "UPDATE_TIME", columnDefinition = "上次更新时间")
+    @Column(name = "UPDATE_TIME", columnDefinition = "datetime DEFAULT CURRENT_TIMESTAMP COMMENT '上次更新时间'")
     private LocalDateTime updateTime;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        ConfigLoadTask that = (ConfigLoadTask) o;
-        return taskId != null && Objects.equals(taskId, that.taskId);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+    @Column(name = "COMMENT", columnDefinition = "VARCHAR(100) COMMENT '任务描述'")
+    private String comment;
 }

@@ -1,0 +1,18 @@
+# 自动配置
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.devpl.spring.boot.DevplAutoConfiguration
+# 自动配置导入过滤
+org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
+    io.devpl.spring.boot.DevplAutoConfigurationImportFilter
+# Initializers
+# org.springframework.context.ApplicationContextInitializer=
+# Application Listeners
+# org.springframework.context.ApplicationListener=
+# Environment Post Processors
+org.springframework.boot.env.EnvironmentPostProcessor=io.devpl.spring.boot.DevplEnvironmentPostProcessor
+# Auto Configuration Import Listeners
+org.springframework.boot.autoconfigure.AutoConfigurationImportListener=\
+    io.devpl.spring.boot.DevplAutoConfigurationImportListener
+# DataSource initializer detectors
+# org.springframework.boot.sql.init.dependency.DatabaseInitializerDetector=
+# Depends on database initialization detectors
+# org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitializationDetector=
