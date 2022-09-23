@@ -1,4 +1,4 @@
-package io.devpl.sdk.internal.rest;
+package io.devpl.sdk.internal.restful;
 
 import lombok.Data;
 
@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 @Data
 public class PageInfo implements Serializable {
+
+    public static final PageInfo UNKNOWN = new PageInfo();
 
     private static final long serialVersionUID = -9005418320425464234L;
 

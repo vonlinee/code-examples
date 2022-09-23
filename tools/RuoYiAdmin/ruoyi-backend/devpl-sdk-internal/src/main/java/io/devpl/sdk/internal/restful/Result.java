@@ -1,4 +1,4 @@
-package io.devpl.sdk.internal.rest;
+package io.devpl.sdk.internal.restful;
 
 /**
  * 只能使用泛型定义了
@@ -49,13 +49,13 @@ public class Result<T> extends RestfullResult<T> implements ResultBuilder<T> {
         return this;
     }
 
+    public T getData() {
+        return this.data;
+    }
+
     @Override
     public Result<T> getThis() {
         return this;
-    }
-
-    public T getData() {
-        return this.data;
     }
 
     @Override

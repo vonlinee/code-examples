@@ -1,4 +1,4 @@
-package io.devpl.sdk.internal.rest;
+package io.devpl.sdk.internal.restful;
 
 import java.io.Serializable;
 

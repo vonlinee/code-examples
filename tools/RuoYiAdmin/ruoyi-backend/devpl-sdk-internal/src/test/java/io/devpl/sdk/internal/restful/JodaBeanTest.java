@@ -1,9 +1,8 @@
-package io.devpl.sdk.internal.rest;
+package io.devpl.sdk.internal.restful;
 
 import com.google.gson.Gson;
 import org.joda.beans.DynamicBean;
 import org.joda.beans.DynamicMetaBean;
-import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.impl.flexi.FlexiBean;
 import org.joda.beans.impl.map.MapBean;

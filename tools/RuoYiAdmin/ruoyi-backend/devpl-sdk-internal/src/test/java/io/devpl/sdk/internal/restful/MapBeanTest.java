@@ -1,8 +1,7 @@
-package io.devpl.sdk.internal.rest;
+package io.devpl.sdk.internal.restful;
 
 
 import com.google.gson.Gson;
-import org.joda.beans.DynamicMetaBean;
 import org.joda.beans.impl.map.MapBean;
 import org.junit.jupiter.api.Test;
 

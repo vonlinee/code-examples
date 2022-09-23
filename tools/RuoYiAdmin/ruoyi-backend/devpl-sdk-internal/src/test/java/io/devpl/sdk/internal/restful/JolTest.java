@@ -1,4 +1,4 @@
-package io.devpl.sdk.internal.rest;
+package io.devpl.sdk.internal.restful;
 
 import org.junit.jupiter.api.Test;
 import org.openjdk.jol.info.ClassLayout;

@@ -11,6 +11,8 @@
 
     <artifactId>devpl-sdk-internal</artifactId>
 
+    <description>依赖于jsr  javax.annotation.api </description>
+
     <dependencies>
         <dependency>
             <groupId>com.google.code.gson</groupId>
