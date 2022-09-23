@@ -9,14 +9,13 @@
     <version>3.8.3</version>
 
     <name>ruoyi</name>
-    <url>http://www.ruoyi.vip</url>
     <description>开发平台</description>
 
     <properties>
         <ruoyi.version>3.8.3</ruoyi.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
         <druid.version>1.2.11</druid.version>
         <bitwalker.version>1.21</bitwalker.version>
@@ -198,13 +197,11 @@
         <module>ruoyi-common</module>
         <module>devpl-configured</module>
         <module>devpl-spring</module>
+        <module>devpl-sdk</module>
+        <module>devpl-sdk-internal</module>
     </modules>
     <packaging>pom</packaging>
 
-
-    <dependencies>
-
-    </dependencies>
 
     <build>
         <plugins>
@@ -222,14 +219,14 @@
     </build>
 
     <repositories>
-        <io.devpl.configured.repository>
+        <repository>
             <id>public</id>
             <name>aliyun nexus</name>
             <url>https://maven.aliyun.com/io.devpl.configured.repository/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
-        </io.devpl.configured.repository>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -245,5 +242,4 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
 </project>

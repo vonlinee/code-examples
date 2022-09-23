@@ -1,6 +1,0 @@
-ext {
-    //这里管理版本
-    junitVersion = '4.12'
-    commonsVesion = '3.0'
-    slf4jVersion = '1.7.16'
-}

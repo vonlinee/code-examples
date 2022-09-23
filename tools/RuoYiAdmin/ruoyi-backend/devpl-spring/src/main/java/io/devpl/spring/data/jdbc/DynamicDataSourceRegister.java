@@ -28,7 +28,6 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
 
     private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourceRegister.class);
 
-    private ConversionService conversionService = new DefaultConversionService();
     private PropertyValues dataSourcePropertyValues;
 
     // 如配置文件中未指定数据源类型，使用该默认值
@@ -70,9 +69,9 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
     public DataSource buildDataSource(Map<String, Object> dsMap) {
         try {
             Object type = dsMap.get("type");
-            if (type == null)
+            if (type == null) {
                 type = DATASOURCE_TYPE_DEFAULT;// 默认DataSource
-
+            }
             Class<? extends DataSource> dataSourceType;
             dataSourceType = (Class<? extends DataSource>) Class.forName((String) type);
 

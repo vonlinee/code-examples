@@ -6,6 +6,7 @@ org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
 # Initializers
 # org.springframework.context.ApplicationContextInitializer=
 # Application Listeners
+org.springframework.boot.SpringApplicationRunListener=io.devpl.sdk.support.spring.context.DevplRunLifecycleListener
 # org.springframework.context.ApplicationListener=
 # Environment Post Processors
 org.springframework.boot.env.EnvironmentPostProcessor=io.devpl.spring.boot.DevplEnvironmentPostProcessor
