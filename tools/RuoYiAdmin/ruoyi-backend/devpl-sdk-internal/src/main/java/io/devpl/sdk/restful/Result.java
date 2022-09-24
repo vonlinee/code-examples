@@ -1,14 +1,21 @@
 package io.devpl.sdk.restful;
 
-public class Result<T> extends ResultfulResultTemplate implements ResultBuilder<T> {
+/**
+ * @param <T> 携带的数据类型
+ * @since 0.0.1
+ */
+public class Result<T> extends ResultfulResultTemplate implements RBuilder<T> {
 
+    /**
+     * 存放具体的业务数据
+     */
     private T data;
 
     Result() {
         super();
     }
 
-    Result(StatusCode status, String toast) {
+    Result(Status status, String toast) {
         this(status.getCode(), status.getMessage(), null, toast);
     }
 
@@ -38,31 +45,37 @@ public class Result<T> extends ResultfulResultTemplate implements ResultBuilder<
     }
 
     @Override
-    public ResultBuilder<T> setCode(int code) {
+    public RBuilder<T> setCode(int code) {
         this.code = code;
         return this;
     }
 
     @Override
-    public ResultBuilder<T> setMessage(String message) {
+    public RBuilder<T> setMessage(String message) {
         this.message = message;
         return this;
     }
 
     @Override
-    public ResultBuilder<T> setStackTrace(String stackTrace) {
+    public RBuilder<T> setStackTrace(String stackTrace) {
         this.stackTrace = stackTrace;
         return this;
     }
 
     @Override
-    public ResultBuilder<T> setToast(String toastMessage) {
+    public RBuilder<T> setToast(String toastMessage) {
         this.toast = toastMessage;
         return this;
     }
 
     @Override
-    public ResultBuilder<T> setData(T data) {
+    public RBuilder<T> setMoreInfo(String moreInfo) {
+        this.moreInfo = moreInfo;
+        return this;
+    }
+
+    @Override
+    public RBuilder<T> setData(T data) {
         this.data = data;
         return this;
     }

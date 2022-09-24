@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.monitor;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.StringUtils;
@@ -70,6 +71,7 @@ public class CacheController {
         return AjaxResult.success(cacheKeys);
     }
 
+    @DS("")
     @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
     @GetMapping("/getValue/{cacheName}/{cacheKey}")
     public AjaxResult getCacheValue(@PathVariable String cacheName, @PathVariable String cacheKey) {

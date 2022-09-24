@@ -6,7 +6,7 @@ import com.ruoyi.common.exception.job.TaskException;
 import com.ruoyi.common.exception.job.TaskException.Code;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.quartz.domain.SysJob;
-import io.devpl.spring.SpringUtils;
+import io.devpl.spring.utils.SpringUtils;
 import org.quartz.*;
 
 /**

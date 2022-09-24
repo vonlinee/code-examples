@@ -1,8 +1,10 @@
 package io.devpl.sdk.restful;
 
+import io.devpl.sdk.DelegatedList;
+
 import java.util.List;
 
-public class ListResult<E> extends ResultfulResultTemplate implements ListResultBuilder<E> {
+public class ListResult<E> extends ResultfulResultTemplate implements ListRBuilder<E>, DelegatedList<E> {
 
     private List<E> data;
 
@@ -22,42 +24,55 @@ public class ListResult<E> extends ResultfulResultTemplate implements ListResult
 
     @Override
     public ListResult<E> build() {
+        if (data == null) this.data = List.of();
+        if (pageInfo == null) this.pageInfo = PageInfo.UNKNOWN;
         return this;
     }
 
     @Override
-    public ListResultBuilder<E> setCode(int code) {
+    public ListRBuilder<E> setCode(int code) {
         this.code = code;
         return this;
     }
 
     @Override
-    public ListResultBuilder<E> setMessage(String message) {
+    public ListRBuilder<E> setMessage(String message) {
         this.message = message;
         return this;
     }
 
     @Override
-    public ListResultBuilder<E> setStackTrace(String stackTrace) {
+    public ListRBuilder<E> setStackTrace(String stackTrace) {
         this.stackTrace = stackTrace;
         return this;
     }
 
     @Override
-    public ListResultBuilder<E> setToast(String toastMessage) {
+    public ListRBuilder<E> setToast(String toastMessage) {
         this.toast = toastMessage;
         return this;
     }
 
     @Override
-    public ListResultBuilder<E> setData(List<E> data) {
+    public ListRBuilder<E> setMoreInfo(String moreInfo) {
+        this.moreInfo = moreInfo;
+        return this;
+    }
+
+    @Override
+    public ListRBuilder<E> setData(List<E> data) {
         this.data = data;
         return this;
     }
 
     @Override
-    public ListResultBuilder<E> setPageInfo(PageInfo pageInfo) {
+    public ListRBuilder<E> setPageInfo(PageInfo pageInfo) {
         this.pageInfo = pageInfo;
         return this;
+    }
+
+    @Override
+    public List<E> delegator() {
+        return this.data == null ? List.of() : this.data;
     }
 }

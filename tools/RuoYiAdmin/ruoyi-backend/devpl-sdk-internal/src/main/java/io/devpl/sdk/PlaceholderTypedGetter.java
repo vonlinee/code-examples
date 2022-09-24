@@ -7,6 +7,7 @@ import java.util.Date;
 
 /**
  * 提供默认值，不对默认值进行检查，由调用方保证其是否符合要求
+ *
  * @param <K>
  */
 public interface PlaceholderTypedGetter<K> extends TypedGetter<K> {

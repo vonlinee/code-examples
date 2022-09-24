@@ -2,7 +2,7 @@ package io.devpl.configured;
 
 import io.devpl.configured.entity.ConfigLoadTask;
 import io.devpl.configured.repository.ConfigLoadTaskRepository;
-import io.devpl.spring.SpringUtils;
+import io.devpl.spring.utils.SpringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;

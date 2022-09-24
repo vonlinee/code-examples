@@ -7,7 +7,7 @@ import com.alibaba.druid.util.Utils;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.framework.config.properties.DruidProperties;
 import com.ruoyi.framework.datasource.DynamicDataSource;
-import io.devpl.spring.SpringUtils;
+import io.devpl.spring.utils.SpringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

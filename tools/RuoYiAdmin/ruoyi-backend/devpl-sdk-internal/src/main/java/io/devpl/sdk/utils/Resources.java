@@ -141,8 +141,4 @@ public final class Resources {
         }
         return name;
     }
-
-    public static void main(String[] args) {
-        System.out.println(Resources.getClasspathResource("1.txt"));
-    }
 }

@@ -8,7 +8,7 @@ import com.ruoyi.common.utils.bean.BeanUtils;
 import com.ruoyi.quartz.domain.SysJob;
 import com.ruoyi.quartz.domain.SysJobLog;
 import com.ruoyi.quartz.service.ISysJobLogService;
-import io.devpl.spring.SpringUtils;
+import io.devpl.spring.utils.SpringUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

@@ -2,6 +2,7 @@ package io.devpl.spring.context;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.core.env.PropertySource;
@@ -10,6 +11,7 @@ import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertySourceFactory;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Nullable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -17,17 +19,17 @@ import java.util.Objects;
 import java.util.Properties;
 
 /**
+ * 定义创建资源的PropertySource包装器的策略接口
  * 属于Spring容器创建前，需要先预加载一些属性配置，交由Spring的配置管理器管理，可使用@Value读取。
- * <p>
  * PropertySourceFactory主要用来扩展Spring对资源文件的读取，例如：配置文件等。
- *
- * <code>@PropertySource</code> 注解来定义扫描规则
  */
 @Slf4j
 public class DevplPropertyFactory implements PropertySourceFactory {
 
     @Override
-    public PropertySource<?> createPropertySource(String name, EncodedResource resource) throws IOException {
+    public PropertySource<?> createPropertySource(
+            @Nullable String name, EncodedResource resource) throws IOException {
+
         String encoding = "UTF-8";
         if (StringUtils.hasLength(resource.getEncoding())) {
             encoding = resource.getEncoding();

@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 public class RuoYiApplication {
     public static void main(String[] args) {
-        System.setProperty("spring.devtools.restart.enabled", "false");
+        // System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(RuoYiApplication.class, args);
     }
 }

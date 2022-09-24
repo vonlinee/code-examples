@@ -66,6 +66,7 @@ public abstract class Validator {
 
     /**
      * 断言失败，则提供默认值，默认值为空，则报空指针；断言成功，则直接返回该值，即使是NULL
+     *
      * @param value        校验的值
      * @param condition    条件，测试对象为value
      * @param defaultValue 默认值，不可为空，确保这个值是预期的值
@@ -123,6 +124,7 @@ public abstract class Validator {
 
     /**
      * 对Object的任意类型做值检查
+     *
      * @param obj
      * @param message
      */
@@ -149,6 +151,7 @@ public abstract class Validator {
 
     /**
      * 不包含null元素
+     *
      * @param iterable 可迭代类型
      * @param <T>      <T extends Iterable<?>>
      * @return
@@ -163,6 +166,7 @@ public abstract class Validator {
 
     /**
      * 数组没有NULL元素
+     *
      * @param array
      * @param message
      * @param values
@@ -246,6 +250,7 @@ public abstract class Validator {
 
     /**
      * 不包含指定的key
+     *
      * @param <T>
      * @param <K>
      * @param map
@@ -261,6 +266,7 @@ public abstract class Validator {
 
     /**
      * map has null value for the specificied key
+     *
      * @param <K>
      * @param map
      * @param key
@@ -325,6 +331,7 @@ public abstract class Validator {
 
     /**
      * 获取字符序列的长度，null check
+     *
      * @param cs
      * @return int
      */
@@ -624,6 +631,7 @@ public abstract class Validator {
 
     /**
      * 针对字符串的特别校验
+     *
      * @param sequence
      * @return
      */
@@ -642,6 +650,7 @@ public abstract class Validator {
 
     /**
      * 针对Map定制
+     *
      * @param map
      * @param key
      * @param message
@@ -713,6 +722,7 @@ public abstract class Validator {
 
     /**
      * 判断字符序列是否为空
+     *
      * @param cs CharSequence
      * @return boolean
      */
