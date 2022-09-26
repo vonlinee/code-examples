@@ -4,11 +4,14 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 提供默认值，不对默认值进行检查，由调用方保证其是否符合要求
  *
- * @param <K>
+ * @param <K> key类型
  */
 public interface OptionalTypedGetter<K> extends TypedGetter<K> {
 
@@ -95,5 +98,40 @@ public interface OptionalTypedGetter<K> extends TypedGetter<K> {
     default <V> V get(K key, Class<V> type, V placeholder) {
         V val = get(key, type);
         return val == null ? placeholder : val;
+    }
+
+    default <MK, V> Map<MK, V> getMap(K key, Map<MK, V> optional) {
+        Map<MK, V> map = getMap(key);
+        return map == null ? optional : map;
+    }
+
+    default <MK, V> Map<MK, V> getMap(K key, Class<MK> keyType, Class<V> valueType, Map<MK, V> optional) {
+        Map<MK, V> map = getMap(key, keyType, valueType);
+        return map == null ? optional : map;
+    }
+
+    default <V> Map<String, V> getMap(K key, Class<V> valueType, Map<String, V> optional) {
+        Map<String, V> map = getMap(key, valueType);
+        return map == null ? optional : map;
+    }
+
+    default <E> List<E> getList(K key, List<E> optional) {
+        List<E> list = getList(key);
+        return list == null ? optional : list;
+    }
+
+    default <E> List<E> getList(K key, Class<E> elementType, List<E> optional) {
+        List<E> list = getList(key, elementType);
+        return list == null ? optional : list;
+    }
+
+    default <E> Set<E> getSet(K key, Set<E> optional) {
+        Set<E> list = getSet(key);
+        return list == null ? optional : list;
+    }
+
+    default <E> Set<E> getSet(K key, Class<E> elementType, Set<E> optional) {
+        Set<E> list = getSet(key, elementType);
+        return list == null ? optional : list;
     }
 }

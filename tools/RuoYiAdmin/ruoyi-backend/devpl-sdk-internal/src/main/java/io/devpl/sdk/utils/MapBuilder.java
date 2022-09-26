@@ -1,6 +1,5 @@
 package io.devpl.sdk.utils;
 
-import cn.hutool.core.map.MapUtil;
 import io.devpl.sdk.Builder;
 
 import java.util.Map;
@@ -39,7 +38,7 @@ public class MapBuilder<K, V> implements Builder<Map<K, V>> {
      * @since 5.3.0
      */
     public static <K, V> MapBuilder<K, V> create(boolean isLinked) {
-        return create(MapUtil.newHashMap(isLinked));
+        return create(Maps.newHashMap(isLinked));
     }
 
     /**
@@ -139,7 +138,7 @@ public class MapBuilder<K, V> implements Builder<Map<K, V>> {
      * @return 连接字符串
      */
     public String join(String separator, final String keyValueSeparator) {
-        return MapUtil.join(this.map, separator, keyValueSeparator);
+        return Maps.join(this.map, separator, keyValueSeparator);
     }
 
     /**
@@ -150,7 +149,7 @@ public class MapBuilder<K, V> implements Builder<Map<K, V>> {
      * @return 连接后的字符串
      */
     public String joinIgnoreNull(String separator, final String keyValueSeparator) {
-        return MapUtil.joinIgnoreNull(this.map, separator, keyValueSeparator);
+        return Maps.joinIgnoreNull(this.map, separator, keyValueSeparator);
     }
 
     /**
@@ -162,6 +161,6 @@ public class MapBuilder<K, V> implements Builder<Map<K, V>> {
      * @return 连接后的字符串
      */
     public String join(String separator, final String keyValueSeparator, boolean isIgnoreNull) {
-        return MapUtil.join(this.map, separator, keyValueSeparator, isIgnoreNull);
+        return Maps.join(this.map, separator, keyValueSeparator, isIgnoreNull);
     }
 }

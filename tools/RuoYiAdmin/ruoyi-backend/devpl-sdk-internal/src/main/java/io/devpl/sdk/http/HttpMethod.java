@@ -18,7 +18,6 @@ public enum HttpMethod {
         }
     }
 
-
     /**
      * Resolve the given method value to an {@code HttpMethod}.
      *

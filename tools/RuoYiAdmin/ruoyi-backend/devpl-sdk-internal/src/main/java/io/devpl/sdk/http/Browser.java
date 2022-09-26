@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * HTTP请求工具类
  */
-public final class Requests {
+public final class Browser {
 
     private static final HttpClient client = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
@@ -28,7 +28,6 @@ public final class Requests {
 
     /**
      * 构建请求对象
-     *
      * @param url
      * @param method
      * @param body
@@ -50,7 +49,6 @@ public final class Requests {
 
     /**
      * 添加请求头
-     *
      * @param builder HttpRequest.Builder
      * @param header  请求头 header
      */
@@ -66,7 +64,6 @@ public final class Requests {
         HttpRequest request = buildRequest(url, method, body, header);
         try {
             HttpResponse<InputStream> response = client.send(request, new ResponseBodyHandler());
-
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }

@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 基本类型的getter接口<br>
@@ -156,4 +159,22 @@ public interface TypedGetter<K> {
      * @return
      */
     <V> V get(K key, Class<V> type);
+
+    /*-------------------------- 集合类型 start -------------------------------*/
+
+    <MK, V> Map<MK, V> getMap(K key);
+
+    <MK, V> Map<MK, V> getMap(K key, Class<MK> keyType, Class<V> valueType);
+
+    <V> Map<String, V> getMap(K key, Class<V> valueType);
+
+    <E> List<E> getList(K key);
+
+    <E> List<E> getList(K key, Class<E> elementType);
+
+    <E> Set<E> getSet(K key);
+
+    <E> Set<E> getSet(K key, Class<E> elementType);
+
+    /*-------------------------- 集合类型 end -------------------------------*/
 }

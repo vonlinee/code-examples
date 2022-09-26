@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * @see org.joda.beans.impl.map.MapBean
+ * 基于Map实现一个动态Bean
  */
 public class MapBean extends AbstractDynamicBean implements Map<String, Object>, OptionalTypedGetter<String>, Serializable, Cloneable {
 
@@ -30,7 +30,6 @@ public class MapBean extends AbstractDynamicBean implements Map<String, Object>,
 
     /**
      * TODO 修改
-     *
      * @param value 值
      * @return 存在/不存在
      */
@@ -253,6 +252,49 @@ public class MapBean extends AbstractDynamicBean implements Map<String, Object>,
         if (o != null && type != null && type.isAssignableFrom(o.getClass())) {
             return (V) o;
         }
+        return null;
+    }
+
+    @Override
+    public <MK, V> Map<MK, V> getMap(String key) {
+        Object o = get(key);
+        if (o instanceof Map) {
+            return (Map<MK, V>) o;
+        }
+        return null;
+    }
+
+    @Override
+    public <MK, V> Map<MK, V> getMap(String key, Class<MK> keyType, Class<V> valueType) {
+        Object o = get(key);
+        if (o instanceof Map) {
+            return (Map<MK, V>) o;
+        }
+        return null;
+    }
+
+    @Override
+    public <V> Map<String, V> getMap(String key, Class<V> valueType) {
+        return null;
+    }
+
+    @Override
+    public <E> List<E> getList(String key) {
+        return null;
+    }
+
+    @Override
+    public <E> List<E> getList(String key, Class<E> elementType) {
+        return null;
+    }
+
+    @Override
+    public <E> Set<E> getSet(String key) {
+        return null;
+    }
+
+    @Override
+    public <E> Set<E> getSet(String key, Class<E> elementType) {
         return null;
     }
 }

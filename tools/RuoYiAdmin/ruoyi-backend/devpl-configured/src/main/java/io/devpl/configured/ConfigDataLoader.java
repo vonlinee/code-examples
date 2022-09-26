@@ -2,7 +2,7 @@ package io.devpl.configured;
 
 import io.devpl.configured.entity.ConfigLoadTask;
 import io.devpl.configured.repository.ConfigLoadTaskRepository;
-import io.devpl.spring.utils.SpringUtils;
+import io.devpl.spring.context.SpringContext;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class ConfigDataLoader implements CommandLineRunner {
         // 排序
         taskList.sort(Comparator.comparing(ConfigLoadTask::getOrderNum));
 
-        JdbcTemplate template = SpringUtils.getBean(JdbcTemplate.class);
+        JdbcTemplate template = SpringContext.getBean(JdbcTemplate.class);
         for (ConfigLoadTask configLoadTask : taskList) {
             if (!configLoadTask.isEnable()) continue;
             String querySql = configLoadTask.getQuerySql();

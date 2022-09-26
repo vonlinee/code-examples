@@ -20,7 +20,6 @@ import java.util.List;
  * 加载自定义配置文件
  * https://blog.csdn.net/WayneLee0809/article/details/108194131
  * https://juejin.cn/post/6874426451043876871
- *
  * @see org.springframework.boot.context.config.ConfigFileApplicationListener
  */
 @Slf4j
@@ -35,7 +34,6 @@ public class DevplConfigFileLoader implements EnvironmentPostProcessor {
 
     /**
      * Environment的后置处理
-     *
      * @param environment
      * @param application
      */
@@ -46,7 +44,6 @@ public class DevplConfigFileLoader implements EnvironmentPostProcessor {
 
     /**
      * 加载Devpl自定义的配置文件
-     *
      * @param environment ConfigurableEnvironment
      * @param application SpringApplication
      */
@@ -58,15 +55,19 @@ public class DevplConfigFileLoader implements EnvironmentPostProcessor {
                 continue;
             }
 
-            ClassPathResource resource = new ClassPathResource("devpl.properties");
-            try {
-                List<PropertySource<?>> propertySources = loader.load(resource.getFilename(), resource);
-                if (!CollectionUtils.isEmpty(propertySources)) {
-                    log.info("加载配置文件 {}", propertySources);
-                    propertySources.forEach(environment.getPropertySources()::addLast);
+            String[] devplConfigFiles = {"devpl.properties", "devpl-jdbc.properties"};
+
+            for (String devplConfigFile : devplConfigFiles) {
+                ClassPathResource resource = new ClassPathResource(devplConfigFile);
+                try {
+                    List<PropertySource<?>> propertySources = loader.load(resource.getFilename(), resource);
+                    if (!CollectionUtils.isEmpty(propertySources)) {
+                        log.info("加载配置文件 {}", propertySources);
+                        propertySources.forEach(environment.getPropertySources()::addLast);
+                    }
+                } catch (IOException e) {
+                    log.error("加载配置文件失败 {}", resource);
                 }
-            } catch (IOException e) {
-                log.error("加载配置文件失败 {}", resource);
             }
             break;
         }

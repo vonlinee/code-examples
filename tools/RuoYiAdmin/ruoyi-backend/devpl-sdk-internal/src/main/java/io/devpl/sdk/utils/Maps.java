@@ -168,7 +168,7 @@ public abstract class Maps {
     }
 
     /**
-     * 新建一个初始容量为{@link cn.hutool.core.map.MapUtil#DEFAULT_INITIAL_CAPACITY} 的ConcurrentHashMap
+     * 新建一个初始容量为{@link #DEFAULT_INITIAL_CAPACITY} 的ConcurrentHashMap
      *
      * @param <K> key的类型
      * @param <V> value的类型
@@ -181,7 +181,7 @@ public abstract class Maps {
     /**
      * 新建一个ConcurrentHashMap
      *
-     * @param size 初始容量，当传入的容量小于等于0时，容量为{@link cn.hutool.core.map.MapUtil#DEFAULT_INITIAL_CAPACITY}
+     * @param size 初始容量，当传入的容量小于等于0时，容量为{@link #DEFAULT_INITIAL_CAPACITY}
      * @param <K>  key的类型
      * @param <V>  value的类型
      * @return ConcurrentHashMap
@@ -740,7 +740,7 @@ public abstract class Maps {
      * @param <V> Value类型
      * @return map创建类
      */
-    public static <K, V> cn.hutool.core.map.MapBuilder<K, V> builder() {
+    public static <K, V> MapBuilder<K, V> builder() {
         return builder(new HashMap<>());
     }
 
@@ -752,8 +752,8 @@ public abstract class Maps {
      * @param map 实际使用的map
      * @return map创建类
      */
-    public static <K, V> cn.hutool.core.map.MapBuilder<K, V> builder(Map<K, V> map) {
-        return new cn.hutool.core.map.MapBuilder<>(map);
+    public static <K, V> MapBuilder<K, V> builder(Map<K, V> map) {
+        return new MapBuilder<>(map);
     }
 
     /**

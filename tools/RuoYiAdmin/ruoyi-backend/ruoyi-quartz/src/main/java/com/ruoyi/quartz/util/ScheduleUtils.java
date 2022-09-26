@@ -6,7 +6,7 @@ import com.ruoyi.common.exception.job.TaskException;
 import com.ruoyi.common.exception.job.TaskException.Code;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.quartz.domain.SysJob;
-import io.devpl.spring.utils.SpringUtils;
+import io.devpl.spring.context.SpringContext;
 import org.quartz.*;
 
 /**
@@ -111,7 +111,7 @@ public class ScheduleUtils {
         if (count > 1) {
             return StringUtils.containsAnyIgnoreCase(invokeTarget, Constants.JOB_WHITELIST_STR);
         }
-        Object obj = SpringUtils.getBean(StringUtils.split(invokeTarget, ".")[0]);
+        Object obj = SpringContext.getBean(StringUtils.split(invokeTarget, ".")[0]);
         return StringUtils.containsAnyIgnoreCase(obj.getClass().getPackage().getName(), Constants.JOB_WHITELIST_STR);
     }
 }

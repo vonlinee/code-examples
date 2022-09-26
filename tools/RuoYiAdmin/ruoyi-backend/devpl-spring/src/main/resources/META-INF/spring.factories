@@ -7,9 +7,11 @@ org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
 org.springframework.context.ApplicationContextInitializer=\
     io.devpl.spring.boot.factories.DevplContextInitializer
 # RunListener
-org.springframework.boot.SpringApplicationRunListener=io.devpl.spring.boot.factories.DevplRunLifecycleListener
+org.springframework.boot.SpringApplicationRunListener=io.devpl.spring.boot.factories.listener.DevplPriorityBeanRegistrar
 # Application Listeners
-org.springframework.context.ApplicationListener=io.devpl.spring.boot.factories.InternalApplicationListener
+org.springframework.context.ApplicationListener=\
+  io.devpl.spring.boot.factories.listener.MultiDataSourceRegistrar,\
+  io.devpl.spring.boot.factories.listener.BootstrapContextClosedListener
 # Environment Post Processors
 org.springframework.boot.env.EnvironmentPostProcessor=io.devpl.spring.boot.factories.DevplConfigFileLoader
 # Auto Configuration Import Listeners

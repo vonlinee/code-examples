@@ -7,7 +7,6 @@ import java.util.Objects;
 
 /**
  * 键值对对象，只能在构造时传入键值
- *
  * @param <K> 键类型
  * @param <V> 值类型
  * @since 0.0.1
@@ -22,7 +21,6 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
 
     /**
      * 构建{@code Pair}对象
-     *
      * @param <K>   键类型
      * @param <V>   值类型
      * @param key   键
@@ -36,7 +34,6 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
 
     /**
      * 构造
-     *
      * @param key   键
      * @param value 值
      */
@@ -47,7 +44,6 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
 
     /**
      * 获取键
-     *
      * @return 键
      */
     public K getKey() {
@@ -62,7 +58,6 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
 
     /**
      * 获取值
-     *
      * @return 值
      */
     public V getValue() {

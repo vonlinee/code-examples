@@ -2,7 +2,6 @@ package io.devpl.spring.context;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
-import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.core.env.PropertySource;
@@ -11,7 +10,6 @@ import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertySourceFactory;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Nullable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -28,7 +26,7 @@ public class DevplPropertyFactory implements PropertySourceFactory {
 
     @Override
     public PropertySource<?> createPropertySource(
-            @Nullable String name, EncodedResource resource) throws IOException {
+            String name, EncodedResource resource) throws IOException {
 
         String encoding = "UTF-8";
         if (StringUtils.hasLength(resource.getEncoding())) {

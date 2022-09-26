@@ -7,7 +7,7 @@ import com.alibaba.druid.util.Utils;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.framework.config.properties.DruidProperties;
 import com.ruoyi.framework.datasource.DynamicDataSource;
-import io.devpl.spring.utils.SpringUtils;
+import io.devpl.spring.context.SpringContext;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -62,7 +62,7 @@ public class DruidConfig {
      */
     public void setDataSource(Map<Object, Object> targetDataSources, String sourceName, String beanName) {
         try {
-            DataSource dataSource = SpringUtils.getBean(beanName);
+            DataSource dataSource = SpringContext.getBean(beanName);
             targetDataSources.put(sourceName, dataSource);
         } catch (Exception e) {
 

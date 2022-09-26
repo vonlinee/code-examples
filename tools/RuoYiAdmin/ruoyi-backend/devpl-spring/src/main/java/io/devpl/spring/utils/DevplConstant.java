@@ -1,8 +1,8 @@
-package io.devpl.spring;
+package io.devpl.spring.utils;
 
 import java.util.regex.Pattern;
 
-public interface Devpl {
+public interface DevplConstant {
 
     String NAME = "devpl";
 

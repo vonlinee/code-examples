@@ -11,10 +11,6 @@ import java.util.Set;
 public class DevplAutoConfigurationImportListener implements AutoConfigurationImportListener {
     @Override
     public void onAutoConfigurationImportEvent(AutoConfigurationImportEvent event) {
-        List<String> candidateConfigurations = event.getCandidateConfigurations();
-        Set<String> exclusions = event.getExclusions();
-        Object source = event.getSource();
 
-        log.info("DevplAutoConfigurationImportListener => {}", event.getSource());
     }
 }
