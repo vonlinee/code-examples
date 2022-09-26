@@ -17,13 +17,12 @@ public class InternalApplicationListener implements ApplicationListener<Applicat
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
-        log.info("响应事件");
         if (event instanceof ContextRefreshedEvent) {
-            log.info("刷新上下文");
+            log.info("刷新上下文事件");
         }
         if (event instanceof ApplicationEnvironmentPreparedEvent) {
-            ApplicationEnvironmentPreparedEvent envPreparedEvent = (ApplicationEnvironmentPreparedEvent) event;
-            ConfigurableEnvironment environment = envPreparedEvent.getEnvironment();
+            log.info("环境准备事件");
+            ConfigurableEnvironment environment = ((ApplicationEnvironmentPreparedEvent) event).getEnvironment();
         }
     }
 }

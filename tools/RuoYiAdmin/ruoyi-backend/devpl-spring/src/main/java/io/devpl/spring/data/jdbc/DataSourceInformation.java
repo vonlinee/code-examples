@@ -18,10 +18,11 @@ import java.util.UUID;
 
 /**
  * 配置一个数据源的所有配置项
+ *
  * @see org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
  */
 @Data
-public class DataSourceProperties implements Serializable {
+public class DataSourceInformation implements Serializable {
 
     /**
      * 是否只读
@@ -36,7 +37,7 @@ public class DataSourceProperties implements Serializable {
     /**
      * 是否随机生成数据库名称
      *
-     * @see DataSourceProperties#name
+     * @see DataSourceInformation#name
      */
     private boolean generateUniqueName = true;
 
@@ -46,6 +47,7 @@ public class DataSourceProperties implements Serializable {
     private Class<? extends DataSource> type;
 
     /**
+     * 驱动类的全限定类名
      * Fully qualified name of the JDBC driver. Auto-detected based on the URL by
      * default.
      */
@@ -131,6 +133,9 @@ public class DataSourceProperties implements Serializable {
 
     private EmbeddedDatabaseConnection embeddedDatabaseConnection = EmbeddedDatabaseConnection.NONE;
 
+    /**
+     * 唯一名称
+     */
     private String uniqueName;
 
     /**
@@ -182,20 +187,6 @@ public class DataSourceProperties implements Serializable {
         } catch (Throwable ex) {
             return false;
         }
-    }
-
-    /**
-     * Return the configured url or {@code null} if none was configured.
-     *
-     * @return the configured url
-     * @see #determineUrl()
-     */
-    public String getUrl() {
-        return this.url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     /**

@@ -44,21 +44,29 @@ public class DevplConfigFileLoader implements EnvironmentPostProcessor {
         loadDevplConfigFiles(environment, application);
     }
 
+    /**
+     * 加载Devpl自定义的配置文件
+     *
+     * @param environment ConfigurableEnvironment
+     * @param application SpringApplication
+     */
     private void loadDevplConfigFiles(ConfigurableEnvironment environment, SpringApplication application) {
         List<PropertySourceLoader> loaders = SpringFactoriesLoader.loadFactories(PropertySourceLoader.class, application.getClassLoader());
         for (PropertySourceLoader loader : loaders) {
+            // 使用自定义的资源加载器进行加载
             if (!(loader instanceof MultitypePropertySourceLoader)) {
                 continue;
             }
+
+            ClassPathResource resource = new ClassPathResource("devpl.properties");
             try {
-                ClassPathResource resource = new ClassPathResource("devpl.properties");
                 List<PropertySource<?>> propertySources = loader.load(resource.getFilename(), resource);
                 if (!CollectionUtils.isEmpty(propertySources)) {
-                    System.out.println("加载配置文件：" + propertySources);
+                    log.info("加载配置文件 {}", propertySources);
                     propertySources.forEach(environment.getPropertySources()::addLast);
                 }
             } catch (IOException e) {
-                System.out.println("配置文件加载失败：" + e.getMessage());
+                log.error("加载配置文件失败 {}", resource);
             }
             break;
         }

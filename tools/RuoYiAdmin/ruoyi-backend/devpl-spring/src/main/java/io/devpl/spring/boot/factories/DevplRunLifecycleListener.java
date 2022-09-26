@@ -1,5 +1,7 @@
 package io.devpl.spring.boot.factories;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
@@ -7,6 +9,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 public class DevplRunLifecycleListener implements SpringApplicationRunListener {
+
+    private Log log = LogFactory.getLog(DevplRunLifecycleListener.class);
 
     private SpringApplication application;
     private String[] args;

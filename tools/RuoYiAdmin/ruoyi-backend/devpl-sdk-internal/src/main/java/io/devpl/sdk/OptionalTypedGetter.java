@@ -10,7 +10,7 @@ import java.util.Date;
  *
  * @param <K>
  */
-public interface PlaceholderTypedGetter<K> extends TypedGetter<K> {
+public interface OptionalTypedGetter<K> extends TypedGetter<K> {
 
     default Object getObject(K key, Object placeholder) {
         Object val = getObject(key);

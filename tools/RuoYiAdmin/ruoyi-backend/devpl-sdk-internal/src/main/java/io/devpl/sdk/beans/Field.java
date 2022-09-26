@@ -6,17 +6,25 @@ package io.devpl.sdk.beans;
  * <p>
  * For a JavaBean, this will ultimately wrap a get/set method pair.
  * Alternate implementations may perform any logic to obtain the value.
+ *
  * @see org.joda.beans.Property
+ * @see java.lang.reflect.Field
  */
 public interface Field<V> {
 
-    String id();
+    default String id() {
+        return this.getClass().getName();
+    }
 
-    String name();
+    String getName();
 
-    String description();
+    V getValue();
 
-    boolean equals(Object obj);
+    V setValue(Object value);
 
-    int hashCode();
+    Class<V> getType();
+
+    default String description() {
+        return "";
+    }
 }
