@@ -4,10 +4,14 @@ import io.devpl.spring.context.SpringContext;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.util.Assert;
 
 import java.util.Map;
 
-public class SpringUtils {
+public final class SpringUtils {
 
     public static final SpringContext CONTEXT = SpringContext.INSTANCE;
 
@@ -113,5 +117,25 @@ public class SpringUtils {
      */
     public static <T> Map<String, T> getBeansOfType(Class<T> type) {
         return CONTEXT.getBeansOfType(type);
+    }
+
+    /**
+     * 注册BeanDefinition
+     * @param beanName
+     * @param beanDefinition
+     * @return
+     */
+    public static boolean registerBeanDefinition(String beanName, BeanDefinition beanDefinition) {
+        Assert.hasLength(beanName, "beanDefinition cannot be empty!");
+        Assert.notNull(beanDefinition, "beanDefinition cannot be null!");
+        ConfigurableListableBeanFactory beanFactory = CONTEXT.getBeanFactory();
+        try {
+            if (beanFactory instanceof BeanDefinitionRegistry) {
+                ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(beanName, beanDefinition);
+            }
+        } catch (Exception exception) {
+            return false;
+        }
+        return true;
     }
 }

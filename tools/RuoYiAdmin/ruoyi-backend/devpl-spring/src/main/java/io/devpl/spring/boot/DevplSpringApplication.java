@@ -1,13 +1,14 @@
 package io.devpl.spring.boot;
 
 import io.devpl.spring.context.SpringContext;
+import io.devpl.spring.data.jdbc.DynamicDataSource;
 import lombok.Setter;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.BootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.io.ResourceLoader;
 
 @Setter
 public class DevplSpringApplication extends SpringApplication {
@@ -53,20 +54,19 @@ public class DevplSpringApplication extends SpringApplication {
     @Override
     protected void postProcessApplicationContext(ConfigurableApplicationContext context) {
         super.postProcessApplicationContext(context);
-
         SpringContext springContext = bootstrapContext.get(SpringContext.class);
-        springContext.setResourceLoader(getResourceLoader());
+        ResourceLoader resourceLoader = getResourceLoader();
+        if (resourceLoader == null) {
+            resourceLoader = context;
+        }
+        springContext.setResourceLoader(resourceLoader);
         springContext.setClassLoader(getClassLoader());
-
         ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
         springContext.setConversionService(beanFactory.getConversionService());
+        springContext.setApplication(this);
         beanFactory.registerSingleton("Devpl::spring-context", springContext);
-    }
 
-    private void finishDataSourceInitialization(ConfigurableApplicationContext context) {
-
-        ConfigurableEnvironment environment = context.getEnvironment();
-
-
+        DynamicDataSource dataSource = bootstrapContext.get(DynamicDataSource.class);
+        beanFactory.registerSingleton("dynamicDataSource", dataSource);
     }
 }

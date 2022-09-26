@@ -1,5 +1,6 @@
-package io.devpl.spring.boot.factories;
+package io.devpl.spring.boot.factories.post;
 
+import io.devpl.spring.boot.factories.environment.MultitypePropertySourceLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
@@ -7,8 +8,6 @@ import org.springframework.boot.env.PropertySourceLoader;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.util.CollectionUtils;
 
@@ -24,9 +23,6 @@ import java.util.List;
  */
 @Slf4j
 public class DevplConfigFileLoader implements EnvironmentPostProcessor {
-
-    // 配置文件名称匹配
-    private ResourceLoader resourceLoader = new PathMatchingResourcePatternResolver();
 
     public DevplConfigFileLoader() {
         super();

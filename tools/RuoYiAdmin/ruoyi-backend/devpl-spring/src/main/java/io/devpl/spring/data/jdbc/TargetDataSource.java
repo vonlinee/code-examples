@@ -1,4 +1,4 @@
-package io.devpl.spring.data;
+package io.devpl.spring.data.jdbc;
 
 import java.lang.annotation.*;
 

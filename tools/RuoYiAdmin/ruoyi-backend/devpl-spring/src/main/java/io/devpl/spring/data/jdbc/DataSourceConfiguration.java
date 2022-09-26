@@ -1,8 +1,11 @@
 package io.devpl.spring.data.jdbc;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.sql.DataSource;
+import java.util.ArrayList;
 
 /**
  * 数据源配置
@@ -10,8 +13,4 @@ import javax.sql.DataSource;
 @Configuration(proxyBeanMethods = false)
 public class DataSourceConfiguration {
 
-    // @Bean
-    public DataSource dynamicDataSource() {
-        return new DevplRoutingDataSource();
-    }
 }

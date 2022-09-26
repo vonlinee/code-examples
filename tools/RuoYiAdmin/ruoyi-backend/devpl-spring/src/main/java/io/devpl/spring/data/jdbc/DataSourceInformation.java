@@ -18,11 +18,12 @@ import java.util.UUID;
 
 /**
  * 配置一个数据源的所有配置项
- *
  * @see org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
  */
 @Data
 public class DataSourceInformation implements Serializable {
+
+    private boolean isDefault;
 
     /**
      * 是否只读
@@ -36,7 +37,6 @@ public class DataSourceInformation implements Serializable {
 
     /**
      * 是否随机生成数据库名称
-     *
      * @see DataSourceInformation#name
      */
     private boolean generateUniqueName = true;
@@ -140,7 +140,6 @@ public class DataSourceInformation implements Serializable {
 
     /**
      * Initialize a {@link DataSourceBuilder} with the state of this instance.
-     *
      * @return a {@link DataSourceBuilder} initialized with the customizations
      * defined on this instance
      */
@@ -155,7 +154,6 @@ public class DataSourceInformation implements Serializable {
 
     /**
      * 根据此配置和环境确定要使用的驱动程序
-     *
      * @return the driver to use
      * @since 1.4.0
      */
@@ -191,7 +189,6 @@ public class DataSourceInformation implements Serializable {
 
     /**
      * Determine the url to use based on this configuration and the environment.
-     *
      * @return the url to use
      * @since 1.4.0
      */
@@ -209,7 +206,6 @@ public class DataSourceInformation implements Serializable {
 
     /**
      * Determine the name to used based on this configuration.
-     *
      * @return the database name to use or {@code null}
      * @since 2.0.0
      */
@@ -231,7 +227,6 @@ public class DataSourceInformation implements Serializable {
 
     /**
      * Return the configured username or {@code null} if none was configured.
-     *
      * @return the configured username
      * @see #determineUsername()
      */
@@ -246,7 +241,6 @@ public class DataSourceInformation implements Serializable {
     /**
      * Determine the username to use based on this configuration and the
      * environment.
-     *
      * @return the username to use
      * @since 1.4.0
      */
@@ -262,7 +256,6 @@ public class DataSourceInformation implements Serializable {
 
     /**
      * Return the configured password or {@code null} if none was configured.
-     *
      * @return the configured password
      * @see #determinePassword()
      */
@@ -277,7 +270,6 @@ public class DataSourceInformation implements Serializable {
     /**
      * Determine the password to use based on this configuration and the
      * environment.
-     *
      * @return the password to use
      * @since 1.4.0
      */

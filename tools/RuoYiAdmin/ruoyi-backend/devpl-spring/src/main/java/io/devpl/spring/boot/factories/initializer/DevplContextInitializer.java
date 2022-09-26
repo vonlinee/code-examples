@@ -1,4 +1,4 @@
-package io.devpl.spring.boot.factories;
+package io.devpl.spring.boot.factories.initializer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +23,6 @@ public class DevplContextInitializer implements ApplicationContextInitializer<Co
 
     @Override
     public int getOrder() {
-        return Integer.MIN_VALUE; // 越小越先执行
+        return Ordered.HIGHEST_PRECEDENCE; // 越小越先执行
     }
 }

@@ -1,4 +1,4 @@
-package io.devpl.spring.boot.factories;
+package io.devpl.spring.boot.factories.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigurationImportEvent;

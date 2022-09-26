@@ -1,4 +1,4 @@
-package io.devpl.spring.boot.factories;
+package io.devpl.spring.boot.factories.environment;
 
 import org.springframework.boot.env.PropertiesPropertySourceLoader;
 import org.springframework.boot.env.PropertySourceLoader;

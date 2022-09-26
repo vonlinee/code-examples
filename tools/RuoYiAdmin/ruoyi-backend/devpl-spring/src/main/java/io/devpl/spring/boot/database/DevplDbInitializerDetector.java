@@ -8,14 +8,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 数据库初始化
+ * 数据库初始化: 在上下文刷新阶段执行操作
  * https://pxzxj.github.io/articles/starter-data-initialization.html
  */
 public class DevplDbInitializerDetector implements DatabaseInitializerDetector {
 
     /**
      * 返回用来初始化数据库的Bean名称
-     *
      * @param beanFactory
      * @return
      */
@@ -26,7 +25,6 @@ public class DevplDbInitializerDetector implements DatabaseInitializerDetector {
 
     /**
      * detect()完成的回调方法
-     *
      * @param beanFactory
      * @param dataSourceInitializerNames
      */

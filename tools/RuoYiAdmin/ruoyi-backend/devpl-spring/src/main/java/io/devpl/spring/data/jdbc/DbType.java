@@ -1,4 +1,4 @@
-package io.devpl.spring.data;
+package io.devpl.spring.data.jdbc;
 
 /**
  * 常见的数据库类型枚举

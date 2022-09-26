@@ -2,6 +2,8 @@ package io.devpl.spring.context;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -25,9 +27,12 @@ import java.util.Objects;
 @Getter
 public class SpringContext {
 
+    private final Logger log = LoggerFactory.getLogger(SpringContext.class);
+
     public static final SpringContext INSTANCE = new SpringContext();
 
     private SpringContext() {
+        log.info("Initialize SpringContext => {}", this);
     }
 
     private SpringApplication application;
