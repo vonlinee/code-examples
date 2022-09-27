@@ -1,15 +1,10 @@
 package io.devpl.sdk;
 
-import io.devpl.sdk.http.Browser;
+import io.devpl.sdk.beans.MapBean;
 
 public class TestHttpClient {
 
     public static void main(String[] args) {
-
-
-        Browser browser = new Browser();
-
-
 
     }
 }

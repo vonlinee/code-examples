@@ -10,7 +10,6 @@ import java.util.Set;
 
 /**
  * 提供默认值，不对默认值进行检查，由调用方保证其是否符合要求
- *
  * @param <K> key类型
  */
 public interface OptionalTypedGetter<K> extends TypedGetter<K> {

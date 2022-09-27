@@ -1,7 +1,10 @@
 package io.devpl.spring.web.utils;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.core.Ordered;
 import org.springframework.core.ResolvableType;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.lang.Nullable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
@@ -10,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.method.annotation.RequestParamMapMethodArgumentResolver;
 import org.springframework.web.method.annotation.RequestParamMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
@@ -19,12 +23,13 @@ import org.springframework.web.multipart.support.MultipartResolutionDelegate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 解析RequestParam注解标注的Map类型的方法参数，并且该注解未指定参数的名字
+ *
+ *
+ *
  *
  * <p>The created {@link Map} contains all request parameter name/value pairs,
  * or all multipart files for a given parameter name if specifically declared
@@ -36,26 +41,41 @@ import java.util.Map;
  * @see HttpServletRequest#getParameterMap()
  * @see MultipartRequest#getMultiFileMap()
  * @see MultipartRequest#getFileMap()
+ * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor
+ * @see RequestParamMapMethodArgumentResolver  根据这个实现
  * @since 3.1
  */
-public class RequestParamMapMethodArgumentResolver implements HandlerMethodArgumentResolver {
+public class ParamMapMethodArgumentResolver implements HandlerMethodArgumentResolver, Ordered {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         RequestParam requestParam = parameter.getParameterAnnotation(RequestParam.class);
-        return (requestParam != null && Map.class.isAssignableFrom(parameter.getParameterType()) &&
+        boolean f = (requestParam != null && Map.class.isAssignableFrom(parameter.getParameterType()) &&
                 !StringUtils.hasText(requestParam.name()));
+        return f || parameter.getParameterType() == RequestInfo.class;
     }
 
+    /**
+     * 具体实现参考：org.springframework.web.method.annotation.RequestParamMapMethodArgumentResolver
+     * @param parameter
+     * @param mavContainer
+     * @param webRequest
+     * @param binderFactory
+     * @return
+     * @throws Exception
+     */
     @Override
-    public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
-
+    public Object resolveArgument(MethodParameter parameter,
+                                  @Nullable ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest,
+                                  @Nullable WebDataBinderFactory binderFactory) throws Exception {
+        // 可解析的类型
         ResolvableType resolvableType = ResolvableType.forMethodParameter(parameter);
-
+        // 参数类型是MultiValueMap的子类型
         if (MultiValueMap.class.isAssignableFrom(parameter.getParameterType())) {
-            // MultiValueMap
+            // 获取Value的泛型类型
             Class<?> valueType = resolvableType.as(MultiValueMap.class).getGeneric(1).resolve();
+            // 文件
             if (valueType == MultipartFile.class) {
                 MultipartRequest multipartRequest = MultipartResolutionDelegate.resolveMultipartRequest(webRequest);
                 return (multipartRequest != null ? multipartRequest.getMultiFileMap() : new LinkedMultiValueMap<>(0));
@@ -71,6 +91,7 @@ public class RequestParamMapMethodArgumentResolver implements HandlerMethodArgum
                 }
                 return new LinkedMultiValueMap<>(0);
             } else {
+                // 普通的MultiValueMap类型
                 Map<String, String[]> parameterMap = webRequest.getParameterMap();
                 MultiValueMap<String, String> result = new LinkedMultiValueMap<>(parameterMap.size());
                 parameterMap.forEach((key, values) -> {
@@ -100,15 +121,70 @@ public class RequestParamMapMethodArgumentResolver implements HandlerMethodArgum
                 }
                 return new LinkedHashMap<>(0);
             } else {
-                Map<String, String[]> parameterMap = webRequest.getParameterMap();
-                Map<String, String> result = CollectionUtils.newLinkedHashMap(parameterMap.size());
-                parameterMap.forEach((key, values) -> {
-                    if (values.length > 0) {
-                        result.put(key, values[0]);
-                    }
-                });
-                return result;
+                RequestInfo requestInfo = new RequestInfo();
+                requestInfo.setParam(webRequest.getParameterMap());
+
+                // 获取请求头
+                HttpServletRequest nativeReq = getNativeHttpServletRequest(webRequest);
+                requestInfo.setHeaders(getHttpHeaders(nativeReq, webRequest));
+                if (nativeReq != null) {
+                    requestInfo.setMethod(HttpMethod.resolve(nativeReq.getMethod()));
+                }
+                return requestInfo;
             }
         }
+    }
+
+    /**
+     * 递归获取 HttpServletRequest 对象实例
+     * @param webRequest
+     * @return
+     */
+    private HttpServletRequest getNativeHttpServletRequest(NativeWebRequest webRequest) {
+        Object req = webRequest.getNativeRequest();
+        if (req instanceof HttpServletRequest) {
+            return ((HttpServletRequest) req);
+        }
+        if (req instanceof NativeWebRequest) {
+            return getNativeHttpServletRequest((NativeWebRequest) req);
+        }
+        return null;
+    }
+
+    private HttpHeaders getHttpHeaders(HttpServletRequest nativeRequest, NativeWebRequest webRequest) {
+        HttpHeaders httpHeaders = HttpHeaders.EMPTY;
+        if (nativeRequest != null) {
+            httpHeaders = new HttpHeaders();
+            Enumeration<String> headerNames = nativeRequest.getHeaderNames();
+            while (headerNames.hasMoreElements()) {
+                String name = headerNames.nextElement();
+                httpHeaders.addAll(name, listOfEnumrations(nativeRequest.getHeaders(name)));
+            }
+            return httpHeaders;
+        }
+        if (webRequest == null) {
+            return httpHeaders;
+        }
+        httpHeaders = new HttpHeaders();
+        Iterator<String> headerNames = webRequest.getHeaderNames();
+        while (headerNames.hasNext()) {
+            String name = headerNames.next();
+            String[] headerValues = webRequest.getHeaderValues(name);
+            httpHeaders.addAll(name, Arrays.asList(headerValues == null ? new String[0] : headerValues));
+        }
+        return httpHeaders;
+    }
+
+    private List<String> listOfEnumrations(Enumeration<String> enumeration) {
+        List<String> list = new ArrayList<>();
+        while (enumeration.hasMoreElements()) {
+            list.add(enumeration.nextElement());
+        }
+        return list;
+    }
+
+    @Override
+    public int getOrder() {
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 }

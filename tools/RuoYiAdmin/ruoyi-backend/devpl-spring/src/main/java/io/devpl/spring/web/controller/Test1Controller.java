@@ -1,6 +1,6 @@
 package io.devpl.spring.web.controller;
 
-import io.devpl.spring.web.utils.ParamMap;
+import io.devpl.spring.web.utils.RequestInfo;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +28,9 @@ public class Test1Controller {
         return new HashMap<>();
     }
 
-    @GetMapping("/testparammap3")
-    public Map<String, Object> map3(@org.springframework.web.bind.annotation.RequestParam ParamMap param) {
+    @RequestMapping("/testparammap5")
+    public Map<String, Object> map2(RequestInfo param) {
         return new HashMap<>();
     }
+
 }

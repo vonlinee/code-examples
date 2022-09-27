@@ -11,6 +11,7 @@ import java.util.*;
 /**
  * 基于Map实现一个动态Bean
  */
+@SuppressWarnings("unchecked")
 public class MapBean extends AbstractDynamicBean implements Map<String, Object>, OptionalTypedGetter<String>, Serializable, Cloneable {
 
     @Override
