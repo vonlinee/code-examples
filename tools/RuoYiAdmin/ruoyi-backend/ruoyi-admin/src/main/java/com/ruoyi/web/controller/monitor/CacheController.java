@@ -71,7 +71,6 @@ public class CacheController {
         return AjaxResult.success(cacheKeys);
     }
 
-    @DS("")
     @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
     @GetMapping("/getValue/{cacheName}/{cacheKey}")
     public AjaxResult getCacheValue(@PathVariable String cacheName, @PathVariable String cacheKey) {

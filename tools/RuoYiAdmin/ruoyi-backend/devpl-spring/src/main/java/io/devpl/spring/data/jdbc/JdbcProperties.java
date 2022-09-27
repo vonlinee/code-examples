@@ -6,6 +6,9 @@ package io.devpl.spring.data.jdbc;
  */
 public class JdbcProperties {
 
+    /**
+     * 驱动名称
+     */
     private String driverClassName;
 
     /**

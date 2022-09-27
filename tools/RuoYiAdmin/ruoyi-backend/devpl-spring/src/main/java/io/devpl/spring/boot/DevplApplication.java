@@ -11,12 +11,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.ResourceLoader;
 
 @Setter
-public class DevplSpringApplication extends SpringApplication {
+public class DevplApplication extends SpringApplication {
 
-    private boolean reportInternal;
+    private boolean reportInternal = true;
     private BootstrapContext bootstrapContext;
 
-    public DevplSpringApplication(Class<?>[] primarySources) {
+    public DevplApplication(Class<?>[] primarySources) {
         super(primarySources);
     }
 
@@ -44,7 +44,7 @@ public class DevplSpringApplication extends SpringApplication {
      * @return the running {@link ApplicationContext}
      */
     public static ConfigurableApplicationContext run(Class<?>[] primarySources, String[] args) {
-        return new DevplSpringApplication(primarySources).run(args);
+        return new DevplApplication(primarySources).run(args);
     }
 
     /**
@@ -65,7 +65,6 @@ public class DevplSpringApplication extends SpringApplication {
         springContext.setConversionService(beanFactory.getConversionService());
         springContext.setApplication(this);
         beanFactory.registerSingleton("Devpl::spring-context", springContext);
-
         DynamicDataSource dataSource = bootstrapContext.get(DynamicDataSource.class);
         beanFactory.registerSingleton("dynamicDataSource", dataSource);
     }

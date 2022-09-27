@@ -1,7 +1,7 @@
 package io.devpl.spring.boot.factories;
 
 import io.devpl.sdk.beans.MapBean;
-import io.devpl.spring.boot.DevplSpringApplication;
+import io.devpl.spring.boot.DevplApplication;
 import io.devpl.spring.context.PropertyBindCallback;
 import io.devpl.spring.context.SpringContext;
 import io.devpl.spring.data.jdbc.DataSourceInformation;
@@ -42,8 +42,8 @@ public class DevplBootstrap implements SpringApplicationRunListener, Ordered {
 
     @Override
     public void starting(ConfigurableBootstrapContext bootstrapContext) {
-        if (application instanceof DevplSpringApplication) {
-            ((DevplSpringApplication) application).setBootstrapContext(bootstrapContext);
+        if (application instanceof DevplApplication) {
+            ((DevplApplication) application).setBootstrapContext(bootstrapContext);
         }
         bootstrapContext.registerIfAbsent(DynamicDataSource.class, context -> new DynamicDataSource());
         bootstrapContext.registerIfAbsent(SpringContext.class, context -> SpringContext.INSTANCE);
@@ -119,8 +119,6 @@ public class DevplBootstrap implements SpringApplicationRunListener, Ordered {
 
     @Override
     public void running(ConfigurableApplicationContext context) {
-        DynamicDataSource dataSource = context.getBean(DynamicDataSource.class);
 
-        System.out.println(dataSource);
     }
 }

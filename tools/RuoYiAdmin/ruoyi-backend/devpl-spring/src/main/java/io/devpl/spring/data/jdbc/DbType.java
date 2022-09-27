@@ -52,7 +52,7 @@ public enum DbType {
     /**
      * Google App Engine.
      */
-    GAE(null, "com.google.appengine.api.rdbms.AppEngineDriver", "", "", "jdbc:microsoft:sqlserver://", ""),
+    GAE("Google App Engine", "com.google.appengine.api.rdbms.AppEngineDriver", "", "", "jdbc:microsoft:sqlserver://", ""),
 
     /**
      * Oracle.
@@ -81,7 +81,7 @@ public enum DbType {
      * jTDS. As it can be used for several databases, there isn't a single product
      * name we could rely on.
      */
-    JTDS(null, "net.sourceforge.jtds.jdbc.Driver", "", "", "", ""),
+    JTDS("JTDS", "net.sourceforge.jtds.jdbc.Driver", "", "", "", ""),
 
     /**
      * SQL Server.

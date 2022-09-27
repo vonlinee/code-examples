@@ -12,6 +12,8 @@ open module devpl.sdk.internal {
     requires lombok;
     requires jsr305;
 
+    requires hutool.all;
+
     // 表示允许访问指定包的public成员(编译及运行时)
     // 如果反射不直接通过类名调用，只是运行时通过包名使用，则只需open或opens即可
     // 如果是通过类名来反射，由于用到了该类，需要通过exports指定可以访问，不指定则编译期立即报错

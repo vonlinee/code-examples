@@ -13,6 +13,9 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 动态路由数据源
+ */
 public abstract class AbstractRoutingDataSource extends AbstractDataSource {
 
     /**
@@ -36,12 +39,6 @@ public abstract class AbstractRoutingDataSource extends AbstractDataSource {
         this.lenientFallback = lenientFallback;
     }
 
-    /**
-     * Set the DataSourceLookup implementation to use for resolving data source
-     * name Strings in the {@link # targetDataSources} map.
-     * <p>Default is a {@link JndiDataSourceLookup}, allowing the JNDI names
-     * of application server DataSources to be specified directly.
-     */
     public void setDataSourceLookup(@Nullable DataSourceLookup dataSourceLookup) {
         this.dataSourceLookup = (dataSourceLookup != null ? dataSourceLookup : new JndiDataSourceLookup());
     }

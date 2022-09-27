@@ -1,21 +1,31 @@
 package io.devpl.spring.web.utils;
 
-import java.util.LinkedHashMap;
+import java.util.function.Predicate;
 
 /**
- * 用作方法参数传递
+ * 前端请求参数封装
+ * 支持多值
+ * @see org.springframework.util.MultiValueMap
  */
-public final class ParamMap extends LinkedHashMap<String, Object> {
+public interface ParamMap {
 
-    public String getString(String key) {
-        return (String) get(key);
-    }
+    /**
+     * 是否存在某个名字的参数
+     * @param name
+     * @return
+     */
+    boolean exists(String name);
 
-    public int getInt(String key) {
-        return (int) get(key);
-    }
+    /**
+     * 是否存在某个名字的参数，并且满足指定条件
+     * @param name
+     * @return
+     */
+    boolean exists(String name, Predicate<Object> rule);
 
-    public Integer getInteger(String key) {
-        return (Integer) get(key);
-    }
+    <V> V validate(String name, Predicate<V> rule);
+
+    <V> V get(String name);
+
+    <V> V[] getArray(String name);
 }

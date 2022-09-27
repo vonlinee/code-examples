@@ -12,9 +12,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * 启动程序
  * @author ruoyi
  */
-@ComponentScans(value = {
-        @ComponentScan(basePackages = "io.devpl")
-})
 @SpringBootApplication
 public class RuoYiApplication {
     public static void main(String[] args) {
