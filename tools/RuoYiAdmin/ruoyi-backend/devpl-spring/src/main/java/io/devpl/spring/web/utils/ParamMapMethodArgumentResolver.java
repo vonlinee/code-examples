@@ -37,6 +37,7 @@ import java.util.*;
  * {@link MultiValueMap} instead, the created map contains all request parameters
  * and all their values for cases where request parameters have multiple values
  * (or multiple multipart files of the same name).
+ *
  * @see RequestParamMethodArgumentResolver
  * @see HttpServletRequest#getParameterMap()
  * @see MultipartRequest#getMultiFileMap()
@@ -57,6 +58,7 @@ public class ParamMapMethodArgumentResolver implements HandlerMethodArgumentReso
 
     /**
      * 具体实现参考：org.springframework.web.method.annotation.RequestParamMapMethodArgumentResolver
+     *
      * @param parameter
      * @param mavContainer
      * @param webRequest
@@ -137,8 +139,10 @@ public class ParamMapMethodArgumentResolver implements HandlerMethodArgumentReso
 
     /**
      * 递归获取 HttpServletRequest 对象实例
-     * @param webRequest
-     * @return
+     *
+     * @param webRequest NativeWebRequest
+     * @return HttpServletRequest, 可能为null
+     * @see NativeWebRequest#getNativeRequest
      */
     private HttpServletRequest getNativeHttpServletRequest(NativeWebRequest webRequest) {
         Object req = webRequest.getNativeRequest();
