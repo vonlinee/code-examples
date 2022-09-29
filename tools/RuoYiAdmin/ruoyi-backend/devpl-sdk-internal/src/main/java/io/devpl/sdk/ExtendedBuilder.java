@@ -24,7 +24,7 @@ public interface ExtendedBuilder<T, B extends Builder<T>> extends Builder<T> {
      * @return Builder子类
      */
     @SuppressWarnings("unchecked")
-    default B getThis() {
+    default B materialize() {
         return (B) this;
     }
 }

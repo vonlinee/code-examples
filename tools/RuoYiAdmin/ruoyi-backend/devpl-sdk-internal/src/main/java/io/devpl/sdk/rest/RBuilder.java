@@ -1,4 +1,4 @@
-package io.devpl.sdk.restful;
+package io.devpl.sdk.rest;
 
 /**
  * 不对外暴露

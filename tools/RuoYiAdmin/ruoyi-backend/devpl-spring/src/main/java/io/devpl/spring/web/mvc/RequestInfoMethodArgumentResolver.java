@@ -1,4 +1,4 @@
-package io.devpl.spring.web.utils;
+package io.devpl.spring.web.mvc;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
@@ -28,25 +28,22 @@ import java.util.*;
 /**
  * 解析RequestParam注解标注的Map类型的方法参数，并且该注解未指定参数的名字
  *
- *
- *
- *
  * <p>The created {@link Map} contains all request parameter name/value pairs,
  * or all multipart files for a given parameter name if specifically declared
  * with {@link MultipartFile} as the value type. If the method parameter type is
  * {@link MultiValueMap} instead, the created map contains all request parameters
  * and all their values for cases where request parameters have multiple values
  * (or multiple multipart files of the same name).
- *
  * @see RequestParamMethodArgumentResolver
  * @see HttpServletRequest#getParameterMap()
  * @see MultipartRequest#getMultiFileMap()
  * @see MultipartRequest#getFileMap()
  * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor
  * @see RequestParamMapMethodArgumentResolver  根据这个实现
+ * @see
  * @since 3.1
  */
-public class ParamMapMethodArgumentResolver implements HandlerMethodArgumentResolver, Ordered {
+public class RequestInfoMethodArgumentResolver implements HandlerMethodArgumentResolver, Ordered {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -58,7 +55,6 @@ public class ParamMapMethodArgumentResolver implements HandlerMethodArgumentReso
 
     /**
      * 具体实现参考：org.springframework.web.method.annotation.RequestParamMapMethodArgumentResolver
-     *
      * @param parameter
      * @param mavContainer
      * @param webRequest
@@ -127,32 +123,15 @@ public class ParamMapMethodArgumentResolver implements HandlerMethodArgumentReso
                 requestInfo.setParam(webRequest.getParameterMap());
 
                 // 获取请求头
-                HttpServletRequest nativeReq = getNativeHttpServletRequest(webRequest);
+                HttpServletRequest nativeReq = webRequest.getNativeRequest(HttpServletRequest.class);
                 requestInfo.setHeaders(getHttpHeaders(nativeReq, webRequest));
                 if (nativeReq != null) {
                     requestInfo.setMethod(HttpMethod.resolve(nativeReq.getMethod()));
+                    requestInfo.setPath(nativeReq.getRequestURI());
                 }
                 return requestInfo;
             }
         }
-    }
-
-    /**
-     * 递归获取 HttpServletRequest 对象实例
-     *
-     * @param webRequest NativeWebRequest
-     * @return HttpServletRequest, 可能为null
-     * @see NativeWebRequest#getNativeRequest
-     */
-    private HttpServletRequest getNativeHttpServletRequest(NativeWebRequest webRequest) {
-        Object req = webRequest.getNativeRequest();
-        if (req instanceof HttpServletRequest) {
-            return ((HttpServletRequest) req);
-        }
-        if (req instanceof NativeWebRequest) {
-            return getNativeHttpServletRequest((NativeWebRequest) req);
-        }
-        return null;
     }
 
     private HttpHeaders getHttpHeaders(HttpServletRequest nativeRequest, NativeWebRequest webRequest) {

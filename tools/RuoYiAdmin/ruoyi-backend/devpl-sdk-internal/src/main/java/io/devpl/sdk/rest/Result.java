@@ -1,10 +1,13 @@
-package io.devpl.sdk.restful;
+package io.devpl.sdk.rest;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 /**
  * @param <T> 携带的数据类型
  * @since 0.0.1
  */
-public class Result<T> extends ResultfulResultTemplate implements RBuilder<T> {
+public class Result<T> extends RestfulResultTemplate implements RBuilder<T> {
 
     /**
      * 存放具体的业务数据
@@ -39,8 +42,6 @@ public class Result<T> extends ResultfulResultTemplate implements RBuilder<T> {
     public Result<T> build() {
         if (this.code == 0) this.code = -1;
         if (this.message == null) this.message = "";
-        if (this.toast == null) this.toast = "";
-        if (this.stackTrace == null) this.stackTrace = "";
         return this;
     }
 
@@ -57,8 +58,11 @@ public class Result<T> extends ResultfulResultTemplate implements RBuilder<T> {
     }
 
     @Override
-    public RBuilder<T> setStackTrace(String stackTrace) {
-        this.stackTrace = stackTrace;
+    public RBuilder<T> setThrowable(Throwable throwable) {
+        if (this.throwable == null || throwable != this.throwable) {
+            this.stacktrace = getStackTrace(throwable);
+        }
+        this.throwable = throwable;
         return this;
     }
 
@@ -78,5 +82,16 @@ public class Result<T> extends ResultfulResultTemplate implements RBuilder<T> {
     public RBuilder<T> setData(T data) {
         this.data = data;
         return this;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    @Override
+    protected void toJSONString(StringBuilder result) {
+        Gson gson = new Gson();
+        JsonElement je = gson.toJsonTree(this.data);
+
     }
 }
