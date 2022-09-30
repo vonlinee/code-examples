@@ -20,11 +20,10 @@ import java.util.List;
 
 /**
  * Swagger2的接口配置
- *
  * @author ruoyi
  */
 @Configuration
-public class SwaggerConfig {
+public class SwaggerConfiguration {
     /**
      * 系统基础配置
      */
@@ -109,13 +108,13 @@ public class SwaggerConfig {
         // 用ApiInfoBuilder进行定制
         return new ApiInfoBuilder()
                 // 设置标题
-                .title("标题：若依管理系统_接口文档")
+                .title("")
                 // 描述
-                .description("描述：用于管理集团旗下公司的人员信息,具体包括XXX,XXX模块...")
+                .description("")
                 // 作者信息
-                .contact(new Contact(ruoyiConfig.getName(), null, null))
+                .contact(new Contact(null, null, null))
                 // 版本
-                .version("版本号:" + ruoyiConfig.getVersion())
+                .version("")
                 .build();
     }
 }

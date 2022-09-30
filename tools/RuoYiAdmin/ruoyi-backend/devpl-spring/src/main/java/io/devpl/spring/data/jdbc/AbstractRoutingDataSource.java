@@ -87,12 +87,10 @@ public abstract class AbstractRoutingDataSource extends AbstractDataSource {
     protected DataSource determineTargetDataSource() {
         Assert.notNull(this.resolvedDataSources, "DataSource router not initialized");
         String lookupKey = determineCurrentLookupKey();
-
         if (lookupKey == null) {
             // 选择默认数据源
             return defaultTargetDataSource;
         }
-
         DataSource dataSource = this.resolvedDataSources.get(lookupKey);
         if (dataSource == null && this.lenientFallback) {
             dataSource = this.resolvedDefaultDataSource;

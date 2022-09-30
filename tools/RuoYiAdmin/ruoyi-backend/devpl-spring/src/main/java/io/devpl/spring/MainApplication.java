@@ -1,22 +1,12 @@
 package io.devpl.spring;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import io.devpl.sdk.rest.RBuilder;
-import io.devpl.sdk.rest.Result;
-import io.devpl.sdk.rest.Results;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @SpringBootApplication
 public class MainApplication {
