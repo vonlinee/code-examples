@@ -7,11 +7,11 @@ import org.springframework.context.ApplicationListener;
 
 /**
  * 多数据源注册，在Environment准备完成后立刻进行注册
+ * 注册所有的数据源信息
  */
 public class EnvironmentPreparedListener implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {
 
     private static final Logger log = LoggerFactory.getLogger(EnvironmentPreparedListener.class);
-
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {

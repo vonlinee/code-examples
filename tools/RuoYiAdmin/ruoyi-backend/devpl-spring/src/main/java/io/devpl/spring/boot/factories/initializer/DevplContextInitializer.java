@@ -7,6 +7,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
 
 /**
+ * 在SpringApplicationRunListener#contextPrepared之前执行
+ * 执行顺序：
+ * 1.ApplicationContextInitializer#initialize
+ * 2.SpringApplicationRunListener#contextPrepared
+ * 3.ApplicationListener<BootstrapContextClosedEvent>#onApplicationEvent
  * https://www.cnblogs.com/duanxz/p/11239291.html
  */
 public class DevplContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext>, Ordered {
@@ -18,7 +23,7 @@ public class DevplContextInitializer implements ApplicationContextInitializer<Co
      */
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-        log.info("applicationContext => " + applicationContext);
+
     }
 
     @Override

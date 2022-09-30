@@ -1,4 +1,4 @@
-package io.devpl.spring.boot.factories.environment;
+package io.devpl.spring.boot.factories.env;
 
 import org.springframework.boot.env.PropertiesPropertySourceLoader;
 import org.springframework.boot.env.PropertySourceLoader;
@@ -14,13 +14,13 @@ import java.io.InputStream;
 import java.util.*;
 
 /**
+ * 此类用于加载PropertySource
  * <p>
  * SpringBoot加载配置文件的入口是ConfigFileApplicationListener，
  * 这个类实现了ApplicationListener和EnvironmentPostProcessor两个接口。
  * SpringApplication在初始化的时候会加载spring.factories配置的ApplicationListener接口的实现类
  * <p>
  * https://www.cnblogs.com/zhao1949/p/6226288.html
- *
  * @see org.springframework.boot.env.PropertiesPropertySourceLoader
  * @see org.springframework.boot.env.YamlPropertySourceLoader
  */
@@ -35,7 +35,6 @@ public class MultitypePropertySourceLoader implements PropertySourceLoader {
 
     /**
      * 返回支持的文件扩展名
-     *
      * @return
      */
     @Override

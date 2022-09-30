@@ -12,6 +12,7 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.HashMap;
@@ -30,10 +31,5 @@ public class MainApplication {
         ConfigurableApplicationContext context = app.run(args);
         ServerProperties serverInfo = context.getBean(ServerProperties.class);
         LOG.info("启动成功，访问地址 => {} {}", serverInfo.getAddress(), serverInfo.getPort());
-    }
-
-    public static void test() {
-
-
     }
 }

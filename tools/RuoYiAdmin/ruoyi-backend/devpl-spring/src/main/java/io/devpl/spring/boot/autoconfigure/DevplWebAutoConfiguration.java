@@ -7,6 +7,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableAutoConfiguration
 @ConditionalOnWebApplication
-public class DevplWebMVCAutoConfiguration {
+public class DevplWebAutoConfiguration {
 
 }

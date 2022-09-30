@@ -23,6 +23,9 @@ import java.util.UUID;
 @Data
 public class DataSourceInformation implements Serializable {
 
+    /**
+     * 是否默认数据源
+     */
     private boolean isDefault;
 
     /**
@@ -197,7 +200,7 @@ public class DataSourceInformation implements Serializable {
             return this.url;
         }
         String databaseName = determineDatabaseName();
-        String url = (databaseName != null) ? this.embeddedDatabaseConnection.getUrl(databaseName) : null;
+        String url = this.embeddedDatabaseConnection.getUrl(databaseName);
         if (!StringUtils.hasText(url)) {
             throw new BeanCreationException("Failed to determine suitable jdbc url");
         }
@@ -222,7 +225,7 @@ public class DataSourceInformation implements Serializable {
         if (this.embeddedDatabaseConnection != EmbeddedDatabaseConnection.NONE) {
             return "testdb";
         }
-        return null;
+        return "";
     }
 
     /**
@@ -251,7 +254,7 @@ public class DataSourceInformation implements Serializable {
         if (EmbeddedDatabaseConnection.isEmbedded(determineDriverClassName())) {
             return "sa";
         }
-        return null;
+        return "";
     }
 
     /**
