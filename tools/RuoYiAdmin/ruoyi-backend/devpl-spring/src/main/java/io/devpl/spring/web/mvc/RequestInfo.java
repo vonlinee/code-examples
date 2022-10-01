@@ -1,9 +1,8 @@
-package io.devpl.spring.web.utils;
+package io.devpl.spring.web.mvc;
 
 import lombok.Data;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -14,9 +13,11 @@ import java.util.Map;
 @Data
 public class RequestInfo implements Serializable {
 
-    @Nullable
+    private String path;
+    private String token;
     private HttpMethod method;
     private Map<String, String[]> param;
     private Map<String, Object> body;
     private HttpHeaders headers;
+
 }

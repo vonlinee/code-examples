@@ -1,10 +1,9 @@
-package io.devpl.sdk.restful;
+package io.devpl.sdk.rest;
 
 import io.devpl.sdk.ExtendedBuilder;
 
 /**
  * 提供构建RestfulResult的常用方法
- *
  * @param <R>  Builder要构造的Result类型
  * @param <RB> RestfulResultBuilder的子类型
  */
@@ -18,8 +17,8 @@ interface RestfulRBuilder<R, RB extends RestfulRBuilder<R, RB>> extends Extended
         return setMessage(message);
     }
 
-    default RB stackTrace(String stackTrace) {
-        return setStackTrace(stackTrace);
+    default RB throwable(Throwable throwable) {
+        return setThrowable(throwable);
     }
 
     default RB toast(String toastMessage) {
@@ -34,7 +33,7 @@ interface RestfulRBuilder<R, RB extends RestfulRBuilder<R, RB>> extends Extended
 
     RB setMessage(String message);
 
-    RB setStackTrace(String stackTrace);
+    RB setThrowable(Throwable throwable);
 
     RB setToast(String toastMessage);
 

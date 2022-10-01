@@ -1,4 +1,4 @@
-package io.devpl.sdk.restful;
+package io.devpl.sdk.rest;
 
 import java.io.Serializable;
 
@@ -10,11 +10,13 @@ public abstract class ResultTemplate implements Serializable {
 
     private static final long serialVersionUID = -6110075435780788111L;
 
+    /**
+     * 生成此对象的时间戳：System.currentTimeMillis()
+     */
     private final long timestamp;
-    protected String stackTrace;
 
     /**
-     * 用于处理异常堆栈信息
+     * 记录异常堆栈信息
      */
     protected transient Throwable throwable;
 

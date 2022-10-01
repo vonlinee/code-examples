@@ -1,4 +1,4 @@
-package io.devpl.sdk.restful;
+package io.devpl.sdk.rest;
 
 import io.devpl.sdk.enumx.KeyedEnumPool;
 

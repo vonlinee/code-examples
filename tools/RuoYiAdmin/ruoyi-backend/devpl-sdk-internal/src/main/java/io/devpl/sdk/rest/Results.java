@@ -1,6 +1,7 @@
-package io.devpl.sdk.restful;
+package io.devpl.sdk.rest;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 工具类方法
@@ -38,10 +39,12 @@ public abstract class Results {
         return (RBuilder<T>) new MResult();
     }
 
+    public static RBuilder<Map<String, Object>> mapBean() {
+        return new Result<>();
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> ListRBuilder<T> mapListBuilder() {
         return (ListRBuilder<T>) new MLResult();
     }
-
-
 }

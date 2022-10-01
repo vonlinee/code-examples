@@ -1,16 +1,16 @@
-package io.devpl.sdk.restful;
+package io.devpl.sdk.rest;
 
-import io.devpl.sdk.DelegatedList;
+import io.devpl.sdk.ListDelegation;
 
 import java.util.List;
 
-public class ListResult<E> extends ResultfulResultTemplate implements ListRBuilder<E>, DelegatedList<E> {
+public class ListResult<E> extends RestfulResultTemplate implements ListRBuilder<E>, ListDelegation<E> {
 
     private List<E> data;
 
     private PageInfo pageInfo;
 
-    ListResult() {
+    public ListResult() {
         super();
     }
 
@@ -42,8 +42,8 @@ public class ListResult<E> extends ResultfulResultTemplate implements ListRBuild
     }
 
     @Override
-    public ListRBuilder<E> setStackTrace(String stackTrace) {
-        this.stackTrace = stackTrace;
+    public ListRBuilder<E> setThrowable(Throwable throwable) {
+        this.throwable = throwable;
         return this;
     }
 
@@ -74,5 +74,10 @@ public class ListResult<E> extends ResultfulResultTemplate implements ListRBuild
     @Override
     public List<E> delegator() {
         return this.data == null ? List.of() : this.data;
+    }
+
+    @Override
+    protected void toJSONString(StringBuilder result) {
+
     }
 }

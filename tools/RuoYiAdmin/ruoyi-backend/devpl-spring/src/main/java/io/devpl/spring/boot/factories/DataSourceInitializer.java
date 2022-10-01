@@ -1,12 +1,12 @@
 package io.devpl.spring.boot.factories;
 
 import io.devpl.sdk.beans.MapBean;
-import io.devpl.spring.boot.DevplApplication;
 import io.devpl.spring.context.PropertyBindCallback;
-import io.devpl.spring.context.SpringContext;
 import io.devpl.spring.data.jdbc.DataSourceInformation;
-import io.devpl.spring.data.jdbc.DynamicDataSource;
+import io.devpl.spring.data.jdbc.DataSourceManager;
 import io.devpl.spring.utils.DevplConstant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
@@ -15,7 +15,6 @@ import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.boot.context.properties.source.ConfigurationPropertyName;
 import org.springframework.boot.context.properties.source.ConfigurationPropertySources;
 import org.springframework.boot.env.OriginTrackedMapPropertySource;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
@@ -28,49 +27,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 在ApplicationContext创建之前注册一些Bean实例
+ * 在Sping内部的Environment准备完毕后触发
+ * 从Environment配置中加载所有的数据源信息，并且初始化数据源
  */
-public class DevplBootstrap implements SpringApplicationRunListener, Ordered {
+public class DataSourceInitializer implements SpringApplicationRunListener, Ordered {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DataSourceInitializer.class);
 
     private final SpringApplication application;
     private final String[] args;
 
-    public DevplBootstrap(SpringApplication application, String[] args) {
+    public DataSourceInitializer(SpringApplication application, String[] args) {
         this.application = application;
         this.args = args;
     }
 
     @Override
-    public void starting(ConfigurableBootstrapContext bootstrapContext) {
-        if (application instanceof DevplApplication) {
-            ((DevplApplication) application).setBootstrapContext(bootstrapContext);
-        }
-        bootstrapContext.registerIfAbsent(DynamicDataSource.class, context -> new DynamicDataSource());
-        bootstrapContext.registerIfAbsent(SpringContext.class, context -> SpringContext.INSTANCE);
-        SpringContext.INSTANCE.setBootstrapContext(bootstrapContext);
-    }
-
-    @Override
-    public void contextLoaded(ConfigurableApplicationContext context) {
-        SpringContext.INSTANCE.setApplicationContext(context);
-        // 上下文未刷新之前，不能通过getBean获取Bean对象
-        SpringContext.INSTANCE.setBeanFactory(context.getBeanFactory());
-    }
-
-    @Override
     public void environmentPrepared(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) {
-        SpringContext.INSTANCE.setEnvironment(environment);
-        initializeDynamicDataSource(bootstrapContext, environment);
-    }
-
-    @Override
-    public void contextPrepared(ConfigurableApplicationContext context) {
-
-    }
-
-    @Override
-    public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
+        initializeMultiDataSource(bootstrapContext, environment);
     }
 
     /**
@@ -80,12 +54,12 @@ public class DevplBootstrap implements SpringApplicationRunListener, Ordered {
      * @param bootstrapContext
      * @param environment
      */
-    private void initializeDynamicDataSource(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) {
+    private void initializeMultiDataSource(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) {
         MutablePropertySources propertySources = environment.getPropertySources();
         // 存放数据源配置信息
         List<DataSourceInformation> dataSourceInformations = new ArrayList<>();
         // 配置属性名称
-        ConfigurationPropertyName cpn = ConfigurationPropertyName.of("devpl-jdbc.datasource");
+        ConfigurationPropertyName cpn = ConfigurationPropertyName.of("devpl.datasource");
         Bindable<MapBean> bindable = Bindable.of(MapBean.class);
         for (PropertySource<?> source : propertySources) {
             if (!StringUtils.startsWithIgnoreCase(source.getName(), DevplConstant.NAME)) {
@@ -94,31 +68,43 @@ public class DevplBootstrap implements SpringApplicationRunListener, Ordered {
             // 如何把 Java properties 转换为具有层级结构的字典
             Binder binder = new Binder(ConfigurationPropertySources.from(source));
             MapBean map = binder.bind(cpn, bindable, new PropertyBindCallback()).orElse(new MapBean());
-            String dataSourceIds = map.getString("id", "");
-            if (!StringUtils.hasLength(dataSourceIds)) {
+            // 获取所有的数据源名称
+            String dataSourceNames = map.getString("name-list", "");
+            if (!StringUtils.hasLength(dataSourceNames)) {
                 continue;
             }
-            String[] split = dataSourceIds.split(",");
             Bindable<DataSourceInformation> dspBindable = Bindable.of(DataSourceInformation.class);
             // 数据库的ID
-            for (String s : split) {
-                String dataSourceId = s.trim();
-                Map<String, Object> dataSourceInfoMap = new HashMap<>();
-                dataSourceInfoMap.put("name", dataSourceId);
-                dataSourceInfoMap.putAll(map.get(dataSourceId));
+            for (String dsName : dataSourceNames.split("\\|")) {
+                String dataSourceId = dsName.trim();
+
+                if (!map.containsKey(dataSourceId)) {
+                    LOG.warn("name-list contains {}, but cannot find the relative config item!", dataSourceId);
+                    continue;
+                }
                 String psName = "devpl.datasource." + dataSourceId;
-                environment.getPropertySources().addLast(new OriginTrackedMapPropertySource(psName, dataSourceInfoMap));
-                dataSourceInformations.add(binder.bind(psName, dspBindable).orElse(new DataSourceInformation()));
+                Map<String, Object> dataSourceInfoMap = new HashMap<>();
+                dataSourceInfoMap.put(psName + ".name", dataSourceId);
+                Map<String, String> info = map.get(dataSourceId);
+                info.forEach((k, v) -> {
+                    dataSourceInfoMap.put(psName + "." + k, v);
+                });
+                OriginTrackedMapPropertySource dsPropertySource = new OriginTrackedMapPropertySource("DataSource-" + dataSourceId, dataSourceInfoMap);
+                Binder dataSourceInfoBinder = new Binder(ConfigurationPropertySources.from(dsPropertySource));
+                environment.getPropertySources().addLast(dsPropertySource);
+                dataSourceInformations.add(dataSourceInfoBinder.bind(psName, dspBindable).orElse(new DataSourceInformation()));
             }
         }
-        DynamicDataSource dynamicDataSource = bootstrapContext.get(DynamicDataSource.class);
+        // 初始化数据源
+        DataSourceManager manager = bootstrapContext.getOrElseSupply(DataSourceManager.class, DataSourceManager::new);
         for (DataSourceInformation information : dataSourceInformations) {
-            dynamicDataSource.addDataSource(information.getName(), information);
+            LOG.info("register DataSource[{}]", information.getName());
+            manager.registerDataSource(information.getName(), information);
         }
     }
 
     @Override
-    public void running(ConfigurableApplicationContext context) {
-
+    public int getOrder() {
+        return Ordered.HIGHEST_PRECEDENCE + 2;
     }
 }

@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * token验证处理
- *
  * @author ruoyi
  */
 @Component
@@ -46,21 +45,22 @@ public class TokenService {
 
     /**
      * 获取用户身份信息
-     *
      * @return 用户信息
      */
     public LoginUser getLoginUser(HttpServletRequest request) {
         // 获取请求携带的令牌
-        String token = getToken(request);
-        if (StringUtils.isNotEmpty(token)) {
+        // 经过JWT加密
+        String token = getTokenFromRequestHeader(request);
+        if (token != null) {
             try {
+                // 解密拿到token
                 Claims claims = parseToken(token);
                 // 解析对应的权限以及用户信息
                 String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
                 String userKey = getTokenKey(uuid);
-                LoginUser user = redisCache.getCacheObject(userKey);
-                return user;
+                return redisCache.getCacheObject(userKey);
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return null;
@@ -87,7 +87,6 @@ public class TokenService {
 
     /**
      * 创建令牌
-     *
      * @param loginUser 用户信息
      * @return 令牌
      */
@@ -96,7 +95,6 @@ public class TokenService {
         loginUser.setToken(token);
         setUserAgent(loginUser);
         refreshToken(loginUser);
-
         Map<String, Object> claims = new HashMap<>();
         claims.put(Constants.LOGIN_USER_KEY, token);
         return createToken(claims);
@@ -104,11 +102,10 @@ public class TokenService {
 
     /**
      * 验证令牌有效期，相差不足20分钟，自动刷新缓存
-     *
      * @param loginUser
      * @return 令牌
      */
-    public void verifyToken(LoginUser loginUser) {
+    public void verifyTokenExpiration(LoginUser loginUser) {
         long expireTime = loginUser.getExpireTime();
         long currentTime = System.currentTimeMillis();
         if (expireTime - currentTime <= MILLIS_MINUTE_TEN) {
@@ -118,7 +115,6 @@ public class TokenService {
 
     /**
      * 刷新令牌有效期
-     *
      * @param loginUser 登录信息
      */
     public void refreshToken(LoginUser loginUser) {
@@ -131,7 +127,6 @@ public class TokenService {
 
     /**
      * 设置用户代理信息
-     *
      * @param loginUser 登录信息
      */
     public void setUserAgent(LoginUser loginUser) {
@@ -145,20 +140,17 @@ public class TokenService {
 
     /**
      * 从数据声明生成令牌
-     *
      * @param claims 数据声明
      * @return 令牌
      */
     private String createToken(Map<String, Object> claims) {
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
-        return token;
     }
 
     /**
      * 从令牌中获取数据声明
-     *
      * @param token 令牌
      * @return 数据声明
      */
@@ -171,27 +163,24 @@ public class TokenService {
 
     /**
      * 从令牌中获取用户名
-     *
      * @param token 令牌
      * @return 用户名
      */
     public String getUsernameFromToken(String token) {
-        Claims claims = parseToken(token);
-        return claims.getSubject();
+        return parseToken(token).getSubject();
     }
 
     /**
      * 获取请求token
-     *
      * @param request
-     * @return token
+     * @return token 如果校验通过返回token，不通过则返回null
      */
-    private String getToken(HttpServletRequest request) {
+    private String getTokenFromRequestHeader(HttpServletRequest request) {
         String token = request.getHeader(header);
-        if (StringUtils.isNotEmpty(token) && token.startsWith(Constants.TOKEN_PREFIX)) {
-            token = token.replace(Constants.TOKEN_PREFIX, "");
+        if (token != null && !"".equals(token.trim()) && token.startsWith(Constants.TOKEN_PREFIX)) {
+            return token.replace(Constants.TOKEN_PREFIX, "");
         }
-        return token;
+        return null;
     }
 
     private String getTokenKey(String uuid) {

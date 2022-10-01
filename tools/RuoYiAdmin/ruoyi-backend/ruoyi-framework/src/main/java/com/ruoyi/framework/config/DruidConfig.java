@@ -65,7 +65,7 @@ public class DruidConfig {
             DataSource dataSource = SpringUtils.getBean(beanName);
             targetDataSources.put(sourceName, dataSource);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

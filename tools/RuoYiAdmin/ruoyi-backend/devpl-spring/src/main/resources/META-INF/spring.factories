@@ -1,5 +1,6 @@
-# 自动配置
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.devpl.spring.boot.autoconfigure.DevplAutoConfiguration
+# 自动配置类
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  io.devpl.spring.boot.autoconfigure.DevplAutoConfiguration
 # 自动配置导入过滤
 org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
     io.devpl.spring.boot.factories.filter.DevplAutoConfigurationImportFilter
@@ -7,13 +8,17 @@ org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
 org.springframework.context.ApplicationContextInitializer=\
     io.devpl.spring.boot.factories.initializer.DevplContextInitializer
 # RunListener
-org.springframework.boot.SpringApplicationRunListener=io.devpl.spring.boot.factories.DevplBootstrap
+org.springframework.boot.SpringApplicationRunListener=\
+  io.devpl.spring.boot.factories.DevplInternalBeanInitializer,\
+  io.devpl.spring.boot.factories.DataSourceInitializer,\
+  io.devpl.spring.boot.factories.InternalConfigFileLoader
 # Application Listeners
 org.springframework.context.ApplicationListener=\
   io.devpl.spring.boot.factories.listener.EnvironmentPreparedListener,\
   io.devpl.spring.boot.factories.listener.BootstrapContextClosedListener
 # Environment Post Processors
-org.springframework.boot.env.EnvironmentPostProcessor=io.devpl.spring.boot.factories.post.DevplConfigFileLoader
+# 由SpringApplicationRunListener发布事件进行处理
+# org.springframework.boot.env.EnvironmentPostProcessor=io.devpl.spring.boot.factories.InternalConfigFileLoader
 # Auto Configuration Import Listeners
 org.springframework.boot.autoconfigure.AutoConfigurationImportListener=\
     io.devpl.spring.boot.factories.filter.DevplAutoConfigurationImportListener
@@ -23,4 +28,6 @@ org.springframework.boot.sql.init.dependency.DatabaseInitializerDetector=io.devp
 # org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitializationDetector=
 
 
-org.springframework.boot.env.PropertySourceLoader=io.devpl.spring.boot.factories.environment.MultitypePropertySourceLoader
+org.springframework.boot.env.PropertySourceLoader=io.devpl.spring.boot.factories.env.MultitypePropertySourceLoader
+
+org.springframework.boot.BootstrapRegistryInitializer=io.devpl.spring.boot.factories.BootstrapContextInitializer
