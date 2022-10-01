@@ -29,7 +29,7 @@ public class Test1Controller {
     }
 
     @RequestMapping("/testparammap5")
-    public Map<String, Object> map2(RequestInfo param) {
+    public Map<String, Object> map2(RequestInfo info) {
         return new HashMap<>();
     }
 
