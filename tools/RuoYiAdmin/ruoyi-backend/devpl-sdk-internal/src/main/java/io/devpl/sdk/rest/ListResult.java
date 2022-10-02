@@ -4,6 +4,10 @@ import io.devpl.sdk.ListDelegation;
 
 import java.util.List;
 
+/**
+ * 携带多条数据的列表
+ * @param <E>
+ */
 public class ListResult<E> extends RestfulResultTemplate implements ListRBuilder<E>, ListDelegation<E> {
 
     private List<E> data;

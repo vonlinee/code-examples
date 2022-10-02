@@ -1,11 +1,16 @@
 package io.devpl.sdk.beans;
 
+/**
+ * Bean字段
+ *
+ * @param <V>
+ */
 @SuppressWarnings("unchecked")
 public class BeanField<V> implements Field<V> {
 
     private final String name;
     private V value;
-    private Class<V> type;
+    private final Class<V> type;
 
     public BeanField(String name, V value, Class<V> type) {
         this.name = name;

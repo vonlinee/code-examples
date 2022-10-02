@@ -1,6 +1,8 @@
 package io.devpl.sdk.beans;
 
 /**
+ * 定义对Bean的操作
+ *
  * @see Bean
  */
 public interface BeanAccess {

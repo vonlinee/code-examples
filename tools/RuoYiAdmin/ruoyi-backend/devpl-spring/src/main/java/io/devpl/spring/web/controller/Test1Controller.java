@@ -32,16 +32,11 @@ public class Test1Controller {
     }
 
     @RequestMapping("/testparammap5")
-<<<<<<< HEAD
     public Map<String, Object> map2(RequestInfo info) {
         return new HashMap<>();
-=======
-    public ResultTemplate map2(RequestInfo param, HttpServletResponse response) {
-        return met1();
->>>>>>> 75656823e8095918e866ca216a09bd8678dfb3f0
     }
 
-    public ResultTemplate met1() {
+    public ResultTemplate met231() {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "zs");
         map.put("age", 30);
