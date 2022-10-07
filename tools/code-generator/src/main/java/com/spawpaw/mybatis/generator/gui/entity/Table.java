@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class Table extends ConfigMatcher {
     public final String actualName;
-    public final String entityPackage;
+    // public final String entityPackage;
     public final String entityName;
     public final String entityLowerCamel;
     public final String exampleName;
@@ -36,7 +36,7 @@ public class Table extends ConfigMatcher {
 
         actualName = introspectedTable.getFullyQualifiedTable().getIntrospectedTableName();
 
-        entityPackage = introspectedTable.getIbatis2SqlMapPackage();
+        // entityPackage = introspectedTable.getIbatis2SqlMapPackage();
         entityName = introspectedTable.getFullyQualifiedTable().getDomainObjectName();
         entityLowerCamel = Utils.getLowerCamelCase(entityName);
 
@@ -64,7 +64,7 @@ public class Table extends ConfigMatcher {
     }
 
     public String getEntityPackage() {
-        return entityPackage;
+        return "entityPackage";
     }
 
     public String getEntityName() {

@@ -85,9 +85,10 @@ public class MyShellCallback implements ShellCallback {
                                 File existingFile, String[] javadocTags, String fileEncoding)
             throws ShellException {
         try {
-            CompilationUnit newCompilationUnit = JavaParser.parse(newFileSource);
-            CompilationUnit existingCompilationUnit = JavaParser.parse(existingFile);
-            return mergeCompilationUnit(existingCompilationUnit, newCompilationUnit).toString();
+//            CompilationUnit newCompilationUnit = JavaParser.parse(newFileSource);
+//            CompilationUnit existingCompilationUnit = JavaParser.parse(existingFile);
+//            return mergeCompilationUnit(existingCompilationUnit, newCompilationUnit).toString();
+            throw new FileNotFoundException("");
         } catch (FileNotFoundException e) {
             throw new UnsupportedOperationException();
         }

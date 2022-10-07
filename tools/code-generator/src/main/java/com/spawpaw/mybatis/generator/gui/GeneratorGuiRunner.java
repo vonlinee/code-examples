@@ -19,5 +19,6 @@ public class GeneratorGuiRunner {
 //        Constants.setLocale(Locale.CHINA);
 //        Constants.setLocale(Locale.ENGLISH);
         BaseController.launchWindow(args);
+
     }
 }
