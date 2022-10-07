@@ -2,9 +2,6 @@ package io.devpl.codegen.mbg.model;
 
 import java.util.Objects;
 
-/**
- * Created by Owen on 5/13/16.
- */
 public class DatabaseConfig {
 
 	/**

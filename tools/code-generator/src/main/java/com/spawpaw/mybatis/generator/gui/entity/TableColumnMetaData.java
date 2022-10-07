@@ -1,4 +1,5 @@
-package io.devpl.codegen.mbg.model;
+package com.spawpaw.mybatis.generator.gui.entity;
+
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -6,21 +7,25 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Created by Owen on 6/22/16.
+ * Created By spawpaw@hotmail.com 2018.1.20
+ * Description:
+ * 表中字段的元信息
+ *
+ * @author BenBenShang spawpaw@hotmail.com
  */
-public class UITableColumnVO {
+public class TableColumnMetaData {
 
-    private final BooleanProperty checked = new SimpleBooleanProperty(true); // Default set to true
+    private BooleanProperty checked = new SimpleBooleanProperty(true);
 
-    private final StringProperty columnName = new SimpleStringProperty();
+    private StringProperty columnName = new SimpleStringProperty();
 
-    private final StringProperty javaType = new SimpleStringProperty();
+    private StringProperty jdbcType = new SimpleStringProperty();
 
-    private final StringProperty jdbcType = new SimpleStringProperty();
+    private StringProperty javaType = new SimpleStringProperty();
 
-    private final StringProperty propertyName = new SimpleStringProperty();
+    private StringProperty propertyName = new SimpleStringProperty();
 
-    private final StringProperty typeHandle = new SimpleStringProperty();
+    private StringProperty typeHandler = new SimpleStringProperty();
 
     public String getColumnName() {
         return columnName.get();
@@ -58,16 +63,16 @@ public class UITableColumnVO {
         this.checked.set(checked);
     }
 
-    public StringProperty typeHandleProperty() {
-        return typeHandle;
+    public StringProperty typeHandlerProperty() {
+        return typeHandler;
     }
 
-    public String getTypeHandle() {
-        return typeHandle.get();
+    public String getTypeHandler() {
+        return typeHandler.get();
     }
 
-    public void setTypeHandle(String typeHandle) {
-        this.typeHandle.set(typeHandle);
+    public void setTypeHandler(String typeHandler) {
+        this.typeHandler.set(typeHandler);
     }
 
     public StringProperty columnNameProperty() {
@@ -86,11 +91,11 @@ public class UITableColumnVO {
         return javaType.get();
     }
 
-    public StringProperty javaTypeProperty() {
-        return javaType;
-    }
-
     public void setJavaType(String javaType) {
         this.javaType.set(javaType);
+    }
+
+    public StringProperty javaTypeProperty() {
+        return javaType;
     }
 }

@@ -1,12 +1,8 @@
 
-var model = {
-    name: "孙允珠"
+
+function func(a, b) {
+    console.log(this + "===========" + func == undefined);
 }
-
-
-
-
-
 
 
 

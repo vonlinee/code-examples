@@ -291,7 +291,6 @@ public class MybatisGeneratorBridge {
         myBatisGenerator.generate(progressCallback, contexts, fullyqualifiedTables);
     }
 
-
     private void addPlugins(Context context) {
         PluginConfiguration pc = new PluginConfiguration();
         pc.addProperty("type", "io.devpl.codegen.mbg.plugins.FullMVCSupportPlugin");
