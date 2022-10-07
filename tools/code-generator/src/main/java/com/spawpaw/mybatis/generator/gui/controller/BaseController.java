@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -81,14 +82,14 @@ public class BaseController extends Application {
             FXMLLoader customize_columns_editor_loader = getFxmlLoader("table_columns_editor.fxml");
             FXMLLoader database_config_editor_loader = getFxmlLoader("database_config_editor.fxml");
             FXMLLoader generation_progress_loader = getFxmlLoader("generation_progress.fxml");
-            FXMLLoader about_loader = getFxmlLoader("About.fxml");
+            // FXMLLoader about_loader = getFxmlLoader("About.fxml");
 
             //load fxml
             Parent primary_stage_scene = primaryStageLoader.load();
             Parent customize_columns_editor_scene = customize_columns_editor_loader.load();
             Parent database_config_editor_scene = database_config_editor_loader.load();
             Parent generation_progress_scene = generation_progress_loader.load();
-            Parent about = about_loader.load();
+            // Parent about = about_loader.load();
 
             //set controller
             primaryStageController = primaryStageLoader.getController();
@@ -115,7 +116,7 @@ public class BaseController extends Application {
             generationProgressStage.initModality(Modality.APPLICATION_MODAL);
 
             aboutStage = new Stage();
-            aboutStage.setScene(new Scene(about));
+            aboutStage.setScene(new Scene(new BorderPane()));
             aboutStage.initOwner(primaryStage);
             aboutStage.initModality(Modality.APPLICATION_MODAL);
             aboutStage.setMinHeight(349);
