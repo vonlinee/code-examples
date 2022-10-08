@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
  *
  * @author BenBenShang spawpaw@hotmail.com
  */
-public class DatabaseConfigEditorController extends BaseController implements Initializable {
+public class DatabaseConfigEditorController extends CodeGenApplication implements Initializable {
     public VBox main_container;
     public Label lb_msg;
     DatabaseConfig databaseConfig;

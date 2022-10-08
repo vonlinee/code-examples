@@ -31,7 +31,7 @@ import java.util.*;
  *
  * @author BenBenShang spawpaw@hotmail.com
  */
-public class MainController extends BaseController implements Initializable {
+public class MainController extends CodeGenApplication implements Initializable {
     public VBox main_container;
     public ComboBox<String> cb_load_saved_project_config;
     public TreeView<String> tv_connections;

@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author BenBenShang spawpaw@hotmail.com
  */
-public class GenerationProgressController extends BaseController {
+public class GenerationProgressController extends CodeGenApplication {
     Logger log = LoggerFactory.getLogger(GenerationProgressController.class);
     public TextArea ta_msg;
     public ProgressBar progressbar;

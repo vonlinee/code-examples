@@ -1,6 +1,6 @@
 package com.spawpaw.mybatis.generator.gui;
 
-import com.spawpaw.mybatis.generator.gui.controller.BaseController;
+import com.spawpaw.mybatis.generator.gui.controller.CodeGenApplication;
 import com.spawpaw.mybatis.generator.gui.util.Constants;
 
 import java.util.Locale;
@@ -18,7 +18,6 @@ public class GeneratorGuiRunner {
         Constants.setLocale(Locale.getDefault());
 //        Constants.setLocale(Locale.CHINA);
 //        Constants.setLocale(Locale.ENGLISH);
-        BaseController.launchWindow(args);
-
+        CodeGenApplication.launchWindow(args);
     }
 }

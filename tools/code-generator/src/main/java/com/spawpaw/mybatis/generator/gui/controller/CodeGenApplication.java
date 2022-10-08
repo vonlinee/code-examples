@@ -20,7 +20,7 @@ import java.io.IOException;
  *
  * @author BenBenShang spawpaw@hotmail.com
  */
-public class BaseController extends Application {
+public class CodeGenApplication extends Application {
 
     //stages
     public transient static Stage primaryStage;
@@ -64,10 +64,9 @@ public class BaseController extends Application {
         return fxmlLoader;
     }
 
-
     @Override
     public void start(Stage primaryStage) throws Exception {
-        BaseController.primaryStage = primaryStage;
+        CodeGenApplication.primaryStage = primaryStage;
         initializeStages();
         primaryStage.setTitle(Constants.ui.MAIN_WINDOW_TITLE);
         primaryStage.setMinWidth(1024);

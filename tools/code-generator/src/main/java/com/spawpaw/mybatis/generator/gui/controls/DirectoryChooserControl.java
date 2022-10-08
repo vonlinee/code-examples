@@ -1,6 +1,6 @@
 package com.spawpaw.mybatis.generator.gui.controls;
 
-import com.spawpaw.mybatis.generator.gui.controller.BaseController;
+import com.spawpaw.mybatis.generator.gui.controller.CodeGenApplication;
 import com.spawpaw.mybatis.generator.gui.util.Constants;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -36,7 +36,7 @@ public class DirectoryChooserControl extends AbstractControl<String> {
         button.setText(Constants.getI18nStr("controls.chooseDir"));
         button.setOnMouseClicked((event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
-            File selectedFolder = directoryChooser.showDialog(BaseController.primaryStage);
+            File selectedFolder = directoryChooser.showDialog(CodeGenApplication.primaryStage);
             if (selectedFolder != null) {
                 value.setValue(selectedFolder.getAbsolutePath());
             }

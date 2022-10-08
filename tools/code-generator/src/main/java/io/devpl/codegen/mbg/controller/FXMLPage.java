@@ -13,7 +13,7 @@ public enum FXMLPage {
     GENERATOR_CONFIG("fxml/generatorConfigs.fxml"),
     ;
 
-    private String fxml;
+    private final String fxml;
 
     FXMLPage(String fxml) {
         this.fxml = fxml;

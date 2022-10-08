@@ -1,6 +1,6 @@
 package com.spawpaw.mybatis.generator.gui.controls;
 
-import com.spawpaw.mybatis.generator.gui.controller.BaseController;
+import com.spawpaw.mybatis.generator.gui.controller.CodeGenApplication;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -33,7 +33,7 @@ public class FileChooserControl extends AbstractControl<String> {
         label.textProperty().bindBidirectional(this.labelTextProperty);
         button.setOnMouseClicked((event -> {
             FileChooser fileChooser = new FileChooser();
-            File selectedFile = fileChooser.showOpenDialog(BaseController.primaryStage);
+            File selectedFile = fileChooser.showOpenDialog(CodeGenApplication.primaryStage);
             if (selectedFile != null) {
                 value.setValue(selectedFile.getAbsolutePath());
             }

@@ -20,9 +20,9 @@ import java.util.ResourceBundle;
  *
  * @author BenBenShang spawpaw@hotmail.com
  */
-public class TableColumnEditorController extends BaseController implements Initializable {
+public class TableColumnEditorController extends CodeGenApplication implements Initializable {
 
-    transient org.slf4j.Logger log = LoggerFactory.getLogger(BaseController.class);
+    transient org.slf4j.Logger log = LoggerFactory.getLogger(CodeGenApplication.class);
     //    public TextField tf_filter;
     public TableView<TableColumnMetaData> table_view;
     public TableColumn<TableColumnMetaData, Boolean> c_checked;
