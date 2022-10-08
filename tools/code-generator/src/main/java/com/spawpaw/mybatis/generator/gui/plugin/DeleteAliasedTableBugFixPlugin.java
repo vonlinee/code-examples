@@ -20,7 +20,6 @@ public class DeleteAliasedTableBugFixPlugin extends PluginAdapter {
     private String fixType = "DONT_FIX";
 
     @Override
-
     public void setProperties(Properties properties) {
         super.setProperties(properties);
         Utils.injectFieldsFromProperties(this, properties);

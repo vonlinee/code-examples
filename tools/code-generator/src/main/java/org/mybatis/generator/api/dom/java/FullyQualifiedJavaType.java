@@ -22,8 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class FullyQualifiedJavaType implements
-        Comparable<FullyQualifiedJavaType> {
+public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType> {
 
     private static final String JAVA_LANG = "java.lang"; //$NON-NLS-1$
 

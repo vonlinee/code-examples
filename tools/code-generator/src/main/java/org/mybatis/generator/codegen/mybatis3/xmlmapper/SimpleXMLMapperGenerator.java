@@ -40,7 +40,6 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
         // 根标签
         XmlElement answer = new XmlElement("mapper"); //$NON-NLS-1$
 
-        answer.setBlankBetweenChildren(true);
         logger.info("初始化<mapper></mapper>");
 
         String namespace = introspectedTable.getMyBatis3SqlMapNamespace();

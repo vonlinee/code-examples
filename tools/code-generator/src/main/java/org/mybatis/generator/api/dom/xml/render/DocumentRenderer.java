@@ -8,6 +8,9 @@ import org.mybatis.generator.api.dom.xml.DocType;
 import org.mybatis.generator.api.dom.xml.Document;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
+/**
+ * 文档渲染
+ */
 public class DocumentRenderer {
 
     /**
@@ -18,7 +21,7 @@ public class DocumentRenderer {
     public String render(Document document) {
         Stream<String> xmlHeader = renderXmlHeader();
         Stream<String> docType = renderDocType(document);
-        // 根标签
+        // 渲染根标签
         Stream<String> rootElement = renderRootElement(document);
         return Stream.of(xmlHeader, docType, rootElement).flatMap(Function.identity())
                 .collect(Collectors.joining(System.getProperty("line.separator"))); //$NON-NLS-1$

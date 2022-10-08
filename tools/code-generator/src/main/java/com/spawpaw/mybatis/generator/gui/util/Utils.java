@@ -46,7 +46,7 @@ public class Utils {
                 if (field.getType().getSimpleName().equalsIgnoreCase("boolean"))
                     field.setBoolean(obj, isTrue(properties.getProperty(field.getName())));
                 if (field.getType().getSimpleName().equalsIgnoreCase("short"))
-                    field.setShort(obj, Short.valueOf(properties.getProperty(field.getName())));
+                    field.setShort(obj, Short.parseShort(properties.getProperty(field.getName())));
                 if (field.getType().getSimpleName().equalsIgnoreCase("int"))
                     field.setInt(obj, Integer.valueOf(properties.getProperty(field.getName())));
                 if (field.getType().getSimpleName().equalsIgnoreCase("Integer"))

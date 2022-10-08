@@ -244,7 +244,7 @@ public class MyBatisGenerator {
             context.generateFiles(callback, generatedJavaFiles, generatedXmlFiles, generatedKotlinFiles, otherGeneratedFiles, warnings);
         }
 
-        // now save the files
+        // 保存到文件
         if (writeFiles) {
             callback.saveStarted(generatedXmlFiles.size()
                     + generatedJavaFiles.size());

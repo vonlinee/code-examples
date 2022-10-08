@@ -75,9 +75,9 @@ public class Column extends ConfigMatcher {
                 , parent.get("ddl")).replaceAll(",$", "");//去除末尾逗号
         this.put("ddl", ddl);
         if (contains("index"))
-            index = Integer.valueOf(get("index"));
+            index = Integer.parseInt(get("index"));
         if (contains("disable"))
-            disable = Boolean.valueOf(get("disable"));
+            disable = Boolean.parseBoolean(get("disable"));
     }
 
     @Override

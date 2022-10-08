@@ -23,12 +23,6 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Predicate;
 
-/**
- * Created By spawpaw@hotmail.com 2018.1.20
- * Description:
- *
- * @author BenBenShang spawpaw@hotmail.com
- */
 public class MBGRunner {
     Logger log = LoggerFactory.getLogger(MBGRunner.class);
     private ProjectConfig projectConfig;

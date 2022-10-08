@@ -1,16 +1,16 @@
 package io.devpl.codegen.mbg.plugins;
 
+import org.mybatis.generator.api.GeneratedJavaFile;
+import org.mybatis.generator.api.IntrospectedTable;
+import org.mybatis.generator.api.PluginAdapter;
+import org.mybatis.generator.config.Context;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.PluginAdapter;
-import org.mybatis.generator.api.dom.java.Interface;
-import org.mybatis.generator.api.dom.java.TopLevelClass;
-import org.mybatis.generator.config.Context;
-
 /**
- * 
+ * 生成Controller和Service代码
  * @since created on 2022年8月5日
  */
 public class FullMVCSupportPlugin extends PluginAdapter {
@@ -30,10 +30,11 @@ public class FullMVCSupportPlugin extends PluginAdapter {
 		super.setProperties(properties);
 	}
 
-	// @Override
-	public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass,
-			IntrospectedTable introspectedTable) {
-		// return super.clientGenerated(interfaze, topLevelClass, introspectedTable);
-		return true;
+	@Override
+	public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles() {
+		List<IntrospectedTable> tables = context.getIntrospectedTables();
+		List<GeneratedJavaFile> mvcFiles = new ArrayList<>();
+
+		return mvcFiles;
 	}
 }

@@ -19,10 +19,19 @@ import org.mybatis.generator.api.dom.java.CompilationUnit;
 
 public class GeneratedJavaFile extends GeneratedFile {
 
+    /**
+     * 一个文件对应一个编译单元：类，接口，枚举类，注解等等
+     */
     private final CompilationUnit compilationUnit;
 
+    /**
+     * 文件编码
+     */
     private final String fileEncoding;
 
+    /**
+     * 文本格式化
+     */
     private final JavaFormatter javaFormatter;
 
     public GeneratedJavaFile(CompilationUnit compilationUnit,
