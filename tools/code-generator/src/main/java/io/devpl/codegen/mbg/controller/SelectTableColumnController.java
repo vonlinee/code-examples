@@ -1,5 +1,6 @@
 package io.devpl.codegen.mbg.controller;
 
+import io.devpl.codegen.mbg.view.FXMLPage;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -37,7 +38,7 @@ public class SelectTableColumnController extends BaseFXController {
     @FXML
     private TableColumn<UITableColumnVO, String> typeHandlerColumn;
 
-    private MainUIController mainUIController;
+    private MainController mainUIController;
 
     private String tableName;
 
@@ -113,7 +114,7 @@ public class SelectTableColumnController extends BaseFXController {
         columnListView.setItems(columns);
     }
 
-    public void setMainUIController(MainUIController mainUIController) {
+    public void setMainUIController(MainController mainUIController) {
         this.mainUIController = mainUIController;
     }
 

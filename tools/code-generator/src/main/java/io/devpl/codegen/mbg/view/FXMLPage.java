@@ -1,13 +1,8 @@
-package io.devpl.codegen.mbg.controller;
+package io.devpl.codegen.mbg.view;
 
-/**
- * FXML User Interface enum
- * <p>
- * Created by Owen on 6/20/16.
- */
 public enum FXMLPage {
 
-    NEW_CONNECTION("fxml/newConnection.fxml"),
+    NEW_CONNECTION("fxml/connection_config.fxml"),
     SELECT_TABLE_COLUMN("fxml/selectTableColumn.fxml"),
     TABLE_COLUMN_CONFIG("fxml/tableColumnConfigs.fxml"),
     GENERATOR_CONFIG("fxml/generatorConfigs.fxml"),

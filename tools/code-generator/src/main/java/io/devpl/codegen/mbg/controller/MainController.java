@@ -2,12 +2,13 @@ package io.devpl.codegen.mbg.controller;
 
 import com.jcraft.jsch.Session;
 
-import io.devpl.codegen.mbg.bridge.MybatisGeneratorBridge;
-import io.devpl.codegen.mbg.model.DatabaseConfig;
-import io.devpl.codegen.mbg.model.GeneratorConfig;
+import io.devpl.codegen.mbg.bridge.MyBatisCodeGenerator;
+import io.devpl.codegen.mbg.model.DatabaseConfiguration;
+import io.devpl.codegen.mbg.model.CodeGenConfiguration;
 import io.devpl.codegen.mbg.model.UITableColumnVO;
 import io.devpl.codegen.mbg.utils.*;
-import io.devpl.codegen.mbg.view.AlertUtil;
+import io.devpl.codegen.mbg.view.AlertDialog;
+import io.devpl.codegen.mbg.view.FXMLPage;
 import io.devpl.codegen.mbg.view.UIProgressCallback;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,9 +40,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class MainUIController extends BaseFXController {
+public class MainController extends BaseFXController {
 
-    private static final Logger _LOG = LoggerFactory.getLogger(MainUIController.class);
+    private static final Logger _LOG = LoggerFactory.getLogger(MainController.class);
     private static final String FOLDER_NO_EXIST = "部分目录不存在，是否创建";
 
     // tool bar buttons
@@ -104,7 +105,7 @@ public class MainUIController extends BaseFXController {
     @FXML
     public TextField filterTreeBox;
     // Current selected databaseConfig
-    private DatabaseConfig selectedDatabaseConfig;
+    private DatabaseConfiguration selectedDatabaseConfig;
     // Current selected tableName
     private String tableName;
 
@@ -118,11 +119,14 @@ public class MainUIController extends BaseFXController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializePlaceholderValue();
-        // 新建连接
+        // 新建数据库连接
         ImageView dbImage = FXUtils.loadImageView("icons/computer.png", 40, 40);
         connectionLabel.setGraphic(dbImage);
         connectionLabel.setOnMouseClicked(event -> {
-            TabPaneController controller = (TabPaneController) loadFXMLPage("新建数据库连接", FXMLPage.NEW_CONNECTION, false);
+
+
+
+            DbConnConfigController controller = (DbConnConfigController) loadFXMLPage("新建数据库连接", FXMLPage.NEW_CONNECTION, false);
             controller.setMainUIController(this);
             controller.showDialogStage();
         });
@@ -165,20 +169,20 @@ public class MainUIController extends BaseFXController {
                     item1.setOnAction(event1 -> treeItem.getChildren().clear());
                     MenuItem item2 = new MenuItem("编辑连接");
                     item2.setOnAction(event1 -> {
-                        DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
-                        TabPaneController controller = (TabPaneController) loadFXMLPage("编辑数据库连接", FXMLPage.NEW_CONNECTION, false);
+                        DatabaseConfiguration selectedConfig = (DatabaseConfiguration) treeItem.getGraphic().getUserData();
+                        DbConnConfigController controller = (DbConnConfigController) loadFXMLPage("编辑数据库连接", FXMLPage.NEW_CONNECTION, false);
                         controller.setMainUIController(this);
                         controller.setConfig(selectedConfig);
                         controller.showDialogStage();
                     });
                     MenuItem item3 = new MenuItem("删除连接");
                     item3.setOnAction(event1 -> {
-                        DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
+                        DatabaseConfiguration selectedConfig = (DatabaseConfiguration) treeItem.getGraphic().getUserData();
                         try {
                             ConfigHelper.deleteDatabaseConfig(selectedConfig);
                             this.loadLeftDBTree();
                         } catch (Exception e) {
-                            AlertUtil.showErrorAlert("Delete connection failed! Reason: " + e.getMessage());
+                            AlertDialog.showError("Delete connection failed! Reason: " + e.getMessage());
                         }
                     });
                     contextMenu.getItems().addAll(item1, item2, item3);
@@ -193,10 +197,10 @@ public class MainUIController extends BaseFXController {
                         displayTables(treeItem);
                     } else if (level == 2) { // left DB tree level3
                         String tableName = treeCell.getTreeItem().getValue();
-                        selectedDatabaseConfig = (DatabaseConfig) treeItem.getParent().getGraphic().getUserData();
+                        selectedDatabaseConfig = (DatabaseConfiguration) treeItem.getParent().getGraphic().getUserData();
                         this.tableName = tableName;
                         tableNameField.setText(tableName);
-                        domainObjectNameField.setText(MyStringUtils.dbStringToCamelStyle(tableName));
+                        domainObjectNameField.setText(Validator.dbStringToCamelStyle(tableName));
                         mapperName.setText(domainObjectNameField.getText().concat("DAO"));
                     }
                 }
@@ -226,10 +230,10 @@ public class MainUIController extends BaseFXController {
         if (!treeItem.isExpanded()) {
             return;
         }
-        DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
+        DatabaseConfiguration selectedConfig = (DatabaseConfiguration) treeItem.getGraphic().getUserData();
         try {
             String filter = filterTreeBox.getText();
-            List<String> tables = DbUtil.getTableNames(selectedConfig, filter);
+            List<String> tables = DBUtils.getTableNames(selectedConfig, filter);
             if (tables.size() > 0) {
                 ObservableList<TreeItem<String>> children = treeItem.getChildren();
                 children.clear();
@@ -260,10 +264,10 @@ public class MainUIController extends BaseFXController {
             }
         } catch (SQLRecoverableException e) {
             _LOG.error(e.getMessage(), e);
-            AlertUtil.showErrorAlert("连接超时");
+            AlertDialog.showError("连接超时");
         } catch (Exception e) {
             _LOG.error(e.getMessage(), e);
-            AlertUtil.showErrorAlert(e.getMessage());
+            AlertDialog.showError(e.getMessage());
         }
     }
 
@@ -284,8 +288,8 @@ public class MainUIController extends BaseFXController {
         TreeItem<String> rootTreeItem = leftDBTree.getRoot();
         rootTreeItem.getChildren().clear();
         try {
-            List<DatabaseConfig> dbConfigs = ConfigHelper.loadDatabaseConfig();
-            for (DatabaseConfig dbConfig : dbConfigs) {
+            List<DatabaseConfiguration> dbConfigs = ConfigHelper.loadDatabaseConfig();
+            for (DatabaseConfiguration dbConfig : dbConfigs) {
                 TreeItem<String> treeItem = new TreeItem<>();
                 treeItem.setValue(dbConfig.getName());
                 ImageView dbImage = new ImageView("icons/computer.png");
@@ -297,7 +301,7 @@ public class MainUIController extends BaseFXController {
             }
         } catch (Exception e) {
             _LOG.error("connect db failed, reason", e);
-            AlertUtil.showErrorAlert(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+            AlertDialog.showError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
     }
 
@@ -313,22 +317,22 @@ public class MainUIController extends BaseFXController {
     @FXML
     public void generateCode() {
         if (tableName == null) {
-            AlertUtil.showWarnAlert("请先在左侧选择数据库表");
+            AlertDialog.showWarning("请先在左侧选择数据库表");
             return;
         }
         String result = validateConfig();
         if (result != null) {
-            AlertUtil.showErrorAlert(result);
+            AlertDialog.showError(result);
             return;
         }
-        GeneratorConfig generatorConfig = getGeneratorConfigFromUI();
+        CodeGenConfiguration generatorConfig = getGeneratorConfigFromUI();
         if (!checkDirs(generatorConfig)) {
             return;
         }
 
-        MybatisGeneratorBridge bridge = new MybatisGeneratorBridge();
+        MyBatisCodeGenerator bridge = new MyBatisCodeGenerator();
         bridge.setGeneratorConfig(generatorConfig);
-        bridge.setDatabaseConfig(selectedDatabaseConfig);
+        bridge.setDatabaseConfiguration(selectedDatabaseConfig);
         bridge.setIgnoredColumns(ignoredColumns);
         bridge.setColumnOverrides(columnOverrides);
         UIProgressCallback alert = new UIProgressCallback(Alert.AlertType.INFORMATION);
@@ -337,8 +341,8 @@ public class MainUIController extends BaseFXController {
         PictureProcessStateController pictureProcessStateController = null;
         try {
             //Engage PortForwarding
-            Session sshSession = DbUtil.getSSHSession(selectedDatabaseConfig);
-            DbUtil.engagePortForwarding(sshSession, selectedDatabaseConfig);
+            Session sshSession = DBUtils.getSSHSession(selectedDatabaseConfig);
+            DBUtils.engagePortForwarding(sshSession, selectedDatabaseConfig);
 
             if (sshSession != null) {
                 pictureProcessStateController = new PictureProcessStateController();
@@ -354,7 +358,7 @@ public class MainUIController extends BaseFXController {
             try {
                 bridge.generate();
             } catch (Exception exception) {
-                AlertUtil.showErrorAlert("生成失败: " + exception.getMessage());
+                AlertDialog.showError("生成失败: " + exception.getMessage());
             }
 
             if (pictureProcessStateController != null) {
@@ -376,7 +380,7 @@ public class MainUIController extends BaseFXController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            AlertUtil.showErrorAlert(e.getMessage());
+            AlertDialog.showError(e.getMessage());
             if (pictureProcessStateController != null) {
                 pictureProcessStateController.close();
                 pictureProcessStateController.playFailState(e.getMessage(), true);
@@ -407,24 +411,24 @@ public class MainUIController extends BaseFXController {
         if (result.isPresent()) {
             String name = result.get();
             if (StringUtils.isEmpty(name)) {
-                AlertUtil.showErrorAlert("名称不能为空");
+                AlertDialog.showError("名称不能为空");
                 return;
             }
             _LOG.info("user choose name: {}", name);
             try {
-                GeneratorConfig generatorConfig = getGeneratorConfigFromUI();
+                CodeGenConfiguration generatorConfig = getGeneratorConfigFromUI();
                 generatorConfig.setName(name);
                 ConfigHelper.deleteGeneratorConfig(name);
                 ConfigHelper.saveGeneratorConfig(generatorConfig);
             } catch (Exception e) {
                 _LOG.error("保存配置失败", e);
-                AlertUtil.showErrorAlert("保存配置失败");
+                AlertDialog.showError("保存配置失败");
             }
         }
     }
 
-    public GeneratorConfig getGeneratorConfigFromUI() {
-        GeneratorConfig generatorConfig = new GeneratorConfig();
+    public CodeGenConfiguration getGeneratorConfigFromUI() {
+        CodeGenConfiguration generatorConfig = new CodeGenConfiguration();
         generatorConfig.setProjectFolder(projectFolderField.getText());
         generatorConfig.setModelPackage(modelTargetPackage.getText());
         generatorConfig.setGenerateKeys(generateKeysField.getText());
@@ -454,7 +458,7 @@ public class MainUIController extends BaseFXController {
         return generatorConfig;
     }
 
-    public void setGeneratorConfigIntoUI(GeneratorConfig generatorConfig) {
+    public void setGeneratorConfigIntoUI(CodeGenConfiguration generatorConfig) {
         projectFolderField.setText(generatorConfig.getProjectFolder());
         modelTargetPackage.setText(generatorConfig.getModelPackage());
         generateKeysField.setText(generatorConfig.getGenerateKeys());
@@ -473,7 +477,7 @@ public class MainUIController extends BaseFXController {
         overrideXML.setSelected(generatorConfig.isOverrideXML());
         needToStringHashcodeEquals.setSelected(generatorConfig.isNeedToStringHashcodeEquals());
         useLombokPlugin.setSelected(generatorConfig.isUseLombokPlugin());
-        useTableNameAliasCheckbox.setSelected(generatorConfig.getUseTableNameAlias());
+        useTableNameAliasCheckbox.setSelected(generatorConfig.isUseTableNameAlias());
         forUpdateCheckBox.setSelected(generatorConfig.isNeedForUpdate());
         annotationDAOCheckBox.setSelected(generatorConfig.isAnnotationDAO());
         annotationCheckBox.setSelected(generatorConfig.isAnnotation());
@@ -488,7 +492,7 @@ public class MainUIController extends BaseFXController {
     @FXML
     public void openTableColumnCustomizationPage() {
         if (tableName == null) {
-            AlertUtil.showWarnAlert("请先在左侧选择数据库表");
+            AlertDialog.showWarning("请先在左侧选择数据库表");
             return;
         }
         SelectTableColumnController controller = (SelectTableColumnController) loadFXMLPage("定制列", FXMLPage.SELECT_TABLE_COLUMN, true);
@@ -496,14 +500,14 @@ public class MainUIController extends BaseFXController {
         try {
             // If select same schema and another table, update table data
             if (!tableName.equals(controller.getTableName())) {
-                List<UITableColumnVO> tableColumns = DbUtil.getTableColumns(selectedDatabaseConfig, tableName);
+                List<UITableColumnVO> tableColumns = DBUtils.getTableColumns(selectedDatabaseConfig, tableName);
                 controller.setColumnList(FXCollections.observableList(tableColumns));
                 controller.setTableName(tableName);
             }
             controller.showDialogStage();
         } catch (Exception e) {
             _LOG.error(e.getMessage(), e);
-            AlertUtil.showErrorAlert(e.getMessage());
+            AlertDialog.showError(e.getMessage());
         }
     }
 
@@ -519,7 +523,7 @@ public class MainUIController extends BaseFXController {
      * 检查并创建不存在的文件夹
      * @return
      */
-    private boolean checkDirs(GeneratorConfig config) {
+    private boolean checkDirs(CodeGenConfiguration config) {
         List<String> dirs = new ArrayList<>();
         dirs.add(config.getProjectFolder());
         dirs.add(config.getProjectFolder().concat("/").concat(config.getModelPackageTargetFolder()));
@@ -544,7 +548,7 @@ public class MainUIController extends BaseFXController {
                         }
                         return true;
                     } catch (Exception e) {
-                        AlertUtil.showErrorAlert("创建目录失败，请检查目录是否是文件而非目录");
+                        AlertDialog.showError("创建目录失败，请检查目录是否是文件而非目录");
                     }
                 } else {
                     return false;
@@ -556,12 +560,12 @@ public class MainUIController extends BaseFXController {
 
     @FXML
     public void openTargetFolder() {
-        GeneratorConfig generatorConfig = getGeneratorConfigFromUI();
+        CodeGenConfiguration generatorConfig = getGeneratorConfigFromUI();
         String projectFolder = generatorConfig.getProjectFolder();
         try {
             FileUtils.show(new File(projectFolder));
         } catch (Exception e) {
-            AlertUtil.showErrorAlert("打开目录失败，请检查目录是否填写正确" + e.getMessage());
+            AlertDialog.showError("打开目录失败，请检查目录是否填写正确" + e.getMessage());
         }
     }
 }

@@ -1,5 +1,7 @@
 package io.devpl.codegen.mbg.controller;
 
+import io.devpl.codegen.mbg.utils.FXMLHelper;
+import io.devpl.codegen.mbg.view.FXMLPage;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -9,11 +11,10 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.devpl.codegen.mbg.view.AlertUtil;
+import io.devpl.codegen.mbg.view.AlertDialog;
 
 import java.io.IOException;
 import java.lang.ref.SoftReference;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,15 +24,14 @@ public abstract class BaseFXController implements Initializable {
     private Stage primaryStage;
     private Stage dialogStage;
 
-    private static Map<FXMLPage, SoftReference<? extends BaseFXController>> cacheNodeMap = new HashMap<>();
+    private static final Map<FXMLPage, SoftReference<? extends BaseFXController>> cacheNodeMap = new HashMap<>();
 
     public BaseFXController loadFXMLPage(String title, FXMLPage fxmlPage, boolean cache) {
         SoftReference<? extends BaseFXController> parentNodeRef = cacheNodeMap.get(fxmlPage);
         if (cache && parentNodeRef != null) {
             return parentNodeRef.get();
         }
-        URL skeletonResource = Thread.currentThread().getContextClassLoader().getResource(fxmlPage.getFxml());
-        FXMLLoader loader = new FXMLLoader(skeletonResource);
+        FXMLLoader loader = FXMLHelper.createFXMLLoader(fxmlPage);
         Parent loginNode;
         try {
             loginNode = loader.load();
@@ -52,7 +52,7 @@ public abstract class BaseFXController implements Initializable {
             return controller;
         } catch (IOException e) {
             _LOG.error(e.getMessage(), e);
-            AlertUtil.showErrorAlert(e.getMessage());
+            AlertDialog.showError(e.getMessage());
         }
         return null;
     }

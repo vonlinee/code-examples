@@ -2,21 +2,24 @@ package io.devpl.codegen.mbg.view;
 
 import javafx.scene.control.Alert;
 
-public class AlertUtil {
+/**
+ * 弹窗警告
+ */
+public class AlertDialog {
 
-    public static void showInfoAlert(String message) {
+    public static void showInformation(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText(message);
         alert.show();
     }
 
-    public static void showWarnAlert(String message) {
+    public static void showWarning(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setContentText(message);
         alert.show();
     }
 
-    public static void showErrorAlert(String message) {
+    public static void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setContentText(message);
         alert.show();
@@ -25,13 +28,17 @@ public class AlertUtil {
     /**
      * build both OK and Cancel buttons for the user
      * to click on to dismiss the dialog.
-     *
      * @param message
      */
-    public static Alert buildConfirmationAlert(String message) {
+    public static Alert buildConfirmation(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setContentText(message);
         return alert;
     }
 
+    public static Alert build(String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setContentText(message);
+        return alert;
+    }
 }

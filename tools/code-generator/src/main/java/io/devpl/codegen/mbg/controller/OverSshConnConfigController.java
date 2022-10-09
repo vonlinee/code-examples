@@ -3,10 +3,10 @@ package io.devpl.codegen.mbg.controller;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-import io.devpl.codegen.mbg.model.DatabaseConfig;
+import io.devpl.codegen.mbg.model.DatabaseConfiguration;
 import io.devpl.codegen.mbg.utils.ConfigHelper;
-import io.devpl.codegen.mbg.utils.DbUtil;
-import io.devpl.codegen.mbg.view.AlertUtil;
+import io.devpl.codegen.mbg.utils.DBUtils;
+import io.devpl.codegen.mbg.view.AlertDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -25,14 +25,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
-/**
- * Project: mybatis-generator-gui
- *
- * @author slankka on 2018/12/30.
- */
-public class OverSshController extends DbConnectionController {
 
-    private Logger logger = LoggerFactory.getLogger(OverSshController.class);
+public class OverSshConnConfigController extends TcpIPConnConfigController {
+
+    private Logger logger = LoggerFactory.getLogger(OverSshConnConfigController.class);
 
     @FXML
     public HBox pubkeyBox;
@@ -97,7 +93,7 @@ public class OverSshController extends DbConnectionController {
         });
     }
 
-    public void setDbConnectionConfig(DatabaseConfig databaseConfig) {
+    public void setDbConnectionConfig(DatabaseConfiguration databaseConfig) {
         if (databaseConfig == null) {
             return;
         }
@@ -126,7 +122,7 @@ public class OverSshController extends DbConnectionController {
 
     @FXML
     public void checkInput() {
-        DatabaseConfig databaseConfig = extractConfigFromUi();
+        DatabaseConfiguration databaseConfig = extractConfigFromUi();
         if (authTypeChoice.getValue().equals("Password") && (
             StringUtils.isBlank(databaseConfig.getSshHost())
                 || StringUtils.isBlank(databaseConfig.getSshPort())
@@ -156,7 +152,7 @@ public class OverSshController extends DbConnectionController {
         this.lPortLabel.setText("注意不要填写被其他程序占用的端口");
     }
 
-    public DatabaseConfig extractConfigFromUi() {
+    public DatabaseConfiguration extractConfigFromUi() {
         String name = nameField.getText();
         String host = hostField.getText();
         String port = portField.getText();
@@ -166,7 +162,7 @@ public class OverSshController extends DbConnectionController {
         String dbType = dbTypeChoice.getValue();
         String schema = schemaField.getText();
         String authType = authTypeChoice.getValue();
-        DatabaseConfig config = new DatabaseConfig();
+        DatabaseConfiguration config = new DatabaseConfiguration();
         config.setName(name);
         config.setDbType(dbType);
         config.setHost(host);
@@ -189,7 +185,7 @@ public class OverSshController extends DbConnectionController {
     }
 
     public void saveConfig() {
-        DatabaseConfig databaseConfig = extractConfigFromUi();
+        DatabaseConfiguration databaseConfig = extractConfigFromUi();
         if (StringUtils.isAnyEmpty(
                 databaseConfig.getName(),
                 databaseConfig.getHost(),
@@ -198,7 +194,7 @@ public class OverSshController extends DbConnectionController {
                 databaseConfig.getEncoding(),
                 databaseConfig.getDbType(),
                 databaseConfig.getSchema())) {
-            AlertUtil.showWarnAlert("密码以外其他字段必填");
+            AlertDialog.showWarning("密码以外其他字段必填");
             return;
         }
         try {
@@ -207,15 +203,15 @@ public class OverSshController extends DbConnectionController {
             mainUIController.loadLeftDBTree();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            AlertUtil.showErrorAlert(e.getMessage());
+            AlertDialog.showError(e.getMessage());
         }
     }
 
     @FXML
     public void testSSH() {
-        Session session = DbUtil.getSSHSession(extractConfigFromUi());
+        Session session = DBUtils.getSSHSession(extractConfigFromUi());
         if (session == null) {
-            AlertUtil.showErrorAlert("请检查主机，端口，用户名，以及密码/秘钥是否填写正确");
+            AlertDialog.showError("请检查主机，端口，用户名，以及密码/秘钥是否填写正确");
             return;
         }
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -234,12 +230,12 @@ public class OverSshController extends DbConnectionController {
                 throw new TimeoutException("连接超时");
             }
             result.get();
-            AlertUtil.showInfoAlert("连接SSH服务器成功，恭喜你可以使用OverSSH功能");
+            AlertDialog.showInformation("连接SSH服务器成功，恭喜你可以使用OverSSH功能");
             recoverNotice();
         } catch (Exception e) {
-            AlertUtil.showErrorAlert("请检查主机，端口，用户名，以及密码/秘钥是否填写正确: " + e.getMessage());
+            AlertDialog.showError("请检查主机，端口，用户名，以及密码/秘钥是否填写正确: " + e.getMessage());
         } finally {
-            DbUtil.shutdownPortForwarding(session);
+            DBUtils.shutdownPortForwarding(session);
         }
     }
 

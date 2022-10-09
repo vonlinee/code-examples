@@ -1,14 +1,13 @@
 package io.devpl.codegen.mbg.controller;
 
 import com.jcraft.jsch.Session;
-
-import io.devpl.codegen.mbg.model.DatabaseConfig;
-import io.devpl.codegen.mbg.utils.DbUtil;
-import io.devpl.codegen.mbg.view.AlertUtil;
+import io.devpl.codegen.mbg.model.DatabaseConfiguration;
+import io.devpl.codegen.mbg.utils.DBUtils;
+import io.devpl.codegen.mbg.view.AlertDialog;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,48 +17,48 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Project: mybatis-generator-gui
- *
- * @author github.com/slankka on 2019/1/22.
+ * 数据库连接配置控制器
  */
-public class TabPaneController extends BaseFXController {
-    private static Logger logger = LoggerFactory.getLogger(TabPaneController.class);
+public class DbConnConfigController extends BaseFXController {
+
+    private static final Logger logger = LoggerFactory.getLogger(DbConnConfigController.class);
 
     @FXML
     private TabPane tabPane;
 
     @FXML
-    private DbConnectionController tabControlAController;
+    private TcpIPConnConfigController tcpIPConnConfigController;
 
     @FXML
-    private OverSshController tabControlBController;
+    private OverSshConnConfigController sshConnConfigController;
 
     private boolean isOverssh;
 
-    private MainUIController mainUIController;
+    private MainController mainUIController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tabPane.setPrefHeight(((AnchorPane) tabPane.getSelectionModel().getSelectedItem().getContent()).getPrefHeight());
+        Region content = (Region) tabPane.getSelectionModel().getSelectedItem().getContent();
+        tabPane.setPrefHeight(content.getPrefHeight());
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             isOverssh = observable.getValue().getText().equals("SSH");
-            tabPane.prefHeightProperty().bind(((AnchorPane) tabPane.getSelectionModel().getSelectedItem().getContent()).prefHeightProperty());
+            tabPane.prefHeightProperty().bind(((Region) tabPane.getSelectionModel().getSelectedItem().getContent()).prefHeightProperty());
             getDialogStage().close();
             getDialogStage().show();
         });
     }
 
-    public void setMainUIController(MainUIController mainUIController) {
+    public void setMainUIController(MainController mainUIController) {
         this.mainUIController = mainUIController;
-        this.tabControlAController.setMainUIController(mainUIController);
-        this.tabControlAController.setTabPaneController(this);
-        this.tabControlBController.setMainUIController(mainUIController);
-        this.tabControlBController.setTabPaneController(this);
+        this.tcpIPConnConfigController.setMainUIController(mainUIController);
+        this.tcpIPConnConfigController.setTabPaneController(this);
+        this.sshConnConfigController.setMainUIController(mainUIController);
+        this.sshConnConfigController.setTabPaneController(this);
     }
 
-    public void setConfig(DatabaseConfig selectedConfig) {
-        tabControlAController.setConfig(selectedConfig);
-        tabControlBController.setDbConnectionConfig(selectedConfig);
+    public void setConfig(DatabaseConfiguration selectedConfig) {
+        tcpIPConnConfigController.setConfig(selectedConfig);
+        sshConnConfigController.setDbConnectionConfig(selectedConfig);
         if (StringUtils.isNoneBlank(
                 selectedConfig.getSshHost(),
                 selectedConfig.getSshPassword(),
@@ -71,51 +70,45 @@ public class TabPaneController extends BaseFXController {
         }
     }
 
-    private DatabaseConfig extractConfigForUI() {
+    /**
+     * 将界面填的配置聚合
+     * 校验配置项，如果有必填项弹窗提示或者填充默认值
+     * @return 数据库连接配置,TCP/IP或者SSH连接
+     */
+    private DatabaseConfiguration extractDatabaseConfiguration() {
         if (isOverssh) {
-            return tabControlBController.extractConfigFromUi();
+            return sshConnConfigController.extractConfigFromUi();
         } else {
-            return tabControlAController.extractConfigForUI();
+            return tcpIPConnConfigController.assembleDbConnInfoConfiguration();
         }
     }
 
     @FXML
-    void saveConnection() {
+    private void saveConnection() {
         if (isOverssh) {
-            tabControlBController.saveConfig();
+            sshConnConfigController.saveConfig();
         } else {
-            tabControlAController.saveConnection();
+            tcpIPConnConfigController.saveConnection();
         }
     }
 
-
+    /**
+     * 测试连接按钮
+     */
     @FXML
-    void testConnection() {
-        DatabaseConfig config = extractConfigForUI();
-        if (config == null) {
-            return;
-        }
-        if (StringUtils.isAnyEmpty(config.getName(),
-                config.getHost(),
-                config.getPort(),
-                config.getUsername(),
-                config.getEncoding(),
-                config.getDbType(),
-                config.getSchema())) {
-            AlertUtil.showWarnAlert("密码以外其他字段必填");
-            return;
-        }
-        Session sshSession = DbUtil.getSSHSession(config);
+    private void testDbConnection() {
+        DatabaseConfiguration config = extractDatabaseConfiguration();
+        Session sshSession = DBUtils.getSSHSession(config);
         if (isOverssh && sshSession != null) {
             PictureProcessStateController pictureProcessState = new PictureProcessStateController();
             pictureProcessState.setDialogStage(getDialogStage());
             pictureProcessState.startPlay();
             //如果不用异步，则视图会等方法返回才会显示
-            Task task = new Task<Void>() {
+            Task<Void> task = new Task<>() {
                 @Override
                 protected Void call() throws Exception {
-                    DbUtil.engagePortForwarding(sshSession, config);
-                    DbUtil.getConnection(config);
+                    DBUtils.engagePortForwarding(sshSession, config);
+                    DBUtils.getConnection(config);
                     return null;
                 }
             };
@@ -124,28 +117,27 @@ public class TabPaneController extends BaseFXController {
                 logger.error("task Failed", e);
                 if (e instanceof RuntimeException) {
                     if (e.getMessage().equals("Address already in use: JVM_Bind")) {
-                        tabControlBController.setLPortLabelText(config.getLport() + "已经被占用，请换其他端口");
+                        sshConnConfigController.setLPortLabelText(config.getLport() + "已经被占用，请换其他端口");
                     }
                     //端口转发一定不成功，导致数据库连接不上
                     pictureProcessState.playFailState("连接失败:" + e.getMessage(), true);
                     return;
                 }
-
                 if (e.getCause() instanceof EOFException) {
                     pictureProcessState.playFailState("连接失败, 请检查数据库的主机名，并且检查端口和目标端口是否一致", true);
                     //端口转发已经成功，但是数据库连接不上，故需要释放连接
-                    DbUtil.shutdownPortForwarding(sshSession);
+                    DBUtils.shutdownPortForwarding(sshSession);
                     return;
                 }
                 pictureProcessState.playFailState("连接失败:" + e.getMessage(), true);
                 //可能是端口转发已经成功，但是数据库连接不上，故需要释放连接
-                DbUtil.shutdownPortForwarding(sshSession);
+                DBUtils.shutdownPortForwarding(sshSession);
             });
             task.setOnSucceeded(event -> {
                 try {
                     pictureProcessState.playSuccessState("连接成功", true);
-                    DbUtil.shutdownPortForwarding(sshSession);
-                    tabControlBController.recoverNotice();
+                    DBUtils.shutdownPortForwarding(sshSession);
+                    sshConnConfigController.recoverNotice();
                 } catch (Exception e) {
                     logger.error("", e);
                 }
@@ -153,14 +145,14 @@ public class TabPaneController extends BaseFXController {
             new Thread(task).start();
         } else {
             try {
-                DbUtil.getConnection(config);
-                AlertUtil.showInfoAlert("连接成功");
+                DBUtils.getConnection(config);
+                AlertDialog.showInformation("连接成功");
             } catch (RuntimeException e) {
                 logger.error("", e);
-                AlertUtil.showWarnAlert("连接失败, " + e.getMessage());
+                AlertDialog.showWarning("连接失败, " + e.getMessage());
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
-                AlertUtil.showWarnAlert("连接失败");
+                AlertDialog.showWarning("连接失败");
             }
         }
     }

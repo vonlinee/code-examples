@@ -1,71 +1,40 @@
 package io.devpl.codegen.mbg.bridge;
 
+import io.devpl.codegen.mbg.model.DatabaseConfiguration;
+import io.devpl.codegen.mbg.model.DbType;
+import io.devpl.codegen.mbg.model.CodeGenConfiguration;
+import io.devpl.codegen.mbg.plugins.DbRemarksCommentGenerator;
+import io.devpl.codegen.mbg.utils.ConfigHelper;
+import io.devpl.codegen.mbg.utils.DBUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.mybatis.generator.api.ProgressCallback;
+import org.mybatis.generator.api.ShellCallback;
+import org.mybatis.generator.config.*;
+import org.mybatis.generator.internal.DefaultShellCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
-import org.mybatis.generator.api.MyBatisGenerator;
-import org.mybatis.generator.api.ProgressCallback;
-import org.mybatis.generator.api.ShellCallback;
-import org.mybatis.generator.config.ColumnOverride;
-import org.mybatis.generator.config.CommentGeneratorConfiguration;
-import org.mybatis.generator.config.Configuration;
-import org.mybatis.generator.config.Context;
-import org.mybatis.generator.config.GeneratedKey;
-import org.mybatis.generator.config.IgnoredColumn;
-import org.mybatis.generator.config.JDBCConnectionConfiguration;
-import org.mybatis.generator.config.JavaClientGeneratorConfiguration;
-import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
-import org.mybatis.generator.config.JavaTypeResolverConfiguration;
-import org.mybatis.generator.config.ModelType;
-import org.mybatis.generator.config.PluginConfiguration;
-import org.mybatis.generator.config.PropertyRegistry;
-import org.mybatis.generator.config.SqlMapGeneratorConfiguration;
-import org.mybatis.generator.config.TableConfiguration;
-import org.mybatis.generator.internal.DefaultShellCallback;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public class MyBatisCodeGenerator {
 
-import io.devpl.codegen.mbg.model.DatabaseConfig;
-import io.devpl.codegen.mbg.model.DbType;
-import io.devpl.codegen.mbg.model.GeneratorConfig;
-import io.devpl.codegen.mbg.plugins.DbRemarksCommentGenerator;
-import io.devpl.codegen.mbg.utils.ConfigHelper;
-import io.devpl.codegen.mbg.utils.DbUtil;
+    private static final Logger LOG = LoggerFactory.getLogger(MyBatisCodeGenerator.class);
 
-/**
- * The bridge between GUI and the mybatis generator. All the operation to  mybatis generator should proceed through this
- * class
- * <p>
- * Created by Owen on 6/30/16.
- */
-public class MybatisGeneratorBridge {
-
-    static Logger log = LoggerFactory.getLogger(MybatisGeneratorBridge.class);
-
-    private static final Logger _LOG = LoggerFactory.getLogger(MybatisGeneratorBridge.class);
-
-    private GeneratorConfig generatorConfig;
-
-    private DatabaseConfig selectedDatabaseConfig;
-
+    private CodeGenConfiguration generatorConfig;
+    private DatabaseConfiguration selectedDatabaseConfig;
     private ProgressCallback progressCallback;
-
     private List<IgnoredColumn> ignoredColumns;
-
     private List<ColumnOverride> columnOverrides;
 
-    public MybatisGeneratorBridge() {
-    }
-
-    public void setGeneratorConfig(GeneratorConfig generatorConfig) {
+    public void setGeneratorConfig(CodeGenConfiguration generatorConfig) {
         this.generatorConfig = generatorConfig;
     }
 
-    public void setDatabaseConfig(DatabaseConfig databaseConfig) {
+    public void setDatabaseConfiguration(DatabaseConfiguration databaseConfig) {
         this.selectedDatabaseConfig = databaseConfig;
     }
 
@@ -78,7 +47,7 @@ public class MybatisGeneratorBridge {
 
         String dbType = selectedDatabaseConfig.getDbType();
         String connectorLibPath = ConfigHelper.findConnectorLibPath(dbType);
-        _LOG.info("connectorLibPath: {}", connectorLibPath);
+        LOG.info("connectorLibPath: {}", connectorLibPath);
         configuration.addClasspathEntry(connectorLibPath);
         // Table configuration
         TableConfiguration tableConfig = new TableConfiguration(context);
@@ -156,7 +125,7 @@ public class MybatisGeneratorBridge {
             jdbcConfig.addProperty("useInformationSchema", "true");
         }
         jdbcConfig.setDriverClass(DbType.valueOf(dbType).getDriverClass());
-        jdbcConfig.setConnectionURL(DbUtil.getConnectionUrlWithSchema(selectedDatabaseConfig));
+        jdbcConfig.setConnectionURL(DBUtils.getConnectionUrlWithSchema(selectedDatabaseConfig));
         jdbcConfig.setUserId(selectedDatabaseConfig.getUsername());
         jdbcConfig.setPassword(selectedDatabaseConfig.getPassword());
         if (DbType.Oracle.name().equals(dbType)) {
@@ -275,7 +244,7 @@ public class MybatisGeneratorBridge {
         Set<String> fullyqualifiedTables = new HashSet<>();
         Set<String> contexts = new HashSet<>();
         ShellCallback shellCallback = new DefaultShellCallback(true); // override=true
-        MyBatisGenerator myBatisGenerator = new MyBatisGenerator(configuration, shellCallback, warnings);
+        org.mybatis.generator.api.MyBatisGenerator myBatisGenerator = new org.mybatis.generator.api.MyBatisGenerator(configuration, shellCallback, warnings);
         // if overrideXML selected, delete oldXML ang generate new one
         if (generatorConfig.isOverrideXML()) {
             String mappingXMLFilePath = getMappingXMLFilePath(generatorConfig);
@@ -287,7 +256,6 @@ public class MybatisGeneratorBridge {
                 }
             }
         }
-        log.info("开始生成");
         myBatisGenerator.generate(progressCallback, contexts, fullyqualifiedTables);
     }
 
@@ -298,7 +266,7 @@ public class MybatisGeneratorBridge {
         context.addPluginConfiguration(pc);
     }
 
-    private String getMappingXMLFilePath(GeneratorConfig generatorConfig) {
+    private String getMappingXMLFilePath(CodeGenConfiguration generatorConfig) {
         StringBuilder sb = new StringBuilder();
         sb.append(generatorConfig.getProjectFolder()).append("/");
         sb.append(generatorConfig.getMappingXMLTargetFolder()).append("/");

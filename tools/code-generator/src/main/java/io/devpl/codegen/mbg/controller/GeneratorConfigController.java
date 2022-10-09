@@ -11,31 +11,26 @@ import javafx.scene.layout.HBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.devpl.codegen.mbg.model.GeneratorConfig;
+import io.devpl.codegen.mbg.model.CodeGenConfiguration;
 import io.devpl.codegen.mbg.utils.ConfigHelper;
-import io.devpl.codegen.mbg.view.AlertUtil;
+import io.devpl.codegen.mbg.view.AlertDialog;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-/**
- * 管理GeneratorConfig的Controller
- *
- * Created by Owen on 8/21/16.
- */
 public class GeneratorConfigController extends BaseFXController {
 
     private static final Logger _LOG = LoggerFactory.getLogger(GeneratorConfigController.class);
 
     @FXML
-    private TableView<GeneratorConfig> configTable;
+    private TableView<CodeGenConfiguration> configTable;
     @FXML
     private TableColumn nameColumn;
     @FXML
     private TableColumn opsColumn;
 
-    private MainUIController mainUIController;
+    private MainController mainUIController;
 
     private GeneratorConfigController controller;
 
@@ -63,11 +58,11 @@ public class GeneratorConfigController extends BaseFXController {
                         btn1.setOnAction(event -> {
                             try {
                                 // 应用配置
-                                GeneratorConfig generatorConfig = ConfigHelper.loadGeneratorConfig(item.toString());
+                                CodeGenConfiguration generatorConfig = ConfigHelper.loadGeneratorConfig(item.toString());
                                 mainUIController.setGeneratorConfigIntoUI(generatorConfig);
                                 controller.closeDialogStage();
                             } catch (Exception e) {
-                                AlertUtil.showErrorAlert(e.getMessage());
+                                AlertDialog.showError(e.getMessage());
                             }
                         });
                         btn2.setOnAction(event -> {
@@ -77,7 +72,7 @@ public class GeneratorConfigController extends BaseFXController {
                                 ConfigHelper.deleteGeneratorConfig(item.toString());
                                 refreshTableView();
                             } catch (Exception e) {
-                                AlertUtil.showErrorAlert(e.getMessage());
+                                AlertDialog.showError(e.getMessage());
                             }
                         });
                         setGraphic(hBox);
@@ -90,14 +85,14 @@ public class GeneratorConfigController extends BaseFXController {
 
     public void refreshTableView() {
         try {
-            List<GeneratorConfig> configs = ConfigHelper.loadGeneratorConfigs();
+            List<CodeGenConfiguration> configs = ConfigHelper.loadGeneratorConfigs();
             configTable.setItems(FXCollections.observableList(configs));
         } catch (Exception e) {
-            AlertUtil.showErrorAlert(e.getMessage());
+            AlertDialog.showError(e.getMessage());
         }
     }
 
-    void setMainUIController(MainUIController mainUIController) {
+    void setMainUIController(MainController mainUIController) {
         this.mainUIController = mainUIController;
     }
 }

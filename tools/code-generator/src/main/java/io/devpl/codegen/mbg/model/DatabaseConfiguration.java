@@ -2,7 +2,7 @@ package io.devpl.codegen.mbg.model;
 
 import java.util.Objects;
 
-public class DatabaseConfig {
+public class DatabaseConfiguration {
 
 	/**
 	 * The primary key in the sqlite db
@@ -183,7 +183,7 @@ public class DatabaseConfig {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		DatabaseConfig that = (DatabaseConfig) o;
+		DatabaseConfiguration that = (DatabaseConfiguration) o;
 		return Objects.equals(id, that.id) &&
 			Objects.equals(dbType, that.dbType) &&
 			Objects.equals(name, that.name) &&

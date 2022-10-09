@@ -1,9 +1,9 @@
 package io.devpl.codegen.mbg.utils;
 
 import com.alibaba.fastjson.JSON;
-import io.devpl.codegen.mbg.model.DatabaseConfig;
+import io.devpl.codegen.mbg.model.CodeGenConfiguration;
+import io.devpl.codegen.mbg.model.DatabaseConfiguration;
 import io.devpl.codegen.mbg.model.DbType;
-import io.devpl.codegen.mbg.model.GeneratorConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,15 +16,12 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-/**
- * XML based config file help class
- * <p>
- * Created by Owen on 6/16/16.
- */
 public class ConfigHelper {
 
     private static final Logger _LOG = LoggerFactory.getLogger(ConfigHelper.class);
@@ -43,37 +40,40 @@ public class ConfigHelper {
     }
 
     static void createEmptyXMLFile(File uiConfigFile) throws IOException {
-        InputStream fis = null;
-        FileOutputStream fos = null;
-        try {
-            fis = Thread.currentThread().getContextClassLoader().getResourceAsStream("sqlite3.db");
-            fos = new FileOutputStream(uiConfigFile);
+        try (InputStream fis = Thread.currentThread().getContextClassLoader().getResourceAsStream("sqlite3.db"); FileOutputStream fos = new FileOutputStream(uiConfigFile)) {
             byte[] buffer = new byte[1024];
-            int byteread = 0;
-            while ((byteread = fis.read(buffer)) != -1) {
+            int byteread;
+            while ((byteread = Objects.requireNonNull(fis).read(buffer)) != -1) {
                 fos.write(buffer, 0, byteread);
             }
-        } finally {
-            if (fis != null) fis.close();
-            if (fos != null) fos.close();
         }
     }
 
-    public static List<DatabaseConfig> loadDatabaseConfig() throws Exception {
-        try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement(); ResultSet rs = stat.executeQuery("SELECT * FROM dbs")) {
-            List<DatabaseConfig> configs = new ArrayList<>();
+    /**
+     * 从数据库加载配置
+     * @return
+     * @throws Exception
+     */
+    public static List<DatabaseConfiguration> loadDatabaseConfig() throws Exception {
+        try (Connection conn = ConnectionManager.getConnection();
+             Statement stat = conn.createStatement()) {
+
+            ResultSet rs = stat.executeQuery("SELECT * FROM dbs");
+            List<DatabaseConfiguration> configs = new ArrayList<>();
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String value = rs.getString("value");
-                DatabaseConfig databaseConfig = JSON.parseObject(value, DatabaseConfig.class);
+                DatabaseConfiguration databaseConfig = JSON.parseObject(value, DatabaseConfiguration.class);
                 databaseConfig.setId(id);
                 configs.add(databaseConfig);
             }
             return configs;
+        } catch (SQLException exception) {
+            return new ArrayList<>();
         }
     }
 
-    public static void saveDatabaseConfig(boolean isUpdate, Integer primaryKey, DatabaseConfig dbConfig) throws Exception {
+    public static void saveDatabaseConfig(boolean isUpdate, Integer primaryKey, DatabaseConfiguration dbConfig) throws Exception {
         String configName = dbConfig.getName();
         ResultSet rs = null;
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
@@ -94,7 +94,7 @@ public class ConfigHelper {
         }
     }
 
-    public static void deleteDatabaseConfig(DatabaseConfig databaseConfig) throws Exception {
+    public static void deleteDatabaseConfig(DatabaseConfiguration databaseConfig) throws Exception {
         ResultSet rs = null;
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             String sql = String.format("delete from dbs where id=%d", databaseConfig.getId());
@@ -102,7 +102,7 @@ public class ConfigHelper {
         }
     }
 
-    public static void saveGeneratorConfig(GeneratorConfig generatorConfig) throws Exception {
+    public static void saveGeneratorConfig(CodeGenConfiguration generatorConfig) throws Exception {
         ResultSet rs = null;
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             String jsonStr = JSON.toJSONString(generatorConfig);
@@ -112,7 +112,7 @@ public class ConfigHelper {
         }
     }
 
-    public static GeneratorConfig loadGeneratorConfig(String name) throws Exception {
+    public static CodeGenConfiguration loadGeneratorConfig(String name) throws Exception {
         Connection conn = null;
         Statement stat = null;
         ResultSet rs = null;
@@ -122,10 +122,10 @@ public class ConfigHelper {
             String sql = String.format("SELECT * FROM generator_config where name='%s'", name);
             _LOG.info("sql: {}", sql);
             rs = stat.executeQuery(sql);
-            GeneratorConfig generatorConfig = null;
+            CodeGenConfiguration generatorConfig = null;
             if (rs.next()) {
                 String value = rs.getString("value");
-                generatorConfig = JSON.parseObject(value, GeneratorConfig.class);
+                generatorConfig = JSON.parseObject(value, CodeGenConfiguration.class);
             }
             return generatorConfig;
         } finally {
@@ -135,7 +135,7 @@ public class ConfigHelper {
         }
     }
 
-    public static List<GeneratorConfig> loadGeneratorConfigs() throws Exception {
+    public static List<CodeGenConfiguration> loadGeneratorConfigs() throws Exception {
         Connection conn = null;
         Statement stat = null;
         ResultSet rs = null;
@@ -145,10 +145,10 @@ public class ConfigHelper {
             String sql = "SELECT * FROM generator_config";
             _LOG.info("sql: {}", sql);
             rs = stat.executeQuery(sql);
-            List<GeneratorConfig> configs = new ArrayList<>();
+            List<CodeGenConfiguration> configs = new ArrayList<>();
             while (rs.next()) {
                 String value = rs.getString("value");
-                configs.add(JSON.parseObject(value, GeneratorConfig.class));
+                configs.add(JSON.parseObject(value, CodeGenConfiguration.class));
             }
             return configs;
         } finally {

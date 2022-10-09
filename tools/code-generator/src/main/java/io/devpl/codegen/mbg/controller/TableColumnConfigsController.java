@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.devpl.codegen.mbg.model.UITableColumnVO;
-import io.devpl.codegen.mbg.view.AlertUtil;
+import io.devpl.codegen.mbg.view.AlertDialog;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -59,7 +59,7 @@ public class TableColumnConfigsController extends BaseFXController {
 			this.closeDialogStage();
 		} catch (Exception e) {
 			_LOG.error("confirm throw exception.", e);
-			AlertUtil.showErrorAlert(e.getMessage());
+			AlertDialog.showError(e.getMessage());
 		}
 	}
 

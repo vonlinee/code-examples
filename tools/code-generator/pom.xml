@@ -267,13 +267,6 @@
             <version>11</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.hsqldb/hsqldb -->
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>2.7.0</version>
-        </dependency>
-
         <!-- Java Parser是基于JavaCC做为Java语言词法解析的工具，支持Java语言生成AST，在AST基础上进行类型推断分析，支持修改AST从而生成新的Java文件内容，支持从Java
 1.0到14所有的版本的AST解析 -->
         <!-- https://mvnrepository.com/artifact/com.github.javaparser/javaparser-core -->
@@ -310,6 +303,12 @@
             <groupId>com.squareup</groupId>
             <artifactId>javapoet</artifactId>
             <version>1.13.0</version>
+        </dependency>
+        <!--嵌入式数据库-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.1.214</version>
         </dependency>
     </dependencies>
 

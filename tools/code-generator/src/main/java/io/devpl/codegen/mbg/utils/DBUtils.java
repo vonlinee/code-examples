@@ -3,13 +3,11 @@ package io.devpl.codegen.mbg.utils;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-
 import io.devpl.codegen.mbg.exception.DbDriverLoadingException;
-import io.devpl.codegen.mbg.model.DatabaseConfig;
+import io.devpl.codegen.mbg.model.DatabaseConfiguration;
 import io.devpl.codegen.mbg.model.DbType;
 import io.devpl.codegen.mbg.model.UITableColumnVO;
-import io.devpl.codegen.mbg.view.AlertUtil;
-
+import io.devpl.codegen.mbg.view.AlertDialog;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.mybatis.generator.internal.util.ClassloaderUtils;
@@ -19,24 +17,20 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by Owen on 6/12/16.
- */
-public class DbUtil {
+public class DBUtils {
 
-    private static final Logger _LOG = LoggerFactory.getLogger(DbUtil.class);
+    private static final Logger _LOG = LoggerFactory.getLogger(DBUtils.class);
     private static final int DB_CONNECTION_TIMEOUTS_SECONDS = 1;
 
-    private static Map<DbType, Driver> drivers = new HashMap<>();
+    private static final Map<DbType, Driver> drivers = new HashMap<>();
 
     private static ExecutorService executorService = Executors.newSingleThreadExecutor();
     private static volatile boolean portForwaring = false;
     private static Map<Integer, Session> portForwardingSession = new ConcurrentHashMap<>();
 
-    public static Session getSSHSession(DatabaseConfig databaseConfig) {
+    public static Session getSSHSession(DatabaseConfiguration databaseConfig) {
         if (StringUtils.isBlank(databaseConfig.getSshHost())
                 || StringUtils.isBlank(databaseConfig.getSshPort())
                 || StringUtils.isBlank(databaseConfig.getSshUser())
@@ -44,7 +38,6 @@ public class DbUtil {
         ) {
             return null;
         }
-
         Session session = null;
         try {
             //Set StrictHostKeyChecking property to no to avoid UnknownHostKey issue
@@ -67,7 +60,7 @@ public class DbUtil {
         return session;
     }
 
-    public static void engagePortForwarding(Session sshSession, DatabaseConfig config) {
+    public static void engagePortForwarding(Session sshSession, DatabaseConfiguration config) {
         if (sshSession != null) {
             AtomicInteger assinged_port = new AtomicInteger();
             Future<?> result = executorService.submit(() -> {
@@ -110,7 +103,7 @@ public class DbUtil {
                 }
 
                 _LOG.info("executorService isShutdown:{}", executorService.isShutdown());
-                AlertUtil.showErrorAlert("OverSSH 失败，请检查连接设置:" + e.getMessage());
+                AlertDialog.showError("OverSSH 失败，请检查连接设置:" + e.getMessage());
             }
         }
     }
@@ -124,7 +117,7 @@ public class DbUtil {
 //		executorService.shutdown();
     }
 
-    public static Connection getConnection(DatabaseConfig config) throws ClassNotFoundException, SQLException {
+    public static Connection getConnection(DatabaseConfiguration config) throws ClassNotFoundException, SQLException {
         DbType dbType = DbType.valueOf(config.getDbType());
         if (drivers.get(dbType) == null) {
             loadDbDriver(dbType);
@@ -142,7 +135,7 @@ public class DbUtil {
         return connection;
     }
 
-    public static List<String> getTableNames(DatabaseConfig config, String filter) throws Exception {
+    public static List<String> getTableNames(DatabaseConfiguration config, String filter) throws Exception {
         Session sshSession = getSSHSession(config);
         engagePortForwarding(sshSession, config);
         try (Connection connection = getConnection(config)) {
@@ -183,7 +176,7 @@ public class DbUtil {
         }
     }
 
-    public static List<UITableColumnVO> getTableColumns(DatabaseConfig dbConfig, String tableName) throws Exception {
+    public static List<UITableColumnVO> getTableColumns(DatabaseConfiguration dbConfig, String tableName) throws Exception {
         String url = getConnectionUrlWithSchema(dbConfig);
         _LOG.info("getTableColumns, connection url: {}", url);
         Session sshSession = getSSHSession(dbConfig);
@@ -207,7 +200,7 @@ public class DbUtil {
         }
     }
 
-    public static String getConnectionUrlWithSchema(DatabaseConfig dbConfig) throws ClassNotFoundException {
+    public static String getConnectionUrlWithSchema(DatabaseConfiguration dbConfig) throws ClassNotFoundException {
         DbType dbType = DbType.valueOf(dbConfig.getDbType());
         String connectionUrl = String.format(dbType.getConnectionUrlPattern(),
                 portForwaring ? "127.0.0.1" : dbConfig.getHost(), portForwaring ? dbConfig.getLport() : dbConfig.getPort(), dbConfig.getSchema(), dbConfig.getEncoding());
