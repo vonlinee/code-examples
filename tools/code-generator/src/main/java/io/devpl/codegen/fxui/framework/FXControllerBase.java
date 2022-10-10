@@ -3,9 +3,6 @@ package io.devpl.codegen.fxui.framework;
 import javafx.event.*;
 import javafx.fxml.Initializable;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 /**
  * 每个Controller都可以发布订阅事件
  * 订阅的事件将在FXML加载时
@@ -14,17 +11,18 @@ import java.util.ResourceBundle;
  */
 public abstract class FXControllerBase implements EventTarget, Initializable {
 
-    private final EventBusEventDispatcher eventBusEventDispatcher = new EventBusEventDispatcher();
+    ControllerEventDispatcher dispatcher = new ControllerEventDispatcher(this);
 
     /**
      * 订阅事件
+     *
      * @param eventType
      * @param eventHandler
      * @param <T>
      */
     public final <T extends Event> void addEventHandler(
             final EventType<T> eventType, final EventHandler<? super T> eventHandler) {
-        eventBusEventDispatcher.registerEventHandler(eventType, eventHandler);
+        dispatcher.registerEventHandler(eventType, eventHandler);
     }
 
     /**
@@ -33,8 +31,7 @@ public abstract class FXControllerBase implements EventTarget, Initializable {
      */
     @Override
     public final EventDispatchChain buildEventDispatchChain(EventDispatchChain tail) {
-        BroadcastEventDispatchChain chain = new BroadcastEventDispatchChain();
-        chain.append(eventBusEventDispatcher);
-        return chain;
+        DefaultEventDispatchChain chain = new DefaultEventDispatchChain();
+        return chain.append(this.dispatcher);
     }
 }

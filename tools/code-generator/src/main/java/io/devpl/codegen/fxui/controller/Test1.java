@@ -3,7 +3,6 @@ package io.devpl.codegen.fxui.controller;
 import io.devpl.codegen.fxui.framework.FXControllerBase;
 import io.devpl.codegen.fxui.framework.MessageEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -21,7 +20,9 @@ public class Test1 extends FXControllerBase {
     @FXML
     public void post1(MouseEvent mouseEvent) {
         // Button 向 Controller 发送事件
-        Event.fireEvent(this, new MessageEvent(btn1, this, MessageEvent.SEND_DATA));
+       // Event.fireEvent(this, new MessageEvent(btn1, this, MessageEvent.SEND_DATA));
+
+        Event.fireEvent(btn2, new MessageEvent(btn1, btn2, MessageEvent.SEND_DATA));
     }
 
     @FXML
@@ -35,15 +36,15 @@ public class Test1 extends FXControllerBase {
     public void initialize(URL location, ResourceBundle resources) {
         btn2.addEventHandler(MessageEvent.SEND_DATA, event -> {
             System.out.println("Controller 向 Button 发送事件");
-            System.out.println(event.getEventType());
-            System.out.println(event.getTarget());
-            System.out.println(event.getSource());
+            System.out.println("EventType " + event.getEventType());
+            System.out.println("Target " + event.getTarget());
+            System.out.println("Source " + event.getSource());
         });
         addEventHandler(MessageEvent.SEND_DATA, event -> {
             System.out.println("Button 向 Controller 发送事件");
-            System.out.println(event.getEventType());
-            System.out.println(event.getTarget());
-            System.out.println(event.getSource());
+            System.out.println("EventType " + event.getEventType());
+            System.out.println("Target " + event.getTarget());
+            System.out.println("Source " + event.getSource());
         });
     }
 }

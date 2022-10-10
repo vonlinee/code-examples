@@ -6,7 +6,7 @@ import javafx.event.EventType;
 
 /**
  * 广播事件
- * @see BroadcastEventDispatchChain 搭配使用
+ * @see DefaultEventDispatchChain 搭配使用
  */
 public class BroadcastEvent extends Event {
 

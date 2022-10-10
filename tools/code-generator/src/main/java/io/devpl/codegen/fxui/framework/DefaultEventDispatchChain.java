@@ -7,15 +7,16 @@ import javafx.event.EventDispatcher;
 import java.util.LinkedList;
 
 /**
- * 广播事件分发
+ *
+ * @see com.sun.javafx.event.EventDispatchChainImpl
  */
-public class BroadcastEventDispatchChain implements EventDispatchChain {
+public class DefaultEventDispatchChain implements EventDispatchChain {
 
     private volatile boolean consumed;
 
     private final LinkedList<EventDispatcher> dispatchers;
 
-    public BroadcastEventDispatchChain() {
+    public DefaultEventDispatchChain() {
         this.dispatchers = new LinkedList<>();
     }
 
