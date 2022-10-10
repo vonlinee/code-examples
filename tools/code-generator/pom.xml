@@ -66,50 +66,46 @@
         </repository>
     </repositories>
 
-
     <dependencies>
-
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.31</version>
         </dependency>
-
-        <!--yml序列化/反序列化工具-->
+        <!-- yml序列化/反序列化工具 -->
         <!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
             <version>${snake-yaml.version}</version>
         </dependency>
-        <!--MyBatis生成器插件-->
+        <!-- MyBatis生成器插件 -->
         <dependency>
             <groupId>com.itfsw</groupId>
             <artifactId>mybatis-generator-plugin</artifactId>
             <version>${mybatis-generator-plugin.version}</version>
         </dependency>
-        <!--Velocity模板引擎-->
+        <!-- Velocity模板引擎 -->
         <!-- https://mvnrepository.com/artifact/org.apache.velocity/velocity -->
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>${velocity.version}</version>
         </dependency>
-        <!--FX-GSON库：一组Google Gson的类型适配器，使JavaFX属性序列化更加自然-->
+        <!-- FX-GSON库：一组Google Gson的类型适配器，使JavaFX属性序列化更加自然 -->
         <!-- https://mvnrepository.com/artifact/org.hildan.fxgson/fx-gson -->
         <dependency>
             <groupId>org.hildan.fxgson</groupId>
             <artifactId>fx-gson</artifactId>
             <version>${fx-gson.version}</version>
         </dependency>
-        <!--Google的JSON解析库-->
+        <!-- Google的JSON解析库 -->
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -160,7 +156,6 @@
             <version>${ojdbc6.version}</version>
         </dependency>
 
-
         <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -180,14 +175,12 @@
             <artifactId>log4j-api</artifactId>
             <version>2.18.0</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.36</version>
         </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -198,27 +191,23 @@
             <artifactId>logback-core</artifactId>
             <version>1.2.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.2</version>
         </dependency>
-
         <!-- Apache log4j https://mvnrepository.com/artifact/log4j/log4j -->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
         </dependency>
-
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -244,7 +233,6 @@
             <artifactId>junit</artifactId>
             <version>4.13.1</version>
         </dependency>
-
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
@@ -323,8 +311,6 @@
                     <target>11</target>
                 </configuration>
             </plugin>
-
-
             <!--fat jar-->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -348,7 +334,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>com.zenjava</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>

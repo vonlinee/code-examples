@@ -1,7 +1,5 @@
 package io.devpl.codegen.fxui.utils;
 
-import io.devpl.codegen.fxui.view.AlertDialog;
-import io.devpl.codegen.fxui.view.FXMLPage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;

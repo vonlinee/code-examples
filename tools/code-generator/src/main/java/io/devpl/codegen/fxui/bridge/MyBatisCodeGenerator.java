@@ -1,4 +1,4 @@
-package io.devpl.codegen.fxui;
+package io.devpl.codegen.fxui.bridge;
 
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.common.DbType;

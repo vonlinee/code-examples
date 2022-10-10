@@ -1,4 +1,4 @@
-package io.devpl.codegen.fxui.view;
+package io.devpl.codegen.fxui.utils;
 
 public enum FXMLPage {
 

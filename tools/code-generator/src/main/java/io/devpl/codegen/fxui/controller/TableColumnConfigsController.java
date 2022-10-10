@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.devpl.codegen.fxui.model.UITableColumnVO;
-import io.devpl.codegen.fxui.view.AlertDialog;
+import io.devpl.codegen.fxui.utils.AlertDialog;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  * @author xueqi
  * @date 2021-06-24
  */
-public class TableColumnConfigsController extends BaseFXController {
+public class TableColumnConfigsController extends FXControllerBase {
 
 	private static final Logger _LOG                  = LoggerFactory.getLogger(TableColumnConfigsController.class);
 	private static final String COL_NAME_PREFIX_REGEX = "(?<=%s)[^\"]+";   // pattern regex and split prefix: (?<=aggregate_|f_)[^"]+  f_ or d_ prefix

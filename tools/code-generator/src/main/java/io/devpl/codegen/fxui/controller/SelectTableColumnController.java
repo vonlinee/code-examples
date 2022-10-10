@@ -1,6 +1,6 @@
 package io.devpl.codegen.fxui.controller;
 
-import io.devpl.codegen.fxui.view.FXMLPage;
+import io.devpl.codegen.fxui.utils.FXMLPage;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Owen on 6/20/16.
  */
-public class SelectTableColumnController extends BaseFXController {
+public class SelectTableColumnController extends FXControllerBase {
 
     @FXML
     private TableView<UITableColumnVO> columnListView;

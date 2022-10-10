@@ -7,7 +7,7 @@ import io.devpl.codegen.common.DbType;
 import io.devpl.codegen.common.exception.DbDriverLoadingException;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.fxui.model.UITableColumnVO;
-import io.devpl.codegen.fxui.view.AlertDialog;
+import io.devpl.codegen.fxui.utils.AlertDialog;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.internal.util.ClassloaderUtils;
 import org.slf4j.Logger;

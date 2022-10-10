@@ -1,4 +1,4 @@
-package io.devpl.codegen.fxui.view;
+package io.devpl.codegen.fxui.bridge;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

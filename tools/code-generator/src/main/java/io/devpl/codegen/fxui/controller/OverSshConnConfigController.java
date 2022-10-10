@@ -6,7 +6,7 @@ import com.jcraft.jsch.Session;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.common.utils.ConfigHelper;
 import io.devpl.codegen.common.utils.DBUtils;
-import io.devpl.codegen.fxui.view.AlertDialog;
+import io.devpl.codegen.fxui.utils.AlertDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;

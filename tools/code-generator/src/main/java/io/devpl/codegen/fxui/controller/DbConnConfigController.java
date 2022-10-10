@@ -4,7 +4,7 @@ import com.jcraft.jsch.Session;
 import io.devpl.codegen.common.utils.DBUtils;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.fxui.utils.FXUtils;
-import io.devpl.codegen.fxui.view.AlertDialog;
+import io.devpl.codegen.fxui.utils.AlertDialog;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 /**
  * 数据库连接配置控制器
  */
-public class DbConnConfigController extends BaseFXController {
+public class DbConnConfigController extends FXControllerBase {
 
     private static final Logger logger = LoggerFactory.getLogger(DbConnConfigController.class);
 

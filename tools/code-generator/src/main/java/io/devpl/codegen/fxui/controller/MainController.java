@@ -2,19 +2,19 @@ package io.devpl.codegen.fxui.controller;
 
 import com.jcraft.jsch.Session;
 import io.devpl.codegen.common.utils.*;
-import io.devpl.codegen.fxui.MyBatisCodeGenerator;
+import io.devpl.codegen.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.codegen.fxui.model.CodeGenConfiguration;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.fxui.model.UITableColumnVO;
-import io.devpl.codegen.fxui.utils.FXMLHelper;
 import io.devpl.codegen.fxui.utils.FXUtils;
 import io.devpl.codegen.fxui.utils.Messages;
-import io.devpl.codegen.fxui.view.AlertDialog;
-import io.devpl.codegen.fxui.view.FXMLPage;
-import io.devpl.codegen.fxui.view.UIProgressCallback;
+import io.devpl.codegen.fxui.utils.AlertDialog;
+import io.devpl.codegen.fxui.utils.FXMLPage;
+import io.devpl.codegen.fxui.bridge.UIProgressCallback;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class MainController extends BaseFXController {
+public class MainController extends FXControllerBase {
 
     private static final Logger _LOG = LoggerFactory.getLogger(MainController.class);
 
@@ -139,6 +139,7 @@ public class MainController extends BaseFXController {
         leftDBTree.setShowRoot(false);
         leftDBTree.setRoot(new TreeItem<>());
         Callback<TreeView<String>, TreeCell<String>> defaultCellFactory = TextFieldTreeCell.forTreeView();
+
         filterTreeBox.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
             if (ev.getCode() == KeyCode.ENTER) {
                 ObservableList<TreeItem<String>> schemas = leftDBTree.getRoot().getChildren();
@@ -229,10 +230,7 @@ public class MainController extends BaseFXController {
                 children.clear();
                 for (String tableName : tables) {
                     TreeItem<String> newTreeItem = new TreeItem<>();
-                    ImageView imageView = new ImageView("icons/table.png");
-                    imageView.setFitHeight(16);
-                    imageView.setFitWidth(16);
-                    newTreeItem.setGraphic(imageView);
+                    newTreeItem.setGraphic(FXUtils.loadImageView("icons/table.png", 16, 16));
                     newTreeItem.setValue(tableName);
                     children.add(newTreeItem);
                 }

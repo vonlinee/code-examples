@@ -1,4 +1,4 @@
-package io.devpl.codegen.fxui;
+package io.devpl.codegen.fxui.boot;
 
 import io.devpl.codegen.fxui.controller.MainController;
 import io.devpl.codegen.common.h2.EmbedH2ServiceThread;

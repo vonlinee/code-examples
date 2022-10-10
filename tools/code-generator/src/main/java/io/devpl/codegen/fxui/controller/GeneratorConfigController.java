@@ -13,13 +13,13 @@ import org.slf4j.LoggerFactory;
 
 import io.devpl.codegen.fxui.model.CodeGenConfiguration;
 import io.devpl.codegen.common.utils.ConfigHelper;
-import io.devpl.codegen.fxui.view.AlertDialog;
+import io.devpl.codegen.fxui.utils.AlertDialog;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class GeneratorConfigController extends BaseFXController {
+public class GeneratorConfigController extends FXControllerBase {
 
     private static final Logger _LOG = LoggerFactory.getLogger(GeneratorConfigController.class);
 
@@ -40,6 +40,7 @@ public class GeneratorConfigController extends BaseFXController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         // 自定义操作列
         opsColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
         opsColumn.setCellFactory(cell -> {
             return new TableCell() {
                 @Override

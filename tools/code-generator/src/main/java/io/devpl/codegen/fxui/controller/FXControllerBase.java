@@ -1,7 +1,8 @@
 package io.devpl.codegen.fxui.controller;
 
+import io.devpl.codegen.fxui.utils.AlertDialog;
 import io.devpl.codegen.fxui.utils.FXMLHelper;
-import io.devpl.codegen.fxui.view.FXMLPage;
+import io.devpl.codegen.fxui.utils.FXMLPage;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -11,23 +12,28 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.devpl.codegen.fxui.view.AlertDialog;
-
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseFXController implements Initializable {
-    private static final Logger _LOG = LoggerFactory.getLogger(BaseFXController.class);
+/**
+ * Code designers should also be careful when using the Stage within a controller.
+ * Typically, the controller is responsible only for updating the model and view,
+ * and is shouldn’t really be responsible for the Window lifecycle.
+ * This responsibility more comfortably fits with whichever class created the Stage in the first place.
+ */
+public abstract class FXControllerBase implements Initializable {
+
+    private static final Logger _LOG = LoggerFactory.getLogger(FXControllerBase.class);
 
     private Stage primaryStage;
     private Stage dialogStage;
 
-    private static final Map<FXMLPage, SoftReference<? extends BaseFXController>> cacheNodeMap = new HashMap<>();
+    private static final Map<FXMLPage, SoftReference<? extends FXControllerBase>> cacheNodeMap = new HashMap<>();
 
-    public BaseFXController loadFXMLPage(String title, FXMLPage fxmlPage, boolean cache) {
-        SoftReference<? extends BaseFXController> parentNodeRef = cacheNodeMap.get(fxmlPage);
+    public FXControllerBase loadFXMLPage(String title, FXMLPage fxmlPage, boolean cache) {
+        SoftReference<? extends FXControllerBase> parentNodeRef = cacheNodeMap.get(fxmlPage);
         if (cache && parentNodeRef != null) {
             return parentNodeRef.get();
         }
@@ -35,7 +41,7 @@ public abstract class BaseFXController implements Initializable {
         Parent loginNode;
         try {
             loginNode = loader.load();
-            BaseFXController controller = loader.getController();
+            FXControllerBase controller = loader.getController();
             // fix bug: 嵌套弹出时会发生dialogStage被覆盖的情况
             Stage tmpDialogStage = new Stage();
             tmpDialogStage.setTitle(title);
@@ -47,7 +53,7 @@ public abstract class BaseFXController implements Initializable {
             tmpDialogStage.show();
             controller.setDialogStage(tmpDialogStage);
             // put into cache map
-            SoftReference<BaseFXController> softReference = new SoftReference<>(controller);
+            SoftReference<FXControllerBase> softReference = new SoftReference<>(controller);
             cacheNodeMap.put(fxmlPage, softReference);
             return controller;
         } catch (IOException e) {

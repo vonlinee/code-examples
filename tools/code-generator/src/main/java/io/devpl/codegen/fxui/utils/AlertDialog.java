@@ -1,4 +1,4 @@
-package io.devpl.codegen.fxui.view;
+package io.devpl.codegen.fxui.utils;
 
 import javafx.scene.control.Alert;
 

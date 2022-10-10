@@ -3,7 +3,7 @@ package io.devpl.codegen.fxui.controller;
 import io.devpl.codegen.common.DbType;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.fxui.utils.FXUtils;
-import io.devpl.codegen.fxui.view.AlertDialog;
+import io.devpl.codegen.fxui.utils.AlertDialog;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-public class TcpIPConnConfigController extends BaseFXController {
+public class TcpIPConnConfigController extends FXControllerBase {
 
     private static final Logger _LOG = LoggerFactory.getLogger(TcpIPConnConfigController.class);
 
