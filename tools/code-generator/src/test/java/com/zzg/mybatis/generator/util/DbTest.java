@@ -1,8 +1,7 @@
 package com.zzg.mybatis.generator.util;
 
-import io.devpl.codegen.mbg.utils.ConfigHelper;
-import io.devpl.codegen.mbg.utils.ConnectionManager;
-import io.devpl.codegen.mbg.utils.DBUtils;
+import io.devpl.codegen.common.utils.ConfigHelper;
+import io.devpl.codegen.common.utils.ConnectionManager;
 import org.junit.Assert;
 import org.junit.Test;
 

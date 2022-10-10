@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.collections.*?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
+<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
 <BorderPane prefHeight="613.0" prefWidth="918.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/11"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.codegen.mbg.controller.MainController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.codegen.fxui.controller.MainController">
     <top>
         <VBox>
             <ToolBar minHeight="70.0" prefHeight="81.0" prefWidth="918.0" BorderPane.alignment="CENTER">

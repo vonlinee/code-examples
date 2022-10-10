@@ -3,7 +3,7 @@ package com.zzg.mybatis.generator.util;
 import org.junit.Assert;
 import org.junit.Test;
 
-import io.devpl.codegen.mbg.utils.ConfigHelper;
+import io.devpl.codegen.common.utils.ConfigHelper;
 
 import java.util.List;
 
