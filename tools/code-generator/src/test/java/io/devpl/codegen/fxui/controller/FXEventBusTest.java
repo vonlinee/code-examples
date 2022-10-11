@@ -1,4 +1,4 @@
-package com.almasb.fxeventbus;
+package io.devpl.codegen.fxui.controller;
 
 import io.devpl.codegen.fxui.framework.EventBus;
 import io.devpl.codegen.fxui.framework.FXEventBus;

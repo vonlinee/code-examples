@@ -4,14 +4,19 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 
-public class Subscriber {
+/**
+ * @author Almas Baimagambetov (AlmasB) (almaslvl@gmail.com)
+ */
+public final class Subscriber {
 
     private final EventBus bus;
-    private final EventType<? extends Event> eventType;
-    private final EventHandler<? super Event> eventHandler;
+    private final Object subscriber;
+    private EventType<? extends Event> eventType;
+    private EventHandler<? super Event> eventHandler;
 
-    Subscriber(EventBus bus, EventType<? extends Event> eventType, EventHandler<? super Event> eventHandler) {
+    Subscriber(EventBus bus, Object subscriber, EventType<? extends Event> eventType, EventHandler<? super Event> eventHandler) {
         this.bus = bus;
+        this.subscriber = subscriber;
         this.eventType = eventType;
         this.eventHandler = eventHandler;
     }
@@ -23,7 +28,7 @@ public class Subscriber {
         bus.removeEventHandler(eventType, eventHandler);
     }
 
-    public void handleEvenet(Event event) {
-        eventHandler.handle(event);
+    public EventHandler<? super Event> getEventHandler() {
+        return eventHandler;
     }
 }

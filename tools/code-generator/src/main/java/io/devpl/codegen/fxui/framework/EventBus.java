@@ -6,24 +6,19 @@ import javafx.event.EventType;
 
 /**
  * An event dispatcher that can be used for subscribing to events and posting the events.
- *
- * @author Almas Baimagambetov (AlmasB) (almaslvl@gmail.com)
  */
 public interface EventBus {
 
     /**
      * Register event handler for event type.
-     *
      * @param eventType    type
      * @param eventHandler handler
      * @param <T>          event
      */
-    <T extends Event> Subscriber addEventHandler(EventType<T> eventType,
-                                                 EventHandler<? super T> eventHandler);
+    <T extends Event> Subscriber addEventHandler(EventSource<?> eventSource, EventType<T> eventType, EventHandler<? super T> eventHandler);
 
     /**
      * Remove event handler for event type.
-     *
      * @param eventType    type
      * @param eventHandler handler
      * @param <T>          event
@@ -40,7 +35,6 @@ public interface EventBus {
      * Note: according to JavaFX doc this must be called on JavaFX Application Thread.
      * In reality this doesn't seem to be true.
      * </p>
-     *
      * @param event the event
      */
     void fireEvent(Event event);

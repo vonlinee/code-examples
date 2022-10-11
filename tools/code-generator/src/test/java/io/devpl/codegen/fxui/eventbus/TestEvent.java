@@ -1,4 +1,4 @@
-package com.almasb.fxeventbus;
+package io.devpl.codegen.fxui.eventbus;
 
 import javafx.beans.NamedArg;
 import javafx.event.Event;
