@@ -3,16 +3,13 @@ package io.devpl.codegen.fxui.controller;
 import com.jcraft.jsch.Session;
 import io.devpl.codegen.common.utils.DBUtils;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
-import io.devpl.codegen.fxui.utils.FXUtils;
 import io.devpl.codegen.fxui.utils.AlertDialog;
-import javafx.application.Platform;
+import io.devpl.codegen.fxui.utils.FXUtils;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Region;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.EOFException;
 import java.net.URL;
@@ -23,8 +20,6 @@ import java.util.ResourceBundle;
  * 数据库连接配置控制器
  */
 public class DbConnConfigController extends FXControllerBase {
-
-    private static final Logger logger = LoggerFactory.getLogger(DbConnConfigController.class);
 
     @FXML
     private TabPane tabPane;
@@ -49,8 +44,6 @@ public class DbConnConfigController extends FXControllerBase {
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             isOverssh = observable.getValue().getText().equals("SSH");
             tabPane.prefHeightProperty().bind(((Region) tabPane.getSelectionModel().getSelectedItem().getContent()).prefHeightProperty());
-            getDialogStage().close();
-            getDialogStage().show();
         });
     }
 
@@ -71,7 +64,7 @@ public class DbConnConfigController extends FXControllerBase {
                 selectedConfig.getSshPort(),
                 selectedConfig.getSshUser(),
                 selectedConfig.getLport())) {
-            logger.info("Found SSH based Config");
+            LOG.info("Found SSH based Config");
             tabPane.getSelectionModel().selectLast();
         }
     }
@@ -123,7 +116,7 @@ public class DbConnConfigController extends FXControllerBase {
             };
             task.setOnFailed(event -> {
                 Throwable e = task.getException();
-                logger.error("task Failed", e);
+                LOG.error("task Failed", e);
                 if (e instanceof RuntimeException) {
                     if (e.getMessage().equals("Address already in use: JVM_Bind")) {
                         sshConnConfigController.setLPortLabelText(config.getLport() + "已经被占用，请换其他端口");
@@ -148,7 +141,7 @@ public class DbConnConfigController extends FXControllerBase {
                     DBUtils.shutdownPortForwarding(sshSession);
                     sshConnConfigController.recoverNotice();
                 } catch (Exception e) {
-                    logger.error("", e);
+
                 }
             });
             new Thread(task).start();

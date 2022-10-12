@@ -1,17 +1,14 @@
 package io.devpl.codegen.fxui.controller;
 
+import com.google.common.eventbus.Subscribe;
 import com.jcraft.jsch.Session;
 import io.devpl.codegen.common.utils.*;
 import io.devpl.codegen.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.codegen.fxui.bridge.UIProgressCallback;
-import io.devpl.codegen.fxui.framework.ControllerEvent;
 import io.devpl.codegen.fxui.model.CodeGenConfiguration;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.fxui.model.UITableColumnVO;
-import io.devpl.codegen.fxui.utils.AlertDialog;
-import io.devpl.codegen.fxui.utils.FXMLPage;
-import io.devpl.codegen.fxui.utils.FXUtils;
-import io.devpl.codegen.fxui.utils.Messages;
+import io.devpl.codegen.fxui.utils.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -21,7 +18,9 @@ import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -41,6 +40,9 @@ import java.util.ResourceBundle;
 public class MainController extends FXControllerBase {
 
     private static final Logger _LOG = LoggerFactory.getLogger(MainController.class);
+
+    @FXML
+    public BorderPane root;
 
     // tool bar buttons
     @FXML
@@ -119,17 +121,18 @@ public class MainController extends FXControllerBase {
         // 新建数据库连接
         connectionLabel.setGraphic(FXUtils.loadImageView("icons/computer.png", 40, 40));
         connectionLabel.setOnMouseClicked(event -> {
-            DbConnConfigController controller = (DbConnConfigController) loadFXMLPage("新建数据库连接", FXMLPage.NEW_CONNECTION, false);
-            controller.setMainUIController(this);
-            controller.showDialogStage();
+            FXMLHelper.load(FXMLPage.NEW_CONNECTION.getFxml()).ifPresent(parent -> {
+                // fix bug: 嵌套弹出时会发生dialogStage被覆盖的情况
+                Stage ownerStage = FXUtils.getOwnerStage(root);
+                FXUtils.createDialogStage("新建数据库连接", ownerStage, parent).show();
+            });
         });
-
         configsLabel.setGraphic(FXUtils.loadImageView("icons/config-list.png", 40, 40));
-        configsLabel.setOnMouseClicked(event -> {
-            GeneratorConfigController controller = (GeneratorConfigController) loadFXMLPage("配置", FXMLPage.GENERATOR_CONFIG, false);
-            controller.setMainUIController(this);
-            controller.showDialogStage();
-        });
+        configsLabel.setOnMouseClicked(event -> FXMLHelper.load(FXMLPage.GENERATOR_CONFIG.getFxml()).ifPresent(parent -> {
+            // fix bug: 嵌套弹出时会发生dialogStage被覆盖的情况
+            Stage ownerStage = FXUtils.getOwnerStage(root);
+            FXUtils.createDialogStage("配置", ownerStage, parent).show();
+        }));
         useExample.setOnMouseClicked(event -> offsetLimitCheckBox.setDisable(!useExample.isSelected()));
         // selectedProperty().addListener 解决应用配置的时候未触发Clicked事件
         useLombokPlugin.selectedProperty().addListener((observable, oldValue, newValue) -> needToStringHashcodeEquals.setDisable(newValue));
@@ -169,7 +172,7 @@ public class MainController extends FXControllerBase {
                         DatabaseConfiguration selectedConfig = (DatabaseConfiguration) treeItem.getGraphic().getUserData();
                         try {
                             ConfigHelper.deleteDatabaseConfig(selectedConfig);
-                            this.loadDatabaseConnectionTree();
+                            this.loadDatabaseConnectionTree(List.of(selectedConfig));
                         } catch (Exception e) {
                             AlertDialog.showError("Delete connection failed! Reason: " + e.getMessage());
                         }
@@ -201,12 +204,6 @@ public class MainController extends FXControllerBase {
         setTooltip();
         //默认选中第一个，否则如果忘记选择，没有对应错误提示
         encodingChoice.getSelectionModel().selectFirst();
-
-        addEventHandler(ControllerEvent.RECEIVE_DATA, event -> {
-            System.out.println(event.getSource());
-            System.out.println(event.getEventType());
-            System.out.println(event.getTarget());
-        });
     }
 
     /**
@@ -273,7 +270,8 @@ public class MainController extends FXControllerBase {
     /**
      * 加载数据库连接
      */
-    void loadDatabaseConnectionTree() {
+    @Subscribe
+    public void loadDatabaseConnectionTree(List<DatabaseConfiguration> databaseConfigurations) {
         TreeItem<String> rootTreeItem = leftDBTree.getRoot();
         rootTreeItem.getChildren().clear();
         try {

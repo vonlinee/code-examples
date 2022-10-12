@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <VBox prefHeight="423.0" prefWidth="347.0" stylesheets="@/style/style.css" xmlns="http://javafx.com/javafx/8.0.121"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.spawpaw.mybatis.generator.gui.controller.DatabaseConfigEditorController">
+      fx:controller="com.spawpaw.mbg.controller.DatabaseConfigEditorController">
     <VBox fx:id="main_container" prefHeight="1000.0">
         <padding>
             <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>

@@ -17,6 +17,8 @@ public class ControllerEvent extends BroadcastEvent {
 
     public static final EventType<ControllerEvent> RECEIVE_DATA = new EventType<>(ControllerEvent.ANY, "CONTROLLER_RECEIVE_DATA");
 
+    public static final EventType<ControllerEvent> HANDLE = new EventType<>(ControllerEvent.ANY, "CONTROLLER_HANDLE");
+
     public ControllerEvent(EventType<? extends Event> eventType) {
         super(eventType);
     }

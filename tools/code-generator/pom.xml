@@ -16,7 +16,7 @@
         <module.name>org.mybatis.generator</module.name>
         <sonar.sources>pom.xml,src/main/java</sonar.sources>
         <sonar.tests>src/test/java,src/test/kotlin</sonar.tests>
-        <exec.mainClass>com.spawpaw.mybatis.generator.gui.GeneratorGuiRunner</exec.mainClass>
+        <exec.mainClass>com.spawpaw.mbg.GeneratorGuiRunner</exec.mainClass>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.language.level>11</java.language.level>
         <snake-yaml.version>1.30</snake-yaml.version>

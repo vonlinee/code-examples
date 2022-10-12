@@ -5,12 +5,13 @@ import javafx.event.EventTarget;
 import javafx.event.EventType;
 import javafx.scene.Node;
 
-/**
- * 替代 Event.fireEvent 或者 EventUtil.fireEvent
- */
 public class FXEvent extends Event {
 
-    public static final EventTarget UNKNOWN = tail -> tail;
+    public static final EventType<? extends FXEvent> ANY = new EventType<>(EventType.ROOT, "FXEVENT");
+
+    public FXEvent() {
+        super(null, null, ANY);
+    }
 
     public FXEvent(EventType<? extends Event> eventType) {
         super(eventType);

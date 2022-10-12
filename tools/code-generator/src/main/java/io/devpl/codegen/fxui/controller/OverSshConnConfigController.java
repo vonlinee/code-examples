@@ -22,6 +22,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
@@ -200,7 +202,7 @@ public class OverSshConnConfigController extends TcpIPConnConfigController {
         try {
             ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, databaseConfig);
             this.tabPaneController.getDialogStage().close();
-            mainUIController.loadDatabaseConnectionTree();
+            mainUIController.loadDatabaseConnectionTree(Collections.singletonList(databaseConfig));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             AlertDialog.showError(e.getMessage());

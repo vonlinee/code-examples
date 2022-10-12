@@ -58,7 +58,6 @@ public abstract class FXController implements EventTarget, Initializable {
         if (event.getSource() == null || event.getSource() == Event.NULL_SOURCE_TARGET) {
             event = event.copyFor(this, event.getTarget());
         }
-        System.out.println(event.getEventType());
         BUS.fireEvent(event);
     }
 

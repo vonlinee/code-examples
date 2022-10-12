@@ -26,7 +26,7 @@ public class GeneratorConfigController extends FXControllerBase {
     @FXML
     private TableView<CodeGenConfiguration> configTable;
     @FXML
-    private TableColumn nameColumn;
+    private TableColumn<CodeGenConfiguration, String> nameColumn;
     @FXML
     private TableColumn opsColumn;
 

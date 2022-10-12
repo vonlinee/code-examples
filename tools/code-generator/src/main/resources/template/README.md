@@ -2,7 +2,7 @@
 
 
 ## 哪些Model会被传入模板文件
-默认只传入一个`table`，类型为`com.spawpaw.mybatis.generator.gui.entity.Table`,每个table包含多个column，具体可查看这些类的具体定义
+默认只传入一个`table`，类型为`Table`,每个table包含多个column，具体可查看这些类的具体定义
 
 ## 可以从table中get到哪些值
 - ProjectConfig中导出到本插件的值，例如  `projectDir`、`basePackage`

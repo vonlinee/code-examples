@@ -1,0 +1,26 @@
+package com.spawpaw.mbg.annotations;
+
+import com.spawpaw.mbg.util.Constants;
+
+import java.lang.annotation.*;
+
+/**
+ * Created By spawpaw@hotmail.com 2018.1.20
+ * Description:
+ * 将所标记的配置导出到指定的选项卡
+ * 如果标记了多个本注解，将导出到多个选项卡
+ *
+ * @author BenBenShang spawpaw@hotmail.com
+ */
+@Target({ElementType.TYPE, ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+@Repeatable(ExportToTabs.class)
+public @interface ExportToTab {
+
+    /**
+     * tab的名字，可以使用i18n资源中的key
+     */
+    String tabName() default Constants.tabs.BASIC_SETTINGS;
+
+    int index() default 1000;
+}

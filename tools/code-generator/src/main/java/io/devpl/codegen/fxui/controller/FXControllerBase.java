@@ -1,7 +1,6 @@
 package io.devpl.codegen.fxui.controller;
 
 import com.google.common.eventbus.EventBus;
-import io.devpl.codegen.fxui.framework.FXController;
 import io.devpl.codegen.fxui.utils.AlertDialog;
 import io.devpl.codegen.fxui.utils.FXMLHelper;
 import io.devpl.codegen.fxui.utils.FXMLPage;
@@ -25,9 +24,19 @@ import java.util.Map;
  * and is shouldn’t really be responsible for the Window lifecycle.
  * This responsibility more comfortably fits with whichever class created the Stage in the first place.
  */
-public abstract class FXControllerBase extends FXController implements Initializable {
+public abstract class FXControllerBase implements Initializable {
 
-    private static final Logger _LOG = LoggerFactory.getLogger(FXControllerBase.class);
+    protected final Logger LOG = LoggerFactory.getLogger(getClass());
+
+    private static final EventBus BUS = new EventBus();
+
+    public FXControllerBase() {
+        BUS.register(this);
+    }
+
+    public final void publish(Object event) {
+        BUS.post(event);
+    }
 
     private Stage primaryStage;
     private Stage dialogStage;
@@ -59,7 +68,7 @@ public abstract class FXControllerBase extends FXController implements Initializ
             cacheNodeMap.put(fxmlPage, softReference);
             return controller;
         } catch (IOException e) {
-            _LOG.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             AlertDialog.showError(e.getMessage());
         }
         return null;

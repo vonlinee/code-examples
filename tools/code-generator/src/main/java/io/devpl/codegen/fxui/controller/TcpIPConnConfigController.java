@@ -1,8 +1,6 @@
 package io.devpl.codegen.fxui.controller;
 
 import io.devpl.codegen.common.DbType;
-import io.devpl.codegen.common.utils.ConfigHelper;
-import io.devpl.codegen.fxui.framework.ControllerEvent;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.fxui.utils.AlertDialog;
 import io.devpl.codegen.fxui.utils.FXUtils;
@@ -17,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -53,21 +52,19 @@ public class TcpIPConnConfigController extends FXControllerBase {
         dbTypeChoice.getSelectionModel().select(DbType.MYSQL5.getProductName());
     }
 
-
     /**
      * 保存连接配置信息
      */
     void saveConnection() {
         try {
             // TODO 配置持久化
-            ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, assembleDbConnInfoConfiguration());
+            // ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, assembleDbConnInfoConfiguration());
             if (FXUtils.closeOwnerStage(nameField)) {
                 // 加载数据库连接，获取所有的表信息
-                mainUIController.loadDatabaseConnectionTree();
+                publish(List.of(assembleDbConnInfoConfiguration()));
                 // fireEvent(new ControllerEvent(ControllerEvent.RECEIVE_DATA));
             }
         } catch (Exception e) {
-            _LOG.error(e.getMessage(), e);
             AlertDialog.showError(e.getMessage());
         }
     }

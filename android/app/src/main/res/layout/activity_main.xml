@@ -15,6 +15,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-    <Button android:text="" tools:ignore="HardcodedText,MissingConstraints"/>
+    <Button android:constraint_referenced_ids="btn" android:text="" tools:ignore="HardcodedText,MissingConstraints,UnknownId"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

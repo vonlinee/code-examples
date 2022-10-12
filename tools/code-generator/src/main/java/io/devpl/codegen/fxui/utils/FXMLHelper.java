@@ -1,6 +1,7 @@
 package io.devpl.codegen.fxui.utils;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class FXMLHelper {
 
@@ -20,8 +22,14 @@ public class FXMLHelper {
         Thread.currentThread().getContextClassLoader().getResource("/");
     }
 
-    public static void main(String[] args) {
-
+    public static Optional<Parent> load(String fxmlLocation) {
+        Parent parent = null;
+        try {
+            parent = createFXMLLoader(fxmlLocation).load();
+        } catch (IOException exception) {
+            LOG.error("load fxml[{}] failed, {}", fxmlLocation, exception);
+        }
+        return Optional.ofNullable(parent);
     }
 
     public static FXMLLoader createFXMLLoader(FXMLPage page) {
