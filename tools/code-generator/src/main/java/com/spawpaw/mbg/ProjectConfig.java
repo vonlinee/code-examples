@@ -4,7 +4,6 @@ import com.google.common.base.CaseFormat;
 import com.spawpaw.mbg.annotations.*;
 import com.spawpaw.mbg.enums.DeclaredPlugins;
 import com.spawpaw.mbg.util.Constants;
-import com.spawpaw.mybatis.generator.gui.annotations.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
