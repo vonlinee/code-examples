@@ -1,5 +1,7 @@
 package io.devpl.codegen.fxui.controller;
 
+import com.google.common.eventbus.EventBus;
+import io.devpl.codegen.fxui.framework.FXController;
 import io.devpl.codegen.fxui.utils.AlertDialog;
 import io.devpl.codegen.fxui.utils.FXMLHelper;
 import io.devpl.codegen.fxui.utils.FXMLPage;
@@ -23,7 +25,7 @@ import java.util.Map;
  * and is shouldn’t really be responsible for the Window lifecycle.
  * This responsibility more comfortably fits with whichever class created the Stage in the first place.
  */
-public abstract class FXControllerBase implements Initializable {
+public abstract class FXControllerBase extends FXController implements Initializable {
 
     private static final Logger _LOG = LoggerFactory.getLogger(FXControllerBase.class);
 

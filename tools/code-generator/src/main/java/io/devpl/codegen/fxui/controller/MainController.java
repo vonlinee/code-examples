@@ -3,22 +3,21 @@ package io.devpl.codegen.fxui.controller;
 import com.jcraft.jsch.Session;
 import io.devpl.codegen.common.utils.*;
 import io.devpl.codegen.fxui.bridge.MyBatisCodeGenerator;
+import io.devpl.codegen.fxui.bridge.UIProgressCallback;
+import io.devpl.codegen.fxui.framework.ControllerEvent;
 import io.devpl.codegen.fxui.model.CodeGenConfiguration;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.fxui.model.UITableColumnVO;
-import io.devpl.codegen.fxui.utils.FXUtils;
-import io.devpl.codegen.fxui.utils.Messages;
 import io.devpl.codegen.fxui.utils.AlertDialog;
 import io.devpl.codegen.fxui.utils.FXMLPage;
-import io.devpl.codegen.fxui.bridge.UIProgressCallback;
+import io.devpl.codegen.fxui.utils.FXUtils;
+import io.devpl.codegen.fxui.utils.Messages;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -125,8 +124,7 @@ public class MainController extends FXControllerBase {
             controller.showDialogStage();
         });
 
-        ImageView configImage = FXUtils.loadImageView("icons/config-list.png", 40, 40);
-        configsLabel.setGraphic(configImage);
+        configsLabel.setGraphic(FXUtils.loadImageView("icons/config-list.png", 40, 40));
         configsLabel.setOnMouseClicked(event -> {
             GeneratorConfigController controller = (GeneratorConfigController) loadFXMLPage("配置", FXMLPage.GENERATOR_CONFIG, false);
             controller.setMainUIController(this);
@@ -171,7 +169,7 @@ public class MainController extends FXControllerBase {
                         DatabaseConfiguration selectedConfig = (DatabaseConfiguration) treeItem.getGraphic().getUserData();
                         try {
                             ConfigHelper.deleteDatabaseConfig(selectedConfig);
-                            this.loadLeftDBTree();
+                            this.loadDatabaseConnectionTree();
                         } catch (Exception e) {
                             AlertDialog.showError("Delete connection failed! Reason: " + e.getMessage());
                         }
@@ -198,10 +196,17 @@ public class MainController extends FXControllerBase {
             });
             return cell;
         });
-        loadLeftDBTree();
+        // 初始化时加载数据库信息
+        // loadDatabaseConnectionTree();
         setTooltip();
         //默认选中第一个，否则如果忘记选择，没有对应错误提示
         encodingChoice.getSelectionModel().selectFirst();
+
+        addEventHandler(ControllerEvent.RECEIVE_DATA, event -> {
+            System.out.println(event.getSource());
+            System.out.println(event.getEventType());
+            System.out.println(event.getTarget());
+        });
     }
 
     /**
@@ -237,18 +242,11 @@ public class MainController extends FXControllerBase {
             } else if (StringUtils.isNotBlank(filter)) {
                 treeItem.getChildren().clear();
             }
+            Object userData = treeItem.getGraphic().getUserData();
             if (StringUtils.isNotBlank(filter)) {
-                ImageView imageView = new ImageView("icons/filter.png");
-                imageView.setFitHeight(16);
-                imageView.setFitWidth(16);
-                imageView.setUserData(treeItem.getGraphic().getUserData());
-                treeItem.setGraphic(imageView);
+                treeItem.setGraphic(FXUtils.loadImageView("icons/filter.png", 16, 16, userData));
             } else {
-                ImageView dbImage = new ImageView("icons/computer.png");
-                dbImage.setFitHeight(16);
-                dbImage.setFitWidth(16);
-                dbImage.setUserData(treeItem.getGraphic().getUserData());
-                treeItem.setGraphic(dbImage);
+                treeItem.setGraphic(FXUtils.loadImageView("icons/computer.png", 16, 16, userData));
             }
         } catch (SQLRecoverableException e) {
             _LOG.error(e.getMessage(), e);
@@ -272,7 +270,10 @@ public class MainController extends FXControllerBase {
         useLombokPlugin.setTooltip(new Tooltip("实体类使用Lombok @Data简化代码"));
     }
 
-    void loadLeftDBTree() {
+    /**
+     * 加载数据库连接
+     */
+    void loadDatabaseConnectionTree() {
         TreeItem<String> rootTreeItem = leftDBTree.getRoot();
         rootTreeItem.getChildren().clear();
         try {
@@ -280,15 +281,10 @@ public class MainController extends FXControllerBase {
             for (DatabaseConfiguration dbConfig : dbConfigs) {
                 TreeItem<String> treeItem = new TreeItem<>();
                 treeItem.setValue(dbConfig.getName());
-                ImageView dbImage = new ImageView("icons/computer.png");
-                dbImage.setFitHeight(16);
-                dbImage.setFitWidth(16);
-                dbImage.setUserData(dbConfig);
-                treeItem.setGraphic(dbImage);
+                treeItem.setGraphic(FXUtils.loadImageView("icons/computer.png", 16, 16, dbConfig));
                 rootTreeItem.getChildren().add(treeItem);
             }
         } catch (Exception e) {
-            _LOG.error("connect db failed, reason", e);
             AlertDialog.showError(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
     }

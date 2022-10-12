@@ -15,7 +15,7 @@ public interface EventBus {
      * @param eventHandler handler
      * @param <T>          event
      */
-    <T extends Event> Subscriber addEventHandler(EventSource<?> eventSource, EventType<T> eventType, EventHandler<? super T> eventHandler);
+    <T extends Event> Subscriber addEventHandler(EventType<T> eventType, EventHandler<? super T> eventHandler);
 
     /**
      * Remove event handler for event type.

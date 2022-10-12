@@ -10,6 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+/**
+ * 提供一些模板方法
+ */
 public abstract class FXUtils {
 
     /**
@@ -23,6 +26,14 @@ public abstract class FXUtils {
         ImageView dbImage = new ImageView(pathname);
         dbImage.setFitHeight(w);
         dbImage.setFitWidth(h);
+        return dbImage;
+    }
+
+    public static ImageView loadImageView(String pathname, double w, double h, Object userData) {
+        ImageView dbImage = new ImageView(pathname);
+        dbImage.setFitHeight(w);
+        dbImage.setFitWidth(h);
+        dbImage.setUserData(userData);
         return dbImage;
     }
 

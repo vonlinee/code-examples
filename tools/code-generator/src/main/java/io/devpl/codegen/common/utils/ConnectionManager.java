@@ -4,9 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class ConnectionManager {
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionManager.class);
@@ -30,7 +32,15 @@ public class ConnectionManager {
     }
 
     public static Connection getConnection() throws SQLException {
-        LOG.info("database FilePath :{}", file.getAbsolutePath());
-        return DriverManager.getConnection(DB_URL);
+        Properties properties = new Properties();
+        try {
+            properties.load(Resources.fromClasspath("jdbc.properties").openStream());
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        String url = properties.getProperty("jdbc.url");
+        String username = properties.getProperty("jdbc.username");
+        String password = properties.getProperty("jdbc.password");
+        return DriverManager.getConnection(url, username, password);
     }
 }

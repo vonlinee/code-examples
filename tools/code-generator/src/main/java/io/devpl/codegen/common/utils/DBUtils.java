@@ -131,14 +131,10 @@ public class DBUtils {
         }
         String url = getConnectionUrlWithSchema(config);
         Properties props = new Properties();
-
         props.setProperty("user", config.getUsername()); //$NON-NLS-1$
         props.setProperty("password", config.getPassword()); //$NON-NLS-1$
-
         DriverManager.setLoginTimeout(DB_CONNECTION_TIMEOUTS_SECONDS);
-        Connection connection = drivers.get(dbType).connect(url, props);
-        _LOG.info("getConnection, connection url: {}", connection);
-        return connection;
+        return drivers.get(dbType).connect(url, props);
     }
 
     public static List<String> getTableNames(DatabaseConfiguration config, String filter) throws Exception {
@@ -148,15 +144,15 @@ public class DBUtils {
             List<String> tables = new ArrayList<>();
             DatabaseMetaData md = connection.getMetaData();
             ResultSet rs;
-            if (DbType.valueOf(config.getDbType()) == DbType.MICROSOFT_SQLSERVER) {
+            if (DbType.fromProductName(config.getDbType()) == DbType.MICROSOFT_SQLSERVER) {
                 String sql = "SELECT name FROM sysobjects  WHERE xtype='u' OR xtype='v' ORDER BY name";
                 rs = connection.createStatement().executeQuery(sql);
                 while (rs.next()) {
                     tables.add(rs.getString("name"));
                 }
-            } else if (DbType.valueOf(config.getDbType()) == DbType.ORACLE) {
+            } else if (DbType.fromProductName(config.getDbType()) == DbType.ORACLE) {
                 rs = md.getTables(null, config.getUsername().toUpperCase(), null, new String[]{"TABLE", "VIEW"});
-            } else if (DbType.valueOf(config.getDbType()) == DbType.SQLITE) {
+            } else if (DbType.fromProductName(config.getDbType()) == DbType.SQLITE) {
                 String sql = "SELECT name FROM sqlite_master;";
                 rs = connection.createStatement().executeQuery(sql);
                 while (rs.next()) {
@@ -230,5 +226,14 @@ public class DBUtils {
             _LOG.error("load driver error", e);
             throw new DbDriverLoadingException("找不到" + dbType.getDriverJarFileName() + "驱动");
         }
+    }
+
+    public static boolean isTableExists(Statement statement, String tableName) {
+        try {
+            statement.execute("select * from " + tableName);
+        } catch (SQLException exception) {
+            return false;
+        }
+        return true;
     }
 }

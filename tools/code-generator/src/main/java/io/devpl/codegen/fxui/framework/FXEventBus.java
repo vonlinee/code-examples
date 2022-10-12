@@ -8,9 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-/**
- * @author Almas Baimagambetov (AlmasB) (almaslvl@gmail.com)
- */
 public final class FXEventBus implements EventBus {
 
     private final ConcurrentMap<EventType<? extends Event>, CopyOnWriteArraySet<Subscriber>>
@@ -33,7 +30,9 @@ public final class FXEventBus implements EventBus {
 
     @Override
     public void fireEvent(Event event) {
-        broadcastEvent(event);
+        if (event instanceof BroadcastEvent) {
+            broadcastEvent(event);
+        }
     }
 
     private void broadcastEvent(Event event) {

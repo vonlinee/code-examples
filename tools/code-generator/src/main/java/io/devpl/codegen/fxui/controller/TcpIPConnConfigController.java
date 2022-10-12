@@ -1,9 +1,11 @@
 package io.devpl.codegen.fxui.controller;
 
 import io.devpl.codegen.common.DbType;
+import io.devpl.codegen.common.utils.ConfigHelper;
+import io.devpl.codegen.fxui.framework.ControllerEvent;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
-import io.devpl.codegen.fxui.utils.FXUtils;
 import io.devpl.codegen.fxui.utils.AlertDialog;
+import io.devpl.codegen.fxui.utils.FXUtils;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -17,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 public class TcpIPConnConfigController extends FXControllerBase {
 
@@ -52,17 +53,18 @@ public class TcpIPConnConfigController extends FXControllerBase {
         dbTypeChoice.getSelectionModel().select(DbType.MYSQL5.getProductName());
     }
 
+
     /**
      * 保存连接配置信息
      */
     void saveConnection() {
         try {
             // TODO 配置持久化
-            // ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, assembleDbConnInfoConfiguration());
-            this.tabPaneController.getDialogStage().close();
+            ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, assembleDbConnInfoConfiguration());
             if (FXUtils.closeOwnerStage(nameField)) {
                 // 加载数据库连接，获取所有的表信息
-                mainUIController.loadLeftDBTree();
+                mainUIController.loadDatabaseConnectionTree();
+                // fireEvent(new ControllerEvent(ControllerEvent.RECEIVE_DATA));
             }
         } catch (Exception e) {
             _LOG.error(e.getMessage(), e);
@@ -93,7 +95,7 @@ public class TcpIPConnConfigController extends FXControllerBase {
         String dbType = dbTypeChoice.getValue();
         String schema = schemaField.getText();
         DatabaseConfiguration config = new DatabaseConfiguration();
-        if (StringUtils.isAnyEmpty(name, host, port, userName, encoding, dbType, schema)) {
+        if (StringUtils.isAnyEmpty(name, host, port, userName, encoding, dbType)) {
             Alert confirm = AlertDialog.buildConfirmation("是否填充默认值(MySQL5)？");
             Optional<ButtonType> buttonType = confirm.showAndWait();
             // 常用MySQL5版本的配置
@@ -102,8 +104,6 @@ public class TcpIPConnConfigController extends FXControllerBase {
                     initDefaultMySQLConnectionInfo();
                     // 直接返回，再次点击测试连接按钮
                     return null;
-                } else {
-                    AlertDialog.showError("除密码外所有选项必填！");
                 }
             }
         }
@@ -120,13 +120,13 @@ public class TcpIPConnConfigController extends FXControllerBase {
 
     // 默认填充MySQL的常用配置
     private void initDefaultMySQLConnectionInfo() {
-        FXUtils.setTextIfEmpty(nameField, UUID.randomUUID().toString());
         FXUtils.setTextIfEmpty(hostField, "127.0.0.1");
         FXUtils.setTextIfEmpty(portField, "3306");
         FXUtils.setTextIfEmpty(userNameField, "root");
         FXUtils.setTextIfEmpty(passwordField, "123456");
         FXUtils.setValueIfEmpty(encodingChoice, "utf8");
         FXUtils.setValueIfEmpty(dbTypeChoice, DbType.MYSQL5.name());
+        FXUtils.setTextIfEmpty(nameField, hostField.getText() + ":" + portField.getText() + ":" + userNameField.getText());
     }
 
     public void setConfig(DatabaseConfiguration config) {

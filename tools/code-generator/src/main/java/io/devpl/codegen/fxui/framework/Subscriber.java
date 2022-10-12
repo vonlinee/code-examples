@@ -10,6 +10,10 @@ import javafx.event.EventType;
 public final class Subscriber {
 
     private final EventBus bus;
+
+    /**
+     * 订阅者的相关信息
+     */
     private final Object subscriber;
     private EventType<? extends Event> eventType;
     private EventHandler<? super Event> eventHandler;

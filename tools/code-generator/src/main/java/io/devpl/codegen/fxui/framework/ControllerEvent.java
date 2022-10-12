@@ -24,4 +24,12 @@ public class ControllerEvent extends BroadcastEvent {
     public ControllerEvent(Object source, EventTarget target, EventType<? extends Event> eventType) {
         super(source, target, eventType);
     }
+
+    @Override
+    public ControllerEvent copyFor(Object newSource, EventTarget newTarget) {
+        final ControllerEvent newEvent = (ControllerEvent) clone();
+        newEvent.target = (newTarget != null) ? newTarget : NULL_SOURCE_TARGET;
+        newEvent.consumed = false;
+        return newEvent;
+    }
 }

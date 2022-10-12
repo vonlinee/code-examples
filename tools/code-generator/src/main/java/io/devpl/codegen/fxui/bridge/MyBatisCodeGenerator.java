@@ -124,7 +124,7 @@ public class MyBatisCodeGenerator {
             // useInformationSchema可以拿到表注释，从而生成类注释可以使用表的注释
             jdbcConfig.addProperty("useInformationSchema", "true");
         }
-        jdbcConfig.setDriverClass(DbType.valueOf(dbType).getDriverClassName());
+        jdbcConfig.setDriverClass(DbType.fromProductName(dbType).getDriverClassName());
         jdbcConfig.setConnectionURL(DBUtils.getConnectionUrlWithSchema(selectedDatabaseConfig));
         jdbcConfig.setUserId(selectedDatabaseConfig.getUsername());
         jdbcConfig.setPassword(selectedDatabaseConfig.getPassword());

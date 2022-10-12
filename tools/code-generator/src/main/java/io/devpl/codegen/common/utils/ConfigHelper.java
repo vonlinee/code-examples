@@ -68,6 +68,7 @@ public class ConfigHelper {
             }
             return configs;
         } catch (SQLException exception) {
+            exception.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -166,7 +167,7 @@ public class ConfigHelper {
     }
 
     public static String findConnectorLibPath(String dbType) {
-        DbType type = DbType.valueOf(dbType);
+        DbType type = DbType.fromProductName(dbType);
         URL resource = Thread.currentThread().getContextClassLoader().getResource("logback-2.xml");
         _LOG.info("jar resource: {}", resource);
         if (resource != null) {

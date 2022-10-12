@@ -200,7 +200,7 @@ public class OverSshConnConfigController extends TcpIPConnConfigController {
         try {
             ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, databaseConfig);
             this.tabPaneController.getDialogStage().close();
-            mainUIController.loadLeftDBTree();
+            mainUIController.loadDatabaseConnectionTree();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             AlertDialog.showError(e.getMessage());

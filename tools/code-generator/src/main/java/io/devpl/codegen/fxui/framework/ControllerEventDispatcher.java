@@ -4,11 +4,11 @@ import javafx.event.Event;
 import javafx.event.EventDispatchChain;
 import javafx.event.EventDispatcher;
 
-public class EventBusEventDispatcher implements EventDispatcher {
+public class ControllerEventDispatcher implements EventDispatcher {
 
     private final EventBus bus;
 
-    public EventBusEventDispatcher(EventBus eventBus) {
+    public ControllerEventDispatcher(EventBus eventBus) {
         this.bus = eventBus;
     }
 

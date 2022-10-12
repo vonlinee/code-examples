@@ -5,6 +5,7 @@ import io.devpl.codegen.common.utils.DBUtils;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.fxui.utils.FXUtils;
 import io.devpl.codegen.fxui.utils.AlertDialog;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.EOFException;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.ResourceBundle;
 
 /**
@@ -104,6 +106,7 @@ public class DbConnConfigController extends FXControllerBase {
         DatabaseConfiguration config = extractDatabaseConfiguration();
         if (config == null) return;
         if (isOverssh) {
+            // SSH连接
             Session sshSession = DBUtils.getSSHSession(config);
             if (sshSession == null) return;
             PictureProcessStateController pictureProcessState = new PictureProcessStateController();
@@ -151,13 +154,11 @@ public class DbConnConfigController extends FXControllerBase {
             new Thread(task).start();
         } else {
             try {
-                DBUtils.getConnection(config);
-                AlertDialog.showInformation("连接成功");
+                Connection connection = DBUtils.getConnection(config);
+                AlertDialog.showInformation("连接成功:" + connection);
             } catch (RuntimeException e) {
-                logger.error("", e);
                 AlertDialog.showWarning("连接失败, " + e.getMessage());
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
                 AlertDialog.showWarning("连接失败");
             }
         }

@@ -10,6 +10,8 @@ import javafx.scene.Node;
  */
 public class FXEvent extends Event {
 
+    public static final EventTarget UNKNOWN = tail -> tail;
+
     public FXEvent(EventType<? extends Event> eventType) {
         super(eventType);
     }
@@ -24,9 +26,9 @@ public class FXEvent extends Event {
      * Event.fireEvent(btn2, new MessageEvent(btn1, btn2, MessageEvent.RECEIVE_DATA));
      * 而通过界面点击触发的就不会这样
      * <p>
-     * Controller 向 Node 发送事件，事件源会被界面的事件源覆盖，而不是代码中指定的事件源
+     * Controller 向 Node 发送事件（EventTarget是Node），事件源会被界面的事件源覆盖，而不是代码中指定的事件源
      * <p>
-     * 也就是说 View 不能向 Controller 发送事件
+     * 也就是说 View 不需要向 Controller 发送事件
      */
     public static void publish(EventTarget eventTarget, Event event) {
         // FXEvent#publish 发布事件时，如果 EventTarget 是 Node ，那么 Event 中的事件源将被真实的事件源覆盖
@@ -42,11 +44,13 @@ public class FXEvent extends Event {
         Event.fireEvent(eventTarget, event);
     }
 
+    /**
+     * 广播事件，没有 EventTarget
+     * @param event 发送的事件
+     */
     public static void publish(Event event) {
         // 广播事件
-        if (event instanceof BroadcastEvent) {
-
-        }
+        Event.fireEvent(Event.NULL_SOURCE_TARGET, event.copyFor(null, Event.NULL_SOURCE_TARGET));
     }
 
     public boolean isSubTypeOf(final EventType<?> subType, final EventType<?> mayBeSuperType) {
