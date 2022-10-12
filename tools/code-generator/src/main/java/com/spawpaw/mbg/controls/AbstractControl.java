@@ -10,6 +10,11 @@ import javafx.scene.layout.HBox;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created By spawpaw@hotmail.com  2018-01-30
+ *
+ * @author BenBenShang spawpaw@hotmail.com
+ */
 public abstract class AbstractControl<T> {
     protected static final int MIN_WIDTH_LEFT = 150;
     protected static final int MIN_WIDTH_RIGHT = 350;

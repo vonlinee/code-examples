@@ -111,14 +111,14 @@ public class MainController extends CodeGenApplication implements Initializable 
     private void loadExposedConfigs() {
         configs = new TreeMap<>(Comparator.naturalOrder());
         ExportToTab[] defaultTargetLayer = ProjectConfig.class.getAnnotationsByType(ExportToTab.class);
+
         for (Field field : ProjectConfig.class.getFields()) {
             try {
                 Config config = field.getAnnotation(Config.class);
                 ExportToTab[] targetTabs = field.getAnnotationsByType(ExportToTab.class);
-                if (targetTabs.length == 0) {
+                if (targetTabs.length == 0)
                     targetTabs = defaultTargetLayer;
-                }
-                if (targetTabs.length == 0) {
+                if (targetTabs == null || targetTabs.length == 0) {
                     continue;
                 } else {
                     defaultTargetLayer = targetTabs;
@@ -151,7 +151,7 @@ public class MainController extends CodeGenApplication implements Initializable 
         Gson fxGson = FxGson.create();
         cb_load_saved_project_config.getItems().clear();
         if (projectConfigDir.listFiles() != null)
-            for (File file : Objects.requireNonNull(projectConfigDir.listFiles())) {
+            for (File file : projectConfigDir.listFiles()) {
                 cb_load_saved_project_config.getItems().add(file.getName());
             }
         cb_load_saved_project_config.valueProperty().addListener((observable, oldValue, newValue) -> {
