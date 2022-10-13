@@ -1,5 +1,6 @@
 package io.devpl.codegen.fxui.utils;
 
+import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,6 +15,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -156,6 +158,19 @@ public abstract class FXUtils {
     public static Stage createDialogStage(
             String title, StageStyle style, Modality modality, Window owner, Scene scene) {
         return createDialogStage(title, style, modality, owner, scene, false, false);
+    }
+
+    /**
+     * 获取事件源所在的窗口
+     * @param event 事件
+     * @return Optional of Stage
+     */
+    public static Optional<Stage> getOwnerStage(Event event) {
+        Object source = event.getSource();
+        if (source instanceof Node) {
+            return Optional.ofNullable((Stage) ((Node) source).getScene().getWindow());
+        }
+        return Optional.empty();
     }
 
     public static Stage createDialogStage(

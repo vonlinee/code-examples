@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
@@ -17,12 +18,12 @@ public class MainActivity extends AppCompatActivity {
 
         View view = findViewById(Layout.BREAK_STRATEGY_BALANCED);
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        Intent iten = new Intent();
 
-            }
-        });
+
+
+
+
     }
 
 }

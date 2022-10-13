@@ -78,7 +78,7 @@ public class SelectTableColumnController extends FXControllerBase {
         if (items != null && items.size() > 0) {
             List<IgnoredColumn> ignoredColumns = new ArrayList<>();
             List<ColumnOverride> columnOverrides = new ArrayList<>();
-            items.stream().forEach(item -> {
+            items.forEach(item -> {
                 if (!item.getChecked()) {
                     IgnoredColumn ignoredColumn = new IgnoredColumn(item.getColumnName());
                     ignoredColumns.add(ignoredColumn);
@@ -125,6 +125,4 @@ public class SelectTableColumnController extends FXControllerBase {
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
-
-
 }

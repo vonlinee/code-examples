@@ -3,11 +3,6 @@ package com.spawpaw.mbg.controls;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
-/**
- * Created By spawpaw@hotmail.com  2018-01-30
- *
- * @author BenBenShang spawpaw@hotmail.com
- */
 public class TextAreaControl extends AbstractControl<String> {
     protected TextArea textArea;
     protected Label label;

@@ -5,9 +5,9 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 
 /**
- * @author Almas Baimagambetov (AlmasB) (almaslvl@gmail.com)
+ * @see com.google.common.eventbus.Subscribe
  */
-public final class Subscriber {
+public class Subscriber {
 
     private final EventBus bus;
 

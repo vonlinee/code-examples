@@ -49,7 +49,6 @@ public class MainController extends CodeGenApplication implements Initializable 
         refreshProjectConfigList();
         refreshDatabaseConfigList();
         setSelectedProjectConfig(new ProjectConfig(), "untitled");
-
         cb_select_language.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals("中文")) {
                 Constants.setLocale(Locale.CHINA);

@@ -10,12 +10,6 @@ import org.mybatis.generator.config.Context;
 
 import java.util.Map;
 
-/**
- * Created By spawpaw@hotmail.com  2018-03-22
- * this class holds the basic info for a column.
- *
- * @author BenBenShang spawpaw@hotmail.com
- */
 public class Column extends ConfigMatcher {
     public final String actualName;//真实列名称
     public final String fieldName;//该字段entity中的变量名称

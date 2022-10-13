@@ -12,7 +12,9 @@ import io.devpl.codegen.fxui.utils.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.input.KeyCode;
@@ -39,11 +41,8 @@ import java.util.ResourceBundle;
 
 public class MainController extends FXControllerBase {
 
-    private static final Logger _LOG = LoggerFactory.getLogger(MainController.class);
-
     @FXML
     public BorderPane root;
-
     // tool bar buttons
     @FXML
     private Label connectionLabel;
@@ -162,10 +161,13 @@ public class MainController extends FXControllerBase {
                     MenuItem item2 = new MenuItem("编辑连接");
                     item2.setOnAction(event1 -> {
                         DatabaseConfiguration selectedConfig = (DatabaseConfiguration) treeItem.getGraphic().getUserData();
-                        DbConnConfigController controller = (DbConnConfigController) loadFXMLPage("编辑数据库连接", FXMLPage.NEW_CONNECTION, false);
-                        controller.setMainUIController(this);
-                        controller.setConfig(selectedConfig);
-                        controller.showDialogStage();
+                        // 将配置填充进去
+                        FXMLHelper.load(FXMLPage.NEW_CONNECTION.getFxml()).ifPresent(parent -> {
+                            // fix bug: 嵌套弹出时会发生dialogStage被覆盖的情况
+                            Node source = (Node) event.getSource();
+                            Stage ownerStage = (Stage) source.getScene().getWindow();
+                            FXUtils.createDialogStage("新建数据库连接", ownerStage, parent).show();
+                        });
                     });
                     MenuItem item3 = new MenuItem("删除连接");
                     item3.setOnAction(event1 -> {
@@ -246,10 +248,10 @@ public class MainController extends FXControllerBase {
                 treeItem.setGraphic(FXUtils.loadImageView("icons/computer.png", 16, 16, userData));
             }
         } catch (SQLRecoverableException e) {
-            _LOG.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             AlertDialog.showError("连接超时");
         } catch (Exception e) {
-            _LOG.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             AlertDialog.showError(e.getMessage());
         }
     }
@@ -288,9 +290,9 @@ public class MainController extends FXControllerBase {
     }
 
     @FXML
-    public void chooseProjectFolder() {
+    public void chooseProjectFolder(ActionEvent event) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        File selectedFolder = directoryChooser.showDialog(getPrimaryStage());
+        File selectedFolder = directoryChooser.showDialog(((Node) event.getSource()).getScene().getWindow());
         if (selectedFolder != null) {
             projectFolderField.setText(selectedFolder.getAbsolutePath());
         }
@@ -391,14 +393,14 @@ public class MainController extends FXControllerBase {
                 AlertDialog.showError("名称不能为空");
                 return;
             }
-            _LOG.info("user choose name: {}", name);
+            LOG.info("user choose name: {}", name);
             try {
                 CodeGenConfiguration generatorConfig = getGeneratorConfigFromUI();
                 generatorConfig.setName(name);
                 ConfigHelper.deleteGeneratorConfig(name);
                 ConfigHelper.saveGeneratorConfig(generatorConfig);
             } catch (Exception e) {
-                _LOG.error("保存配置失败", e);
+                LOG.error("保存配置失败", e);
                 AlertDialog.showError("保存配置失败");
             }
         }
@@ -483,7 +485,7 @@ public class MainController extends FXControllerBase {
             }
             controller.showDialogStage();
         } catch (Exception e) {
-            _LOG.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             AlertDialog.showError(e.getMessage());
         }
     }

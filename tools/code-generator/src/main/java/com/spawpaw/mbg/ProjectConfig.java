@@ -4,19 +4,11 @@ import com.google.common.base.CaseFormat;
 import com.spawpaw.mbg.annotations.*;
 import com.spawpaw.mbg.enums.DeclaredPlugins;
 import com.spawpaw.mbg.util.Constants;
-import com.spawpaw.mybatis.generator.gui.annotations.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-/**
- * Created By spawpaw@hotmail.com 2018.1.20
- * Description:
- * 默认的MBG配置
- *
- * @author BenBenShang spawpaw@hotmail.com
- */
 public class ProjectConfig {
     public StringProperty selectedTable = new SimpleStringProperty("");
     /****基本配置******************************************************************************************************/

@@ -23,11 +23,12 @@ public class FXMLHelper {
     }
 
     public static Optional<Parent> load(String fxmlLocation) {
-        Parent parent = null;
+        Parent parent;
         try {
             parent = createFXMLLoader(fxmlLocation).load();
         } catch (IOException exception) {
             LOG.error("load fxml[{}] failed, {}", fxmlLocation, exception);
+            return Optional.empty();
         }
         return Optional.ofNullable(parent);
     }

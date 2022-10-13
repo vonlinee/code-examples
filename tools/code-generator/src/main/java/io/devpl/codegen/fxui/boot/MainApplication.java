@@ -24,18 +24,13 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = FXMLHelper.createFXMLLoader("fxml/main.fxml");
+        FXMLHelper.load("fxml/main.fxml").ifPresent(parent -> {
+            primaryStage.setScene(new Scene(parent));
+        });
         primaryStage.setResizable(true);
-        try {
-            primaryStage.setScene(new Scene(fxmlLoader.load()));
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
         primaryStage.setTitle("Mybatis Generator GUI");
         primaryStage.getIcons().add(new Image("icons/mybatis-logo.png"));
         primaryStage.show();
-        MainController controller = fxmlLoader.getController();
-        controller.setPrimaryStage(primaryStage);
     }
 
     @Override
