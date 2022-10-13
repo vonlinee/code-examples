@@ -19,6 +19,7 @@ import java.util.logging.Level;
  * Once registered, subscribers receive events until {@link #unregister(Object)} is called.
  * Event handling methods must be annotated by {@link Subscribe}, must be public, return nothing (void),
  * and have exactly one parameter (the event).
+ *
  * @author Markus Junginger, greenrobot
  */
 public class EventBus {
@@ -130,7 +131,7 @@ public class EventBus {
 
     // Must be called in synchronized block
     private void subscribe(Object subscriber, SubscriberMethod subscriberMethod) {
-        Class<?> eventType = subscriberMethod.eventType;
+        Class<?> eventType = subscriberMethod.getEventType();
         Subscription newSubscription = new Subscription(subscriber, subscriberMethod);
         CopyOnWriteArrayList<Subscription> subscriptions = subscriptionsByEventType.get(eventType);
         if (subscriptions == null) {
@@ -142,19 +143,17 @@ public class EventBus {
                         + eventType);
             }
         }
-
         int size = subscriptions.size();
         for (int i = 0; i <= size; i++) {
-            if (i == size || subscriberMethod.priority > subscriptions.get(i).subscriberMethod.priority) {
+            if (i == size || subscriberMethod.getPriority() > subscriptions.get(i).getSubscriberMethod().getPriority()) {
                 subscriptions.add(i, newSubscription);
                 break;
             }
         }
-
         List<Class<?>> subscribedEvents = typesBySubscriber.computeIfAbsent(subscriber, k -> new ArrayList<>());
         subscribedEvents.add(eventType);
-
-        if (subscriberMethod.sticky) {
+        // 处理粘性事件
+        if (subscriberMethod.isSticky()) {
             if (eventInheritance) {
                 // Existing sticky events of all subclasses of eventType have to be considered.
                 // Note: Iterating over all events may be inefficient with lots of sticky events,
@@ -209,7 +208,7 @@ public class EventBus {
             int size = subscriptions.size();
             for (int i = 0; i < size; i++) {
                 Subscription subscription = subscriptions.get(i);
-                if (subscription.subscriber == subscriber) {
+                if (subscription.getSubscriber() == subscriber) {
                     subscription.active = false;
                     subscriptions.remove(i);
                     i--;
@@ -278,7 +277,7 @@ public class EventBus {
             throw new EventBusException("Event may not be null");
         } else if (postingState.event != event) {
             throw new EventBusException("Only the currently handled event may be aborted");
-        } else if (postingState.subscription.subscriberMethod.threadMode != ThreadMode.POSTING) {
+        } else if (postingState.subscription.getSubscriberMethod().getThreadMode() != ThreadMode.POSTING) {
             throw new EventBusException(" event handlers may only abort the incoming event");
         }
 
@@ -299,6 +298,7 @@ public class EventBus {
 
     /**
      * Gets the most recent sticky event for the given type.
+     *
      * @see #postSticky(Object)
      */
     public <T> T getStickyEvent(Class<T> eventType) {
@@ -309,6 +309,7 @@ public class EventBus {
 
     /**
      * Remove and gets the recent sticky event for the given event type.
+     *
      * @see #postSticky(Object)
      */
     public <T> T removeStickyEvent(Class<T> eventType) {
@@ -319,6 +320,7 @@ public class EventBus {
 
     /**
      * Removes the sticky event if it equals to the given event.
+     *
      * @return true if the events matched and the sticky event was removed.
      */
     public boolean removeStickyEvent(Object event) {
@@ -412,13 +414,14 @@ public class EventBus {
 
     /**
      * 将事件提交给监听方法
+     *
      * @param subscription
      * @param event
      * @param isMainThread
      */
     private void postToSubscription(Subscription subscription, Object event, boolean isMainThread, Callback callback) {
         // 选择以何种线程模型运行
-        switch (subscription.subscriberMethod.threadMode) {
+        switch (subscription.getSubscriberMethod().getThreadMode()) {
             case POSTING:
                 invokeSubscriber(subscription, event, callback);
                 break;
@@ -450,7 +453,7 @@ public class EventBus {
                 asyncPoster.enqueue(subscription, event);
                 break;
             default:
-                throw new IllegalStateException("Unknown thread mode: " + subscription.subscriberMethod.threadMode);
+                throw new IllegalStateException("Unknown thread mode: " + subscription.getSubscriberMethod().getThreadMode());
         }
     }
 
@@ -503,19 +506,21 @@ public class EventBus {
 
     /**
      * 执行监听方法
+     *
      * @param subscription
      * @param event
      */
     void invokeSubscriber(Subscription subscription, Object event, Callback callback) {
         try {
-            Object result = subscription.getSubscriberMethod().getMethod().invoke(subscription.getSubscriber(), event);
-            if (callback != null) {
-                callback.call(result);
+            subscription.invoke(event);
+        } catch (Exception exception) {
+            if (exception instanceof ReflectiveOperationException) {
+                if (exception instanceof InvocationTargetException) {
+                    handleSubscriberException(subscription, event, exception.getCause());
+                } else if (exception instanceof IllegalAccessException) {
+                    throw new RuntimeException("unspection exception: " + exception);
+                }
             }
-        } catch (InvocationTargetException e) {
-            handleSubscriberException(subscription, event, e.getCause());
-        } catch (IllegalAccessException e) {
-            throw new IllegalStateException("Unexpected exception", e);
         }
     }
 
@@ -523,7 +528,7 @@ public class EventBus {
         if (event instanceof SubscriberExceptionEvent) {
             if (logSubscriberExceptions) {
                 // Don't send another SubscriberExceptionEvent to avoid infinite event recursion, just log
-                logger.log(Level.SEVERE, "SubscriberExceptionEvent subscriber " + subscription.subscriber.getClass()
+                logger.log(Level.SEVERE, "SubscriberExceptionEvent subscriber " + subscription.getSubscriber().getClass()
                         + " threw an exception", cause);
                 SubscriberExceptionEvent exEvent = (SubscriberExceptionEvent) event;
                 logger.log(Level.SEVERE, "Initial event " + exEvent.causingEvent + " caused exception in "
@@ -535,11 +540,11 @@ public class EventBus {
             }
             if (logSubscriberExceptions) {
                 logger.log(Level.SEVERE, "Could not dispatch event: " + event.getClass() + " to subscribing class "
-                        + subscription.subscriber.getClass(), cause);
+                        + subscription.getSubscriber().getClass(), cause);
             }
             if (sendSubscriberExceptionEvent) {
                 SubscriberExceptionEvent exEvent = new SubscriberExceptionEvent(this, cause, event,
-                        subscription.subscriber);
+                        subscription.getSubscriber());
                 post(exEvent);
             }
         }

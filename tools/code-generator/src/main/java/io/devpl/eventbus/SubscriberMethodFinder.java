@@ -80,7 +80,7 @@ class SubscriberMethodFinder {
             if (findState.subscriberInfo != null) {
                 SubscriberMethod[] array = findState.subscriberInfo.getSubscriberMethods();
                 for (SubscriberMethod subscriberMethod : array) {
-                    if (findState.checkAdd(subscriberMethod.method, subscriberMethod.eventType)) {
+                    if (findState.checkAdd(subscriberMethod.getMethod(), subscriberMethod.getEventType())) {
                         findState.subscriberMethods.add(subscriberMethod);
                     }
                 }

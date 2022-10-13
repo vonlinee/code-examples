@@ -1,11 +1,29 @@
 package io.devpl.eventbus;
 
-public class Subscription {
-    final Object subscriber;
-    final SubscriberMethod subscriberMethod;
+import io.devpl.eventbus.ext.Callback;
+import io.devpl.eventbus.ext.Invocation;
+
+import java.lang.reflect.Method;
+
+/**
+ * 封装订阅者信息
+ * 包含订阅者所在类，订阅方法
+ */
+public class Subscription implements Invocation<Object, Object> {
+
+    volatile boolean consumed;
+
+    private final Object subscriber;
+    private final SubscriberMethod subscriberMethod;
+
+    /**
+     * 可能为Null
+     */
+    private Callback callback;
+
     /**
      * Becomes false as soon as {@link EventBus#unregister(Object)} is called, which is checked by queued event delivery
-     * {@link EventBus#invokeSubscriber(PendingPost)} to prevent race conditions.
+     * { EventBus#invokeSubscriber(PendingPost)} to prevent race conditions.
      */
     volatile boolean active;
 
@@ -41,5 +59,16 @@ public class Subscription {
 
     public boolean isActive() {
         return active;
+    }
+
+    @Override
+    public Object invoke(Object input) throws Exception {
+        Method method = subscriberMethod.getMethod();
+        method.setAccessible(true);
+        Object result = method.invoke(subscriber, input);
+        if (callback != null) {
+            callback.call(result);
+        }
+        return result;
     }
 }

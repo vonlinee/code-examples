@@ -3,15 +3,16 @@ package io.devpl.eventbus;
 import java.lang.reflect.Method;
 
 /**
+ * 仅内部使用
  * Used internally by EventBus and generated subscriber indexes.
  */
 public class SubscriberMethod {
-    final Method method;
-    final ThreadMode threadMode;
-    final Class<?> eventType;
-    final int priority;
-    final boolean sticky;
-    final Class<?> returnType;
+    private final Method method;
+    private final ThreadMode threadMode;
+    private final Class<?> eventType;
+    private final int priority;
+    private final boolean sticky;
+    private final Class<?> returnType;
 
     /**
      * Used for efficient comparison
@@ -44,11 +45,9 @@ public class SubscriberMethod {
     private synchronized void checkMethodString() {
         if (methodString == null) {
             // Method.toString has more overhead, just take relevant parts of the method
-            StringBuilder builder = new StringBuilder(64);
-            builder.append(method.getDeclaringClass().getName());
-            builder.append('#').append(method.getName());
-            builder.append('(').append(eventType.getName());
-            methodString = builder.toString();
+            methodString = method.getDeclaringClass().getName() +
+                    '#' + method.getName() +
+                    '(' + eventType.getName();
         }
     }
 
@@ -63,5 +62,25 @@ public class SubscriberMethod {
 
     public Method getMethod() {
         return method;
+    }
+
+    public ThreadMode getThreadMode() {
+        return threadMode;
+    }
+
+    public Class<?> getEventType() {
+        return eventType;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public boolean isSticky() {
+        return sticky;
+    }
+
+    public String getMethodString() {
+        return methodString;
     }
 }
