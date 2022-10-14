@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -37,7 +38,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class MainController extends FXControllerBase {
+public class MainController extends FXController {
 
     @FXML
     public BorderPane root;
@@ -204,6 +205,13 @@ public class MainController extends FXControllerBase {
         setTooltip();
         //默认选中第一个，否则如果忘记选择，没有对应错误提示
         encodingChoice.getSelectionModel().selectFirst();
+
+        addEventHandler(FXEvent.DATA_SEND, new EventHandler<FXEvent>() {
+            @Override
+            public void handle(FXEvent event) {
+                loadDatabaseConnectionTree(event.getExtra("db_configs"));
+            }
+        });
     }
 
     /**

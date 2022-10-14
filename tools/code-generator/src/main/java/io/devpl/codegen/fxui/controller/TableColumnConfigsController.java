@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  * @author xueqi
  * @date 2021-06-24
  */
-public class TableColumnConfigsController extends FXControllerBase {
+public class TableColumnConfigsController extends FXController {
 
     private static final Logger _LOG = LoggerFactory.getLogger(TableColumnConfigsController.class);
     private static final String COL_NAME_PREFIX_REGEX = "(?<=%s)[^\"]+";   // pattern regex and split prefix: (?<=aggregate_|f_)[^"]+  f_ or d_ prefix
@@ -52,7 +52,6 @@ public class TableColumnConfigsController extends FXControllerBase {
         try {
             // 1. generator bean propert name
             this.genProertyNameByColumnNamePrefix();
-
             // close window
             this.closeDialogStage();
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package io.devpl.codegen.fxui.controller;
 
+import io.devpl.codegen.fxui.model.TableColumnCustomization;
 import io.devpl.codegen.fxui.utils.FXMLPage;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,20 +9,16 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseEvent;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
-
-import io.devpl.codegen.fxui.model.TableColumnCustomization;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-/**
- * Created by Owen on 6/20/16.
- */
-public class SelectTableColumnController extends FXControllerBase {
+public class SelectTableColumnController extends FXController {
 
     @FXML
     private TableView<TableColumnCustomization> columnListView;
@@ -73,7 +70,7 @@ public class SelectTableColumnController extends FXControllerBase {
     }
 
     @FXML
-    public void ok() {
+    public void apply() {
         ObservableList<TableColumnCustomization> items = columnListView.getItems();
         if (items != null && items.size() > 0) {
             List<IgnoredColumn> ignoredColumns = new ArrayList<>();
@@ -103,8 +100,12 @@ public class SelectTableColumnController extends FXControllerBase {
     }
 
     @FXML
-    public void configAction() {
-        TableColumnConfigsController controller = (TableColumnConfigsController) loadFXMLPage("定制列配置", FXMLPage.TABLE_COLUMN_CONFIG,true);
+    public void configAction(MouseEvent event) {
+        // FXMLHelper.load(FXMLPage.TABLE_COLUMN_CONFIG.getFxml()).ifPresent(parent -> {
+        //     FXUtils.createDialogStage("定制列配置", ((Node) event.getSource()).getScene().getWindow(), parent).show();
+        // });
+
+        TableColumnConfigsController controller = (TableColumnConfigsController) loadFXMLPage("定制列配置", FXMLPage.TABLE_COLUMN_CONFIG, true);
         controller.setColumnListView(this.columnListView);
         controller.setTableName(this.tableName);
         controller.showDialogStage();

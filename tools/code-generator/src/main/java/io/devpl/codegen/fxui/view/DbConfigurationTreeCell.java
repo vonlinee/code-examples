@@ -10,10 +10,8 @@ import javafx.scene.layout.HBox;
 
 import java.lang.ref.WeakReference;
 
-/**
- * Created by Owen on 6/14/16.
- */
-public class LeftDbTreeCell extends TreeCell<DatabaseConfiguration> {
+public class DbConfigurationTreeCell extends TreeCell<DatabaseConfiguration> {
+
     private HBox hbox;
 
     private WeakReference<TreeItem<DatabaseConfiguration>> treeItemRef;
@@ -29,7 +27,6 @@ public class LeftDbTreeCell extends TreeCell<DatabaseConfiguration> {
             if (oldTreeItem != null) {
                 oldTreeItem.graphicProperty().removeListener(weakTreeItemGraphicListener);
             }
-
             TreeItem<DatabaseConfiguration> newTreeItem = getTreeItem();
             if (newTreeItem != null) {
                 newTreeItem.graphicProperty().addListener(weakTreeItemGraphicListener);
@@ -44,7 +41,7 @@ public class LeftDbTreeCell extends TreeCell<DatabaseConfiguration> {
     private final WeakInvalidationListener weakTreeItemListener =
             new WeakInvalidationListener(treeItemListener);
 
-    public LeftDbTreeCell() {
+    public DbConfigurationTreeCell() {
         treeItemProperty().addListener(weakTreeItemListener);
         if (getTreeItem() != null) {
             getTreeItem().graphicProperty().addListener(weakTreeItemGraphicListener);

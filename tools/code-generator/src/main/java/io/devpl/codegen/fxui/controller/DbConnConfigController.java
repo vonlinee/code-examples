@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 /**
  * 数据库连接配置控制器
  */
-public class DbConnConfigController extends FXControllerBase {
+public class DbConnConfigController extends FXController {
 
     @FXML
     private TabPane tabPane;

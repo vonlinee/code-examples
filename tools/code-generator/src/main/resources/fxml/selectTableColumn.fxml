@@ -21,7 +21,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
         </columnResizePolicy>
     </TableView>
-    <Button focusTraversable="false" layoutX="642.0" layoutY="453.0" mnemonicParsing="false" onAction="#ok"
+    <Button focusTraversable="false" layoutX="642.0" layoutY="453.0" mnemonicParsing="false" onAction="#apply"
             prefHeight="27.0" prefWidth="59.0" text="确认" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="29.0"/>
     <Button focusTraversable="false" layoutX="556.0" layoutY="486.0" mnemonicParsing="false" onAction="#cancel"
             text="取消" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="113.0"/>
@@ -29,6 +29,5 @@
           text="2. 如果要定制列的Java数据类型, 编辑Java Type和Property Name或者你自己的Type Handler, 注意要按Enter键保存，然后再点击确认方可生效。"
           wrappingWidth="706.0"/>
     <Text layoutX="14.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1. 如果不想生成某列请取消勾选对应的列"/>
-    <Button focusTraversable="false" layoutX="14.0" layoutY="489.0" mnemonicParsing="false" onAction="#configAction"
-            text="属性配置"/>
+    <Button focusTraversable="false" layoutX="14.0" layoutY="489.0" mnemonicParsing="false" onMouseClicked="#configAction" text="属性配置"/>
 </AnchorPane>

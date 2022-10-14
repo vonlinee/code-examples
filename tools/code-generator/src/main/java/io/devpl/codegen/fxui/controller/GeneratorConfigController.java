@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class GeneratorConfigController extends FXControllerBase {
+public class GeneratorConfigController extends FXController {
 
     private static final Logger _LOG = LoggerFactory.getLogger(GeneratorConfigController.class);
 

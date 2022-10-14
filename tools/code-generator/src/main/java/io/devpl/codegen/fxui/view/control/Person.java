@@ -1,5 +1,6 @@
 package io.devpl.codegen.fxui.view.control;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,7 +10,7 @@ import javafx.beans.property.StringProperty;
  * 先创建一个静态内部类
  * 作为TableView的行数据
  */
-public class Person {
+public class Person extends RecursiveTreeObject<Person> {
     private final StringProperty name;
     private final IntegerProperty age;
     private final StringProperty sex;

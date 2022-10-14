@@ -3,7 +3,7 @@ package io.devpl.codegen.fxui.controller;
 import io.devpl.codegen.fxui.utils.AlertDialog;
 import io.devpl.codegen.fxui.utils.FXMLHelper;
 import io.devpl.codegen.fxui.utils.FXMLPage;
-import io.devpl.eventbus.ext.EventBus;
+import javafx.event.*;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * Code designers should also be careful when using the Stage within a controller.
@@ -24,35 +25,43 @@ import java.util.Map;
  * and is shouldn’t really be responsible for the Window lifecycle.
  * This responsibility more comfortably fits with whichever class created the Stage in the first place.
  */
-public abstract class FXControllerBase implements Initializable {
+public abstract class FXController implements EventTarget, Initializable {
 
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
 
-    private static final EventBus BUS = EventBus.getDefault();
+    private static final FXEventBus BUS = new FXEventBus();
 
-    public FXControllerBase() {
-        BUS.register(this);
+    private final ControllerEventDispatcher dispatcher = new ControllerEventDispatcher(this);
+
+    public FXController() {
+
     }
 
-    public final void publish(Object event) {
-        BUS.post(event);
+    public final void publish(Event event, Predicate<EventTarget> filter) {
+        BUS.publish(event, filter);
+    }
+
+    public final void publish(Event event) {
+        BUS.publish(event, target -> true);
     }
 
     private Stage primaryStage;
     private Stage dialogStage;
 
-    private static final Map<FXMLPage, SoftReference<? extends FXControllerBase>> cacheNodeMap = new HashMap<>();
+    private static final Map<FXMLPage, SoftReference<? extends FXController>> cacheNodeMap = new HashMap<>();
 
-    public FXControllerBase loadFXMLPage(String title, FXMLPage fxmlPage, boolean cache) {
-        SoftReference<? extends FXControllerBase> parentNodeRef = cacheNodeMap.get(fxmlPage);
+    public FXController loadFXMLPage(String title, FXMLPage fxmlPage, boolean cache) {
+        SoftReference<? extends FXController> parentNodeRef = cacheNodeMap.get(fxmlPage);
         if (cache && parentNodeRef != null) {
             return parentNodeRef.get();
         }
+
+
         FXMLLoader loader = FXMLHelper.createFXMLLoader(fxmlPage);
         Parent loginNode;
         try {
             loginNode = loader.load();
-            FXControllerBase controller = loader.getController();
+            FXController controller = loader.getController();
             // fix bug: 嵌套弹出时会发生dialogStage被覆盖的情况
             Stage tmpDialogStage = new Stage();
             tmpDialogStage.setTitle(title);
@@ -64,7 +73,7 @@ public abstract class FXControllerBase implements Initializable {
             tmpDialogStage.show();
             controller.setDialogStage(tmpDialogStage);
             // put into cache map
-            SoftReference<FXControllerBase> softReference = new SoftReference<>(controller);
+            SoftReference<FXController> softReference = new SoftReference<>(controller);
             cacheNodeMap.put(fxmlPage, softReference);
             return controller;
         } catch (IOException e) {
@@ -100,5 +109,30 @@ public abstract class FXControllerBase implements Initializable {
         if (dialogStage != null) {
             dialogStage.close();
         }
+    }
+
+    /**
+     * 订阅事件
+     * @param eventType
+     * @param eventHandler
+     * @param <T>
+     */
+    public final <T extends Event> void addEventHandler(
+            final EventType<T> eventType,
+            final EventHandler<? super T> eventHandler) {
+        BUS.register(eventType, this, eventHandler);
+    }
+
+    public void fireEvent() {
+
+    }
+
+    private ControllerEventDispatcher getInternalEventDispatcher() {
+        return dispatcher;
+    }
+
+    @Override
+    public EventDispatchChain buildEventDispatchChain(EventDispatchChain tail) {
+        return tail.prepend(dispatcher);
     }
 }

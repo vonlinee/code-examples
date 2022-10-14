@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class TcpIPConnConfigController extends FXControllerBase {
+public class TcpIPConnConfigController extends FXController {
 
     private static final Logger _LOG = LoggerFactory.getLogger(TcpIPConnConfigController.class);
 
@@ -62,7 +62,9 @@ public class TcpIPConnConfigController extends FXControllerBase {
             ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, assembleDbConnInfoConfiguration());
             if (FXUtils.closeOwnerStage(nameField)) {
                 // 加载数据库连接，获取所有的表信息
-                publish(List.of(assembleDbConnInfoConfiguration()));
+                FXEvent fxEvent = new FXEvent(FXEvent.DATA_SEND);
+                fxEvent.putExtra("db_configs", List.of(assembleDbConnInfoConfiguration()));
+                publish(fxEvent, target -> target.getClass() == MainController.class);
             }
         } catch (Exception e) {
             AlertDialog.showError(e.getMessage());
