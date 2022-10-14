@@ -1,8 +1,8 @@
 package io.devpl.codegen.common.utils;
 
 import com.alibaba.fastjson.JSON;
-import io.devpl.codegen.fxui.model.CodeGenConfiguration;
-import io.devpl.codegen.fxui.model.DatabaseConfiguration;
+import io.devpl.codegen.ui.fxui.model.CodeGenConfiguration;
+import io.devpl.codegen.ui.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.common.DbType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

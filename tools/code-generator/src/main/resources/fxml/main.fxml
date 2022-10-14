@@ -9,7 +9,7 @@
 <?import java.lang.*?>
 <BorderPane fx:id="root" prefHeight="613.0" prefWidth="918.0" stylesheets="@../style.css"
             xmlns="http://javafx.com/javafx/11"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.codegen.fxui.controller.MainController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.codegen.ui.fxui.controller.MainController">
     <top>
         <VBox>
             <ToolBar minHeight="70.0" prefHeight="81.0" prefWidth="918.0" BorderPane.alignment="CENTER">

@@ -1,6 +1,6 @@
 package io.devpl.codegen.fxui.app;
 
-import io.devpl.codegen.fxui.utils.FXMLHelper;
+import io.devpl.codegen.ui.fxui.utils.FXMLHelper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

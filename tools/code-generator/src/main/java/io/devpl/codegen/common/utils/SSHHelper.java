@@ -3,7 +3,7 @@ package io.devpl.codegen.common.utils;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import io.devpl.codegen.fxui.model.DatabaseConfiguration;
+import io.devpl.codegen.ui.fxui.model.DatabaseConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 

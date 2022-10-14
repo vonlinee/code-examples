@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 
-public class ServiceAndControllerGeneratorPlugin extends PluginAdapter {
+public class MVCSupportPlugin extends PluginAdapter {
 
     // 项目目录，一般为 src/main/java
     private String targetProject;
