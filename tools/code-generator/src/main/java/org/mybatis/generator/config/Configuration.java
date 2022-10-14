@@ -1,6 +1,6 @@
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class Configuration {
         List<String> errors = new ArrayList<>();
 
         for (String classPathEntry : classPathEntries) {
-            if (!stringHasValue(classPathEntry)) {
+            if (!hasLength(classPathEntry)) {
                 errors.add(getString("ValidationError.19")); //$NON-NLS-1$
                 // only need to state this error once
                 break;

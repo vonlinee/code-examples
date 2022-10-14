@@ -19,7 +19,7 @@ import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualif
 import static org.mybatis.generator.internal.util.StringUtils.isTrue;
 import static org.mybatis.generator.internal.util.StringUtils.stringContainsSQLWildcard;
 import static org.mybatis.generator.internal.util.StringUtils.stringContainsSpace;
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.sql.DatabaseMetaData;
@@ -302,7 +302,7 @@ public class DatabaseIntrospector {
                     ColumnOverride co = tc.getColumnOverride(introspectedColumn
                             .getActualColumnName());
                     if (co != null
-                            && stringHasValue(co.getJavaType())) {
+                            && hasLength(co.getJavaType())) {
                         warn = false;
                     }
 
@@ -378,26 +378,26 @@ public class DatabaseIntrospector {
                                         .getKey().toString()));
                     }
 
-                    if (stringHasValue(columnOverride
+                    if (hasLength(columnOverride
                             .getJavaProperty())) {
                         introspectedColumn.setJavaProperty(columnOverride
                                 .getJavaProperty());
                     }
 
-                    if (stringHasValue(columnOverride
+                    if (hasLength(columnOverride
                             .getJavaType())) {
                         introspectedColumn
                                 .setFullyQualifiedJavaType(new FullyQualifiedJavaType(
                                         columnOverride.getJavaType()));
                     }
 
-                    if (stringHasValue(columnOverride
+                    if (hasLength(columnOverride
                             .getJdbcType())) {
                         introspectedColumn.setJdbcTypeName(columnOverride
                                 .getJdbcType());
                     }
 
-                    if (stringHasValue(columnOverride
+                    if (hasLength(columnOverride
                             .getTypeHandler())) {
                         introspectedColumn.setTypeHandler(columnOverride
                                 .getTypeHandler());
@@ -591,8 +591,8 @@ public class DatabaseIntrospector {
             // configuration, then some sort of DB default is being returned
             // and we don't want that in our SQL
             FullyQualifiedTable table = new FullyQualifiedTable(
-                    stringHasValue(tc.getCatalog()) ? atn.getCatalog() : null,
-                    stringHasValue(tc.getSchema()) ? atn.getSchema() : null,
+                    hasLength(tc.getCatalog()) ? atn.getCatalog() : null,
+                    hasLength(tc.getSchema()) ? atn.getSchema() : null,
                     atn.getTableName(),
                     tc.getDomainObjectName(),
                     tc.getAlias(),

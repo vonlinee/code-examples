@@ -199,7 +199,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         String project = context.getJavaModelGeneratorConfiguration().getProperty(
                 PropertyRegistry.MODEL_GENERATOR_EXAMPLE_PROJECT);
 
-        if (StringUtils.stringHasValue(project)) {
+        if (StringUtils.hasLength(project)) {
             return project;
         } else {
             return getModelProject();

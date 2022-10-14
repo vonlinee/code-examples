@@ -16,7 +16,7 @@
 package org.mybatis.generator.api;
 
 import static org.mybatis.generator.internal.util.StringUtils.isTrue;
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -672,7 +672,7 @@ public abstract class IntrospectedTable {
         }
 
         String packkage = config.getProperty(PropertyRegistry.CLIENT_DYNAMIC_SQL_SUPPORT_PACKAGE);
-        if (stringHasValue(packkage)) {
+        if (hasLength(packkage)) {
             return packkage + fullyQualifiedTable.getSubPackageForClientOrSqlMap(isSubPackagesEnabled(config));
         } else {
             return calculateJavaClientInterfacePackage();
@@ -687,10 +687,10 @@ public abstract class IntrospectedTable {
         StringBuilder sb = new StringBuilder();
         sb.append(calculateJavaClientInterfacePackage());
         sb.append('.');
-        if (stringHasValue(tableConfiguration.getMapperName())) {
+        if (hasLength(tableConfiguration.getMapperName())) {
             sb.append(tableConfiguration.getMapperName());
         } else {
-            if (stringHasValue(fullyQualifiedTable.getDomainObjectSubPackage())) {
+            if (hasLength(fullyQualifiedTable.getDomainObjectSubPackage())) {
                 sb.append(fullyQualifiedTable.getDomainObjectSubPackage());
                 sb.append('.');
             }
@@ -702,10 +702,10 @@ public abstract class IntrospectedTable {
         sb.setLength(0);
         sb.append(calculateJavaClientInterfacePackage());
         sb.append('.');
-        if (stringHasValue(tableConfiguration.getSqlProviderName())) {
+        if (hasLength(tableConfiguration.getSqlProviderName())) {
             sb.append(tableConfiguration.getSqlProviderName());
         } else {
-            if (stringHasValue(fullyQualifiedTable.getDomainObjectSubPackage())) {
+            if (hasLength(fullyQualifiedTable.getDomainObjectSubPackage())) {
                 sb.append(fullyQualifiedTable.getDomainObjectSubPackage());
                 sb.append('.');
             }
@@ -717,10 +717,10 @@ public abstract class IntrospectedTable {
         sb.setLength(0);
         sb.append(calculateDynamicSqlSupportPackage());
         sb.append('.');
-        if (stringHasValue(tableConfiguration.getDynamicSqlSupportClassName())) {
+        if (hasLength(tableConfiguration.getDynamicSqlSupportClassName())) {
             sb.append(tableConfiguration.getDynamicSqlSupportClassName());
         } else {
-            if (stringHasValue(fullyQualifiedTable.getDomainObjectSubPackage())) {
+            if (hasLength(fullyQualifiedTable.getDomainObjectSubPackage())) {
                 sb.append(fullyQualifiedTable.getDomainObjectSubPackage());
                 sb.append('.');
             }
@@ -729,7 +729,7 @@ public abstract class IntrospectedTable {
         }
         setMyBatisDynamicSqlSupportType(sb.toString());
 
-        if (stringHasValue(tableConfiguration.getDynamicSqlTableObjectName())) {
+        if (hasLength(tableConfiguration.getDynamicSqlTableObjectName())) {
             setMyBatisDynamicSQLTableObjectName(tableConfiguration.getDynamicSqlTableObjectName());
         } else {
             setMyBatisDynamicSQLTableObjectName(fullyQualifiedTable.getDomainObjectName());
@@ -790,7 +790,7 @@ public abstract class IntrospectedTable {
     protected String calculateJavaModelExamplePackage() {
         JavaModelGeneratorConfiguration config = context.getJavaModelGeneratorConfiguration();
         String exampleTargetPackage = config.getProperty(PropertyRegistry.MODEL_GENERATOR_EXAMPLE_PACKAGE);
-        if (!stringHasValue(exampleTargetPackage)) {
+        if (!hasLength(exampleTargetPackage)) {
             return calculateJavaModelPackage();
         }
 
@@ -807,13 +807,13 @@ public abstract class IntrospectedTable {
         if (config != null) {
             sb.append(config.getTargetPackage());
             sb.append(fullyQualifiedTable.getSubPackageForClientOrSqlMap(isSubPackagesEnabled(config)));
-            if (stringHasValue(tableConfiguration.getMapperName())) {
+            if (hasLength(tableConfiguration.getMapperName())) {
                 String mapperName = tableConfiguration.getMapperName();
                 int ind = mapperName.lastIndexOf('.');
                 if (ind != -1) {
                     sb.append('.').append(mapperName, 0, ind);
                 }
-            } else if (stringHasValue(fullyQualifiedTable.getDomainObjectSubPackage())) {
+            } else if (hasLength(fullyQualifiedTable.getDomainObjectSubPackage())) {
                 sb.append('.').append(fullyQualifiedTable.getDomainObjectSubPackage());
             }
         }
@@ -823,7 +823,7 @@ public abstract class IntrospectedTable {
 
     protected String calculateMyBatis3XmlMapperFileName() {
         StringBuilder sb = new StringBuilder();
-        if (stringHasValue(tableConfiguration.getMapperName())) {
+        if (hasLength(tableConfiguration.getMapperName())) {
             String mapperName = tableConfiguration.getMapperName();
             int ind = mapperName.lastIndexOf('.');
             if (ind == -1) {
@@ -843,7 +843,7 @@ public abstract class IntrospectedTable {
         StringBuilder sb = new StringBuilder();
         sb.append(calculateSqlMapPackage());
         sb.append('.');
-        if (stringHasValue(tableConfiguration.getMapperName())) {
+        if (hasLength(tableConfiguration.getMapperName())) {
             sb.append(tableConfiguration.getMapperName());
         } else {
             sb.append(fullyQualifiedTable.getDomainObjectName());

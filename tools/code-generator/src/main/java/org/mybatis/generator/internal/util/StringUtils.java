@@ -26,7 +26,7 @@ public class StringUtils {
         super();
     }
 
-    public static boolean stringHasValue(String s) {
+    public static boolean hasLength(String s) {
         return s != null && s.length() > 0;
     }
 
@@ -34,12 +34,12 @@ public class StringUtils {
             String schema, String tableName, char separator) {
         StringBuilder sb = new StringBuilder();
 
-        if (stringHasValue(catalog)) {
+        if (hasLength(catalog)) {
             sb.append(catalog);
             sb.append(separator);
         }
 
-        if (stringHasValue(schema)) {
+        if (hasLength(schema)) {
             sb.append(schema);
             sb.append(separator);
         } else {

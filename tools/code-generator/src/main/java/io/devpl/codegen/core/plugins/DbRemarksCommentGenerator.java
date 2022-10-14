@@ -109,7 +109,7 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
     public void addFieldComment(Field field,
             IntrospectedTable introspectedTable,
             IntrospectedColumn introspectedColumn) {
-        if (StringUtils.stringHasValue(introspectedColumn.getRemarks())) {
+        if (StringUtils.hasLength(introspectedColumn.getRemarks())) {
             field.addJavaDocLine("/**");
             StringBuilder sb = new StringBuilder();
             sb.append(" * ");

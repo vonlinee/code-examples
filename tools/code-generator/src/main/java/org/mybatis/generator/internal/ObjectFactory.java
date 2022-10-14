@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.internal;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.net.URL;
@@ -270,7 +270,7 @@ public class ObjectFactory {
 
     public static JavaFormatter createJavaFormatter(Context context) {
         String type = context.getProperty(PropertyRegistry.CONTEXT_JAVA_FORMATTER);
-        if (!stringHasValue(type)) {
+        if (!hasLength(type)) {
             type = DefaultJavaFormatter.class.getName();
         }
 
@@ -283,7 +283,7 @@ public class ObjectFactory {
 
     public static KotlinFormatter createKotlinFormatter(Context context) {
         String type = context.getProperty(PropertyRegistry.CONTEXT_KOTLIN_FORMATTER);
-        if (!stringHasValue(type)) {
+        if (!hasLength(type)) {
             type = DefaultKotlinFormatter.class.getName();
         }
 
@@ -296,7 +296,7 @@ public class ObjectFactory {
 
     public static XmlFormatter createXmlFormatter(Context context) {
         String type = context.getProperty(PropertyRegistry.CONTEXT_XML_FORMATTER);
-        if (!stringHasValue(type)) {
+        if (!hasLength(type)) {
             type = DefaultXmlFormatter.class.getName();
         }
 
@@ -328,7 +328,7 @@ public class ObjectFactory {
      */
     public static IntrospectedTable createIntrospectedTableForValidation(Context context) {
         String type = context.getTargetRuntime();
-        if (!stringHasValue(type)) {
+        if (!hasLength(type)) {
             type = IntrospectedTableMyBatis3DynamicSqlImpl.class.getName();
         } else if ("MyBatis3".equalsIgnoreCase(type)) { //$NON-NLS-1$
             type = IntrospectedTableMyBatis3Impl.class.getName();
@@ -348,7 +348,7 @@ public class ObjectFactory {
 
     public static IntrospectedColumn createIntrospectedColumn(Context context) {
         String type = context.getIntrospectedColumnImpl();
-        if (!stringHasValue(type)) {
+        if (!hasLength(type)) {
             type = IntrospectedColumn.class.getName();
         }
 

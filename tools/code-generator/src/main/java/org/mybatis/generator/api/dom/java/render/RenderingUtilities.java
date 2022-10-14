@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.api.dom.java.render;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -151,7 +151,7 @@ public class RenderingUtilities {
         List<String> answer = new ArrayList<>();
 
         String pack = compilationUnit.getType().getPackageName();
-        if (stringHasValue(pack)) {
+        if (hasLength(pack)) {
             answer.add("package " + pack + ";"); //$NON-NLS-1$ //$NON-NLS-2$
             answer.add(""); //$NON-NLS-1$
         }

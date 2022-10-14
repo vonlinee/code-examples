@@ -102,7 +102,7 @@ public class CachePlugin extends PluginAdapter {
             property = properties.getProperty(cacheProperty.getPropertyName());
         }
 
-        if (StringUtils.stringHasValue(property)) {
+        if (StringUtils.hasLength(property)) {
             element.addAttribute(new Attribute(cacheProperty.getAttributeName(), property));
         }
     }

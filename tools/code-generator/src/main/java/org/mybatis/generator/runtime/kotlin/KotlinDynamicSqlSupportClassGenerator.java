@@ -180,7 +180,7 @@ public class KotlinDynamicSqlSupportClassGenerator {
                 escapeStringForKotlin(getEscapedColumnName(column)),
                 column.getJdbcTypeName()));
 
-        if (StringUtils.stringHasValue(column.getTypeHandler())) {
+        if (StringUtils.hasLength(column.getTypeHandler())) {
             initializationString.append(
                     String.format(", typeHandler = \"%s\"", column.getTypeHandler())); //$NON-NLS-1$
         }

@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.api.dom.kotlin;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;
@@ -158,7 +158,7 @@ public class FullyQualifiedKotlinType {
         }
 
         String finalType = sb.toString();
-        if (stringHasValue(finalType)) {
+        if (hasLength(finalType)) {
             typeArguments.add(new FullyQualifiedKotlinType(finalType));
         }
     }

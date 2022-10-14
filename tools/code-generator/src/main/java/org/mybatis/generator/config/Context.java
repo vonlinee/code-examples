@@ -2,7 +2,7 @@ package org.mybatis.generator.config;
 
 import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualifiedTableName;
 import static org.mybatis.generator.internal.util.StringUtils.isTrue;
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.sql.Connection;
@@ -117,7 +117,7 @@ public class Context extends PropertyHolder {
      * @param errors the errors
      */
     public void validate(List<String> errors) {
-        if (!stringHasValue(id)) {
+        if (!hasLength(id)) {
             errors.add(getString("ValidationError.16")); //$NON-NLS-1$
         }
 
@@ -220,7 +220,7 @@ public class Context extends PropertyHolder {
         } else if (PropertyRegistry.CONTEXT_ENDING_DELIMITER.equals(name)) {
             endingDelimiter = value;
         } else if (PropertyRegistry.CONTEXT_AUTO_DELIMIT_KEYWORDS.equals(name)
-                && stringHasValue(value)) {
+                && hasLength(value)) {
             autoDelimitKeywords = isTrue(value);
         }
     }

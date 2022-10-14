@@ -17,7 +17,7 @@ package org.mybatis.generator.runtime.kotlin.elements;
 
 import static org.mybatis.generator.api.dom.OutputUtilities.kotlinIndent;
 import static org.mybatis.generator.internal.util.StringUtils.escapeStringForKotlin;
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -161,7 +161,7 @@ public class KotlinFragmentGenerator {
         sb.append(introspectedColumn.getJavaProperty());
         sb.append('\"');
 
-        if (stringHasValue(introspectedColumn.getTypeHandler())) {
+        if (hasLength(introspectedColumn.getTypeHandler())) {
             FullyQualifiedKotlinType fqjt =
                     new FullyQualifiedKotlinType(introspectedColumn.getTypeHandler());
             imports.add(introspectedColumn.getTypeHandler());

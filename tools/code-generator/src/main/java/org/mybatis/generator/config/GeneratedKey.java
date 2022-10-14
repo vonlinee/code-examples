@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.List;
@@ -71,12 +71,12 @@ public class GeneratedKey {
     }
 
     public void validate(List<String> errors, String tableName) {
-        if (!stringHasValue(runtimeSqlStatement)) {
+        if (!hasLength(runtimeSqlStatement)) {
             errors.add(getString("ValidationError.7", //$NON-NLS-1$
                     tableName));
         }
 
-        if (stringHasValue(type)
+        if (hasLength(type)
                 && !"pre".equals(type) //$NON-NLS-1$
                 && !"post".equals(type)) { //$NON-NLS-1$ //$NON-NLS-2$
             errors.add(getString("ValidationError.15", tableName)); //$NON-NLS-1$

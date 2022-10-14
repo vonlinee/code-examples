@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class IgnoredColumnPattern {
     }
 
     public void validate(List<String> errors, String tableName) {
-        if (!stringHasValue(patternRegex)) {
+        if (!hasLength(patternRegex)) {
             errors.add(getString("ValidationError.27", //$NON-NLS-1$
                     tableName));
         }

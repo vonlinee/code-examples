@@ -161,7 +161,7 @@ public class DynamicSqlSupportClassGenerator {
                 escapeStringForJava(getEscapedColumnName(column)),
                 column.getJdbcTypeName()));
 
-        if (StringUtils.stringHasValue(column.getTypeHandler())) {
+        if (StringUtils.hasLength(column.getTypeHandler())) {
             initializationString.append(String.format(", \"%s\")", column.getTypeHandler())); //$NON-NLS-1$
         } else {
             initializationString.append(')'); //$NON-NLS-1$

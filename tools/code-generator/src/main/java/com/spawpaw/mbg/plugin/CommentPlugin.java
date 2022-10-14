@@ -119,7 +119,7 @@ public class CommentPlugin implements CommentGenerator {
     protected String getDateString() {
         SimpleDateFormat dateFormat = null;
         String dateFormatString = this.dateFormat;
-        if (StringUtils.stringHasValue(dateFormatString)) {
+        if (StringUtils.hasLength(dateFormatString)) {
             dateFormat = new SimpleDateFormat(dateFormatString);
         }
 
@@ -210,7 +210,7 @@ public class CommentPlugin implements CommentGenerator {
         field.addJavaDocLine("/**"); //$NON-NLS-1$
 
         String remarks = introspectedColumn.getRemarks();
-        if (StringUtils.stringHasValue(remarks)) {
+        if (StringUtils.hasLength(remarks)) {
             String[] remarkLines = remarks.split(System.getProperty("line.separator"));  //$NON-NLS-1$
             for (String remarkLine : remarkLines) {
                 field.addJavaDocLine(" * " + remarkLine);  //$NON-NLS-1$

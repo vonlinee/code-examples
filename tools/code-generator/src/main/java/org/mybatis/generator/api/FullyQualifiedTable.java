@@ -16,7 +16,7 @@
 package org.mybatis.generator.api;
 
 import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualifiedTableName;
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -104,7 +104,7 @@ public class FullyQualifiedTable {
         this.runtimeTableName = runtimeTableName;
         this.domainObjectRenamingRule = domainObjectRenamingRule;
 
-        if (stringHasValue(domainObjectName)) {
+        if (hasLength(domainObjectName)) {
             int index = domainObjectName.lastIndexOf('.');
             if (index == -1) {
                 this.domainObjectName = domainObjectName;
@@ -141,9 +141,9 @@ public class FullyQualifiedTable {
     public String getFullyQualifiedTableNameAtRuntime() {
         StringBuilder localCatalog = new StringBuilder();
         if (!ignoreQualifiersAtRuntime) {
-            if (stringHasValue(runtimeCatalog)) {
+            if (hasLength(runtimeCatalog)) {
                 localCatalog.append(runtimeCatalog);
-            } else if (stringHasValue(introspectedCatalog)) {
+            } else if (hasLength(introspectedCatalog)) {
                 localCatalog.append(introspectedCatalog);
             }
         }
@@ -153,9 +153,9 @@ public class FullyQualifiedTable {
 
         StringBuilder localSchema = new StringBuilder();
         if (!ignoreQualifiersAtRuntime) {
-            if (stringHasValue(runtimeSchema)) {
+            if (hasLength(runtimeSchema)) {
                 localSchema.append(runtimeSchema);
-            } else if (stringHasValue(introspectedSchema)) {
+            } else if (hasLength(introspectedSchema)) {
                 localSchema.append(introspectedSchema);
             }
         }
@@ -164,7 +164,7 @@ public class FullyQualifiedTable {
         }
 
         StringBuilder localTableName = new StringBuilder();
-        if (stringHasValue(runtimeTableName)) {
+        if (hasLength(runtimeTableName)) {
             localTableName.append(runtimeTableName);
         } else {
             localTableName.append(introspectedTableName);
@@ -181,7 +181,7 @@ public class FullyQualifiedTable {
 
         sb.append(getFullyQualifiedTableNameAtRuntime());
 
-        if (stringHasValue(alias)) {
+        if (hasLength(alias)) {
             sb.append(' ');
             sb.append(alias);
         }
@@ -190,12 +190,12 @@ public class FullyQualifiedTable {
     }
 
     public String getDomainObjectName() {
-        if (stringHasValue(domainObjectName)) {
+        if (hasLength(domainObjectName)) {
             return domainObjectName;
         }
 
         String finalDomainObjectName;
-        if (stringHasValue(runtimeTableName)) {
+        if (hasLength(runtimeTableName)) {
             finalDomainObjectName = JavaBeansUtil.getCamelCaseString(runtimeTableName, true);
         } else {
             finalDomainObjectName = JavaBeansUtil.getCamelCaseString(introspectedTableName, true);
@@ -259,18 +259,18 @@ public class FullyQualifiedTable {
     public String getSubPackageForClientOrSqlMap(boolean isSubPackagesEnabled) {
         StringBuilder sb = new StringBuilder();
         if (!ignoreQualifiersAtRuntime && isSubPackagesEnabled) {
-            if (stringHasValue(runtimeCatalog)) {
+            if (hasLength(runtimeCatalog)) {
                 sb.append('.');
                 sb.append(runtimeCatalog.toLowerCase());
-            } else if (stringHasValue(introspectedCatalog)) {
+            } else if (hasLength(introspectedCatalog)) {
                 sb.append('.');
                 sb.append(introspectedCatalog.toLowerCase());
             }
 
-            if (stringHasValue(runtimeSchema)) {
+            if (hasLength(runtimeSchema)) {
                 sb.append('.');
                 sb.append(runtimeSchema.toLowerCase());
-            } else if (stringHasValue(introspectedSchema)) {
+            } else if (hasLength(introspectedSchema)) {
                 sb.append('.');
                 sb.append(introspectedSchema.toLowerCase());
             }
@@ -296,7 +296,7 @@ public class FullyQualifiedTable {
         StringBuilder sb = new StringBuilder();
         sb.append(getSubPackageForClientOrSqlMap(isSubPackagesEnabled));
 
-        if (stringHasValue(domainObjectSubPackage)) {
+        if (hasLength(domainObjectSubPackage)) {
             sb.append('.');
             sb.append(domainObjectSubPackage);
         }
@@ -305,11 +305,11 @@ public class FullyQualifiedTable {
     }
 
     private void addDelimiters(StringBuilder sb) {
-        if (stringHasValue(beginningDelimiter)) {
+        if (hasLength(beginningDelimiter)) {
             sb.insert(0, beginningDelimiter);
         }
 
-        if (stringHasValue(endingDelimiter)) {
+        if (hasLength(endingDelimiter)) {
             sb.append(endingDelimiter);
         }
     }

@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.codegen.mybatis3.xmlmapper.elements;
 
-import static org.mybatis.generator.internal.util.StringUtils.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
@@ -53,7 +53,7 @@ public class SimpleSelectByPrimaryKeyElementGenerator extends AbstractXmlElement
         StringBuilder sb = new StringBuilder();
         sb.append("select "); //$NON-NLS-1$
 
-        if (stringHasValue(introspectedTable.getSelectByPrimaryKeyQueryId())) {
+        if (hasLength(introspectedTable.getSelectByPrimaryKeyQueryId())) {
             sb.append('\'');
             sb.append(introspectedTable.getSelectByPrimaryKeyQueryId());
             sb.append("' as QUERYID,"); //$NON-NLS-1$

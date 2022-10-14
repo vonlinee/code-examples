@@ -145,7 +145,7 @@ public class CacheNamespacePlugin extends PluginAdapter {
                 .map(Optional::get)
                 .collect(Collectors.joining(", ")); //$NON-NLS-1$
 
-        if (StringUtils.stringHasValue(attributes)) {
+        if (StringUtils.hasLength(attributes)) {
             return "@CacheNamespace(" + attributes + ")"; //$NON-NLS-1$ //$NON-NLS-2$
         } else {
             return "@CacheNamespace"; //$NON-NLS-1$
@@ -179,7 +179,7 @@ public class CacheNamespacePlugin extends PluginAdapter {
             value = properties.getProperty(propertyName);
         }
 
-        if (StringUtils.stringHasValue(value)) {
+        if (StringUtils.hasLength(value)) {
             return Optional.of(value);
         } else {
             return Optional.empty();
