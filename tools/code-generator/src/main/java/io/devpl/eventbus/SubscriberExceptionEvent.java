@@ -6,9 +6,9 @@ package io.devpl.eventbus;
  */
 public final class SubscriberExceptionEvent {
     /**
-     * The {@link EventBus} instance to with the original event was posted to.
+     * The {@link DefaultEventBus} instance to with the original event was posted to.
      */
-    public final EventBus eventBus;
+    public final DefaultEventBus eventBus;
 
     /**
      * The Throwable thrown by a subscriber.
@@ -25,7 +25,7 @@ public final class SubscriberExceptionEvent {
      */
     public final Object causingSubscriber;
 
-    public SubscriberExceptionEvent(EventBus eventBus, Throwable throwable, Object causingEvent,
+    public SubscriberExceptionEvent(DefaultEventBus eventBus, Throwable throwable, Object causingEvent,
                                     Object causingSubscriber) {
         this.eventBus = eventBus;
         this.throwable = throwable;

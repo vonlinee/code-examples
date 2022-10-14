@@ -1,9 +1,9 @@
 package io.devpl.codegen.fxui.controller;
 
-import com.google.common.eventbus.EventBus;
 import io.devpl.codegen.fxui.utils.AlertDialog;
 import io.devpl.codegen.fxui.utils.FXMLHelper;
 import io.devpl.codegen.fxui.utils.FXMLPage;
+import io.devpl.eventbus.ext.EventBus;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -28,7 +28,7 @@ public abstract class FXControllerBase implements Initializable {
 
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
 
-    private static final EventBus BUS = new EventBus();
+    private static final EventBus BUS = EventBus.getDefault();
 
     public FXControllerBase() {
         BUS.register(this);

@@ -6,7 +6,6 @@ import javafx.event.EventType;
 
 public class FXEventBus {
 
-
     public <T extends Event> void post(T event) {
 
     }

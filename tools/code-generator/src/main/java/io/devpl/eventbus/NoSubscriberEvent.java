@@ -6,16 +6,16 @@ package io.devpl.eventbus;
  */
 public final class NoSubscriberEvent {
     /**
-     * The {@link EventBus} instance to with the original event was posted to.
+     * The {@link DefaultEventBus} instance to with the original event was posted to.
      */
-    public final EventBus eventBus;
+    public final DefaultEventBus eventBus;
 
     /**
      * The original event that could not be delivered to any subscriber.
      */
     public final Object originalEvent;
 
-    public NoSubscriberEvent(EventBus eventBus, Object originalEvent) {
+    public NoSubscriberEvent(DefaultEventBus eventBus, Object originalEvent) {
         this.eventBus = eventBus;
         this.originalEvent = originalEvent;
     }

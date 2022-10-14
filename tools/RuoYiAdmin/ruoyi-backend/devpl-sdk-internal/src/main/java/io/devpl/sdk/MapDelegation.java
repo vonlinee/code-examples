@@ -67,19 +67,6 @@ public interface MapDelegation<K, V> extends Map<K, V> {
     }
 
     @Override
-    default boolean equals(Object o) {
-        if (!(o instanceof Map)) {
-            return false;
-        }
-        return delegator().equals(o);
-    }
-
-    @Override
-    default int hashCode() {
-        return delegator().hashCode();
-    }
-
-    @Override
     default V getOrDefault(Object key, V defaultValue) {
         return Map.super.getOrDefault(key, defaultValue);
     }

@@ -1,13 +1,21 @@
 package io.devpl.codegen.fxui;
 
-import com.google.common.eventbus.EventBus;
-import io.devpl.codegen.fxui.app.TestApp;
-import javafx.application.Application;
+
+import io.devpl.eventbus.DefaultEventBus;
+import io.devpl.eventbus.ext.EventBus;
+
+import java.util.function.Function;
 
 public class TestMain {
     public static void main(String[] args) {
-        Application.launch(TestApp.class);
+        EventBus bus = EventBus.getDefault();
+        DefaultEventBus defaultEventBus = new DefaultEventBus();
 
-        EventBus bus = new EventBus();
+        int i = 10;
+
+    }
+
+    static void add(Function<Integer, String> function) {
+
     }
 }

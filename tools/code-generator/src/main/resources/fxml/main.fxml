@@ -108,7 +108,7 @@
                                             <Insets right="5.0"/>
                                         </HBox.margin>
                                     </TextField>
-                                    <Button mnemonicParsing="false" onAction="#openTableColumnCustomizationPage"
+                                    <Button mnemonicParsing="false" onMouseClicked="#openCustomizeTableColumn"
                                             text="定制列">
                                         <styleClass>
                                             <String fx:value="btn"/>

@@ -7,5 +7,5 @@ public interface MainThreadSupport {
 
     boolean isMainThread();
 
-    Poster createPoster(EventBus eventBus);
+    Poster createPoster(DefaultEventBus eventBus);
 }

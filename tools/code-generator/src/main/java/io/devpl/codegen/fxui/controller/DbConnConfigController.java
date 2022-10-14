@@ -64,7 +64,6 @@ public class DbConnConfigController extends FXControllerBase {
                 selectedConfig.getSshPort(),
                 selectedConfig.getSshUser(),
                 selectedConfig.getLport())) {
-            LOG.info("Found SSH based Config");
             tabPane.getSelectionModel().selectLast();
         }
     }

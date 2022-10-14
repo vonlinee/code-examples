@@ -1,6 +1,6 @@
 package io.devpl.eventbus.util;
 
-import io.devpl.eventbus.EventBus;
+import io.devpl.eventbus.DefaultEventBus;
 
 import java.lang.reflect.Constructor;
 import java.util.concurrent.Executor;
@@ -26,7 +26,7 @@ public class AsyncExecutor {
     public static class Builder {
         private Executor threadPool;
         private Class<?> failureEventType;
-        private EventBus eventBus;
+        private DefaultEventBus eventBus;
 
         private Builder() {
         }
@@ -41,7 +41,7 @@ public class AsyncExecutor {
             return this;
         }
 
-        public Builder eventBus(EventBus eventBus) {
+        public Builder eventBus(DefaultEventBus eventBus) {
             this.eventBus = eventBus;
             return this;
         }
@@ -52,7 +52,7 @@ public class AsyncExecutor {
 
         public AsyncExecutor buildForScope(Object executionContext) {
             if (eventBus == null) {
-                eventBus = EventBus.getDefault();
+                eventBus = DefaultEventBus.getDefault();
             }
             if (threadPool == null) {
                 threadPool = Executors.newCachedThreadPool();
@@ -81,10 +81,10 @@ public class AsyncExecutor {
 
     private final Executor threadPool;
     private final Constructor<?> failureEventConstructor;
-    private final EventBus eventBus;
+    private final DefaultEventBus eventBus;
     private final Object scope;
 
-    private AsyncExecutor(Executor threadPool, EventBus eventBus, Class<?> failureEventType, Object scope) {
+    private AsyncExecutor(Executor threadPool, DefaultEventBus eventBus, Class<?> failureEventType, Object scope) {
         this.threadPool = threadPool;
         this.eventBus = eventBus;
         this.scope = scope;
@@ -108,7 +108,6 @@ public class AsyncExecutor {
                 try {
                     event = failureEventConstructor.newInstance(e);
                 } catch (Exception e1) {
-                    eventBus.getLogger().log(Level.SEVERE, "Original exception:", e);
                     throw new RuntimeException("Could not create failure event", e1);
                 }
                 if (event instanceof HasExecutionScope) {

@@ -1,6 +1,7 @@
 package io.devpl.codegen.fxui.controller;
 
 import io.devpl.codegen.common.DbType;
+import io.devpl.codegen.common.utils.ConfigHelper;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.fxui.utils.AlertDialog;
 import io.devpl.codegen.fxui.utils.FXUtils;
@@ -58,11 +59,10 @@ public class TcpIPConnConfigController extends FXControllerBase {
     void saveConnection() {
         try {
             // TODO 配置持久化
-            // ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, assembleDbConnInfoConfiguration());
+            ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, assembleDbConnInfoConfiguration());
             if (FXUtils.closeOwnerStage(nameField)) {
                 // 加载数据库连接，获取所有的表信息
                 publish(List.of(assembleDbConnInfoConfiguration()));
-                // fireEvent(new ControllerEvent(ControllerEvent.RECEIVE_DATA));
             }
         } catch (Exception e) {
             AlertDialog.showError(e.getMessage());

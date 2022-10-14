@@ -17,7 +17,7 @@ public @interface Subscribe {
     /**
      * 粘性事件
      * If true, delivers the most recent sticky event (posted with
-     * {@link EventBus#postSticky(Object)}) to this subscriber (if event available).
+     * {@link DefaultEventBus#postSticky(Object)}) to this subscriber (if event available).
      */
     boolean sticky() default false;
 

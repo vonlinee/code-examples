@@ -1,14 +1,14 @@
 package io.devpl.codegen.fxui.controller;
 
-import com.google.common.eventbus.Subscribe;
 import com.jcraft.jsch.Session;
 import io.devpl.codegen.common.utils.*;
 import io.devpl.codegen.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.codegen.fxui.bridge.UIProgressCallback;
 import io.devpl.codegen.fxui.model.CodeGenConfiguration;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
-import io.devpl.codegen.fxui.model.UITableColumnVO;
+import io.devpl.codegen.fxui.model.TableColumnCustomization;
 import io.devpl.codegen.fxui.utils.*;
+import io.devpl.eventbus.Subscribe;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -28,8 +28,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
@@ -468,8 +466,11 @@ public class MainController extends FXControllerBase {
         jsr310Support.setSelected(generatorConfig.isJsr310Support());
     }
 
+    /**
+     * 自定义列
+     */
     @FXML
-    public void openTableColumnCustomizationPage() {
+    public void openCustomizeTableColumn(MouseEvent event) {
         if (tableName == null) {
             AlertDialog.showWarning("请先在左侧选择数据库表");
             return;
@@ -479,7 +480,7 @@ public class MainController extends FXControllerBase {
         try {
             // If select same schema and another table, update table data
             if (!tableName.equals(controller.getTableName())) {
-                List<UITableColumnVO> tableColumns = DBUtils.getTableColumns(selectedDatabaseConfig, tableName);
+                List<TableColumnCustomization> tableColumns = DBUtils.getTableColumns(selectedDatabaseConfig, tableName);
                 controller.setColumnList(FXCollections.observableList(tableColumns));
                 controller.setTableName(tableName);
             }

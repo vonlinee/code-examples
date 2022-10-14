@@ -11,7 +11,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
 
-import io.devpl.codegen.fxui.model.UITableColumnVO;
+import io.devpl.codegen.fxui.model.TableColumnCustomization;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,19 +24,19 @@ import java.util.ResourceBundle;
 public class SelectTableColumnController extends FXControllerBase {
 
     @FXML
-    private TableView<UITableColumnVO> columnListView;
+    private TableView<TableColumnCustomization> columnListView;
     @FXML
-    private TableColumn<UITableColumnVO, Boolean> checkedColumn;
+    private TableColumn<TableColumnCustomization, Boolean> checkedColumn;
     @FXML
-    private TableColumn<UITableColumnVO, String> columnNameColumn;
+    private TableColumn<TableColumnCustomization, String> columnNameColumn;
     @FXML
-    private TableColumn<UITableColumnVO, String> jdbcTypeColumn;
+    private TableColumn<TableColumnCustomization, String> jdbcTypeColumn;
     @FXML
-    private TableColumn<UITableColumnVO, String> javaTypeColumn;
+    private TableColumn<TableColumnCustomization, String> javaTypeColumn;
     @FXML
-    private TableColumn<UITableColumnVO, String> propertyNameColumn;
+    private TableColumn<TableColumnCustomization, String> propertyNameColumn;
     @FXML
-    private TableColumn<UITableColumnVO, String> typeHandlerColumn;
+    private TableColumn<TableColumnCustomization, String> typeHandlerColumn;
 
     private MainController mainUIController;
 
@@ -74,7 +74,7 @@ public class SelectTableColumnController extends FXControllerBase {
 
     @FXML
     public void ok() {
-        ObservableList<UITableColumnVO> items = columnListView.getItems();
+        ObservableList<TableColumnCustomization> items = columnListView.getItems();
         if (items != null && items.size() > 0) {
             List<IgnoredColumn> ignoredColumns = new ArrayList<>();
             List<ColumnOverride> columnOverrides = new ArrayList<>();
@@ -110,7 +110,7 @@ public class SelectTableColumnController extends FXControllerBase {
         controller.showDialogStage();
     }
 
-    public void setColumnList(ObservableList<UITableColumnVO> columns) {
+    public void setColumnList(ObservableList<TableColumnCustomization> columns) {
         columnListView.setItems(columns);
     }
 

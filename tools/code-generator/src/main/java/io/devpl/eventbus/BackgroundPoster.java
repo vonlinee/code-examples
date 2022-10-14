@@ -1,7 +1,5 @@
 package io.devpl.eventbus;
 
-import java.util.logging.Level;
-
 /**
  * Posts events in background.
  * @author Markus
@@ -9,11 +7,11 @@ import java.util.logging.Level;
 final class BackgroundPoster implements Runnable, Poster {
 
     private final PendingPostQueue queue;
-    private final EventBus eventBus;
+    private final DefaultEventBus eventBus;
 
     private volatile boolean executorRunning;
 
-    BackgroundPoster(EventBus eventBus) {
+    BackgroundPoster(DefaultEventBus eventBus) {
         this.eventBus = eventBus;
         queue = new PendingPostQueue();
     }
@@ -46,10 +44,10 @@ final class BackgroundPoster implements Runnable, Poster {
                         }
                     }
                     // TODO
-                    eventBus.invokeSubscriber(pendingPost, null);
+                    eventBus.invokeSubscriber(pendingPost);
                 }
             } catch (InterruptedException e) {
-                eventBus.getLogger().log(Level.WARNING, Thread.currentThread().getName() + " was interrupted", e);
+
             }
         } finally {
             executorRunning = false;

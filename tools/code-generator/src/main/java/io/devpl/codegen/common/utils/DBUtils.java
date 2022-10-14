@@ -6,7 +6,7 @@ import com.jcraft.jsch.Session;
 import io.devpl.codegen.common.DbType;
 import io.devpl.codegen.common.exception.DbDriverLoadingException;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
-import io.devpl.codegen.fxui.model.UITableColumnVO;
+import io.devpl.codegen.fxui.model.TableColumnCustomization;
 import io.devpl.codegen.fxui.utils.AlertDialog;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.internal.util.ClassloaderUtils;
@@ -178,7 +178,7 @@ public class DBUtils {
         }
     }
 
-    public static List<UITableColumnVO> getTableColumns(DatabaseConfiguration dbConfig, String tableName) throws Exception {
+    public static List<TableColumnCustomization> getTableColumns(DatabaseConfiguration dbConfig, String tableName) throws Exception {
         String url = getConnectionUrlWithSchema(dbConfig);
         _LOG.info("getTableColumns, connection url: {}", url);
         Session sshSession = getSSHSession(dbConfig);
@@ -187,9 +187,9 @@ public class DBUtils {
         try {
             DatabaseMetaData md = conn.getMetaData();
             ResultSet rs = md.getColumns(dbConfig.getSchema(), null, tableName, null);
-            List<UITableColumnVO> columns = new ArrayList<>();
+            List<TableColumnCustomization> columns = new ArrayList<>();
             while (rs.next()) {
-                UITableColumnVO columnVO = new UITableColumnVO();
+                TableColumnCustomization columnVO = new TableColumnCustomization();
                 String columnName = rs.getString("COLUMN_NAME");
                 columnVO.setColumnName(columnName);
                 columnVO.setJdbcType(rs.getString("TYPE_NAME"));

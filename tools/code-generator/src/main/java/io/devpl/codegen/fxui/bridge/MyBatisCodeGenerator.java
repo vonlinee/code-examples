@@ -6,6 +6,7 @@ import io.devpl.codegen.fxui.model.CodeGenConfiguration;
 import io.devpl.codegen.core.plugins.DbRemarksCommentGenerator;
 import io.devpl.codegen.common.utils.ConfigHelper;
 import io.devpl.codegen.common.utils.DBUtils;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.ProgressCallback;
 import org.mybatis.generator.api.ShellCallback;
@@ -37,6 +38,7 @@ public class MyBatisCodeGenerator {
     public void setDatabaseConfiguration(DatabaseConfiguration databaseConfig) {
         this.selectedDatabaseConfig = databaseConfig;
     }
+
 
     public void generate() throws Exception {
         Configuration configuration = new Configuration();
@@ -83,7 +85,6 @@ public class MyBatisCodeGenerator {
         if (DbType.POSTGRE_SQL.name().equals(dbType)) {
             tableConfig.setDelimitIdentifiers(true);
         }
-
         //添加GeneratedKey主键生成
         if (StringUtils.isNotEmpty(generatorConfig.getGenerateKeys())) {
             String dbType2 = dbType;
@@ -103,7 +104,7 @@ public class MyBatisCodeGenerator {
         if (generatorConfig.getMapperName() != null) {
             tableConfig.setMapperName(generatorConfig.getMapperName());
         }
-        // add ignore columns
+        // 忽略的列
         if (ignoredColumns != null) {
             ignoredColumns.forEach(tableConfig::addIgnoredColumn);
         }
@@ -117,7 +118,7 @@ public class MyBatisCodeGenerator {
         if (generatorConfig.isUseTableNameAlias()) {
             tableConfig.setAlias(generatorConfig.getTableName());
         }
-
+        // JDBC连接
         JDBCConnectionConfiguration jdbcConfig = new JDBCConnectionConfiguration();
         if (DbType.MYSQL5.name().equals(dbType) || DbType.MYSQL8.name().equals(dbType)) {
             jdbcConfig.addProperty("nullCatalogMeansCurrent", "true");
@@ -144,7 +145,6 @@ public class MyBatisCodeGenerator {
         daoConfig.setConfigurationType("XMLMAPPER");
         daoConfig.setTargetPackage(generatorConfig.getDaoPackage());
         daoConfig.setTargetProject(generatorConfig.getProjectFolder() + "/" + generatorConfig.getDaoTargetFolder());
-
 
         context.setId("myid");
         context.addTableConfiguration(tableConfig);
@@ -279,7 +279,6 @@ public class MyBatisCodeGenerator {
         } else {
             sb.append(generatorConfig.getDomainObjectName()).append("Mapper.xml");
         }
-
         return sb.toString();
     }
 

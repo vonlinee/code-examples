@@ -4,7 +4,7 @@ package io.devpl.eventbus;
  * Each subscriber method has a thread mode, which determines in which thread the method is to be called by EventBus.
  * EventBus takes care of threading independently of the posting thread.
  *
- * @see EventBus#register(Object)
+ * @see DefaultEventBus#register(Object)
  */
 public enum ThreadMode {
     /**

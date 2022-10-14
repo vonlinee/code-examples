@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class UITableColumnVO {
+public class TableColumnCustomization {
 
     private final BooleanProperty checked = new SimpleBooleanProperty(true); // Default set to true
 

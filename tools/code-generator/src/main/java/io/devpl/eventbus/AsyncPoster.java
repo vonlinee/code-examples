@@ -7,9 +7,9 @@ package io.devpl.eventbus;
 class AsyncPoster implements Runnable, Poster {
 
     private final PendingPostQueue queue;
-    private final EventBus eventBus;
+    private final DefaultEventBus eventBus;
 
-    AsyncPoster(EventBus eventBus) {
+    AsyncPoster(DefaultEventBus eventBus) {
         this.eventBus = eventBus;
         queue = new PendingPostQueue();
     }
@@ -26,6 +26,6 @@ class AsyncPoster implements Runnable, Poster {
         if (pendingPost == null) {
             throw new IllegalStateException("No pending post available");
         }
-        eventBus.invokeSubscriber(pendingPost, null);
+        eventBus.invokeSubscriber(pendingPost);
     }
 }

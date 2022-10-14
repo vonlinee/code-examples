@@ -10,9 +10,8 @@ import java.util.concurrent.Executors;
 
 /**
  * Creates EventBus instances with custom parameters and also allows to install a custom default EventBus instance.
- * Create a new builder using {@link EventBus#builder()}.
+ * Create a new builder using {@link DefaultEventBus#builder()}.
  */
-@SuppressWarnings("unused")
 public class EventBusBuilder {
     private final static ExecutorService DEFAULT_EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
@@ -169,26 +168,26 @@ public class EventBusBuilder {
     }
 
     /**
-     * Installs the default EventBus returned by {@link EventBus#getDefault()} using this builders' values. Must be
+     * Installs the default EventBus returned by {@link DefaultEventBus#getDefault()} using this builders' values. Must be
      * done only once before the first usage of the default EventBus.
      * @throws EventBusException if there's already a default EventBus instance in place
      */
-    public EventBus installDefaultEventBus() {
-        synchronized (EventBus.class) {
-            if (EventBus.defaultInstance != null) {
+    public DefaultEventBus installDefaultEventBus() {
+        synchronized (DefaultEventBus.class) {
+            if (DefaultEventBus.defaultInstance != null) {
                 throw new EventBusException("Default instance already exists." +
                         " It may be only set once before it's used the first time to ensure consistent behavior.");
             }
-            EventBus.defaultInstance = build();
-            return EventBus.defaultInstance;
+            DefaultEventBus.defaultInstance = build();
+            return DefaultEventBus.defaultInstance;
         }
     }
 
     /**
      * Builds an EventBus based on the current configuration.
      */
-    public EventBus build() {
-        return new EventBus(this);
+    public DefaultEventBus build() {
+        return new DefaultEventBus(this);
     }
 
 }

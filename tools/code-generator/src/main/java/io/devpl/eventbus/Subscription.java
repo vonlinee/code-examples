@@ -22,7 +22,7 @@ public class Subscription implements Invocation<Object, Object> {
     private Callback callback;
 
     /**
-     * Becomes false as soon as {@link EventBus#unregister(Object)} is called, which is checked by queued event delivery
+     * Becomes false as soon as {@link DefaultEventBus#unregister(Object)} is called, which is checked by queued event delivery
      * { EventBus#invokeSubscriber(PendingPost)} to prevent race conditions.
      */
     volatile boolean active;

@@ -1,6 +1,7 @@
 package io.devpl.eventbus;
 
 import io.devpl.eventbus.ext.Callback;
+import io.devpl.eventbus.ext.EventBus;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -19,12 +20,11 @@ import java.util.logging.Level;
  * Once registered, subscribers receive events until {@link #unregister(Object)} is called.
  * Event handling methods must be annotated by {@link Subscribe}, must be public, return nothing (void),
  * and have exactly one parameter (the event).
- *
  * @author Markus Junginger, greenrobot
  */
-public class EventBus {
+public class DefaultEventBus implements EventBus {
 
-    static volatile EventBus defaultInstance;
+    static volatile DefaultEventBus defaultInstance;
 
     private static final EventBusBuilder DEFAULT_BUILDER = new EventBusBuilder();
     private static final Map<Class<?>, List<Class<?>>> eventTypesCache = new HashMap<>();
@@ -57,13 +57,13 @@ public class EventBus {
     /**
      * Convenience singleton for apps using a process-wide EventBus instance.
      */
-    public static EventBus getDefault() {
-        EventBus instance = defaultInstance;
+    public static DefaultEventBus getDefault() {
+        DefaultEventBus instance = defaultInstance;
         if (instance == null) {
-            synchronized (EventBus.class) {
-                instance = EventBus.defaultInstance;
+            synchronized (DefaultEventBus.class) {
+                instance = DefaultEventBus.defaultInstance;
                 if (instance == null) {
-                    instance = EventBus.defaultInstance = new EventBus();
+                    instance = DefaultEventBus.defaultInstance = new DefaultEventBus();
                 }
             }
         }
@@ -86,11 +86,11 @@ public class EventBus {
      * Creates a new EventBus instance; each instance is a separate scope in which events are delivered. To use a
      * central bus, consider {@link #getDefault()}.
      */
-    public EventBus() {
+    public DefaultEventBus() {
         this(DEFAULT_BUILDER);
     }
 
-    EventBus(EventBusBuilder builder) {
+    DefaultEventBus(EventBusBuilder builder) {
         logger = builder.getLogger();
         subscriptionsByEventType = new HashMap<>();
         typesBySubscriber = new HashMap<>();
@@ -119,9 +119,13 @@ public class EventBus {
      * The {@link Subscribe} annotation also allows configuration like {@link
      * ThreadMode} and priority.
      */
+    @Override
     public void register(Object subscriber) {
         Class<?> subscriberClass = subscriber.getClass();
         List<SubscriberMethod> subscriberMethods = subscriberMethodFinder.findSubscriberMethods(subscriberClass);
+        if (subscriberMethods.isEmpty()) {
+            return;
+        }
         synchronized (this) {
             for (SubscriberMethod subscriberMethod : subscriberMethods) {
                 subscribe(subscriber, subscriberMethod);
@@ -179,7 +183,7 @@ public class EventBus {
             // If the subscriber is trying to abort the event, it will fail (event is not tracked in posting state)
             // --> Strange corner case, which we don't take care of here.
             // TODO  EventCallback
-            postToSubscription(newSubscription, stickyEvent, isMainThread(), null);
+            postToSubscription(newSubscription, stickyEvent, isMainThread());
         }
     }
 
@@ -195,6 +199,7 @@ public class EventBus {
         return mainThreadSupport == null || mainThreadSupport.isMainThread();
     }
 
+    @Override
     public synchronized boolean isRegistered(Object subscriber) {
         return typesBySubscriber.containsKey(subscriber);
     }
@@ -221,6 +226,7 @@ public class EventBus {
     /**
      * Unregisters the given subscriber from all event classes.
      */
+    @Override
     public synchronized void unregister(Object subscriber) {
         List<Class<?>> subscribedTypes = typesBySubscriber.get(subscriber);
         if (subscribedTypes != null) {
@@ -233,6 +239,7 @@ public class EventBus {
         }
     }
 
+    @Override
     public void post(Object event) {
         post(event, null);
     }
@@ -280,7 +287,6 @@ public class EventBus {
         } else if (postingState.subscription.getSubscriberMethod().getThreadMode() != ThreadMode.POSTING) {
             throw new EventBusException(" event handlers may only abort the incoming event");
         }
-
         postingState.canceled = true;
     }
 
@@ -298,7 +304,6 @@ public class EventBus {
 
     /**
      * Gets the most recent sticky event for the given type.
-     *
      * @see #postSticky(Object)
      */
     public <T> T getStickyEvent(Class<T> eventType) {
@@ -309,7 +314,6 @@ public class EventBus {
 
     /**
      * Remove and gets the recent sticky event for the given event type.
-     *
      * @see #postSticky(Object)
      */
     public <T> T removeStickyEvent(Class<T> eventType) {
@@ -320,7 +324,6 @@ public class EventBus {
 
     /**
      * Removes the sticky event if it equals to the given event.
-     *
      * @return true if the events matched and the sticky event was removed.
      */
     public boolean removeStickyEvent(Object event) {
@@ -396,7 +399,7 @@ public class EventBus {
                 postingState.subscription = subscription;
                 boolean aborted;
                 try {
-                    postToSubscription(subscription, event, postingState.isMainThread, callback);
+                    postToSubscription(subscription, event, postingState.isMainThread);
                     aborted = postingState.canceled;
                 } finally {
                     postingState.event = null;
@@ -414,21 +417,20 @@ public class EventBus {
 
     /**
      * 将事件提交给监听方法
-     *
      * @param subscription
      * @param event
      * @param isMainThread
      */
-    private void postToSubscription(Subscription subscription, Object event, boolean isMainThread, Callback callback) {
+    private void postToSubscription(Subscription subscription, Object event, boolean isMainThread) {
         // 选择以何种线程模型运行
         switch (subscription.getSubscriberMethod().getThreadMode()) {
             case POSTING:
-                invokeSubscriber(subscription, event, callback);
+                invokeSubscriber(subscription, event);
                 break;
             case MAIN:
                 // 如果是主线程，那么在主线程中执行，如果不是，则提交到主线程中去
                 if (isMainThread) {
-                    invokeSubscriber(subscription, event, callback);
+                    invokeSubscriber(subscription, event);
                 } else {
                     // TODO
                     mainThreadPoster.enqueue(subscription, event);
@@ -439,14 +441,14 @@ public class EventBus {
                     mainThreadPoster.enqueue(subscription, event);
                 } else {
                     // temporary: technically not correct as poster not decoupled from subscriber
-                    invokeSubscriber(subscription, event, callback);
+                    invokeSubscriber(subscription, event);
                 }
                 break;
             case BACKGROUND:
                 if (isMainThread) {
                     backgroundPoster.enqueue(subscription, event);
                 } else {
-                    invokeSubscriber(subscription, event, callback);
+                    invokeSubscriber(subscription, event);
                 }
                 break;
             case ASYNC:
@@ -495,31 +497,30 @@ public class EventBus {
      * subscriber unregistered. This is particularly important for main thread delivery and registrations bound to the
      * live cycle of an Activity or Fragment.
      */
-    void invokeSubscriber(PendingPost pendingPost, Callback callback) {
+    void invokeSubscriber(PendingPost pendingPost) {
         Object event = pendingPost.event;
         Subscription subscription = pendingPost.subscription;
         PendingPost.releasePendingPost(pendingPost);
         if (subscription.active) {
-            invokeSubscriber(subscription, event, callback);
+            invokeSubscriber(subscription, event);
         }
     }
 
     /**
      * 执行监听方法
-     *
      * @param subscription
      * @param event
      */
-    void invokeSubscriber(Subscription subscription, Object event, Callback callback) {
+    void invokeSubscriber(Subscription subscription, Object event) {
         try {
             subscription.invoke(event);
         } catch (Exception exception) {
-            if (exception instanceof ReflectiveOperationException) {
-                if (exception instanceof InvocationTargetException) {
-                    handleSubscriberException(subscription, event, exception.getCause());
-                } else if (exception instanceof IllegalAccessException) {
-                    throw new RuntimeException("unspection exception: " + exception);
-                }
+            if (exception instanceof InvocationTargetException) {
+                handleSubscriberException(subscription, event, exception.getCause());
+            } else if (exception instanceof IllegalAccessException) {
+                throw new RuntimeException("unspection exception: " + exception);
+            } else {
+                throw new RuntimeException(exception);
             }
         }
     }
@@ -564,13 +565,6 @@ public class EventBus {
 
     ExecutorService getExecutorService() {
         return executorService;
-    }
-
-    /**
-     * For internal use only.
-     */
-    public Logger getLogger() {
-        return logger;
     }
 
     @Override
