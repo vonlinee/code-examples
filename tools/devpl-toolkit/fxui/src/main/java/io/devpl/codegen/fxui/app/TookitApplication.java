@@ -1,4 +1,4 @@
-package io.devpl.codegen.fxui.boot;
+package io.devpl.codegen.fxui.app;
 
 import io.devpl.codegen.fxui.utils.Utils;
 

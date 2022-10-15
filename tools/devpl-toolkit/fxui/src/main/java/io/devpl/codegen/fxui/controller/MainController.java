@@ -2,14 +2,13 @@ package io.devpl.codegen.fxui.controller;
 
 import com.jcraft.jsch.Session;
 import io.devpl.codegen.common.utils.*;
+import io.devpl.codegen.fxui.bridge.MyBatisCodeGenerator;
+import io.devpl.codegen.fxui.bridge.UIProgressCallback;
 import io.devpl.codegen.fxui.frame.FXController;
 import io.devpl.codegen.fxui.model.CodeGenConfiguration;
 import io.devpl.codegen.fxui.model.DatabaseConfiguration;
 import io.devpl.codegen.fxui.model.TableColumnCustomization;
-import io.devpl.codegen.fxui.bridge.MyBatisCodeGenerator;
-import io.devpl.codegen.fxui.bridge.UIProgressCallback;
 import io.devpl.codegen.fxui.utils.*;
-import org.greenrobot.eventbus.Subscribe;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -27,6 +26,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.greenrobot.eventbus.Subscribe;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
 
@@ -148,6 +148,7 @@ public class MainController extends FXController {
         });
         leftDBTree.setCellFactory((TreeView<String> tv) -> {
             TreeCell<String> cell = defaultCellFactory.call(tv);
+            // 表列表点击事件
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 int level = leftDBTree.getTreeItemLevel(cell.getTreeItem());
                 @SuppressWarnings("unchecked")

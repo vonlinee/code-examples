@@ -1,4 +1,4 @@
-package io.devpl.codegen.fxui.boot;
+package io.devpl.codegen.fxui.app;
 
 import io.devpl.codegen.common.h2.EmbedH2ServiceThread;
 import io.devpl.codegen.common.utils.ConfigHelper;

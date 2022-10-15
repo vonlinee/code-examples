@@ -1,7 +1,5 @@
-package io.devpl.codegen.fxui.boot;
+package io.devpl.codegen.fxui.app;
 
-import com.jfoenix.controls.JFXAlert;
-import io.devpl.codegen.fxui.utils.Alerts;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -37,11 +35,6 @@ public class SnippetApplication extends Application {
 //                    Alerts.showError(exception.getMessage());
 //                }
 //            }
-            Alerts.info("标题", "文本");
-
-            JFXAlert<String> alert = new JFXAlert<>();
-            alert.setContentText("sfffffffffffffffffffffffffffff");
-            alert.showAndWait();
         });
 
         root.setCenter(vBox);

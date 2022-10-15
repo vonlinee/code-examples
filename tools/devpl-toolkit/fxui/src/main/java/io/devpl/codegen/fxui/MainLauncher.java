@@ -1,11 +1,11 @@
 package io.devpl.codegen.fxui;
 
-import io.devpl.codegen.fxui.boot.MainApplication;
-import io.devpl.codegen.fxui.boot.SnippetApplication;
+import io.devpl.codegen.fxui.app.LauncherApplication;
 import javafx.application.Application;
 
 public class MainLauncher {
     public static void main(String[] args) {
-        Application.launch(SnippetApplication.class);
+        LauncherApplication.args = args;
+        Application.launch(LauncherApplication.class, args);
     }
 }
