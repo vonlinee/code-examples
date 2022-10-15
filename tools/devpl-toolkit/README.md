@@ -34,10 +34,6 @@ mybatis-generator-gui是基于 [mybatis generator](http://www.mybatis.org/genera
 
 ### 启动本软件
 
-* 方法一：关注微信公众号“搬砖头也要有态度”，回复“GUI”获取下载链接
-    
-  ![image](https://user-images.githubusercontent.com/3505708/61360019-2893dc00-a8b0-11e9-8dc9-a020e997ab87.png)
-
 * 方法二: 自助构建
 
   ```bash
@@ -73,18 +69,6 @@ mybatis-generator-gui是基于 [mybatis generator](http://www.mybatis.org/genera
 ### 文档
 更多详细文档请参考本库的Wiki
 * [Usage](https://github.com/astarring/mybatis-generator-gui/wiki/Usage-Guide)
-
-
-### 贡献
-目前本工具只是本人项目人使用到了并且觉得非常有用所以把它开源，如果你觉得有用并且想改进本软件，你可以：
-* 对于你认为有用的功能，你可以在Issue提，我可以开发的尽量满足
-* 对于有Bug的地方，请按如下方式在Issue中提bug
-    * 如何重现你的bug，包括你使用的系统，JDK版本，数据库类型及版本
-    * 如果有任何的错误截图会更好
-    * 如果你是一些常见的数据库连接、软件启动不了等问题，请先仔细阅读上面的文档，再解决不了在下面的QQ群中问（问问题的时候尽量把各种信息都提供好，否则只是几行文字是没有人愿意为你解答的）。
-    
-### QQ群
-鉴于有的同学可能有一些特殊情况不能使用，我建了一个钉钉群供大家交流，钉钉群号：35412531 （原QQ群已不再提供，QQ不方便打开）
 
 - - -
 Licensed under the Apache 2.0 License

@@ -422,6 +422,21 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.fxml</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.css</include>
+                    <include>**/*.yml</include>
+                    <include>**/*.yaml</include>
+                    <include>**/*.png</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -433,6 +448,7 @@
                 </configuration>
             </plugin>
             <!--fat jar-->
+
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
@@ -466,16 +482,17 @@
                         <!-- mac打包开启 -->
                         <icon>${project.basedir}/package/macosx/mybatis-generator-gui.icns</icon>
                     </bundleArguments>
-                    <mainClass>com.zzg.mybatis.generator.MainUI</mainClass>
+                    <mainClass>io.devpl.codegen.ui.fxui.MainLauncher</mainClass>
                     <vendor>Owen Zou</vendor>
                     <verbose>false</verbose>
-                    <jfxMainAppJarName>mybatis-generator-gui.jar</jfxMainAppJarName>
+                    <jfxMainAppJarName>devpl-tookit.jar</jfxMainAppJarName>
                     <needShortcut>true</needShortcut>
                     <needMenu>true</needMenu>
                     <copyAdditionalAppResourcesToJar>true</copyAdditionalAppResourcesToJar>
                     <additionalAppResources>${project.basedir}/src/main/resources</additionalAppResources>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 </project>
