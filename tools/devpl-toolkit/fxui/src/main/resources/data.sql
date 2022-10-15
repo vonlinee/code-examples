@@ -1,3 +1,6 @@
+CREATE
+DATABASE IF NOT EXISTS `mbg` DEFAULT CHARACTER SET utf8mb4;
+
 CREATE TABLE mbg.generator_config
 (
     value varchar(100) NULL

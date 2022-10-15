@@ -5,9 +5,9 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import io.devpl.codegen.common.DbType;
 import io.devpl.codegen.common.exception.DbDriverLoadingException;
-import io.devpl.codegen.ui.fxui.model.DatabaseConfiguration;
-import io.devpl.codegen.ui.fxui.model.TableColumnCustomization;
-import io.devpl.codegen.ui.fxui.utils.AlertDialog;
+import io.devpl.codegen.fxui.model.DatabaseConfiguration;
+import io.devpl.codegen.fxui.model.TableColumnCustomization;
+import io.devpl.codegen.fxui.utils.Alerts;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.internal.util.ClassloaderUtils;
 import org.slf4j.Logger;
@@ -103,7 +103,7 @@ public class DBUtils {
                     throw new RuntimeException("OverSSH 连接超时：超过5秒");
                 }
                 _LOG.info("executorService isShutdown:{}", executorService.isShutdown());
-                AlertDialog.showError("OverSSH 失败，请检查连接设置:" + e.getMessage());
+                Alerts.error("OverSSH 失败，请检查连接设置:" + e.getMessage());
             }
         }
     }
@@ -130,6 +130,7 @@ public class DBUtils {
         //     loadDbDriver(dbType);
         // }
         String url = getConnectionUrlWithSchema(config);
+        _LOG.info("try to get connection, url: {}", url);
         Properties props = new Properties();
         props.setProperty("user", config.getUsername()); //$NON-NLS-1$
         props.setProperty("password", config.getPassword()); //$NON-NLS-1$
@@ -146,11 +147,23 @@ public class DBUtils {
         return null;
     }
 
+    /**
+     * TODO
+     * 不会关闭该连接
+     * @param dbName
+     * @return
+     */
+    public static boolean isDbExisted(DatabaseConfiguration config, String dbName) {
+        if (dbName == null || dbName.length() == 0) return false;
+        String sql = "show databases like '" + dbName + "'";
+        return true;
+    }
+
     public static List<String> getTableNames(DatabaseConfiguration config, String filter) throws Exception {
         Session sshSession = getSSHSession(config);
         engagePortForwarding(sshSession, config);
+        List<String> tables = new ArrayList<>();
         try (Connection connection = getConnection(config)) {
-            List<String> tables = new ArrayList<>();
             DatabaseMetaData md = connection.getMetaData();
             ResultSet rs;
             if (DbType.fromProductName(config.getDbType()) == DbType.MICROSOFT_SQLSERVER) {
@@ -182,9 +195,12 @@ public class DBUtils {
                 Collections.sort(tables);
             }
             return tables;
+        } catch (Exception exception) {
+            Alerts.error(exception.getMessage());
         } finally {
             shutdownPortForwarding(sshSession);
         }
+        return tables;
     }
 
     public static List<TableColumnCustomization> getTableColumns(DatabaseConfiguration dbConfig, String tableName) throws Exception {
@@ -213,10 +229,8 @@ public class DBUtils {
 
     public static String getConnectionUrlWithSchema(DatabaseConfiguration dbConfig) throws ClassNotFoundException {
         DbType dbType = DbType.fromProductName(dbConfig.getDbType());
-        String connectionUrl = String.format(dbType.getConnectionUrlPattern(),
+        return String.format(dbType.getConnectionUrlPattern(),
                 portForwaring ? "127.0.0.1" : dbConfig.getHost(), portForwaring ? dbConfig.getLport() : dbConfig.getPort(), dbConfig.getSchema(), dbConfig.getEncoding());
-        _LOG.info("getConnectionUrlWithSchema, connection url: {}", connectionUrl);
-        return connectionUrl;
     }
 
     /**

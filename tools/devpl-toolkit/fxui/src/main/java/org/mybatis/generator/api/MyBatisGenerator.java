@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.api;
 
 import org.mybatis.generator.codegen.RootClassInfo;
@@ -24,6 +9,7 @@ import org.mybatis.generator.exception.ShellException;
 import org.mybatis.generator.internal.DefaultShellCallback;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.XmlFileMergerJaxp;
+import org.mybatis.generator.internal.util.ClassloaderUtils;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
 
@@ -35,7 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.mybatis.generator.internal.util.ClassloaderUtils.getCustomClassloader;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
@@ -217,7 +202,7 @@ public class MyBatisGenerator {
 
         // setup custom classloader if required
         if (!configuration.getClassPathEntries().isEmpty()) {
-            ClassLoader classLoader = getCustomClassloader(configuration.getClassPathEntries());
+            ClassLoader classLoader = ClassloaderUtils.getCustomClassloader(configuration.getClassPathEntries());
             ObjectFactory.addExternalClassLoader(classLoader);
         }
 

@@ -1,6 +1,6 @@
 package io.devpl.codegen.reflection;
 
-import io.devpl.codegen.ui.fxui.frame.FXEvent;
+import io.devpl.codegen.fxui.frame.FXEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 

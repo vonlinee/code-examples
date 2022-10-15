@@ -1,8 +1,8 @@
 package io.devpl.codegen.fxui;
 
 
-import io.devpl.eventbus.DefaultEventBus;
-import io.devpl.eventbus.ext.EventBus;
+import org.greenrobot.eventbus.DefaultEventBus;
+import org.greenrobot.eventbus.ext.EventBus;
 
 import java.util.function.Function;
 

@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
 import com.baomidou.mybatisplus.generator.config.querys.MySqlQuery;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.keywords.MySqlKeyWordsHandler;
-import io.devpl.codegen.ui.fxui.utils.PropertiesUtils;
+import io.devpl.codegen.fxui.utils.PropertiesUtils;
 import org.springframework.util.StopWatch;
 
 import java.util.Collections;

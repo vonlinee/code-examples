@@ -20,8 +20,6 @@ import org.mybatis.generator.logging.LogFactory;
  */
 public class ClassloaderUtils {
 
-    private static final Log LOG = LogFactory.getLog(ClassloaderUtils.class);
-
     /**
      * Utility Class - No Instances.
      */
@@ -35,7 +33,7 @@ public class ClassloaderUtils {
             for (String classPathEntry : entries) {
                 file = new File(classPathEntry);
                 if (!file.exists()) {
-                    LOG.warn(getString("Warning.31", classPathEntry)); //$NON-NLS-1$
+                    // LOG.warn(getString("Warning.31", classPathEntry)); //$NON-NLS-1$
                     continue;
                 }
                 try {

@@ -482,7 +482,7 @@
                         <!-- mac打包开启 -->
                         <icon>${project.basedir}/package/macosx/mybatis-generator-gui.icns</icon>
                     </bundleArguments>
-                    <mainClass>io.devpl.codegen.ui.fxui.MainLauncher</mainClass>
+                    <mainClass>MainLauncher</mainClass>
                     <vendor>Owen Zou</vendor>
                     <verbose>false</verbose>
                     <jfxMainAppJarName>devpl-tookit.jar</jfxMainAppJarName>
