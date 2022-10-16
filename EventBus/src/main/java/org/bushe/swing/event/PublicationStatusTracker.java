@@ -14,11 +14,11 @@ public interface PublicationStatusTracker {
     * @return last value set by setPublicationStatus(), or
     * {@link PublicationStatus#Unpublished} if setPublicationStatus was never called.
     */
-   public PublicationStatus getPublicationStatus();
+   PublicationStatus getPublicationStatus();
 
    /**
     * Implementations of this method must be made thread safe.
     * @param status the status of the event during it's current publication
     */
-   public void setPublicationStatus(PublicationStatus status);
+   void setPublicationStatus(PublicationStatus status);
 }

@@ -2,8 +2,8 @@ package org.bushe.swing.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Central Logging class.  Shields code from Logging implementation.

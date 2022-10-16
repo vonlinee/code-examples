@@ -11,16 +11,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-
-		EventBus.subscribe(Main.class, new EventSubscriber<String>() {
-			@Override
-			public void onEvent(String event) {
-				System.out.println(event);
-			}
-		});
-		
-		
 		EventBus.publish("event");
-		
+
 	}
 }

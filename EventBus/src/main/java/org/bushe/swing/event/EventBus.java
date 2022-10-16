@@ -15,9 +15,9 @@
  */
 package org.bushe.swing.event;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.lang.reflect.Type;
 
 /**
  * The EventBus provides event publication and subscription services. It is a
@@ -85,9 +85,9 @@ public class EventBus {
 	}
 
 	/**
-	 * @see EventService#subscribe(Class,EventSubscriber)
+	 * @see EventService#subscribe(Class, EventSubscriber)
 	 */
-	public static boolean subscribe(Class eventClass, EventSubscriber subscriber) {
+	public static boolean subscribe(Class<?> eventClass, EventSubscriber<?> subscriber) {
 		return EventServiceLocator.getEventBusService().subscribe(eventClass, subscriber);
 	}
 
