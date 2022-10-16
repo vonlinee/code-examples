@@ -33,7 +33,7 @@ public class FXMLHelper {
                 loader.setLocation(entry.getValue().toURL());
                 loader.load();
             } catch (Exception e) {
-                LOG.error("failed to load fxml {}, {}", entry.getValue(), e.getMessage());
+                LOG.error("failed to load fxml {}, {}", entry.getValue(), e);
                 continue;
             }
             FxmlLoadResult result = new FxmlLoadResult(loader.getRoot(), loader.getController(), entry.getValue().toString());
@@ -41,6 +41,11 @@ public class FXMLHelper {
         }
     }
 
+    /**
+     * 先从缓存中获取，缓存中没有再重新从硬盘加载
+     * @param fxmlLocation
+     * @return
+     */
     public static FxmlLoadResult loadFxml(String fxmlLocation) {
         fxmlLocation = resolveFxmlName(fxmlLocation);
         FxmlLoadResult result = cache.get(fxmlLocation);

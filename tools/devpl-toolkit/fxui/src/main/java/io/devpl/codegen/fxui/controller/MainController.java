@@ -534,7 +534,7 @@ public class MainController extends FXController {
                         }
                         return true;
                     } catch (Exception e) {
-                        Alerts.error("创建目录失败，请检查目录是否是文件而非目录");
+                        Alerts.error("创建目录失败，请检查目录是否是文件而非目录").showAndWait();
                     }
                 } else {
                     return false;
@@ -551,7 +551,7 @@ public class MainController extends FXController {
         try {
             FileUtils.show(new File(projectFolder));
         } catch (Exception e) {
-            Alerts.error("打开目录失败，请检查目录是否填写正确" + e.getMessage());
+            Alerts.error("打开目录失败，请检查目录是否填写正确" + e.getMessage()).showAndWait();
         }
     }
 }

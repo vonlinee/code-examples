@@ -1,5 +1,6 @@
 package org.greenrobot.eventbus;
 
+import org.greenrobot.eventbus.condition.Condition;
 import org.greenrobot.eventbus.ext.Callback;
 import org.greenrobot.eventbus.ext.Invocation;
 
@@ -20,6 +21,8 @@ public class Subscription implements Invocation<Object, Object> {
      * 可能为Null
      */
     private Callback callback;
+
+    private Condition condition;
 
     /**
      * Becomes false as soon as {@link DefaultEventBus#unregister(Object)} is called, which is checked by queued event delivery

@@ -17,8 +17,6 @@ import javafx.stage.Stage;
  */
 public class LauncherApplication extends Application {
 
-    public static String[] args;
-
     @Override
     public void init() throws Exception {
         super.init();
@@ -48,7 +46,7 @@ public class LauncherApplication extends Application {
     }
 
     public void launchApplication(String appClassName) {
-        Class<?> clazz = null;
+        Class<?> clazz;
         try {
             clazz = Class.forName(appClassName);
         } catch (ClassNotFoundException e) {
@@ -58,7 +56,7 @@ public class LauncherApplication extends Application {
         if (Application.class.isAssignableFrom(clazz)) {
             @SuppressWarnings("unchecked")
             Class<? extends Application> appClass = (Class<? extends Application>) clazz;
-            Application.launch(appClass, args);
+            Application.launch(appClass);
         } else {
             Alerts.error("选择的启动类: " + clazz.getName()).showAndWait();
         }

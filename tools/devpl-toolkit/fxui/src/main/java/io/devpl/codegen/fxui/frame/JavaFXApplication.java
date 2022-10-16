@@ -18,4 +18,8 @@ public abstract class JavaFXApplication extends Application {
     public void init() throws Exception {
 
     }
+
+    public static void run(Class<? extends Application> appClass, String[] args) {
+        Application.launch(appClass, args);
+    }
 }

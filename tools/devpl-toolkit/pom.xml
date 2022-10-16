@@ -433,6 +433,10 @@
                     <include>**/*.yml</include>
                     <include>**/*.yaml</include>
                     <include>**/*.png</include>
+                    <include>**/*.ftl</include>
+                    <include>**/*.vm</include>
+                    <include>**/*.ej</include>
+                    <include>**/*.btl</include>
                 </includes>
             </resource>
         </resources>

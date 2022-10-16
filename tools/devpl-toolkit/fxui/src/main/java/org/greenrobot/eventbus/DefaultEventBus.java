@@ -243,6 +243,14 @@ public class DefaultEventBus implements EventBus {
         }
     }
 
+    //事件总线配置
+    private final EventBusConfiguration configuration = null;
+
+    @Override
+    public EventBusConfiguration getConfiuration() {
+        return configuration;
+    }
+
     @Override
     public void post(Object event) {
         post(event, null);

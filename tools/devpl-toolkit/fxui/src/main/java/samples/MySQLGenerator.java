@@ -33,8 +33,6 @@ public class MySQLGenerator {
     private static final String USER_NAME = "root";
     private static final String PASSWORD = "123456";
 
-    // 生成器配置
-
     // 输出文件根目录
     public static final String OUTPUT_ROOT_DIR = "D://Temp";
     // 生成文件所在项目路径
@@ -65,7 +63,7 @@ public class MySQLGenerator {
 
         String url = (String) properties.get("url");
         String username = (String) properties.get("username");
-        String password = (String) properties.get("passwordlll");
+        String password = (String) properties.get("password");
 
         // 数据源配置
         DataSourceConfig.Builder dataSourceBuilder = new DataSourceConfig.Builder(url, username, password)
