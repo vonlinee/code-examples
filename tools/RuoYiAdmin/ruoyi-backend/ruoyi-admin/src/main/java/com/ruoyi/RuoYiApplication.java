@@ -20,6 +20,6 @@ public class RuoYiApplication {
         // System.setProperty("spring.devtools.restart.enabled", "false");
         ConfigurableApplicationContext context = SpringApplication.run(RuoYiApplication.class, args);
 
-        System.out.println(context.getBean(DataSourceProperties.class));
+        // System.out.println(context.getBean(DataSourceProperties.class));
     }
 }

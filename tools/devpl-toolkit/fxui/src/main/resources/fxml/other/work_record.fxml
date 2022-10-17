@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="io.devpl.codegen.fxui.controller.WorkRecordController">
+    <TableView fx:id="recordTableView">
+        <columns>
+            <TableColumn text="日期"/>
+            <TableColumn text="1"/>
+            <TableColumn text="2"/>
+            <TableColumn text="3"/>
+            <TableColumn text="4"/>
+            <TableColumn text="5"/>
+            <TableColumn text="6"/>
+            <TableColumn text="7"/>
+        </columns>
+    </TableView>
+</AnchorPane>

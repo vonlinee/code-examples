@@ -1,6 +1,5 @@
 package io.devpl.codegen.reflection;
 
-import io.devpl.codegen.fxui.frame.FXEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 
@@ -12,17 +11,6 @@ public class TestType {
     static List<EventHandler<?>> handlers = new ArrayList<>();
 
     public static void main(String[] args) {
-        addEventHandler();
-        addEventHandler(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                System.out.println(this);
-            }
-        });
-
-        for (EventHandler handler : handlers) {
-            handler.handle(new FXEvent());
-        }
     }
 
     public static void addEventHandler() {
