@@ -1,5 +1,7 @@
 package io.devpl.codegen.fxui.app;
 
+import io.devpl.codegen.fxui.utils.FXMLHelper;
+import io.devpl.codegen.fxui.utils.FxmlLoadResult;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.StatusBar;
 
 public class SnippetApplication extends Application {
     @Override
@@ -21,20 +24,15 @@ public class SnippetApplication extends Application {
 
         fxmlLocaltionTextField.prefWidthProperty().bind(root.widthProperty().subtract(btn.widthProperty()));
 
+
+        StatusBar statusBar = new StatusBar();
+        vBox.getChildren().add(statusBar);
         btn.setOnMouseClicked(event -> {
-//            String text = fxmlLocaltionTextField.getText();
-//            if (text != null && text.length() != 0) {
-//                try {
-//                    URL resource = Thread.currentThread().getContextClassLoader().getResource(text);
-//                    FXMLLoader fxmlLoader = new FXMLLoader(resource);
-//                    Parent parent = fxmlLoader.load();
-//                    Stage stage = new Stage();
-//                    stage.setScene(new Scene(parent));
-//                    stage.show();
-//                } catch (Exception exception) {
-//                    Alerts.showError(exception.getMessage());
-//                }
-//            }
+            FxmlLoadResult result = FXMLHelper.loadFxml("fxml/other/work_record.fxml");
+            Scene scene = new Scene(result.getRoot());
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
         });
 
         root.setCenter(vBox);

@@ -577,7 +577,7 @@ public class DefaultEventBus implements EventBus {
 
     @Override
     public String name() {
-        return "DEFAULT_EVENTBUS";
+        return this.getClass().getSimpleName();
     }
 
     /**
@@ -605,7 +605,6 @@ public class DefaultEventBus implements EventBus {
     public Logger getLogger() {
         return logger;
     }
-
 
     @Override
     public String toString() {

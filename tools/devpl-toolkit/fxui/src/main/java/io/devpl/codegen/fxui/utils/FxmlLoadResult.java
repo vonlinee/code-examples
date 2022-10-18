@@ -13,6 +13,11 @@ public final class FxmlLoadResult {
         this.location = location;
     }
 
+    /**
+     * 不能通过new Scene(root)进行构造场景图，因为root已经属于另一个场景图了
+     * @param <T>
+     * @return
+     */
     public <T> T getRoot() {
         return (T) root;
     }

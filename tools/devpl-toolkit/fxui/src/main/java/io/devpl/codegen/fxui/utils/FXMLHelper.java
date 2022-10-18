@@ -56,6 +56,8 @@ public class FXMLHelper {
             } catch (Exception exception) {
                 LOG.error("failed to load fxml [{}]", fxmlLocation, exception);
             }
+
+            Parent parent = loader.getRoot();
             result = new FxmlLoadResult(loader.getRoot(), loader.getController(), loader.getLocation().toExternalForm());
             cache.put(fxmlLocation, result);
         }

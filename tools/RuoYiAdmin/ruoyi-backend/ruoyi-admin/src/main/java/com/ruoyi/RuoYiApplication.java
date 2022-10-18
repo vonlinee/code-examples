@@ -21,5 +21,7 @@ public class RuoYiApplication {
         ConfigurableApplicationContext context = SpringApplication.run(RuoYiApplication.class, args);
 
         // System.out.println(context.getBean(DataSourceProperties.class));
+
+        System.out.println("http://localhost:8888/swagger-ui/index.html#/");
     }
 }

@@ -22,17 +22,25 @@ public class Main {
 
         bus.register(new Main());
 
-        bus.publish(new Event(main, Event.NULL_SOURCE_TARGET, Event.ANY));
+        Event event = new Event(main, Event.NULL_SOURCE_TARGET, Event.ANY);
 
-        System.out.println(bus.name());
+        bus.publish("subscriber1", event);
+
     }
 
-    @Subscribe
+    @Subscribe(priority = 2, topic = "subscriber1")
     public Map<String, Object> subscriber1(Event event) {
-
         Map<String, Object> map = new HashMap<>();
         map.put("event", event);
+        System.out.println("11111111111");
+        return map;
+    }
 
+    @Subscribe(priority = 1, topic = "subscriber1")
+    public Map<String, Object> subscriber2(Event event) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("event", event);
+        System.out.println("22222222222");
         return map;
     }
 }
