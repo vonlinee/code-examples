@@ -10,7 +10,7 @@ import { saveAs } from 'file-saver'
 let downloadLoadingInstance;
 // 是否显示重新登录
 export let isRelogin = { show: false };
-
+// JSON格式请求
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 // 创建axios实例
 const service = axios.create({
