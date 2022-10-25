@@ -115,7 +115,14 @@ service.interceptors.response.use(res => {
       message = "后端接口连接异常";
     }
     else if (message.includes("timeout")) {
-      message = "系统接口请求超时";
+      message = "系统接口请求超时，默认返回空数据";
+      // TODO 请求超时，提示，但是返回空数据
+      Message({
+        message: message,
+        type: 'error',
+        duration: 5 * 1000
+      })
+      return []
     }
     else if (message.includes("Request failed with status code")) {
       message = "系统接口" + message.substr(message.length - 3) + "异常";

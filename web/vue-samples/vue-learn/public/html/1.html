@@ -8,22 +8,22 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   </head>
   <body>
-
-
     <div id="root">
-
+        {{ msg }}
     </div>
 
+    <script type="">
 
-    <script>
+import Vue from '@/vue.global.js'
 
         new Vue({
             el: "#root",
-            data: {
-
-            },
+            data: function() {
+              return {
+                msg: "=============="
+              }
+            }
         })
-
     </script>
   </body>
 </html>

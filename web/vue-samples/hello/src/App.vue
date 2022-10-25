@@ -6,8 +6,16 @@
 </template>
 
 <script>
+
+import GoodList from './components/GoodList.vue';
+import HelloWorld from './components/HelloWorld.vue';
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    GoodList,
+    HelloWorld
+  }
 }
 </script>
 

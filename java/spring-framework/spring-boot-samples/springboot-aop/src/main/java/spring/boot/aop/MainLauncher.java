@@ -20,7 +20,7 @@ import spring.boot.aop.service.UserService;
 public class MainLauncher {
     public static void main(String[] args) {
 
-        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "G:\\cglib");
+        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:\\Temp");
 
 
         /**
@@ -50,9 +50,9 @@ public class MainLauncher {
 //        userService.login("zs", "123");
 //        userService.login("ls", "456");
 
-        BeanA a = beanFactory.getBean(BeanA.class);
-        System.out.println(a);
-        BeanB b = beanFactory.getBean(BeanB.class);
-        System.out.println(b);
+        // BeanA a = beanFactory.getBean(BeanA.class);
+        // System.out.println(a);
+        // BeanB b = beanFactory.getBean(BeanB.class);
+        // System.out.println(b);
     }
 }
