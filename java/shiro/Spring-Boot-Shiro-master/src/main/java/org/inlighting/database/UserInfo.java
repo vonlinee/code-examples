@@ -1,6 +1,6 @@
 package org.inlighting.database;
 
-public class UserBean {
+public class UserInfo {
     private String username;
 
     private String password;

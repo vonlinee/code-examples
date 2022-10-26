@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DataSource {
-    private static Map<String, Map<String, String>> data = new HashMap<>();
+    private static final Map<String, Map<String, String>> data = new HashMap<>();
 
     static {
         Map<String, String> data1 = new HashMap<>();
