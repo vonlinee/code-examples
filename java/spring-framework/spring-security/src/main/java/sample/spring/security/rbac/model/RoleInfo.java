@@ -1,8 +1,11 @@
 package sample.spring.security.rbac.model;
 
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
-public class SystemRole {
+@Data
+public class RoleInfo {
 
 	private String roleId;
 	private String roleCode;
