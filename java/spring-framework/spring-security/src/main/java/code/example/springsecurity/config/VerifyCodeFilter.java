@@ -25,9 +25,9 @@ public class VerifyCodeFilter implements Filter {
 			// 验证码验证
 			String requestCaptcha = request.getParameter("code");
 			String genCaptcha = (String) request.getSession().getAttribute("index_code");
-			if (StringUtils.isEmpty(requestCaptcha))
+			if (!StringUtils.hasText(requestCaptcha))
 				throw new AuthenticationServiceException("验证码不能为空!");
-			if (!genCaptcha.toLowerCase().equals(requestCaptcha.toLowerCase())) {
+			if (!genCaptcha.equalsIgnoreCase(requestCaptcha)) {
 				throw new AuthenticationServiceException("验证码错误!");
 			}
 		}
