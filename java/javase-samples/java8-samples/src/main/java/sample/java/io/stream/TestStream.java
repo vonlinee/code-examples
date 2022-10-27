@@ -10,7 +10,18 @@ import java.io.Reader;
 public class TestStream {
 
     public static void main(String[] args) throws FileNotFoundException {
-    	InputStream is = new FileInputStream(new File(""));
+    	FileInputStream is = new FileInputStream(new File(""));
     	Reader reader = new FileReader(new File(""));
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
     }
 }

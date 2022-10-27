@@ -1,4 +1,4 @@
-package code.example.springsecurity.config;
+package sample.spring.security;
 
 import java.io.IOException;
 
