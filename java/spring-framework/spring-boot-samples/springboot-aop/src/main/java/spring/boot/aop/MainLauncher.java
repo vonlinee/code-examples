@@ -22,7 +22,6 @@ public class MainLauncher {
 
         System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:\\Temp");
 
-
         /**
          * {@link SpringApplication#run(String...)}
          * {@link CglibAopProxy#getProxy()}
@@ -35,7 +34,6 @@ public class MainLauncher {
          */
         ConfigurableApplicationContext context = SpringApplication.run(MainLauncher.class, args);
 
-
         ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
 
         // System.out.println(beanFactory.getBeanDefinition("logAspect"));
@@ -44,6 +42,7 @@ public class MainLauncher {
 
         // CglibAopProxy proxy;
         //
+
 
         ProxyFactory pf;
 
