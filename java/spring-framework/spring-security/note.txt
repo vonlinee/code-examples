@@ -5,7 +5,7 @@ https://www.woshipm.com/pd/1150093.html
 
 
 
-
+在引入Spring Security依赖之后启动项目，访问http://localhost:8080/login，Spring Security自带了一个登陆页面。如图
 
 
 
