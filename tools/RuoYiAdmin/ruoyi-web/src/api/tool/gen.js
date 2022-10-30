@@ -1,3 +1,7 @@
+/**
+ * 存放后端接口
+ */
+
 import request from '@/utils/request'
 
 // 查询生成表数据

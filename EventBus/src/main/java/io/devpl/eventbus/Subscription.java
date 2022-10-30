@@ -19,7 +19,7 @@ public final class Subscription implements Comparable<Subscription> {
     public Subscription(Object subscriber, SubscriberMethod subscriberMethod) {
         this.subscriber = subscriber;
         this.subscriberMethod = subscriberMethod;
-        subscriberMethod.setSubscriber(subscriber);
+        subscriberMethod.subscriber = subscriber;
         this.invocation = subscriberMethod;
         active = true;
     }

@@ -191,7 +191,7 @@ class SubscriberMethodFinder {
                             ThreadMode threadMode = subscribeAnnotation.threadMode();
                             SubscriberMethod sm = new SubscriberMethod(method, eventType, threadMode,
                                     subscribeAnnotation.priority(), subscribeAnnotation.sticky());
-                            sm.setSubscribedTopic(subscribeAnnotation.topic());
+                            sm.subscribedTopic = subscribeAnnotation.topic();
                             findState.subscriberMethods.add(sm);
                         }
                     }
