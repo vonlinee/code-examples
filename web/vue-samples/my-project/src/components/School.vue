@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <p>22222222222222222222222</p>
     <button @click="$emit('myEvent')">click me</button>
   </div>
 </template>
