@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">若依后台管理系统</h3>
+      <!-- <h3 class="title">若依后台管理系统</h3> -->
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -140,6 +140,7 @@ export default {
             Cookies.remove("password");
             Cookies.remove('rememberMe');
           }
+          debugger
           this.$store.dispatch("Login", this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
           }).catch(() => {
@@ -161,7 +162,8 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-image: url("../assets/images/login-background.jpg");
+  // 去掉登录页的背景图片
+  // background-image: url("../assets/images/login-background.jpg");
   background-size: cover;
 }
 .title {

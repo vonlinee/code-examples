@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * https://blog.csdn.net/band_mmbx/article/details/126904989
+ * <a href="https://blog.csdn.net/band_mmbx/article/details/126904989">关于SpringBoot的多数据源以及事务解决方案</a>
  */
 @Data
 public class DataSourceManager {

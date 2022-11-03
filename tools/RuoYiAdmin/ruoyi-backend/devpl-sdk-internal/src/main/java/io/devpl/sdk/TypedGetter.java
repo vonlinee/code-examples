@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * 基本类型的getter接口<br>
  * 提供一个统一的接口定义返回不同类型的值（基本类型）<br>
- * @param <K> key类型
+ * @param <K> key类型  可为Null
  */
 public interface TypedGetter<K> {
 

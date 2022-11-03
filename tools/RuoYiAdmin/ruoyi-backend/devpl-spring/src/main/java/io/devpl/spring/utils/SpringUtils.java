@@ -23,8 +23,8 @@ public final class SpringUtils implements ApplicationContextAware, BeanFactoryPo
      * 获取对象
      * @param name
      * @return Object 一个以所给名字注册的bean的实例
-     * @throws org.springframework.beans.BeansException
      */
+    @SuppressWarnings("unchecked")
     public static <T> T getBean(String name) throws BeansException {
         return (T) context.getBean(name);
     }
@@ -33,7 +33,6 @@ public final class SpringUtils implements ApplicationContextAware, BeanFactoryPo
      * 获取类型为requiredType的对象
      * @param clz
      * @return
-     * @throws org.springframework.beans.BeansException
      */
     public static <T> T getBean(Class<T> clz) throws BeansException {
         return (T) context.getBean(clz);
@@ -79,11 +78,11 @@ public final class SpringUtils implements ApplicationContextAware, BeanFactoryPo
 
     /**
      * 获取aop代理对象
-     * @param invoker
+     * @param type
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static <T> T getAopProxy(T invoker) {
+    public static <T> T getAopProxy(Class<T> type) {
         return (T) AopContext.currentProxy();
     }
 

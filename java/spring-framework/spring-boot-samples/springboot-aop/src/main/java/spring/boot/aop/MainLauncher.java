@@ -9,9 +9,6 @@ import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebSe
 import org.springframework.cglib.core.DebuggingClassWriter;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import spring.boot.aop.bean.BeanA;
-import spring.boot.aop.bean.BeanB;
-import spring.boot.aop.service.UserService;
 
 @SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class
@@ -50,9 +47,9 @@ public class MainLauncher {
 //        userService.login("zs", "123");
 //        userService.login("ls", "456");
 
-        BeanA a = beanFactory.getBean(BeanA.class);
-        System.out.println(a);
-        BeanB b = beanFactory.getBean(BeanB.class);
-        System.out.println(b);
+        // BeanA a = beanFactory.getBean(BeanA.class);
+        // System.out.println(a);
+        // BeanB b = beanFactory.getBean(BeanB.class);
+        // System.out.println(b);
     }
 }

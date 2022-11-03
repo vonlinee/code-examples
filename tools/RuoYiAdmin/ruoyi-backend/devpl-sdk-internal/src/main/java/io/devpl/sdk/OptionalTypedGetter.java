@@ -14,89 +14,89 @@ import java.util.Set;
  */
 public interface OptionalTypedGetter<K> extends TypedGetter<K> {
 
-    default Object getObject(K key, Object placeholder) {
+    default Object getObject(K key, Object optional) {
         Object val = getObject(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default String getString(K key, String placeholder) {
+    default String getString(K key, String optional) {
         String val = getString(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default Integer getInteger(K key, Integer placeholder) {
+    default Integer getInteger(K key, Integer optional) {
         Integer val = getInteger(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default Short getShort(K key, Short placeholder) {
+    default Short getShort(K key, Short optional) {
         Short val = getShort(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default Boolean getBoolean(K key, Boolean placeholder) {
+    default Boolean getBoolean(K key, Boolean optional) {
         Boolean val = getBoolean(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default Long getLong(K key, Long placeholder) {
+    default Long getLong(K key, Long optional) {
         Long val = getLong(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default Character getCharacter(K key, Character placeholder) {
+    default Character getCharacter(K key, Character optional) {
         Character val = getCharacter(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default Float getFloat(K key, Float placeholder) {
+    default Float getFloat(K key, Float optional) {
         Long val = getLong(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default Double getDouble(K key, Double placeholder) {
+    default Double getDouble(K key, Double optional) {
         Long val = getLong(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default Byte getByte(K key, Byte placeholder) {
+    default Byte getByte(K key, Byte optional) {
         Byte val = getByte(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default BigDecimal getBigDecimal(K key, BigDecimal placeholder) {
+    default BigDecimal getBigDecimal(K key, BigDecimal optional) {
         BigDecimal val = getBigDecimal(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default Number getNumber(K key, Number placeholder) {
+    default Number getNumber(K key, Number optional) {
         Number val = getNumber(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default BigInteger getBigInteger(K key, BigInteger placeholder) {
+    default BigInteger getBigInteger(K key, BigInteger optional) {
         BigInteger val = getBigInteger(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default <E extends Enum<E>> E getEnum(Class<E> clazz, K key, E placeholder) {
+    default <E extends Enum<E>> E getEnum(Class<E> clazz, K key, E optional) {
         E val = getEnum(clazz, key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default Date getDate(K key, Date placeholder) {
+    default Date getDate(K key, Date optional) {
         Date val = getDate(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default LocalDateTime getLocalDateTime(K key, LocalDateTime placeholder) {
+    default LocalDateTime getLocalDateTime(K key, LocalDateTime optional) {
         LocalDateTime val = getLocalDateTime(key);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
-    default <V> V get(K key, Class<V> type, V placeholder) {
+    default <V> V get(K key, Class<V> type, V optional) {
         V val = get(key, type);
-        return val == null ? placeholder : val;
+        return val == null ? optional : val;
     }
 
     default <MK, V> Map<MK, V> getMap(K key, Map<MK, V> optional) {

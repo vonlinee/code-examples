@@ -23,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,16 +36,16 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/system/user")
 public class SysUserController extends BaseController {
-    @Autowired
+    @Resource
     private ISysUserService userService;
 
-    @Autowired
+    @Resource
     private ISysRoleService roleService;
 
-    @Autowired
+    @Resource
     private ISysDeptService deptService;
 
-    @Autowired
+    @Resource
     private ISysPostService postService;
 
     /**

@@ -2,17 +2,17 @@ package com.ruoyi.common.utils;
 
 import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.exception.BusinessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * 安全服务工具类
- *
  * @author ruoyi
  */
 public class SecurityUtils {
+
     /**
      * 用户ID
      **/
@@ -20,7 +20,7 @@ public class SecurityUtils {
         try {
             return getLoginUser().getUserId();
         } catch (Exception e) {
-            throw new ServiceException("获取用户ID异常", HttpStatus.UNAUTHORIZED);
+            throw new BusinessException("获取用户ID异常", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -31,7 +31,7 @@ public class SecurityUtils {
         try {
             return getLoginUser().getDeptId();
         } catch (Exception e) {
-            throw new ServiceException("获取部门ID异常", HttpStatus.UNAUTHORIZED);
+            throw new BusinessException("获取部门ID异常", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -42,7 +42,7 @@ public class SecurityUtils {
         try {
             return getLoginUser().getUsername();
         } catch (Exception e) {
-            throw new ServiceException("获取用户账户异常", HttpStatus.UNAUTHORIZED);
+            throw new BusinessException("获取用户账户异常", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -53,7 +53,7 @@ public class SecurityUtils {
         try {
             return (LoginUser) getAuthentication().getPrincipal();
         } catch (Exception e) {
-            throw new ServiceException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
+            throw new BusinessException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -66,7 +66,6 @@ public class SecurityUtils {
 
     /**
      * 生成BCryptPasswordEncoder密码
-     *
      * @param password 密码
      * @return 加密字符串
      */
@@ -77,7 +76,6 @@ public class SecurityUtils {
 
     /**
      * 判断密码是否相同
-     *
      * @param rawPassword     真实密码
      * @param encodedPassword 加密后字符
      * @return 结果
@@ -89,7 +87,6 @@ public class SecurityUtils {
 
     /**
      * 是否为管理员
-     *
      * @param userId 用户ID
      * @return 结果
      */

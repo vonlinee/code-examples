@@ -48,7 +48,7 @@ public class CacheController {
         result.put("dbSize", dbSize);
 
         List<Map<String, String>> pieList = new ArrayList<>();
-        commandStats.stringPropertyNames().forEach(key -> {
+        Objects.requireNonNull(commandStats).stringPropertyNames().forEach(key -> {
             Map<String, String> data = new HashMap<>(2);
             String property = commandStats.getProperty(key);
             data.put("name", StringUtils.removeStart(key, "cmdstat_"));

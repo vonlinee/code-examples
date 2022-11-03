@@ -6,10 +6,9 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.FileUtils;
-import com.ruoyi.framework.config.ServerConfig;
+import com.ruoyi.framework.config.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ import java.util.List;
 
 /**
  * 通用请求处理
- *
  * @author ruoyi
  */
 @RestController
@@ -32,12 +31,12 @@ import java.util.List;
 public class CommonController {
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
     private static final String FILE_DELIMETER = ",";
-    @Autowired
-    private ServerConfig serverConfig;
+
+    @Resource
+    private ServerConfiguration serverConfig;
 
     /**
      * 通用下载请求
-     *
      * @param fileName 文件名称
      * @param delete   是否删除
      */
@@ -91,10 +90,10 @@ public class CommonController {
         try {
             // 上传文件路径
             String filePath = RuoYiConfig.getUploadPath();
-            List<String> urls = new ArrayList<String>();
-            List<String> fileNames = new ArrayList<String>();
-            List<String> newFileNames = new ArrayList<String>();
-            List<String> originalFilenames = new ArrayList<String>();
+            List<String> urls = new ArrayList<>();
+            List<String> fileNames = new ArrayList<>();
+            List<String> newFileNames = new ArrayList<>();
+            List<String> originalFilenames = new ArrayList<>();
             for (MultipartFile file : files) {
                 // 上传并返回新文件名称
                 String fileName = FileUploadUtils.upload(filePath, file);

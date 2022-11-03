@@ -1,6 +1,6 @@
 package io.devpl.sdk.rest;
 
-import io.devpl.sdk.ListDelegation;
+import io.devpl.sdk.DelegationList;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * 携带多条数据的列表
  * @param <E>
  */
-public class ListResult<E> extends RestfulResultTemplate implements ListRBuilder<E>, ListDelegation<E> {
+public class ListResult<E> extends RestfulResultTemplate implements ListRBuilder<E>, DelegationList<E> {
 
     private List<E> data;
 

@@ -1,6 +1,6 @@
 package io.devpl.spring.boot.factories;
 
-import io.devpl.sdk.beans.MapBean;
+import io.devpl.sdk.beans.BeanMap;
 import io.devpl.spring.context.PropertyBindCallback;
 import io.devpl.spring.data.jdbc.DataSourceInformation;
 import io.devpl.spring.data.jdbc.DataSourceManager;
@@ -60,14 +60,14 @@ public class DataSourceInitializer implements SpringApplicationRunListener, Orde
         List<DataSourceInformation> dataSourceInformations = new ArrayList<>();
         // 配置属性名称
         ConfigurationPropertyName cpn = ConfigurationPropertyName.of("devpl.datasource");
-        Bindable<MapBean> bindable = Bindable.of(MapBean.class);
+        Bindable<BeanMap> bindable = Bindable.of(BeanMap.class);
         for (PropertySource<?> source : propertySources) {
             if (!StringUtils.startsWithIgnoreCase(source.getName(), DevplConstant.NAME)) {
                 continue;
             }
             // 如何把 Java properties 转换为具有层级结构的字典
             Binder binder = new Binder(ConfigurationPropertySources.from(source));
-            MapBean map = binder.bind(cpn, bindable, new PropertyBindCallback()).orElse(new MapBean());
+            BeanMap map = binder.bind(cpn, bindable, new PropertyBindCallback()).orElse(new BeanMap());
             // 获取所有的数据源名称
             String dataSourceNames = map.getString("name-list", "");
             if (!StringUtils.hasLength(dataSourceNames)) {

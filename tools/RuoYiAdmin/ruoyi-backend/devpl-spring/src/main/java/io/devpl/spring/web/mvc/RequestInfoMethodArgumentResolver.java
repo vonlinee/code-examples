@@ -40,7 +40,6 @@ import java.util.*;
  * @see MultipartRequest#getFileMap()
  * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor
  * @see RequestParamMapMethodArgumentResolver  根据这个实现
- * @see
  * @since 3.1
  */
 public class RequestInfoMethodArgumentResolver implements HandlerMethodArgumentResolver, Ordered {
@@ -100,7 +99,7 @@ public class RequestInfoMethodArgumentResolver implements HandlerMethodArgumentR
                 return result;
             }
         } else {
-            // Regular Map
+            // 常规的Map类型
             Class<?> valueType = resolvableType.asMap().getGeneric(1).resolve();
             if (valueType == MultipartFile.class) {
                 MultipartRequest multipartRequest = MultipartResolutionDelegate.resolveMultipartRequest(webRequest);
@@ -120,8 +119,7 @@ public class RequestInfoMethodArgumentResolver implements HandlerMethodArgumentR
                 return new LinkedHashMap<>(0);
             } else {
                 RequestInfo requestInfo = new RequestInfo();
-                requestInfo.setParam(webRequest.getParameterMap());
-
+                requestInfo.setRequestParam(webRequest.getParameterMap());
                 // 获取请求头
                 HttpServletRequest nativeReq = webRequest.getNativeRequest(HttpServletRequest.class);
                 requestInfo.setHeaders(getHttpHeaders(nativeReq, webRequest));

@@ -3,7 +3,7 @@ package com.ruoyi.framework.web.exception;
 import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.exception.DemoModeException;
-import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
  * 全局异常处理器
@@ -39,8 +40,7 @@ public class GlobalExceptionHandler {
      * 请求方式不支持
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public AjaxResult handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException e,
-                                                          HttpServletRequest request) {
+    public AjaxResult handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',不支持'{}'请求", requestURI, e.getMethod());
         return AjaxResult.error(e.getMessage());
@@ -49,8 +49,8 @@ public class GlobalExceptionHandler {
     /**
      * 业务异常
      */
-    @ExceptionHandler(ServiceException.class)
-    public AjaxResult handleServiceException(ServiceException e, HttpServletRequest request) {
+    @ExceptionHandler(BusinessException.class)
+    public AjaxResult handleServiceException(BusinessException e, HttpServletRequest request) {
         log.error(e.getMessage(), e);
         Integer code = e.getCode();
         return StringUtils.isNotNull(code) ? AjaxResult.error(code, e.getMessage()) : AjaxResult.error(e.getMessage());
@@ -92,7 +92,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Object handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
-        String message = e.getBindingResult().getFieldError().getDefaultMessage();
+        String message = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
         return AjaxResult.error(message);
     }
 

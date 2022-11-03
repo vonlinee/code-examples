@@ -24,11 +24,13 @@
             <version>3.8.3</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>28.2-android</version>
+            <version>31.1-jre</version>
         </dependency>
+
 
         <!-- SpringBoot Web容器 -->
         <dependency>
@@ -96,6 +98,12 @@
         <!--            <version>3.5.2</version>-->
         <!--        </dependency>-->
 
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>13.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>

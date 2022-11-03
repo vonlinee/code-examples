@@ -5,7 +5,7 @@ import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.redis.RedisCache;
-import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.exception.user.CaptchaException;
 import com.ruoyi.common.exception.user.CaptchaExpireException;
 import com.ruoyi.common.exception.user.UserPasswordNotMatchException;
@@ -19,7 +19,6 @@ import com.ruoyi.framework.manager.factory.AsyncFactory;
 import com.ruoyi.framework.security.context.AuthenticationContextHolder;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,19 +34,19 @@ import javax.annotation.Resource;
  */
 @Component
 public class SysLoginService {
-    @Autowired
+    @Resource
     private TokenService tokenService;
 
     @Resource
     private AuthenticationManager authenticationManager;
 
-    @Autowired
+    @Resource
     private RedisCache redisCache;
 
-    @Autowired
+    @Resource
     private ISysUserService userService;
 
-    @Autowired
+    @Resource
     private ISysConfigService configService;
 
     /**
@@ -78,7 +77,7 @@ public class SysLoginService {
                 throw new UserPasswordNotMatchException();
             } else {
                 AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, e.getMessage()));
-                throw new ServiceException(e.getMessage());
+                throw new BusinessException(e.getMessage());
             }
         } finally {
             AuthenticationContextHolder.clearContext();

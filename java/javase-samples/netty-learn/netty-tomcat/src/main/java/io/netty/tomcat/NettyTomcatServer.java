@@ -21,7 +21,7 @@ import java.util.Properties;
 //打开Tomcat源码，全局搜索ServerSocket
 public class NettyTomcatServer {
 
-    private int port = 8080;
+    private final int port = 8080;
 
     private final Map<String, GPServlet> servletMapping = new HashMap<>();
 

@@ -1,7 +1,6 @@
 package com.ruoyi.framework.manager.factory;
 
 import com.ruoyi.common.constant.Constants;
-import com.ruoyi.common.utils.LogUtils;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.SpringUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -43,11 +42,11 @@ public class AsyncFactory {
             public void run() {
                 String address = AddressUtils.getRealAddressByIP(ip);
                 StringBuilder s = new StringBuilder();
-                s.append(LogUtils.getBlock(ip));
+                s.append("[").append(ip).append("]");
                 s.append(address);
-                s.append(LogUtils.getBlock(username));
-                s.append(LogUtils.getBlock(status));
-                s.append(LogUtils.getBlock(message));
+                s.append("[").append(username).append("]");
+                s.append("[").append(status).append("]");
+                s.append("[").append(message).append("]");
                 // 打印信息到日志
                 sys_user_logger.info(s.toString(), args);
                 // 获取客户端操作系统

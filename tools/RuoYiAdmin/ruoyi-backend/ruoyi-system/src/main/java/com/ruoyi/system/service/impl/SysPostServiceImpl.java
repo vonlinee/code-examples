@@ -1,7 +1,7 @@
 package com.ruoyi.system.service.impl;
 
 import com.ruoyi.common.constant.UserConstants;
-import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.SysPost;
 import com.ruoyi.system.mapper.SysPostMapper;
@@ -133,7 +133,7 @@ public class SysPostServiceImpl implements ISysPostService {
         for (Long postId : postIds) {
             SysPost post = selectPostById(postId);
             if (countUserPostById(postId) > 0) {
-                throw new ServiceException(String.format("%1$s已分配,不能删除", post.getPostName()));
+                throw new BusinessException(String.format("%1$s已分配,不能删除", post.getPostName()));
             }
         }
         return postMapper.deletePostByIds(postIds);

@@ -1,5 +1,6 @@
 package io.devpl.spring.web.mvc;
 
+import io.devpl.sdk.beans.BeanMap;
 import io.devpl.sdk.rest.RestfulResultTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -26,16 +27,21 @@ public class ControllerMethodProcessor extends AbstractMessageConverterMethodPro
         super(converters);
     }
 
+    /**
+     * BeanMap继承自Map，会被Spring内置的Map类型的参数解析器处理
+     * @param parameter the method parameter to check
+     * @return
+     */
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         log.info("supportsParameter => {}", parameter);
-        return false;
+        return parameter.getParameterType() == BeanMap.class;
     }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         log.info("resolveArgument => {}", parameter);
-        return null;
+        return new BeanMap();
     }
 
     @Override

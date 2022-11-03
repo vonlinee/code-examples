@@ -2,6 +2,7 @@ package io.devpl.spring.web.mvc;
 
 import com.google.gson.Gson;
 import io.devpl.sdk.rest.RestfulResultTemplate;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -20,7 +21,7 @@ import java.util.List;
 public class RestHttpMessageConverter extends AbstractGenericHttpMessageConverter<Object> {
 
     @Override
-    protected boolean supports(Class<?> clazz) {
+    protected boolean supports(@NotNull Class<?> clazz) {
         return RestfulResultTemplate.class.isAssignableFrom(clazz);
     }
 
@@ -38,6 +39,7 @@ public class RestHttpMessageConverter extends AbstractGenericHttpMessageConverte
      * 支持的媒体类型
      * @return 仅支持文本或者JSON格式
      */
+    @NotNull
     @Override
     public List<MediaType> getSupportedMediaTypes() {
         return List.of(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN);
@@ -52,12 +54,12 @@ public class RestHttpMessageConverter extends AbstractGenericHttpMessageConverte
     }
 
     @Override
-    protected Object readInternal(Class<?> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
-        return null;
+    protected Object readInternal(@NotNull Class<?> clazz, @NotNull HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+        return 1;
     }
 
     @Override
-    public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+    public Object read(@NotNull Type type, Class<?> contextClass, @NotNull HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         return null;
     }
 }

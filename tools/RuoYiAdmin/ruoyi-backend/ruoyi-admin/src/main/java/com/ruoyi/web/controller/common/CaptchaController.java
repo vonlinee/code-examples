@@ -23,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 验证码操作处理
- *
  * @author ruoyi
  */
 @RestController
@@ -34,10 +33,10 @@ public class CaptchaController {
     @Resource(name = "captchaProducerMath")
     private Producer captchaProducerMath;
 
-    @Autowired
+    @Resource
     private RedisCache redisCache;
 
-    @Autowired
+    @Resource
     private ISysConfigService configService;
 
     /**
@@ -51,12 +50,11 @@ public class CaptchaController {
         if (!captchaEnabled) {
             return ajax;
         }
-
         // 保存验证码信息
         String uuid = IdUtils.simpleUUID();
         String verifyKey = CacheConstants.CAPTCHA_CODE_KEY + uuid;
 
-        String capStr = null, code = null;
+        String capStr, code = null;
         BufferedImage image = null;
 
         // 生成验证码
@@ -79,7 +77,6 @@ public class CaptchaController {
         } catch (IOException e) {
             return AjaxResult.error(e.getMessage());
         }
-
         ajax.put("uuid", uuid);
         ajax.put("img", Base64.encode(os.toByteArray()));
         return ajax;

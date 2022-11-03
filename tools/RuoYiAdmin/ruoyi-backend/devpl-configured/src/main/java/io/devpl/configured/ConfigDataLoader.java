@@ -24,15 +24,15 @@ public class ConfigDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        List<ConfigLoadTask> taskList = loadTaskRepository.findAll();
-        // 排序
-        taskList.sort(Comparator.comparing(ConfigLoadTask::getOrderNum));
-
-        JdbcTemplate template = SpringUtils.getBean(JdbcTemplate.class);
-        for (ConfigLoadTask configLoadTask : taskList) {
-            if (!configLoadTask.isEnable()) continue;
-            String querySql = configLoadTask.getQuerySql();
-            template.execute(querySql);
-        }
+        // List<ConfigLoadTask> taskList = loadTaskRepository.findAll();
+        // // 排序
+        // taskList.sort(Comparator.comparing(ConfigLoadTask::getOrderNum));
+        //
+        // JdbcTemplate template = SpringUtils.getBean(JdbcTemplate.class);
+        // for (ConfigLoadTask configLoadTask : taskList) {
+        //     if (!configLoadTask.isEnable()) continue;
+        //     String querySql = configLoadTask.getQuerySql();
+        //     template.execute(querySql);
+        // }
     }
 }

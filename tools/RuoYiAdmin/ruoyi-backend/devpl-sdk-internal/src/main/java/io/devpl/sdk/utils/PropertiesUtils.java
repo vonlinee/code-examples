@@ -2,6 +2,7 @@ package io.devpl.sdk.utils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.Map.Entry;
@@ -11,42 +12,39 @@ import java.util.Map.Entry;
  */
 public class PropertiesUtils {
 
+    public static final Properties EMPTY = new Properties();
+
+    /**
+     * @see PropertiesUtils#load(InputStream, boolean)
+     */
+    public static Properties load(InputStream stream) throws IOException, IllegalArgumentException {
+        return load(stream, false);
+    }
+
+    /**
+     * @throws IOException              if an error occurred when reading from the
+     *                                  input stream.
+     * @throws IllegalArgumentException if the input stream contains a
+     *                                  malformed Unicode escape sequence.
+     */
+    public static Properties load(InputStream stream, boolean optional) throws IOException, IllegalArgumentException {
+        if (stream == null) {
+            return optional ? EMPTY : null;
+        }
+        Properties properties = new Properties();
+        properties.load(stream);
+        return properties;
+    }
+
     /**
      * Load properties from the given file into Properties.
      */
-    public static Properties loadProperties(String file) {
-        Properties properties = new Properties();
-        if (file == null) {
-            return properties;
+    public static Properties load(String pathname) {
+        try (InputStream is = new FileInputStream(pathname)){
+            return load(is);
+        } catch (IOException e) {
+            return new Properties();
         }
-        InputStream is = null;
-        try {
-            is = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            try {
-                is = PropertiesUtils.class.getResourceAsStream(file);
-            } catch (Exception ex) {
-                // LOG.warn("Can not load resource " + file, ex);
-            }
-        }
-        if (is != null) {
-            try {
-                properties.load(is);
-            } catch (Exception e) {
-                //
-            } finally {
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (Exception e) {
-                        //
-                    }
-                }
-            }
-        } else {
-            // LOG.warn("File " + file + " can't be loaded!");
-        }
-        return properties;
     }
 
     /**

@@ -206,12 +206,11 @@
         <module>devpl-configured</module>
         <module>devpl-spring</module>
         <module>devpl-sdk-internal</module>
+        <module>devpl-auth</module>
     </modules>
     <packaging>pom</packaging>
 
-
     <build>
-
         <!-- Java9或更高版本：对于Java 9和更高版本，使用插件版的一种变体，用release属性来代替source和target属性 -->
         <plugins>
             <plugin>

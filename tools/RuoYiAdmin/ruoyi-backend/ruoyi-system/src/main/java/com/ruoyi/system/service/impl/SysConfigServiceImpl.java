@@ -6,7 +6,7 @@ import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.DataSourceType;
-import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.SysConfig;
 import com.ruoyi.system.mapper.SysConfigMapper;
@@ -140,7 +140,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
         for (Long configId : configIds) {
             SysConfig config = selectConfigById(configId);
             if (StringUtils.equals(UserConstants.YES, config.getConfigType())) {
-                throw new ServiceException(String.format("内置参数【%1$s】不能删除 ", config.getConfigKey()));
+                throw new BusinessException(String.format("内置参数【%1$s】不能删除 ", config.getConfigKey()));
             }
             configMapper.deleteConfigById(configId);
             redisCache.deleteObject(getCacheKey(config.getConfigKey()));

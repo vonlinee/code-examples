@@ -1,6 +1,6 @@
 /**
- * 模块化使用：https://blog.csdn.net/weixin_34247032/article/details/88883304
- * https://juejin.cn/post/6847902216590721031
+ * 模块化使用：<a href="https://blog.csdn.net/weixin_34247032/article/details/88883304">...</a>
+ * <a href="https://juejin.cn/post/6847902216590721031">...</a>
  */
 open module devpl.sdk.internal {
 
@@ -22,6 +22,7 @@ open module devpl.sdk.internal {
     // 如果有exports，但是没有open，因此编译通过运行时报错
     exports io.devpl.sdk;
     exports io.devpl.sdk.beans;
+    exports io.devpl.sdk.utils;
 
     // 表示允许运行时通过反射使用
     // open的作用是表示该模块下的所有的包在runtime都允许deep reflection( 包括public及private类型);

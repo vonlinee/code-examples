@@ -2,7 +2,7 @@ package com.ruoyi.framework.aspectj;
 
 import com.ruoyi.common.annotation.RateLimiter;
 import com.ruoyi.common.enums.LimitType;
-import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.ip.IpUtils;
@@ -56,10 +56,10 @@ public class RateLimiterAspect {
         try {
             Long number = redisTemplate.execute(limitScript, keys, count, time);
             if (StringUtils.isNull(number) || number.intValue() > count) {
-                throw new ServiceException("访问过于频繁，请稍候再试");
+                throw new BusinessException("访问过于频繁，请稍候再试");
             }
             log.info("限制请求'{}',当前请求'{}',缓存key'{}'", count, number.intValue(), key);
-        } catch (ServiceException e) {
+        } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException("服务器限流异常，请稍候再试");

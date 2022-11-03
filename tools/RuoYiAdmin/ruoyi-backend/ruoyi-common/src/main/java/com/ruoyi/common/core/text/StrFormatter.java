@@ -4,7 +4,6 @@ import com.ruoyi.common.utils.StringUtils;
 
 /**
  * 字符串格式化
- *
  * @author ruoyi
  */
 public class StrFormatter {
@@ -21,7 +20,6 @@ public class StrFormatter {
      * 通常使用：format("this is {} for {}", "a", "b") -> this is a for b<br>
      * 转义{}： format("this is \\{} for {}", "a", "b") -> this is \{} for a<br>
      * 转义\： format("this is \\\\{} for {}", "a", "b") -> this is \a for b<br>
-     *
      * @param strPattern 字符串模板
      * @param argArray   参数列表
      * @return 结果
@@ -70,7 +68,6 @@ public class StrFormatter {
         }
         // 加入最后一个占位符后所有的字符
         sbuf.append(strPattern, handledPosition, strPattern.length());
-
         return sbuf.toString();
     }
 }

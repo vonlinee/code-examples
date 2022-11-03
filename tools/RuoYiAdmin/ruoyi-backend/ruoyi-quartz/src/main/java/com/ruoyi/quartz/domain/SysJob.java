@@ -10,6 +10,7 @@ import com.ruoyi.quartz.util.CronUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -19,6 +20,7 @@ import java.util.Date;
  *
  * @author ruoyi
  */
+@Table(name = "sys_job")
 public class SysJob extends BaseEntity {
     private static final long serialVersionUID = 1L;
 

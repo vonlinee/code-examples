@@ -47,7 +47,7 @@ public enum DbType {
     /**
      * Maria DB.
      */
-    MARIADB("MySQL", "org.mariadb.jdbc.Driver", "org.mariadb.jdbc.MariaDbDataSource", "SELECT 1", "jdbc:mysql://", ""),
+    MARIADB("MariaDBB", "org.mariadb.jdbc.Driver", "org.mariadb.jdbc.MariaDbDataSource", "SELECT 1", "jdbc:mysql://", ""),
 
     /**
      * Google App Engine.
@@ -86,7 +86,7 @@ public enum DbType {
     /**
      * SQL Server.
      */
-    SQLSERVER("Microsoft SQL Server", "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+    SQL_SERVER("Microsoft SQL Server", "com.microsoft.sqlserver.jdbc.SQLServerDriver",
             "com.microsoft.sqlserver.jdbc.SQLServerXADataSource", "SELECT 1", "jdbc:microsoft:sqlserver://", ""),
 
     /**
@@ -144,34 +144,34 @@ public enum DbType {
 
     public static DbType valueOfName(String name) {
         for (DbType type : DbType.values()) {
-            if (type.getName().equalsIgnoreCase(String.valueOf(name))) {
+            if (type.uniqueName().equalsIgnoreCase(String.valueOf(name))) {
                 return type;
             }
         }
         return UNKNOWN;
     }
 
-    public String getName() {
+    public String uniqueName() {
         return name;
     }
 
-    public String getDriverClassName() {
+    public String driverClassName() {
         return driverClassName;
     }
 
-    public String getXaDataSourceClassName() {
+    public String xaDataSourceClassName() {
         return xaDataSourceClassName;
     }
 
-    public String getValidationQuery() {
+    public String validationQuery() {
         return validationQuery;
     }
 
-    public String getProtocol() {
+    public String protocol() {
         return protocol;
     }
 
-    public String getRemark() {
+    public String remark() {
         return remark;
     }
 }
