@@ -1,4 +1,4 @@
-package code.example.springsecurity.config;
+package sample.spring.security;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -14,9 +14,7 @@ public abstract class ObjectUtils {
 	 * @param objects void
 	 */
 	public static void setNull(Object... objects) {
-		for (int i = 0; i < objects.length; i++) {
-			objects[i] = null;
-		}
+		Arrays.fill(objects, null);
 	}
 
 	private static final int INITIAL_HASH = 7;
@@ -112,13 +110,12 @@ public abstract class ObjectUtils {
 	 * @since 4.2
 	 * @see Optional#isPresent()
 	 */
-	@SuppressWarnings("rawtypes")
 	public static boolean isEmpty(Object obj) {
 		if (obj == null) {
 			return true;
 		}
 		if (obj instanceof Optional) {
-			return !((Optional) obj).isPresent();
+			return !((Optional<?>) obj).isPresent();
 		}
 		if (obj instanceof CharSequence) {
 			return ((CharSequence) obj).length() == 0;
@@ -127,10 +124,10 @@ public abstract class ObjectUtils {
 			return Array.getLength(obj) == 0;
 		}
 		if (obj instanceof Collection) {
-			return ((Collection) obj).isEmpty();
+			return ((Collection<?>) obj).isEmpty();
 		}
 		if (obj instanceof Map) {
-			return ((Map) obj).isEmpty();
+			return ((Map<?, ?>) obj).isEmpty();
 		}
 		// else
 		return false;

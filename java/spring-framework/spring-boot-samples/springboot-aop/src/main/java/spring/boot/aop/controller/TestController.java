@@ -36,13 +36,6 @@ public class TestController {
         userService.login("zs", "123");
     }
 
-    /**
-     * {@link org.springframework.aop.framework.CglibAopProxy}
-     */
-    public void test() {
-
-    }
-
     // http://localhost:8080/user/point?flag=true
     // http://localhost:8080/user/point/true
     // Service未实现接口
@@ -52,9 +45,7 @@ public class TestController {
             userCheckService.checkUserInfo("zs", "123", flag);
         } catch (Exception exception) {
             StackTraceElement[] stackTrace = exception.getStackTrace();
-
             HttpServletMapping httpServletMapping = request.getHttpServletMapping();
-
             PrintWriter writer = response.getWriter();
             writer.append(httpServletMapping.getMatchValue());
             for (StackTraceElement stackTraceElement : stackTrace) {

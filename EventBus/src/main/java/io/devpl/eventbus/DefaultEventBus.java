@@ -431,7 +431,7 @@ public class DefaultEventBus implements EventBus {
             try {
                 // 过滤主题
                 if (postingState.currentTopic != null) {
-                    if (postingState.currentTopic.equals(subscription.subscriberMethod.getSubscribedTopic())) {
+                    if (postingState.currentTopic.equals(subscription.subscriberMethod.subscribedTopic)) {
                         postToSubscription(subscription, event, postingState.isMainThread);
                     }
                 } else {

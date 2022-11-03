@@ -21,6 +21,9 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+    // 关闭eslint的缩进检查
+    'indent': 0,
+    'semi': [2, 'warn'],
     // allow async-await
     'generator-star-spacing': 'off',
     // allow debugger during development

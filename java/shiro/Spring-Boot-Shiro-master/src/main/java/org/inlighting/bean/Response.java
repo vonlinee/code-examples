@@ -1,6 +1,6 @@
 package org.inlighting.bean;
 
-public class ResponseBean {
+public class Response {
 
     // http 状态码
     private int code;
@@ -11,7 +11,7 @@ public class ResponseBean {
     // 返回的数据
     private Object data;
 
-    public ResponseBean(int code, String msg, Object data) {
+    public Response(int code, String msg, Object data) {
         this.code = code;
         this.msg = msg;
         this.data = data;

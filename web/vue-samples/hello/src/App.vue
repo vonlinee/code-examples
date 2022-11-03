@@ -1,13 +1,21 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <router-link to="/goodlist" />
+    <router-view />
   </div>
 </template>
 
 <script>
+
+import GoodList from './components/GoodList.vue';
+import HelloWorld from './components/HelloWorld.vue';
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    GoodList,
+    HelloWorld
+  }
 }
 </script>
 

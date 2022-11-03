@@ -1,4 +1,4 @@
-package code.example.springsecurity.config;
+package sample.spring.security;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -13,12 +13,12 @@ import javax.imageio.ImageIO;
 
 public class VerifyCode {
 
-	private int width = 100;// 生成验证码图片的宽度
-	private int height = 50;// 生成验证码图片的高度
-	private String[] fontNames = { "宋体", "楷体", "隶书", "微软雅黑" };
-	private Color bgColor = new Color(255, 255, 255);// 定义验证码图片的背景颜色为白色
-	private Random random = new Random();
-	private String codes = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private final int width = 100;// 生成验证码图片的宽度
+	private final int height = 50;// 生成验证码图片的高度
+	private final String[] fontNames = { "宋体", "楷体", "隶书", "微软雅黑" };
+	private final Color bgColor = new Color(255, 255, 255);// 定义验证码图片的背景颜色为白色
+	private final Random random = new Random();
+	private static final String codes = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private String text;// 记录随机字符串
 
 	/**
@@ -38,9 +38,9 @@ public class VerifyCode {
 	 */
 	private Font randomFont() {
 		String name = fontNames[random.nextInt(fontNames.length)];
-		int style = random.nextInt(4);
+		// int style = random.nextInt(4);
 		int size = random.nextInt(5) + 24;
-		return new Font(name, style, size);
+		return new Font(name, Font.PLAIN, size);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class VerifyCode {
 	public BufferedImage getImage() {
 		BufferedImage image = createImage();
 		Graphics2D g2 = (Graphics2D) image.getGraphics();
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < 4; i++) {
 			String s = randomChar() + "";
 			sb.append(s);
@@ -85,7 +85,7 @@ public class VerifyCode {
 	 * @param image
 	 */
 	private void drawLine(BufferedImage image) {
-		Graphics2D g2 = (Graphics2D) image.getGraphics();
+		Graphics2D g2 = image.createGraphics();
 		int num = 5;
 		for (int i = 0; i < num; i++) {
 			int x1 = random.nextInt(width);

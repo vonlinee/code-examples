@@ -17,8 +17,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 public class MainLauncher {
     public static void main(String[] args) {
 
-        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "G:\\cglib");
-
+        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:\\Temp");
 
         /**
          * {@link SpringApplication#run(String...)}
@@ -32,7 +31,6 @@ public class MainLauncher {
          */
         ConfigurableApplicationContext context = SpringApplication.run(MainLauncher.class, args);
 
-
         ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
 
         // System.out.println(beanFactory.getBeanDefinition("logAspect"));
@@ -41,6 +39,7 @@ public class MainLauncher {
 
         // CglibAopProxy proxy;
         //
+
 
         ProxyFactory pf;
 

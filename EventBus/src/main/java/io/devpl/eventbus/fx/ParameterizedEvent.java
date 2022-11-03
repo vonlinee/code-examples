@@ -7,9 +7,8 @@ import javafx.event.EventType;
  */
 public final class ParameterizedEvent extends FXEvent {
 
-    static final EventType<? extends FXEvent> EVENT_REGISTRATION
-            = new EventType<>(FXEvent.ANY, "EVENT_REGISTRATION");
+	public static final EventType<? extends FXEvent> EVENT_REGISTRATION = new EventType<>(FXEvent.ANY,
+			"EVENT_REGISTRATION");
 
-    static final EventType<? extends FXEvent> EVENT_PUBLISH
-            = new EventType<>(FXEvent.ANY, "EVENT_PUBLISH");
+	public static final EventType<? extends FXEvent> EVENT_PUBLISH = new EventType<>(FXEvent.ANY, "EVENT_PUBLISH");
 }

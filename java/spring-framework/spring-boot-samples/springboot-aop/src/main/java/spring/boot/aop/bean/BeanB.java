@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
-//@Component
+@Component
 public class BeanB {
 
     @Resource

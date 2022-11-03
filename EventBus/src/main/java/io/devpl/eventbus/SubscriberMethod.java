@@ -21,7 +21,7 @@ public class SubscriberMethod implements Invocation<Object, Object> {
      * Used for efficient comparison
      */
     String methodString;
-    private Object subscriber;
+    Object subscriber;
 
     String subscribedTopic;
 
