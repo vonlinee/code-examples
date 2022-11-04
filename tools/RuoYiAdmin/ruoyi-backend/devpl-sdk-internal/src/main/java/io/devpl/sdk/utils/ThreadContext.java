@@ -14,7 +14,7 @@ import java.util.function.Supplier;
  * threads in a pooled or reusable threaded environment, the application (or more likely a framework) must
  * bind and remove any necessary values at the beginning and end of stack
  * execution, respectively (i.e. individually explicitly or all via the <tt>clear</tt> method).</p>
- * @see #clear() 
+ * @see #clear()
  * @since 0.1
  */
 public final class ThreadContext {
