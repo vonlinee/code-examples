@@ -2,7 +2,7 @@ package com.ruoyi.web.controller.system;
 
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.Result;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.SysNotice;
@@ -41,8 +41,8 @@ public class SysNoticeController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:notice:query')")
     @GetMapping(value = "/{noticeId}")
-    public AjaxResult getInfo(@PathVariable Long noticeId) {
-        return AjaxResult.success(noticeService.selectNoticeById(noticeId));
+    public Result getInfo(@PathVariable Long noticeId) {
+        return Result.success(noticeService.selectNoticeById(noticeId));
     }
 
     /**
@@ -51,7 +51,7 @@ public class SysNoticeController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:notice:add')")
     @Log(title = "通知公告", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@Validated @RequestBody SysNotice notice) {
+    public Result add(@Validated @RequestBody SysNotice notice) {
         notice.setCreateBy(getUsername());
         return toAjax(noticeService.insertNotice(notice));
     }
@@ -62,7 +62,7 @@ public class SysNoticeController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:notice:edit')")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@Validated @RequestBody SysNotice notice) {
+    public Result edit(@Validated @RequestBody SysNotice notice) {
         notice.setUpdateBy(getUsername());
         return toAjax(noticeService.updateNotice(notice));
     }
@@ -73,7 +73,7 @@ public class SysNoticeController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:notice:remove')")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
     @DeleteMapping("/{noticeIds}")
-    public AjaxResult remove(@PathVariable Long[] noticeIds) {
+    public Result remove(@PathVariable Long[] noticeIds) {
         return toAjax(noticeService.deleteNoticeByIds(noticeIds));
     }
 }

@@ -1,14 +1,14 @@
-package org.inlighting.database;
+package io.devpl.auth.dao;
 
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 @Component
-public class UserService {
+public class UserService implements IUserService {
 
-    public UserInfo getUser(String username) {
-        // 没有此用户直接返回null
+    @Override
+    public UserInfo findByUserName(String username) {
         if (! DataSource.getData().containsKey(username))
             return null;
         UserInfo user = new UserInfo();

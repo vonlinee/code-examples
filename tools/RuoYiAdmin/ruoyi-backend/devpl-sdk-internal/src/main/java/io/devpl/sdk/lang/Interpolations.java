@@ -31,7 +31,7 @@ public class Interpolations {
     public static void main(String[] args) {
         out.println(indexed("{0} and {1}", "Li Lei", "Han Meimei"));
         out.println(named("{a} and {b}", "a", "Li Lei", "b", "Han Meimei"));
-        out.println(named("{a} and {unknown}", "a", "A", "default"));
-        out.println(named("{a} and {unknown}", Collections.singletonMap("a", "A"), "default"));
+        out.println(named("{a} and { unknown}", "a", "A", "default"));
+        out.println(named("{a} and {  unknown}", Collections.singletonMap("a", "A"), "default"));
     }
 }

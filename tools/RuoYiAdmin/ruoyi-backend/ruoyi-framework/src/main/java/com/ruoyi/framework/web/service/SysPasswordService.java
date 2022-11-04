@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class SysPasswordService {
-    @Autowired
+    @Resource
     private RedisCache redisCache;
 
     @Value(value = "${user.password.maxRetryCount}")
@@ -48,13 +49,10 @@ public class SysPasswordService {
         Authentication usernamePasswordAuthenticationToken = AuthenticationContextHolder.getContext();
         String username = usernamePasswordAuthenticationToken.getName();
         String password = usernamePasswordAuthenticationToken.getCredentials().toString();
-
         Integer retryCount = redisCache.getCacheObject(getCacheKey(username));
-
         if (retryCount == null) {
             retryCount = 0;
         }
-
         if (retryCount >= maxRetryCount) {
             AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL,
                     MessageUtils.message("user.password.retry.limit.exceed", maxRetryCount, lockTime)));

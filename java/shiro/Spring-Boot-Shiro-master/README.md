@@ -2,26 +2,16 @@
 
 GitHub 项目地址：[https://github.com/Smith-Cruise/Spring-Boot-Shiro](https://github.com/Smith-Cruise/Spring-Boot-Shiro) 。
 
-## 序言
-
-我也是半路出家的人，如果大家有什么好的意见或批评，请务必 `issue` 下。
-
-如果想要直接体验，直接 `clone` 项目，运行 `mvn spring-boot:run` 命令即可进行访问。网址规则自行看教程后面。
-
 如果想了解 Spring Security 可以看
 
 [Spring Boot 2.0+Srping Security+Thymeleaf的简易教程](https://github.com/Smith-Cruise/Spring-Boot-Security-Thymeleaf-Demo)
 
 [Spring Boot 2 + Spring Security 5 + JWT 的单页应用Restful解决方案](https://github.com/Smith-Cruise/Spring-Boot-Security-JWT-SPA) **（推荐）**
 
-## 特性
-
 * 完全使用了 Shiro 的注解配置，保持高度的灵活性。
 * 放弃 Cookie ，Session ，使用JWT进行鉴权，完全实现无状态鉴权。
 * JWT 密钥支持过期时间。
 * 对跨域提供支持。
-
-## 准备工作
 
 在开始本教程之前，请保证已经熟悉以下几点。
 
@@ -31,8 +21,6 @@ GitHub 项目地址：[https://github.com/Smith-Cruise/Spring-Boot-Shiro](https:
 - 模拟 HTTP 请求工具，我使用的是 PostMan。
 
 简要的说明下我们为什么要用 JWT ，因为我们要实现完全的前后端分离，所以不可能使用 `session`， `cookie` 的方式进行鉴权，所以 JWT 就被派上了用场，你可以通过一个加密密钥来进行前后端的鉴权。
-
-## 程序逻辑
 
 1. 我们 POST 用户名与密码到 `/login` 进行登入，如果成功返回一个加密 token，失败的话直接返回 401 错误。
 2. 之后用户访问每一个需要权限的网址请求必须在 `header` 中添加 `Authorization` 字段，例如 `Authorization: token` ，`token` 为密钥。
@@ -44,13 +32,10 @@ GitHub 项目地址：[https://github.com/Smith-Cruise/Spring-Boot-Shiro](https:
 - 设定了过期时间。
 - 使用用户登入密码对 `token` 进行加密。
 
-## Token校验流程
-
+Token校验流程
 1. 获得 `token` 中携带的 `username` 信息。
 2. 进入数据库搜索这个用户，得到他的密码。
 3. 使用用户的密码来检验 `token` 是否正确。
-
-## 准备Maven文件
 
 新建一个 Maven 工程，添加相关的 dependencies。
 
@@ -86,7 +71,7 @@ GitHub 项目地址：[https://github.com/Smith-Cruise/Spring-Boot-Shiro](https:
 
     <build>
         <plugins>
-        		<!-- Srping Boot 打包工具 -->
+        	<!-- Srping Boot 打包工具 -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -116,21 +101,17 @@ GitHub 项目地址：[https://github.com/Smith-Cruise/Spring-Boot-Shiro](https:
 
 注意指定JDK版本和编码。
 
-## 构建简易的数据源
+构建简易的数据源
 
 为了缩减教程的代码，我使用 `HashMap` 本地模拟了一个数据库，结构如下：
-
 | username | password | role  | permission |
 | -------- | -------- | ----- | ---------- |
 | smith    | smith123 | user  | view       |
 | danny    | danny123 | admin | view,edit  |
-
 这是一个最简单的用户权限表，如果想更加进一步了解，自行百度 RBAC。
-
 之后再构建一个 `UserService` 来模拟数据库查询，并且把结果放到 `UserBean` 之中。
 
-**UserService.java**
-
+UserService.java
 ```java
 @Component
 public class UserService {
@@ -152,7 +133,7 @@ public class UserService {
 }
 ```
 
-**UserBean.java**
+UserBean.java
 
 ```java
 public class UserBean {
@@ -629,7 +610,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
 
 `getSubject(request, response).login(token);` 这一步就是提交给了 `realm` 进行处理。
 
-**配置Shiro**
+配置Shiro
 
 ```java
 @Configuration
@@ -707,8 +688,6 @@ public class ShiroConfig {
 ```
 
 里面 URL 规则自己参考文档即可 http://shiro.apache.org/web.html 。
-
-## 总结
 
 我就说下代码还有哪些可以进步的地方吧
 

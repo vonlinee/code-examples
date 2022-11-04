@@ -2,7 +2,7 @@ package com.ruoyi.generator.controller;
 
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.Result;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.BusinessType;
@@ -52,7 +52,7 @@ public class GenController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:query')")
     @GetMapping(value = "/{tableId}")
-    public AjaxResult getInfo(@PathVariable Long tableId) {
+    public Result getInfo(@PathVariable Long tableId) {
         GenTable table = genTableService.selectGenTableById(tableId);
         List<GenTable> tables = genTableService.selectGenTableAll();
         List<GenTableColumn> list = genTableColumnService.selectGenTableColumnListByTableId(tableId);
@@ -60,7 +60,7 @@ public class GenController extends BaseController {
         map.put("info", table);
         map.put("rows", list);
         map.put("tables", tables);
-        return AjaxResult.success(map);
+        return Result.success(map);
     }
 
     /**
@@ -93,12 +93,12 @@ public class GenController extends BaseController {
     @PreAuthorize("@ss.hasPermi('tool:gen:import')")
     @Log(title = "代码生成", businessType = BusinessType.IMPORT)
     @PostMapping("/importTable")
-    public AjaxResult importTableSave(String tables) {
+    public Result importTableSave(String tables) {
         String[] tableNames = Convert.toStrArray(tables);
         // 查询表信息
         List<GenTable> tableList = genTableService.selectDbTableListByNames(tableNames);
         genTableService.importGenTable(tableList);
-        return AjaxResult.success();
+        return Result.success();
     }
 
     /**
@@ -107,10 +107,10 @@ public class GenController extends BaseController {
     @PreAuthorize("@ss.hasPermi('tool:gen:edit')")
     @Log(title = "代码生成", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult editSave(@Validated @RequestBody GenTable genTable) {
+    public Result editSave(@Validated @RequestBody GenTable genTable) {
         genTableService.validateEdit(genTable);
         genTableService.updateGenTable(genTable);
-        return AjaxResult.success();
+        return Result.success();
     }
 
     /**
@@ -119,9 +119,9 @@ public class GenController extends BaseController {
     @PreAuthorize("@ss.hasPermi('tool:gen:remove')")
     @Log(title = "代码生成", businessType = BusinessType.DELETE)
     @DeleteMapping("/{tableIds}")
-    public AjaxResult remove(@PathVariable Long[] tableIds) {
+    public Result remove(@PathVariable Long[] tableIds) {
         genTableService.deleteGenTableByIds(tableIds);
-        return AjaxResult.success();
+        return Result.success();
     }
 
     /**
@@ -129,9 +129,9 @@ public class GenController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:preview')")
     @GetMapping("/preview/{tableId}")
-    public AjaxResult preview(@PathVariable("tableId") Long tableId) throws IOException {
+    public Result preview(@PathVariable("tableId") Long tableId) throws IOException {
         Map<String, String> dataMap = genTableService.previewCode(tableId);
-        return AjaxResult.success(dataMap);
+        return Result.success(dataMap);
     }
 
     /**
@@ -151,9 +151,9 @@ public class GenController extends BaseController {
     @PreAuthorize("@ss.hasPermi('tool:gen:code')")
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
     @GetMapping("/genCode/{tableName}")
-    public AjaxResult genCode(@PathVariable("tableName") String tableName) {
+    public Result genCode(@PathVariable("tableName") String tableName) {
         genTableService.generatorCode(tableName);
-        return AjaxResult.success();
+        return Result.success();
     }
 
     /**
@@ -162,9 +162,9 @@ public class GenController extends BaseController {
     @PreAuthorize("@ss.hasPermi('tool:gen:edit')")
     @Log(title = "代码生成", businessType = BusinessType.UPDATE)
     @GetMapping("/synchDb/{tableName}")
-    public AjaxResult synchDb(@PathVariable("tableName") String tableName) {
+    public Result synchDb(@PathVariable("tableName") String tableName) {
         genTableService.synchDb(tableName);
-        return AjaxResult.success();
+        return Result.success();
     }
 
     /**

@@ -1,10 +1,17 @@
-package org.inlighting.database;
+package io.devpl.auth.dao;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class DataSource {
     private static final Map<String, Map<String, String>> data = new HashMap<>();
+
+    private static final Map<String, UserInfo> userTable = new HashMap<>();
+
+    boolean insert(UserInfo userInfo) {
+        return userTable.put(userInfo.getUsername(), userInfo) == null;
+    }
+
 
     static {
         Map<String, String> data1 = new HashMap<>();

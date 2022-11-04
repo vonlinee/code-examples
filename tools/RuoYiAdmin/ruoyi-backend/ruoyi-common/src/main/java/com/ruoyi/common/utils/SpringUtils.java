@@ -1,6 +1,5 @@
 package com.ruoyi.common.utils;
 
-import com.ruoyi.common.utils.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -8,6 +7,8 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,13 +17,14 @@ import org.springframework.stereotype.Component;
  * @author ruoyi
  */
 @Component
-public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationContextAware {
+public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationContextAware, EnvironmentAware {
     /**
      * Spring应用上下文环境
      */
     private static ConfigurableListableBeanFactory beanFactory;
 
     private static ApplicationContext applicationContext;
+    private static Environment environment;
 
     /**
      * 获取对象
@@ -129,6 +131,10 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
         return applicationContext.getEnvironment().getRequiredProperty(key);
     }
 
+    public static Environment getEnvironment() {
+        return environment;
+    }
+
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         SpringUtils.beanFactory = beanFactory;
@@ -137,5 +143,10 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         SpringUtils.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        SpringUtils.environment = environment;
     }
 }

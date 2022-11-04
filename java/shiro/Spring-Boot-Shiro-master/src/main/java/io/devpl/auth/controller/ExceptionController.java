@@ -1,8 +1,8 @@
-package org.inlighting.controller;
+package io.devpl.auth.controller;
 
+import io.devpl.auth.bean.Response;
+import io.devpl.auth.exception.UnauthorizedException;
 import org.apache.shiro.ShiroException;
-import org.inlighting.bean.Response;
-import org.inlighting.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

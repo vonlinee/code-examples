@@ -1,4 +1,4 @@
-package org.inlighting.exception;
+package io.devpl.auth.exception;
 
 public class UnauthorizedException extends RuntimeException {
     public UnauthorizedException(String msg) {

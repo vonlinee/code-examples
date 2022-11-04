@@ -1,4 +1,4 @@
-package org.inlighting.util;
+package io.devpl.auth.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;

@@ -3,7 +3,7 @@ package com.ruoyi.common.core.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.constant.HttpStatus;
-import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.Result;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -85,29 +85,29 @@ public class BaseController {
     /**
      * 返回成功
      */
-    public AjaxResult success() {
-        return AjaxResult.success();
+    public Result success() {
+        return Result.success();
     }
 
     /**
      * 返回失败消息
      */
-    public AjaxResult error() {
-        return AjaxResult.error();
+    public Result error() {
+        return Result.error();
     }
 
     /**
      * 返回成功消息
      */
-    public AjaxResult success(String message) {
-        return AjaxResult.success(message);
+    public Result success(String message) {
+        return Result.success(message);
     }
 
     /**
      * 返回失败消息
      */
-    public AjaxResult error(String message) {
-        return AjaxResult.error(message);
+    public Result error(String message) {
+        return Result.error(message);
     }
 
     /**
@@ -116,8 +116,8 @@ public class BaseController {
      * @param rows 影响行数
      * @return 操作结果
      */
-    protected AjaxResult toAjax(int rows) {
-        return rows > 0 ? AjaxResult.success() : AjaxResult.error();
+    protected Result toAjax(int rows) {
+        return rows > 0 ? Result.success() : Result.error();
     }
 
     /**
@@ -126,7 +126,7 @@ public class BaseController {
      * @param result 结果
      * @return 操作结果
      */
-    protected AjaxResult toAjax(boolean result) {
+    protected Result toAjax(boolean result) {
         return result ? success() : error();
     }
 

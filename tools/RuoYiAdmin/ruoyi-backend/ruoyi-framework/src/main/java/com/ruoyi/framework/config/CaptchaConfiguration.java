@@ -15,6 +15,7 @@ import static com.google.code.kaptcha.Constants.*;
  */
 @Configuration
 public class CaptchaConfiguration {
+
     @Bean(name = "captchaProducer")
     public DefaultKaptcha getKaptchaBean() {
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
@@ -37,8 +38,7 @@ public class CaptchaConfiguration {
         properties.setProperty(KAPTCHA_TEXTPRODUCER_FONT_NAMES, "Arial,Courier");
         // 图片样式 水纹com.google.code.kaptcha.impl.WaterRipple 鱼眼com.google.code.kaptcha.impl.FishEyeGimpy 阴影com.google.code.kaptcha.impl.ShadowGimpy
         properties.setProperty(KAPTCHA_OBSCURIFICATOR_IMPL, "com.google.code.kaptcha.impl.ShadowGimpy");
-        Config config = new Config(properties);
-        defaultKaptcha.setConfig(config);
+        defaultKaptcha.setConfig(new Config(properties));
         return defaultKaptcha;
     }
 
@@ -74,8 +74,7 @@ public class CaptchaConfiguration {
         properties.setProperty(KAPTCHA_NOISE_IMPL, "com.google.code.kaptcha.impl.NoNoise");
         // 图片样式 水纹com.google.code.kaptcha.impl.WaterRipple 鱼眼com.google.code.kaptcha.impl.FishEyeGimpy 阴影com.google.code.kaptcha.impl.ShadowGimpy
         properties.setProperty(KAPTCHA_OBSCURIFICATOR_IMPL, "com.google.code.kaptcha.impl.ShadowGimpy");
-        Config config = new Config(properties);
-        defaultKaptcha.setConfig(config);
+        defaultKaptcha.setConfig(new Config(properties));
         return defaultKaptcha;
     }
 }

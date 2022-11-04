@@ -1,10 +1,12 @@
 package com.ruoyi.framework.config;
 
+import com.ruoyi.common.utils.SpringUtils;
 import com.ruoyi.common.utils.StringUtils;
 import org.apache.ibatis.io.VFS;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -32,9 +34,6 @@ import java.util.List;
 public class MyBatisConfiguration {
 
     private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
-
-    @javax.annotation.Resource
-    private Environment env;
 
     public String setTypeAliasesPackage(String typeAliasesPackage) {
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
@@ -94,6 +93,8 @@ public class MyBatisConfiguration {
 
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+        Environment env = SpringUtils.getBean(Environment.class);
+
         String typeAliasesPackage = env.getProperty("mybatis.typeAliasesPackage");
         String mapperLocations = env.getProperty("mybatis.mapperLocations");
         String configLocation = env.getProperty("mybatis.configLocation");

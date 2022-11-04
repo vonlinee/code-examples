@@ -4,12 +4,11 @@ import com.google.code.kaptcha.Producer;
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.Constants;
-import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.Result;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.utils.sign.Base64;
 import com.ruoyi.common.utils.uuid.IdUtils;
 import com.ruoyi.system.service.ISysConfigService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,8 +42,8 @@ public class CaptchaController {
      * 生成验证码
      */
     @GetMapping("/captchaImage")
-    public AjaxResult getCode(HttpServletResponse response) throws IOException {
-        AjaxResult ajax = AjaxResult.success();
+    public Result getCode(HttpServletResponse response) throws IOException {
+        Result ajax = Result.success();
         boolean captchaEnabled = configService.selectCaptchaEnabled();
         ajax.put("captchaEnabled", captchaEnabled);
         if (!captchaEnabled) {
@@ -75,7 +74,7 @@ public class CaptchaController {
         try {
             ImageIO.write(image, "jpg", os);
         } catch (IOException e) {
-            return AjaxResult.error(e.getMessage());
+            return Result.error(e.getMessage());
         }
         ajax.put("uuid", uuid);
         ajax.put("img", Base64.encode(os.toByteArray()));

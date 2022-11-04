@@ -1,17 +1,17 @@
-package org.inlighting.controller;
+package io.devpl.auth.controller;
 
+import io.devpl.auth.bean.Response;
+import io.devpl.auth.dao.DataSource;
+import io.devpl.auth.util.JWTUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
-import org.inlighting.bean.Response;
-import org.inlighting.database.DataSource;
-import org.inlighting.database.UserInfo;
-import org.inlighting.database.UserService;
-import org.inlighting.exception.UnauthorizedException;
-import org.inlighting.util.JWTUtils;
+import io.devpl.auth.dao.UserInfo;
+import io.devpl.auth.dao.UserService;
+import io.devpl.auth.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +26,7 @@ public class WebController {
     @PostMapping("/login")
     public Response login(@RequestParam("username") String username,
                           @RequestParam("password") String password) {
-        UserInfo user = userService.getUser(username);
+        UserInfo user = userService.findByUserName(username);
         if (user == null) {
             return new Response(405, "登陆失败", DataSource.getData());
         }

@@ -3,12 +3,14 @@ package com.ruoyi.framework.config;
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.framework.interceptor.RepeatSubmitInterceptor;
+import com.ruoyi.framework.interceptor.WebRequestTracer;
 import io.devpl.spring.web.mvc.RequestInfoMethodArgumentResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -36,6 +38,8 @@ public class WebMVCConfiguration implements WebMvcConfigurer {
         /** swagger配置 */
         registry.addResourceHandler("/swagger-ui/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/");
+
+        OncePerRequestFilter filter;
     }
 
     /**
@@ -44,6 +48,8 @@ public class WebMVCConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(repeatSubmitInterceptor).addPathPatterns("/**");
+
+        registry.addInterceptor(new WebRequestTracer()).addPathPatterns("*/**");
     }
 
     /**

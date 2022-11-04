@@ -10,6 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 跟踪web请求
+ */
 @Component
 public class WebRequestTracer implements HandlerInterceptor, Ordered {
 

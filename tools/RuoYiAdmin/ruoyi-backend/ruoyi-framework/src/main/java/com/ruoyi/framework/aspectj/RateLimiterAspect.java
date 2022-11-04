@@ -36,7 +36,7 @@ public class RateLimiterAspect {
     private RedisScript<Long> limitScript;
 
     @Autowired
-    public void setRedisTemplate1(RedisTemplate<Object, Object> redisTemplate) {
+    public void setRedisTemplate(RedisTemplate<Object, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
@@ -67,7 +67,7 @@ public class RateLimiterAspect {
     }
 
     public String getCombineKey(RateLimiter rateLimiter, JoinPoint point) {
-        StringBuffer stringBuffer = new StringBuffer(rateLimiter.key());
+        StringBuilder stringBuffer = new StringBuilder(rateLimiter.key());
         if (rateLimiter.limitType() == LimitType.IP) {
             stringBuffer.append(IpUtils.getIpAddr(ServletUtils.getRequest())).append("-");
         }

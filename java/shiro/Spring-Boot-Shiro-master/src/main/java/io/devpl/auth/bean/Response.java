@@ -1,4 +1,4 @@
-package org.inlighting.bean;
+package io.devpl.auth.bean;
 
 public class Response {
 

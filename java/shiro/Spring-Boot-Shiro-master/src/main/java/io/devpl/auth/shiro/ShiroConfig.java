@@ -1,4 +1,4 @@
-package org.inlighting.shiro;
+package io.devpl.auth.shiro;
 
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;

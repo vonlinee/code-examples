@@ -1,4 +1,4 @@
-package org.inlighting.shiro;
+package io.devpl.auth.shiro;
 
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.slf4j.Logger;
