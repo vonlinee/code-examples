@@ -21,6 +21,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.huaweicloud</groupId>
+			<artifactId>esdk-obs-java-bundle</artifactId>
+			<version>3.21.8</version>
+		</dependency>
 		<!-- SpringBoot Starter -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

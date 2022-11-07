@@ -32,6 +32,12 @@ public class HttpTracerFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        filterChain.doFilter(null, null);
+
+        if (filterChain.toString().length() > 1) {
+            return;
+        }
         // 使用ContentCachingRequestWrapper缓存请求信息
         if (!wrapped) {
             if (!(request instanceof ContentCachingRequestWrapper)) {
