@@ -12,7 +12,7 @@ import java.util.Objects;
  * @since 0.0.1
  */
 @NotThreadSafe
-public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
+public class MapEntry<K, V> implements Map.Entry<K, V>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,8 +28,8 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
      * @return {@code Pair}
      * @since 5.4.3
      */
-    public static <K, V> Pair<K, V> of(K key, V value) {
-        return new Pair<>(key, value);
+    public static <K, V> MapEntry<K, V> of(K key, V value) {
+        return new MapEntry<>(key, value);
     }
 
     /**
@@ -37,7 +37,7 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
      * @param key   键
      * @param value 值
      */
-    public Pair(K key, V value) {
+    public MapEntry(K key, V value) {
         this.key = key;
         this.value = value;
     }
@@ -80,8 +80,8 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o instanceof Pair) {
-            Pair<?, ?> pair = (Pair<?, ?>) o;
+        if (o instanceof MapEntry) {
+            MapEntry<?, ?> pair = (MapEntry<?, ?>) o;
             return Objects.equals(getKey(), pair.getKey()) &&
                     Objects.equals(getValue(), pair.getValue());
         }

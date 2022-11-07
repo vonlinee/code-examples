@@ -1,7 +1,6 @@
-package io.devpl.sdk.utils;
+package io.devpl.sdk.io;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;

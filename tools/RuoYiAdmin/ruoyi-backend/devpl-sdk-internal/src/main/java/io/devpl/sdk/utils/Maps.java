@@ -16,6 +16,7 @@ public abstract class Maps {
      * 默认初始大小
      */
     public static final int DEFAULT_INITIAL_CAPACITY = 16;
+
     /**
      * 默认增长因子，当Map的size达到 容量*增长因子时，开始扩充Map
      */
@@ -42,14 +43,15 @@ public abstract class Maps {
     /**
      * 如果提供的集合为{@code null}，返回一个不可变的默认空集合，否则返回原集合<br>
      * 空集合使用{@link Collections#emptyMap()}
-     * @param <K> 键类型
-     * @param <V> 值类型
-     * @param set 提供的集合，可能为null
+     * @param <K>         键类型
+     * @param <V>         值类型
+     * @param set         提供的集合，可能为null
+     * @param optionalMap 可选的集合
      * @return 原集合，若为null返回空集合
      * @since 4.6.3
      */
-    public static <K, V> Map<K, V> whenNull(Map<K, V> set) {
-        return (null == set) ? Collections.emptyMap() : set;
+    public static <K, V> Map<K, V> whenNull(Map<K, V> set, Map<K, V> optionalMap) {
+        return (null == set) ? Collections.emptyMap() : optionalMap;
     }
 
     /**
@@ -64,8 +66,6 @@ public abstract class Maps {
     public static <K, V> Map<K, V> whenEmpty(Map<K, V> map, Map<K, V> optional) {
         return (map == null || map.isEmpty()) ? optional : map;
     }
-
-    // ----------------------------------------------------------------------------------------------- new HashMap
 
     /**
      * 新建一个HashMap
@@ -235,9 +235,9 @@ public abstract class Maps {
      * @since 5.4.1
      */
     @SafeVarargs
-    public static <K, V> Map<K, V> of(Pair<K, V>... pairs) {
+    public static <K, V> Map<K, V> of(MapEntry<K, V>... pairs) {
         final Map<K, V> map = new HashMap<>();
-        for (Pair<K, V> pair : pairs) {
+        for (MapEntry<K, V> pair : pairs) {
             map.put(pair.getKey(), pair.getValue());
         }
         return map;
@@ -731,10 +731,31 @@ public abstract class Maps {
      * @return 修改后的key
      * @since 5.0.5
      */
-    @SuppressWarnings("unchecked")
     public static <K, V> Map<K, V> removeAny(Map<K, V> map, final K... keys) {
+        if (keys.length == 0) {
+            return map;
+        }
         for (K key : keys) {
             map.remove(key);
+        }
+        return map;
+    }
+
+    /**
+     * 批量为多个key设置同一个值
+     * @param map
+     * @param val
+     * @param keys
+     * @return
+     * @param <K>
+     * @param <V>
+     */
+    public static <K, V> Map<K, V> put(Map<K, V> map, V val, final K... keys) {
+        if (keys.length == 0) {
+            return map;
+        }
+        for (K key : keys) {
+            map.put(key, val);
         }
         return map;
     }

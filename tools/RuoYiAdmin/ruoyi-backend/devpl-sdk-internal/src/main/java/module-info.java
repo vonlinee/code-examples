@@ -24,6 +24,7 @@ open module devpl.sdk.internal {
     exports io.devpl.sdk.beans;
     exports io.devpl.sdk.utils;
     exports io.devpl.sdk.runtime;
+    exports io.devpl.sdk.io;
 
     // 表示允许运行时通过反射使用
     // open的作用是表示该模块下的所有的包在runtime都允许deep reflection( 包括public及private类型);
