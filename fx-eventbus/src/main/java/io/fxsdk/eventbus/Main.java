@@ -1,10 +1,8 @@
-package spring.boot.aop;
+package io.fxsdk.eventbus;
 
-public class TEst {
+public class Main {
 
     public static void main(String[] args) {
-
-
 
     }
 }

@@ -8,13 +8,14 @@ public class ThisEscape {
     private M m;
 
     public ThisEscape() {
-        this.m = new M() {
-            @Override
-            public void method() {
-                System.out.println(this);//this -> xxx.ThisEscape$1@5674cd4d
-                doSomething(10);
-            }
-        };
+    	new Thread(() -> {
+    		doSomething(10);
+    	}).start();
+    	try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     }
 
     private void doSomething(int i) {
