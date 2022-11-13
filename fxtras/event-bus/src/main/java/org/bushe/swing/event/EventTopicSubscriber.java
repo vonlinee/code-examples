@@ -34,5 +34,5 @@ public interface EventTopicSubscriber<T> extends EventListener {
      * @param topic the name of the topic published on
      * @param data  the data object published on the topic
      */
-    public void onEvent(String topic, T data);
+    void onEvent(String topic, T data);
 }

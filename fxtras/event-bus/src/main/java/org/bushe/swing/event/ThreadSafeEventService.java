@@ -1034,7 +1034,7 @@ public class ThreadSafeEventService implements EventService {
             for (int i = 0; i < subscribers.size(); i++) {
                 Object eh = subscribers.get(i);
                 if (event != null) {
-                    EventSubscriber eventSubscriber = (EventSubscriber) eh;
+                    EventSubscriber<Object> eventSubscriber = (EventSubscriber<Object>) eh;
                     long start = System.currentTimeMillis();
                     try {
                         eventSubscriber.onEvent(event);
@@ -1044,7 +1044,7 @@ public class ThreadSafeEventService implements EventService {
                         handleException(event, e, callingStack, eventSubscriber);
                     }
                 } else {
-                    EventTopicSubscriber eventTopicSubscriber = (EventTopicSubscriber) eh;
+                    EventTopicSubscriber<Object> eventTopicSubscriber = (EventTopicSubscriber<Object>) eh;
                     try {
                         eventTopicSubscriber.onEvent(topic, eventObj);
                     } catch (Throwable e) {
@@ -1082,7 +1082,7 @@ public class ThreadSafeEventService implements EventService {
      * @param subscribers the subscribers to sort
      * @return the same list if there are no prioritized subscribers in the list, otherwise a new sorted result
      */
-    private List sortSubscribers(List subscribers) {
+    private List sortSubscribers(List<Object> subscribers) {
         if (subscribers == null) {
             return null;
         }
