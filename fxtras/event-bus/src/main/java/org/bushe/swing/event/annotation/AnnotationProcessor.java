@@ -1,5 +1,6 @@
 package org.bushe.swing.event.annotation;
 
+import com.sun.deploy.util.StringUtils;
 import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventServiceExistsException;
 import org.bushe.swing.event.EventServiceLocator;
@@ -198,7 +199,7 @@ public class AnnotationProcessor {
     private static void process(EventTopicSubscriber topicAnnotation, Object obj, Method method, boolean add) {
         // Check args
         String topic = topicAnnotation.topic();
-        if (topic == null) {
+        if (topic == null || topic.length() == 0) {
             throw new IllegalArgumentException("Topic cannot be null for EventTopicSubscriber annotation");
         }
 

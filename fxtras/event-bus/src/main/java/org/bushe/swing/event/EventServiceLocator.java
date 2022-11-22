@@ -92,7 +92,7 @@ public class EventServiceLocator {
      */
     public static synchronized EventService getSwingEventService() {
         if (SWING_EVENT_SERVICE == null) {
-            SWING_EVENT_SERVICE = getEventService(SWING_EVENT_SERVICE_CLASS, new SwingEventService());
+            SWING_EVENT_SERVICE = getEventService(SWING_EVENT_SERVICE_CLASS, new DefaultEventService());
             EVENT_SERVICES.put(SERVICE_NAME_SWING_EVENT_SERVICE, SWING_EVENT_SERVICE);
         }
         return SWING_EVENT_SERVICE;

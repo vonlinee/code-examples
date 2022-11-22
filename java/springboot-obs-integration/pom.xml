@@ -6,22 +6,41 @@
 	<artifactId>springboot-obs</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-
+	<properties>
+		<spring.boot.version>2.3.12.RELEASE</spring.boot.version>
+		<huaweicloud.obs.version>3.21.11</huaweicloud.obs.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
-			<version>2.3.12.RELEASE</version>
+			<version>${spring.boot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>2.3.12.RELEASE</version>
+			<version>${spring.boot.version}</version>
+		</dependency>
+
+		<!-- 华为云对象存储服务OBS -->
+		<dependency>
+			<groupId>com.huaweicloud</groupId>
+			<artifactId>esdk-obs-java-bundle</artifactId>
+			<version>${huaweicloud.obs.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.22</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId></groupId>
+			<artifactId>annotation-pro</artifactId>
 		</dependency>
 
 	</dependencies>
-
-
 
 </project>

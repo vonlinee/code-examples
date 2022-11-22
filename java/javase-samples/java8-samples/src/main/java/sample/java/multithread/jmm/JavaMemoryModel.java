@@ -2,7 +2,7 @@ package sample.java.multithread.jmm;
 
 public class JavaMemoryModel {
 
-    class A {
+    static class A {
         int val;
         public void set() {
             this.val++;
