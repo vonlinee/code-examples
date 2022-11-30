@@ -28,8 +28,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBean;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -171,12 +171,12 @@ public abstract class AbstractResult<T extends Address> extends DirectBean {
          * The meta-property for the {@code docs} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<T>> docs = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<List<T>> docs = DirectBeanMetaProperty.ofReadWrite(
                 this, "docs", AbstractResult.class, (Class) List.class);
         /**
          * The meta-property for the {@code resultType} property.
          */
-        private final MetaProperty<String> resultType = DirectMetaProperty.ofDerived(
+        private final MetaProperty<String> resultType = DirectBeanMetaProperty.ofDerived(
                 this, "resultType", AbstractResult.class, String.class);
         /**
          * The meta-properties.

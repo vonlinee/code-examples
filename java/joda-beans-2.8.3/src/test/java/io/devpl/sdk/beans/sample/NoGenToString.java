@@ -25,11 +25,8 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
-import io.devpl.sdk.beans.impl.direct.DirectBean;
-import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
-import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
+import io.devpl.sdk.beans.impl.direct.*;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 
 /**
  * Mock used for test toString generation.
@@ -131,7 +128,7 @@ public class NoGenToString extends DirectBean {
         /**
          * The meta-property for the {@code value} property.
          */
-        private final MetaProperty<Object> value = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Object> value = DirectBeanMetaProperty.ofReadWrite(
                 this, "value", NoGenToString.class, Object.class);
         /**
          * The meta-properties.

@@ -26,8 +26,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.base.Optional;
@@ -165,12 +165,12 @@ public final class MutableOptional implements Bean {
          * The meta-property for the {@code optString} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Optional<String>> optString = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Optional<String>> optString = DirectBeanMetaProperty.ofReadWrite(
                 this, "optString", MutableOptional.class, (Class) Optional.class);
         /**
          * The meta-property for the {@code optStringGetter} property.
          */
-        private final MetaProperty<String> optStringGetter = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> optStringGetter = DirectBeanMetaProperty.ofReadWrite(
                 this, "optStringGetter", MutableOptional.class, String.class);
         /**
          * The meta-properties.

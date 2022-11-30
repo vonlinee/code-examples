@@ -25,11 +25,8 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
-import io.devpl.sdk.beans.impl.direct.DirectBean;
-import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
-import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
+import io.devpl.sdk.beans.impl.direct.*;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 
 /**
  * Mock tuple, used for testing.
@@ -231,19 +228,19 @@ public class TupleNonFinal<X, Y, Z> extends DirectBean {
          * The meta-property for the {@code first} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<X> first = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<X> first = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "first", TupleNonFinal.class, Object.class);
         /**
          * The meta-property for the {@code second} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Y> second = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Y> second = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "second", TupleNonFinal.class, Object.class);
         /**
          * The meta-property for the {@code third} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Z> third = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Z> third = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "third", TupleNonFinal.class, Object.class);
         /**
          * The meta-properties.

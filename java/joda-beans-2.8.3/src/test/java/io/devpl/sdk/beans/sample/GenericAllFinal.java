@@ -26,8 +26,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -175,13 +175,13 @@ public class GenericAllFinal<T> implements Bean {
         /**
          * The meta-property for the {@code name} property.
          */
-        private final MetaProperty<String> name = DirectMetaProperty.ofReadOnly(
+        private final MetaProperty<String> name = DirectBeanMetaProperty.ofReadOnly(
                 this, "name", GenericAllFinal.class, String.class);
         /**
          * The meta-property for the {@code value} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<T> value = (DirectMetaProperty) DirectMetaProperty.ofReadOnly(
+        private final MetaProperty<T> value = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadOnly(
                 this, "value", GenericAllFinal.class, Object.class);
         /**
          * The meta-properties.

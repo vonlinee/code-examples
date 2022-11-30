@@ -27,7 +27,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -150,7 +150,7 @@ public class CompanyAddress extends Address {
         /**
          * The meta-property for the {@code companyName} property.
          */
-        private final MetaProperty<String> companyName = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> companyName = DirectBeanMetaProperty.ofReadWrite(
                 this, "companyName", CompanyAddress.class, String.class);
         /**
          * The meta-properties.

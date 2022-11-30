@@ -30,9 +30,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.BiMap;
@@ -786,205 +786,205 @@ public final class ImmGuava<T extends Comparable<T>> implements ImmutableBean {
          * The meta-property for the {@code collection} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableCollection<T>> collection = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableCollection<T>> collection = DirectBeanMetaProperty.ofImmutable(
                 this, "collection", ImmGuava.class, (Class) ImmutableCollection.class);
         /**
          * The meta-property for the {@code list} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<T>> list = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<T>> list = DirectBeanMetaProperty.ofImmutable(
                 this, "list", ImmGuava.class, (Class) ImmutableList.class);
         /**
          * The meta-property for the {@code set} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableSet<T>> set = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableSet<T>> set = DirectBeanMetaProperty.ofImmutable(
                 this, "set", ImmGuava.class, (Class) ImmutableSet.class);
         /**
          * The meta-property for the {@code sortedSet} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableSortedSet<T>> sortedSet = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableSortedSet<T>> sortedSet = DirectBeanMetaProperty.ofImmutable(
                 this, "sortedSet", ImmGuava.class, (Class) ImmutableSortedSet.class);
         /**
          * The meta-property for the {@code map} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<T, String>> map = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<T, String>> map = DirectBeanMetaProperty.ofImmutable(
                 this, "map", ImmGuava.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code sortedMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableSortedMap<T, String>> sortedMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableSortedMap<T, String>> sortedMap = DirectBeanMetaProperty.ofImmutable(
                 this, "sortedMap", ImmGuava.class, (Class) ImmutableSortedMap.class);
         /**
          * The meta-property for the {@code biMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableBiMap<T, String>> biMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableBiMap<T, String>> biMap = DirectBeanMetaProperty.ofImmutable(
                 this, "biMap", ImmGuava.class, (Class) ImmutableBiMap.class);
         /**
          * The meta-property for the {@code multimap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMultimap<T, String>> multimap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMultimap<T, String>> multimap = DirectBeanMetaProperty.ofImmutable(
                 this, "multimap", ImmGuava.class, (Class) ImmutableMultimap.class);
         /**
          * The meta-property for the {@code listMultimap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableListMultimap<T, String>> listMultimap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableListMultimap<T, String>> listMultimap = DirectBeanMetaProperty.ofImmutable(
                 this, "listMultimap", ImmGuava.class, (Class) ImmutableListMultimap.class);
         /**
          * The meta-property for the {@code setMultimap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableSetMultimap<T, String>> setMultimap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableSetMultimap<T, String>> setMultimap = DirectBeanMetaProperty.ofImmutable(
                 this, "setMultimap", ImmGuava.class, (Class) ImmutableSetMultimap.class);
         /**
          * The meta-property for the {@code multiset} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMultiset<T>> multiset = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMultiset<T>> multiset = DirectBeanMetaProperty.ofImmutable(
                 this, "multiset", ImmGuava.class, (Class) ImmutableMultiset.class);
         /**
          * The meta-property for the {@code sortedMultiset} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableSortedMultiset<T>> sortedMultiset = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableSortedMultiset<T>> sortedMultiset = DirectBeanMetaProperty.ofImmutable(
                 this, "sortedMultiset", ImmGuava.class, (Class) ImmutableSortedMultiset.class);
         /**
          * The meta-property for the {@code collectionInterface} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Collection<T>> collectionInterface = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Collection<T>> collectionInterface = DirectBeanMetaProperty.ofImmutable(
                 this, "collectionInterface", ImmGuava.class, (Class) Collection.class);
         /**
          * The meta-property for the {@code listInterface} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<T>> listInterface = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<List<T>> listInterface = DirectBeanMetaProperty.ofImmutable(
                 this, "listInterface", ImmGuava.class, (Class) List.class);
         /**
          * The meta-property for the {@code setInterface} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Set<T>> setInterface = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Set<T>> setInterface = DirectBeanMetaProperty.ofImmutable(
                 this, "setInterface", ImmGuava.class, (Class) Set.class);
         /**
          * The meta-property for the {@code sortedSetInterface} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<SortedSet<T>> sortedSetInterface = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<SortedSet<T>> sortedSetInterface = DirectBeanMetaProperty.ofImmutable(
                 this, "sortedSetInterface", ImmGuava.class, (Class) SortedSet.class);
         /**
          * The meta-property for the {@code mapInterface} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Map<T, String>> mapInterface = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Map<T, String>> mapInterface = DirectBeanMetaProperty.ofImmutable(
                 this, "mapInterface", ImmGuava.class, (Class) Map.class);
         /**
          * The meta-property for the {@code sortedMapInterface} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<SortedMap<T, String>> sortedMapInterface = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<SortedMap<T, String>> sortedMapInterface = DirectBeanMetaProperty.ofImmutable(
                 this, "sortedMapInterface", ImmGuava.class, (Class) SortedMap.class);
         /**
          * The meta-property for the {@code biMapInterface} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<BiMap<T, String>> biMapInterface = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<BiMap<T, String>> biMapInterface = DirectBeanMetaProperty.ofImmutable(
                 this, "biMapInterface", ImmGuava.class, (Class) BiMap.class);
         /**
          * The meta-property for the {@code multimapInterface} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Multimap<T, String>> multimapInterface = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Multimap<T, String>> multimapInterface = DirectBeanMetaProperty.ofImmutable(
                 this, "multimapInterface", ImmGuava.class, (Class) Multimap.class);
         /**
          * The meta-property for the {@code listMultimapInterface} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ListMultimap<T, String>> listMultimapInterface = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ListMultimap<T, String>> listMultimapInterface = DirectBeanMetaProperty.ofImmutable(
                 this, "listMultimapInterface", ImmGuava.class, (Class) ListMultimap.class);
         /**
          * The meta-property for the {@code setMultimapInterface} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<SetMultimap<T, String>> setMultimapInterface = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<SetMultimap<T, String>> setMultimapInterface = DirectBeanMetaProperty.ofImmutable(
                 this, "setMultimapInterface", ImmGuava.class, (Class) SetMultimap.class);
         /**
          * The meta-property for the {@code multisetInterface} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Multiset<T>> multisetInterface = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Multiset<T>> multisetInterface = DirectBeanMetaProperty.ofImmutable(
                 this, "multisetInterface", ImmGuava.class, (Class) Multiset.class);
         /**
          * The meta-property for the {@code sortedMultisetInterface} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<SortedMultiset<T>> sortedMultisetInterface = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<SortedMultiset<T>> sortedMultisetInterface = DirectBeanMetaProperty.ofImmutable(
                 this, "sortedMultisetInterface", ImmGuava.class, (Class) SortedMultiset.class);
         /**
          * The meta-property for the {@code listWildExtendsT} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<? extends T>> listWildExtendsT = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<? extends T>> listWildExtendsT = DirectBeanMetaProperty.ofImmutable(
                 this, "listWildExtendsT", ImmGuava.class, (Class) ImmutableList.class);
         /**
          * The meta-property for the {@code listWildExtendsNumber} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<? extends Number>> listWildExtendsNumber = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<? extends Number>> listWildExtendsNumber = DirectBeanMetaProperty.ofImmutable(
                 this, "listWildExtendsNumber", ImmGuava.class, (Class) ImmutableList.class);
         /**
          * The meta-property for the {@code listWildExtendsComparable} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<? extends Comparable<?>>> listWildExtendsComparable = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<? extends Comparable<?>>> listWildExtendsComparable = DirectBeanMetaProperty.ofImmutable(
                 this, "listWildExtendsComparable", ImmGuava.class, (Class) ImmutableList.class);
         /**
          * The meta-property for the {@code setWildExtendsT} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableSet<? extends T>> setWildExtendsT = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableSet<? extends T>> setWildExtendsT = DirectBeanMetaProperty.ofImmutable(
                 this, "setWildExtendsT", ImmGuava.class, (Class) ImmutableSet.class);
         /**
          * The meta-property for the {@code setWildExtendsNumber} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableSet<? extends Number>> setWildExtendsNumber = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableSet<? extends Number>> setWildExtendsNumber = DirectBeanMetaProperty.ofImmutable(
                 this, "setWildExtendsNumber", ImmGuava.class, (Class) ImmutableSet.class);
         /**
          * The meta-property for the {@code setWildExtendsComparable} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableSet<? extends Comparable<?>>> setWildExtendsComparable = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableSet<? extends Comparable<?>>> setWildExtendsComparable = DirectBeanMetaProperty.ofImmutable(
                 this, "setWildExtendsComparable", ImmGuava.class, (Class) ImmutableSet.class);
         /**
          * The meta-property for the {@code listWildBuilder1} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<Object>> listWildBuilder1 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<Object>> listWildBuilder1 = DirectBeanMetaProperty.ofImmutable(
                 this, "listWildBuilder1", ImmGuava.class, (Class) ImmutableList.class);
         /**
          * The meta-property for the {@code listWildBuilder2} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<Address>> listWildBuilder2 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<Address>> listWildBuilder2 = DirectBeanMetaProperty.ofImmutable(
                 this, "listWildBuilder2", ImmGuava.class, (Class) ImmutableList.class);
         /**
          * The meta-property for the {@code mapWildBuilder1} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<String, Address>> mapWildBuilder1 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<String, Address>> mapWildBuilder1 = DirectBeanMetaProperty.ofImmutable(
                 this, "mapWildBuilder1", ImmGuava.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code mapWildKey} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<? extends Number, String>> mapWildKey = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<? extends Number, String>> mapWildKey = DirectBeanMetaProperty.ofImmutable(
                 this, "mapWildKey", ImmGuava.class, (Class) ImmutableMap.class);
         /**
          * The meta-properties.

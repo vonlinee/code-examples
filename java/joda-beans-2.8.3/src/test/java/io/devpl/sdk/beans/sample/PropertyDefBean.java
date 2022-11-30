@@ -29,8 +29,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.Lists;
@@ -383,54 +383,54 @@ public final class PropertyDefBean implements Bean {
         /**
          * The meta-property for the {@code stringAsCharSequence} property.
          */
-        private final MetaProperty<CharSequence> stringAsCharSequence = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<CharSequence> stringAsCharSequence = DirectBeanMetaProperty.ofReadWrite(
                 this, "stringAsCharSequence", PropertyDefBean.class, CharSequence.class);
         /**
          * The meta-property for the {@code intAsInteger} property.
          */
-        private final MetaProperty<Integer> intAsInteger = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Integer> intAsInteger = DirectBeanMetaProperty.ofReadWrite(
                 this, "intAsInteger", PropertyDefBean.class, Integer.class);
         /**
          * The meta-property for the {@code listCopyOfCollection} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Collection<Address>> listCopyOfCollection = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Collection<Address>> listCopyOfCollection = DirectBeanMetaProperty.ofReadWrite(
                 this, "listCopyOfCollection", PropertyDefBean.class, (Class) Collection.class);
         /**
          * The meta-property for the {@code arrayListSmart} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ArrayList<Address>> arrayListSmart = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<ArrayList<Address>> arrayListSmart = DirectBeanMetaProperty.ofReadWrite(
                 this, "arrayListSmart", PropertyDefBean.class, (Class) ArrayList.class);
         /**
          * The meta-property for the {@code arrayListExposed} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ArrayList<Address>> arrayListExposed = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<ArrayList<Address>> arrayListExposed = DirectBeanMetaProperty.ofReadWrite(
                 this, "arrayListExposed", PropertyDefBean.class, (Class) ArrayList.class);
         /**
          * The meta-property for the {@code arrayListAsCollection} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Collection<Address>> arrayListAsCollection = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Collection<Address>> arrayListAsCollection = DirectBeanMetaProperty.ofReadWrite(
                 this, "arrayListAsCollection", PropertyDefBean.class, (Class) Collection.class);
         /**
          * The meta-property for the {@code arrayList} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ArrayList<Address>> arrayList = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<ArrayList<Address>> arrayList = DirectBeanMetaProperty.ofReadWrite(
                 this, "arrayList", PropertyDefBean.class, (Class) ArrayList.class);
         /**
          * The meta-property for the {@code listAsIterable} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Iterable<Address>> listAsIterable = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Iterable<Address>> listAsIterable = DirectBeanMetaProperty.ofReadWrite(
                 this, "listAsIterable", PropertyDefBean.class, (Class) Iterable.class);
         /**
          * The meta-property for the {@code listAsIterableNoField} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Iterable<Address>> listAsIterableNoField = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Iterable<Address>> listAsIterableNoField = DirectBeanMetaProperty.ofReadWrite(
                 this, "listAsIterableNoField", PropertyDefBean.class, (Class) Iterable.class);
         /**
          * The meta-properties.

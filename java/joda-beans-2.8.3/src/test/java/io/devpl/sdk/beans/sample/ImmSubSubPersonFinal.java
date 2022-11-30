@@ -23,7 +23,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.gen.BeanDefinition;
 import io.devpl.sdk.beans.gen.PropertyDefinition;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableMultiset;
@@ -157,7 +157,7 @@ public final class ImmSubSubPersonFinal extends ImmSubPersonNonFinal {
          * The meta-property for the {@code codeCounts} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMultiset<String>> codeCounts = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMultiset<String>> codeCounts = DirectBeanMetaProperty.ofImmutable(
                 this, "codeCounts", ImmSubSubPersonFinal.class, (Class) ImmutableMultiset.class);
         /**
          * The meta-properties.

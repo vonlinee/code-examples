@@ -25,9 +25,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -144,7 +144,7 @@ public final class ImmFieldGetter<T> implements ImmutableBean {
         /**
          * The meta-property for the {@code value} property.
          */
-        private final MetaProperty<String> value = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> value = DirectBeanMetaProperty.ofImmutable(
                 this, "value", ImmFieldGetter.class, String.class);
         /**
          * The meta-properties.

@@ -27,7 +27,7 @@ import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -161,7 +161,7 @@ public class MutableBaseBean implements Bean {
         /**
          * The meta-property for the {@code baseBeanString} property.
          */
-        private final MetaProperty<String> baseBeanString = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> baseBeanString = DirectBeanMetaProperty.ofReadWrite(
                 this, "baseBeanString", MutableBaseBean.class, String.class);
         /**
          * The meta-properties.

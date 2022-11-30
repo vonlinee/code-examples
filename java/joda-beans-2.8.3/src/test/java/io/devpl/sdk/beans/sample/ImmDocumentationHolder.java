@@ -29,7 +29,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -156,7 +156,7 @@ public final class ImmDocumentationHolder<T>
          * The meta-property for the {@code documentation} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Documentation<T>> documentation = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Documentation<T>> documentation = DirectBeanMetaProperty.ofImmutable(
                 this, "documentation", ImmDocumentationHolder.class, (Class) Documentation.class);
         /**
          * The meta-properties.

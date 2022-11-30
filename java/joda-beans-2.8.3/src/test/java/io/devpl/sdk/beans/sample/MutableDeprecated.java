@@ -27,8 +27,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -259,22 +259,22 @@ public final class MutableDeprecated implements Cloneable, Bean {
         /**
          * The meta-property for the {@code deprecatedBoth} property.
          */
-        private final MetaProperty<String> deprecatedBoth = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> deprecatedBoth = DirectBeanMetaProperty.ofReadWrite(
                 this, "deprecatedBoth", MutableDeprecated.class, String.class);
         /**
          * The meta-property for the {@code deprecatedJavadoc} property.
          */
-        private final MetaProperty<String> deprecatedJavadoc = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> deprecatedJavadoc = DirectBeanMetaProperty.ofReadWrite(
                 this, "deprecatedJavadoc", MutableDeprecated.class, String.class);
         /**
          * The meta-property for the {@code deprecatedAnnotation} property.
          */
-        private final MetaProperty<String> deprecatedAnnotation = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> deprecatedAnnotation = DirectBeanMetaProperty.ofReadWrite(
                 this, "deprecatedAnnotation", MutableDeprecated.class, String.class);
         /**
          * The meta-property for the {@code deprecatedOptional} property.
          */
-        private final MetaProperty<String> deprecatedOptional = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> deprecatedOptional = DirectBeanMetaProperty.ofReadWrite(
                 this, "deprecatedOptional", MutableDeprecated.class, String.class);
         /**
          * The meta-properties.

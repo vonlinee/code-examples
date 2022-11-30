@@ -27,7 +27,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.impl.StandardImmutableBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -141,12 +141,12 @@ public final class PairManualInnerBuilder implements ImmutableBean {
         /**
          * The meta-property for the {@code first} property.
          */
-        private final MetaProperty<String> first = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> first = DirectBeanMetaProperty.ofImmutable(
                 this, "first", PairManualInnerBuilder.class, String.class);
         /**
          * The meta-property for the {@code second} property.
          */
-        private final MetaProperty<String> second = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> second = DirectBeanMetaProperty.ofImmutable(
                 this, "second", PairManualInnerBuilder.class, String.class);
         /**
          * The meta-properties.

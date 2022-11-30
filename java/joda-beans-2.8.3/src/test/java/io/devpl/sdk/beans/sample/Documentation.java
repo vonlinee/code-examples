@@ -25,11 +25,8 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
-import io.devpl.sdk.beans.impl.direct.DirectBean;
-import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
-import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
+import io.devpl.sdk.beans.impl.direct.*;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 
 /**
  * Mock JavaBean, used for testing.
@@ -217,19 +214,19 @@ public class Documentation<T> extends DirectBean {
         /**
          * The meta-property for the {@code type} property.
          */
-        private final MetaProperty<String> type = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> type = DirectBeanMetaProperty.ofReadWrite(
                 this, "type", Documentation.class, String.class);
         /**
          * The meta-property for the {@code content} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<T> content = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<T> content = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "content", Documentation.class, Object.class);
         /**
          * The meta-property for the {@code map} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Map<String, String>> map = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Map<String, String>> map = DirectBeanMetaProperty.ofReadWrite(
                 this, "map", Documentation.class, (Class) Map.class);
         /**
          * The meta-properties.

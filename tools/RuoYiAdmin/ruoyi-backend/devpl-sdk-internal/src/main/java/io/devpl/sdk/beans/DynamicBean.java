@@ -1,9 +1,6 @@
 package io.devpl.sdk.beans;
 
-import java.util.regex.Pattern;
-
 /**
- * 标记接口
  * A dynamic bean that allows properties to be added and removed.
  * <p>
  * A JavaBean is defined at compile-time and cannot have additional properties added.
@@ -13,21 +10,45 @@ import java.util.regex.Pattern;
 public interface DynamicBean extends Bean {
 
     /**
-     * Valid regex for keys.
+     * Gets the meta-bean representing the parts of the bean that are
+     * common across all instances, such as the set of meta-properties.
+     * @return the meta-bean, not null
      */
-    Pattern FILED_NAME_PATTERN = Pattern.compile("[a-zA-z_][a-zA-z0-9_]*");
+    @Override
+    DynamicMetaBean metaBean();
 
     /**
-     * 校验Bean的字段是否符合要求
-     *
-     * @param filedName
-     * @return
+     * 指定名称的属性是否存在
+     * @param name 属性名称, not null
+     * @return 指定名称的属性是否存在
      */
-    default boolean isKeyValid(String filedName) {
-        return FILED_NAME_PATTERN.matcher(filedName).matches();
-    }
+    boolean existsProperty(String name);
 
-    default String id() {
-        return this.getClass().getName();
-    }
+    /**
+     * Gets a property by name.
+     * <p>
+     * This will not throw an exception if the property name does not exist.
+     * Whether a property is immediately created or not is implementation dependent.
+     * @param <R>  the property type, optional, enabling auto-casting
+     * @param name the property name to retrieve, not null
+     * @return the property, not null
+     */
+    @Override
+    <R> Property<R> getProperty(String name);
+
+    /**
+     * Adds a property to those allowed to be stored in the bean.
+     * <p>
+     * Some implementations will automatically add properties, in which case this
+     * method will have no effect.
+     * @param name the property name to check, not empty, not null
+     * @param type the property type, not null
+     */
+    void defineProperty(String name, Class<?> type);
+
+    /**
+     * Removes a property by name.
+     * @param name the property name to remove, null ignored
+     */
+    void removeProperty(String name);
 }

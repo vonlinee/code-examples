@@ -29,8 +29,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -363,43 +363,43 @@ public class ClonePerson
          * The meta-property for the {@code firstNames} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<String>> firstNames = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<List<String>> firstNames = DirectBeanMetaProperty.ofReadWrite(
                 this, "firstNames", ClonePerson.class, (Class) List.class);
         /**
          * The meta-property for the {@code middleNames} property.
          */
-        private final MetaProperty<String[]> middleNames = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String[]> middleNames = DirectBeanMetaProperty.ofReadWrite(
                 this, "middleNames", ClonePerson.class, String[].class);
         /**
          * The meta-property for the {@code surname} property.
          */
-        private final MetaProperty<String> surname = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> surname = DirectBeanMetaProperty.ofReadWrite(
                 this, "surname", ClonePerson.class, String.class);
         /**
          * The meta-property for the {@code dateOfBirth} property.
          */
-        private final MetaProperty<Date> dateOfBirth = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Date> dateOfBirth = DirectBeanMetaProperty.ofReadWrite(
                 this, "dateOfBirth", ClonePerson.class, Date.class);
         /**
          * The meta-property for the {@code dateOfDeath} property.
          */
-        private final MetaProperty<Date> dateOfDeath = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Date> dateOfDeath = DirectBeanMetaProperty.ofReadWrite(
                 this, "dateOfDeath", ClonePerson.class, Date.class);
         /**
          * The meta-property for the {@code addresses} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<Address>> addresses = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<List<Address>> addresses = DirectBeanMetaProperty.ofReadWrite(
                 this, "addresses", ClonePerson.class, (Class) List.class);
         /**
          * The meta-property for the {@code companies} property.
          */
-        private final MetaProperty<Company[]> companies = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Company[]> companies = DirectBeanMetaProperty.ofReadWrite(
                 this, "companies", ClonePerson.class, Company[].class);
         /**
          * The meta-property for the {@code amounts} property.
          */
-        private final MetaProperty<int[]> amounts = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<int[]> amounts = DirectBeanMetaProperty.ofReadWrite(
                 this, "amounts", ClonePerson.class, int[].class);
         /**
          * The meta-properties.

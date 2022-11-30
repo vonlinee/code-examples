@@ -27,7 +27,7 @@ import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -209,17 +209,17 @@ public class SimpleName
         /**
          * The meta-property for the {@code forename} property.
          */
-        private final MetaProperty<String> forename = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> forename = DirectBeanMetaProperty.ofReadWrite(
                 this, "forename", SimpleName.class, String.class);
         /**
          * The meta-property for the {@code middleNames} property.
          */
-        private final MetaProperty<String[]> middleNames = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String[]> middleNames = DirectBeanMetaProperty.ofReadWrite(
                 this, "middleNames", SimpleName.class, String[].class);
         /**
          * The meta-property for the {@code surname} property.
          */
-        private final MetaProperty<String> surname = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> surname = DirectBeanMetaProperty.ofReadWrite(
                 this, "surname", SimpleName.class, String.class);
         /**
          * The meta-properties.

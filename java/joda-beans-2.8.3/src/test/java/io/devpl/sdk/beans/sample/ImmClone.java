@@ -29,7 +29,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -256,42 +256,42 @@ public final class ImmClone implements ImmutableBean, Serializable{
         /**
          * The meta-property for the {@code date} property.
          */
-        private final MetaProperty<Date> date = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Date> date = DirectBeanMetaProperty.ofImmutable(
                 this, "date", ImmClone.class, Date.class);
         /**
          * The meta-property for the {@code array1} property.
          */
-        private final MetaProperty<String[]> array1 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String[]> array1 = DirectBeanMetaProperty.ofImmutable(
                 this, "array1", ImmClone.class, String[].class);
         /**
          * The meta-property for the {@code array2} property.
          */
-        private final MetaProperty<String[]> array2 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String[]> array2 = DirectBeanMetaProperty.ofImmutable(
                 this, "array2", ImmClone.class, String[].class);
         /**
          * The meta-property for the {@code array3} property.
          */
-        private final MetaProperty<String[]> array3 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String[]> array3 = DirectBeanMetaProperty.ofImmutable(
                 this, "array3", ImmClone.class, String[].class);
         /**
          * The meta-property for the {@code dateNullable} property.
          */
-        private final MetaProperty<Date> dateNullable = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Date> dateNullable = DirectBeanMetaProperty.ofImmutable(
                 this, "dateNullable", ImmClone.class, Date.class);
         /**
          * The meta-property for the {@code array1Nullable} property.
          */
-        private final MetaProperty<String[]> array1Nullable = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String[]> array1Nullable = DirectBeanMetaProperty.ofImmutable(
                 this, "array1Nullable", ImmClone.class, String[].class);
         /**
          * The meta-property for the {@code array2Nullable} property.
          */
-        private final MetaProperty<String[]> array2Nullable = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String[]> array2Nullable = DirectBeanMetaProperty.ofImmutable(
                 this, "array2Nullable", ImmClone.class, String[].class);
         /**
          * The meta-property for the {@code array3Nullable} property.
          */
-        private final MetaProperty<String[]> array3Nullable = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String[]> array3Nullable = DirectBeanMetaProperty.ofImmutable(
                 this, "array3Nullable", ImmClone.class, String[].class);
         /**
          * The meta-properties.

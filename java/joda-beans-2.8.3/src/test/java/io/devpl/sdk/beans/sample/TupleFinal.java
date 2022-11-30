@@ -25,9 +25,9 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -250,19 +250,19 @@ public final class TupleFinal<X, Y, Z> implements Bean {
          * The meta-property for the {@code first} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<X> first = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<X> first = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "first", TupleFinal.class, Object.class);
         /**
          * The meta-property for the {@code second} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Y> second = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Y> second = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "second", TupleFinal.class, Object.class);
         /**
          * The meta-property for the {@code third} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Z> third = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Z> third = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "third", TupleFinal.class, Object.class);
         /**
          * The meta-properties.

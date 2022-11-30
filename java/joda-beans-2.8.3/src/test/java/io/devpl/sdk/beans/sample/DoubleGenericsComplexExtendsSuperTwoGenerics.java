@@ -27,7 +27,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -353,43 +353,43 @@ public class DoubleGenericsComplexExtendsSuperTwoGenerics<T extends Comparable<T
         /**
          * The meta-property for the {@code normalType} property.
          */
-        private final MetaProperty<String> normalType = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> normalType = DirectBeanMetaProperty.ofReadWrite(
                 this, "normalType", DoubleGenericsComplexExtendsSuperTwoGenerics.class, String.class);
         /**
          * The meta-property for the {@code typeT} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<T> typeT = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<T> typeT = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "typeT", DoubleGenericsComplexExtendsSuperTwoGenerics.class, Object.class);
         /**
          * The meta-property for the {@code typeU} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<U> typeU = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<U> typeU = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "typeU", DoubleGenericsComplexExtendsSuperTwoGenerics.class, Object.class);
         /**
          * The meta-property for the {@code typeTList} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<T>> typeTList = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<List<T>> typeTList = DirectBeanMetaProperty.ofReadWrite(
                 this, "typeTList", DoubleGenericsComplexExtendsSuperTwoGenerics.class, (Class) List.class);
         /**
          * The meta-property for the {@code typeUList} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<U>> typeUList = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<List<U>> typeUList = DirectBeanMetaProperty.ofReadWrite(
                 this, "typeUList", DoubleGenericsComplexExtendsSuperTwoGenerics.class, (Class) List.class);
         /**
          * The meta-property for the {@code typeTArray} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<T[]> typeTArray = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<T[]> typeTArray = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "typeTArray", DoubleGenericsComplexExtendsSuperTwoGenerics.class, Object[].class);
         /**
          * The meta-property for the {@code typeUArray} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<U[]> typeUArray = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<U[]> typeUArray = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "typeUArray", DoubleGenericsComplexExtendsSuperTwoGenerics.class, Object[].class);
         /**
          * The meta-properties.

@@ -25,9 +25,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -196,19 +196,19 @@ public final class TupleImmutable<X, Y, Z extends Address> implements ImmutableB
          * The meta-property for the {@code first} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<X> first = (DirectMetaProperty) DirectMetaProperty.ofImmutable(
+        private final MetaProperty<X> first = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofImmutable(
                 this, "first", TupleImmutable.class, Object.class);
         /**
          * The meta-property for the {@code second} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Y> second = (DirectMetaProperty) DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Y> second = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofImmutable(
                 this, "second", TupleImmutable.class, Object.class);
         /**
          * The meta-property for the {@code third} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Z> third = (DirectMetaProperty) DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Z> third = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofImmutable(
                 this, "third", TupleImmutable.class, Object.class);
         /**
          * The meta-properties.

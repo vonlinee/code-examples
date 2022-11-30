@@ -22,7 +22,7 @@ public interface DynamicBean extends Bean {
      * @param name 属性名称, not null
      * @return 指定名称的属性是否存在
      */
-    boolean isPropertyExisted(String name);
+    boolean existsProperty(String name);
 
     /**
      * Gets a property by name.

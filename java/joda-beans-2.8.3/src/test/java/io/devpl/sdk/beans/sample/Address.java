@@ -28,7 +28,7 @@ import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBean;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -244,22 +244,22 @@ public class Address extends DirectBean {
         /**
          * The meta-property for the {@code number} property.
          */
-        private final MetaProperty<Integer> number = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Integer> number = DirectBeanMetaProperty.ofReadWrite(
                 this, "number", Address.class, Integer.TYPE);
         /**
          * The meta-property for the {@code street} property.
          */
-        private final MetaProperty<String> street = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> street = DirectBeanMetaProperty.ofReadWrite(
                 this, "street", Address.class, String.class);
         /**
          * The meta-property for the {@code city} property.
          */
-        private final MetaProperty<String> city = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> city = DirectBeanMetaProperty.ofReadWrite(
                 this, "city", Address.class, String.class);
         /**
          * The meta-property for the {@code owner} property.
          */
-        private final MetaProperty<Person> owner = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Person> owner = DirectBeanMetaProperty.ofReadWrite(
                 this, "owner", Address.class, Person.class);
         /**
          * The meta-properties.

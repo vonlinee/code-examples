@@ -25,9 +25,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -154,7 +154,7 @@ public final class ImmGenericLinkedRefs<A, B extends Comparable<A>> implements I
          * The meta-property for the {@code value} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<A> value = (DirectMetaProperty) DirectMetaProperty.ofImmutable(
+        private final MetaProperty<A> value = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofImmutable(
                 this, "value", ImmGenericLinkedRefs.class, Object.class);
         /**
          * The meta-properties.

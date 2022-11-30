@@ -26,11 +26,8 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
-import io.devpl.sdk.beans.impl.direct.DirectBean;
-import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
-import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
+import io.devpl.sdk.beans.impl.direct.*;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 
 /**
  * Mock used for test equals.
@@ -349,47 +346,47 @@ public class RWOnlyBean extends DirectBean {
         /**
          * The meta-property for the {@code ro} property.
          */
-        private final MetaProperty<Object> ro = DirectMetaProperty.ofReadOnly(
+        private final MetaProperty<Object> ro = DirectBeanMetaProperty.ofReadOnly(
                 this, "ro", RWOnlyBean.class, Object.class);
         /**
          * The meta-property for the {@code wo} property.
          */
-        private final MetaProperty<Object> wo = DirectMetaProperty.ofWriteOnly(
+        private final MetaProperty<Object> wo = DirectBeanMetaProperty.ofWriteOnly(
                 this, "wo", RWOnlyBean.class, Object.class);
         /**
          * The meta-property for the {@code fin} property.
          */
-        private final MetaProperty<Object> fin = DirectMetaProperty.ofReadOnly(
+        private final MetaProperty<Object> fin = DirectBeanMetaProperty.ofReadOnly(
                 this, "fin", RWOnlyBean.class, Object.class);
         /**
          * The meta-property for the {@code priv} property.
          */
-        private final MetaProperty<String> priv = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> priv = DirectBeanMetaProperty.ofReadWrite(
                 this, "priv", RWOnlyBean.class, String.class);
         /**
          * The meta-property for the {@code pkg} property.
          */
-        private final MetaProperty<String> pkg = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> pkg = DirectBeanMetaProperty.ofReadWrite(
                 this, "pkg", RWOnlyBean.class, String.class);
         /**
          * The meta-property for the {@code prot} property.
          */
-        private final MetaProperty<String> prot = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> prot = DirectBeanMetaProperty.ofReadWrite(
                 this, "prot", RWOnlyBean.class, String.class);
         /**
          * The meta-property for the {@code field} property.
          */
-        private final MetaProperty<String> field = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> field = DirectBeanMetaProperty.ofReadWrite(
                 this, "field", RWOnlyBean.class, String.class);
         /**
          * The meta-property for the {@code manualGet} property.
          */
-        private final MetaProperty<String> manualGet = DirectMetaProperty.ofReadOnly(
+        private final MetaProperty<String> manualGet = DirectBeanMetaProperty.ofReadOnly(
                 this, "manualGet", RWOnlyBean.class, String.class);
         /**
          * The meta-property for the {@code derived} property.
          */
-        private final MetaProperty<String> derived = DirectMetaProperty.ofDerived(
+        private final MetaProperty<String> derived = DirectBeanMetaProperty.ofDerived(
                 this, "derived", RWOnlyBean.class, String.class);
         /**
          * The meta-properties.

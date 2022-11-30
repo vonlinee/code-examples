@@ -27,11 +27,8 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
-import io.devpl.sdk.beans.impl.direct.DirectBean;
-import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
-import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
+import io.devpl.sdk.beans.impl.direct.*;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.flexi.FlexiBean;
 
 /**
@@ -282,28 +279,28 @@ public class FinalFieldBean extends DirectBean {
         /**
          * The meta-property for the {@code fieldFinal} property.
          */
-        private final MetaProperty<String> fieldFinal = DirectMetaProperty.ofReadOnly(
+        private final MetaProperty<String> fieldFinal = DirectBeanMetaProperty.ofReadOnly(
                 this, "fieldFinal", FinalFieldBean.class, String.class);
         /**
          * The meta-property for the {@code fieldNonFinal} property.
          */
-        private final MetaProperty<String> fieldNonFinal = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> fieldNonFinal = DirectBeanMetaProperty.ofReadWrite(
                 this, "fieldNonFinal", FinalFieldBean.class, String.class);
         /**
          * The meta-property for the {@code listFinal} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<String>> listFinal = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<List<String>> listFinal = DirectBeanMetaProperty.ofReadWrite(
                 this, "listFinal", FinalFieldBean.class, (Class) List.class);
         /**
          * The meta-property for the {@code flexiFinal} property.
          */
-        private final MetaProperty<FlexiBean> flexiFinal = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<FlexiBean> flexiFinal = DirectBeanMetaProperty.ofReadWrite(
                 this, "flexiFinal", FinalFieldBean.class, FlexiBean.class);
         /**
          * The meta-property for the {@code personFinal} property.
          */
-        private final MetaProperty<Person> personFinal = DirectMetaProperty.ofReadOnly(
+        private final MetaProperty<Person> personFinal = DirectBeanMetaProperty.ofReadOnly(
                 this, "personFinal", FinalFieldBean.class, Person.class);
         /**
          * The meta-properties.

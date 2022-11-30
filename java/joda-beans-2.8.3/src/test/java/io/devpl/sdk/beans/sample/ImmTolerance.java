@@ -25,9 +25,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -169,12 +169,12 @@ public final class ImmTolerance implements ImmutableBean {
         /**
          * The meta-property for the {@code value} property.
          */
-        private final MetaProperty<Double> value = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Double> value = DirectBeanMetaProperty.ofImmutable(
                 this, "value", ImmTolerance.class, Double.TYPE);
         /**
          * The meta-property for the {@code array} property.
          */
-        private final MetaProperty<double[]> array = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<double[]> array = DirectBeanMetaProperty.ofImmutable(
                 this, "array", ImmTolerance.class, double[].class);
         /**
          * The meta-properties.

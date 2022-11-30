@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 
 import io.devpl.sdk.beans.gen.BeanDefinition;
 import io.devpl.sdk.beans.gen.PropertyDefinition;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.ser.SerDeserializer;
 import io.devpl.sdk.beans.Bean;
 import io.devpl.sdk.beans.ImmutableBean;
@@ -29,7 +30,6 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -141,7 +141,7 @@ public final class ImmKeyHolder implements ImmutableBean, Serializable {
     /**
      * The meta-property for the {@code value} property.
      */
-    private final MetaProperty<ImmKey> value = DirectMetaProperty.ofImmutable(
+    private final MetaProperty<ImmKey> value = DirectBeanMetaProperty.ofImmutable(
         this, "value", ImmKeyHolder.class, ImmKey.class);
     /**
      * The meta-properties.

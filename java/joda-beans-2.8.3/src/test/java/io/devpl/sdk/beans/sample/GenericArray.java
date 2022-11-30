@@ -26,8 +26,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -157,7 +157,7 @@ public class GenericArray<T extends Address> implements Bean {
          * The meta-property for the {@code values} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<T[]> values = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<T[]> values = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "values", GenericArray.class, Object[].class);
         /**
          * The meta-properties.

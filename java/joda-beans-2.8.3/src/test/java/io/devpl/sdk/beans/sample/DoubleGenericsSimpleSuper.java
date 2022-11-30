@@ -26,8 +26,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -227,19 +227,19 @@ public class DoubleGenericsSimpleSuper<T, U>
         /**
          * The meta-property for the {@code baseType} property.
          */
-        private final MetaProperty<String> baseType = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> baseType = DirectBeanMetaProperty.ofReadWrite(
                 this, "baseType", DoubleGenericsSimpleSuper.class, String.class);
         /**
          * The meta-property for the {@code baseT} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<T> baseT = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<T> baseT = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "baseT", DoubleGenericsSimpleSuper.class, Object.class);
         /**
          * The meta-property for the {@code baseU} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<U> baseU = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<U> baseU = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "baseU", DoubleGenericsSimpleSuper.class, Object.class);
         /**
          * The meta-properties.

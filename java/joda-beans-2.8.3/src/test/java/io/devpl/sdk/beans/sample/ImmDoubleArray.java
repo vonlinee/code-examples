@@ -19,7 +19,7 @@ import io.devpl.sdk.beans.*;
 import io.devpl.sdk.beans.gen.BeanDefinition;
 import io.devpl.sdk.beans.gen.PropertyDefinition;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 import io.devpl.sdk.beans.impl.direct.DirectPrivateBeanBuilder;
 
@@ -170,12 +170,12 @@ public final class ImmDoubleArray<T> implements Serializable, ImmutableBean {
         /**
          * The meta-property for the {@code values} property.
          */
-        private final MetaProperty<double[]> values = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<double[]> values = DirectBeanMetaProperty.ofImmutable(
                 this, "values", ImmDoubleArray.class, double[].class);
         /**
          * The meta-property for the {@code values2} property.
          */
-        private final MetaProperty<double[]> values2 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<double[]> values2 = DirectBeanMetaProperty.ofImmutable(
                 this, "values2", ImmDoubleArray.class, double[].class);
         /**
          * The meta-properties.

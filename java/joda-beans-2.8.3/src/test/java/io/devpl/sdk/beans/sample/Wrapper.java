@@ -26,8 +26,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBean;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -186,13 +186,13 @@ public abstract class Wrapper<T extends Address> extends DirectBean {
         /**
          * The meta-property for the {@code type} property.
          */
-        private final MetaProperty<String> type = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> type = DirectBeanMetaProperty.ofReadWrite(
                 this, "type", Wrapper.class, String.class);
         /**
          * The meta-property for the {@code content} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<T> content = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<T> content = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "content", Wrapper.class, Object.class);
         /**
          * The meta-properties.

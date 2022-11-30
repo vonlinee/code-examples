@@ -25,11 +25,8 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
-import io.devpl.sdk.beans.impl.direct.DirectBean;
-import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
-import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
+import io.devpl.sdk.beans.impl.direct.*;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 
 /**
  * Mock JavaBean, used for testing.
@@ -144,7 +141,7 @@ public class DocumentationHolder extends DirectBean{
          * The meta-property for the {@code documentation} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Documentation<?>> documentation = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Documentation<?>> documentation = DirectBeanMetaProperty.ofReadWrite(
                 this, "documentation", DocumentationHolder.class, (Class) Documentation.class);
         /**
          * The meta-properties.

@@ -25,9 +25,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -193,22 +193,22 @@ public final class ImmPrivateMeta implements ImmutableBean {
         /**
          * The meta-property for the {@code number} property.
          */
-        private final MetaProperty<Integer> number = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Integer> number = DirectBeanMetaProperty.ofImmutable(
                 this, "number", ImmPrivateMeta.class, Integer.TYPE);
         /**
          * The meta-property for the {@code street} property.
          */
-        private final MetaProperty<String> street = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> street = DirectBeanMetaProperty.ofImmutable(
                 this, "street", ImmPrivateMeta.class, String.class);
         /**
          * The meta-property for the {@code city} property.
          */
-        private final MetaProperty<String> city = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> city = DirectBeanMetaProperty.ofImmutable(
                 this, "city", ImmPrivateMeta.class, String.class);
         /**
          * The meta-property for the {@code owner} property.
          */
-        private final MetaProperty<ImmPerson> owner = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmPerson> owner = DirectBeanMetaProperty.ofImmutable(
                 this, "owner", ImmPrivateMeta.class, ImmPerson.class);
         /**
          * The meta-properties.

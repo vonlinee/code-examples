@@ -25,9 +25,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableMap;
@@ -160,7 +160,7 @@ public class ImmGenericCollections<T> implements ImmutableBean {
          * The meta-property for the {@code map} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<String, T>> map = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<String, T>> map = DirectBeanMetaProperty.ofImmutable(
                 this, "map", ImmGenericCollections.class, (Class) ImmutableMap.class);
         /**
          * The meta-properties.

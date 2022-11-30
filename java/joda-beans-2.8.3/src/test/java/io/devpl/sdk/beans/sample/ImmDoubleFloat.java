@@ -27,7 +27,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -144,12 +144,12 @@ public final class ImmDoubleFloat implements ImmutableBean {
         /**
          * The meta-property for the {@code a} property.
          */
-        private final MetaProperty<Double> a = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Double> a = DirectBeanMetaProperty.ofImmutable(
                 this, "a", ImmDoubleFloat.class, Double.TYPE);
         /**
          * The meta-property for the {@code b} property.
          */
-        private final MetaProperty<Double> b = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Double> b = DirectBeanMetaProperty.ofImmutable(
                 this, "b", ImmDoubleFloat.class, Double.TYPE);
         /**
          * The meta-properties.

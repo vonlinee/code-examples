@@ -24,7 +24,7 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -166,7 +166,7 @@ public class SimpleSubPersonWithBuilderNonFinal extends SimplePersonWithBuilderN
         /**
          * The meta-property for the {@code middleName} property.
          */
-        private final MetaProperty<String> middleName = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> middleName = DirectBeanMetaProperty.ofReadWrite(
                 this, "middleName", SimpleSubPersonWithBuilderNonFinal.class, String.class);
         /**
          * The meta-properties.

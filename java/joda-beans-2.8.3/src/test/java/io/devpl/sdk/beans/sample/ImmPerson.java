@@ -31,9 +31,9 @@ import io.devpl.sdk.beans.gen.ImmutableDefaults;
 import io.devpl.sdk.beans.gen.ImmutablePreBuild;
 import io.devpl.sdk.beans.gen.ImmutableValidator;
 import io.devpl.sdk.beans.gen.PropertyDefinition;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableList;
@@ -330,61 +330,61 @@ public final class ImmPerson implements ImmutableBean {
         /**
          * The meta-property for the {@code forename} property.
          */
-        private final MetaProperty<String> forename = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> forename = DirectBeanMetaProperty.ofImmutable(
                 this, "forename", ImmPerson.class, String.class);
         /**
          * The meta-property for the {@code surname} property.
          */
-        private final MetaProperty<String> surname = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> surname = DirectBeanMetaProperty.ofImmutable(
                 this, "surname", ImmPerson.class, String.class);
         /**
          * The meta-property for the {@code numberOfCars} property.
          */
-        private final MetaProperty<Integer> numberOfCars = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Integer> numberOfCars = DirectBeanMetaProperty.ofImmutable(
                 this, "numberOfCars", ImmPerson.class, Integer.TYPE);
         /**
          * The meta-property for the {@code dateOfBirth} property.
          */
-        private final MetaProperty<Date> dateOfBirth = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Date> dateOfBirth = DirectBeanMetaProperty.ofImmutable(
                 this, "dateOfBirth", ImmPerson.class, Date.class);
         /**
          * The meta-property for the {@code middleNames} property.
          */
-        private final MetaProperty<String[]> middleNames = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String[]> middleNames = DirectBeanMetaProperty.ofImmutable(
                 this, "middleNames", ImmPerson.class, String[].class);
         /**
          * The meta-property for the {@code addressList} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<Address>> addressList = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<Address>> addressList = DirectBeanMetaProperty.ofImmutable(
                 this, "addressList", ImmPerson.class, (Class) ImmutableList.class);
         /**
          * The meta-property for the {@code otherAddressMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Map<String, Address>> otherAddressMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Map<String, Address>> otherAddressMap = DirectBeanMetaProperty.ofImmutable(
                 this, "otherAddressMap", ImmPerson.class, (Class) Map.class);
         /**
          * The meta-property for the {@code addressesList} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<List<Address>>> addressesList = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<List<List<Address>>> addressesList = DirectBeanMetaProperty.ofImmutable(
                 this, "addressesList", ImmPerson.class, (Class) List.class);
         /**
          * The meta-property for the {@code mainAddress} property.
          */
-        private final MetaProperty<ImmAddress> mainAddress = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmAddress> mainAddress = DirectBeanMetaProperty.ofImmutable(
                 this, "mainAddress", ImmPerson.class, ImmAddress.class);
         /**
          * The meta-property for the {@code codeCounts} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMultiset<String>> codeCounts = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMultiset<String>> codeCounts = DirectBeanMetaProperty.ofImmutable(
                 this, "codeCounts", ImmPerson.class, (Class) ImmutableMultiset.class);
         /**
          * The meta-property for the {@code age} property.
          */
-        private final MetaProperty<Integer> age = DirectMetaProperty.ofDerived(
+        private final MetaProperty<Integer> age = DirectBeanMetaProperty.ofDerived(
                 this, "age", ImmPerson.class, Integer.TYPE);
         /**
          * The meta-properties.

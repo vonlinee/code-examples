@@ -31,9 +31,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableList;
@@ -544,140 +544,140 @@ public final class SimpleJson implements ImmutableBean, Serializable {
         /**
          * The meta-property for the {@code primitiveChar} property.
          */
-        private final MetaProperty<Character> primitiveChar = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Character> primitiveChar = DirectBeanMetaProperty.ofImmutable(
                 this, "primitiveChar", SimpleJson.class, Character.TYPE);
         /**
          * The meta-property for the {@code primitiveByte} property.
          */
-        private final MetaProperty<Byte> primitiveByte = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Byte> primitiveByte = DirectBeanMetaProperty.ofImmutable(
                 this, "primitiveByte", SimpleJson.class, Byte.TYPE);
         /**
          * The meta-property for the {@code primitiveShort} property.
          */
-        private final MetaProperty<Short> primitiveShort = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Short> primitiveShort = DirectBeanMetaProperty.ofImmutable(
                 this, "primitiveShort", SimpleJson.class, Short.TYPE);
         /**
          * The meta-property for the {@code primitiveInt} property.
          */
-        private final MetaProperty<Integer> primitiveInt = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Integer> primitiveInt = DirectBeanMetaProperty.ofImmutable(
                 this, "primitiveInt", SimpleJson.class, Integer.TYPE);
         /**
          * The meta-property for the {@code primitiveLong} property.
          */
-        private final MetaProperty<Long> primitiveLong = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Long> primitiveLong = DirectBeanMetaProperty.ofImmutable(
                 this, "primitiveLong", SimpleJson.class, Long.TYPE);
         /**
          * The meta-property for the {@code primitiveFloat} property.
          */
-        private final MetaProperty<Float> primitiveFloat = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Float> primitiveFloat = DirectBeanMetaProperty.ofImmutable(
                 this, "primitiveFloat", SimpleJson.class, Float.TYPE);
         /**
          * The meta-property for the {@code primitiveDouble} property.
          */
-        private final MetaProperty<Double> primitiveDouble = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Double> primitiveDouble = DirectBeanMetaProperty.ofImmutable(
                 this, "primitiveDouble", SimpleJson.class, Double.TYPE);
         /**
          * The meta-property for the {@code primitiveDoubleNaN} property.
          */
-        private final MetaProperty<Double> primitiveDoubleNaN = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Double> primitiveDoubleNaN = DirectBeanMetaProperty.ofImmutable(
                 this, "primitiveDoubleNaN", SimpleJson.class, Double.TYPE);
         /**
          * The meta-property for the {@code primitiveDoubleInf} property.
          */
-        private final MetaProperty<Double> primitiveDoubleInf = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Double> primitiveDoubleInf = DirectBeanMetaProperty.ofImmutable(
                 this, "primitiveDoubleInf", SimpleJson.class, Double.TYPE);
         /**
          * The meta-property for the {@code abstractNumber} property.
          */
-        private final MetaProperty<Number> abstractNumber = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Number> abstractNumber = DirectBeanMetaProperty.ofImmutable(
                 this, "abstractNumber", SimpleJson.class, Number.class);
         /**
          * The meta-property for the {@code arrayByte} property.
          */
-        private final MetaProperty<byte[]> arrayByte = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<byte[]> arrayByte = DirectBeanMetaProperty.ofImmutable(
                 this, "arrayByte", SimpleJson.class, byte[].class);
         /**
          * The meta-property for the {@code array2d} property.
          */
-        private final MetaProperty<String[][]> array2d = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String[][]> array2d = DirectBeanMetaProperty.ofImmutable(
                 this, "array2d", SimpleJson.class, String[][].class);
         /**
          * The meta-property for the {@code string} property.
          */
-        private final MetaProperty<String> string = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> string = DirectBeanMetaProperty.ofImmutable(
                 this, "string", SimpleJson.class, String.class);
         /**
          * The meta-property for the {@code bean} property.
          */
-        private final MetaProperty<ImmKey> bean = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmKey> bean = DirectBeanMetaProperty.ofImmutable(
                 this, "bean", SimpleJson.class, ImmKey.class);
         /**
          * The meta-property for the {@code object1} property.
          */
-        private final MetaProperty<Object> object1 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Object> object1 = DirectBeanMetaProperty.ofImmutable(
                 this, "object1", SimpleJson.class, Object.class);
         /**
          * The meta-property for the {@code object2} property.
          */
-        private final MetaProperty<Object> object2 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Object> object2 = DirectBeanMetaProperty.ofImmutable(
                 this, "object2", SimpleJson.class, Object.class);
         /**
          * The meta-property for the {@code risk} property.
          */
-        private final MetaProperty<Risk> risk = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Risk> risk = DirectBeanMetaProperty.ofImmutable(
                 this, "risk", SimpleJson.class, Risk.class);
         /**
          * The meta-property for the {@code riskLevel} property.
          */
-        private final MetaProperty<RiskLevel> riskLevel = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<RiskLevel> riskLevel = DirectBeanMetaProperty.ofImmutable(
                 this, "riskLevel", SimpleJson.class, RiskLevel.class);
         /**
          * The meta-property for the {@code riskLevels} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<EnumSet<RiskLevel>> riskLevels = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<EnumSet<RiskLevel>> riskLevels = DirectBeanMetaProperty.ofImmutable(
                 this, "riskLevels", SimpleJson.class, (Class) EnumSet.class);
         /**
          * The meta-property for the {@code stringList} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<String>> stringList = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<String>> stringList = DirectBeanMetaProperty.ofImmutable(
                 this, "stringList", SimpleJson.class, (Class) ImmutableList.class);
         /**
          * The meta-property for the {@code beanList} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<ImmKey>> beanList = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<ImmKey>> beanList = DirectBeanMetaProperty.ofImmutable(
                 this, "beanList", SimpleJson.class, (Class) ImmutableList.class);
         /**
          * The meta-property for the {@code stringMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<String, String>> stringMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<String, String>> stringMap = DirectBeanMetaProperty.ofImmutable(
                 this, "stringMap", SimpleJson.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code intKeyMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<Integer, String>> intKeyMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<Integer, String>> intKeyMap = DirectBeanMetaProperty.ofImmutable(
                 this, "intKeyMap", SimpleJson.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code beanMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<String, ImmKey>> beanMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<String, ImmKey>> beanMap = DirectBeanMetaProperty.ofImmutable(
                 this, "beanMap", SimpleJson.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code listInMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<String, List<String>>> listInMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<String, List<String>>> listInMap = DirectBeanMetaProperty.ofImmutable(
                 this, "listInMap", SimpleJson.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code listNumericInMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<String, List<Integer>>> listNumericInMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<String, List<Integer>>> listNumericInMap = DirectBeanMetaProperty.ofImmutable(
                 this, "listNumericInMap", SimpleJson.class, (Class) ImmutableMap.class);
         /**
          * The meta-properties.

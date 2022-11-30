@@ -28,7 +28,7 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 import io.devpl.sdk.beans.impl.direct.DirectPrivateBeanBuilder;
 
@@ -155,7 +155,7 @@ public final class ImmGenericArray<T>
          * The meta-property for the {@code values} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<T[]> values = (DirectMetaProperty) DirectMetaProperty.ofImmutable(
+        private final MetaProperty<T[]> values = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofImmutable(
                 this, "values", ImmGenericArray.class, Object[].class);
         /**
          * The meta-properties.

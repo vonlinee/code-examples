@@ -21,7 +21,7 @@ import io.devpl.sdk.beans.gen.ImmutableDefaults;
 import io.devpl.sdk.beans.gen.PropertyDefinition;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import java.util.Map;
@@ -149,7 +149,7 @@ public final class ImmDefault implements ImmutableBean {
         /**
          * The meta-property for the {@code value} property.
          */
-        private final MetaProperty<String> value = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> value = DirectBeanMetaProperty.ofImmutable(
                 this, "value", ImmDefault.class, String.class);
         /**
          * The meta-properties.

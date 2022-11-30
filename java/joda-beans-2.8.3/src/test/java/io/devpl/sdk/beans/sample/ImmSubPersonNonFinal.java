@@ -24,7 +24,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.gen.BeanDefinition;
 import io.devpl.sdk.beans.gen.PropertyDefinition;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableList;
@@ -163,13 +163,13 @@ public class ImmSubPersonNonFinal extends ImmPersonNonFinal {
         /**
          * The meta-property for the {@code middleName} property.
          */
-        private final MetaProperty<String> middleName = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> middleName = DirectBeanMetaProperty.ofImmutable(
                 this, "middleName", ImmSubPersonNonFinal.class, String.class);
         /**
          * The meta-property for the {@code addressList} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<Address>> addressList = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<Address>> addressList = DirectBeanMetaProperty.ofImmutable(
                 this, "addressList", ImmSubPersonNonFinal.class, (Class) ImmutableList.class);
         /**
          * The meta-properties.

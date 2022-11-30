@@ -27,8 +27,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -234,22 +234,22 @@ public final class UserAccount implements Bean {
         /**
          * The meta-property for the {@code userId} property.
          */
-        private final MetaProperty<String> userId = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> userId = DirectBeanMetaProperty.ofReadWrite(
                 this, "userId", UserAccount.class, String.class);
         /**
          * The meta-property for the {@code emailAddress} property.
          */
-        private final MetaProperty<String> emailAddress = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> emailAddress = DirectBeanMetaProperty.ofReadWrite(
                 this, "emailAddress", UserAccount.class, String.class);
         /**
          * The meta-property for the {@code numberLogins} property.
          */
-        private final MetaProperty<Integer> numberLogins = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Integer> numberLogins = DirectBeanMetaProperty.ofReadWrite(
                 this, "numberLogins", UserAccount.class, Integer.TYPE);
         /**
          * The meta-property for the {@code lastLogin} property.
          */
-        private final MetaProperty<Date> lastLogin = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Date> lastLogin = DirectBeanMetaProperty.ofReadWrite(
                 this, "lastLogin", UserAccount.class, Date.class);
         /**
          * The meta-properties.

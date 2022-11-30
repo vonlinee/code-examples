@@ -26,7 +26,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -148,7 +148,7 @@ public class SubValidateBean extends ValidateBean {
         /**
          * The meta-property for the {@code sub} property.
          */
-        private final MetaProperty<String> sub = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> sub = DirectBeanMetaProperty.ofReadWrite(
                 this, "sub", SubValidateBean.class, String.class);
         /**
          * The meta-properties.

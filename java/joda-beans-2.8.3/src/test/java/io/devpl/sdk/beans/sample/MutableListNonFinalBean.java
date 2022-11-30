@@ -26,9 +26,9 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableList;
@@ -200,13 +200,13 @@ public class MutableListNonFinalBean implements Bean {
          * The meta-property for the {@code strings} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<String>> strings = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<List<String>> strings = DirectBeanMetaProperty.ofReadWrite(
                 this, "strings", MutableListNonFinalBean.class, (Class) List.class);
         /**
          * The meta-property for the {@code numberMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Map<String, Integer>> numberMap = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Map<String, Integer>> numberMap = DirectBeanMetaProperty.ofReadWrite(
                 this, "numberMap", MutableListNonFinalBean.class, (Class) Map.class);
         /**
          * The meta-properties.

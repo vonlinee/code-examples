@@ -25,9 +25,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 import org.joda.convert.FromString;
 import org.joda.convert.ToString;
@@ -163,12 +163,12 @@ public final class ImmJodaConvertBean implements ImmutableBean {
         /**
          * The meta-property for the {@code base} property.
          */
-        private final MetaProperty<String> base = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> base = DirectBeanMetaProperty.ofImmutable(
                 this, "base", ImmJodaConvertBean.class, String.class);
         /**
          * The meta-property for the {@code extra} property.
          */
-        private final MetaProperty<Integer> extra = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Integer> extra = DirectBeanMetaProperty.ofImmutable(
                 this, "extra", ImmJodaConvertBean.class, Integer.TYPE);
         /**
          * The meta-properties.

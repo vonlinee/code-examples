@@ -29,7 +29,7 @@ import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -183,13 +183,13 @@ public final class MutableTypes<T extends Comparable<T>> implements Bean {
          * The meta-property for the {@code listWildNullable} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<?>> listWildNullable = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<List<?>> listWildNullable = DirectBeanMetaProperty.ofReadWrite(
                 this, "listWildNullable", MutableTypes.class, (Class) List.class);
         /**
          * The meta-property for the {@code listWildPublic} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<?>> listWildPublic = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<List<?>> listWildPublic = DirectBeanMetaProperty.ofReadWrite(
                 this, "listWildPublic", MutableTypes.class, (Class) List.class);
         /**
          * The meta-properties.

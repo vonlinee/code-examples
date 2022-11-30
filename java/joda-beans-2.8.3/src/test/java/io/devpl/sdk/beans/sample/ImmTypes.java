@@ -26,9 +26,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableList;
@@ -265,37 +265,37 @@ public final class ImmTypes<T extends Comparable<T>> implements ImmutableBean {
          * The meta-property for the {@code listWild} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<?>> listWild = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<?>> listWild = DirectBeanMetaProperty.ofImmutable(
                 this, "listWild", ImmTypes.class, (Class) ImmutableList.class);
         /**
          * The meta-property for the {@code listWildPublic1} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<?>> listWildPublic1 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<List<?>> listWildPublic1 = DirectBeanMetaProperty.ofImmutable(
                 this, "listWildPublic1", ImmTypes.class, (Class) List.class);
         /**
          * The meta-property for the {@code listWildPublic2} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<?>> listWildPublic2 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<?>> listWildPublic2 = DirectBeanMetaProperty.ofImmutable(
                 this, "listWildPublic2", ImmTypes.class, (Class) ImmutableList.class);
         /**
          * The meta-property for the {@code listWildBuilder1} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<Object>> listWildBuilder1 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<List<Object>> listWildBuilder1 = DirectBeanMetaProperty.ofImmutable(
                 this, "listWildBuilder1", ImmTypes.class, (Class) List.class);
         /**
          * The meta-property for the {@code listWildBuilder2} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<Address>> listWildBuilder2 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<List<Address>> listWildBuilder2 = DirectBeanMetaProperty.ofImmutable(
                 this, "listWildBuilder2", ImmTypes.class, (Class) List.class);
         /**
          * The meta-property for the {@code mapWildBuilder1} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Map<String, Address>> mapWildBuilder1 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Map<String, Address>> mapWildBuilder1 = DirectBeanMetaProperty.ofImmutable(
                 this, "mapWildBuilder1", ImmTypes.class, (Class) Map.class);
         /**
          * The meta-properties.

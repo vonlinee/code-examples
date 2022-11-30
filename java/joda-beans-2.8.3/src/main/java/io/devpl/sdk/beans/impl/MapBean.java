@@ -1,4 +1,4 @@
-package io.devpl.sdk.beans.impl.map;
+package io.devpl.sdk.beans.impl;
 
 import io.devpl.sdk.beans.DynamicBean;
 import io.devpl.sdk.beans.impl.flexi.FlexiBean;

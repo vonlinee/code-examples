@@ -25,11 +25,8 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
-import io.devpl.sdk.beans.impl.direct.DirectBean;
-import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
-import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
+import io.devpl.sdk.beans.impl.direct.*;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 
 /**
  * Mock JavaBean, used for testing.
@@ -350,42 +347,42 @@ public class PrimitiveBean extends DirectBean {
         /**
          * The meta-property for the {@code valueLong} property.
          */
-        private final MetaProperty<Long> valueLong = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Long> valueLong = DirectBeanMetaProperty.ofReadWrite(
                 this, "valueLong", PrimitiveBean.class, Long.TYPE);
         /**
          * The meta-property for the {@code valueInt} property.
          */
-        private final MetaProperty<Integer> valueInt = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Integer> valueInt = DirectBeanMetaProperty.ofReadWrite(
                 this, "valueInt", PrimitiveBean.class, Integer.TYPE);
         /**
          * The meta-property for the {@code valueShort} property.
          */
-        private final MetaProperty<Short> valueShort = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Short> valueShort = DirectBeanMetaProperty.ofReadWrite(
                 this, "valueShort", PrimitiveBean.class, Short.TYPE);
         /**
          * The meta-property for the {@code valueByte} property.
          */
-        private final MetaProperty<Byte> valueByte = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Byte> valueByte = DirectBeanMetaProperty.ofReadWrite(
                 this, "valueByte", PrimitiveBean.class, Byte.TYPE);
         /**
          * The meta-property for the {@code valueDouble} property.
          */
-        private final MetaProperty<Double> valueDouble = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Double> valueDouble = DirectBeanMetaProperty.ofReadWrite(
                 this, "valueDouble", PrimitiveBean.class, Double.TYPE);
         /**
          * The meta-property for the {@code valueFloat} property.
          */
-        private final MetaProperty<Float> valueFloat = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Float> valueFloat = DirectBeanMetaProperty.ofReadWrite(
                 this, "valueFloat", PrimitiveBean.class, Float.TYPE);
         /**
          * The meta-property for the {@code valueChar} property.
          */
-        private final MetaProperty<Character> valueChar = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Character> valueChar = DirectBeanMetaProperty.ofReadWrite(
                 this, "valueChar", PrimitiveBean.class, Character.TYPE);
         /**
          * The meta-property for the {@code valueBoolean} property.
          */
-        private final MetaProperty<Boolean> valueBoolean = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Boolean> valueBoolean = DirectBeanMetaProperty.ofReadWrite(
                 this, "valueBoolean", PrimitiveBean.class, Boolean.TYPE);
         /**
          * The meta-properties.

@@ -27,7 +27,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -135,7 +135,7 @@ final class ImmPackageScoped implements ImmutableBean {
         /**
          * The meta-property for the {@code name} property.
          */
-        private final MetaProperty<String> name = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> name = DirectBeanMetaProperty.ofImmutable(
                 this, "name", ImmPackageScoped.class, String.class);
         /**
          * The meta-properties.

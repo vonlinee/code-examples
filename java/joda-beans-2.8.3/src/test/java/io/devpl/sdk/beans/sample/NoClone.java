@@ -26,8 +26,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -138,7 +138,7 @@ public class NoClone
         /**
          * The meta-property for the {@code dummyProperty} property.
          */
-        private final MetaProperty<String> dummyProperty = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> dummyProperty = DirectBeanMetaProperty.ofReadWrite(
                 this, "dummyProperty", NoClone.class, String.class);
         /**
          * The meta-properties.

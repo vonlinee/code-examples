@@ -25,11 +25,8 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
-import io.devpl.sdk.beans.impl.direct.DirectBean;
-import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
-import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
+import io.devpl.sdk.beans.impl.direct.*;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 
 /**
  * Mock pair, used for testing.
@@ -177,12 +174,12 @@ public class Pair  extends  DirectBean {
         /**
          * The meta-property for the {@code first} property.
          */
-        private final MetaProperty<Object> first = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Object> first = DirectBeanMetaProperty.ofReadWrite(
                 this, "first", Pair.class, Object.class);
         /**
          * The meta-property for the {@code second} property.
          */
-        private final MetaProperty<Object> second = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Object> second = DirectBeanMetaProperty.ofReadWrite(
                 this, "second", Pair.class, Object.class);
         /**
          * The meta-properties.

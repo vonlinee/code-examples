@@ -28,7 +28,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -201,22 +201,22 @@ public final class ImmDeprecated implements Cloneable, ImmutableBean {
         /**
          * The meta-property for the {@code deprecatedBoth} property.
          */
-        private final MetaProperty<String> deprecatedBoth = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> deprecatedBoth = DirectBeanMetaProperty.ofImmutable(
                 this, "deprecatedBoth", ImmDeprecated.class, String.class);
         /**
          * The meta-property for the {@code deprecatedJavadoc} property.
          */
-        private final MetaProperty<String> deprecatedJavadoc = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> deprecatedJavadoc = DirectBeanMetaProperty.ofImmutable(
                 this, "deprecatedJavadoc", ImmDeprecated.class, String.class);
         /**
          * The meta-property for the {@code deprecatedAnnotation} property.
          */
-        private final MetaProperty<String> deprecatedAnnotation = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> deprecatedAnnotation = DirectBeanMetaProperty.ofImmutable(
                 this, "deprecatedAnnotation", ImmDeprecated.class, String.class);
         /**
          * The meta-property for the {@code deprecatedOptional} property.
          */
-        private final MetaProperty<String> deprecatedOptional = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> deprecatedOptional = DirectBeanMetaProperty.ofImmutable(
                 this, "deprecatedOptional", ImmDeprecated.class, String.class);
         /**
          * The meta-properties.

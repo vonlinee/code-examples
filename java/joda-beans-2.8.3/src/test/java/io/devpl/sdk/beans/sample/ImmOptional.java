@@ -27,9 +27,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.base.Optional;
@@ -256,38 +256,38 @@ public final class ImmOptional implements ImmutableBean {
          * The meta-property for the {@code optString} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Optional<String>> optString = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Optional<String>> optString = DirectBeanMetaProperty.ofImmutable(
                 this, "optString", ImmOptional.class, (Class) Optional.class);
         /**
          * The meta-property for the {@code optStringEmpty} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Optional<String>> optStringEmpty = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Optional<String>> optStringEmpty = DirectBeanMetaProperty.ofImmutable(
                 this, "optStringEmpty", ImmOptional.class, (Class) Optional.class);
         /**
          * The meta-property for the {@code optStringGetter} property.
          */
-        private final MetaProperty<String> optStringGetter = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> optStringGetter = DirectBeanMetaProperty.ofImmutable(
                 this, "optStringGetter", ImmOptional.class, String.class);
         /**
          * The meta-property for the {@code optLongGetter} property.
          */
-        private final MetaProperty<Long> optLongGetter = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Long> optLongGetter = DirectBeanMetaProperty.ofImmutable(
                 this, "optLongGetter", ImmOptional.class, Long.class);
         /**
          * The meta-property for the {@code optIntGetter} property.
          */
-        private final MetaProperty<Integer> optIntGetter = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Integer> optIntGetter = DirectBeanMetaProperty.ofImmutable(
                 this, "optIntGetter", ImmOptional.class, Integer.class);
         /**
          * The meta-property for the {@code optDoubleGetter} property.
          */
-        private final MetaProperty<Double> optDoubleGetter = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Double> optDoubleGetter = DirectBeanMetaProperty.ofImmutable(
                 this, "optDoubleGetter", ImmOptional.class, Double.class);
         /**
          * The meta-property for the {@code twelve} property.
          */
-        private final MetaProperty<Integer> twelve = DirectMetaProperty.ofDerived(
+        private final MetaProperty<Integer> twelve = DirectBeanMetaProperty.ofDerived(
                 this, "twelve", ImmOptional.class, Integer.TYPE);
         /**
          * The meta-properties.

@@ -26,9 +26,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -166,17 +166,17 @@ public class ImmPersonNonFinal implements ImmutableBean {
         /**
          * The meta-property for the {@code forename} property.
          */
-        private final MetaProperty<String> forename = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> forename = DirectBeanMetaProperty.ofImmutable(
                 this, "forename", ImmPersonNonFinal.class, String.class);
         /**
          * The meta-property for the {@code surname} property.
          */
-        private final MetaProperty<String> surname = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> surname = DirectBeanMetaProperty.ofImmutable(
                 this, "surname", ImmPersonNonFinal.class, String.class);
         /**
          * The meta-property for the {@code age} property.
          */
-        private final MetaProperty<Integer> age = DirectMetaProperty.ofDerived(
+        private final MetaProperty<Integer> age = DirectBeanMetaProperty.ofDerived(
                 this, "age", ImmPersonNonFinal.class, Integer.TYPE);
         /**
          * The meta-properties.

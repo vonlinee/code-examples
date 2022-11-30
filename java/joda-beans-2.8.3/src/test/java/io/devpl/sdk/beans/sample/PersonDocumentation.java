@@ -26,7 +26,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -142,7 +142,7 @@ public class PersonDocumentation extends Documentation<Person> {
         /**
          * The meta-property for the {@code name} property.
          */
-        private final MetaProperty<String> name = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> name = DirectBeanMetaProperty.ofReadWrite(
                 this, "name", PersonDocumentation.class, String.class);
         /**
          * The meta-properties.

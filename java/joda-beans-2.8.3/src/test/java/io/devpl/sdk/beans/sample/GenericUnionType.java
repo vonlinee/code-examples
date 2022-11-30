@@ -27,8 +27,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -189,13 +189,13 @@ public class GenericUnionType<T extends Number & Serializable & Cloneable> imple
         /**
          * The meta-property for the {@code name} property.
          */
-        private final MetaProperty<String> name = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> name = DirectBeanMetaProperty.ofReadWrite(
                 this, "name", GenericUnionType.class, String.class);
         /**
          * The meta-property for the {@code value} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<T> value = (DirectMetaProperty) DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<T> value = (DirectBeanMetaProperty) DirectBeanMetaProperty.ofReadWrite(
                 this, "value", GenericUnionType.class, Object.class);
         /**
          * The meta-properties.

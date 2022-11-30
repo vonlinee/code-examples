@@ -29,7 +29,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableList;
@@ -239,28 +239,28 @@ public final class ImmTreeNode implements ImmutableBean {
         /**
          * The meta-property for the {@code name} property.
          */
-        private final MetaProperty<String> name = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> name = DirectBeanMetaProperty.ofImmutable(
                 this, "name", ImmTreeNode.class, String.class);
         /**
          * The meta-property for the {@code child1} property.
          */
-        private final MetaProperty<ImmTreeNode> child1 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmTreeNode> child1 = DirectBeanMetaProperty.ofImmutable(
                 this, "child1", ImmTreeNode.class, ImmTreeNode.class);
         /**
          * The meta-property for the {@code child2} property.
          */
-        private final MetaProperty<ImmTreeNode> child2 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmTreeNode> child2 = DirectBeanMetaProperty.ofImmutable(
                 this, "child2", ImmTreeNode.class, ImmTreeNode.class);
         /**
          * The meta-property for the {@code child3} property.
          */
-        private final MetaProperty<ImmTreeNode> child3 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmTreeNode> child3 = DirectBeanMetaProperty.ofImmutable(
                 this, "child3", ImmTreeNode.class, ImmTreeNode.class);
         /**
          * The meta-property for the {@code childList} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<ImmTreeNode>> childList = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<List<ImmTreeNode>> childList = DirectBeanMetaProperty.ofImmutable(
                 this, "childList", ImmTreeNode.class, (Class) List.class);
         /**
          * The meta-properties.

@@ -26,11 +26,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.TestValidateBean;
-import io.devpl.sdk.beans.impl.direct.DirectBean;
-import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
-import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
+import io.devpl.sdk.beans.impl.direct.*;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 
 /**
  * Mock used for test equals.
@@ -290,27 +287,27 @@ public class ValidateBean extends DirectBean {
         /**
          * The meta-property for the {@code first} property.
          */
-        private final MetaProperty<String> first = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> first = DirectBeanMetaProperty.ofReadWrite(
                 this, "first", ValidateBean.class, String.class);
         /**
          * The meta-property for the {@code second} property.
          */
-        private final MetaProperty<String> second = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> second = DirectBeanMetaProperty.ofReadWrite(
                 this, "second", ValidateBean.class, String.class);
         /**
          * The meta-property for the {@code third} property.
          */
-        private final MetaProperty<String> third = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> third = DirectBeanMetaProperty.ofReadWrite(
                 this, "third", ValidateBean.class, String.class);
         /**
          * The meta-property for the {@code fourth} property.
          */
-        private final MetaProperty<String> fourth = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> fourth = DirectBeanMetaProperty.ofReadWrite(
                 this, "fourth", ValidateBean.class, String.class);
         /**
          * The meta-property for the {@code fifth} property.
          */
-        private final MetaProperty<String> fifth = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> fifth = DirectBeanMetaProperty.ofReadWrite(
                 this, "fifth", ValidateBean.class, String.class);
         /**
          * The meta-properties.

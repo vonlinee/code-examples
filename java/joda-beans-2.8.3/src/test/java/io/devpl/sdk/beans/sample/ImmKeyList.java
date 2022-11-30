@@ -29,7 +29,7 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableList;
@@ -142,7 +142,7 @@ public final class ImmKeyList implements ImmutableBean, Serializable {
          * The meta-property for the {@code keys} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableList<IKey>> keys = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableList<IKey>> keys = DirectBeanMetaProperty.ofImmutable(
                 this, "keys", ImmKeyList.class, (Class) ImmutableList.class);
         /**
          * The meta-properties.

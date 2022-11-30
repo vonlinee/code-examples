@@ -31,9 +31,9 @@ import io.devpl.sdk.beans.ImmutableBean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 import org.joda.collect.grid.Grid;
 import org.joda.collect.grid.ImmutableGrid;
@@ -643,144 +643,144 @@ public final class ImmAddress implements ImmutableBean, Serializable {
         /**
          * The meta-property for the {@code number} property.
          */
-        private final MetaProperty<Integer> number = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Integer> number = DirectBeanMetaProperty.ofImmutable(
                 this, "number", ImmAddress.class, Integer.TYPE);
         /**
          * The meta-property for the {@code street} property.
          */
-        private final MetaProperty<String> street = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> street = DirectBeanMetaProperty.ofImmutable(
                 this, "street", ImmAddress.class, String.class);
         /**
          * The meta-property for the {@code city} property.
          */
-        private final MetaProperty<String> city = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String> city = DirectBeanMetaProperty.ofImmutable(
                 this, "city", ImmAddress.class, String.class);
         /**
          * The meta-property for the {@code abstractNumber} property.
          */
-        private final MetaProperty<Number> abstractNumber = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Number> abstractNumber = DirectBeanMetaProperty.ofImmutable(
                 this, "abstractNumber", ImmAddress.class, Number.class);
         /**
          * The meta-property for the {@code data} property.
          */
-        private final MetaProperty<byte[]> data = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<byte[]> data = DirectBeanMetaProperty.ofImmutable(
                 this, "data", ImmAddress.class, byte[].class);
         /**
          * The meta-property for the {@code array2d} property.
          */
-        private final MetaProperty<String[][]> array2d = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<String[][]> array2d = DirectBeanMetaProperty.ofImmutable(
                 this, "array2d", ImmAddress.class, String[][].class);
         /**
          * The meta-property for the {@code owner} property.
          */
-        private final MetaProperty<ImmPerson> owner = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmPerson> owner = DirectBeanMetaProperty.ofImmutable(
                 this, "owner", ImmAddress.class, ImmPerson.class);
         /**
          * The meta-property for the {@code object1} property.
          */
-        private final MetaProperty<Object> object1 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Object> object1 = DirectBeanMetaProperty.ofImmutable(
                 this, "object1", ImmAddress.class, Object.class);
         /**
          * The meta-property for the {@code object2} property.
          */
-        private final MetaProperty<Object> object2 = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Object> object2 = DirectBeanMetaProperty.ofImmutable(
                 this, "object2", ImmAddress.class, Object.class);
         /**
          * The meta-property for the {@code risk} property.
          */
-        private final MetaProperty<Risk> risk = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Risk> risk = DirectBeanMetaProperty.ofImmutable(
                 this, "risk", ImmAddress.class, Risk.class);
         /**
          * The meta-property for the {@code riskLevel} property.
          */
-        private final MetaProperty<RiskLevel> riskLevel = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<RiskLevel> riskLevel = DirectBeanMetaProperty.ofImmutable(
                 this, "riskLevel", ImmAddress.class, RiskLevel.class);
         /**
          * The meta-property for the {@code riskLevels} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<EnumSet<RiskLevel>> riskLevels = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<EnumSet<RiskLevel>> riskLevels = DirectBeanMetaProperty.ofImmutable(
                 this, "riskLevels", ImmAddress.class, (Class) EnumSet.class);
         /**
          * The meta-property for the {@code serializable} property.
          */
-        private final MetaProperty<Serializable> serializable = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<Serializable> serializable = DirectBeanMetaProperty.ofImmutable(
                 this, "serializable", ImmAddress.class, Serializable.class);
         /**
          * The meta-property for the {@code objectInMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<String, Object>> objectInMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<String, Object>> objectInMap = DirectBeanMetaProperty.ofImmutable(
                 this, "objectInMap", ImmAddress.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code listInMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<String, List<String>>> listInMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<String, List<String>>> listInMap = DirectBeanMetaProperty.ofImmutable(
                 this, "listInMap", ImmAddress.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code listNumericInMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<String, List<Integer>>> listNumericInMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<String, List<Integer>>> listNumericInMap = DirectBeanMetaProperty.ofImmutable(
                 this, "listNumericInMap", ImmAddress.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code listInListInMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<String, List<List<Integer>>>> listInListInMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<String, List<List<Integer>>>> listInListInMap = DirectBeanMetaProperty.ofImmutable(
                 this, "listInListInMap", ImmAddress.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code objectListInListInMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<String, List<List<Object>>>> objectListInListInMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<String, List<List<Object>>>> objectListInListInMap = DirectBeanMetaProperty.ofImmutable(
                 this, "objectListInListInMap", ImmAddress.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code mapInMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<ImmPerson, Map<String, ImmPerson>>> mapInMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<ImmPerson, Map<String, ImmPerson>>> mapInMap = DirectBeanMetaProperty.ofImmutable(
                 this, "mapInMap", ImmAddress.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code simpleTable} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableTable<Integer, Integer, String>> simpleTable = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableTable<Integer, Integer, String>> simpleTable = DirectBeanMetaProperty.ofImmutable(
                 this, "simpleTable", ImmAddress.class, (Class) ImmutableTable.class);
         /**
          * The meta-property for the {@code compoundTable} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableTable<Integer, Integer, ImmPerson>> compoundTable = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableTable<Integer, Integer, ImmPerson>> compoundTable = DirectBeanMetaProperty.ofImmutable(
                 this, "compoundTable", ImmAddress.class, (Class) ImmutableTable.class);
         /**
          * The meta-property for the {@code sparseGrid} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableGrid<ImmPerson>> sparseGrid = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableGrid<ImmPerson>> sparseGrid = DirectBeanMetaProperty.ofImmutable(
                 this, "sparseGrid", ImmAddress.class, (Class) ImmutableGrid.class);
         /**
          * The meta-property for the {@code denseGrid} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableGrid<ImmPerson>> denseGrid = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableGrid<ImmPerson>> denseGrid = DirectBeanMetaProperty.ofImmutable(
                 this, "denseGrid", ImmAddress.class, (Class) ImmutableGrid.class);
         /**
          * The meta-property for the {@code beanBeanMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<ImmutableMap<ImmPerson, ImmAddress>> beanBeanMap = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<ImmutableMap<ImmPerson, ImmAddress>> beanBeanMap = DirectBeanMetaProperty.ofImmutable(
                 this, "beanBeanMap", ImmAddress.class, (Class) ImmutableMap.class);
         /**
          * The meta-property for the {@code doubleVector} property.
          */
-        private final MetaProperty<double[]> doubleVector = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<double[]> doubleVector = DirectBeanMetaProperty.ofImmutable(
                 this, "doubleVector", ImmAddress.class, double[].class);
         /**
          * The meta-property for the {@code matrix} property.
          */
-        private final MetaProperty<double[][]> matrix = DirectMetaProperty.ofImmutable(
+        private final MetaProperty<double[][]> matrix = DirectBeanMetaProperty.ofImmutable(
                 this, "matrix", ImmAddress.class, double[][].class);
         /**
          * The meta-properties.

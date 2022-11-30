@@ -26,8 +26,8 @@ import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
@@ -266,27 +266,27 @@ public class WeirdFormat
         /**
          * The meta-property for the {@code forename1} property.
          */
-        private final MetaProperty<String> forename1 = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> forename1 = DirectBeanMetaProperty.ofReadWrite(
                 this, "forename1", WeirdFormat.class, String.class);
         /**
          * The meta-property for the {@code forename2} property.
          */
-        private final MetaProperty<String> forename2 = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> forename2 = DirectBeanMetaProperty.ofReadWrite(
                 this, "forename2", WeirdFormat.class, String.class);
         /**
          * The meta-property for the {@code forename3} property.
          */
-        private final MetaProperty<String> forename3 = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> forename3 = DirectBeanMetaProperty.ofReadWrite(
                 this, "forename3", WeirdFormat.class, String.class);
         /**
          * The meta-property for the {@code forename4} property.
          */
-        private final MetaProperty<String> forename4 = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> forename4 = DirectBeanMetaProperty.ofReadWrite(
                 this, "forename4", WeirdFormat.class, String.class);
         /**
          * The meta-property for the {@code forename5} property.
          */
-        private final MetaProperty<String> forename5 = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> forename5 = DirectBeanMetaProperty.ofReadWrite(
                 this, "forename5", WeirdFormat.class, String.class);
         /**
          * The meta-properties.

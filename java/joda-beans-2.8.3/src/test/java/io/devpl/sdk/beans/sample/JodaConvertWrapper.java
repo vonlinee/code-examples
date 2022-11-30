@@ -25,11 +25,8 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
-import io.devpl.sdk.beans.impl.direct.DirectBean;
-import io.devpl.sdk.beans.impl.direct.DirectBeanBuilder;
-import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
-import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
+import io.devpl.sdk.beans.impl.direct.*;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 
 /**
  * Wraps {@code JodaConvertBean}, used for testing.
@@ -179,12 +176,12 @@ public class JodaConvertWrapper extends DirectBean {
         /**
          * The meta-property for the {@code bean} property.
          */
-        private final MetaProperty<JodaConvertBean> bean = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<JodaConvertBean> bean = DirectBeanMetaProperty.ofReadWrite(
                 this, "bean", JodaConvertWrapper.class, JodaConvertBean.class);
         /**
          * The meta-property for the {@code description} property.
          */
-        private final MetaProperty<String> description = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> description = DirectBeanMetaProperty.ofReadWrite(
                 this, "description", JodaConvertWrapper.class, String.class);
         /**
          * The meta-properties.

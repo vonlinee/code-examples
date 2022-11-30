@@ -28,9 +28,9 @@ import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
+import io.devpl.sdk.beans.impl.direct.DirectBeanMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectFieldsBeanBuilder;
 import io.devpl.sdk.beans.impl.direct.DirectMetaBean;
-import io.devpl.sdk.beans.impl.direct.DirectMetaProperty;
 import io.devpl.sdk.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableList;
@@ -360,40 +360,40 @@ public class SimplePersonWithBuilderNonFinal implements Cloneable, Bean {
         /**
          * The meta-property for the {@code forename} property.
          */
-        private final MetaProperty<String> forename = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<String> forename = DirectBeanMetaProperty.ofReadWrite(
                 this, "forename", SimplePersonWithBuilderNonFinal.class, String.class);
         /**
          * The meta-property for the {@code surname} property.
          */
-        private final MetaProperty<String> surname = DirectMetaProperty.ofReadOnlyBuildable(
+        private final MetaProperty<String> surname = DirectBeanMetaProperty.ofReadOnlyBuildable(
                 this, "surname", SimplePersonWithBuilderNonFinal.class, String.class);
         /**
          * The meta-property for the {@code numberOfCars} property.
          */
-        private final MetaProperty<Integer> numberOfCars = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Integer> numberOfCars = DirectBeanMetaProperty.ofReadWrite(
                 this, "numberOfCars", SimplePersonWithBuilderNonFinal.class, Integer.TYPE);
         /**
          * The meta-property for the {@code addressList} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<Address>> addressList = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<List<Address>> addressList = DirectBeanMetaProperty.ofReadWrite(
                 this, "addressList", SimplePersonWithBuilderNonFinal.class, (Class) List.class);
         /**
          * The meta-property for the {@code otherAddressMap} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<Map<String, Address>> otherAddressMap = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Map<String, Address>> otherAddressMap = DirectBeanMetaProperty.ofReadWrite(
                 this, "otherAddressMap", SimplePersonWithBuilderNonFinal.class, (Class) Map.class);
         /**
          * The meta-property for the {@code addressesList} property.
          */
         @SuppressWarnings({"unchecked", "rawtypes" })
-        private final MetaProperty<List<List<Address>>> addressesList = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<List<List<Address>>> addressesList = DirectBeanMetaProperty.ofReadWrite(
                 this, "addressesList", SimplePersonWithBuilderNonFinal.class, (Class) List.class);
         /**
          * The meta-property for the {@code mainAddress} property.
          */
-        private final MetaProperty<Address> mainAddress = DirectMetaProperty.ofReadWrite(
+        private final MetaProperty<Address> mainAddress = DirectBeanMetaProperty.ofReadWrite(
                 this, "mainAddress", SimplePersonWithBuilderNonFinal.class, Address.class);
         /**
          * The meta-properties.
