@@ -1,19 +1,14 @@
 package io.devpl.sdk.beans.impl.flexi;
 
-import java.io.ObjectStreamException;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.regex.Pattern;
-
-import io.devpl.sdk.beans.DynamicBean;
 import io.devpl.sdk.beans.DynamicMetaBean;
 import io.devpl.sdk.beans.Property;
 import io.devpl.sdk.beans.impl.MapBean;
 import io.devpl.sdk.beans.impl.StandardProperty;
+
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Implementation of a fully dynamic {@code Bean}.
@@ -30,7 +25,7 @@ import io.devpl.sdk.beans.impl.StandardProperty;
  * Alternate way to implement this would be to create a list/map of real property
  * objects which could then be properly typed
  * 实现这一点的另一种方法是创建属性对象的列表/映射，然后可以使用正确的类型
- *
+ * <p>
  * MapBean和FlexiBean的区别
  */
 public final class FlexiBean implements MapBean, Serializable {
@@ -146,7 +141,15 @@ public final class FlexiBean implements MapBean, Serializable {
      * @throws ClassCastException if the type is incorrect
      */
     public <T> T get(String propertyName, Class<T> type) {
+        // 如果方法被 @HotSpotIntrinsicCandidate 标注，表示该方法在HotSpot中有一套高效的实现，
+        // 运行时可能会替换JDK的源码实现。
+        // https://blog.csdn.net/wrz_1028/article/details/107433181
         return type.cast(get(propertyName));
+    }
+
+    @Override
+    public Object getObject(String key) {
+        return data.get(key);
     }
 
     /**
@@ -160,86 +163,6 @@ public final class FlexiBean implements MapBean, Serializable {
     public String getString(String propertyName) {
         Object obj = get(propertyName);
         return obj != null ? obj.toString() : null;
-    }
-
-    /**
-     * Gets the value of the property as a {@code boolean}.
-     * @param propertyName the property name, not empty
-     * @return the value of the property
-     * @throws ClassCastException   if the value is not compatible
-     * @throws NullPointerException if the property does not exist or is null
-     */
-    public boolean getBoolean(String propertyName) {
-        return (Boolean) get(propertyName);
-    }
-
-    /**
-     * Gets the value of the property as a {@code int}.
-     * @param propertyName the property name, not empty
-     * @return the value of the property
-     * @throws ClassCastException   if the value is not compatible
-     * @throws NullPointerException if the property does not exist or is null
-     */
-    public int getInt(String propertyName) {
-        return ((Number) get(propertyName)).intValue();
-    }
-
-    /**
-     * Gets the value of the property as a {@code int} using a default value.
-     * @param propertyName the property name, not empty
-     * @param defaultValue the default value for null or invalid property
-     * @return the value of the property
-     * @throws ClassCastException if the value is not compatible
-     */
-    public int getInt(String propertyName, int defaultValue) {
-        Object obj = get(propertyName);
-        return obj != null ? ((Number) get(propertyName)).intValue() : defaultValue;
-    }
-
-    /**
-     * Gets the value of the property as a {@code long}.
-     * @param propertyName the property name, not empty
-     * @return the value of the property
-     * @throws ClassCastException   if the value is not compatible
-     * @throws NullPointerException if the property does not exist or is null
-     */
-    public long getLong(String propertyName) {
-        return ((Number) get(propertyName)).longValue();
-    }
-
-    /**
-     * Gets the value of the property as a {@code long} using a default value.
-     * @param propertyName the property name, not empty
-     * @param defaultValue the default value for null or invalid property
-     * @return the value of the property
-     * @throws ClassCastException if the value is not compatible
-     */
-    public long getLong(String propertyName, long defaultValue) {
-        Object obj = get(propertyName);
-        return obj != null ? ((Number) get(propertyName)).longValue() : defaultValue;
-    }
-
-    /**
-     * Gets the value of the property as a {@code double}.
-     * @param propertyName the property name, not empty
-     * @return the value of the property
-     * @throws ClassCastException   if the value is not compatible
-     * @throws NullPointerException if the property does not exist or is null
-     */
-    public double getDouble(String propertyName) {
-        return ((Number) get(propertyName)).doubleValue();
-    }
-
-    /**
-     * Gets the value of the property as a {@code double} using a default value.
-     * @param propertyName the property name, not empty
-     * @param defaultValue the default value for null or invalid property
-     * @return the value of the property
-     * @throws ClassCastException if the value is not compatible
-     */
-    public double getDouble(String propertyName, double defaultValue) {
-        Object obj = get(propertyName);
-        return obj != null ? ((Number) get(propertyName)).doubleValue() : defaultValue;
     }
 
     //-----------------------------------------------------------------------

@@ -1,39 +1,22 @@
-/*
- *  Copyright 2001-present Stephen Colebourne
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
 package io.devpl.sdk.beans.impl;
-
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import io.devpl.sdk.beans.Bean;
 import io.devpl.sdk.beans.BeanBuilder;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 /**
  * Implementation of {@code BeanBuilder} that buffers data in a local map.
  * <p>
  * This is useful for cases where the builder data might be manipulated before
  * the final build. The buffer can be directly mutated.
- * 
- * @param <T>  the bean type
+ * @param <T> the bean type
  */
-public class BufferingBeanBuilder<T extends Bean>
-        implements BeanBuilder<T> {
+public class BufferingBeanBuilder<T extends Bean> implements BeanBuilder<T> {
 
     /**
      * The target meta-bean.
@@ -45,10 +28,10 @@ public class BufferingBeanBuilder<T extends Bean>
     private final ConcurrentMap<MetaProperty<?>, Object> buffer = new ConcurrentHashMap<>();
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructs the builder wrapping the target bean.
-     * 
-     * @param metaBean  the target meta-bean, not null
+     * @param metaBean the target meta-bean, not null
      * @return a new untyped builder, not null
      */
     public static BufferingBeanBuilder<?> of(MetaBean metaBean) {
@@ -56,10 +39,10 @@ public class BufferingBeanBuilder<T extends Bean>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructs the builder wrapping the target bean.
-     * 
-     * @param metaBean  the target meta-bean, not null
+     * @param metaBean the target meta-bean, not null
      */
     public BufferingBeanBuilder(MetaBean metaBean) {
         if (metaBean == null) {
@@ -69,9 +52,9 @@ public class BufferingBeanBuilder<T extends Bean>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the meta-beans.
-     * 
      * @return the meta-bean, not null
      */
     public MetaBean getMetaBean() {
@@ -82,7 +65,6 @@ public class BufferingBeanBuilder<T extends Bean>
      * Gets the buffer holding the state of the builder.
      * <p>
      * The buffer may be mutated.
-     * 
      * @return the mutable buffer, not null
      */
     public ConcurrentMap<MetaProperty<?>, Object> getBuffer() {
@@ -90,10 +72,10 @@ public class BufferingBeanBuilder<T extends Bean>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the buffered value associated with the specified property name.
-     * 
-     * @param propertyName  the property name, not null
+     * @param propertyName the property name, not null
      * @return the current value in the builder, null if not found or value is null
      */
     @Override
@@ -103,8 +85,7 @@ public class BufferingBeanBuilder<T extends Bean>
 
     /**
      * Gets the buffered value associated with the specified property name.
-     * 
-     * @param metaProperty  the meta-property, not null
+     * @param metaProperty the meta-property, not null
      * @return the current value in the builder, null if not found or value is null
      */
     @Override
@@ -139,9 +120,9 @@ public class BufferingBeanBuilder<T extends Bean>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns a string that summarises the builder.
-     * 
      * @return a summary string, not null
      */
     @Override

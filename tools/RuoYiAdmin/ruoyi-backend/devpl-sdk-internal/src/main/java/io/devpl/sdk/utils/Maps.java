@@ -10,7 +10,10 @@ import java.util.function.Predicate;
  * Map相关工具类
  * @since 0.0.1
  */
-public abstract class Maps {
+public final class Maps {
+
+    private Maps() {
+    }
 
     /**
      * 默认初始大小
@@ -746,9 +749,9 @@ public abstract class Maps {
      * @param map
      * @param val
      * @param keys
-     * @return
      * @param <K>
      * @param <V>
+     * @return
      */
     public static <K, V> Map<K, V> put(Map<K, V> map, V val, final K... keys) {
         if (keys.length == 0) {

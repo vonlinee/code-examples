@@ -5,6 +5,8 @@ import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.impl.flexi.FlexiBean;
 import io.devpl.sdk.beans.impl.map.BeanMap;
 
+import java.util.Set;
+
 public class Main {
     public static void main(String[] args) {
         FlexiBean bean = new FlexiBean();
@@ -15,7 +17,6 @@ public class Main {
         BeanMap map = new BeanMap();
 
         MetaProperty<String> name = dynamicMetaBean.metaProperty("name");
-
         System.out.println(name.getString(map));
     }
 }

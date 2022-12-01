@@ -207,6 +207,7 @@
         <module>devpl-spring</module>
         <module>devpl-sdk-internal</module>
         <module>devpl-auth</module>
+        <module>devpl-business</module>
     </modules>
     <packaging>pom</packaging>
 

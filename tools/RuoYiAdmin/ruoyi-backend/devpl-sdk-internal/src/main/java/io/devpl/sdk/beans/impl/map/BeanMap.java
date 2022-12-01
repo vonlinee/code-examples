@@ -6,9 +6,10 @@ import io.devpl.sdk.beans.impl.MapBean;
 import io.devpl.sdk.beans.impl.StandardProperty;
 import io.devpl.sdk.beans.impl.flexi.FlexiBean;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * Implementation of a fully dynamic {@code Bean} based on an exposed {@code Map}.
@@ -18,7 +19,7 @@ import java.util.Set;
  * This class extends {@link HashMap}, allowing it to be used wherever a map is.
  * See {@link FlexiBean} for a map-like bean implementation that is more controlled.
  */
-public class BeanMap extends HashMap<String, Object> implements MapBean {
+public final class BeanMap extends HashMap<String, Object> implements MapBean {
 
     /**
      * Serialization version.
@@ -43,6 +44,7 @@ public class BeanMap extends HashMap<String, Object> implements MapBean {
      * Creates an instance.
      */
     public BeanMap() {
+//        Collections.emptyList();
     }
 
     /**
@@ -103,5 +105,10 @@ public class BeanMap extends HashMap<String, Object> implements MapBean {
     @Override
     public String toString() {
         return getClass().getSimpleName() + super.toString();
+    }
+
+    @Override
+    public Object getObject(String key) {
+        return get(key);
     }
 }

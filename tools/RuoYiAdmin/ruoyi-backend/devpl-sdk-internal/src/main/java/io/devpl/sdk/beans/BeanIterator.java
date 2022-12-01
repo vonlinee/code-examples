@@ -44,7 +44,11 @@ final class BeanIterator implements Iterator<Bean> {
         // alternative is to insert into stack at a fixed index (lots of array copying)
         Deque<Bean> temp = new ArrayDeque<>(32);
         for (MetaProperty<?> mp : current.metaBean().metaPropertyIterable()) {
-            findChildBeans(mp.get(current), mp, current.getClass(), temp);
+            try {
+                findChildBeans(mp.get(current), mp, current.getClass(), temp);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
         stack.addAll(temp);
         return current;

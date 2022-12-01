@@ -129,7 +129,7 @@ public interface MetaProperty<P> {
      * @throws ClassCastException            if the bean is of an incorrect type
      * @throws UnsupportedOperationException if the property is write-only
      */
-    P get(Bean bean) throws IllegalAccessException;
+    P get(Bean bean);
 
     /**
      * Sets the value of the property on the specified bean.
@@ -162,11 +162,7 @@ public interface MetaProperty<P> {
      */
     default P put(Bean bean, Object value) {
         P old;
-        try {
-            old = get(bean);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        old = get(bean);
         set(bean, value);
         return old;
     }
@@ -211,11 +207,7 @@ public interface MetaProperty<P> {
      */
     default String getString(Bean bean, StringConvert stringConvert) {
         P value;
-        try {
-            value = get(bean);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        value = get(bean);
         return stringConvert.convertToString(propertyType(), value);
     }
 

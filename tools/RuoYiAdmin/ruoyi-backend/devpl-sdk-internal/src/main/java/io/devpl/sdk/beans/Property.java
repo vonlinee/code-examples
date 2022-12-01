@@ -44,12 +44,7 @@ public interface Property<P> {
      * @throws UnsupportedOperationException if the property is write-only
      */
     default P get() {
-        try {
-            return metaProperty().get(bean());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return metaProperty().get(bean());
     }
 
     /**

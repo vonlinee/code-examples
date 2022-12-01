@@ -144,6 +144,13 @@ public interface TypedGetter<K> {
 
     /*-------------------------- 集合类型 start -------------------------------*/
 
+    /**
+     * 获取Map类型
+     * @param key  key
+     * @param <MK> Map的key类型
+     * @param <V>  Map的Value类型
+     * @return
+     */
     <MK, V> Map<MK, V> getMap(K key);
 
     <MK, V> Map<MK, V> getMap(K key, Class<MK> keyType, Class<V> valueType);

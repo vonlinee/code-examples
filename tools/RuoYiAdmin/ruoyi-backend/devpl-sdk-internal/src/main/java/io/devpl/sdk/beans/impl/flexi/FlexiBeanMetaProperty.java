@@ -1,13 +1,13 @@
 package io.devpl.sdk.beans.impl.flexi;
 
-import java.lang.annotation.Annotation;
-import java.util.Collections;
-import java.util.List;
-
 import io.devpl.sdk.beans.Bean;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.PropertyStyle;
 import io.devpl.sdk.beans.impl.StandardMetaProperty;
+
+import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A meta-property using a {@code FlexiBean} for storage.
@@ -70,11 +70,11 @@ final class FlexiBeanMetaProperty extends StandardMetaProperty<Object> {
     }
 
     @Override
-    public Object get(Bean bean) throws IllegalAccessException {
+    public Object get(Bean bean) {
         if (bean instanceof FlexiBean) {
             return ((FlexiBean) bean).propertyGet(name());
         }
-        throw new IllegalAccessException();
+        return null;
     }
 
     @Override
