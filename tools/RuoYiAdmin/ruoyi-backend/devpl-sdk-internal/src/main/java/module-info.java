@@ -14,6 +14,10 @@ open module devpl.sdk.internal {
 
     requires hutool.all;
     requires com.google.gson;
+    requires org.joda.convert;
+    requires com.google.common;
+    requires org.joda.collect;
+    requires org.jetbrains.annotations;
 
     // 表示允许访问指定包的public成员(编译及运行时)
     // 如果反射不直接通过类名调用，只是运行时通过包名使用，则只需open或opens即可
@@ -25,6 +29,7 @@ open module devpl.sdk.internal {
     exports io.devpl.sdk.utils;
     exports io.devpl.sdk.runtime;
     exports io.devpl.sdk.io;
+    exports io.devpl.sdk.beans.impl.map;
 
     // 表示允许运行时通过反射使用
     // open的作用是表示该模块下的所有的包在runtime都允许deep reflection( 包括public及private类型);

@@ -1,31 +1,6 @@
 package io.devpl.sdk.beans;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.function.Function;
-
+import com.google.common.collect.*;
 import io.devpl.sdk.beans.impl.direct.DirectBean;
 import io.devpl.sdk.beans.impl.flexi.FlexiBean;
 import org.joda.collect.grid.DenseGrid;
@@ -34,23 +9,10 @@ import org.joda.collect.grid.ImmutableGrid;
 import org.joda.collect.grid.SparseGrid;
 import org.joda.convert.StringConvert;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.HashBiMap;
-import com.google.common.collect.ImmutableCollection;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.ImmutableTable;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.LinkedHashMultiset;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multiset;
-import com.google.common.collect.SetMultimap;
-import com.google.common.collect.SortedMultiset;
-import com.google.common.collect.Table;
-import com.google.common.collect.TreeMultiset;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Function;
 
 /**
  * A set of utilities to assist when working with beans and properties.
@@ -432,7 +394,11 @@ public final class JodaBeanUtils {
         Map<String, MetaProperty<?>> propertyMap = bean.metaBean().metaPropertyMap();
         Map<String, Object> map = new LinkedHashMap<>(propertyMap.size());
         for (Entry<String, MetaProperty<?>> entry : propertyMap.entrySet()) {
-            map.put(entry.getKey(), entry.getValue().get(bean));
+            try {
+                map.put(entry.getKey(), entry.getValue().get(bean));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
         return Collections.unmodifiableMap(map);
     }
@@ -474,7 +440,12 @@ public final class JodaBeanUtils {
             if (destMeta.metaPropertyExists(sourceProp.name())) {
                 MetaProperty<?> destProp = destMeta.metaProperty(sourceProp.name());
                 if (destProp.propertyType().isAssignableFrom(sourceProp.propertyType())) {
-                    Object sourceValue = sourceProp.get(sourceBean);
+                    Object sourceValue = null;
+                    try {
+                        sourceValue = sourceProp.get(sourceBean);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
                     if (sourceValue != null) {
                         destBuilder.set(destProp, sourceValue);
                     }
@@ -516,7 +487,12 @@ public final class JodaBeanUtils {
         @SuppressWarnings("unchecked") BeanBuilder<T> builder = (BeanBuilder<T>) original.metaBean().builder();
         for (MetaProperty<?> mp : original.metaBean().metaPropertyIterable()) {
             if (mp.style().isBuildable()) {
-                Object value = mp.get(original);
+                Object value = null;
+                try {
+                    value = mp.get(original);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
                 builder.set(mp.name(), Cloner.INSTANCE.clone(value));
             }
         }
@@ -844,8 +820,12 @@ public final class JodaBeanUtils {
             case 1: {
                 MetaProperty<?> ignored = properties[0];
                 for (MetaProperty<?> mp : bean1.metaBean().metaPropertyIterable()) {
-                    if (!ignored.equals(mp) && !JodaBeanUtils.equal(mp.get(bean1), mp.get(bean2))) {
-                        return false;
+                    try {
+                        if (!ignored.equals(mp) && !JodaBeanUtils.equal(mp.get(bean1), mp.get(bean2))) {
+                            return false;
+                        }
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
                     }
                 }
                 return true;
@@ -853,8 +833,12 @@ public final class JodaBeanUtils {
             default:
                 Set<MetaProperty<?>> ignored = new HashSet<>(Arrays.asList(properties));
                 for (MetaProperty<?> mp : bean1.metaBean().metaPropertyIterable()) {
-                    if (!ignored.contains(mp) && !JodaBeanUtils.equal(mp.get(bean1), mp.get(bean2))) {
-                        return false;
+                    try {
+                        if (!ignored.contains(mp) && !JodaBeanUtils.equal(mp.get(bean1), mp.get(bean2))) {
+                            return false;
+                        }
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
                     }
                 }
                 return true;
@@ -895,8 +879,13 @@ public final class JodaBeanUtils {
         notNull(mp1, "MetaProperty 1");
         notNull(mp1, "MetaProperty 2");
         return b -> {
-            Bean first = mp1.get(b);
-            return first != null ? mp2.get(first) : null;
+            try {
+                Bean first = mp1.get(b);
+                return first != null ? mp2.get(first) : null;
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            return null;
         };
     }
 
@@ -916,7 +905,12 @@ public final class JodaBeanUtils {
         notNull(fn1, "MetaProperty 2");
         return b -> {
             Bean first = fn1.apply(b);
-            return first != null ? mp2.get(first) : null;
+            try {
+                return first != null ? mp2.get(first) : null;
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            return null;
         };
     }
 

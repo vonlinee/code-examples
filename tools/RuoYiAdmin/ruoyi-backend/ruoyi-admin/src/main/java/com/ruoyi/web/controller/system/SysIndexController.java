@@ -2,13 +2,10 @@ package com.ruoyi.web.controller.system;
 
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.utils.StringUtils;
-import io.devpl.sdk.beans.BeanMap;
 import io.devpl.spring.web.mvc.RequestInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * 首页

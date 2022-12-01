@@ -10,7 +10,6 @@ import io.devpl.sdk.beans.Bean;
 import io.devpl.sdk.beans.JodaBeanUtils;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * A standard map of properties.
@@ -61,15 +60,13 @@ public final class StandardPropertyMap extends AbstractMap<String, Property<?>> 
     }
 
     @Override
-    @NotNull
     public Set<String> keySet() {
         return bean.metaBean().metaPropertyMap().keySet();
     }
 
     @Override
-    @NotNull
     public Set<Entry<String, Property<?>>> entrySet() {
-        return new AbstractSet<Entry<String, Property<?>>>() {
+        return new AbstractSet<>() {
 
             @Override
             public boolean contains(Object o) {
