@@ -300,6 +300,7 @@ public final class FlexiBean implements MapBean, Serializable {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Property<Object> getProperty(String name) {
         return StandardProperty.of(this, FlexiBeanMetaProperty.of(metaBean, name));
     }

@@ -117,12 +117,7 @@ public final class StandaloneMetaProperty<P> extends StandardMetaProperty<P> {
     //-----------------------------------------------------------------------
     @Override
     public P get(Bean bean) {
-        try {
-            return clazz.cast(metaBean().metaProperty(name()).get(bean));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return clazz.cast(metaBean().metaProperty(name()).get(bean));
     }
 
     @Override

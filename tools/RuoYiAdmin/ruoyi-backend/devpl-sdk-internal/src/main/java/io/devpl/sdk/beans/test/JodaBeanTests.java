@@ -136,8 +136,6 @@ public final class JodaBeanTests {
                 } catch (RuntimeException ex) {
                     // ignore
                     ex.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
                 }
             }
         }
@@ -303,8 +301,6 @@ public final class JodaBeanTests {
                 assertEquals(built.hashCode(), built.hashCode());
             } catch (RuntimeException ex) {
                 // ignore
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
             }
         }
         // cover the remaining equals edge cases

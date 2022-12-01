@@ -16,6 +16,7 @@ public class Main {
 
         BeanMap map = new BeanMap();
 
+
         MetaProperty<String> name = dynamicMetaBean.metaProperty("name");
         System.out.println(name.getString(map));
     }

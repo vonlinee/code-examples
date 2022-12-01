@@ -67,26 +67,24 @@ class FlexiMetaBean implements DynamicMetaBean {
         if (bean.data.isEmpty()) {
             return Collections.emptySet();
         }
-        return new Iterable<MetaProperty<?>>() {
-            @Override
-            public Iterator<MetaProperty<?>> iterator() {
-                Iterator<String> it = bean.data.keySet().iterator();
-                return new Iterator<MetaProperty<?>>() {
-                    @Override
-                    public boolean hasNext() {
-                        return it.hasNext();
-                    }
-                    @Override
-                    public MetaProperty<?> next() {
-                        return FlexiBeanMetaProperty.of(FlexiMetaBean.this, it.next());
-                    }
-                    @Override
-                    public void remove() {
-                        throw new UnsupportedOperationException("Unmodifiable");
-                    }
-                    
-                };
-            }
+        return () -> {
+            Iterator<String> it = bean.data.keySet().iterator();
+            return new Iterator<>() {
+                @Override
+                public boolean hasNext() {
+                    return it.hasNext();
+                }
+
+                @Override
+                public MetaProperty<?> next() {
+                    return FlexiBeanMetaProperty.of(FlexiMetaBean.this, it.next());
+                }
+
+                @Override
+                public void remove() {
+                    throw new UnsupportedOperationException("Unmodifiable");
+                }
+            };
         };
     }
 

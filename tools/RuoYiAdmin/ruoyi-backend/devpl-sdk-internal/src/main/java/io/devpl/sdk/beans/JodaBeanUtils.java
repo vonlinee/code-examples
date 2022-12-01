@@ -394,11 +394,7 @@ public final class JodaBeanUtils {
         Map<String, MetaProperty<?>> propertyMap = bean.metaBean().metaPropertyMap();
         Map<String, Object> map = new LinkedHashMap<>(propertyMap.size());
         for (Entry<String, MetaProperty<?>> entry : propertyMap.entrySet()) {
-            try {
-                map.put(entry.getKey(), entry.getValue().get(bean));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            map.put(entry.getKey(), entry.getValue().get(bean));
         }
         return Collections.unmodifiableMap(map);
     }
@@ -441,11 +437,7 @@ public final class JodaBeanUtils {
                 MetaProperty<?> destProp = destMeta.metaProperty(sourceProp.name());
                 if (destProp.propertyType().isAssignableFrom(sourceProp.propertyType())) {
                     Object sourceValue = null;
-                    try {
-                        sourceValue = sourceProp.get(sourceBean);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
+                    sourceValue = sourceProp.get(sourceBean);
                     if (sourceValue != null) {
                         destBuilder.set(destProp, sourceValue);
                     }
@@ -488,11 +480,7 @@ public final class JodaBeanUtils {
         for (MetaProperty<?> mp : original.metaBean().metaPropertyIterable()) {
             if (mp.style().isBuildable()) {
                 Object value = null;
-                try {
-                    value = mp.get(original);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                value = mp.get(original);
                 builder.set(mp.name(), Cloner.INSTANCE.clone(value));
             }
         }
@@ -820,12 +808,8 @@ public final class JodaBeanUtils {
             case 1: {
                 MetaProperty<?> ignored = properties[0];
                 for (MetaProperty<?> mp : bean1.metaBean().metaPropertyIterable()) {
-                    try {
-                        if (!ignored.equals(mp) && !JodaBeanUtils.equal(mp.get(bean1), mp.get(bean2))) {
-                            return false;
-                        }
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                    if (!ignored.equals(mp) && !JodaBeanUtils.equal(mp.get(bean1), mp.get(bean2))) {
+                        return false;
                     }
                 }
                 return true;
@@ -833,12 +817,8 @@ public final class JodaBeanUtils {
             default:
                 Set<MetaProperty<?>> ignored = new HashSet<>(Arrays.asList(properties));
                 for (MetaProperty<?> mp : bean1.metaBean().metaPropertyIterable()) {
-                    try {
-                        if (!ignored.contains(mp) && !JodaBeanUtils.equal(mp.get(bean1), mp.get(bean2))) {
-                            return false;
-                        }
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                    if (!ignored.contains(mp) && !JodaBeanUtils.equal(mp.get(bean1), mp.get(bean2))) {
+                        return false;
                     }
                 }
                 return true;
@@ -879,13 +859,8 @@ public final class JodaBeanUtils {
         notNull(mp1, "MetaProperty 1");
         notNull(mp1, "MetaProperty 2");
         return b -> {
-            try {
-                Bean first = mp1.get(b);
-                return first != null ? mp2.get(first) : null;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            return null;
+            Bean first = mp1.get(b);
+            return first != null ? mp2.get(first) : null;
         };
     }
 
@@ -905,12 +880,7 @@ public final class JodaBeanUtils {
         notNull(fn1, "MetaProperty 2");
         return b -> {
             Bean first = fn1.apply(b);
-            try {
-                return first != null ? mp2.get(first) : null;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            return null;
+            return first != null ? mp2.get(first) : null;
         };
     }
 
