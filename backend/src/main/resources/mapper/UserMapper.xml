@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.devpl.auth.mapper.UserMapper">
+
+    <select id="findUserByUsername" resultMap="userMap">
+        SELECT u.user_id,
+               u.username,
+               u.password,
+               u.short_name,
+               u.gender,
+               u.phone_number,
+               u.avatar_path,
+               u.user_type,
+               u.user_class,
+               u.login_time,
+               u.login_ip,
+               u.agency_id,
+               ab.agency_name
+        FROM tb_user AS u
+                 LEFT JOIN agency_basic AS ab ON u.agency_id = ab.agency_id
+        WHERE username = #{username}
+    </select>
+
+    <select id="findUserByPhone" resultMap="userMap">
+        SELECT u.user_id,
+               u.username,
+               u.password,
+               u.short_name,
+               u.gender,
+               u.phone_number,
+               u.avatar_path,
+               u.user_type,
+               u.user_class,
+               u.login_time,
+               u.login_ip,
+               u.agency_id,
+               ab.agency_name
+        FROM tb_user AS u
+                 LEFT JOIN agency_basic AS ab ON u.agency_id = ab.agency_id
+        WHERE phone_number = #{phone}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*) AS NUM
+        FROM tb_user
+        WHERE ${column} = #{value}
+    </select>
+
+    <resultMap id="userMap" type="io.devpl.auth.domain.User">
+        <id column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="short_name" property="shortName"/>
+        <result column="gender" property="gender"/>
+        <result column="phone_number" property="phoneNumber"/>
+        <result column="avatar_path" property="avatarPath"/>
+        <result column="login_time" property="loginTime"/>
+        <result column="login_ip" property="loginIP"/>
+        <result column="agency_id" property="agencyId"/>
+        <result column="agency_name" property="agencyName"/>
+        <result column="user_type" property="userType"/>
+        <result column="user_class" property="userClass"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!--    <select id="validate" resultMap="userMap">-->
+    <!--        SELECT user_id, username, short_name, gender, phone_number, avatar_path, login_time, login_ip, agency_id, agency_name, create_time, update_time-->
+    <!--        FROM tb_user WHERE username=#{username} AND password=#{password}-->
+    <!--    </select>-->
+
+    <insert id="insert" parameterType="io.devpl.auth.domain.User">
+        INSERT INTO tb_user(user_id, username, password, short_name, gender, phone_number, avatar_path, user_type,
+                            user_class, create_time, update_time)
+        VALUES (#{userId}, #{username}, #{password}, #{shortName},
+                #{gender,}, #{phoneNumber},
+                #{avatarPath}, #{userType},
+                #{userClass},
+                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <update id="updateAvatar">
+        UPDATE tb_user
+        SET avatar_path=#{avatarPath},
+            update_time=CURRENT_TIMESTAMP
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updatePhoneNumber">
+        UPDATE tb_user
+        SET phone_number=#{phone},
+            update_time=CURRENT_TIMESTAMP
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updatePassword">
+        UPDATE tb_user
+        SET password=#{password},
+            update_time=CURRENT_TIMESTAMP
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updateAgency">
+        UPDATE tb_user
+        SET agency_id=#{agencyId},
+            agency_name=#{agencyName},
+            update_time=CURRENT_TIMESTAMP
+        WHERE user_id = #{userId}
+    </update>
+
+    <resultMap id="simpleUserMap" type="io.devpl.auth.domain.User">
+        <id column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="short_name" property="shortName"/>
+        <result column="avatar_path" property="avatarPath"/>
+        <result column="agency_id" property="agencyId"/>
+        <result column="agency_name" property="agencyName"/>
+    </resultMap>
+    <!-- 查询原则：小表驱动大表，IN接小表 EXIST接大表 -->
+    <!--
+    <select id="listUserByIdentity" resultMap="simpleUserMap">
+        SELECT user_id, username, short_name, avatar_path, agency_id FROM tb_user WHERE user_id IN
+        (SELECT user_id FROM user_identity WHERE identity_code = #{identityCode})
+    </select>
+    -->
+
+    <select id="listUserByUserType" resultMap="simpleUserMap">
+        SELECT u.user_id, u.username, u.short_name, u.avatar_path, u.agency_id, ab.agency_name
+        FROM tb_user AS u LEFT JOIN agency_basic AS ab ON u.agency_id = ab.agency_id
+        WHERE u.user_type = #{userType, typeHandler=com.lancoo.supervisionplatform.handler.UserTypeEnumHandler}
+        <if test="verified">
+            <!-- AND u.agency_id IS NOT NULL -->
+            AND ab.verified = 1
+        </if>
+    </select>
+
+    <select id="listUserByCondition" resultMap="simpleUserMap">
+        SELECT u.user_id, u.username, u.short_name, u.avatar_path, u.agency_id, ab.agency_name
+        FROM tb_user AS u LEFT JOIN agency_basic AS ab ON u.agency_id = ab.agency_id
+        WHERE u.user_type = #{userType, typeHandler=com.lancoo.supervisionplatform.handler.UserTypeEnumHandler}
+        <if test="verified">
+            AND ab.verified = 1
+        </if>
+        <if test="keyword != null and keyword !=''">
+            AND ab.agency_name LIKE concat('%', #{keyword}, '%')
+        </if>
+    </select>
+
+    <select id="listUserByIds" resultMap="simpleUserMap">
+        SELECT u.user_id, u.username, u.short_name, u.avatar_path, u.agency_id, ab.agency_name
+        FROM tb_user AS u LEFT JOIN agency_basic AS ab ON u.agency_id = ab.agency_id
+        WHERE u.user_id IN
+        <foreach collection="list" open="(" separator="," close=")" item="userId">
+            #{userId}
+        </foreach>
+    </select>
+
+    <!-- 同步基础平台的用户到本地用户表 -->
+    <select id="saveOrUpdateUser" resultType="java.lang.Integer">
+        INSERT INTO `tb_user`(user_id, username, password, short_name, avatar_path, user_type) VALUES
+        <foreach collection="list" item="user" separator=",">
+            (#{user.userId}, #{user.username}, 'UNKNOWN', #{user.shortName}, #{user.avatarPath},
+            #{user.userType, typeHandler=com.lancoo.supervisionplatform.handler.UserTypeEnumHandler})
+        </foreach>
+        ON DUPLICATE KEY UPDATE password = 'UNKNOWN', short_name = VALUES(short_name), avatar_path =
+        VALUES(avatar_path), user_type = VALUES(user_type), update_time = CURRENT_TIMESTAMP
+    </select>
+</mapper>
