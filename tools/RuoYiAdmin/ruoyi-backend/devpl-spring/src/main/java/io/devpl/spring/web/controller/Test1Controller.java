@@ -7,7 +7,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,11 +40,11 @@ public class Test1Controller {
         map.put("name", "zs");
         map.put("age", 30);
         map.put("sex", false);
-        RBuilder<Map<String, Object>> builder = Results.mapBean()
-                .code(200)
-                .message("消息内容")
-                .moreInfo("更多信息")
-                .data(map);
+        ResultBuilder<Map<String, Object>> builder = Results.mapBean()
+                                                            .code(200)
+                                                            .message("消息内容")
+                                                            .moreInfo("更多信息")
+                                                            .data(map);
 
         try {
             int i = 1 / 0;

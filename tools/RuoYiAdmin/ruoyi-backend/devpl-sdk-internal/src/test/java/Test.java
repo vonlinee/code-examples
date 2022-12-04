@@ -1,6 +1,6 @@
-import io.devpl.sdk.util.*;
-
-import java.util.List;
+import io.devpl.sdk.util.DataClass;
+import io.devpl.sdk.util.DataObject;
+import io.devpl.sdk.util.IdUtils;
 
 public class Test {
 
@@ -14,10 +14,6 @@ public class Test {
         obj.put("map", DataClass.newObject());
 
         System.out.println(obj.asMap());
-
         System.out.println(IdUtils.simpleULID());
-
-
-
     }
 }

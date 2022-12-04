@@ -7,7 +7,7 @@ import com.google.gson.JsonElement;
  * @param <T> 携带的数据类型
  * @since 0.0.1
  */
-public class Result<T> extends RestfulResultTemplate implements RBuilder<T> {
+public class Result<T> extends RestfulResultTemplate implements ResultBuilder<T> {
 
     /**
      * 存放具体的业务数据
@@ -46,19 +46,19 @@ public class Result<T> extends RestfulResultTemplate implements RBuilder<T> {
     }
 
     @Override
-    public RBuilder<T> setCode(int code) {
+    public ResultBuilder<T> setCode(int code) {
         this.code = code;
         return this;
     }
 
     @Override
-    public RBuilder<T> setMessage(String message) {
+    public ResultBuilder<T> setMessage(String message) {
         this.message = message;
         return this;
     }
 
     @Override
-    public RBuilder<T> setThrowable(Throwable throwable) {
+    public ResultBuilder<T> setThrowable(Throwable throwable) {
         if (this.throwable == null || throwable != this.throwable) {
             this.stacktrace = getStackTrace(throwable);
         }
@@ -67,19 +67,19 @@ public class Result<T> extends RestfulResultTemplate implements RBuilder<T> {
     }
 
     @Override
-    public RBuilder<T> setToast(String toastMessage) {
+    public ResultBuilder<T> setToast(String toastMessage) {
         this.toast = toastMessage;
         return this;
     }
 
     @Override
-    public RBuilder<T> setMoreInfo(String moreInfo) {
+    public ResultBuilder<T> setMoreInfo(String moreInfo) {
         this.moreInfo = moreInfo;
         return this;
     }
 
     @Override
-    public RBuilder<T> setData(T data) {
+    public ResultBuilder<T> setData(T data) {
         this.data = data;
         return this;
     }

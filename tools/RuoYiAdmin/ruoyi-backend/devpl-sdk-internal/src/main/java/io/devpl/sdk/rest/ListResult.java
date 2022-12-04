@@ -8,7 +8,7 @@ import java.util.List;
  * 携带多条数据的列表
  * @param <E>
  */
-public class ListResult<E> extends RestfulResultTemplate implements ListRBuilder<E>, DelegationList<E> {
+public class ListResult<E> extends RestfulResultTemplate implements ListResultBuilder<E>, DelegationList<E> {
 
     private List<E> data;
 
@@ -34,43 +34,43 @@ public class ListResult<E> extends RestfulResultTemplate implements ListRBuilder
     }
 
     @Override
-    public ListRBuilder<E> setCode(int code) {
+    public ListResultBuilder<E> setCode(int code) {
         this.code = code;
         return this;
     }
 
     @Override
-    public ListRBuilder<E> setMessage(String message) {
+    public ListResultBuilder<E> setMessage(String message) {
         this.message = message;
         return this;
     }
 
     @Override
-    public ListRBuilder<E> setThrowable(Throwable throwable) {
+    public ListResultBuilder<E> setThrowable(Throwable throwable) {
         this.throwable = throwable;
         return this;
     }
 
     @Override
-    public ListRBuilder<E> setToast(String toastMessage) {
+    public ListResultBuilder<E> setToast(String toastMessage) {
         this.toast = toastMessage;
         return this;
     }
 
     @Override
-    public ListRBuilder<E> setMoreInfo(String moreInfo) {
+    public ListResultBuilder<E> setMoreInfo(String moreInfo) {
         this.moreInfo = moreInfo;
         return this;
     }
 
     @Override
-    public ListRBuilder<E> setData(List<E> data) {
+    public ListResultBuilder<E> setData(List<E> data) {
         this.data = data;
         return this;
     }
 
     @Override
-    public ListRBuilder<E> setPageInfo(PageInfo pageInfo) {
+    public ListResultBuilder<E> setPageInfo(PageInfo pageInfo) {
         this.pageInfo = pageInfo;
         return this;
     }

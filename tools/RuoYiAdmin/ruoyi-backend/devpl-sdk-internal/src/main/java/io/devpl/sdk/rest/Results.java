@@ -26,25 +26,15 @@ public abstract class Results {
         return new ListResult<>(code, message, data, toast);
     }
 
-    public static <T> RBuilder<T> builder() {
+    public static <T> ResultBuilder<T> builder() {
         return new Result<>();
     }
 
-    public static <T> ListRBuilder<T> listBuilder() {
+    public static <T> ListResultBuilder<T> listBuilder() {
         return new ListResult<>();
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> RBuilder<T> mapBuilder() {
-        return (RBuilder<T>) new MResult();
-    }
-
-    public static RBuilder<Map<String, Object>> mapBean() {
+    public static ResultBuilder<Map<String, Object>> mapBean() {
         return new Result<>();
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> ListRBuilder<T> mapListBuilder() {
-        return (ListRBuilder<T>) new MLResult();
     }
 }
