@@ -29,6 +29,8 @@ import java.util.Map;
 /**
  * 在Sping内部的Environment准备完毕后触发
  * 从Environment配置中加载所有的数据源信息，并且初始化数据源
+ * <p>
+ * 即在配置加载阶段就完成数据库的初始化
  */
 public class DataSourceInitializer implements SpringApplicationRunListener, Ordered {
 
@@ -37,6 +39,8 @@ public class DataSourceInitializer implements SpringApplicationRunListener, Orde
     private final SpringApplication application;
     private final String[] args;
 
+    private static final String PREFIX = "devpl.datasource";
+
     public DataSourceInitializer(SpringApplication application, String[] args) {
         this.application = application;
         this.args = args;
@@ -44,22 +48,26 @@ public class DataSourceInitializer implements SpringApplicationRunListener, Orde
 
     @Override
     public void environmentPrepared(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) {
-        initializeMultiDataSource(bootstrapContext, environment);
+        String prefix = environment.getProperty("devpl.namespace.prefix.datasource");
+        if (!StringUtils.hasText(prefix)) {
+            prefix = PREFIX;
+        }
+        initializeMultiDataSource(prefix, bootstrapContext, environment);
     }
 
     /**
      * 初始化动态数据源
      * https://machbbs.com/v2ex/427466
      * https://www.jianshu.com/p/4feab6df384e
-     * @param bootstrapContext
-     * @param environment
+     * @param bootstrapContext 启动上下文
+     * @param environment      运行环境
      */
-    private void initializeMultiDataSource(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) {
+    private void initializeMultiDataSource(String prefix, ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) {
         MutablePropertySources propertySources = environment.getPropertySources();
         // 存放数据源配置信息
         List<DataSourceInformation> dataSourceInformations = new ArrayList<>();
         // 配置属性名称
-        ConfigurationPropertyName cpn = ConfigurationPropertyName.of("devpl.datasource");
+        ConfigurationPropertyName cpn = ConfigurationPropertyName.of(prefix);
         Bindable<BeanMap> bindable = Bindable.of(BeanMap.class);
         for (PropertySource<?> source : propertySources) {
             if (!StringUtils.startsWithIgnoreCase(source.getName(), DevplConstant.NAME)) {
@@ -95,7 +103,7 @@ public class DataSourceInitializer implements SpringApplicationRunListener, Orde
                 Binder dataSourceInfoBinder = new Binder(ConfigurationPropertySources.from(dsPropertySource));
                 environment.getPropertySources().addLast(dsPropertySource);
                 dataSourceInformations.add(dataSourceInfoBinder.bind(psName, dspBindable)
-                                                               .orElse(new DataSourceInformation()));
+                        .orElse(new DataSourceInformation()));
             }
         }
         // 初始化数据源
