@@ -1,12 +1,12 @@
 package io.devpl.sdk.beans;
 
 import io.devpl.sdk.beans.impl.StandardProperty;
-import org.joda.convert.StringConvert;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.function.BiFunction;
 
 /**
  * A meta-property, defining those aspects of a property which are not specific
@@ -187,7 +187,7 @@ public interface MetaProperty<P> {
      * @throws RuntimeException              if the value cannot be converted to a string (use appropriate subclasses)
      */
     default String getString(Bean bean) {
-        return getString(bean, JodaBeanUtils.stringConverter());
+        return getString(bean, null);
     }
 
     /**
@@ -198,17 +198,19 @@ public interface MetaProperty<P> {
      * <p>
      * For a standard JavaBean, this is equivalent to calling <code>getFoo()</code> on the bean.
      * Alternate implementations may perform any logic to obtain the value.
-     * @param bean          the bean to query, not null
-     * @param stringConvert the converter to use, not null
+     * @param bean      the bean to query, not null
+     * @param converter the converter to use, not null
      * @return the value of the property on the specified bean, may be null
      * @throws ClassCastException            if the bean is of an incorrect type
      * @throws UnsupportedOperationException if the property is write-only
      * @throws RuntimeException              if the value cannot be converted to a string (use appropriate subclasses)
      */
-    default String getString(Bean bean, StringConvert stringConvert) {
-        P value;
-        value = get(bean);
-        return stringConvert.convertToString(propertyType(), value);
+    default String getString(Bean bean, BiFunction<Class<?>, Object, String> converter) {
+        P value = get(bean);
+        if (converter == null) {
+            return String.valueOf(value);
+        }
+        return converter.apply(propertyType(), value);
     }
 
     /**
@@ -224,7 +226,7 @@ public interface MetaProperty<P> {
      * @throws RuntimeException              if the value is rejected by the property (use appropriate subclasses)
      */
     default void setString(Bean bean, String value) {
-        setString(bean, value, JodaBeanUtils.stringConverter());
+        setString(bean, value, null);
     }
 
     /**
@@ -232,16 +234,20 @@ public interface MetaProperty<P> {
      * <p>
      * This converts the string to the correct type for the property using the supplied converter and then sets it
      * using {@link #set(Bean, Object)}.
-     * @param bean          the bean to update, not null
-     * @param value         the value to set into the property on the specified bean, may be null
-     * @param stringConvert the converter, not null
+     * @param bean      the bean to update, not null
+     * @param value     the value to set into the property on the specified bean, may be null
+     * @param converter the converter, not null
      * @throws ClassCastException            if the bean is of an incorrect type
      * @throws ClassCastException            if the value is of an invalid type for the property
      * @throws UnsupportedOperationException if the property is read-only
      * @throws RuntimeException              if the value is rejected by the property (use appropriate subclasses)
      */
-    default void setString(Bean bean, String value, StringConvert stringConvert) {
-        set(bean, stringConvert.convertFromString(propertyType(), value));
+    default void setString(Bean bean, String value, BiFunction<Class<P>, String, P> converter) {
+        if (converter != null) {
+            set(bean, converter.apply(propertyType(), value));
+        } else {
+            set(bean, value);
+        }
     }
 
     //-----------------------------------------------------------------------

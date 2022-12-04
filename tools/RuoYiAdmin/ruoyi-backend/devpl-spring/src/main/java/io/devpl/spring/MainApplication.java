@@ -15,11 +15,11 @@ public class MainApplication {
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(MainApplication.class);
-        app.setBannerMode(Banner.Mode.OFF);
+        app.setBannerMode(Banner.Mode.OFF); // 关掉Banner
         app.setLazyInitialization(false);
         app.setAllowBeanDefinitionOverriding(true);
         ConfigurableApplicationContext context = app.run(args);
         ServerProperties serverInfo = context.getBean(ServerProperties.class);
-        LOG.info("启动成功，访问地址 => {} {}", serverInfo.getAddress(), serverInfo.getPort());
+        LOG.info("启动成功，访问地址 => {} {}", "127.0.0.1", serverInfo.getPort());
     }
 }

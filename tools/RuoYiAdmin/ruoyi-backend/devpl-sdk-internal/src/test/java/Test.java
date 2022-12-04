@@ -1,22 +1,22 @@
-import io.devpl.sdk.utils.ArrayMap;
-import io.devpl.sdk.utils.Maps;
-import org.openjdk.jol.info.ClassLayout;
+import io.devpl.sdk.util.*;
 
-import java.util.Map;
+import java.util.List;
 
 public class Test {
 
     public static void main(String[] args) {
-        Map<String, Object> map = new ArrayMap<>();
-        map.put("name", "zs");
-        map.put("id", "1");
-        map.put("sex", "男");
-        System.out.println(ClassLayout.parseInstance(map).toPrintable());
+        DataObject obj = DataClass.newObject();
+        obj.put("age", "28");
+        obj.put("name", "孙允珠");
 
-        Map<String, Object> map1 = Maps.builder(new ArrayMap<String, Object>())
-                                       .put("name", "")
-                                       .put("id", "a")
-                                       .build();
+        final String name = obj.getValue("name", String.class);
+
+        obj.put("map", DataClass.newObject());
+
+        System.out.println(obj.asMap());
+
+        System.out.println(IdUtils.simpleULID());
+
 
 
     }

@@ -7,7 +7,7 @@ public class SqlInterceptor implements StatementInspector {
     @Override
     public String inspect(String sql) {
         System.out.println("进入拦截器" + sql);
-        sql += " and 1=1";
+        // sql += " and 1=1";
         return sql;
     }
 }

@@ -1,6 +1,6 @@
 package io.devpl.sdk.rest;
 
-import io.devpl.sdk.enumx.KeyedEnumPool;
+import io.devpl.sdk.util.KeyedEnumPool;
 
 import java.io.Serializable;
 import java.util.ArrayList;

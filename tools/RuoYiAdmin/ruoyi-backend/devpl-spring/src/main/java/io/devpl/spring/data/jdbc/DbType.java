@@ -13,8 +13,7 @@ public enum DbType {
     /**
      * Apache Derby.
      */
-    DERBY("Apache Derby", "org.apache.derby.jdbc.EmbeddedDriver", "org.apache.derby.jdbc.EmbeddedXADataSource",
-            "SELECT 1 FROM SYSIBM.SYSDUMMY1", "jdbc:derby", ""),
+    DERBY("Apache Derby", "org.apache.derby.jdbc.EmbeddedDriver", "org.apache.derby.jdbc.EmbeddedXADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1", "jdbc:derby", ""),
 
     /**
      * H2.
@@ -24,8 +23,7 @@ public enum DbType {
     /**
      * HyperSQL DataBase.
      */
-    HSQLDB("HSQL Database Engine", "org.hsqldb.jdbc.JDBCDriver", "org.hsqldb.jdbc.pool.JDBCXADataSource",
-            "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_USERS", "jdbc:microsoft:sqlserver://", ""),
+    HSQLDB("HSQL Database Engine", "org.hsqldb.jdbc.JDBCDriver", "org.hsqldb.jdbc.pool.JDBCXADataSource", "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_USERS", "jdbc:microsoft:sqlserver://", ""),
 
     /**
      * SQL Lite.
@@ -35,14 +33,12 @@ public enum DbType {
     /**
      * MySQL8.
      */
-    MYSQL8("MySQL8", "com.mysql.cj.jdbc.Driver", "com.mysql.cj.jdbc.MysqlXADataSource", "/* ping */ SELECT 1",
-            "jdbc:mysql://", ""),
+    MYSQL8("MySQL8", "com.mysql.cj.jdbc.Driver", "com.mysql.cj.jdbc.MysqlXADataSource", "/* ping */ SELECT 1", "jdbc:mysql://", ""),
 
     /**
      * MySQL5.
      */
-    MySQL5("MySQL5", "com.mysql.cj.jdbc.Driver", "com.mysql.jdbc.MysqlXADataSource", "/* ping */ SELECT 1",
-            "jdbc:mysql://", ""),
+    MySQL5("MySQL5", "com.mysql.cj.jdbc.Driver", "com.mysql.jdbc.MysqlXADataSource", "/* ping */ SELECT 1", "jdbc:mysql://", ""),
 
     /**
      * Maria DB.
@@ -57,8 +53,7 @@ public enum DbType {
     /**
      * Oracle.
      */
-    ORACLE("Oracle", "oracle.jdbc.OracleDriver", "oracle.jdbc.xa.client.OracleXADataSource", "SELECT 'Hello' from DUAL",
-            "jdbc:oracle:thin:@//", "Oracle11及以下数据库"),
+    ORACLE("Oracle", "oracle.jdbc.OracleDriver", "oracle.jdbc.xa.client.OracleXADataSource", "SELECT 'Hello' from DUAL", "jdbc:oracle:thin:@//", "Oracle11及以下数据库"),
 
     /**
      * Postgres.
@@ -86,26 +81,22 @@ public enum DbType {
     /**
      * SQL Server.
      */
-    SQL_SERVER("Microsoft SQL Server", "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-            "com.microsoft.sqlserver.jdbc.SQLServerXADataSource", "SELECT 1", "jdbc:microsoft:sqlserver://", ""),
+    SQL_SERVER("Microsoft SQL Server", "com.microsoft.sqlserver.jdbc.SQLServerDriver", "com.microsoft.sqlserver.jdbc.SQLServerXADataSource", "SELECT 1", "jdbc:microsoft:sqlserver://", ""),
 
     /**
      * Firebird.
      */
-    FIREBIRD("Firebird", "org.firebirdsql.jdbc.FBDriver", "org.firebirdsql.ds.FBXADataSource",
-            "SELECT 1 FROM RDB$DATABASE", "", ""),
+    FIREBIRD("Firebird", "org.firebirdsql.jdbc.FBDriver", "org.firebirdsql.ds.FBXADataSource", "SELECT 1 FROM RDB$DATABASE", "", ""),
 
     /**
      * DB2 Server.
      */
-    DB2("DB2", "com.ibm.db2.jcc.DB2Driver", "com.ibm.db2.jcc.DB2XADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1",
-            "jdbc:db2://", ""),
+    DB2("DB2", "com.ibm.db2.jcc.DB2Driver", "com.ibm.db2.jcc.DB2XADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1", "jdbc:db2://", ""),
 
     /**
      * DB2 AS400 Server.
      */
-    DB2_AS400("DB2 UDB for AS/400", "com.ibm.as400.access.AS400JDBCDriver",
-            "com.ibm.as400.access.AS400JDBCXADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1", "", ""),
+    DB2_AS400("DB2 UDB for AS/400", "com.ibm.as400.access.AS400JDBCDriver", "com.ibm.as400.access.AS400JDBCXADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1", "", ""),
 
     /**
      * Teradata.

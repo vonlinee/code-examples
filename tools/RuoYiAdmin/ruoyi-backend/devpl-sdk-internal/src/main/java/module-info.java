@@ -26,8 +26,7 @@ open module devpl.sdk.internal {
     // 如果有exports，但是没有open，因此编译通过运行时报错
     exports io.devpl.sdk;
     exports io.devpl.sdk.beans;
-    exports io.devpl.sdk.utils;
-    exports io.devpl.sdk.runtime;
+    exports io.devpl.sdk.util;
     exports io.devpl.sdk.io;
     exports io.devpl.sdk.beans.impl.map;
 

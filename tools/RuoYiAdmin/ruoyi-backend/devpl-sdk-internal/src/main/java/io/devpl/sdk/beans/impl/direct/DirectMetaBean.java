@@ -1,12 +1,12 @@
 package io.devpl.sdk.beans.impl.direct;
 
-import java.util.NoSuchElementException;
-
 import io.devpl.sdk.beans.Bean;
 import io.devpl.sdk.beans.MetaBean;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.impl.StandaloneMetaProperty;
-import io.devpl.sdk.beans.test.JodaBeanTests;
+
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * A meta-bean implementation designed for use by the code generator.
@@ -36,7 +36,7 @@ public abstract class DirectMetaBean implements MetaBean {
 
     @SuppressWarnings("unchecked")
     private <R> MetaProperty<R> metaPropertyNotFound(String propertyName) {
-        if (propertyName == JodaBeanTests.TEST_COVERAGE_PROPERTY) {
+        if (Objects.equals(propertyName, "test")) {
             // cast is unsafe unless R is String, but code only used in test coverage scenarios
             return (MetaProperty<R>) StandaloneMetaProperty.of(propertyName, this, String.class);
         }

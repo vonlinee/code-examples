@@ -1,5 +1,6 @@
 package io.devpl.spring.boot.factories;
 
+import io.devpl.sdk.beans.impl.map.BeanMap;
 import io.devpl.spring.context.PropertyBindCallback;
 import io.devpl.spring.data.jdbc.DataSourceInformation;
 import io.devpl.spring.data.jdbc.DataSourceManager;
@@ -59,14 +60,14 @@ public class DataSourceInitializer implements SpringApplicationRunListener, Orde
         List<DataSourceInformation> dataSourceInformations = new ArrayList<>();
         // 配置属性名称
         ConfigurationPropertyName cpn = ConfigurationPropertyName.of("devpl.datasource");
-        Bindable<BeanMap1> bindable = Bindable.of(BeanMap1.class);
+        Bindable<BeanMap> bindable = Bindable.of(BeanMap.class);
         for (PropertySource<?> source : propertySources) {
             if (!StringUtils.startsWithIgnoreCase(source.getName(), DevplConstant.NAME)) {
                 continue;
             }
             // 如何把 Java properties 转换为具有层级结构的字典
             Binder binder = new Binder(ConfigurationPropertySources.from(source));
-            BeanMap1 map = binder.bind(cpn, bindable, new PropertyBindCallback()).orElse(new BeanMap1());
+            BeanMap map = binder.bind(cpn, bindable, new PropertyBindCallback()).orElse(new BeanMap());
             // 获取所有的数据源名称
             String dataSourceNames = map.getString("name-list", "");
             if (!StringUtils.hasLength(dataSourceNames)) {
@@ -84,14 +85,17 @@ public class DataSourceInitializer implements SpringApplicationRunListener, Orde
                 String psName = "devpl.datasource." + dataSourceId;
                 Map<String, Object> dataSourceInfoMap = new HashMap<>();
                 dataSourceInfoMap.put(psName + ".name", dataSourceId);
-                Map<String, String> info = map.get(dataSourceId);
-                info.forEach((k, v) -> {
-                    dataSourceInfoMap.put(psName + "." + k, v);
-                });
+                Map<String, String> info = map.getMap(dataSourceId);
+                if (info != null) {
+                    info.forEach((k, v) -> {
+                        dataSourceInfoMap.put(psName + "." + k, v);
+                    });
+                }
                 OriginTrackedMapPropertySource dsPropertySource = new OriginTrackedMapPropertySource("DataSource-" + dataSourceId, dataSourceInfoMap);
                 Binder dataSourceInfoBinder = new Binder(ConfigurationPropertySources.from(dsPropertySource));
                 environment.getPropertySources().addLast(dsPropertySource);
-                dataSourceInformations.add(dataSourceInfoBinder.bind(psName, dspBindable).orElse(new DataSourceInformation()));
+                dataSourceInformations.add(dataSourceInfoBinder.bind(psName, dspBindable)
+                                                               .orElse(new DataSourceInformation()));
             }
         }
         // 初始化数据源

@@ -1,9 +1,12 @@
 package io.devpl.spring.data.jdbc;
 
+import lombok.Data;
+
 /**
  * JDBC连接信息
  * 参考：https://blog.csdn.net/liu_sisi/article/details/88728332
  */
+@Data
 public class JdbcProperties {
 
     /**

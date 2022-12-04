@@ -5,11 +5,11 @@ import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 
 /**
  * 自定义命名策略
- * https://www.cnblogs.com/CreateMyself/p/12373664.html
+ * <a href="https://www.cnblogs.com/CreateMyself/p/12373664.html">...</a>
  */
 public class HibernateNamingStrategy implements PhysicalNamingStrategy, ImplicitNamingStrategy {
 
-    private ImplicitNamingStrategy delegate = new ImplicitNamingStrategyLegacyJpaImpl();
+    private final ImplicitNamingStrategy delegate = new ImplicitNamingStrategyLegacyJpaImpl();
 
     @Override
     public Identifier toPhysicalCatalogName(Identifier name, JdbcEnvironment jdbcEnvironment) {

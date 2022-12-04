@@ -1,5 +1,6 @@
 package io.devpl.spring.web.mvc;
 
+import io.devpl.sdk.beans.impl.map.BeanMap;
 import io.devpl.sdk.rest.RestfulResultTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -34,13 +35,13 @@ public class ControllerMethodProcessor extends AbstractMessageConverterMethodPro
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         log.info("supportsParameter => {}", parameter);
-        return parameter.getParameterType() == BeanMap1.class;
+        return parameter.getParameterType() == BeanMap.class;
     }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         log.info("resolveArgument => {}", parameter);
-        return new BeanMap1();
+        return new BeanMap();
     }
 
     @Override

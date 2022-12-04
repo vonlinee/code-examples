@@ -20,11 +20,20 @@ import org.springframework.lang.Nullable;
  */
 @Setter
 @Getter
-public class SpringContext {
+public final class SpringContext {
+
+    private SpringContext() {
+    }
+
+    private static class SpringContextHolder {
+        private static final SpringContext INSTANCE = new SpringContext();
+    }
+
+    public static SpringContext get() {
+        return SpringContextHolder.INSTANCE;
+    }
 
     private final Logger log = LoggerFactory.getLogger(SpringContext.class);
-
-    public static final SpringContext INSTANCE = new SpringContext();
 
     private SpringApplication application;
 

@@ -18,7 +18,6 @@ package io.devpl.sdk.beans.impl.direct;
 import io.devpl.sdk.beans.Bean;
 import io.devpl.sdk.beans.BeanBuilder;
 import io.devpl.sdk.beans.MetaProperty;
-import io.devpl.sdk.beans.test.JodaBeanTests;
 
 /**
  * A builder implementation designed for use by the code generator.
@@ -55,7 +54,7 @@ public abstract class DirectFieldsBeanBuilder<T extends Bean>
             set(metaProperty.name(), value);
             return this;
         } catch (RuntimeException ex) {
-            if (value == JodaBeanTests.TEST_COVERAGE_STRING) {
+            if (value == "") {
                 return this;
             }
             throw ex;

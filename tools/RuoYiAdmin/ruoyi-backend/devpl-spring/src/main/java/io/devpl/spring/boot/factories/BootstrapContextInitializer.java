@@ -17,9 +17,8 @@ public class BootstrapContextInitializer implements BootstrapRegistryInitializer
     @Override
     public void initialize(BootstrapRegistry registry) {
         registry.registerIfAbsent(SpringContext.class, context -> {
-            SpringContext springContext = new SpringContext();
-            springContext.setBootstrapContext(context);
-            return springContext;
+            SpringContext.get().setBootstrapContext(context);
+            return SpringContext.get();
         });
         registry.register(DataSourceManager.class, context -> new DataSourceManager());
     }

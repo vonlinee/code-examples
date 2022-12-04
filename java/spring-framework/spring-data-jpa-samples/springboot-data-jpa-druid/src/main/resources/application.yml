@@ -1,10 +1,10 @@
 spring:
   datasource:
-    # 不存在数据库则创建
-    url: jdbc:mysql://localhost:3306/jpa_learn?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+    type: com.zaxxer.hikari.HikariDataSource
     username: root
     password: 123456
-    driver-class-name: com.mysql.jdbc.Driver # 驱动
+    driver-class-name: com.mysql.jdbc.Driver
+    jdbc-url: jdbc:mysql://localhost:3306/spring?createDatabaseIfNotExist=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
   jpa:
     hibernate:
       ddl-auto: create # 自动更新
@@ -16,7 +16,7 @@ spring:
     show-sql: true  # 日志中显示sql语句
     generate-ddl: true
     # open-in-view: true
-    database-platform: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     properties:
       hibernate:
         session_factory:

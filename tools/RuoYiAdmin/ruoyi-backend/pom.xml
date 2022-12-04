@@ -208,6 +208,8 @@
         <module>devpl-sdk-internal</module>
         <module>devpl-auth</module>
         <module>devpl-business</module>
+        <module>devpl-boot</module>
+        <module>devpl-monitor</module>
     </modules>
     <packaging>pom</packaging>
 

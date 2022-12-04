@@ -10,7 +10,6 @@ import org.springframework.beans.factory.support.BeanNameGenerator;
 /**
  * 自定义的Bean的名称策略
  */
-@Setter
 public class DevplBeanNameGenerator implements BeanNameGenerator {
 
     public static final DevplBeanNameGenerator INSTANCE = new DevplBeanNameGenerator();
@@ -21,5 +20,9 @@ public class DevplBeanNameGenerator implements BeanNameGenerator {
     @Override
     public String generateBeanName(BeanDefinition definition, BeanDefinitionRegistry registry) {
         return DevplConstant.NAME + "-" + definition.getBeanClassName();
+    }
+
+    public void setDelegate(@Nullable BeanNameGenerator delegate) {
+        this.delegate = delegate;
     }
 }

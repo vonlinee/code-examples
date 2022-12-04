@@ -114,6 +114,11 @@ public interface MapBean extends DynamicBean, OptionalTypedGetter<String> {
     }
 
     @Override
+    default <MK, V> Map<MK, V> getMap(String key, Map<MK, V> defaultValue) {
+        return null;
+    }
+
+    @Override
     default <MK, V> Map<MK, V> getMap(String key, Class<MK> keyType, Class<V> valueType) {
         return null;
     }

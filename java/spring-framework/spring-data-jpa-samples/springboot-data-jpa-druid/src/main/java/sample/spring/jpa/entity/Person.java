@@ -21,6 +21,6 @@ public class Person {
     @Column(name = "name", length = 20)
     private String name;
 
-    @Column(name = "agee", length = 4)
+    @Column(name = "age", length = 4)
     private int age;
 }

@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import io.devpl.sdk.beans.ser.SerIterator;
-import io.devpl.sdk.beans.ser.SerIteratorFactory;
+import io.devpl.sdk.beans.serialize.SerIterator;
+import io.devpl.sdk.beans.serialize.SerIteratorFactory;
 
 /**
  * An iterator over beans.

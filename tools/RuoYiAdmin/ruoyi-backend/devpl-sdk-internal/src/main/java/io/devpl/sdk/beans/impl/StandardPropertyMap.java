@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import io.devpl.sdk.beans.Bean;
-import io.devpl.sdk.beans.JodaBeanUtils;
+import io.devpl.sdk.beans.BeanUtils;
 import io.devpl.sdk.beans.MetaProperty;
 import io.devpl.sdk.beans.Property;
 
@@ -109,7 +109,7 @@ public final class StandardPropertyMap extends AbstractMap<String, Property<?>> 
      * @return the unmodifiable map of property name to value, not null
      */
     public Map<String, Object> flatten() {
-        return JodaBeanUtils.flatten(bean);
+        return BeanUtils.flatten(bean);
     }
 
 }

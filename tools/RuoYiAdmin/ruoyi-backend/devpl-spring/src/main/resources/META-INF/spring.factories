@@ -4,10 +4,10 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 # 自动配置导入过滤
 org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
     io.devpl.spring.boot.factories.filter.DevplAutoConfigurationImportFilter
-# Initializers
+# 上下文初始化Initializers
 org.springframework.context.ApplicationContextInitializer=\
     io.devpl.spring.boot.factories.initializer.DevplContextInitializer
-# RunListener
+# 运行状态事件监听 RunListener
 org.springframework.boot.SpringApplicationRunListener=\
   io.devpl.spring.boot.factories.DevplInternalBeanInitializer,\
   io.devpl.spring.boot.factories.DataSourceInitializer,\
@@ -26,8 +26,5 @@ org.springframework.boot.autoconfigure.AutoConfigurationImportListener=\
 org.springframework.boot.sql.init.dependency.DatabaseInitializerDetector=io.devpl.spring.boot.database.DevplDbInitializerDetector
 # Depends on database initialization detectors
 # org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitializationDetector=
-
-
 org.springframework.boot.env.PropertySourceLoader=io.devpl.spring.boot.factories.env.MultitypePropertySourceLoader
-
 org.springframework.boot.BootstrapRegistryInitializer=io.devpl.spring.boot.factories.BootstrapContextInitializer
