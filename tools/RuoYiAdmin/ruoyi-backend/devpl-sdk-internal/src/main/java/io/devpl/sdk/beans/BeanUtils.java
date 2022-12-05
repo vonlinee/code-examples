@@ -916,7 +916,7 @@ public final class BeanUtils {
 
         Object clone(Object value) {
             if (value == null) {
-                return value;
+                return null;
             } else if (value instanceof Bean) {
                 return cloneAlways((Bean) value);
             } else if (value instanceof SortedSet) {
@@ -978,7 +978,7 @@ public final class BeanUtils {
         @Override
         Object clone(Object value) {
             if (value == null) {
-                return value;
+                return null;
             } else if (value instanceof ImmutableMap || value instanceof ImmutableCollection || value instanceof ImmutableMultimap || value instanceof ImmutableTable) {
                 return value;
             } else if (value instanceof SortedMultiset) {

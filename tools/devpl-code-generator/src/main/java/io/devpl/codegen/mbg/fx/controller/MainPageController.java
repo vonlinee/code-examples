@@ -34,11 +34,11 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.LineNumberFactory;
-import org.fxmisc.richtext.model.StyleSpans;
-import org.fxmisc.richtext.model.StyleSpansBuilder;
-import org.reactfx.Subscription;
+// import org.fxmisc.richtext.CodeArea;
+// import org.fxmisc.richtext.LineNumberFactory;
+// import org.fxmisc.richtext.model.StyleSpans;
+// import org.fxmisc.richtext.model.StyleSpansBuilder;
+// import org.reactfx.Subscription;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -96,7 +96,7 @@ public class MainPageController implements Initializable {
     private static final String sampleCode = String.join("\n", new String[]{"Hellow,World"});
     private static String tosearch = "";
     private ConsoleView console;
-    CodeArea codearea = new CodeArea();
+    // CodeArea codearea = new CodeArea();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -107,7 +107,7 @@ public class MainPageController implements Initializable {
         console.invokeMain(() -> {
             System.out.print(Godrive.INSTANCE.goauth());
         });
-        codepane.setCenter(codearea);
+        // codepane.setCenter(codearea);
         codepane.setPadding(new Insets(7));
         consolepane.maxWidthProperty().bind(splitpane.widthProperty().multiply(0));
         splitpane.setStyle(
@@ -240,13 +240,13 @@ public class MainPageController implements Initializable {
     }
 
     private void initCodearea() {
-        codearea.setPadding(new Insets(36, 8, 10, 8));
-        codearea.setParagraphGraphicFactory(LineNumberFactory.get(codearea));
-        Subscription cleanupWhenNoLongerNeedIt = codearea
-                .multiPlainChanges()
-                .successionEnds(java.time.Duration.ofMillis(256))
-                .subscribe(ignore -> codearea.setStyleSpans(0, computeHighlighting(codearea.getText())));
-        codearea.replaceText(0, 0, sampleCode);
+        // codearea.setPadding(new Insets(36, 8, 10, 8));
+        // codearea.setParagraphGraphicFactory(LineNumberFactory.get(codearea));
+        // Subscription cleanupWhenNoLongerNeedIt = codearea
+        //         .multiPlainChanges()
+        //         .successionEnds(java.time.Duration.ofMillis(256))
+        //         .subscribe(ignore -> codearea.setStyleSpans(0, computeHighlighting(codearea.getText())));
+        // codearea.replaceText(0, 0, sampleCode);
     }
 
     @FXML
@@ -262,7 +262,7 @@ public class MainPageController implements Initializable {
                         + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
                         + "|(?<TOSEARCH>" + tosearch + ")"
         );
-        codearea.appendText("\0");
+        // codearea.appendText("\0");
     }
 
     @FXML
@@ -272,9 +272,9 @@ public class MainPageController implements Initializable {
         newString.setHeaderText("Please input the new word that you want you want to replace the old word \"" + input.getText() + "\"");
         Optional<String> newstring = newString.showAndWait();
         newstring.ifPresent(value -> {
-            String context = codearea.getText();
-            codearea.clear();
-            codearea.appendText(context.replace(input.getText(), value));
+            // String context = codearea.getText();
+            // codearea.clear();
+            // codearea.appendText(context.replace(input.getText(), value));
         });
     }
 
@@ -298,7 +298,7 @@ public class MainPageController implements Initializable {
 
     @FXML
     private void openaction(ActionEvent event) {
-        codearea.clear();
+        // codearea.clear();
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Editable File", "*.*");
         fileChooser.getExtensionFilters().add(extFilter);
@@ -309,7 +309,7 @@ public class MainPageController implements Initializable {
         //读入文件，这里使用了常规的readine方法，下面还有两种方案可供参考；
         try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
             while ((context = reader.readLine()) != null) {
-                codearea.appendText(context + "\n");
+                // codearea.appendText(context + "\n");
             }
         } catch (IOException io) {
         }
@@ -318,7 +318,7 @@ public class MainPageController implements Initializable {
     @FXML
     private void saveitaction(ActionEvent event) {
         try {
-            savefile(path, codearea.getText());
+            // savefile(path, codearea.getText());
         } catch (NullPointerException n) {
 
             ChoiceDialog<String> choice = new ChoiceDialog<>("to select", "to create");
@@ -345,7 +345,7 @@ public class MainPageController implements Initializable {
                                 System.out.println(path);
 
                                 Files.createFile(path);
-                                savefile(path, codearea.getText());
+                                // savefile(path, codearea.getText());
                             } catch (FileAlreadyExistsException ex) {
                                 Alert alert = new Alert(AlertType.ERROR);
                                 alert.setTitle("File existed error");
@@ -368,7 +368,7 @@ public class MainPageController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("files", "*.*"));
         file = fileChooser.showOpenDialog(stage);
-        savefile(Paths.get(file.getPath()), codearea.getText());
+        //savefile(Paths.get(file.getPath()), codearea.getText());
     }
 
     private void savefile(Path path, String context) {
@@ -381,14 +381,14 @@ public class MainPageController implements Initializable {
 
     @FXML
     private void darkmode(ActionEvent event) {
-        codearea.setBackground(new Background(new BackgroundFill(Color.web("#232323", 0.81f), new CornerRadii(16), Insets.EMPTY)));
+        //codearea.setBackground(new Background(new BackgroundFill(Color.web("#232323", 0.81f), new CornerRadii(16), Insets.EMPTY)));
         splitpane.getStylesheets().remove(getClass().getResource("/Jeditor/effect/css/LightMode.css").toExternalForm());
         splitpane.getStylesheets().add(getClass().getResource("/Jeditor/effect/css/DarkMode.css").toExternalForm());
     }
 
     @FXML
     private void lightmode(ActionEvent event) {
-        codearea.setBackground(new Background(new BackgroundFill(Color.web("#B9E8BA", 0.9f), new CornerRadii(16), Insets.EMPTY)));
+        //codearea.setBackground(new Background(new BackgroundFill(Color.web("#B9E8BA", 0.9f), new CornerRadii(16), Insets.EMPTY)));
         splitpane.getStylesheets().remove(getClass().getResource("/Jeditor/effect/css/DarkMode.css").toExternalForm());
         splitpane.getStylesheets().add(getClass().getResource("/Jeditor/effect/css/LightMode.css").toExternalForm());
 
@@ -396,12 +396,12 @@ public class MainPageController implements Initializable {
 
     @FXML
     private void genTime(ActionEvent event) {
-        codearea.appendText(
-                " [ "
-                        + DateFormat.getDateTimeInstance(
-                        DateFormat.LONG, DateFormat.LONG, Locale.CHINESE).
-                        format(new java.util.Date()).toString()
-                        + " ] ");
+        // codearea.appendText(
+        //         " [ "
+        //                 + DateFormat.getDateTimeInstance(
+        //                 DateFormat.LONG, DateFormat.LONG, Locale.CHINESE).
+        //                 format(new java.util.Date()).toString()
+        //                 + " ] ");
     }
 
     @FXML
@@ -454,32 +454,33 @@ public class MainPageController implements Initializable {
         }
     }
 
-    private static StyleSpans<Collection<String>> computeHighlighting(String text) {
-        Matcher matcher = PATTERN.matcher(text);
-        int lastKwEnd = 0;
-        StyleSpansBuilder<Collection<String>> spansBuilder
-                = new StyleSpansBuilder<>();
-        while (matcher.find()) {
-            String styleClass
-                    = matcher.group("KEYWORD") != null ? "keyword"
-                    : matcher.group("PAREN") != null ? "paren"
-                    : matcher.group("BRACE") != null ? "brace"
-                    : matcher.group("BRACKET") != null ? "bracket"
-                    : matcher.group("SEMICOLON") != null ? "semicolon"
-                    : matcher.group("STRING") != null ? "string"
-                    : matcher.group("COMMENT") != null ? "comment"
-                    : matcher.group("TOSEARCH") != null ? "tosearch"
-                    : null;
-            /* never happens */
-            assert styleClass != null;
-
-            spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
-            spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
-            lastKwEnd = matcher.end();
-        }
-        spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
-        return spansBuilder.create();
-    }
+    // private static StyleSpans<Collection<String>> computeHighlighting(String text) {
+    //     Matcher matcher = PATTERN.matcher(text);
+    //     int lastKwEnd = 0;
+    //     // StyleSpansBuilder<Collection<String>> spansBuilder
+    //     //         = new StyleSpansBuilder<>();
+    //     while (matcher.find()) {
+    //         String styleClass
+    //                 = matcher.group("KEYWORD") != null ? "keyword"
+    //                 : matcher.group("PAREN") != null ? "paren"
+    //                 : matcher.group("BRACE") != null ? "brace"
+    //                 : matcher.group("BRACKET") != null ? "bracket"
+    //                 : matcher.group("SEMICOLON") != null ? "semicolon"
+    //                 : matcher.group("STRING") != null ? "string"
+    //                 : matcher.group("COMMENT") != null ? "comment"
+    //                 : matcher.group("TOSEARCH") != null ? "tosearch"
+    //                 : null;
+    //         /* never happens */
+    //         assert styleClass != null;
+    //
+    //         // spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
+    //         // spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+    //         // lastKwEnd = matcher.end();
+    //     }
+    //     // spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
+    //     // return spansBuilder.create();
+    //     return null;
+    // }
 
     private static final String[] KEYWORDS = new String[]{
             "abstract", "assert", "boolean", "break", "byte",

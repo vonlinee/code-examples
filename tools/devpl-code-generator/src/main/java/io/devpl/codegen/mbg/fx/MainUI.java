@@ -32,8 +32,7 @@ public class MainUI extends Application {
         primaryStage.setResizable(true);
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle(MAIN_WINDOW_TITLE);
-        Image imageIcon = new Image("static/icons/mybatis-logo.png");
-        primaryStage.getIcons().add(imageIcon);
+        primaryStage.getIcons().add(new Image("static/icons/mybatis-logo.png"));
         primaryStage.show();
 
         MainUIController controller = fxmlLoader.getController();

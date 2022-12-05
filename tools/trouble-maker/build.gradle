@@ -35,11 +35,11 @@ allprojects {
         options.warnings = false
         // 这几行配置在有些版本无效，6.9版本有效
         // 忽略未检查的，或者过时API的警告，只需要不配置下面的编译参数就可以
-        options.compilerArgs += ["-nowarn", "-XDenableSunApiLintControl"]
-        options.compilerArgs += '-Xlint:-deprecation'
-        options.compilerArgs += '-Xlint:-unchecked'
-        options.compilerArgs << "-Xlint:unchecked"
-        options.compilerArgs << "-Xlint:deprecation"
+//        options.compilerArgs += ["-nowarn", "-XDenableSunApiLintControl"]
+//        options.compilerArgs += '-Xlint:-deprecation'
+//        options.compilerArgs += '-Xlint:-unchecked'
+//        options.compilerArgs << "-Xlint:unchecked"
+//        options.compilerArgs << "-Xlint:deprecation"
         // 指定-Werror会报错
         // options.compilerArgs << "-Werror"
     }

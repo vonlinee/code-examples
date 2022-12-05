@@ -1,6 +1,7 @@
 package io.devpl.spring.data.jpa;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import io.devpl.sdk.util.DataClass;
 import io.devpl.sdk.util.DataObject;
 import io.devpl.spring.data.jdbc.DataSourceConfiguration;
 import io.devpl.spring.data.jdbc.DbType;
@@ -64,7 +65,6 @@ public class JpaConfiguration {
         props.setShowSql(true);
         props.setGenerateDdl(true);
         props.setOpenInView(true);
-        final DataObject obj = DataObject.newObject();
         return props;
     }
 

@@ -15,7 +15,7 @@ import com.sun.jna.Native;
 public interface Godrive extends Library {
 
     @SuppressWarnings("deprecation")
-    Godrive INSTANCE = Native.loadLibrary("quickgoogle", Godrive.class);
+    Godrive INSTANCE = (Godrive) Native.loadLibrary("quickgoogle", Godrive.class);
 
     String goauth();
 }

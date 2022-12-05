@@ -46,7 +46,7 @@ public abstract class AbstractRoutingDataSource extends AbstractDataSource {
     public void refresh() {
         resolvedDataSources.clear();
         this.dataSourceInformationMap.forEach((key, value) -> {
-            DataSourceBuilder<?> builder = value.initializeDataSourceBuilder();
+            DataSourceBuilder<?> builder = value.getProperties().initializeDataSourceBuilder();
             try {
                 resolvedDataSources.put(key, builder.build());
             } catch (Exception exception) {
@@ -110,7 +110,7 @@ public abstract class AbstractRoutingDataSource extends AbstractDataSource {
      */
     public void addDataSource(String name, DataSourceInformation information) {
         this.dataSourceInformationMap.put(name, information);
-        DataSource dataSource = information.initializeDataSourceBuilder().build();
+        DataSource dataSource = information.getProperties().initializeDataSourceBuilder().build();
         if (information.isDefault()) {
             this.defaultTargetDataSource = dataSource;
         }

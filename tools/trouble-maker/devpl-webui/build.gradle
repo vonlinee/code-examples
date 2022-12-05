@@ -35,7 +35,7 @@ dependencies {
 // https://mvnrepository.com/artifact/com.h2database/h2
     implementation 'com.h2database:h2:2.1.214'
 
-    compile libs.lombok
+//    compile libs.lombok
 
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-cache
     implementation 'org.springframework.boot:spring-boot-starter-cache:2.3.12.RELEASE'

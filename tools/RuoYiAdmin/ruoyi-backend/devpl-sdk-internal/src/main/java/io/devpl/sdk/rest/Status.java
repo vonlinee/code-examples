@@ -2,7 +2,6 @@ package io.devpl.sdk.rest;
 
 import io.devpl.sdk.util.KeyedEnumPool;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -13,9 +12,7 @@ import java.util.NoSuchElementException;
  * 2.按照规范：使用规范的HTTP状态码。如果是没有登录，就返回401，如果是没权限就返回403。
  * @since 0.0.1
  */
-public final class Status implements Serializable {
-
-    private static final long serialVersionUID = 8188825397312417945L;
+public final class Status {
 
     /**
      * 响应编码
@@ -79,7 +76,6 @@ public final class Status implements Serializable {
 
     /**
      * 默认不存在时会创建并放入常量池
-     *
      * @param code    响应状态码
      * @param message 响应信息
      * @return Status
@@ -88,16 +84,20 @@ public final class Status implements Serializable {
         return valueOf(code, message, true);
     }
 
+    /**
+     * 默认不存在时会创建并放入常量池
+     * @param code 响应状态码
+     * @return Status
+     */
     public static Status valueOf(int code) {
         return valueOf(code, "", false);
     }
 
     /**
      * 更新状态码定义
-     *
-     * @param code
-     * @param message
-     * @param putIfNotExists
+     * @param code           响应状态码
+     * @param message        携带的信息
+     * @param putIfNotExists 不存在时是否新增
      */
     public static void update(int code, String message, boolean putIfNotExists) {
         Status status = pool.get(code);
@@ -123,7 +123,7 @@ public final class Status implements Serializable {
     }
 
     /**
-     * 预定义的常量
+     * 预定义的HTTP错误状态，遵循HTTP规范
      */
     public static final Status HTTP_200 = valueOf(200, "OK");
     public static final Status HTTP_201 = valueOf(201, "created");
@@ -137,9 +137,15 @@ public final class Status implements Serializable {
     public static final Status HTTP_503 = valueOf(503, "Service Unavailable");
 
     /**
-     * 业务异常
+     * 业务异常，由具体的业务定义，注意不要覆盖 HTTP 状态码
      */
     public static final Status UNCORRECT_PASSWORD = valueOf(10000, "密码错误");
     public static final Status NO_PASSWORD = valueOf(10001, "请输入密码");
-    public static final Status TOKEN_EXPIRED = valueOf(10001, "用户TOKEN已过期");
+    public static final Status TOKEN_EXPIRED = valueOf(10002, "用户TOKEN已过期");
+    public static final Status FORBIDDEN = valueOf(10003, "无权限");
+    public static final Status RESOURCE_NOT_EXISTED = valueOf(10004, "资源不存在");
+
+    public static final Status INSERT_OK = valueOf(20000, "新增成功");
+    public static final Status UPDATE_OK = valueOf(20001, "修改成功");
+    public static final Status DELETE_OK = valueOf(20002, "删除成功");
 }

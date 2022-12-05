@@ -5,10 +5,12 @@ import java.util.Map;
 
 /**
  * 工具类方法
- *
  * @since 0.0.1
  */
-public abstract class Results {
+public final class Results {
+
+    private Results() {
+    }
 
     public static <T> Result<T> of(Status status, String toast, T data) {
         return new Result<>(status.getCode(), status.getMessage(), data, toast);
@@ -32,9 +34,5 @@ public abstract class Results {
 
     public static <T> ListResultBuilder<T> listBuilder() {
         return new ListResult<>();
-    }
-
-    public static ResultBuilder<Map<String, Object>> mapBean() {
-        return new Result<>();
     }
 }

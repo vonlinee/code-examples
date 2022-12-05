@@ -35,29 +35,4 @@ public class Test1Controller {
         return new HashMap<>();
     }
 
-    public ResultTemplate met231() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", "zs");
-        map.put("age", 30);
-        map.put("sex", false);
-        ResultBuilder<Map<String, Object>> builder = Results.mapBean()
-                                                            .code(200)
-                                                            .message("消息内容")
-                                                            .moreInfo("更多信息")
-                                                            .data(map);
-
-        try {
-            int i = 1 / 0;
-        } catch (Exception exception) {
-            builder.throwable(exception);
-        }
-        Result<Map<String, Object>> result = builder.build();
-
-        ListResult<Result<Map<String, Object>>> result1 = new ListResult<>();
-        result1.setCode(200);
-        result1.setMessage("提示信息");
-        result1.setData(Arrays.asList(result));
-
-        return result1;
-    }
 }

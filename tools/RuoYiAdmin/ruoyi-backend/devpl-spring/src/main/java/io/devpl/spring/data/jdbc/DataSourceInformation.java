@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
  */
 public class DataSourceInformation implements BeanClassLoaderAware, InitializingBean {
 
+    private boolean isDefault;
     /**
      * 数据源配置信息
      */
@@ -29,5 +30,13 @@ public class DataSourceInformation implements BeanClassLoaderAware, Initializing
 
     public String getName() {
         return dsProps.getName();
+    }
+
+    public DataSourceProperties getProperties() {
+        return dsProps;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
     }
 }

@@ -6,7 +6,7 @@ package io.devpl.sdk.rest;
  * @param <T> Result携带的数据类型
  * @since 0.0.1
  */
-public interface ResultBuilder<T> extends RestfulRBuilder<Result<T>, ResultBuilder<T>> {
+public interface ResultBuilder<T> extends RestfulResultBuilder<Result<T>, ResultBuilder<T>> {
 
     ResultBuilder<T> setData(T data);
 

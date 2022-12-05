@@ -2,7 +2,7 @@ package io.devpl.sdk.rest;
 
 import java.util.List;
 
-public interface ListResultBuilder<E> extends RestfulRBuilder<ListResult<E>, ListResultBuilder<E>> {
+public interface ListResultBuilder<E> extends RestfulResultBuilder<ListResult<E>, ListResultBuilder<E>> {
 
     ListResultBuilder<E> setData(List<E> data);
 

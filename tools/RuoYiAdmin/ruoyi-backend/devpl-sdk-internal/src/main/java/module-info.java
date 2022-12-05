@@ -18,6 +18,8 @@ open module devpl.sdk.internal {
     requires com.google.common;
     requires org.joda.collect;
     requires org.jetbrains.annotations;
+    requires spring.core;
+    requires spring.jcl;
 
     // 表示允许访问指定包的public成员(编译及运行时)
     // 如果反射不直接通过类名调用，只是运行时通过包名使用，则只需open或opens即可
