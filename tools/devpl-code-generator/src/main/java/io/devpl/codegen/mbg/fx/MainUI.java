@@ -39,7 +39,7 @@ public class MainUI extends Application {
         controller.setPrimaryStage(primaryStage);
     }
 
-    // JavaFX 11 运行此类不行，会提示缺少JavaFX运行时组件
+    // JFX 11 运行此类不行，会提示缺少JavaFX运行时组件
     public static void main(String[] args) {
         launch(args);
     }

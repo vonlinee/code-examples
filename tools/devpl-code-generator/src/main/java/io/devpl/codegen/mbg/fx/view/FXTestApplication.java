@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbg.fx.view;
 
-import io.devpl.codegen.mbg.fx.utils.FXUtils;
+import io.devpl.codegen.mbg.fx.utils.JFX;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -25,7 +25,7 @@ public class FXTestApplication extends Application {
 
         Scene scene = new Scene(root, 600, 400);
 
-        Button btn = FXUtils.addButton(hBox, "打开", event -> {
+        Button btn = JFX.addButton(hBox, "打开", event -> {
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.show();

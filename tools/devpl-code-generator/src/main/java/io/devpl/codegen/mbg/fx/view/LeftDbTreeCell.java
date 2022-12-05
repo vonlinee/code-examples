@@ -10,6 +10,9 @@ import javafx.scene.layout.HBox;
 
 import java.lang.ref.WeakReference;
 
+/**
+ * 数据库属性列表单元格
+ */
 public class LeftDbTreeCell extends TreeCell<DatabaseConfig> {
 
     private HBox hbox;

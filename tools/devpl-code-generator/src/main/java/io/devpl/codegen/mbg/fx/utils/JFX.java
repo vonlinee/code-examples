@@ -10,13 +10,21 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.util.StringConverter;
+import javafx.util.converter.DefaultStringConverter;
 
 /**
  * 便捷的方法用于创建JavaFX控件
+ * 类似于SWT
  */
-public final class FXUtils {
+public final class JFX {
 
-    private FXUtils() {
+    /**
+     * 工具类
+     */
+    public static final StringConverter<String> DEFAULT_STRING_CONVERTER = new DefaultStringConverter();
+
+    private JFX() {
     }
 
     public static Button newButton(String text) {
@@ -87,15 +95,23 @@ public final class FXUtils {
 
     /**
      * 加载图片
-     * @param pathname
-     * @param w
-     * @param h
-     * @return
+     * @param pathname 相对路径
+     * @param w        宽度
+     * @param h        高度
+     * @return ImageView
      */
     public static ImageView loadImageView(String pathname, double w, double h) {
         ImageView dbImage = new ImageView(pathname);
         dbImage.setFitHeight(h);
         dbImage.setFitWidth(w);
+        return dbImage;
+    }
+
+    public static ImageView loadImageView(String pathname, double w, double h, Object userData) {
+        ImageView dbImage = new ImageView(pathname);
+        dbImage.setFitHeight(h);
+        dbImage.setFitWidth(w);
+        dbImage.setUserData(userData);
         return dbImage;
     }
 
