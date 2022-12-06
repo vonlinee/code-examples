@@ -21,9 +21,6 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by Owen on 6/12/16.
- */
 public class DbUtils {
 
     private static final Logger _LOG = LoggerFactory.getLogger(DbUtils.class);
@@ -36,17 +33,12 @@ public class DbUtils {
     private static final Map<Integer, Session> portForwardingSession = new ConcurrentHashMap<>();
 
     public static Session getSSHSession(DatabaseConfig databaseConfig) {
-        if (StringUtils.isBlank(databaseConfig.getSshHost())
-                || StringUtils.isBlank(databaseConfig.getSshPort())
-                || StringUtils.isBlank(databaseConfig.getSshUser())
-                || (StringUtils.isBlank(databaseConfig.getPrivateKey()) && StringUtils.isBlank(databaseConfig.getSshPassword()))
-        ) {
+        if (StringUtils.isBlank(databaseConfig.getSshHost()) || StringUtils.isBlank(databaseConfig.getSshPort()) || StringUtils.isBlank(databaseConfig.getSshUser()) || (StringUtils.isBlank(databaseConfig.getPrivateKey()) && StringUtils.isBlank(databaseConfig.getSshPassword()))) {
             return null;
         }
-
         Session session = null;
         try {
-            //Set StrictHostKeyChecking property to no to avoid UnknownHostKey issue
+            // Set StrictHostKeyChecking property to no to avoid UnknownHostKey issue
             Properties config = new Properties();
             config.put("StrictHostKeyChecking", "no");
             JSch jsch = new JSch();
@@ -54,14 +46,14 @@ public class DbUtils {
             int port = sshPort == null ? 22 : sshPort;
             session = jsch.getSession(databaseConfig.getSshUser(), databaseConfig.getSshHost(), port);
             if (StringUtils.isNotBlank(databaseConfig.getPrivateKey())) {
-                //使用秘钥方式认证
+                // 使用秘钥方式认证
                 jsch.addIdentity(databaseConfig.getPrivateKey(), StringUtils.defaultIfBlank(databaseConfig.getPrivateKeyPassword(), null));
             } else {
                 session.setPassword(databaseConfig.getSshPassword());
             }
             session.setConfig(config);
         } catch (JSchException e) {
-            //Ignore
+            // Ignore
         }
         return session;
     }
@@ -79,7 +71,8 @@ public class DbUtils {
                     if (session != null && session.isConnected()) {
                         String s = session.getPortForwardingL()[0];
                         String[] split = StringUtils.split(s, ":");
-                        boolean portForwarding = String.format("%s:%s", split[0], split[1]).equals(lport + ":" + config.getHost());
+                        boolean portForwarding = String.format("%s:%s", split[0], split[1])
+                                                       .equals(lport + ":" + config.getHost());
                         if (portForwarding) {
                             return;
                         }
@@ -164,7 +157,7 @@ public class DbUtils {
                 }
             } else {
                 // rs = md.getTables(null, config.getUsername().toUpperCase(), null, null);
-                rs = md.getTables(config.getSchema(), null, "%", new String[]{"TABLE", "VIEW"});//针对 postgresql 的左侧数据表显示
+                rs = md.getTables(config.getSchema(), null, "%", new String[]{"TABLE", "VIEW"});// 针对 postgresql 的左侧数据表显示
             }
             while (rs.next()) {
                 tables.add(rs.getString(3));
@@ -208,8 +201,7 @@ public class DbUtils {
 
     public static String getConnectionUrlWithSchema(DatabaseConfig dbConfig) throws ClassNotFoundException {
         DbType dbType = DbType.valueOf(dbConfig.getDbType());
-        String connectionUrl = String.format(dbType.getConnectionUrlPattern(),
-                portForwaring ? "127.0.0.1" : dbConfig.getHost(), portForwaring ? dbConfig.getLport() : dbConfig.getPort(), dbConfig.getSchema(), dbConfig.getEncoding());
+        String connectionUrl = String.format(dbType.getConnectionUrlPattern(), portForwaring ? "127.0.0.1" : dbConfig.getHost(), portForwaring ? dbConfig.getLport() : dbConfig.getPort(), dbConfig.getSchema(), dbConfig.getEncoding());
         _LOG.info("getConnectionUrlWithSchema, connection url: {}", connectionUrl);
         return connectionUrl;
     }

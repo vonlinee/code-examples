@@ -2,7 +2,6 @@ package io.devpl.codegen.mbg.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;

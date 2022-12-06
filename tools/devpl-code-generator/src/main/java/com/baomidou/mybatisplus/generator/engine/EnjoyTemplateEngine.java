@@ -23,9 +23,7 @@ public class EnjoyTemplateEngine extends AbstractTemplateEngine {
 
     @Override
     public @NotNull AbstractTemplateEngine init(@NotNull ConfigBuilder configBuilder) {
-        engine = Engine.createIfAbsent("mybatis-plus-generator", e -> {
-            e.setToClassPathSourceFactory();
-        });
+        engine = Engine.createIfAbsent("mybatis-plus-generator", Engine::setToClassPathSourceFactory);
         return this;
     }
 

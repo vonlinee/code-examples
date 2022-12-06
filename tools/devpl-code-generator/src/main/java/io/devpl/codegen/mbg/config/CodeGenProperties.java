@@ -10,4 +10,9 @@ public class CodeGenProperties {
 
     private String javaFileEncoding = "UTF-8";
 
+    /**
+     * Mapper 接口命名后缀
+     */
+    private String mapperNameSuffix;
+
 }

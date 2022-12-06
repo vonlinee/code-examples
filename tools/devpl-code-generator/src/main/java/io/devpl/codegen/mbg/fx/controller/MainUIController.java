@@ -42,9 +42,8 @@ public class MainUIController extends FXControllerBase {
 
     @FXML
     public Label dictConfigLabel; // 程序内部字典配置
-    // tool bar buttons
     @FXML
-    private Label connectionLabel;
+    private Label connectionLabel; // toolbar buttons
     @FXML
     private Label configsLabel;
     @FXML
@@ -58,7 +57,7 @@ public class MainUIController extends FXControllerBase {
     @FXML
     private TextField domainObjectNameField;
     @FXML
-    private TextField generateKeysField;    //主键ID
+    private TextField generateKeysField;    // 主键ID
     @FXML
     private TextField modelTargetProject;
     @FXML
@@ -143,7 +142,6 @@ public class MainUIController extends FXControllerBase {
         // 字典配置
         configImage = FXUtils.loadImageView("static/icons/config-list.png", 40, 40);
         dictConfigLabel.setGraphic(configImage);
-
         useExample.setOnMouseClicked(event -> {
             offsetLimitCheckBox.setDisable(!useExample.isSelected());
         });
@@ -207,7 +205,7 @@ public class MainUIController extends FXControllerBase {
                         this.tableName = tableName;
                         tableNameField.setText(tableName);
                         domainObjectNameField.setText(StringUtils.dbStringToCamelStyle(tableName));
-                        mapperName.setText(domainObjectNameField.getText().concat("DAO"));
+                        mapperName.setText(domainObjectNameField.getText().concat("Mapper"));
                     }
                 }
             });
@@ -215,7 +213,7 @@ public class MainUIController extends FXControllerBase {
         });
         loadLeftDBTree();
         setTooltip();
-        //默认选中第一个，否则如果忘记选择，没有对应错误提示
+        // 默认选中第一个，否则如果忘记选择，没有对应错误提示
         encodingChoice.getSelectionModel().selectFirst();
     }
 
@@ -294,6 +292,7 @@ public class MainUIController extends FXControllerBase {
         TreeItem<String> rootTreeItem = leftDBTree.getRoot();
         rootTreeItem.getChildren().clear();
         try {
+            // 加载所有的数据库配置
             List<DatabaseConfig> dbConfigs = ConfigHelper.loadDatabaseConfig();
             for (DatabaseConfig dbConfig : dbConfigs) {
                 TreeItem<String> treeItem = new TreeItem<>();
@@ -344,7 +343,7 @@ public class MainUIController extends FXControllerBase {
         alert.show();
         PictureProcessStateController pictureProcessStateController = null;
         try {
-            //Engage PortForwarding
+            // Engage PortForwarding
             Session sshSession = DbUtils.getSSHSession(selectedDatabaseConfig);
             DbUtils.engagePortForwarding(sshSession, selectedDatabaseConfig);
 

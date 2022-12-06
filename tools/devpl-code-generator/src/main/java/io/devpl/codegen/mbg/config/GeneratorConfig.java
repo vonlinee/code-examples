@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbg.config;
 
 /**
- * GeneratorConfig is the Config of mybatis generator config exclude database
+ * GeneratorConfig除了数据库配置外的配置 config exclude database
  * config
  * <p>
  * Created by Owen on 6/16/16.
