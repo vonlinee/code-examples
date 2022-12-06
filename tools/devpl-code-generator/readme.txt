@@ -11,4 +11,9 @@ https://github.com/baomidou/generator
 
 
 
+命名约定
+控件缩写
+比如
+tv_name;
+
 

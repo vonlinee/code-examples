@@ -6,7 +6,7 @@
 <?import java.lang.String?>
 <SplitPane fx:id="splitpane" dividerPositions="1.0" prefHeight="800.0" prefWidth="1200.0"
            xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="io.devpl.codegen.mbg.fx.controller.MainPageController">
+           fx:controller="io.devpl.codegen.fxui.common.controller.MainPageController">
     <styleClass>
         <String fx:value="bg"/>
         <String fx:value="trans"/>

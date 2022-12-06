@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="io.devpl.codegen.mbg.fx.controller.DictConfigController"
+      fx:controller="io.devpl.codegen.fxui.controller.DictConfigController"
       prefHeight="400.0" prefWidth="600.0">
 
     <TableView fx:id="dictConfigTable" layoutX="47.0" layoutY="53.0" prefHeight="200.0" prefWidth="200.0"
@@ -22,6 +22,6 @@
     </TableView>
 
     <HBox>
-        <Button text="新增"></Button>
+        <Button text="新增"/>
     </HBox>
 </VBox>
