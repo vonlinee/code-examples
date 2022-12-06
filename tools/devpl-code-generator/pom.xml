@@ -213,20 +213,19 @@
             <artifactId>mybatis-plus-core</artifactId>
             <version>3.5.2</version>
         </dependency>
+        <!--模板引擎库-->
         <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.30</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.ibeetl/beetl -->
         <dependency>
             <groupId>com.ibeetl</groupId>
             <artifactId>beetl</artifactId>
             <version>3.13.0.RELEASE</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.apache.velocity/velocity-engine-core -->
         <dependency>
             <groupId>org.apache.velocity</groupId>
@@ -239,13 +238,12 @@
             <artifactId>enjoy</artifactId>
             <version>5.0.3</version>
         </dependency>
-
+        <!--数据库工具类-->
         <dependency>
             <groupId>commons-dbutils</groupId>
             <artifactId>commons-dbutils</artifactId>
             <version>1.7</version>
         </dependency>
-
         <!-- 选择原因：最快 Github: https://github.com/brettwooldridge/HikariCP -->
         <!-- 注意：此坐标仅仅支持Java 11+ -->
         <dependency>
@@ -253,7 +251,6 @@
             <artifactId>HikariCP</artifactId>
             <version>5.0.1</version>
         </dependency>
-
         <!--Spring-->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -265,15 +262,25 @@
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
-
+        <!--JSON序列化-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10</version>
+        </dependency>
+        <!--SSH连接库：支持ssh2协议-->
         <!-- https://mvnrepository.com/artifact/org.apache.sshd/sshd-core -->
         <dependency>
             <groupId>org.apache.sshd</groupId>
             <artifactId>sshd-core</artifactId>
             <version>2.9.2</version>
         </dependency>
-
+        <!--Java代码生成-->
+        <dependency>
+            <groupId>com.squareup</groupId>
+            <artifactId>javapoet</artifactId>
+            <version>1.13.0</version>
+        </dependency>
     </dependencies>
     <build>
         <!--资源打包配置-->
