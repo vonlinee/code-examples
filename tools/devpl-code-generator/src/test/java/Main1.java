@@ -18,7 +18,7 @@ public class Main1 extends Application {
     final Group group = new Group();
     final Scene scene = new Scene(group, 600, 400, Color.GHOSTWHITE);
     stage.setScene(scene);
-    stage.setTitle("JavaFX 2 Animations");
+    stage.setTitle("JFX 2 Animations");
     stage.show();
     final Circle circle = new Circle(20, 20, 15);
     circle.setFill(Color.DARKRED);

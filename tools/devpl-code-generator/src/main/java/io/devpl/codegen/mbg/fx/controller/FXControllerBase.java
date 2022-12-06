@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * JavaFX Controller的基类
+ * JFX Controller的基类
  */
 public abstract class FXControllerBase implements Initializable {
     private static final Logger _LOG = LoggerFactory.getLogger(FXControllerBase.class);
@@ -29,10 +29,10 @@ public abstract class FXControllerBase implements Initializable {
 
     /**
      * 加载FXML页面
-     * @param title
-     * @param fxmlPage
-     * @param cache
-     * @return
+     * @param title    标题
+     * @param fxmlPage FXML页面
+     * @param cache    是否缓存
+     * @return 控制器类
      */
     public FXControllerBase loadFXMLPage(String title, FXMLPage fxmlPage, boolean cache) {
         SoftReference<? extends FXControllerBase> parentNodeRef = cacheNodeMap.get(fxmlPage);

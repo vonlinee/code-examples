@@ -2,13 +2,16 @@ package io.devpl.codegen.mbg.fx.controller;
 
 import com.jcraft.jsch.Session;
 import io.devpl.codegen.mbg.bridge.MyBatisCodeGenerator;
-import io.devpl.codegen.mbg.fx.utils.FXUtils;
 import io.devpl.codegen.mbg.config.DatabaseConfig;
 import io.devpl.codegen.mbg.config.GeneratorConfig;
 import io.devpl.codegen.mbg.fx.model.UITableColumnVO;
-import io.devpl.codegen.mbg.utils.*;
 import io.devpl.codegen.mbg.fx.utils.Alerts;
+import io.devpl.codegen.mbg.fx.utils.JFX;
 import io.devpl.codegen.mbg.fx.utils.UIProgressCallback;
+import io.devpl.codegen.mbg.utils.ConfigHelper;
+import io.devpl.codegen.mbg.utils.DbUtils;
+import io.devpl.codegen.mbg.utils.FileUtils;
+import io.devpl.codegen.mbg.utils.StringUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -20,7 +23,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
-import javafx.util.Callback;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
@@ -116,7 +118,7 @@ public class MainUIController extends FXControllerBase {
     public void initialize(URL location, ResourceBundle resources) {
         initializePlaceholderValue();
         // 新建连接
-        ImageView dbImage = FXUtils.loadImageView("static/icons/computer.png", 40, 40);
+        ImageView dbImage = JFX.loadImageView("static/icons/computer.png", 40, 40);
         connectionLabel.setGraphic(dbImage);
         connectionLabel.setOnMouseClicked(event -> {
             TabPaneController controller = (TabPaneController) loadFXMLPage("新建数据库连接", FXMLPage.NEW_CONNECTION, false);
@@ -130,7 +132,7 @@ public class MainUIController extends FXControllerBase {
         });
 
         // 生成配置管理
-        ImageView configImage = FXUtils.loadImageView("static/icons/config-list.png", 40, 40);
+        ImageView configImage = JFX.loadImageView("static/icons/config-list.png", 40, 40);
 
         configsLabel.setGraphic(configImage);
         configsLabel.setOnMouseClicked(event -> {
@@ -140,7 +142,7 @@ public class MainUIController extends FXControllerBase {
         });
 
         // 字典配置
-        configImage = FXUtils.loadImageView("static/icons/config-list.png", 40, 40);
+        configImage = JFX.loadImageView("static/icons/config-list.png", 40, 40);
         dictConfigLabel.setGraphic(configImage);
         useExample.setOnMouseClicked(event -> {
             offsetLimitCheckBox.setDisable(!useExample.isSelected());
@@ -152,7 +154,6 @@ public class MainUIController extends FXControllerBase {
 
         leftDBTree.setShowRoot(false);
         leftDBTree.setRoot(new TreeItem<>());
-        Callback<TreeView<String>, TreeCell<String>> defaultCellFactory = TextFieldTreeCell.forTreeView();
         filterTreeBox.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
             if (ev.getCode() == KeyCode.ENTER) {
                 ObservableList<TreeItem<String>> schemas = leftDBTree.getRoot().getChildren();
@@ -160,18 +161,23 @@ public class MainUIController extends FXControllerBase {
                 ev.consume();
             }
         });
+
+        // 设置单元格工厂 Callback<TreeView<T>, TreeCell<T>> value
         leftDBTree.setCellFactory((TreeView<String> tv) -> {
-            TreeCell<String> cell = defaultCellFactory.call(tv);
+            // 创建一个单元格
+            TreeCell<String> cell = new TextFieldTreeCell<>(JFX.DEFAULT_STRING_CONVERTER);
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                int level = leftDBTree.getTreeItemLevel(cell.getTreeItem());
+                // 获取单元格
                 @SuppressWarnings("unchecked")
                 TreeCell<String> treeCell = (TreeCell<String>) event.getSource();
                 TreeItem<String> treeItem = treeCell.getTreeItem();
+                int level = leftDBTree.getTreeItemLevel(treeItem);
+                // 层级为1，点击每个连接
                 if (level == 1) {
                     final ContextMenu contextMenu = new ContextMenu();
                     MenuItem item1 = new MenuItem("关闭连接");
-                    item1.setOnAction(event1 -> treeItem.getChildren().clear());
                     MenuItem item2 = new MenuItem("编辑连接");
+                    item1.setOnAction(event1 -> treeItem.getChildren().clear());
                     item2.setOnAction(event1 -> {
                         DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
                         TabPaneController controller = (TabPaneController) loadFXMLPage("编辑数据库连接", FXMLPage.NEW_CONNECTION, false);
@@ -192,6 +198,7 @@ public class MainUIController extends FXControllerBase {
                     contextMenu.getItems().addAll(item1, item2, item3);
                     cell.setContextMenu(contextMenu);
                 }
+                // 双击
                 if (event.getClickCount() == 2) {
                     if (treeItem == null) {
                         return;
@@ -243,9 +250,7 @@ public class MainUIController extends FXControllerBase {
                 children.clear();
                 for (String tableName : tables) {
                     TreeItem<String> newTreeItem = new TreeItem<>();
-                    ImageView imageView = new ImageView("static/icons/table.png");
-                    imageView.setFitHeight(16);
-                    imageView.setFitWidth(16);
+                    ImageView imageView = JFX.loadImageView("static/icons/table.png", 16, 16);
                     newTreeItem.setGraphic(imageView);
                     newTreeItem.setValue(tableName);
                     children.add(newTreeItem);
@@ -254,16 +259,10 @@ public class MainUIController extends FXControllerBase {
                 treeItem.getChildren().clear();
             }
             if (org.apache.commons.lang3.StringUtils.isNotBlank(filter)) {
-                ImageView imageView = new ImageView("static/icons/filter.png");
-                imageView.setFitHeight(16);
-                imageView.setFitWidth(16);
-                imageView.setUserData(treeItem.getGraphic().getUserData());
+                ImageView imageView = JFX.loadImageView("static/icons/filter.png", 16, 16, treeItem.getGraphic().getUserData());
                 treeItem.setGraphic(imageView);
             } else {
-                ImageView dbImage = new ImageView("static/icons/computer.png");
-                dbImage.setFitHeight(16);
-                dbImage.setFitWidth(16);
-                dbImage.setUserData(treeItem.getGraphic().getUserData());
+                ImageView dbImage = JFX.loadImageView("static/icons/computer.png", 16, 16, treeItem.getGraphic().getUserData());
                 treeItem.setGraphic(dbImage);
             }
         } catch (SQLRecoverableException e) {
@@ -285,7 +284,7 @@ public class MainUIController extends FXControllerBase {
         overrideXML.setTooltip(new Tooltip("重新生成时把原XML文件覆盖，否则是追加"));
         useDAOExtendStyle.setTooltip(new Tooltip("将通用接口方法放在公共接口中，DAO接口留空"));
         forUpdateCheckBox.setTooltip(new Tooltip("在Select语句中增加for update后缀"));
-        FXUtils.setTooltip(useLombokPlugin, "实体类使用Lombok @Data简化代码");
+        JFX.setTooltip(useLombokPlugin, "实体类使用Lombok @Data简化代码");
     }
 
     void loadLeftDBTree() {
@@ -297,7 +296,7 @@ public class MainUIController extends FXControllerBase {
             for (DatabaseConfig dbConfig : dbConfigs) {
                 TreeItem<String> treeItem = new TreeItem<>();
                 treeItem.setValue(dbConfig.getName());
-                ImageView dbImage = FXUtils.loadImageView("static/icons/computer.png", 16, 16);
+                ImageView dbImage = JFX.loadImageView("static/icons/computer.png", 16, 16);
                 dbImage.setUserData(dbConfig);
                 treeItem.setGraphic(dbImage);
                 rootTreeItem.getChildren().add(treeItem);
@@ -332,7 +331,6 @@ public class MainUIController extends FXControllerBase {
         if (!checkDirs(generatorConfig)) {
             return;
         }
-
         MyBatisCodeGenerator bridge = new MyBatisCodeGenerator();
         bridge.setGeneratorConfig(generatorConfig);
         bridge.setDatabaseConfig(selectedDatabaseConfig);
@@ -346,7 +344,6 @@ public class MainUIController extends FXControllerBase {
             // Engage PortForwarding
             Session sshSession = DbUtils.getSSHSession(selectedDatabaseConfig);
             DbUtils.engagePortForwarding(sshSession, selectedDatabaseConfig);
-
             if (sshSession != null) {
                 pictureProcessStateController = new PictureProcessStateController();
                 pictureProcessStateController.setDialogStage(getDialogStage());
