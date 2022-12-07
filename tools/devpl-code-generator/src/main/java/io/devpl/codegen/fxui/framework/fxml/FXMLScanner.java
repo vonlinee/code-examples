@@ -8,36 +8,25 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class FXMLScanner {
-    private static final List<File> scanFiles = new ArrayList<>();
 
     private static final String parentPath = "static/fxml";
 
-    static int i = 0;
+    private static int i = 0;
 
     public static void scanClassPath() {
         final URL classpathRoot = Resources.getAppClassLoader().getResource(parentPath);
-
         if (classpathRoot == null) {
             return;
         }
-
         try {
             final File rootDirectory = new File(classpathRoot.toURI());
-
             final String absoluteRootPath = rootDirectory.getAbsolutePath().replace("\\", "/");
-
             i = absoluteRootPath.indexOf(parentPath);
-
             doScan(rootDirectory.getAbsolutePath());
-            for (File scanFile : scanFiles) {
-                fxmlLocations.put(scanFile.getCanonicalPath(), scanFile);
-            }
         } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -46,9 +35,9 @@ public class FXMLScanner {
     /**
      * 扫描所有的FXML文件，Key为相对路径，Value为绝对路径
      */
-    private static final Map<String, File> fxmlLocations = new LinkedHashMap<>();
+    private static final Map<String, String> fxmlLocations = new LinkedHashMap<>();
 
-    public static File getFxmlFile(String relativePath) {
+    public static String getFxmlLocation(String relativePath) {
         return fxmlLocations.get(relativePath);
     }
 
@@ -74,7 +63,8 @@ public class FXMLScanner {
                     doScan(file.getAbsolutePath());
                 } else {  // 非文件夹
                     //
-                    fxmlLocations.put(file.getAbsolutePath().substring(i).replace("\\", "/"), file);
+                    final String absolutePath = file.getAbsolutePath().intern();
+                    fxmlLocations.put(absolutePath.substring(i).replace("\\", "/"), absolutePath);
                 }
             }
         }
@@ -82,7 +72,5 @@ public class FXMLScanner {
 
     public static void main(String[] args) {
         FXMLScanner.scanClassPath();
-
-        System.out.println(fxmlLocations);
     }
 }

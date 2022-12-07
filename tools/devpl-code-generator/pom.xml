@@ -283,6 +283,27 @@
             <version>3.2.0</version>
         </dependency>
 
+
+        <!-- 在 java11 发布时，oracle官方就宣布移除了以下两个特性：-->
+        <!-- Remove JAXB (Java Architecture for XML Binding)-->
+        <!-- Remove JAX-WS (Java API for XML Web Services)-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <!-- jax-ws-->
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>rt</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+
     </dependencies>
     <build>
         <!--资源打包配置-->
