@@ -8,6 +8,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -17,42 +18,34 @@ public class FXMLScanner {
 
     private static int i = 0;
 
-    public static void scanClassPath() {
+    public static Map<String, String> scan() {
+        FilenameFilter filter = (dir, name) -> name != null && name.endsWith(".fxml");
         final URL classpathRoot = Resources.getAppClassLoader().getResource(parentPath);
         if (classpathRoot == null) {
-            return;
+            return Collections.emptyMap();
         }
         try {
             final File rootDirectory = new File(classpathRoot.toURI());
             final String absoluteRootPath = rootDirectory.getAbsolutePath().replace("\\", "/");
             i = absoluteRootPath.indexOf(parentPath);
-            doScan(rootDirectory.getAbsolutePath());
+            Map<String, String> map = new LinkedHashMap<>();
+            doScan(rootDirectory.getAbsolutePath(), filter, map);
+            return map;
         } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * 扫描所有的FXML文件，Key为相对路径，Value为绝对路径
-     */
-    private static final Map<String, String> fxmlLocations = new LinkedHashMap<>();
-
-    public static String getFxmlLocation(String relativePath) {
-        return fxmlLocations.get(relativePath);
-    }
-
-    static final FilenameFilter FXML_FILTER = (dir, name) -> name != null && name.endsWith(".fxml");
-
-    /**
      * TODO:递归扫描指定文件夹下面的指定文件
      */
-    public static void doScan(String folderPath) throws FileNotFoundException {
+    private static void doScan(String folderPath, final FilenameFilter filter, final Map<String, String> result) throws FileNotFoundException {
         File directory = new File(folderPath);
         if (!directory.isDirectory()) {
             return;
         }
         if (directory.isDirectory()) {
-            File[] files = directory.listFiles(FXML_FILTER);
+            File[] files = directory.listFiles(filter);
             if (files == null || files.length == 0) {
                 return;
             }
@@ -60,17 +53,13 @@ public class FXMLScanner {
                 // 如果当前是文件夹，进入递归扫描文件夹
                 if (file.isDirectory()) {
                     // 递归扫描下面的文件夹
-                    doScan(file.getAbsolutePath());
+                    doScan(file.getAbsolutePath(), filter, result);
                 } else {  // 非文件夹
                     //
                     final String absolutePath = file.getAbsolutePath().intern();
-                    fxmlLocations.put(absolutePath.substring(i).replace("\\", "/"), absolutePath);
+                    result.put(absolutePath.substring(i).replace("\\", "/"), absolutePath);
                 }
             }
         }
-    }
-
-    public static void main(String[] args) {
-        FXMLScanner.scanClassPath();
     }
 }

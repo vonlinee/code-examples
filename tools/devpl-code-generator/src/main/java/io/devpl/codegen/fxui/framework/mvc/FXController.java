@@ -2,6 +2,7 @@ package io.devpl.codegen.fxui.framework.mvc;
 
 import javafx.event.EventDispatchChain;
 import javafx.event.EventTarget;
+import javafx.fxml.Initializable;
 import org.greenrobot.eventbus.EventBus;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
@@ -12,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 所有控制器的基类，控制器是单例对象
  */
-public abstract class FXController implements EventTarget {
+public abstract class FXController implements EventTarget, Initializable {
 
     protected final Log log = LogFactory.getLog(getClass());
 
