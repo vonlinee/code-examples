@@ -10,15 +10,22 @@ import java.util.Objects;
 /**
  * 资源加载工具类
  */
-public class Resources {
+public final class Resources {
+
+    private static final ClassLoader loader = Resources.class.getClassLoader();
 
     /**
      * 项目运行时的根路径
      */
     public static final String ROOT_PROJECT_PATH = new File("").getAbsolutePath();
 
+    public static ClassLoader getAppClassLoader() {
+        return loader;
+    }
+
     /**
      * 运行时的类路径的根路径
+     * 先获得本类的所在位置
      */
     public static final String ROOT_CLASSPATH = Objects.requireNonNull(Resources.class.getResource("/")).getPath();
 

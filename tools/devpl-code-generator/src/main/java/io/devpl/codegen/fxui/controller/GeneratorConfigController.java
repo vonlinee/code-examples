@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.devpl.codegen.fxui.config.GeneratorConfig;
+import io.devpl.codegen.fxui.config.CodeGenConfiguration;
 import io.devpl.codegen.fxui.utils.ConfigHelper;
 import io.devpl.codegen.fxui.framework.Alerts;
 
@@ -29,7 +29,7 @@ public class GeneratorConfigController extends FXControllerBase {
     private static final Logger _LOG = LoggerFactory.getLogger(GeneratorConfigController.class);
 
     @FXML
-    private TableView<GeneratorConfig> configTable;
+    private TableView<CodeGenConfiguration> configTable;
     @FXML
     private TableColumn nameColumn;
     @FXML
@@ -62,7 +62,7 @@ public class GeneratorConfigController extends FXControllerBase {
                     btn1.setOnAction(event -> {
                         try {
                             // 应用配置
-                            GeneratorConfig generatorConfig = ConfigHelper.loadGeneratorConfig(item.toString());
+                            CodeGenConfiguration generatorConfig = ConfigHelper.loadGeneratorConfig(item.toString());
                             mainUIController.setGeneratorConfigIntoUI(generatorConfig);
                             controller.closeDialogStage();
                         } catch (Exception e) {
@@ -88,7 +88,7 @@ public class GeneratorConfigController extends FXControllerBase {
 
     public void refreshTableView() {
         try {
-            List<GeneratorConfig> configs = ConfigHelper.loadGeneratorConfigs();
+            List<CodeGenConfiguration> configs = ConfigHelper.loadGeneratorConfigs();
             configTable.setItems(FXCollections.observableList(configs));
         } catch (Exception e) {
             Alerts.showErrorAlert(e.getMessage());

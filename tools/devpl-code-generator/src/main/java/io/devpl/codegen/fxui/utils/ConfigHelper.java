@@ -3,7 +3,7 @@ package io.devpl.codegen.fxui.utils;
 import com.alibaba.fastjson.JSON;
 import io.devpl.codegen.fxui.config.DatabaseConfig;
 import io.devpl.codegen.fxui.config.DbType;
-import io.devpl.codegen.fxui.config.GeneratorConfig;
+import io.devpl.codegen.fxui.config.CodeGenConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,7 +100,7 @@ public class ConfigHelper {
         }
     }
 
-    public static void saveGeneratorConfig(GeneratorConfig generatorConfig) throws Exception {
+    public static void saveGeneratorConfig(CodeGenConfiguration generatorConfig) throws Exception {
         ResultSet rs = null;
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             String jsonStr = JSON.toJSONString(generatorConfig);
@@ -110,31 +110,31 @@ public class ConfigHelper {
         }
     }
 
-    public static GeneratorConfig loadGeneratorConfig(String name) throws Exception {
+    public static CodeGenConfiguration loadGeneratorConfig(String name) throws Exception {
         ResultSet rs = null;
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             String sql = String.format("SELECT * FROM generator_config where name='%s'", name);
             _LOG.info("sql: {}", sql);
             rs = stat.executeQuery(sql);
-            GeneratorConfig generatorConfig = null;
+            CodeGenConfiguration generatorConfig = null;
             if (rs.next()) {
                 String value = rs.getString("value");
-                generatorConfig = JSON.parseObject(value, GeneratorConfig.class);
+                generatorConfig = JSON.parseObject(value, CodeGenConfiguration.class);
             }
             return generatorConfig;
         }
     }
 
-    public static List<GeneratorConfig> loadGeneratorConfigs() throws Exception {
+    public static List<CodeGenConfiguration> loadGeneratorConfigs() throws Exception {
         ResultSet rs = null;
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             String sql = String.format("SELECT * FROM generator_config");
             _LOG.info("sql: {}", sql);
             rs = stat.executeQuery(sql);
-            List<GeneratorConfig> configs = new ArrayList<>();
+            List<CodeGenConfiguration> configs = new ArrayList<>();
             while (rs.next()) {
                 String value = rs.getString("value");
-                configs.add(JSON.parseObject(value, GeneratorConfig.class));
+                configs.add(JSON.parseObject(value, CodeGenConfiguration.class));
             }
             return configs;
         }

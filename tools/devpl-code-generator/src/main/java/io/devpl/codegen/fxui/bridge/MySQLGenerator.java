@@ -1,4 +1,4 @@
-package io.devpl.codegen.fxui;
+package io.devpl.codegen.fxui.bridge;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;

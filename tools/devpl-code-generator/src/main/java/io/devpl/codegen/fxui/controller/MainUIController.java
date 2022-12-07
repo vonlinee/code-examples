@@ -5,13 +5,10 @@ import io.devpl.codegen.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.codegen.fxui.common.model.ColumnCustomConfiguration;
 import io.devpl.codegen.fxui.common.utils.UIProgressCallback;
 import io.devpl.codegen.fxui.config.DatabaseConfig;
-import io.devpl.codegen.fxui.config.GeneratorConfig;
+import io.devpl.codegen.fxui.config.CodeGenConfiguration;
 import io.devpl.codegen.fxui.framework.Alerts;
 import io.devpl.codegen.fxui.framework.JFX;
-import io.devpl.codegen.fxui.utils.ConfigHelper;
-import io.devpl.codegen.fxui.utils.DbUtils;
-import io.devpl.codegen.fxui.utils.FileUtils;
-import io.devpl.codegen.fxui.utils.StringUtils;
+import io.devpl.codegen.fxui.utils.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -40,7 +37,6 @@ import java.util.ResourceBundle;
 public class MainUIController extends FXControllerBase {
 
     private static final Logger _LOG = LoggerFactory.getLogger(MainUIController.class);
-    private static final String FOLDER_NO_EXIST = "部分目录不存在，是否创建";
 
     @FXML
     public Label dictConfigLabel; // 程序内部字典配置
@@ -319,7 +315,7 @@ public class MainUIController extends FXControllerBase {
             Alerts.error(result).showAndWait();
             return;
         }
-        GeneratorConfig generatorConfig = getGeneratorConfigFromUI();
+        CodeGenConfiguration generatorConfig = getGeneratorConfigFromUI();
         if (!checkDirs(generatorConfig)) {
             return;
         }
@@ -407,7 +403,7 @@ public class MainUIController extends FXControllerBase {
             }
             log.info("user choose name: {}", name);
             try {
-                GeneratorConfig generatorConfig = getGeneratorConfigFromUI();
+                CodeGenConfiguration generatorConfig = getGeneratorConfigFromUI();
                 generatorConfig.setName(name);
                 ConfigHelper.deleteGeneratorConfig(name);
                 ConfigHelper.saveGeneratorConfig(generatorConfig);
@@ -418,8 +414,8 @@ public class MainUIController extends FXControllerBase {
         }
     }
 
-    public GeneratorConfig getGeneratorConfigFromUI() {
-        GeneratorConfig generatorConfig = new GeneratorConfig();
+    public CodeGenConfiguration getGeneratorConfigFromUI() {
+        CodeGenConfiguration generatorConfig = new CodeGenConfiguration();
         generatorConfig.setProjectFolder(projectFolderField.getText());
         generatorConfig.setModelPackage(modelTargetPackage.getText());
         generatorConfig.setGenerateKeys(generateKeysField.getText());
@@ -453,7 +449,7 @@ public class MainUIController extends FXControllerBase {
      * 将配置更新到UI
      * @param generatorConfig 代码生成配置
      */
-    public void setGeneratorConfigIntoUI(GeneratorConfig generatorConfig) {
+    public void setGeneratorConfigIntoUI(CodeGenConfiguration generatorConfig) {
         projectFolderField.setText(generatorConfig.getProjectFolder());
         modelTargetPackage.setText(generatorConfig.getModelPackage());
         generateKeysField.setText(generatorConfig.getGenerateKeys());
@@ -518,7 +514,7 @@ public class MainUIController extends FXControllerBase {
      * 检查并创建不存在的文件夹
      * @return 是否创建成功
      */
-    private boolean checkDirs(GeneratorConfig config) {
+    private boolean checkDirs(CodeGenConfiguration config) {
         List<String> dirs = new ArrayList<>();
         dirs.add(config.getProjectFolder());
         dirs.add(config.getProjectFolder().concat("/").concat(config.getModelPackageTargetFolder()));
@@ -533,7 +529,7 @@ public class MainUIController extends FXControllerBase {
         }
         if (haveNotExistFolder) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setContentText(FOLDER_NO_EXIST);
+            alert.setContentText(Messages.getString("PromptText.2"));
             Optional<ButtonType> optional = alert.showAndWait();
             if (optional.isPresent()) {
                 if (ButtonType.OK == optional.get()) {
@@ -543,7 +539,7 @@ public class MainUIController extends FXControllerBase {
                         }
                         return true;
                     } catch (Exception e) {
-                        Alerts.error("创建目录失败，请检查目录是否是文件而非目录").show();
+                        Alerts.error(Messages.getString("PromptText.3")).show();
                     }
                 } else {
                     return false;
@@ -555,12 +551,12 @@ public class MainUIController extends FXControllerBase {
 
     @FXML
     public void openTargetFolder() {
-        GeneratorConfig generatorConfig = getGeneratorConfigFromUI();
+        CodeGenConfiguration generatorConfig = getGeneratorConfigFromUI();
         String projectFolder = generatorConfig.getProjectFolder();
         try {
             FileUtils.show(new File(projectFolder));
         } catch (Exception e) {
-            Alerts.showErrorAlert("打开目录失败，请检查目录是否填写正确" + e.getMessage());
+            Alerts.error("打开目录失败，请检查目录是否填写正确" + e.getMessage()).showAndWait();
         }
     }
 }

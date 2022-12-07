@@ -2,6 +2,8 @@ package io.devpl.codegen.fxui.common;
 
 import io.devpl.codegen.fxui.controller.MainUIController;
 import io.devpl.codegen.fxui.utils.ConfigHelper;
+import io.devpl.codegen.fxui.utils.Messages;
+import io.devpl.codegen.fxui.utils.Resources;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
 
 /**
@@ -18,6 +21,13 @@ import java.net.URL;
 public class MainUI extends Application {
 
     private static final String MAIN_WINDOW_TITLE = "代码生成器";
+
+    @Override
+    public void init() throws Exception {
+        super.init();
+        final File file = Resources.getResourcesAsFile("message.properties", true);
+        Messages.init(file);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {

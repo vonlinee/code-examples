@@ -1,6 +1,9 @@
 package io.devpl.codegen.fxui.utils;
 
-public class StringUtils {
+/**
+ * 统一工具类
+ */
+public final class StringUtils {
 
     public static boolean isEmpty(final CharSequence cs) {
         return cs == null || cs.length() == 0;
@@ -16,6 +19,10 @@ public class StringUtils {
             if (!hasText(charSequence)) return false;
         }
         return true;
+    }
+
+    public static boolean isNotEmpty(final CharSequence cs) {
+        return org.apache.commons.lang3.StringUtils.isNotEmpty(cs);
     }
 
     /**

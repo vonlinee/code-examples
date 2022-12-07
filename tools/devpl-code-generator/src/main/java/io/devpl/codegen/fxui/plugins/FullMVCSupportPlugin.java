@@ -1,9 +1,6 @@
 package io.devpl.codegen.fxui.plugins;
 
-import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
-import org.mybatis.generator.api.dom.java.Interface;
-import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.config.Context;
 
 import java.util.List;
@@ -34,10 +31,4 @@ public class FullMVCSupportPlugin extends PluginAdapter {
         super.setProperties(properties);
     }
 
-    // @Override
-    public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass,
-                                   IntrospectedTable introspectedTable) {
-        // return super.clientGenerated(interfaze, topLevelClass, introspectedTable);
-        return true;
-    }
 }

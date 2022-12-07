@@ -1,9 +1,13 @@
 package io.devpl.codegen.fxui.config;
 
+import io.devpl.codegen.fxui.common.ConfigMap;
+
 /**
  * 除了数据库配置外的配置
  */
-public class GeneratorConfig {
+public class CodeGenConfiguration {
+
+    private final ConfigMap configMap = new ConfigMap();
 
     /**
      * 本配置的名称
@@ -76,7 +80,7 @@ public class GeneratorConfig {
     private boolean swaggerSupport;
 
     /**
-     * 是否支持swagger
+     * 是否支持MVC
      */
     private boolean fullMVCSupport = true;
 
