@@ -7,6 +7,8 @@ import javafx.scene.control.Alert;
  */
 public final class Alerts {
 
+    private Alerts() {}
+
     private static final Alert INFO = new Alert(Alert.AlertType.INFORMATION);
     private static final Alert WARN = new Alert(Alert.AlertType.WARNING);
     private static final Alert ERROR = new Alert(Alert.AlertType.ERROR);
@@ -59,7 +61,7 @@ public final class Alerts {
      * dialog.
      * @param message
      */
-    public static Alert buildConfirmationAlert(String message) {
+    public static Alert confirmation(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setContentText(message);
         return alert;

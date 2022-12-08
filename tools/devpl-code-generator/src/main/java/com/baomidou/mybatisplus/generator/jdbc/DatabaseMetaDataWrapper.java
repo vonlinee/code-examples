@@ -30,7 +30,6 @@ import java.util.*;
 
 /**
  * 数据库数据元包装类
- *
  * @author nieqiurong 2021/2/8.
  * @since 3.5.0
  */
@@ -40,15 +39,14 @@ public class DatabaseMetaDataWrapper {
 
     private final DatabaseMetaData databaseMetaData;
 
-    //TODO 暂时只支持一种
+    // TODO 暂时只支持一种
     private final String catalog;
 
-    //TODO 暂时只支持一种
+    // TODO 暂时只支持一种
     private final String schema;
 
     /**
      * 3.5.4版本会删除此方法
-     *
      * @param connection
      * @see #DatabaseMetaDataWrapper(DataSourceConfig)
      */
@@ -80,7 +78,6 @@ public class DatabaseMetaDataWrapper {
 
     /**
      * 获取表字段信息
-     *
      * @return 表字段信息 (小写字段名->字段信息)
      */
     public Map<String, Column> getColumnsInfo(String catalog, String schema, String tableName, boolean queryPrimaryKey) {
@@ -115,7 +112,7 @@ public class DatabaseMetaDataWrapper {
                     column.autoIncrement = "YES".equals(resultSet.getString("IS_AUTOINCREMENT"));
                 } catch (SQLException sqlException) {
                     logger.warn("获取IS_AUTOINCREMENT出现异常:", sqlException);
-                    //TODO 目前测试在oracle旧驱动下存在问题，降级成false.
+                    // TODO 目前测试在oracle旧驱动下存在问题，降级成false.
                 }
                 columnsInfoMap.put(name.toLowerCase(), column);
             }
@@ -156,7 +153,7 @@ public class DatabaseMetaDataWrapper {
 
     public Table getTableInfo(String catalog, String schema, String tableName) {
         Table table = new Table();
-        //TODO 后面要根据表是否为视图来查询，后面重构表查询策略。
+        // TODO 后面要根据表是否为视图来查询，后面重构表查询策略。
         try (ResultSet resultSet = databaseMetaData.getTables(catalog, schema, tableName, new String[]{"TABLE", "VIEW"})) {
             table.name = tableName;
             while (resultSet.next()) {

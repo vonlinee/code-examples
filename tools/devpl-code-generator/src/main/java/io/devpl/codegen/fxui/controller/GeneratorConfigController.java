@@ -21,12 +21,8 @@ import java.util.ResourceBundle;
 
 /**
  * 管理GeneratorConfig的Controller
- *
- * Created by Owen on 8/21/16.
  */
 public class GeneratorConfigController extends FXControllerBase {
-
-    private static final Logger _LOG = LoggerFactory.getLogger(GeneratorConfigController.class);
 
     @FXML
     private TableView<CodeGenConfiguration> configTable;
@@ -72,7 +68,7 @@ public class GeneratorConfigController extends FXControllerBase {
                     btn2.setOnAction(event -> {
                         try {
                             // 删除配置
-                            _LOG.debug("item: {}", item);
+                            log.debug("item: {}", item);
                             ConfigHelper.deleteGeneratorConfig(item.toString());
                             refreshTableView();
                         } catch (Exception e) {

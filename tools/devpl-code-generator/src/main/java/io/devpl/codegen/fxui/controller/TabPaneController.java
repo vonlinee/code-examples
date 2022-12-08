@@ -19,11 +19,9 @@ import java.util.ResourceBundle;
 
 /**
  * Project: mybatis-generator-gui
- *
  * @author github.com/slankka on 2019/1/22.
  */
 public class TabPaneController extends FXControllerBase {
-    private static Logger logger = LoggerFactory.getLogger(TabPaneController.class);
 
     @FXML
     private TabPane tabPane;
@@ -40,10 +38,12 @@ public class TabPaneController extends FXControllerBase {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tabPane.setPrefHeight(((AnchorPane) tabPane.getSelectionModel().getSelectedItem().getContent()).getPrefHeight());
+        tabPane.setPrefHeight(((AnchorPane) tabPane.getSelectionModel().getSelectedItem()
+                                                   .getContent()).getPrefHeight());
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             isOverssh = observable.getValue().getText().equals("SSH");
-            tabPane.prefHeightProperty().bind(((AnchorPane) tabPane.getSelectionModel().getSelectedItem().getContent()).prefHeightProperty());
+            tabPane.prefHeightProperty().bind(((AnchorPane) tabPane.getSelectionModel().getSelectedItem()
+                                                                   .getContent()).prefHeightProperty());
             getDialogStage().close();
             getDialogStage().show();
         });
@@ -60,13 +60,8 @@ public class TabPaneController extends FXControllerBase {
     public void setConfig(DatabaseConfig selectedConfig) {
         tabControlAController.setConfig(selectedConfig);
         tabControlBController.setDbConnectionConfig(selectedConfig);
-        if (StringUtils.isNoneBlank(
-                selectedConfig.getSshHost(),
-                selectedConfig.getSshPassword(),
-                selectedConfig.getSshPort(),
-                selectedConfig.getSshUser(),
-                selectedConfig.getLport())) {
-            logger.info("Found SSH based Config");
+        if (StringUtils.isNoneBlank(selectedConfig.getSshHost(), selectedConfig.getSshPassword(), selectedConfig.getSshPort(), selectedConfig.getSshUser(), selectedConfig.getLport())) {
+            log.info("Found SSH based Config");
             tabPane.getSelectionModel().selectLast();
         }
     }
@@ -80,7 +75,7 @@ public class TabPaneController extends FXControllerBase {
     }
 
     @FXML
-    void saveConnection() {
+    private void saveConnection() {
         if (isOverssh) {
             tabControlBController.saveConfig();
         } else {
@@ -88,20 +83,13 @@ public class TabPaneController extends FXControllerBase {
         }
     }
 
-
     @FXML
     void testConnection() {
         DatabaseConfig config = extractConfigForUI();
         if (config == null) {
             return;
         }
-        if (StringUtils.isAnyEmpty(config.getName(),
-                config.getHost(),
-                config.getPort(),
-                config.getUsername(),
-                config.getEncoding(),
-                config.getDbType(),
-                config.getSchema())) {
+        if (StringUtils.isAnyEmpty(config.getName(), config.getHost(), config.getPort(), config.getUsername(), config.getEncoding(), config.getDbType(), config.getSchema())) {
             Alerts.showWarnAlert("密码以外其他字段必填");
             return;
         }
@@ -110,7 +98,7 @@ public class TabPaneController extends FXControllerBase {
             PictureProcessStateController pictureProcessState = new PictureProcessStateController();
             pictureProcessState.setDialogStage(getDialogStage());
             pictureProcessState.startPlay();
-            //如果不用异步，则视图会等方法返回才会显示
+            // 如果不用异步，则视图会等方法返回才会显示
             Task task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
@@ -121,24 +109,24 @@ public class TabPaneController extends FXControllerBase {
             };
             task.setOnFailed(event -> {
                 Throwable e = task.getException();
-                logger.error("task Failed", e);
+                log.error("task Failed", e);
                 if (e instanceof RuntimeException) {
                     if (e.getMessage().equals("Address already in use: JVM_Bind")) {
                         tabControlBController.setLPortLabelText(config.getLport() + "已经被占用，请换其他端口");
                     }
-                    //端口转发一定不成功，导致数据库连接不上
+                    // 端口转发一定不成功，导致数据库连接不上
                     pictureProcessState.playFailState("连接失败:" + e.getMessage(), true);
                     return;
                 }
 
                 if (e.getCause() instanceof EOFException) {
                     pictureProcessState.playFailState("连接失败, 请检查数据库的主机名，并且检查端口和目标端口是否一致", true);
-                    //端口转发已经成功，但是数据库连接不上，故需要释放连接
+                    // 端口转发已经成功，但是数据库连接不上，故需要释放连接
                     DbUtils.shutdownPortForwarding(sshSession);
                     return;
                 }
                 pictureProcessState.playFailState("连接失败:" + e.getMessage(), true);
-                //可能是端口转发已经成功，但是数据库连接不上，故需要释放连接
+                // 可能是端口转发已经成功，但是数据库连接不上，故需要释放连接
                 DbUtils.shutdownPortForwarding(sshSession);
             });
             task.setOnSucceeded(event -> {
@@ -147,7 +135,7 @@ public class TabPaneController extends FXControllerBase {
                     DbUtils.shutdownPortForwarding(sshSession);
                     tabControlBController.recoverNotice();
                 } catch (Exception e) {
-                    logger.error("", e);
+                    log.error("", e);
                 }
             });
             new Thread(task).start();
@@ -156,10 +144,10 @@ public class TabPaneController extends FXControllerBase {
                 DbUtils.getConnection(config);
                 Alerts.showInfoAlert("连接成功");
             } catch (RuntimeException e) {
-                logger.error("", e);
+                log.error("", e);
                 Alerts.showWarnAlert("连接失败, " + e.getMessage());
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
                 Alerts.showWarnAlert("连接失败");
             }
         }

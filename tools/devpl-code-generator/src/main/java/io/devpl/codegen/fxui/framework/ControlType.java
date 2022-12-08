@@ -10,9 +10,10 @@ import javafx.scene.control.Control;
  * 程序中使用单词缩写原则：不要用缩写，除非该缩写是约定俗成的。
  * 一:控件命名：控件类型 + 名称，整体按小驼峰命名
  * Button           btn
- * CheckBox         chk
+ * CheckBox         chb
  * TableView        tv
- * ImageView        imgView 或者 iv
+ * ImageView        imgView 或者 iv 或者 imgv
+ * TextArea         tta
  * <p>
  * 容器类命名
  * BorderPane       bop

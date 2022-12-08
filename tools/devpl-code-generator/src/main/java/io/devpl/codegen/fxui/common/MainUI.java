@@ -1,6 +1,7 @@
 package io.devpl.codegen.fxui.common;
 
 import io.devpl.codegen.fxui.controller.MainUIController;
+import io.devpl.codegen.fxui.framework.JavaFXApplication;
 import io.devpl.codegen.fxui.utils.ConfigHelper;
 import io.devpl.codegen.fxui.utils.Messages;
 import io.devpl.codegen.fxui.utils.Resources;
@@ -18,7 +19,7 @@ import java.net.URL;
  * 这是本软件的主入口,要运行本软件请直接运行本类就可以了,不用传入任何参数
  * 本软件要求jkd版本大于1.8.0.40
  */
-public class MainUI extends Application {
+public class MainUI extends JavaFXApplication {
 
     private static final String MAIN_WINDOW_TITLE = "代码生成器";
 

@@ -6,9 +6,8 @@ import com.jcraft.jsch.Session;
 import io.devpl.codegen.fxui.common.model.ColumnCustomConfiguration;
 import io.devpl.codegen.fxui.framework.Alerts;
 import io.devpl.codegen.fxui.config.DatabaseConfig;
-import io.devpl.codegen.fxui.config.DbType;
+import io.devpl.codegen.fxui.config.DBDriver;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.mybatis.generator.internal.util.ClassloaderUtility;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
@@ -22,9 +21,12 @@ public class DbUtils {
 
     private static final Log log = LogFactory.getLog(DbUtils.class);
 
+    /**
+     * 数据库连接超时时长
+     */
     private static final int DB_CONNECTION_TIMEOUTS_SECONDS = 1;
 
-    private static final Map<DbType, Driver> drivers = new HashMap<>();
+    private static final Map<DBDriver, Driver> drivers = new HashMap<>();
 
     private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private static volatile boolean portForwaring = false;
@@ -41,8 +43,7 @@ public class DbUtils {
             // Set StrictHostKeyChecking property to no to avoid UnknownHostKey issue
             Properties config = new Properties();
             config.put("StrictHostKeyChecking", "no");
-            Integer sshPort = NumberUtils.createInteger(databaseConfig.getSshPort());
-            int port = sshPort == null ? 22 : sshPort;
+            Integer port = NumberUtils.decode(databaseConfig.getSshPort(), 22);
             session = jsch.getSession(databaseConfig.getSshUser(), databaseConfig.getSshHost(), port);
             if (StringUtils.isNotBlank(databaseConfig.getPrivateKey())) {
                 // 使用秘钥方式认证
@@ -62,10 +63,8 @@ public class DbUtils {
             AtomicInteger assinged_port = new AtomicInteger();
             Future<?> result = executorService.submit(() -> {
                 try {
-                    Integer localPort = NumberUtils.createInteger(config.getLport());
-                    Integer RemotePort = NumberUtils.createInteger(config.getRport());
-                    int lport = localPort == null ? Integer.parseInt(config.getPort()) : localPort;
-                    int rport = RemotePort == null ? Integer.parseInt(config.getPort()) : RemotePort;
+                    Integer lport = NumberUtils.decode(config.getLport(), NumberUtils.parseInt(config.getLport(), 3306));
+                    Integer rport = NumberUtils.decode(config.getRport(), NumberUtils.parseInt(config.getRport(), 3306));
                     Session session = portForwardingSession.get(lport);
                     if (session != null && session.isConnected()) {
                         String s = session.getPortForwardingL()[0];
@@ -116,11 +115,10 @@ public class DbUtils {
     }
 
     public static Connection getConnection(DatabaseConfig config) throws ClassNotFoundException, SQLException {
-        DbType dbType = DbType.valueOf(config.getDbType());
+        DBDriver dbType = DBDriver.valueOf(config.getDbType());
         if (drivers.get(dbType) == null) {
             loadDbDriver(dbType);
         }
-
         String url = getConnectionUrlWithSchema(config);
         Properties props = new Properties();
 
@@ -140,15 +138,15 @@ public class DbUtils {
             List<String> tables = new ArrayList<>();
             DatabaseMetaData md = connection.getMetaData();
             ResultSet rs;
-            if (DbType.valueOf(config.getDbType()) == DbType.SQL_Server) {
+            if (DBDriver.valueOf(config.getDbType()) == DBDriver.SQL_SERVER) {
                 String sql = "SELECT name FROM sysobjects  WHERE xtype='u' OR xtype='v' ORDER BY name";
                 rs = connection.createStatement().executeQuery(sql);
                 while (rs.next()) {
                     tables.add(rs.getString("name"));
                 }
-            } else if (DbType.valueOf(config.getDbType()) == DbType.Oracle) {
+            } else if (DBDriver.valueOf(config.getDbType()) == DBDriver.ORACLE) {
                 rs = md.getTables(null, config.getUsername().toUpperCase(), null, new String[]{"TABLE", "VIEW"});
-            } else if (DbType.valueOf(config.getDbType()) == DbType.Sqlite) {
+            } else if (DBDriver.valueOf(config.getDbType()) == DBDriver.SQLITE) {
                 String sql = "SELECT name FROM sqlite_master;";
                 rs = connection.createStatement().executeQuery(sql);
                 while (rs.next()) {
@@ -199,7 +197,7 @@ public class DbUtils {
     }
 
     public static String getConnectionUrlWithSchema(DatabaseConfig dbConfig) throws ClassNotFoundException {
-        DbType dbType = DbType.valueOf(dbConfig.getDbType());
+        DBDriver dbType = DBDriver.valueOf(dbConfig.getDbType());
         String connectionUrl = String.format(dbType.getConnectionUrlPattern(), portForwaring ? "127.0.0.1" : dbConfig.getHost(), portForwaring ? dbConfig.getLport() : dbConfig.getPort(), dbConfig.getSchema(), dbConfig.getEncoding());
         log.info("getConnectionUrlWithSchema, connection url: {}", connectionUrl);
         return connectionUrl;
@@ -209,7 +207,7 @@ public class DbUtils {
      * 加载数据库驱动
      * @param dbType 数据库类型
      */
-    private static void loadDbDriver(DbType dbType) {
+    private static void loadDbDriver(DBDriver dbType) {
         List<String> driverJars = ConfigHelper.getAllJDBCDriverJarPaths();
         ClassLoader classloader = ClassloaderUtility.getCustomClassloader(driverJars);
         try {

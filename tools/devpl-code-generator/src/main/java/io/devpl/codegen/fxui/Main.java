@@ -1,5 +1,6 @@
 package io.devpl.codegen.fxui;
 
+import io.devpl.codegen.fxui.common.MainUI;
 import io.devpl.codegen.fxui.test.TestFXMLApplication;
 import javafx.application.Application;
 
@@ -9,6 +10,6 @@ import javafx.application.Application;
  */
 public class Main {
     public static void main(String[] args) {
-        Application.launch(TestFXMLApplication.class);
+        Application.launch(MainUI.class);
     }
 }

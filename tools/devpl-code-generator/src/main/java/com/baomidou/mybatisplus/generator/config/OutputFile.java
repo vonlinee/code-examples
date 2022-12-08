@@ -17,21 +17,13 @@ package com.baomidou.mybatisplus.generator.config;
 
 /**
  * 输出文件类型
- *
  * @author hubin
  * @since 2021-06-01
  */
 public enum OutputFile {
-    entity,
-    service,
-    serviceImpl,
-    mapper,
-    xml,
-    controller,
+    entity, service, serviceImpl, mapper, xml, controller,
     /**
      * 已弃用，已重构自定义文件生成，3.5.4版本会删除
      */
-    @Deprecated
-    other,
-    parent;
+    @Deprecated other, parent;
 }

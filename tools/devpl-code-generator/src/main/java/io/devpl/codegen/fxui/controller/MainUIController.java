@@ -43,6 +43,8 @@ public class MainUIController extends FXControllerBase {
     @FXML
     public CheckBox addMapperAnnotationChcekBox; // 是否添加@Mapper注解
     @FXML
+    public Label labTextHandle;
+    @FXML
     private Label connectionLabel; // toolbar buttons
     @FXML
     private Label configsLabel;
@@ -144,7 +146,8 @@ public class MainUIController extends FXControllerBase {
         dictConfigLabel.setGraphic(configImage);
         useExample.setOnMouseClicked(event -> offsetLimitCheckBox.setDisable(!useExample.isSelected()));
         // selectedProperty().addListener 解决应用配置的时候未触发Clicked事件
-        useLombokPlugin.selectedProperty().addListener((observable, oldValue, newValue) -> needToStringHashcodeEquals.setDisable(newValue));
+        useLombokPlugin.selectedProperty()
+                       .addListener((observable, oldValue, newValue) -> needToStringHashcodeEquals.setDisable(newValue));
 
         // 设置多选
         leftDBTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -363,6 +366,15 @@ public class MainUIController extends FXControllerBase {
         }
     }
 
+    /**
+     * 打开文本处理界面
+     * @param mouseEvent
+     */
+    @FXML
+    public void openTextHandleToolkit(MouseEvent mouseEvent) {
+
+    }
+
     static class DoNothing extends Task<Void> {
         @Override
         protected Void call() throws Exception {
@@ -398,7 +410,7 @@ public class MainUIController extends FXControllerBase {
         if (result.isPresent()) {
             String name = result.get();
             if (org.apache.commons.lang3.StringUtils.isEmpty(name)) {
-                Alerts.showErrorAlert("名称不能为空");
+                Alerts.error("名称不能为空").show();
                 return;
             }
             log.info("user choose name: {}", name);

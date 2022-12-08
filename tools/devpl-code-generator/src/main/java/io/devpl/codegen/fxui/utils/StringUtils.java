@@ -5,12 +5,17 @@ package io.devpl.codegen.fxui.utils;
  */
 public final class StringUtils {
 
+    private StringUtils() {
+    }
+
+    public static final String EMPTY_BLANK = "";
+
     public static boolean isEmpty(final CharSequence cs) {
         return cs == null || cs.length() == 0;
     }
 
     public static boolean hasText(final CharSequence cs) {
-        return cs == null || cs.length() == 0;
+        return org.springframework.util.StringUtils.hasText(cs);
     }
 
     public static boolean hasText(final CharSequence... sequence) {
@@ -55,5 +60,13 @@ public final class StringUtils {
             }
         }
         return null;
+    }
+
+    public static String[] split(String source, String separator) {
+        return org.apache.commons.lang3.StringUtils.split(source, separator);
+    }
+
+    public static boolean containsAny(final CharSequence cs, final CharSequence... searchCharSequences) {
+        return org.apache.commons.lang3.StringUtils.containsAny(cs, searchCharSequences);
     }
 }

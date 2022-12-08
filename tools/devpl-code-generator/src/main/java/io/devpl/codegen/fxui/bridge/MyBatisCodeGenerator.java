@@ -3,7 +3,7 @@ package io.devpl.codegen.fxui.bridge;
 import io.devpl.codegen.fxui.common.StringKey;
 import io.devpl.codegen.fxui.config.Constants;
 import io.devpl.codegen.fxui.config.DatabaseConfig;
-import io.devpl.codegen.fxui.config.DbType;
+import io.devpl.codegen.fxui.config.DBDriver;
 import io.devpl.codegen.fxui.config.CodeGenConfiguration;
 import io.devpl.codegen.fxui.plugins.*;
 import io.devpl.codegen.fxui.utils.ConfigHelper;
@@ -73,7 +73,7 @@ public class MyBatisCodeGenerator {
         }
 
         context.addProperty(StringKey.AUTO_DELIMIT_KEYWORDS, "true");
-        if (DbType.MySQL.name().equals(dbType) || DbType.MySQL_8.name().equals(dbType)) {
+        if (DBDriver.MySQL5.name().equals(dbType) || DBDriver.MySQL8.name().equals(dbType)) {
             tableConfig.setSchema(selectedDatabaseConfig.getSchema());
             // 由于beginningDelimiter和endingDelimiter的默认值为双引号(")，在Mysql中不能这么写，所以还要将这两个默认值改为`
             context.addProperty(StringKey.BEGINNING_DELIMITER, "`");
@@ -82,9 +82,9 @@ public class MyBatisCodeGenerator {
             tableConfig.setCatalog(selectedDatabaseConfig.getSchema());
         }
         if (generatorConfig.isUseSchemaPrefix()) {
-            if (DbType.MySQL.name().equals(dbType) || DbType.MySQL_8.name().equals(dbType)) {
+            if (DBDriver.MySQL5.name().equals(dbType) || DBDriver.MySQL8.name().equals(dbType)) {
                 tableConfig.setSchema(selectedDatabaseConfig.getSchema());
-            } else if (DbType.Oracle.name().equals(dbType)) {
+            } else if (DBDriver.ORACLE.name().equals(dbType)) {
                 // Oracle的schema为用户名，如果连接用户拥有dba等高级权限，若不设schema，会导致把其他用户下同名的表也生成一遍导致mapper中代码重复
                 tableConfig.setSchema(selectedDatabaseConfig.getUsername());
             } else {
@@ -92,14 +92,14 @@ public class MyBatisCodeGenerator {
             }
         }
         // 针对 postgresql 单独配置
-        if (DbType.PostgreSQL.name().equals(dbType)) {
+        if (DBDriver.POSTGRE_SQL.name().equals(dbType)) {
             tableConfig.setDelimitIdentifiers(true);
         }
 
         // 添加GeneratedKey主键生成
         if (StringUtils.isNotEmpty(generatorConfig.getGenerateKeys())) {
             String dbType2 = dbType;
-            if (DbType.MySQL.name().equals(dbType2) || DbType.MySQL_8.name().equals(dbType)) {
+            if (DBDriver.MySQL5.name().equals(dbType2) || DBDriver.MySQL8.name().equals(dbType)) {
                 dbType2 = "JDBC";
                 // dbType为JDBC，且配置中开启useGeneratedKeys时，Mybatis会使用Jdbc3KeyGenerator,
                 // 使用该KeyGenerator的好处就是直接在一次INSERT 语句内，通过resultSet获取得到 生成的主键值，
@@ -131,16 +131,16 @@ public class MyBatisCodeGenerator {
         }
 
         JDBCConnectionConfiguration jdbcConfig = new JDBCConnectionConfiguration();
-        if (DbType.MySQL.name().equals(dbType) || DbType.MySQL_8.name().equals(dbType)) {
+        if (DBDriver.MySQL5.name().equals(dbType) || DBDriver.MySQL8.name().equals(dbType)) {
             jdbcConfig.addProperty(StringKey.NULL_CATALOG_MEANS_CURRENT, "true");
             // useInformationSchema可以拿到表注释，从而生成类注释可以使用表的注释
             jdbcConfig.addProperty(StringKey.USE_INFORMATION_SCHEMA, "true");
         }
-        jdbcConfig.setDriverClass(DbType.valueOf(dbType).getDriverClass());
+        jdbcConfig.setDriverClass(DBDriver.valueOf(dbType).getDriverClass());
         jdbcConfig.setConnectionURL(DbUtils.getConnectionUrlWithSchema(selectedDatabaseConfig));
         jdbcConfig.setUserId(selectedDatabaseConfig.getUsername());
         jdbcConfig.setPassword(selectedDatabaseConfig.getPassword());
-        if (DbType.Oracle.name().equals(dbType)) {
+        if (DBDriver.ORACLE.name().equals(dbType)) {
             jdbcConfig.getProperties().setProperty(StringKey.REMARKS_REPORTING, "true");
         }
         // java model
@@ -191,8 +191,9 @@ public class MyBatisCodeGenerator {
         }
         // limit/offset插件  
         if (generatorConfig.isOffsetLimit()) {
-            if (DbType.MySQL.name().equals(dbType) || DbType.MySQL_8.name().equals(dbType) || DbType.PostgreSQL.name()
-                                                                                                               .equals(dbType)) {
+            if (DBDriver.MySQL5.name().equals(dbType) || DBDriver.MySQL8.name().equals(dbType) || DBDriver.POSTGRE_SQL
+                    .name()
+                    .equals(dbType)) {
                 addPluginConfiguration(context, MySQLLimitPlugin.class);
             }
         }
@@ -204,20 +205,22 @@ public class MyBatisCodeGenerator {
         }
         // forUpdate 插件
         if (generatorConfig.isNeedForUpdate()) {
-            if (DbType.MySQL.name().equals(dbType) || DbType.PostgreSQL.name().equals(dbType)) {
+            if (DBDriver.MySQL5.name().equals(dbType) || DBDriver.POSTGRE_SQL.name().equals(dbType)) {
                 addPluginConfiguration(context, MySQLForUpdatePlugin.class);
             }
         }
         // repository 插件
         if (generatorConfig.isAnnotationDAO()) {
-            if (DbType.MySQL.name().equals(dbType) || DbType.MySQL_8.name().equals(dbType) || DbType.PostgreSQL.name()
-                                                                                                               .equals(dbType)) {
+            if (DBDriver.MySQL5.name().equals(dbType) || DBDriver.MySQL8.name().equals(dbType) || DBDriver.POSTGRE_SQL
+                    .name()
+                    .equals(dbType)) {
                 addPluginConfiguration(context, RepositoryPlugin.class);
             }
         }
         if (generatorConfig.isUseDAOExtendStyle()) {
-            if (DbType.MySQL.name().equals(dbType) || DbType.MySQL_8.name().equals(dbType) || DbType.PostgreSQL.name()
-                                                                                                               .equals(dbType)) {
+            if (DBDriver.MySQL5.name().equals(dbType) || DBDriver.MySQL8.name().equals(dbType) || DBDriver.POSTGRE_SQL
+                    .name()
+                    .equals(dbType)) {
                 PluginConfiguration pf = addPluginConfiguration(context, CommonDAOInterfacePlugin.class);
                 pf.addProperty(StringKey.USE_EXAMPLE, String.valueOf(generatorConfig.isUseExample()));
             }

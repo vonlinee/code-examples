@@ -16,16 +16,17 @@
         <SplitPane fx:id="sppTxtArea" prefHeight="160.0" prefWidth="200.0"
                    BorderPane.alignment="CENTER">
             <Group fx:id="grpLeft">
-                <TextArea fx:id="txtaLeft" prefHeight="200.0" prefWidth="200.0"/>
+                <TextArea fx:id="ttaLeft" prefHeight="200.0" prefWidth="200.0"/>
             </Group>
             <Group fx:id="grpRight">
-                <TextArea fx:id="txtaRight" prefHeight="200.0" prefWidth="200.0"/>
+                <TextArea fx:id="ttaRight" prefHeight="200.0" prefWidth="200.0"/>
             </Group>
         </SplitPane>
     </center>
     <bottom>
-        <FlowPane fx:id="flpBottom" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <Button fx:id="btnMaven" text="Maven坐标转换" onAction="#mavenConvert"/>
+        <FlowPane fx:id="flpBottomBtnGroup" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <Button fx:id="btnMavenToGradle" text="Maven->Gradle"/>
+            <Button fx:id="btnGradleToMaven" text="Gradle->Maven"/>
         </FlowPane>
     </bottom>
 </BorderPane>

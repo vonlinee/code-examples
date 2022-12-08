@@ -1,5 +1,7 @@
 package io.devpl.codegen.fxui.framework;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -13,11 +15,22 @@ import javafx.scene.layout.Pane;
 import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
 
+import java.net.URL;
+import java.util.Arrays;
+
 /**
  * 便捷的方法用于创建JavaFX控件
  * 类似于SWT
  */
 public final class JFX {
+
+    public static ApplicationContext getApplicationContext() {
+        return ApplicationContext.ApplicationContextHolder.context;
+    }
+
+    public static URL getFxmlLocation(String name) {
+        return getApplicationContext().getFxmlLocation(name);
+    }
 
     /**
      * 工具类
@@ -118,4 +131,22 @@ public final class JFX {
     public static void setTooltip(Control control, String tipText) {
         control.setTooltip(new Tooltip(tipText));
     }
+
+    // ================================ 集合封装 ===========================
+
+    /**
+     * Observable集合实质上也是对普通集合的包装
+     * @param elements 元素
+     * @param <E>      元素类型
+     * @return
+     */
+    public static <E> ObservableList<E> arrayOf(E[] elements) {
+        return FXCollections.observableArrayList(elements);
+    }
+
+    public static <E> ObservableList<E> observableList(E[] elements) {
+        return FXCollections.observableList(Arrays.asList(elements));
+    }
+
+    // ================================ 集合封装 ===========================
 }

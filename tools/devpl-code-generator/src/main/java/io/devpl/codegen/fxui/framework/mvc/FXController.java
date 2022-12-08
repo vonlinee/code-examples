@@ -1,8 +1,10 @@
 package io.devpl.codegen.fxui.framework.mvc;
 
+import io.devpl.codegen.fxui.framework.JavaFXApplication;
 import javafx.event.EventDispatchChain;
 import javafx.event.EventTarget;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import org.greenrobot.eventbus.EventBus;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
@@ -28,7 +30,6 @@ public abstract class FXController implements EventTarget, Initializable {
 
     public FXController() {
         controllers.put(this.getClass(), this);
-        // bus.register(this);
     }
 
     public final void post(Object event) {
@@ -37,7 +38,6 @@ public abstract class FXController implements EventTarget, Initializable {
 
     public final void unregister() {
         bus.unregister(this);
-
     }
 
     public final boolean hasSubscriberForEvent(Class<?> eventClass) {
@@ -53,5 +53,10 @@ public abstract class FXController implements EventTarget, Initializable {
     @Override
     public EventDispatchChain buildEventDispatchChain(EventDispatchChain tail) {
         return tail;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected  <T> T getUserData(Node node) {
+        return (T) node.getUserData();
     }
 }

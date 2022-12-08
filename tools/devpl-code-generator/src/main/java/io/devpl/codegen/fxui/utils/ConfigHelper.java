@@ -2,7 +2,7 @@ package io.devpl.codegen.fxui.utils;
 
 import com.alibaba.fastjson.JSON;
 import io.devpl.codegen.fxui.config.DatabaseConfig;
-import io.devpl.codegen.fxui.config.DbType;
+import io.devpl.codegen.fxui.config.DBDriver;
 import io.devpl.codegen.fxui.config.CodeGenConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,7 +149,7 @@ public class ConfigHelper {
     }
 
     public static String findConnectorLibPath(String dbType) {
-        DbType type = DbType.valueOf(dbType);
+        DBDriver type = DBDriver.valueOf(dbType);
         URL resource = Thread.currentThread().getContextClassLoader().getResource("logback-2.xml");
         _LOG.info("jar resource: {}", resource);
         if (resource != null) {

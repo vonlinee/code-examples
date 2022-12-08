@@ -1,8 +1,12 @@
 package io.devpl.codegen.fxui.controller;
 
+import io.devpl.codegen.fxui.config.Constants;
+import io.devpl.codegen.fxui.config.DBDriver;
 import io.devpl.codegen.fxui.config.DatabaseConfig;
 import io.devpl.codegen.fxui.framework.Alerts;
+import io.devpl.codegen.fxui.framework.JFX;
 import io.devpl.codegen.fxui.utils.ConfigHelper;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -11,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 /**
@@ -37,6 +42,7 @@ public class DbConnectionController extends FXControllerBase {
     protected ChoiceBox<String> encodingChoice; // 编码
     @FXML
     protected ChoiceBox<String> dbTypeChoice;  // 数据库类型选择
+
     protected MainUIController mainUIController;
     protected TabPaneController tabPaneController;
     protected boolean isUpdate = false;
@@ -44,7 +50,10 @@ public class DbConnectionController extends FXControllerBase {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        dbTypeChoice.setItems(JFX.arrayOf(DBDriver.supportedDbNames()));
+        dbTypeChoice.setValue(DBDriver.DEFAULT_DRIVER.name());
+        encodingChoice.setItems(JFX.arrayOf(Constants.SUPPORTED_ENCODING));
+        encodingChoice.setValue(Constants.DEFAULT_ENCODING);
     }
 
     final void saveConnection() {
@@ -57,8 +66,8 @@ public class DbConnectionController extends FXControllerBase {
             this.tabPaneController.getDialogStage().close();
             mainUIController.loadLeftDBTree();
         } catch (Exception e) {
-            _LOG.error(e.getMessage(), e);
-            Alerts.showErrorAlert(e.getMessage());
+            log.error(e.getMessage(), e);
+            Alerts.error(e.getMessage()).show();
         }
     }
 

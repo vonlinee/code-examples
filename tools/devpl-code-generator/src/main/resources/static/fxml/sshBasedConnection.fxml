@@ -65,20 +65,12 @@
             <PasswordField fx:id="passwordField"/>
             <CheckBox fx:id="savePwdCheckBox" mnemonicParsing="false" text="Save password" visible="false"/>
         </HBox>
-
         <Label text="Schema/数据库" GridPane.halignment="RIGHT" GridPane.rowIndex="6"/>
         <TextField fx:id="schemaField" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
 
         <Label text="编码" GridPane.halignment="RIGHT" GridPane.rowIndex="7"/>
-        <ChoiceBox fx:id="encodingChoice" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="2"
+        <ChoiceBox fx:id="encodingChoice" prefWidth="150.0" GridPane.columnIndex="2"
                    GridPane.hgrow="ALWAYS" GridPane.rowIndex="7">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="utf8"/>
-                    <String fx:value="gb2312"/>
-                    <String fx:value="gbk"/>
-                </FXCollections>
-            </items>
         </ChoiceBox>
 
         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="SSH主机名" GridPane.halignment="RIGHT"
@@ -117,7 +109,8 @@
         <PasswordField fx:id="sshPasswordField" maxWidth="200.0" prefHeight="15.0" prefWidth="200.0"
                        GridPane.columnIndex="2" GridPane.rowIndex="14"/>
 
-        <Label fx:id="pubkeyBoxLabel" text="私钥路径" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="14"/>
+        <Label fx:id="pubkeyBoxLabel" text="私钥路径" visible="false" GridPane.halignment="RIGHT"
+               GridPane.rowIndex="14"/>
         <HBox fx:id="pubkeyBox" alignment="BASELINE_LEFT" visible="false" GridPane.columnIndex="2"
               GridPane.rowIndex="14">
             <TextField fx:id="sshPubKeyField" maxWidth="327.0" prefHeight="23.0" prefWidth="327.0"/>
@@ -133,7 +126,8 @@
         <PasswordField fx:id="sshPubkeyPasswordField" maxWidth="200.0" prefHeight="15.0" prefWidth="200.0"
                        visible="false"
                        GridPane.columnIndex="2" GridPane.rowIndex="15"/>
-        <Label fx:id="sshPubkeyPasswordNote" visible="false" prefHeight="15.0" prefWidth="121.0" text="私钥没有密码则留空"
+        <Label fx:id="sshPubkeyPasswordNote" visible="false" prefHeight="15.0" prefWidth="121.0"
+               text="私钥没有密码则留空"
                textFill="#31b3b5" GridPane.columnIndex="2" GridPane.rowIndex="15">
             <GridPane.margin>
                 <Insets left="250.0"/>
