@@ -1,7 +1,6 @@
 package io.devpl.codegen.fxui;
 
 import io.devpl.codegen.fxui.common.MainUI;
-import io.devpl.codegen.fxui.test.TestFXMLApplication;
 import javafx.application.Application;
 
 /**

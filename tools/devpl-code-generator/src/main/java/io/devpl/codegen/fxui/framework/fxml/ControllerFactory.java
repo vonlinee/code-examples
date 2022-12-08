@@ -10,4 +10,6 @@ public interface ControllerFactory extends Callback<Class<?>, Object> {
     }
 
     Object getController(Class<?> param);
+
+    boolean contains(Class<?> controllerClass);
 }

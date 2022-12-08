@@ -1,10 +1,5 @@
 package io.devpl.codegen.fxui.controller;
 
-/**
- * FXML User Interface enum
- * <p>
- * Created by Owen on 6/20/16.
- */
 public enum FXMLPage {
 
     NEW_CONNECTION("static/fxml/newConnection.fxml"),

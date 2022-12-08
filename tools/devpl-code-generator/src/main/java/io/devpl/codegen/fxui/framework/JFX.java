@@ -1,22 +1,30 @@
 package io.devpl.codegen.fxui.framework;
 
+import io.devpl.codegen.fxui.framework.fxml.FXMLScanner;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * 便捷的方法用于创建JavaFX控件
@@ -24,8 +32,42 @@ import java.util.Arrays;
  */
 public final class JFX {
 
+    private static final Map<String, String> fxmlLocations = FXMLScanner.scan();
+
+    public static Scene createScene(String fxmlKey) {
+        Pane pane = loadFxml(fxmlKey);
+        assert pane != null;
+        return new Scene(pane);
+    }
+
+    public static <T extends Pane> T loadFxml(String fxmlKey) {
+        String location = fxmlLocations.get(fxmlKey);
+        try {
+            FXMLLoader loader = new FXMLLoader(new URL(location));
+            return loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static ApplicationContext getApplicationContext() {
         return ApplicationContext.ApplicationContextHolder.context;
+    }
+
+    public static Stage newStage(String title, Window owner, Modality modality, Scene scene) {
+        return newStage(title, owner, modality, scene, true);
+    }
+
+    public static Stage newStage(String title, Window owner, Modality modality, Scene scene, boolean resiable) {
+        Stage stage = new Stage();
+        if (title != null) stage.setTitle(title);
+        if (owner != null) stage.initOwner(owner);
+        if (modality != null) stage.initModality(modality);
+        if (scene != null) stage.setScene(scene);
+        stage.setMaximized(false);
+        stage.setResizable(resiable);
+        return stage;
     }
 
     /**
@@ -100,6 +142,19 @@ public final class JFX {
         Button btn = newButton(text, value);
         pane.getChildren().add(btn);
         return btn;
+    }
+
+    /**
+     * 加载图片
+     * @param pathname 相对路径
+     * @param size     高度=宽度
+     * @return ImageView
+     */
+    public static ImageView loadImageView(String pathname, double size) {
+        ImageView dbImage = new ImageView(pathname);
+        dbImage.setFitHeight(size);
+        dbImage.setFitWidth(size);
+        return dbImage;
     }
 
     /**

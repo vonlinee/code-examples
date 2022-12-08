@@ -1,7 +1,8 @@
 package io.devpl.codegen.fxui.controller;
 
-import io.devpl.codegen.fxui.framework.mvc.FXController;
 import io.devpl.codegen.fxui.framework.Alerts;
+import io.devpl.codegen.fxui.framework.JFX;
+import io.devpl.codegen.fxui.framework.mvc.FXController;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -20,7 +21,9 @@ import java.util.Map;
  */
 public abstract class FXControllerBase extends FXController implements Initializable {
 
+    // 基础窗口
     private Stage primaryStage;
+    // 弹窗窗口
     private Stage dialogStage;
 
     private static final Map<FXMLPage, SoftReference<? extends FXControllerBase>> cacheNodeMap = new HashMap<>();
@@ -44,13 +47,9 @@ public abstract class FXControllerBase extends FXController implements Initializ
             loginNode = loader.load();
             FXControllerBase controller = loader.getController();
             // fix bug: 嵌套弹出时会发生dialogStage被覆盖的情况
-            Stage tmpDialogStage = new Stage();
-            tmpDialogStage.setTitle(title);
-            tmpDialogStage.initModality(Modality.APPLICATION_MODAL);
-            tmpDialogStage.initOwner(getPrimaryStage());
-            tmpDialogStage.setScene(new Scene(loginNode));
+            Stage tmpDialogStage =
+                    JFX.newStage(title, getPrimaryStage(), Modality.APPLICATION_MODAL, new Scene(loginNode), false);
             tmpDialogStage.setMaximized(false);
-            tmpDialogStage.setResizable(false);
             tmpDialogStage.show();
             controller.setDialogStage(tmpDialogStage);
             // put into cache map
@@ -59,7 +58,7 @@ public abstract class FXControllerBase extends FXController implements Initializ
             return controller;
         } catch (IOException e) {
             log.error(e.getMessage(), e);
-            Alerts.showErrorAlert(e.getMessage());
+            Alerts.error(e.getMessage()).showAndWait();
         }
         return null;
     }

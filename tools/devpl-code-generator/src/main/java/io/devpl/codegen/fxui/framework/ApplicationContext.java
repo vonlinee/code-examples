@@ -3,22 +3,20 @@ package io.devpl.codegen.fxui.framework;
 import io.devpl.codegen.fxui.framework.fxml.ControllerFactory;
 import io.devpl.codegen.fxui.framework.fxml.DefaultControllerFactory;
 import io.devpl.codegen.fxui.framework.fxml.FXMLCache;
-import javafx.fxml.FXMLLoader;
-import javafx.util.Callback;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 应用上下文
+ *
+ *
+ * Scene loads too slow
+ * https://stackoverflow.com/questions/22328087/scene-loads-too-slow
+ * 提升性能
+ * https://stackoverflow.com/questions/11734885/javafx2-very-poor-performance-when-adding-custom-made-fxmlpanels-to-gridpane
  */
 public class ApplicationContext {
 
@@ -43,8 +41,6 @@ public class ApplicationContext {
             final FXMLCache fxmlCache = new FXMLCache(fxmlUrl);
             this.fxmlCacheMap.put(fxmlKey, fxmlCache);
             final Object controller = fxmlCache.getController();
-            this.controllerCacheMap.put(controller.getClass(), controller);
-            controllerFxmlRelationMap.put(controller.getClass(), fxmlCache);
         });
     }
 

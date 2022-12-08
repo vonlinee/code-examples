@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.openjdk.jol.info.ClassLayout;
 
 import java.io.File;
 import java.net.URL;
@@ -43,6 +44,12 @@ public class MainUI extends JavaFXApplication {
         primaryStage.show();
         MainUIController controller = fxmlLoader.getController();
         controller.setPrimaryStage(primaryStage);
+
+        primaryStage.setMinWidth(1200.0);
+        primaryStage.setMinHeight(800.0);
+
+        primaryStage.setResizable(false);
+        primaryStage.setIconified(true);
     }
 
     // JFX 11 运行此类不行，会提示缺少JavaFX运行时组件

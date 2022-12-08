@@ -4,8 +4,9 @@ import com.jcraft.jsch.Session;
 import io.devpl.codegen.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.codegen.fxui.common.model.ColumnCustomConfiguration;
 import io.devpl.codegen.fxui.common.utils.UIProgressCallback;
-import io.devpl.codegen.fxui.config.DatabaseConfig;
 import io.devpl.codegen.fxui.config.CodeGenConfiguration;
+import io.devpl.codegen.fxui.config.Constants;
+import io.devpl.codegen.fxui.config.DatabaseConfig;
 import io.devpl.codegen.fxui.framework.Alerts;
 import io.devpl.codegen.fxui.framework.JFX;
 import io.devpl.codegen.fxui.utils.*;
@@ -23,8 +24,6 @@ import javafx.stage.DirectoryChooser;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
@@ -36,14 +35,14 @@ import java.util.ResourceBundle;
 
 public class MainUIController extends FXControllerBase {
 
-    private static final Logger _LOG = LoggerFactory.getLogger(MainUIController.class);
-
     @FXML
     public Label dictConfigLabel; // 程序内部字典配置
     @FXML
     public CheckBox addMapperAnnotationChcekBox; // 是否添加@Mapper注解
     @FXML
     public Label labTextHandle;
+    @FXML
+    public CheckBox chbEnableSwagger;
     @FXML
     private Label connectionLabel; // toolbar buttons
     @FXML
@@ -116,6 +115,11 @@ public class MainUIController extends FXControllerBase {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        encodingChoice.setItems(JFX.arrayOf(Constants.SUPPORTED_ENCODING));
+        // 默认选中第一个，否则如果忘记选择，没有对应错误提示
+        encodingChoice.getSelectionModel().selectFirst();
+
+
         initializePlaceholderValue();
         // 新建连接
         ImageView dbImage = JFX.loadImageView("static/icons/computer.png", 40, 40);
@@ -132,22 +136,19 @@ public class MainUIController extends FXControllerBase {
         });
 
         // 生成配置管理
-        ImageView configImage = JFX.loadImageView("static/icons/config-list.png", 40, 40);
-
-        configsLabel.setGraphic(configImage);
+        configsLabel.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
         configsLabel.setOnMouseClicked(event -> {
             GeneratorConfigController controller = (GeneratorConfigController) loadFXMLPage("配置", FXMLPage.GENERATOR_CONFIG, false);
             controller.setMainUIController(this);
             controller.showDialogStage();
         });
-
         // 字典配置
-        configImage = JFX.loadImageView("static/icons/config-list.png", 40, 40);
-        dictConfigLabel.setGraphic(configImage);
+        // ImageView对象可以被多个控件同时使用吗？ 不能
+        dictConfigLabel.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
         useExample.setOnMouseClicked(event -> offsetLimitCheckBox.setDisable(!useExample.isSelected()));
         // selectedProperty().addListener 解决应用配置的时候未触发Clicked事件
         useLombokPlugin.selectedProperty()
-                       .addListener((observable, oldValue, newValue) -> needToStringHashcodeEquals.setDisable(newValue));
+                .addListener((observable, oldValue, newValue) -> needToStringHashcodeEquals.setDisable(newValue));
 
         // 设置多选
         leftDBTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -155,8 +156,10 @@ public class MainUIController extends FXControllerBase {
         leftDBTree.setRoot(new TreeItem<>());
         filterTreeBox.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
             if (ev.getCode() == KeyCode.ENTER) {
-                ObservableList<TreeItem<String>> schemas = leftDBTree.getRoot().getChildren();
-                schemas.filtered(TreeItem::isExpanded).forEach(this::displayTables);
+                leftDBTree.getRoot()
+                        .getChildren()
+                        .filtered(TreeItem::isExpanded)
+                        .forEach(this::displayTables);
                 ev.consume();
             }
         });
@@ -191,7 +194,7 @@ public class MainUIController extends FXControllerBase {
                             ConfigHelper.deleteDatabaseConfig(selectedConfig);
                             this.loadLeftDBTree();
                         } catch (Exception e) {
-                            Alerts.showErrorAlert("Delete connection failed! Reason: " + e.getMessage());
+                            Alerts.error("Delete connection failed! Reason: " + e.getMessage()).show();
                         }
                     });
                     contextMenu.getItems().addAll(item1, item2, item3);
@@ -219,8 +222,6 @@ public class MainUIController extends FXControllerBase {
         });
         loadLeftDBTree();
         setTooltip();
-        // 默认选中第一个，否则如果忘记选择，没有对应错误提示
-        encodingChoice.getSelectionModel().selectFirst();
     }
 
     /**
@@ -293,7 +294,7 @@ public class MainUIController extends FXControllerBase {
                 rootTreeItem.getChildren().add(treeItem);
             }
         } catch (Exception e) {
-            _LOG.error("connect db failed, reason", e);
+            log.error("connect db failed, reason", e);
             Alerts.showErrorAlert(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
         }
     }
@@ -368,11 +369,11 @@ public class MainUIController extends FXControllerBase {
 
     /**
      * 打开文本处理界面
-     * @param mouseEvent
+     * @param mouseEvent 鼠标点击事件
      */
     @FXML
     public void openTextHandleToolkit(MouseEvent mouseEvent) {
-
+        System.out.println(mouseEvent);
     }
 
     static class DoNothing extends Task<Void> {
