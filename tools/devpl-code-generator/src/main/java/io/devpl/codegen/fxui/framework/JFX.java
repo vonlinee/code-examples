@@ -28,10 +28,6 @@ public final class JFX {
         return ApplicationContext.ApplicationContextHolder.context;
     }
 
-    public static URL getFxmlLocation(String name) {
-        return getApplicationContext().getFxmlLocation(name);
-    }
-
     /**
      * 工具类
      */

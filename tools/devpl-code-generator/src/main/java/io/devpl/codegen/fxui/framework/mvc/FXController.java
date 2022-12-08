@@ -1,6 +1,5 @@
 package io.devpl.codegen.fxui.framework.mvc;
 
-import io.devpl.codegen.fxui.framework.JavaFXApplication;
 import javafx.event.EventDispatchChain;
 import javafx.event.EventTarget;
 import javafx.fxml.Initializable;

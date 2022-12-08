@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
@@ -57,7 +58,11 @@ public class FXMLScanner {
                 } else {  // 非文件夹
                     //
                     final String absolutePath = file.getAbsolutePath().intern();
-                    result.put(absolutePath.substring(i).replace("\\", "/"), absolutePath);
+                    try {
+                        result.put(absolutePath.substring(i).replace("\\", "/"), file.toURI().toURL().toExternalForm());
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }

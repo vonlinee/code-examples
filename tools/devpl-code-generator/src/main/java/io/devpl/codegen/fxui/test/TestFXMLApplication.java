@@ -12,7 +12,7 @@ public class TestFXMLApplication extends JavaFXApplication {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        URL fxmlLocation = getApplicationContext().getFxmlLocation("static/fxml/text_handle.fxml");
+        URL fxmlLocation = new URL("");
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(fxmlLocation);
