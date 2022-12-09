@@ -1,5 +1,10 @@
 import store from '@/store'
 
+/**
+ * 判断是否具有权限
+ * @param {*} permission 
+ * @returns 
+ */
 function authPermission(permission) {
   const all_permission = "*:*:*";
   const permissions = store.getters && store.getters.permissions

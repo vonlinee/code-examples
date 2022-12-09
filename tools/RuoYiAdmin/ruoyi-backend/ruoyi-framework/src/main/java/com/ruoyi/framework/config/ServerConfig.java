@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author ruoyi
  */
 @Component
-public class ServerConfiguration {
+public class ServerConfig {
     public static String getDomain(HttpServletRequest request) {
         StringBuffer url = request.getRequestURL();
         String contextPath = request.getServletContext().getContextPath();

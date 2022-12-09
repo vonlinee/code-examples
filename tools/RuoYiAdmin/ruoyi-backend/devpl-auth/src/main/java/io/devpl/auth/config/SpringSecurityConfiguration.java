@@ -29,7 +29,7 @@ public class SpringSecurityConfiguration extends GlobalMethodSecurityConfigurati
         return new BCryptPasswordEncoder();
     }
 
-    @Component
+//    @Component
     private static class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
         @Resource

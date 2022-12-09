@@ -17,7 +17,10 @@ export default {
   components: { InnerLink },
   computed: {
     iframeViews() {
-      return this.$store.state.tagsView.iframeViews
+
+      var iframe_views = this.$store.state.tagsView.iframeViews
+      console.log("iframeToggle => " + iframe_views)
+      return iframe_views
     }
   }
 }

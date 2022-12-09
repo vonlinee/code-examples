@@ -1,3 +1,5 @@
+
+<!--  -->
 <template>
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
@@ -39,6 +41,9 @@ export default {
       }
 
       this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
+
+      console.log(this.levelList);
+
     },
     isDashboard(route) {
       const name = route && route.name

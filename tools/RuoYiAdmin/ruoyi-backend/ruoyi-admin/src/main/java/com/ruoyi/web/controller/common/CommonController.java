@@ -6,7 +6,7 @@ import com.ruoyi.common.core.domain.Result;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.FileUtils;
-import com.ruoyi.framework.config.ServerConfiguration;
+import com.ruoyi.framework.config.ServerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -33,7 +33,7 @@ public class CommonController {
     private static final String FILE_DELIMETER = ",";
 
     @Resource
-    private ServerConfiguration serverConfig;
+    private ServerConfig serverConfig;
 
     /**
      * 通用下载请求

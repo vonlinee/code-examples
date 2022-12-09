@@ -2,8 +2,8 @@ package io.devpl.spring.boot.factories;
 
 import io.devpl.sdk.beans.impl.map.BeanMap;
 import io.devpl.spring.context.PropertyBindCallback;
-import io.devpl.spring.data.jdbc.DataSourceInformation;
 import io.devpl.spring.data.jdbc.DataSourceManager;
+import io.devpl.spring.data.jpa.entity.DataSourceInformation;
 import io.devpl.spring.utils.DevplConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +85,6 @@ public class DataSourceInitializer implements SpringApplicationRunListener, Orde
             // 数据库的ID
             for (String dsName : dataSourceNames.split("\\|")) {
                 String dataSourceId = dsName.trim();
-
                 if (!map.containsKey(dataSourceId)) {
                     LOG.warn("name-list contains {}, but cannot find the relative config item!", dataSourceId);
                     continue;
@@ -108,10 +107,11 @@ public class DataSourceInitializer implements SpringApplicationRunListener, Orde
         }
         // 初始化数据源
         DataSourceManager manager = bootstrapContext.getOrElseSupply(DataSourceManager.class, DataSourceManager::new);
-        for (DataSourceInformation information : dataSourceInformations) {
-            LOG.info("register DataSource[{}]", information.getName());
-            manager.registerDataSource(information.getName(), information);
-        }
+//        for (DataSourceInformation information : dataSourceInformations) {
+//            LOG.info("register DataSource[{}]", information.getName());
+//            // TODO 修改
+//            manager.registerDataSource(information.getName(), null);
+//        }
     }
 
     @Override

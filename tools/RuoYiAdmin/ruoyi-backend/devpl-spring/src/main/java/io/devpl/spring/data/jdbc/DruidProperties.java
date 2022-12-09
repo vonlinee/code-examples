@@ -3,8 +3,8 @@ package io.devpl.spring.data.jdbc;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@Component
-@ConfigurationProperties(prefix = "druid", ignoreUnknownFields = true)
+//@Component
+//@ConfigurationProperties(prefix = "druid", ignoreUnknownFields = true)
 public class DruidProperties {
 	private int initialSize = 3;
 	private int minIdle = 3;

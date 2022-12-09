@@ -21,6 +21,8 @@ export default {
     }
 
     if (title) {
+      // 左边菜单栏标题
+      console.log(title);
       if (title.length > 5) {
         vnodes.push(<span slot='title' title={(title)}>{(title)}</span>)
       } else {

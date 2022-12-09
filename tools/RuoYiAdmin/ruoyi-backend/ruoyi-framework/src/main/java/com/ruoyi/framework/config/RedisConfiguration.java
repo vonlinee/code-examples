@@ -4,6 +4,7 @@ import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -14,7 +15,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  *
  * @author ruoyi
  */
-@Configuration
+// @Configuration
+@Primary  // 解决问题：2 implementations of CachingConfigurer were found when only 1 was expected. Refactor the configuration such that CachingConfigurer is implemented only once or not at all.
 @EnableCaching
 public class RedisConfiguration extends CachingConfigurerSupport {
 

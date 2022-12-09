@@ -26,7 +26,7 @@ export default {
   name: 'Layout',
   components: {
     AppMain,
-    // Navbar,
+    Navbar,
     RightPanel,
     Settings,
     Sidebar,
