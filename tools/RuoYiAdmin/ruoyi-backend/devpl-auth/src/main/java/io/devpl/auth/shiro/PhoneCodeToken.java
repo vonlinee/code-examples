@@ -5,7 +5,6 @@ import org.apache.shiro.authc.AuthenticationToken;
 /**
  * 手机号-验证码Token，类似于UsernamePasswordToken
  * 用于适应不同的Realm
- * @author Xu Jiabao
  * @since 2022/2/22
  */
 public class PhoneCodeToken implements AuthenticationToken {

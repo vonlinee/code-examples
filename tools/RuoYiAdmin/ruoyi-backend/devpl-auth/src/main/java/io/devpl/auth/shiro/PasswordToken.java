@@ -3,23 +3,18 @@ package io.devpl.auth.shiro;
 import org.apache.shiro.authc.AuthenticationToken;
 
 /**
- * @author Xu Jiabao
- * @since 2022/4/27
+ * 简单的基于用户名密码认证的Token
  */
-public class MyUsernamePasswordToken implements AuthenticationToken {
+public class PasswordToken implements AuthenticationToken {
 
     // 用户名
-    private String username;
+    private final String username;
     // 密码
-    private String password;
+    private final String password;
     // 加密盐Key
-    private String token;
+    private final String token;
 
-    public MyUsernamePasswordToken() {
-
-    }
-
-    public MyUsernamePasswordToken(String username, String password, String token) {
+    public PasswordToken(String username, String password, String token) {
         this.username = username;
         this.password = password;
         this.token = token;
@@ -42,5 +37,4 @@ public class MyUsernamePasswordToken implements AuthenticationToken {
     public Object getCredentials() {
         return password;
     }
-
 }

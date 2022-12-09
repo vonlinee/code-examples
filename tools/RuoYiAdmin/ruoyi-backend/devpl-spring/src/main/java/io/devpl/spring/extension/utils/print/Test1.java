@@ -11,10 +11,10 @@ public class Test1 {
 	
 	public static void main(String[] args) {
 		
-		List<TableCell> header = new ArrayList<TableCell>(){{
-		    add(new TableCell("name"));
-		    add(new TableCell("email"));
-		    add(new TableCell("tel"));
+		List<TableCell> header = new ArrayList<>() {{
+			add(new TableCell("name"));
+			add(new TableCell("email"));
+			add(new TableCell("tel"));
 		}};
 		List<List<TableCell>> body = new ArrayList<List<TableCell>>(){{
 		    add(new ArrayList<TableCell>(){{

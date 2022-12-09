@@ -4,7 +4,6 @@ import org.apache.shiro.authc.HostAuthenticationToken;
 import org.apache.shiro.authc.RememberMeAuthenticationToken;
 
 /**
- * @author Xu Jiabao
  * @since 2022/2/23
  */
 public class RemoteSystemToken implements HostAuthenticationToken, RememberMeAuthenticationToken {

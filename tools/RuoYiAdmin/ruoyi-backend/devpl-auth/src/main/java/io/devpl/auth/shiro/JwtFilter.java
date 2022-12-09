@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 使用JWT代替原JSESSIONID的Cookie，解决Shiro默认返回的Cookie设置了http-only，脚本无法读取的问题
  * 本过滤器负责创建JwtToken，
- * @author Xu Jiabao
- * @since 2022/3/14
  */
 @Slf4j
 public class JwtFilter extends FormAuthenticationFilter {
@@ -23,16 +21,15 @@ public class JwtFilter extends FormAuthenticationFilter {
      * 由subject.login去验证，让SecurityUtils.getSubject可以获取用户
      * 登录成功后后端返回Token，此后所有需要认证的请求都需要在请求头上附带Token
      * Authorization={令牌值}
-     * @param request 请求
-     * @param response 响应
+     * @param request     请求
+     * @param response    响应
      * @param mappedValue the filter-specific config value mapped to this filter in the URL rules mappings.
      * @return true if request should be allowed access
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         String authorization = ((HttpServletRequest) request).getHeader("Authorization");
-        if (authorization == null)
-            return false;
+        if (authorization == null) return false;
         // createToken
         JwtToken token = new JwtToken(authorization);
         Subject subject = getSubject(request, response);
@@ -47,7 +44,7 @@ public class JwtFilter extends FormAuthenticationFilter {
 
     /**
      * 拒绝访问时，需要执行的操作
-     * @param request 请求
+     * @param request  请求
      * @param response 响应
      * @return true if the request should continue to be processed;
      * false if the subclass will handle/render the response directly.

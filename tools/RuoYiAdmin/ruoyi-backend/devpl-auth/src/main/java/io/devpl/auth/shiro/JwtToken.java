@@ -2,10 +2,6 @@ package io.devpl.auth.shiro;
 
 import org.apache.shiro.authc.AuthenticationToken;
 
-/**
- * @author Xu Jiabao
- * @since 2022/3/18
- */
 public class JwtToken implements AuthenticationToken {
 
     // jwt字符串

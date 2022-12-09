@@ -302,6 +302,13 @@
             <artifactId>jol-core</artifactId>
             <version>0.16</version>
         </dependency>
+
+        <!-- Excel导出工具 EasyPoi-->
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-spring-boot-starter</artifactId>
+            <version>4.4.0</version>
+        </dependency>
     </dependencies>
     <build>
         <!--资源打包配置-->

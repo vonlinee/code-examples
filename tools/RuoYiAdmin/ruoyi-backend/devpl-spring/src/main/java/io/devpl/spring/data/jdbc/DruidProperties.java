@@ -1,4 +1,4 @@
-package io.devpl.spring.extension.framework.spring.props;
+package io.devpl.spring.data.jdbc;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

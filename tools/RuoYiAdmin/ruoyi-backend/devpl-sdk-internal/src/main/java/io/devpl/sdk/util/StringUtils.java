@@ -11,6 +11,9 @@ import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * String工具类
+ */
 public final class StringUtils {
 
     public static String substring(String s, String b, char c) {
@@ -43,7 +46,6 @@ public final class StringUtils {
 
     /**
      * JDK的随机UUID
-     *
      * @return
      */
     public static String simpleUUID() {
@@ -52,7 +54,6 @@ public final class StringUtils {
 
     /**
      * 将字符串转换为同意最长的长度
-     *
      * @param strings 数组
      * @return List<String>
      */
@@ -106,7 +107,6 @@ public final class StringUtils {
 
     /**
      * 分割字符串
-     *
      * @param str
      * @param delimeter
      * @return
@@ -142,7 +142,6 @@ public final class StringUtils {
 
     /**
      * 字符串是否包含中文
-     *
      * @param str 待校验字符串
      * @return true 包含中文字符 false 不包含中文字符
      */
@@ -216,21 +215,18 @@ public final class StringUtils {
 
     /**
      * A String for a space character.
-     *
      * @since 3.2
      */
     public static final String SPACE = " ";
 
     /**
      * The empty String {@code ""}.
-     *
      * @since 2.0
      */
     public static final String EMPTY = "";
 
     /**
      * A String for linefeed LF ("\n").
-     *
      * @see <a href=
      * "http://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6">
      * JLF: Escape Sequences for Character and String Literals</a>
@@ -240,7 +236,6 @@ public final class StringUtils {
 
     /**
      * A String for carriage return CR ("\r").
-     *
      * @see <a href=
      * "http://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6">JLF:
      * Escape Sequences for Character and String Literals</a>
@@ -250,7 +245,6 @@ public final class StringUtils {
 
     /**
      * Represents a failed index search.
-     *
      * @since 2.1
      */
     public static final int INDEX_NOT_FOUND = -1;
@@ -269,7 +263,6 @@ public final class StringUtils {
 
     /**
      * TODO
-     *
      * @param text
      * @return
      */
@@ -295,7 +288,6 @@ public final class StringUtils {
      * <p>
      * See the examples here: {@link # join(Object[], String)}.
      * </p>
-     *
      * @param iterable  the {@code Iterable} providing the values to join together,
      *                  may be null
      * @param separator the separator character to use, null treated as ""
@@ -311,7 +303,6 @@ public final class StringUtils {
 
     /**
      * 使用指定分隔符拼接字符串
-     *
      * @param separator
      * @param items
      * @return
@@ -324,7 +315,6 @@ public final class StringUtils {
 
     /**
      * 使用指定分隔符拼接字符串
-     *
      * @param items
      * @return
      */
@@ -346,7 +336,6 @@ public final class StringUtils {
      * <p>
      * See the examples here: {@link # join(Object[], String)}.
      * </p>
-     *
      * @param iterator  the {@code Iterator} of values to join together, may be null
      * @param separator the separator character to use, null treated as ""
      * @return the joined String, {@code null} if null iterator input
@@ -431,7 +420,6 @@ public final class StringUtils {
      * StringUtils.isBlank("bob")     = false
      * StringUtils.isBlank("  bob  ") = false
      * </pre>
-     *
      * @param str the String to check, may be null
      * @return <code>true</code> if the String is null, empty or whitespace
      */
@@ -450,7 +438,6 @@ public final class StringUtils {
 
     /**
      * 是否包含空格
-     *
      * @param sequence
      * @return
      */
@@ -460,7 +447,6 @@ public final class StringUtils {
 
     /**
      * 重复字符串指定次数，然后new一个新字符串
-     *
      * @param string
      * @param count
      * @return
@@ -510,7 +496,6 @@ public final class StringUtils {
      *
      * <p><b>Warning:</b> Only the exact two-character placeholder sequence {@code "%s"} is
      * recognized.
-     *
      * @param template a string containing zero or more {@code "%s"} placeholder sequences. {@code
      *                 null} is treated as the four-character string {@code "null"}.
      * @param args     the arguments to be substituted into the message template. The first argument
@@ -559,7 +544,6 @@ public final class StringUtils {
 
     /**
      * 会对输入参数的可能情况进行检测
-     *
      * @param o
      * @return
      */

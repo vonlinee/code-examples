@@ -11,7 +11,7 @@ final class DefaultDataObject implements DataObject {
     /**
      * 存放实际的数据
      */
-    private ArrayMap<String, Object> data = null;
+    private final ArrayMap<String, Object> data;
 
     /**
      * 严格模式，如果为true，针对每个数据项的key都要进行合法性校验

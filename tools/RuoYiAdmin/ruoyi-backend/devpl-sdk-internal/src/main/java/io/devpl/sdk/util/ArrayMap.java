@@ -5,19 +5,17 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * ArrayMap is a generic key->value mapping data structure that is
- * designed to be more memory efficient than a traditional {@link java.util.HashMap},
- * this implementation is a version of the platform's
- * {@code android.util.ArrayMap} that can be used on older versions of the platform.
- * It keeps its mappings in an array data structure -- an integer array of hash
- * codes for each item, and an Object array of the key/value pairs.  This allows it to
- * avoid having to create an extra object for every entry put in to the map, and it
- * also tries to control the growth of the size of these arrays more aggressively
- * (since growing them only requires copying the entries in the array, not rebuilding
- * a hash map).
+ * copied from android.os.util.ArrayMap.
+ * ArrayMap是一个通用的key->value映射类型的数据结构，相比传统的java.util.HashMap，内存利用效率更高
+ * <p>
+ * 本实现基于Android平台的{@code android.util.ArrayMap}
+ * 它将其映射保存在数组数据结构中，一个int数组，存放有所有key的hash码，一个存放key/value对像
+ * 这个设计使得不用为每个放进map中的项目都创建额外的一个对象
+ * 它还试图更积极地控制这些数组的规模增长（因为增长它们只需要复制数组中的条目，而不是重建整个hash map）
+ * 而java.util.HashMap扩容时先对底层的数组进行扩容，然后需要在扩容后的新数组上重建整个hash map
  *
- * <p>If you don't need the standard Java container APIs provided here (iterators etc),
- * consider using {@link AbstractArrayMap} instead.</p>
+ * <p>如果您不需要这里（指此ArrayMap）提供的标准Java容器API（比如迭代器等），可考虑改用｛@link AbstractArrayMap｝.
+ * 需要自己手动实现AbstractArrayMap</p>
  *
  * <p>Note that this implementation is not intended to be appropriate for data structures
  * that may contain large numbers of items.  It is generally slower than a traditional
