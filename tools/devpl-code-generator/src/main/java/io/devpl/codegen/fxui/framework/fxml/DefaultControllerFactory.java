@@ -20,6 +20,7 @@ public class DefaultControllerFactory implements ControllerFactory {
 
     @Override
     public Object getController(Class<?> param) {
+        // 首次加载，没有该key
         if (!controllerCache.containsKey(param)) {
             try {
                 Constructor<?> constructor = param.getConstructor();

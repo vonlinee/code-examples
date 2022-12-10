@@ -3,6 +3,7 @@ package io.devpl.codegen.fxui.framework;
 import io.devpl.codegen.fxui.framework.fxml.FXMLScanner;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -16,10 +17,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
@@ -49,10 +52,6 @@ public final class JFX {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static ApplicationContext getApplicationContext() {
-        return ApplicationContext.ApplicationContextHolder.context;
     }
 
     public static Stage newStage(String title, Window owner, Modality modality, Scene scene) {
@@ -200,4 +199,30 @@ public final class JFX {
     }
 
     // ================================ 集合封装 ===========================
+
+    /**
+     * When accessing a Stage, timing is important, as the Stage is not created
+     * until the very end of a View-creation process.
+     * https://edencoding.com/stage-controller/
+     * @param event JavaFX event
+     * @return
+     */
+    public static <W extends Window> W getStage(@NotNull Event event) {
+        final Object nodeSource = event.getSource();
+        if (nodeSource instanceof Node) {
+            return getStage((Node) nodeSource);
+        }
+        return null;
+    }
+
+    /**
+     * 不要在Controller的构造，initialize方法里调用
+     * @param node 节点
+     * @param <W>
+     * @return
+     */
+    public static <W extends Window> W getStage(@NotNull Node node) {
+        @SuppressWarnings("unchecked") final W window = (W) node.getScene().getWindow();
+        return window;
+    }
 }

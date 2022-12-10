@@ -25,13 +25,6 @@ public class MainUI extends JavaFXApplication {
     private static final String MAIN_WINDOW_TITLE = "代码生成器";
 
     @Override
-    public void init() throws Exception {
-        super.init();
-        final File file = Resources.getResourcesAsFile("message.properties", true);
-        Messages.init(file);
-    }
-
-    @Override
     public void start(Stage primaryStage) throws Exception {
         ConfigHelper.createEmptyFiles();
         URL url = Thread.currentThread().getContextClassLoader().getResource("static/fxml/MainUI.fxml");
@@ -44,12 +37,8 @@ public class MainUI extends JavaFXApplication {
         primaryStage.show();
         MainUIController controller = fxmlLoader.getController();
         controller.setPrimaryStage(primaryStage);
-
         primaryStage.setMinWidth(1200.0);
         primaryStage.setMinHeight(800.0);
-
-        primaryStage.setResizable(false);
-        primaryStage.setIconified(true);
     }
 
     // JFX 11 运行此类不行，会提示缺少JavaFX运行时组件

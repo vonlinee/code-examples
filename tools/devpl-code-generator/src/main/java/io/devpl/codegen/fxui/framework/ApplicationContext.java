@@ -3,7 +3,11 @@ package io.devpl.codegen.fxui.framework;
 import io.devpl.codegen.fxui.framework.fxml.ControllerFactory;
 import io.devpl.codegen.fxui.framework.fxml.DefaultControllerFactory;
 import io.devpl.codegen.fxui.framework.fxml.FXMLCache;
+import io.devpl.codegen.fxui.framework.fxml.FXMLScanner;
+import javafx.fxml.FXMLLoader;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Map;
@@ -11,19 +15,27 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 应用上下文
- *
- *
+ * <p>
+ * <p>
  * Scene loads too slow
  * https://stackoverflow.com/questions/22328087/scene-loads-too-slow
  * 提升性能
  * https://stackoverflow.com/questions/11734885/javafx2-very-poor-performance-when-adding-custom-made-fxmlpanels-to-gridpane
  */
-public class ApplicationContext {
+public final class ApplicationContext {
 
     // Instance of StackWalker used to get caller class (must be private)
     private static final StackWalker walker = AccessController.doPrivileged((PrivilegedAction<StackWalker>) () -> StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE));
     // Indicates permission to get the ClassLoader
     private static final RuntimePermission GET_CLASSLOADER_PERMISSION = new RuntimePermission("getClassLoader");
+
+    private static class Holder {
+        static final ApplicationContext instance = new ApplicationContext();
+    }
+
+    static ApplicationContext getInstance() {
+        return Holder.instance;
+    }
 
     /**
      * 缓存所有的FXML位置信息
@@ -32,15 +44,18 @@ public class ApplicationContext {
     private final Map<Class<?>, Object> controllerCacheMap = new ConcurrentHashMap<>();
     private final Map<Class<?>, FXMLCache> controllerFxmlRelationMap = new ConcurrentHashMap<>();
 
-    static class ApplicationContextHolder {
-        static ApplicationContext context = new ApplicationContext();
-    }
-
     public void addFxmlMappings(Map<String, String> fxmlMappings) {
+        if (fxmlMappings == null || fxmlMappings.isEmpty()) {
+            return;
+        }
         fxmlMappings.forEach((fxmlKey, fxmlUrl) -> {
-            final FXMLCache fxmlCache = new FXMLCache(fxmlUrl);
-            this.fxmlCacheMap.put(fxmlKey, fxmlCache);
-            final Object controller = fxmlCache.getController();
+            try {
+                final FXMLLoader loader = new FXMLLoader(new URL(fxmlUrl));
+                loader.setControllerFactory(controllerFactory);
+                this.fxmlCacheMap.put(fxmlKey, new FXMLCache(loader));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         });
     }
 
@@ -66,7 +81,7 @@ public class ApplicationContext {
         Object controller = controllerCacheMap.get(controllerType);
         if (controller == null) {
             final FXMLCache fxmlCache = controllerFxmlRelationMap.get(controllerType);
-            controller = fxmlCache.getController();
+            controller = fxmlCache.getFXMLLoader().getController();
         }
         return (T) controller;
     }
