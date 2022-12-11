@@ -3,7 +3,7 @@ package io.devpl.codegen.fxui.controller;
 import com.jcraft.jsch.Session;
 import io.devpl.codegen.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.codegen.fxui.common.model.ColumnCustomConfiguration;
-import io.devpl.codegen.fxui.common.utils.UIProgressCallback;
+import io.devpl.codegen.fxui.common.utils.ProgressDialog;
 import io.devpl.codegen.fxui.config.CodeGenConfiguration;
 import io.devpl.codegen.fxui.config.Constants;
 import io.devpl.codegen.fxui.config.DatabaseConfig;
@@ -47,6 +47,8 @@ public class MainUIController extends FXControllerBase {
     public CheckBox chbEnableSwagger;
     @FXML
     public Label labBeanDefCreate; // 创建Bean定义
+    @FXML
+    public TextField txfParentPackageName;
     @FXML
     private Label connectionLabel; // toolbar buttons
     @FXML
@@ -122,8 +124,6 @@ public class MainUIController extends FXControllerBase {
         encodingChoice.setItems(JFX.arrayOf(Constants.SUPPORTED_ENCODING));
         // 默认选中第一个，否则如果忘记选择，没有对应错误提示
         encodingChoice.getSelectionModel().selectFirst();
-
-
         initializePlaceholderValue();
         // 新建连接
         ImageView dbImage = JFX.loadImageView("static/icons/computer.png", 40, 40);
@@ -157,7 +157,7 @@ public class MainUIController extends FXControllerBase {
         useLombokPlugin.selectedProperty()
                        .addListener((observable, oldValue, newValue) -> needToStringHashcodeEquals.setDisable(newValue));
 
-        // 设置多选
+        // 设置可以多选
         trvDbTreeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         trvDbTreeList.setShowRoot(false);
         trvDbTreeList.setRoot(new TreeItem<>());
@@ -315,10 +315,12 @@ public class MainUIController extends FXControllerBase {
         }
     }
 
+    private final MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
+
     @FXML
     public void generateCode() {
         if (tableName == null) {
-            Alerts.showWarnAlert("请先在左侧选择数据库表");
+            Alerts.warn("请先在左侧选择数据库表").show();
             return;
         }
         String result = validateConfig();
@@ -330,15 +332,15 @@ public class MainUIController extends FXControllerBase {
         if (!checkDirs(generatorConfig)) {
             return;
         }
-        MyBatisCodeGenerator bridge = new MyBatisCodeGenerator();
-        bridge.setGeneratorConfig(generatorConfig);
-        bridge.setDatabaseConfig(selectedDatabaseConfig);
-        bridge.setIgnoredColumns(ignoredColumns);
-        bridge.setColumnOverrides(columnOverrides);
+
+        mbgGenerator.setGeneratorConfig(generatorConfig);
+        mbgGenerator.setDatabaseConfig(selectedDatabaseConfig);
+        mbgGenerator.setIgnoredColumns(ignoredColumns);
+        mbgGenerator.setColumnOverrides(columnOverrides);
 
         // 进度回调
-        UIProgressCallback alert = new UIProgressCallback(Alert.AlertType.INFORMATION);
-        bridge.setProgressCallback(alert);
+        ProgressDialog alert = new ProgressDialog(Alert.AlertType.INFORMATION);
+        mbgGenerator.setProgressCallback(alert);
         alert.show();
         PictureProcessStateController pictureProcessStateController = null;
         try {
@@ -355,7 +357,7 @@ public class MainUIController extends FXControllerBase {
             // String projectFolder = projectFolderField.getText();
             // FileUtils.cleanDirectory(new File(projectFolder));
             try {
-                bridge.generate();
+                mbgGenerator.generate();
             } catch (Exception exception) {
                 Alerts.error("生成失败: " + exception.getMessage()).showAndWait();
             }

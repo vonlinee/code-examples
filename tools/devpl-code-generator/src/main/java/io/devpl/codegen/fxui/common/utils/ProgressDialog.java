@@ -3,20 +3,25 @@ package io.devpl.codegen.fxui.common.utils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextArea;
 import org.mybatis.generator.api.ProgressCallback;
 
 /**
- * Created by Owen on 6/21/16.
+ * 进度弹窗
  */
-public class UIProgressCallback extends Alert implements ProgressCallback {
+public class ProgressDialog extends Alert implements ProgressCallback {
 
     private final StringProperty progressText = new SimpleStringProperty();
     private final StringBuilder progressTextBuilder = new StringBuilder();
 
-    public UIProgressCallback(AlertType alertType) {
+    public ProgressDialog(AlertType alertType) {
         super(alertType);
         this.contentTextProperty().bindBidirectional(progressText);
         setResizable(true);
+        setHeight(500.0);
+        setWidth(800.0);
+        setTitle("进度显示");
     }
 
     @Override

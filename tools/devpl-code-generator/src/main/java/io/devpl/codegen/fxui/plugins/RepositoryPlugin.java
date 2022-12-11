@@ -11,7 +11,7 @@ import java.util.List;
 public class RepositoryPlugin extends PluginAdapter {
 
     private FullyQualifiedJavaType annotationRepository;
-    private String annotation = "@Repository";
+    private String annotation = "@Mapper";
 
     public RepositoryPlugin() {
         annotationRepository = new FullyQualifiedJavaType("org.springframework.stereotype.Repository"); //$NON-NLS-1$
@@ -24,7 +24,14 @@ public class RepositoryPlugin extends PluginAdapter {
 
     // TODO FIX 确定方法是否存在
     // @Override
-    public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+    // public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+    //     interfaze.addImportedType(annotationRepository);
+    //     interfaze.addAnnotation(annotation);
+    //     return true;
+    // }
+
+    @Override
+    public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
         interfaze.addImportedType(annotationRepository);
         interfaze.addAnnotation(annotation);
         return true;

@@ -23,9 +23,7 @@ public class MainUI extends JavaFXApplication {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ConfigHelper.createEmptyFiles();
-
         final FXMLLoader loader = JFX.getFXMLLoader("static/fxml/MainUI.fxml");
-
         primaryStage.setResizable(true);
         primaryStage.setScene(new Scene(loader.getRoot()));
         primaryStage.setTitle(MAIN_WINDOW_TITLE);

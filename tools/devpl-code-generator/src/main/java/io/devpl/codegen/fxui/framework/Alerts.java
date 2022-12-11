@@ -16,6 +16,14 @@ public final class Alerts {
     private static final Alert NONE = new Alert(Alert.AlertType.NONE);
     private static final Alert CONFIRM = new Alert(Alert.AlertType.CONFIRMATION);
 
+    static {
+        INFO.setResizable(true);
+        WARN.setResizable(true);
+        ERROR.setResizable(true);
+        NONE.setResizable(true);
+        CONFIRM.setResizable(true);
+    }
+
     public static Alert info(String message) {
         INFO.setContentText(message);
         return INFO;

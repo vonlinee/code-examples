@@ -24,7 +24,7 @@ import javafx.util.Duration;
 import static javafx.scene.paint.Color.DARKSEAGREEN;
 
 public class PictureProcessStateController {
-    private ImageView dbImage = new ImageView("static/icons/SSH_tunnel.png");
+    private final ImageView dbImage = new ImageView("static/icons/SSH_tunnel.png");
     private final Rectangle rect = new Rectangle(20, 20, 30, 30);
     private final RotateTransition rotateTransition = new RotateTransition();
     private final Text text = new Text("");
