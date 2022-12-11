@@ -8,10 +8,6 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
 
 import java.util.List;
 
-/**
- * Project: mybatis-generator-gui
- * @author slankka on 2017/12/13.
- */
 public class RepositoryPlugin extends PluginAdapter {
 
     private FullyQualifiedJavaType annotationRepository;

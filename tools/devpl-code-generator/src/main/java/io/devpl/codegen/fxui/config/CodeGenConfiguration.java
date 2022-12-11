@@ -7,6 +7,9 @@ import io.devpl.codegen.fxui.common.ConfigMap;
  */
 public class CodeGenConfiguration {
 
+    /**
+     * 所有的配置项
+     */
     private final ConfigMap configMap = new ConfigMap();
 
     /**

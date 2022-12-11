@@ -39,6 +39,8 @@ import org.mybatis.generator.exception.ShellException;
 import org.mybatis.generator.internal.DefaultShellCallback;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.XmlFileMergerJaxp;
+import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.LogFactory;
 
 /**
  * This class is the main interface to MyBatis generator. A typical execution of the tool involves these steps:
@@ -54,6 +56,8 @@ import org.mybatis.generator.internal.XmlFileMergerJaxp;
  * @see org.mybatis.generator.config.xml.ConfigurationParser
  */
 public class MyBatisGenerator {
+
+    private final Log log = LogFactory.getLog(MyBatisGenerator.class);
 
     private static final ProgressCallback NULL_PROGRESS_CALLBACK = new ProgressCallback() {};
 
@@ -252,9 +256,8 @@ public class MyBatisGenerator {
             totalSteps += context.getIntrospectionSteps();
         }
         callback.introspectionStarted(totalSteps);
-        
+
         // 加载数据库表信息
-        
         for (Context context : contextsToRun) {
             context.introspectTables(callback, warnings,
                     fullyQualifiedTableNames);

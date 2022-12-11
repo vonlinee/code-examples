@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.image.ImageView;
@@ -21,6 +22,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
@@ -43,6 +45,8 @@ public class MainUIController extends FXControllerBase {
     public Label labTextHandle;
     @FXML
     public CheckBox chbEnableSwagger;
+    @FXML
+    public Label labBeanDefCreate; // 创建Bean定义
     @FXML
     private Label connectionLabel; // toolbar buttons
     @FXML
@@ -98,7 +102,7 @@ public class MainUIController extends FXControllerBase {
     @FXML
     private CheckBox jsr310Support;
     @FXML
-    private TreeView<String> leftDBTree; // 数据库表列表
+    private TreeView<String> trvDbTreeList; // 数据库表列表
     @FXML
     public TextField filterTreeBox;
     // Current selected databaseConfig
@@ -135,6 +139,9 @@ public class MainUIController extends FXControllerBase {
             controller.showDialogStage();
         });
 
+        labTextHandle.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
+        labBeanDefCreate.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
+
         // 生成配置管理
         configsLabel.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
         configsLabel.setOnMouseClicked(event -> {
@@ -148,24 +155,24 @@ public class MainUIController extends FXControllerBase {
         useExample.setOnMouseClicked(event -> offsetLimitCheckBox.setDisable(!useExample.isSelected()));
         // selectedProperty().addListener 解决应用配置的时候未触发Clicked事件
         useLombokPlugin.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> needToStringHashcodeEquals.setDisable(newValue));
+                       .addListener((observable, oldValue, newValue) -> needToStringHashcodeEquals.setDisable(newValue));
 
         // 设置多选
-        leftDBTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        leftDBTree.setShowRoot(false);
-        leftDBTree.setRoot(new TreeItem<>());
+        trvDbTreeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        trvDbTreeList.setShowRoot(false);
+        trvDbTreeList.setRoot(new TreeItem<>());
         filterTreeBox.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
             if (ev.getCode() == KeyCode.ENTER) {
-                leftDBTree.getRoot()
-                        .getChildren()
-                        .filtered(TreeItem::isExpanded)
-                        .forEach(this::displayTables);
+                trvDbTreeList.getRoot()
+                             .getChildren()
+                             .filtered(TreeItem::isExpanded)
+                             .forEach(this::displayTables);
                 ev.consume();
             }
         });
 
         // 设置单元格工厂 Callback<TreeView<T>, TreeCell<T>> value
-        leftDBTree.setCellFactory((TreeView<String> tv) -> {
+        trvDbTreeList.setCellFactory((TreeView<String> tv) -> {
             // 创建一个单元格
             TreeCell<String> cell = new TextFieldTreeCell<>(JFX.DEFAULT_STRING_CONVERTER);
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -173,7 +180,7 @@ public class MainUIController extends FXControllerBase {
                 @SuppressWarnings("unchecked")
                 TreeCell<String> treeCell = (TreeCell<String>) event.getSource();
                 TreeItem<String> treeItem = treeCell.getTreeItem();
-                int level = leftDBTree.getTreeItemLevel(treeItem);
+                int level = trvDbTreeList.getTreeItemLevel(treeItem);
                 // 层级为1，点击每个连接
                 if (level == 1) {
                     final ContextMenu contextMenu = new ContextMenu();
@@ -280,7 +287,7 @@ public class MainUIController extends FXControllerBase {
     }
 
     void loadLeftDBTree() {
-        TreeItem<String> rootTreeItem = leftDBTree.getRoot();
+        TreeItem<String> rootTreeItem = trvDbTreeList.getRoot();
         rootTreeItem.getChildren().clear();
         try {
             // 加载所有的数据库配置
@@ -328,6 +335,8 @@ public class MainUIController extends FXControllerBase {
         bridge.setDatabaseConfig(selectedDatabaseConfig);
         bridge.setIgnoredColumns(ignoredColumns);
         bridge.setColumnOverrides(columnOverrides);
+
+        // 进度回调
         UIProgressCallback alert = new UIProgressCallback(Alert.AlertType.INFORMATION);
         bridge.setProgressCallback(alert);
         alert.show();
@@ -341,7 +350,6 @@ public class MainUIController extends FXControllerBase {
                 pictureProcessStateController.setDialogStage(getDialogStage());
                 pictureProcessStateController.startPlay();
             }
-
             // 生成之前清除待生成的根目录下的文件
             // TODO 做成配置
             // String projectFolder = projectFolderField.getText();
@@ -349,7 +357,7 @@ public class MainUIController extends FXControllerBase {
             try {
                 bridge.generate();
             } catch (Exception exception) {
-                Alerts.error("生成失败: " + exception.getMessage()).show();
+                Alerts.error("生成失败: " + exception.getMessage()).showAndWait();
             }
             if (pictureProcessStateController != null) {
                 Task<Void> task = new DoNothing();
@@ -373,7 +381,18 @@ public class MainUIController extends FXControllerBase {
      */
     @FXML
     public void openTextHandleToolkit(MouseEvent mouseEvent) {
-        System.out.println(mouseEvent);
+
+    }
+
+    /**
+     * 打开Bean定义创建界面
+     * @param mouseEvent 鼠标点击事件
+     */
+    public void openBeanDefCreateFrame(MouseEvent mouseEvent) {
+        final Scene scene = JFX.createScene("static/fxml/class_definition.fxml");
+        final Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
     }
 
     static class DoNothing extends Task<Void> {

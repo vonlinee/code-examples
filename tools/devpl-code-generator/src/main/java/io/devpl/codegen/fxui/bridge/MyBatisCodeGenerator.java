@@ -192,8 +192,7 @@ public class MyBatisCodeGenerator {
         // limit/offset插件  
         if (generatorConfig.isOffsetLimit()) {
             if (DBDriver.MySQL5.name().equals(dbType) || DBDriver.MySQL8.name().equals(dbType) || DBDriver.POSTGRE_SQL
-                    .name()
-                    .equals(dbType)) {
+                    .name().equals(dbType)) {
                 addPluginConfiguration(context, MySQLLimitPlugin.class);
             }
         }
@@ -211,16 +210,12 @@ public class MyBatisCodeGenerator {
         }
         // repository 插件
         if (generatorConfig.isAnnotationDAO()) {
-            if (DBDriver.MySQL5.name().equals(dbType) || DBDriver.MySQL8.name().equals(dbType) || DBDriver.POSTGRE_SQL
-                    .name()
-                    .equals(dbType)) {
+            if (DBDriver.MySQL5.nameEquals(dbType) || DBDriver.MySQL8.nameEquals(dbType) || DBDriver.POSTGRE_SQL.nameEquals(dbType)) {
                 addPluginConfiguration(context, RepositoryPlugin.class);
             }
         }
         if (generatorConfig.isUseDAOExtendStyle()) {
-            if (DBDriver.MySQL5.name().equals(dbType) || DBDriver.MySQL8.name().equals(dbType) || DBDriver.POSTGRE_SQL
-                    .name()
-                    .equals(dbType)) {
+            if (DBDriver.MySQL5.nameEquals(dbType) || DBDriver.MySQL8.nameEquals(dbType) || DBDriver.POSTGRE_SQL.nameEquals(dbType)) {
                 PluginConfiguration pf = addPluginConfiguration(context, CommonDAOInterfacePlugin.class);
                 pf.addProperty(StringKey.USE_EXAMPLE, String.valueOf(generatorConfig.isUseExample()));
             }
@@ -237,14 +232,12 @@ public class MyBatisCodeGenerator {
 
         // 设置运行时环境
         context.setTargetRuntime("MyBatis3");
-
-        addPlugins(context);
-
+        addPluginConfiguration(context, FullMVCSupportPlugin.class);
         List<String> warnings = new ArrayList<>();
-        Set<String> fullyqualifiedTables = new HashSet<>();
+        Set<String> fullyQualifiedTables = new HashSet<>();
         Set<String> contexts = new HashSet<>();
         ShellCallback shellCallback = new DefaultShellCallback(true); // override=true
-        MyBatisGenerator myBatisGenerator = new MyBatisGenerator(configuration, shellCallback, warnings);
+        MyBatisGenerator mybatisGenerator = new MyBatisGenerator(configuration, shellCallback, warnings);
         // if overrideXML selected, delete oldXML ang generate new one
         if (generatorConfig.isOverrideXML()) {
             String mappingXMLFilePath = getMappingXMLFilePath(generatorConfig);
@@ -257,7 +250,7 @@ public class MyBatisCodeGenerator {
             }
         }
         log.info("开始生成");
-        myBatisGenerator.generate(progressCallback, contexts, fullyqualifiedTables);
+        mybatisGenerator.generate(progressCallback, contexts, fullyQualifiedTables);
     }
 
     public PluginConfiguration addPluginConfiguration(Context context, Class<? extends Plugin> pluginClass) {
@@ -267,17 +260,6 @@ public class MyBatisCodeGenerator {
         pluginConfiguration.setConfigurationType(pluginClassName);
         context.addPluginConfiguration(pluginConfiguration);
         return pluginConfiguration;
-    }
-
-    /**
-     * 添加插件
-     * @param context
-     */
-    private void addPlugins(Context context) {
-        PluginConfiguration pc = new PluginConfiguration();
-        pc.addProperty("type", "io.devpl.codegen.mbg.plugins.FullMVCSupportPlugin");
-        pc.setConfigurationType("io.devpl.codegen.mbg.plugins.FullMVCSupportPlugin");
-        context.addPluginConfiguration(pc);
     }
 
     private String getMappingXMLFilePath(CodeGenConfiguration generatorConfig) {

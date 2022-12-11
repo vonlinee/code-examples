@@ -7,7 +7,8 @@ import javafx.scene.control.Alert;
  */
 public final class Alerts {
 
-    private Alerts() {}
+    private Alerts() {
+    }
 
     private static final Alert INFO = new Alert(Alert.AlertType.INFORMATION);
     private static final Alert WARN = new Alert(Alert.AlertType.WARNING);
@@ -28,7 +29,28 @@ public final class Alerts {
 
     public static Alert error(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setWidth(400);
+        alert.setHeight(400);
+        alert.setResizable(true);
         alert.setContentText(message);
+        return alert;
+    }
+
+    /**
+     * 创建Alert对象
+     * @param alertType   Alert.AlertType
+     * @param contentText 文本
+     * @param width       宽度
+     * @param height      高度
+     * @param resizable   是否可改变大小
+     * @return Alert实例
+     */
+    public static Alert newAlert(Alert.AlertType alertType, String contentText, double width, double height, boolean resizable) {
+        final Alert alert = new Alert(alertType);
+        alert.setResizable(resizable);
+        alert.setWidth(width);
+        alert.setHeight(height);
+        alert.setContentText(contentText);
         return alert;
     }
 

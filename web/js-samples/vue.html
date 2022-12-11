@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue语法</title>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- 如果要使用组件，直接，把组件的名称，以 HTML 标签的形式，引入到页面中，即可 -->
+      <div id="comp">111111111111</div>
+      <div>
+        <my-component></my-component>
+      </div>
+    </div>
+    <script>
+      // 创建组件构造函数
+      var MyComponent = Vue.extend({
+        template: "#comp"
+      });  // typeof MyComponent => Function
+      // 全局挂载组件
+      Vue.component("my-component", MyComponent);
+      // 创建 Vue 实例，得到 ViewModel
+      var vm = new Vue({
+        el: "#app",
+        methods: {},
+        data: function () {
+          return {
+            name: "xxxx",
+          };
+        },
+      });
+
+
+    </script>
+  </body>
+</html>

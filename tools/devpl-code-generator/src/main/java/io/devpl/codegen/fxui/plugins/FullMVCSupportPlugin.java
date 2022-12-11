@@ -16,6 +16,10 @@ import java.util.Properties;
  */
 public class FullMVCSupportPlugin extends PluginAdapter {
 
+    public FullMVCSupportPlugin() {
+
+    }
+
     @Override
     public boolean validate(List<String> warnings) {
         return true;

@@ -33,6 +33,6 @@ public abstract class JavaFXApplication extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        onStop();
+        this.onStop();
     }
 }

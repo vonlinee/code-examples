@@ -1,11 +1,10 @@
 package io.devpl.codegen.fxui.framework;
 
-import io.devpl.codegen.fxui.framework.fxml.FXMLScanner;
+import io.devpl.codegen.fxui.framework.fxml.FXMLLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -17,17 +16,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.Arrays;
-import java.util.Map;
 
 /**
  * 便捷的方法用于创建JavaFX控件
@@ -35,23 +30,15 @@ import java.util.Map;
  */
 public final class JFX {
 
-    private static final Map<String, String> fxmlLocations = FXMLScanner.scan();
+    private final static ApplicationContext context = ApplicationContext.getInstance();
 
     public static Scene createScene(String fxmlKey) {
-        Pane pane = loadFxml(fxmlKey);
-        assert pane != null;
-        return new Scene(pane);
+        FXMLLoader loader = getFXMLLoader(fxmlKey);
+        return new Scene(loader.getRoot());
     }
 
-    public static <T extends Pane> T loadFxml(String fxmlKey) {
-        String location = fxmlLocations.get(fxmlKey);
-        try {
-            FXMLLoader loader = new FXMLLoader(new URL(location));
-            return loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static FXMLLoader getFXMLLoader(String fxmlKey) {
+        return context.loadFXML(fxmlKey);
     }
 
     public static Stage newStage(String title, Window owner, Modality modality, Scene scene) {
@@ -167,6 +154,14 @@ public final class JFX {
         ImageView dbImage = new ImageView(pathname);
         dbImage.setFitHeight(h);
         dbImage.setFitWidth(w);
+        return dbImage;
+    }
+
+    public static ImageView loadImageView(String pathname, double size, Object userData) {
+        ImageView dbImage = new ImageView(pathname);
+        dbImage.setFitHeight(size);
+        dbImage.setFitWidth(size);
+        dbImage.setUserData(userData);
         return dbImage;
     }
 

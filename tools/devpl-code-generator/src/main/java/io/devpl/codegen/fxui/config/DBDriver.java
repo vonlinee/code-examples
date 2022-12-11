@@ -44,4 +44,8 @@ public enum DBDriver {
         }
         return names;
     }
+
+    public boolean nameEquals(String name) {
+        return this.name().equals(name);
+    }
 }

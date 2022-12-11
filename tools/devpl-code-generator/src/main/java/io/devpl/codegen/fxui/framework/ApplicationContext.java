@@ -3,8 +3,9 @@ package io.devpl.codegen.fxui.framework;
 import io.devpl.codegen.fxui.framework.fxml.ControllerFactory;
 import io.devpl.codegen.fxui.framework.fxml.DefaultControllerFactory;
 import io.devpl.codegen.fxui.framework.fxml.FXMLCache;
-import io.devpl.codegen.fxui.framework.fxml.FXMLScanner;
-import javafx.fxml.FXMLLoader;
+import io.devpl.codegen.fxui.framework.fxml.FXMLLoader;
+import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.LogFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,6 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * https://stackoverflow.com/questions/11734885/javafx2-very-poor-performance-when-adding-custom-made-fxmlpanels-to-gridpane
  */
 public final class ApplicationContext {
+
+    private final Log log = LogFactory.getLog(ApplicationContext.class);
 
     // Instance of StackWalker used to get caller class (must be private)
     private static final StackWalker walker = AccessController.doPrivileged((PrivilegedAction<StackWalker>) () -> StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE));
@@ -51,7 +54,7 @@ public final class ApplicationContext {
         fxmlMappings.forEach((fxmlKey, fxmlUrl) -> {
             try {
                 final FXMLLoader loader = new FXMLLoader(new URL(fxmlUrl));
-                loader.setControllerFactory(controllerFactory);
+                // loader.setControllerFactory(controllerFactory);
                 this.fxmlCacheMap.put(fxmlKey, new FXMLCache(loader));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -59,7 +62,7 @@ public final class ApplicationContext {
         });
     }
 
-    private ControllerFactory controllerFactory = new DefaultControllerFactory(this);
+    private ControllerFactory controllerFactory;
 
     /**
      * Sets the controller factory used by this loader.
@@ -68,6 +71,16 @@ public final class ApplicationContext {
      */
     public void setControllerFactory(ControllerFactory controllerFactory) {
         this.controllerFactory = controllerFactory;
+    }
+
+    /**
+     * 加载FXML，可能从缓存中加载
+     * @param fxmlKey
+     * @return
+     */
+    public FXMLLoader loadFXML(String fxmlKey) {
+        final FXMLCache fxmlCache = fxmlCacheMap.get(fxmlKey);
+        return fxmlCache.getFXMLLoader();
     }
 
     /**

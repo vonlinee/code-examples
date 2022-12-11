@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <script src="./test.js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS语法</title>
+  </head>
+  <body>
+    <script>
+      var Animal = function Animal(name) {
+        this.name = name;
+      }
 
+      console.log(Animal.prototype == Animal.prototype.constructor)
+
+      Animal.prototype.color = "white";
+      var cat1 = new Animal("大毛");
+      var cat2 = new Animal("二毛");
+      cat1.color; // 'white'
+      cat2.color; // 'white'
     </script>
-</body>
+  </body>
 </html>

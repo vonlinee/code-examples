@@ -32,7 +32,14 @@
                         <Insets right="10.0"/>
                     </padding>
                 </Label>
-                <Label fx:id="labTextHandle" contentDisplay="TOP" text="文本处理" onMouseClicked="#openTextHandleToolkit">
+                <Label fx:id="labTextHandle" contentDisplay="TOP" text="文本处理"
+                       onMouseClicked="#openTextHandleToolkit">
+                    <padding>
+                        <Insets right="10.0"/>
+                    </padding>
+                </Label>
+                <Label fx:id="labBeanDefCreate" contentDisplay="TOP" text="类定义"
+                       onMouseClicked="#openBeanDefCreateFrame">
                     <padding>
                         <Insets right="10.0"/>
                     </padding>
@@ -44,7 +51,7 @@
         <SplitPane dividerPositions="0.15">
             <!--表列表-->
             <AnchorPane maxWidth="500.0" minWidth="100.0" prefHeight="618.0" prefWidth="200.0">
-                <TreeView fx:id="leftDBTree" layoutX="-14.0" maxWidth="134.0" prefHeight="503.0" prefWidth="134.0"
+                <TreeView fx:id="trvDbTreeList" layoutX="-14.0" maxWidth="134.0" prefHeight="503.0" prefWidth="134.0"
                           AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                           AnchorPane.topAnchor="0.0"/>
                 <TextField fx:id="filterTreeBox" layoutY="504.0" prefHeight="26.0" prefWidth="134.0"
@@ -311,7 +318,8 @@
                                     </padding>
                                 </Label>
                                 <TextField fx:id="mapperName" prefHeight="27.0" prefWidth="532.0"
-                                           promptText="默认格式:XxxMapper" GridPane.columnIndex="1" GridPane.columnSpan="4"
+                                           promptText="默认格式:XxxMapper" GridPane.columnIndex="1"
+                                           GridPane.columnSpan="4"
                                            GridPane.rowIndex="6">
                                     <GridPane.margin>
                                         <Insets left="5.0"/>
