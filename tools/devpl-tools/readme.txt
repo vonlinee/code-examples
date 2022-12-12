@@ -17,3 +17,9 @@ https://github.com/baomidou/generator
 tv_name;
 
 
+
+
+Java解析器选择
+Eclipse JDT，JavaCC，JavaParser(基于JavaCC)
+1.Comparing Between Eclipse JDT and JavaParser: https://github.com/javaparser/javaparser/issues/1919
+
