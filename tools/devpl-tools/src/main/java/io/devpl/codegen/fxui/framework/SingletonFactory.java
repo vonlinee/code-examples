@@ -14,7 +14,7 @@ public class SingletonFactory {
 
     /**
      * 创建可不被回收的单例模式,当没有对象引用，单例对象将被gc掉
-     * @param className
+     * @param className 类名
      * @return
      * @throws InstantiationException
      * @throws IllegalAccessException
@@ -40,31 +40,31 @@ public class SingletonFactory {
 
     /**
      * 创建可回收的单例模式,当没有对象引用，单例对象将被gc掉
-     * @param className
+     * @param className 类名
      * @return
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
     @SuppressWarnings("unchecked")
-    public static <E> E getWeakInstace(Class<E> className) {
+    public static <E> E getWeakInstance(Class<E> className) {
         WeakReference<Object> reference = weakReferenceInstances.get(className);
-        Object instace = reference == null ? null : reference.get();
-        if (instace == null) {
+        Object instance = reference == null ? null : reference.get();
+        if (instance == null) {
             synchronized (SingletonFactory.class) {
                 reference = weakReferenceInstances.get(className);
-                instace = reference == null ? null : reference.get();
-                if (instace == null) {
+                instance = reference == null ? null : reference.get();
+                if (instance == null) {
                     try {
-                        instace = className.getDeclaredConstructor().newInstance();
+                        instance = className.getDeclaredConstructor().newInstance();
                     } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
                              InvocationTargetException e) {
                         e.printStackTrace();
                     }
-                    weakReferenceInstances.put(className, new WeakReference<Object>(instace));
+                    weakReferenceInstances.put(className, new WeakReference<>(instance));
                 }
             }
         }
-        return (E) instace;
+        return (E) instance;
     }
 
 }

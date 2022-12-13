@@ -12,9 +12,13 @@ public enum DBDriver {
     SQL_SERVER("com.microsoft.sqlserver.jdbc.SQLServerDriver", "jdbc:sqlserver://%s:%s;databaseName=%s", "sqljdbc4-4.0.jar"),
     SQLITE("org.sqlite.JDBC", "jdbc:sqlite:%s", "sqlite-jdbc-3.19.3.jar");
 
-    private final String driverClass;
-    private final String connectionUrlPattern;
-    private final String connectorJarFile;
+    // 驱动类全类名
+    private String driverClass;
+    // 连接URL模式串
+    private String connectionUrlPattern;
+    // 驱动Jar文件
+    private String connectorJarFile;
+    private String description;
 
     DBDriver(String driverClass, String connectionUrlPattern, String connectorJarFile) {
         this.driverClass = driverClass;
@@ -23,6 +27,18 @@ public enum DBDriver {
     }
 
     public static final DBDriver DEFAULT_DRIVER = DBDriver.MySQL5;
+
+    public void setDriverClass(String driverClass) {
+        this.driverClass = driverClass;
+    }
+
+    public void setConnectionUrlPattern(String connectionUrlPattern) {
+        this.connectionUrlPattern = connectionUrlPattern;
+    }
+
+    public void setConnectorJarFile(String connectorJarFile) {
+        this.connectorJarFile = connectorJarFile;
+    }
 
     public String getDriverClass() {
         return driverClass;

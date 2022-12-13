@@ -23,7 +23,7 @@ public final class Messages {
 
     public static void init() {
         try {
-            final File file = Resources.getResourcesAsFile("message.properties", true);
+            final File file = ResourceUtils.getResourcesAsFile("message.properties", true);
             init(file);
         } catch (FileNotFoundException e) {
             log.error("messages init failed", e);

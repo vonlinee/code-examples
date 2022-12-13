@@ -1,6 +1,6 @@
 package io.devpl.codegen.fxui.framework.fxml;
 
-import io.devpl.codegen.fxui.utils.Resources;
+import io.devpl.codegen.fxui.utils.ResourceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,7 +21,7 @@ public class FXMLScanner {
 
     public static Map<String, String> scan() {
         FilenameFilter filter = (dir, name) -> name != null && name.endsWith(".fxml");
-        final URL classpathRoot = Resources.getAppClassLoader().getResource(parentPath);
+        final URL classpathRoot = ResourceUtils.getClassLoader().getResource(parentPath);
         if (classpathRoot == null) {
             return Collections.emptyMap();
         }

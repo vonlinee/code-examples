@@ -10,6 +10,7 @@ import io.devpl.codegen.fxui.config.DatabaseConfig;
 import io.devpl.codegen.fxui.framework.Alerts;
 import io.devpl.codegen.fxui.framework.JFX;
 import io.devpl.codegen.fxui.utils.*;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -98,7 +99,7 @@ public class MainUIController extends FXControllerBase {
     @FXML
     private CheckBox useExample;
     @FXML
-    private CheckBox useDAOExtendStyle;
+    private CheckBox useDAOExtendStyle; // DAO方法是否抽出到公共父接口
     @FXML
     private CheckBox useSchemaPrefix;
     @FXML
@@ -163,10 +164,7 @@ public class MainUIController extends FXControllerBase {
         trvDbTreeList.setRoot(new TreeItem<>());
         filterTreeBox.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
             if (ev.getCode() == KeyCode.ENTER) {
-                trvDbTreeList.getRoot()
-                             .getChildren()
-                             .filtered(TreeItem::isExpanded)
-                             .forEach(this::displayTables);
+                trvDbTreeList.getRoot().getChildren().filtered(TreeItem::isExpanded).forEach(this::displayTables);
                 ev.consume();
             }
         });
@@ -177,8 +175,7 @@ public class MainUIController extends FXControllerBase {
             TreeCell<String> cell = new TextFieldTreeCell<>(JFX.DEFAULT_STRING_CONVERTER);
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 // 获取单元格
-                @SuppressWarnings("unchecked")
-                TreeCell<String> treeCell = (TreeCell<String>) event.getSource();
+                @SuppressWarnings("unchecked") TreeCell<String> treeCell = (TreeCell<String>) event.getSource();
                 TreeItem<String> treeItem = treeCell.getTreeItem();
                 int level = trvDbTreeList.getTreeItemLevel(treeItem);
                 // 层级为1，点击每个连接
@@ -295,14 +292,12 @@ public class MainUIController extends FXControllerBase {
             for (DatabaseConfig dbConfig : dbConfigs) {
                 TreeItem<String> treeItem = new TreeItem<>();
                 treeItem.setValue(dbConfig.getName());
-                ImageView dbImage = JFX.loadImageView("static/icons/computer.png", 16, 16);
-                dbImage.setUserData(dbConfig);
-                treeItem.setGraphic(dbImage);
+                treeItem.setGraphic(JFX.loadImageView("static/icons/computer.png", 16, dbConfig));
                 rootTreeItem.getChildren().add(treeItem);
             }
         } catch (Exception e) {
             log.error("connect db failed, reason", e);
-            Alerts.showErrorAlert(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+            Alerts.error(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e)).showAndWait();
         }
     }
 
@@ -466,6 +461,7 @@ public class MainUIController extends FXControllerBase {
         generatorConfig.setOverrideXML(overrideXML.isSelected());
         generatorConfig.setNeedToStringHashcodeEquals(needToStringHashcodeEquals.isSelected());
         generatorConfig.setUseLombokPlugin(useLombokPlugin.isSelected());
+        generatorConfig.setSwaggerSupport(chbEnableSwagger.isSelected());
         generatorConfig.setUseTableNameAlias(useTableNameAliasCheckbox.isSelected());
         generatorConfig.setNeedForUpdate(forUpdateCheckBox.isSelected());
         generatorConfig.setAnnotationDAO(annotationDAOCheckBox.isSelected());
@@ -476,6 +472,7 @@ public class MainUIController extends FXControllerBase {
         generatorConfig.setUseDAOExtendStyle(useDAOExtendStyle.isSelected());
         generatorConfig.setUseSchemaPrefix(useSchemaPrefix.isSelected());
         generatorConfig.setJsr310Support(jsr310Support.isSelected());
+        generatorConfig.setParentPackage(txfParentPackageName.getText());
         return generatorConfig;
     }
 
@@ -514,10 +511,13 @@ public class MainUIController extends FXControllerBase {
         jsr310Support.setSelected(generatorConfig.isJsr310Support());
     }
 
+    /**
+     * 打开定制列面板
+     */
     @FXML
     public void openTableColumnCustomizationPage() {
         if (tableName == null) {
-            Alerts.info("请先在左侧选择数据库表").showAndWait();
+            Alerts.warn("请先在左侧选择数据库表").showAndWait();
             return;
         }
         SelectTableColumnController controller = (SelectTableColumnController) loadFXMLPage("定制列", FXMLPage.SELECT_TABLE_COLUMN, true);
@@ -532,7 +532,7 @@ public class MainUIController extends FXControllerBase {
             controller.showDialogStage();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            Alerts.showErrorAlert(e.getMessage());
+            Alerts.error(e.getMessage()).showAndWait();
         }
     }
 

@@ -157,6 +157,13 @@ public final class JFX {
         return dbImage;
     }
 
+    /**
+     * ImageView对象是否可以缓存
+     * @param pathname
+     * @param size
+     * @param userData
+     * @return
+     */
     public static ImageView loadImageView(String pathname, double size, Object userData) {
         ImageView dbImage = new ImageView(pathname);
         dbImage.setFitHeight(size);

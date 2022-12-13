@@ -3,6 +3,9 @@ package io.devpl.codegen.fxui.common;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 存储所有配置项
+ */
 public final class ConfigMap {
 
     private final Map<String, Object> configurations = new HashMap<>();

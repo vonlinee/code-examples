@@ -184,23 +184,7 @@ public class DatabaseConfig {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DatabaseConfig that = (DatabaseConfig) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(dbType, that.dbType) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(host, that.host) &&
-                Objects.equals(port, that.port) &&
-                Objects.equals(schema, that.schema) &&
-                Objects.equals(username, that.username) &&
-                Objects.equals(password, that.password) &&
-                Objects.equals(encoding, that.encoding) &&
-                Objects.equals(lport, that.lport) &&
-                Objects.equals(rport, that.rport) &&
-                Objects.equals(sshPort, that.sshPort) &&
-                Objects.equals(sshHost, that.sshHost) &&
-                Objects.equals(sshUser, that.sshUser) &&
-                Objects.equals(sshPassword, that.sshPassword) &&
-                Objects.equals(privateKeyPassword, that.privateKeyPassword) &&
-                Objects.equals(privateKey, that.privateKey);
+        return Objects.equals(id, that.id) && Objects.equals(dbType, that.dbType) && Objects.equals(name, that.name) && Objects.equals(host, that.host) && Objects.equals(port, that.port) && Objects.equals(schema, that.schema) && Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(encoding, that.encoding) && Objects.equals(lport, that.lport) && Objects.equals(rport, that.rport) && Objects.equals(sshPort, that.sshPort) && Objects.equals(sshHost, that.sshHost) && Objects.equals(sshUser, that.sshUser) && Objects.equals(sshPassword, that.sshPassword) && Objects.equals(privateKeyPassword, that.privateKeyPassword) && Objects.equals(privateKey, that.privateKey);
     }
 
     @Override
@@ -210,22 +194,6 @@ public class DatabaseConfig {
 
     @Override
     public String toString() {
-        return "DatabaseConfig{" +
-                "id=" + id +
-                ", dbType='" + dbType + '\'' +
-                ", name='" + name + '\'' +
-                ", host='" + host + '\'' +
-                ", port='" + port + '\'' +
-                ", schema='" + schema + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", encoding='" + encoding + '\'' +
-                ", lport='" + lport + '\'' +
-                ", rport='" + rport + '\'' +
-                ", sshPort='" + sshPort + '\'' +
-                ", sshHost='" + sshHost + '\'' +
-                ", sshUser='" + sshUser + '\'' +
-                ", sshPassword='" + sshPassword + '\'' +
-                '}';
+        return "DatabaseConfig{" + "id=" + id + ", dbType='" + dbType + '\'' + ", name='" + name + '\'' + ", host='" + host + '\'' + ", port='" + port + '\'' + ", schema='" + schema + '\'' + ", username='" + username + '\'' + ", password='" + password + '\'' + ", encoding='" + encoding + '\'' + ", lport='" + lport + '\'' + ", rport='" + rport + '\'' + ", sshPort='" + sshPort + '\'' + ", sshHost='" + sshHost + '\'' + ", sshUser='" + sshUser + '\'' + ", sshPassword='" + sshPassword + '\'' + '}';
     }
 }

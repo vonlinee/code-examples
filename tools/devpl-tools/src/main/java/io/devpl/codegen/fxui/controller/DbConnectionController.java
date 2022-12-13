@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -23,8 +24,6 @@ import java.util.ResourceBundle;
  * 负责从界面的配置连接数据库
  */
 public class DbConnectionController extends FXControllerBase {
-
-    private static final Logger _LOG = LoggerFactory.getLogger(DbConnectionController.class);
 
     @FXML
     protected TextField nameField; // 数据库名称
@@ -54,6 +53,9 @@ public class DbConnectionController extends FXControllerBase {
         dbTypeChoice.setValue(DBDriver.DEFAULT_DRIVER.name());
         encodingChoice.setItems(JFX.arrayOf(Constants.SUPPORTED_ENCODING));
         encodingChoice.setValue(Constants.DEFAULT_ENCODING);
+        hostField.setText(Constants.LOCALHOST);
+        userNameField.setText(Constants.MYSQL_ROOT_USERNAME);
+        portField.setText(String.valueOf(Constants.DEFAULT_MYSQL_SERVER_PORT));
     }
 
     final void saveConnection() {

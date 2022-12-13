@@ -12,6 +12,7 @@ import org.mybatis.generator.internal.util.ClassloaderUtility;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
 
+import java.io.File;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -70,7 +71,7 @@ public class DbUtils {
                         String s = session.getPortForwardingL()[0];
                         String[] split = StringUtils.split(s, ":");
                         boolean portForwarding = String.format("%s:%s", split[0], split[1])
-                                .equals(lport + ":" + config.getHost());
+                                                       .equals(lport + ":" + config.getHost());
                         if (portForwarding) {
                             return;
                         }
@@ -98,9 +99,8 @@ public class DbUtils {
                 if (e instanceof TimeoutException) {
                     throw new RuntimeException("OverSSH 连接超时：超过5秒");
                 }
-
                 log.info("executorService isShutdown:{}", executorService.isShutdown());
-                Alerts.showErrorAlert("OverSSH 失败，请检查连接设置:" + e.getMessage());
+                Alerts.error("OverSSH 失败，请检查连接设置:" + e.getMessage()).showAndWait();
             }
         }
     }
@@ -111,24 +111,29 @@ public class DbUtils {
             session.disconnect();
             log.info("portForwarding turn OFF");
         }
-//		executorService.shutdown();
     }
 
-    public static Connection getConnection(DatabaseConfig config) throws ClassNotFoundException, SQLException {
+    public static Connection getConnection(DatabaseConfig config) throws SQLException {
         DBDriver dbType = DBDriver.valueOf(config.getDbType());
-        if (drivers.get(dbType) == null) {
-            loadDbDriver(dbType);
-        }
+        loadDbDriver(dbType);
         String url = getConnectionUrlWithSchema(config);
         Properties props = new Properties();
-
         props.setProperty("user", config.getUsername()); //$NON-NLS-1$
         props.setProperty("password", config.getPassword()); //$NON-NLS-1$
-
         DriverManager.setLoginTimeout(DB_CONNECTION_TIMEOUTS_SECONDS);
-        Connection connection = drivers.get(dbType).connect(url, props);
-        log.info("getConnection, connection url: {}", connection);
+        Connection connection = getConnection(url, props);
+        if (connection == null) {
+            throw new RuntimeException("获取连接失败");
+        }
         return connection;
+    }
+
+    public static Connection getConnection(String url, Properties properties) {
+        try {
+            return DriverManager.getConnection(url, properties);
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     public static List<String> getTableNames(DatabaseConfig config, String filter) throws Exception {
@@ -139,7 +144,7 @@ public class DbUtils {
             DatabaseMetaData md = connection.getMetaData();
             ResultSet rs;
             if (DBDriver.valueOf(config.getDbType()) == DBDriver.SQL_SERVER) {
-                String sql = "SELECT name FROM sysobjects  WHERE xtype='u' OR xtype='v' ORDER BY name";
+                String sql = SQL.SqlServer.SELECT;
                 rs = connection.createStatement().executeQuery(sql);
                 while (rs.next()) {
                     tables.add(rs.getString("name"));
@@ -147,7 +152,7 @@ public class DbUtils {
             } else if (DBDriver.valueOf(config.getDbType()) == DBDriver.ORACLE) {
                 rs = md.getTables(null, config.getUsername().toUpperCase(), null, new String[]{"TABLE", "VIEW"});
             } else if (DBDriver.valueOf(config.getDbType()) == DBDriver.SQLITE) {
-                String sql = "SELECT name FROM sqlite_master;";
+                String sql = SQL.Sqllite.SELECT;
                 rs = connection.createStatement().executeQuery(sql);
                 while (rs.next()) {
                     tables.add(rs.getString("name"));
@@ -161,7 +166,6 @@ public class DbUtils {
             }
             if (StringUtils.isNotBlank(filter)) {
                 tables.removeIf(x -> !x.contains(filter) && !(x.replaceAll("_", "").contains(filter)));
-                ;
             }
             if (tables.size() > 1) {
                 Collections.sort(tables);
@@ -196,25 +200,47 @@ public class DbUtils {
         }
     }
 
-    public static String getConnectionUrlWithSchema(DatabaseConfig dbConfig) throws ClassNotFoundException {
+    public static String getConnectionUrlWithSchema(DatabaseConfig dbConfig) {
         DBDriver dbType = DBDriver.valueOf(dbConfig.getDbType());
         String connectionUrl = String.format(dbType.getConnectionUrlPattern(), portForwaring ? "127.0.0.1" : dbConfig.getHost(), portForwaring ? dbConfig.getLport() : dbConfig.getPort(), dbConfig.getSchema(), dbConfig.getEncoding());
         log.info("getConnectionUrlWithSchema, connection url: {}", connectionUrl);
         return connectionUrl;
     }
 
+    public static List<String> getAllJDBCDriverJarPaths() {
+        List<String> jarFilePathList = new ArrayList<>();
+        try {
+            File file = ResourceUtils.getProjectFile("/lib");
+            if (file == null) {
+                return Collections.emptyList();
+            }
+            final File[] jarFiles = FileUtils.listAllFiles(file);
+            for (int i = 0; i < jarFiles.length; i++) {
+                if (jarFiles[i].isFile() && jarFiles[i].getAbsolutePath().endsWith(".jar")) {
+                    jarFilePathList.add(jarFiles[i].getAbsolutePath());
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("找不到驱动文件，请联系开发者");
+        }
+        return jarFilePathList;
+    }
+
     /**
      * 加载数据库驱动
      * @param dbType 数据库类型
+     * @see DBDriver
      */
     private static void loadDbDriver(DBDriver dbType) {
-        List<String> driverJars = ConfigHelper.getAllJDBCDriverJarPaths();
-        ClassLoader classloader = ClassloaderUtility.getCustomClassloader(driverJars);
+        if (drivers.containsKey(dbType)) {
+            return;
+        }
+        ClassLoader classloader = ResourceUtils.getClassLoader();
         try {
-            Class clazz = Class.forName(dbType.getDriverClass(), true, classloader);
-            Driver driver = (Driver) clazz.newInstance();
+            Class<?> clazz = Class.forName(dbType.getDriverClass(), true, classloader);
+            Driver driver = (Driver) clazz.getConstructor().newInstance();
             log.info("load driver class: {}", driver);
-            drivers.put(dbType, driver);
+            drivers.putIfAbsent(dbType, driver);
         } catch (Exception e) {
             log.error("load driver error", e);
             throw new RuntimeException("找不到" + dbType.getConnectorJarFile() + "驱动");

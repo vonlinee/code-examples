@@ -1,0 +1,11 @@
+package io.devpl.codegen.fxui.framework.core;
+
+import java.lang.annotation.*;
+
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
+public @interface FXMLView {
+
+    String fxmlLocation();
+}

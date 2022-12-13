@@ -43,10 +43,10 @@ public class TableColumnConfigsController extends FXControllerBase {
     @FXML
     public void confirm() {
         try {
-            // 1. generator bean propert name
-            this.genProertyNameByColumnNamePrefix();
+            // 1. generator bean property name
+            genPropertyNameByColumnNamePrefix();
             // close window
-            this.closeDialogStage();
+            closeDialogStage();
         } catch (Exception e) {
             log.error("confirm throw exception.", e);
             Alerts.showErrorAlert(e.getMessage());
@@ -62,7 +62,7 @@ public class TableColumnConfigsController extends FXControllerBase {
         currentTableNameLabel.setText(tableName);
     }
 
-    private void genProertyNameByColumnNamePrefix() {
+    private void genPropertyNameByColumnNamePrefix() {
         String columnNamePrefix = this.columnNamePrefixTextLabel.getText();
         if (StringUtils.isNotBlank(columnNamePrefix)) {
             if (StringUtils.endsWith(columnNamePrefix.trim(), Constants.OR_REGEX)) {

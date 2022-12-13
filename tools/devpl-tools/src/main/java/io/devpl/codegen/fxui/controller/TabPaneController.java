@@ -17,21 +17,16 @@ import java.io.EOFException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-/**
- * Project: mybatis-generator-gui
- * @author github.com/slankka on 2019/1/22.
- */
 public class TabPaneController extends FXControllerBase {
 
     @FXML
     private TabPane tabPane;
 
+    // fx:include可以自动注入Controller，只要名称为${fx:id}Controller
     @FXML
     private DbConnectionController tabControlAController;
-
     @FXML
     private OverSshController tabControlBController;
-
     private boolean isOverssh;
 
     private MainUIController mainUIController;

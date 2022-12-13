@@ -15,24 +15,24 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <module.name>org.mybatis.generator</module.name>
-        <hsqldb.version>2.7.0</hsqldb.version>
-        <kotlin.version>1.7.10</kotlin.version>
+        <hsqldb.version>2.7.1</hsqldb.version>
+        <kotlin.version>1.6.21</kotlin.version>
         <junit.jupiter.version>5.9.0</junit.jupiter.version>
         <!--JVM Option-->
         <argLine>-Djdk.attach.allowAttachSelf -Xmx1024m -Duser.timezone=UTC</argLine>
-        <spring.version>5.2.15.RELEASE</spring.version>
+        <spring.version>5.2.21.RELEASE</spring.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>2.0.0</version>
+            <version>2.0.5</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.18.0</version>
+            <version>2.19.0</version>
         </dependency>
         <!-- 注意日志系统的兼容性问题 -->
         <dependency>
@@ -59,7 +59,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.49</version>
+            <version>8.0.28</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -110,11 +110,12 @@
             <artifactId>mybatis-dynamic-sql</artifactId>
             <version>1.4.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
+        <!--Kotlin标准库-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.jetbrains.kotlin</groupId>-->
+        <!--            <artifactId>kotlin-stdlib</artifactId>-->
+        <!--            <version>${kotlin.version}</version>-->
+        <!--        </dependency>-->
         <!--反射工具类-->
         <dependency>
             <groupId>org.reflections</groupId>
@@ -142,13 +143,13 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.9.2</version>
+            <version>1.9.4</version>
         </dependency>
         <!--Fastjson JSON解析库-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.76</version>
+            <version>1.2.83</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -264,13 +265,25 @@
             <artifactId>javapoet</artifactId>
             <version>1.13.0</version>
         </dependency>
+        <!--JavaFX 控件库，包含代码编辑器-->
+        <!-- https://mvnrepository.com/artifact/org.fxmisc.richtext/richtextfx -->
+        <dependency>
+            <groupId>org.fxmisc.richtext</groupId>
+            <artifactId>richtextfx</artifactId>
+            <version>0.11.0</version>
+        </dependency>
         <!--事件总线-->
         <dependency>
             <groupId>org.greenrobot</groupId>
             <artifactId>eventbus</artifactId>
             <version>3.2.0</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/org.apache.calcite/calcite-core -->
+        <dependency>
+            <groupId>org.apache.calcite</groupId>
+            <artifactId>calcite-core</artifactId>
+            <version>1.32.0</version>
+        </dependency>
 
         <!-- 在 java11 发布时，oracle官方就宣布移除了以下两个特性：-->
         <!-- Remove JAXB (Java Architecture for XML Binding)-->
@@ -336,6 +349,7 @@
                     <include>**/*.ftl</include>
                     <include>**/*.vm</include>
                     <include>**/*.ej</include>
+                    <include>**/*.jar</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>
@@ -351,6 +365,20 @@
                     <target>11</target>
                 </configuration>
             </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.jetbrains.kotlin</groupId>-->
+            <!--                <artifactId>kotlin-maven-plugin</artifactId>-->
+            <!--                <version>${kotlin.version}</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>compile</id>-->
+            <!--                        <phase>process-sources</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>compile</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
             <!--引入此插件会导致Idea下载kotlin-dist时响应很久都没结果，也没进度显示-->
             <!--需要下载kotlin的编译插件-->
             <!--可能是新版本Idea的变化-->

@@ -23,7 +23,6 @@ public class TextEditor extends Application {
         MainPageController controller = loader.getController();
         controller.setEditor(this, stage);
         controller.setPath(path);
-
         Scene scene = new Scene(root, 800, 600);
         stage.setTitle("编辑器");
         stage.getIcons().add(new Image("img/Jeditor.png"));

@@ -7,17 +7,19 @@ import io.devpl.codegen.fxui.config.CodeGenConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ConfigHelper {
@@ -38,8 +40,8 @@ public class ConfigHelper {
     }
 
     static void createEmptyXMLFile(File uiConfigFile) throws IOException {
-        try (InputStream fis = Thread.currentThread().getContextClassLoader().getResourceAsStream("sqlite3.db");
-             FileOutputStream fos = new FileOutputStream(uiConfigFile)) {
+        try (InputStream fis = Thread.currentThread().getContextClassLoader()
+                                     .getResourceAsStream("sqlite3.db"); FileOutputStream fos = new FileOutputStream(uiConfigFile)) {
             byte[] buffer = new byte[1024];
             int byteread = 0;
             while (true) {
@@ -51,9 +53,7 @@ public class ConfigHelper {
     }
 
     public static List<DatabaseConfig> loadDatabaseConfig() throws Exception {
-        try (Connection conn = ConnectionManager.getConnection();
-             Statement stat = conn.createStatement();
-             ResultSet rs = stat.executeQuery("SELECT * FROM dbs")) {
+        try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement(); ResultSet rs = stat.executeQuery("SELECT * FROM dbs")) {
             List<DatabaseConfig> configs = new ArrayList<>();
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -99,8 +99,7 @@ public class ConfigHelper {
         ResultSet rs = null;
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             String jsonStr = JSON.toJSONString(generatorConfig);
-            String sql = String.format("INSERT INTO generator_config values('%s', '%s')", generatorConfig.getName(),
-                    jsonStr);
+            String sql = String.format("INSERT INTO generator_config values('%s', '%s')", generatorConfig.getName(), jsonStr);
             stat.executeUpdate(sql);
         }
     }
@@ -143,45 +142,23 @@ public class ConfigHelper {
         }
     }
 
+    /**
+     * 获取对应数据库类型的驱动jar包路径
+     * @param dbType 数据库类型
+     * @return
+     */
     public static String findConnectorLibPath(String dbType) {
         DBDriver type = DBDriver.valueOf(dbType);
-        URL resource = Thread.currentThread().getContextClassLoader().getResource("logback-2.xml");
-        _LOG.info("jar resource: {}", resource);
-        if (resource != null) {
-            try {
-                File file = new File(resource.toURI().getRawPath() + "/../lib/" + type.getConnectorJarFile());
-                return URLDecoder.decode(file.getCanonicalPath(), StandardCharsets.UTF_8.displayName());
-            } catch (Exception e) {
-                throw new RuntimeException("找不到驱动文件，请联系开发者");
-            }
-        } else {
-            throw new RuntimeException("lib can't find");
-        }
-    }
-
-    public static List<String> getAllJDBCDriverJarPaths() {
-        List<String> jarFilePathList = new ArrayList<>();
-        URL url = Thread.currentThread().getContextClassLoader().getResource("logback-2.xml");
+        final Path path = Paths.get("lib", type.getConnectorJarFile());
+        final File file;
         try {
-            File file;
-            if (url.getPath().contains(".jar")) {
-                file = new File("lib/");
-            } else {
-                file = new File("src/main/resources/lib");
-            }
-            _LOG.info("jar lib path: {}", file.getCanonicalPath());
-            File[] jarFiles = file.listFiles();
-            if (jarFiles != null && jarFiles.length > 0) {
-                for (File jarFile : jarFiles) {
-                    _LOG.info("jar file: {}", jarFile.getAbsolutePath());
-                    if (jarFile.isFile() && jarFile.getAbsolutePath().endsWith(".jar")) {
-                        jarFilePathList.add(jarFile.getAbsolutePath());
-                    }
-                }
-            }
-        } catch (Exception e) {
+            file = new File(ResourceUtils.getProjectResource(path.toString()).toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        if (!file.exists()) {
             throw new RuntimeException("找不到驱动文件，请联系开发者");
         }
-        return jarFilePathList;
+        return PathUtils.decodeUrl(file.getAbsolutePath());
     }
 }

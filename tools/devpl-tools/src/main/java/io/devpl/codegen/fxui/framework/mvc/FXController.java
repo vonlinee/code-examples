@@ -23,12 +23,20 @@ public abstract class FXController implements EventTarget, Initializable {
 
     /**
      * 缓存单例控制器
+     * 并不是所有的都会在一开始初始化
      */
-    private static final Map<Class<? extends FXController>, FXController>
-            controllers = new ConcurrentHashMap<>();
+    private static final Map<Class<? extends FXController>, FXController> controllers = new ConcurrentHashMap<>();
 
     public FXController() {
+        // This逃逸问题？
         controllers.put(this.getClass(), this);
+    }
+
+    /**
+     * 将自身注册进事件总线
+     */
+    public final void register() {
+        bus.register(this);
     }
 
     public final void post(Object event) {
@@ -55,7 +63,7 @@ public abstract class FXController implements EventTarget, Initializable {
     }
 
     @SuppressWarnings("unchecked")
-    protected  <T> T getUserData(Node node) {
+    protected final <T> T getUserData(Node node) {
         return (T) node.getUserData();
     }
 }

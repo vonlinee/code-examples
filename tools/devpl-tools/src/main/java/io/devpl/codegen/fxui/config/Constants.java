@@ -1,7 +1,5 @@
 package io.devpl.codegen.fxui.config;
 
-import java.util.List;
-
 public final class Constants {
 
     private Constants() {
@@ -17,6 +15,10 @@ public final class Constants {
     public static final String DEFAULT_ENCODING = "utf8";
 
     public static final String CONFIGURATION_TYPE_XML_MAPPER = "XMLMAPPER";
+
+    public static final int DEFAULT_MYSQL_SERVER_PORT = 3306;
+    public static final String LOCALHOST = "127.0.0.1";
+    public static final String MYSQL_ROOT_USERNAME = "root";
 
     public static final String[] SUPPORTED_ENCODING = new String[]{
             "utf8",

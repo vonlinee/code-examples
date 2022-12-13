@@ -21,17 +21,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
-/**
- * Project: mybatis-generator-gui
- * @author slankka on 2018/12/30.
- */
 public class OverSshController extends DbConnectionController {
-
-    private final Logger logger = LoggerFactory.getLogger(OverSshController.class);
 
     @FXML
     public CheckBox savePwdCheckBox;
-
     @FXML
     public HBox pubkeyBox;
     @FXML
@@ -205,7 +198,7 @@ public class OverSshController extends DbConnectionController {
             this.tabPaneController.getDialogStage().close();
             mainUIController.loadLeftDBTree();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             Alerts.showErrorAlert(e.getMessage());
         }
     }
@@ -222,7 +215,7 @@ public class OverSshController extends DbConnectionController {
             try {
                 session.connect();
             } catch (JSchException e) {
-                logger.error("Connect Over SSH failed", e);
+                log.error("Connect Over SSH failed", e);
                 throw new RuntimeException(e.getMessage());
             }
         });

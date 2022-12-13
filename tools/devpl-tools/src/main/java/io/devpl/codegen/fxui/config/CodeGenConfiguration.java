@@ -1,10 +1,12 @@
 package io.devpl.codegen.fxui.config;
 
 import io.devpl.codegen.fxui.common.ConfigMap;
+import lombok.Data;
 
 /**
  * 除了数据库配置外的配置
  */
+@Data
 public class CodeGenConfiguration {
 
     /**
@@ -28,6 +30,16 @@ public class CodeGenConfiguration {
      * model类所在包的包名
      */
     private String modelPackage;
+
+    /**
+     * 父包名
+     */
+    private String parentPackage;
+
+    /**
+     * 是否使用mybatis
+     */
+    private boolean useMyBatisPlus;
 
     private String modelPackageTargetFolder;
 

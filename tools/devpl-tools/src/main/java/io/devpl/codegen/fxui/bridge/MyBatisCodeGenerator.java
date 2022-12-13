@@ -31,15 +31,15 @@ import java.util.Set;
 public class MyBatisCodeGenerator {
 
     private static final Log log = LogFactory.getLog(MyBatisCodeGenerator.class);
-
+    // 代码生成配置
     private CodeGenConfiguration generatorConfig;
-
+    // 数据库配置
     private DatabaseConfig selectedDatabaseConfig;
-
+    // 进度回调
     private ProgressCallback progressCallback;
     // 忽略的列
     private List<IgnoredColumn> ignoredColumns;
-
+    // 覆盖的列
     private List<ColumnOverride> columnOverrides;
 
     public void setGeneratorConfig(CodeGenConfiguration generatorConfig) {
@@ -128,6 +128,14 @@ public class MyBatisCodeGenerator {
 
         if (generatorConfig.isUseTableNameAlias()) {
             tableConfig.setAlias(generatorConfig.getTableName());
+        }
+        // Swagger支持
+        if (generatorConfig.isSwaggerSupport()) {
+            addPluginConfiguration(context, SwaggerSupportPlugin.class);
+        }
+        // MyBatis-Plus插件
+        if (generatorConfig.isUseMyBatisPlus()) {
+            addPluginConfiguration(context, MyBatisPlusPlugin.class);
         }
 
         JDBCConnectionConfiguration jdbcConfig = new JDBCConnectionConfiguration();

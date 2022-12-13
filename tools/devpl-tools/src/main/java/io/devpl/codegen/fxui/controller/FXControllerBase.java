@@ -48,7 +48,7 @@ public abstract class FXControllerBase extends FXController implements Initializ
             FXControllerBase controller = loader.getController();
             // fix bug: 嵌套弹出时会发生dialogStage被覆盖的情况
             Stage tmpDialogStage =
-                    JFX.newStage(title, getPrimaryStage(), Modality.APPLICATION_MODAL, new Scene(loginNode), false);
+                    JFX.newStage(title, getPrimaryStage(), Modality.APPLICATION_MODAL, new Scene(loginNode), true);
             tmpDialogStage.setMaximized(false);
             tmpDialogStage.show();
             controller.setDialogStage(tmpDialogStage);

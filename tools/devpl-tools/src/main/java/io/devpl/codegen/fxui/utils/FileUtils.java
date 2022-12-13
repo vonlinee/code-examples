@@ -3,6 +3,9 @@ package io.devpl.codegen.fxui.utils;
 import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.file.Counters;
 import org.apache.commons.io.file.PathUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
@@ -12,10 +15,53 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 public class FileUtils {
+
+    private static final File[] EMPTY_FILES = new File[0];
+
+    @NotNull
+    public static File[] listAllFiles(File dir) {
+        if (!isDirectory(dir)) {
+            return EMPTY_FILES;
+        }
+        final File[] files = dir.listFiles();
+        if (files == null) {
+            return EMPTY_FILES;
+        }
+        return files;
+    }
+
+    public static boolean isDirectory(File file) {
+        return file != null && file.isDirectory();
+    }
+
+    public static List<File> filter(File[] files, FileFilter fileFilter) {
+        final List<File> fileList = new ArrayList<>(files.length);
+        for (int i = 0; i < files.length; i++) {
+            if (fileFilter != null && fileFilter.accept(files[i])) {
+                fileList.add(files[i]);
+            }
+        }
+        return fileList;
+    }
+
+    /**
+     * Converts an array of file extensions to suffixes for use
+     * with IOFileFilters.
+     * @param extensions an array of extensions. Format: {"java", "xml"}
+     * @return an array of suffixes. Format: {".java", ".xml"}
+     */
+    private static String[] toSuffixes(final String... extensions) {
+        final String[] suffixes = new String[extensions.length];
+        for (int i = 0; i < extensions.length; i++) {
+            suffixes[i] = "." + extensions[i];
+        }
+        return suffixes;
+    }
 
     public static void show(File file) {
         try {
@@ -37,12 +83,9 @@ public class FileUtils {
 
     public static String slashify(String path, boolean isDirectory) {
         String p = path;
-        if (File.separatorChar != '/')
-            p = p.replace(File.separatorChar, '/');
-        if (!p.startsWith("/"))
-            p = "/" + p;
-        if (!p.endsWith("/") && isDirectory)
-            p = p + "/";
+        if (File.separatorChar != '/') p = p.replace(File.separatorChar, '/');
+        if (!p.startsWith("/")) p = "/" + p;
+        if (!p.endsWith("/") && isDirectory) p = p + "/";
         return p;
     }
 
@@ -179,8 +222,7 @@ public class FileUtils {
     private static File requireExists(final File file, final String fileParamName) {
         Objects.requireNonNull(file, fileParamName);
         if (!file.exists()) {
-            throw new IllegalArgumentException(
-                    "File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
+            throw new IllegalArgumentException("File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
         }
         return file;
     }

@@ -1,12 +1,7 @@
 package editor;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.*;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -28,30 +23,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
-import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -64,54 +47,30 @@ import org.reactfx.Subscription;
 public class MainPageController implements Initializable {
 
     @FXML
-    Button saveit, saveas, open, zoomin, zoomout, gentime, search, replace;
+    Button saveit, saveas, open, gentime, search, replace;
     @FXML
     CodeArea codearea;
     @FXML
-    BorderPane editpane, webpane;
+    BorderPane editpane;
     @FXML
     Label viewer;
     @FXML
     TextField input;
     @FXML
-    ChoiceBox choosebox;
-    @FXML
-    WebView webview;
-    @FXML
     SplitPane splitpane;
 
-    private TextEditor editor;
     private Stage stage;
     private Path path = null;
     private File file = null;
-    Charset charset = StandardCharsets.UTF_8;
     private static final String sampleCode = String.join("\n", new String[]{"Hellow,World"});
     private static String tosearch = "";
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        choosebox.setItems(FXCollections.observableArrayList("Dark Mode", new Separator(), "Light Mode"));
-        choosebox.setValue(choosebox.getItems().get(0));
-        choosebox.setStyle("-fx-font: bold 9.0  sans-serif;-fx-text-alignment: center;-fx-text-alignment: center;");
-        choosebox.setTooltip(new Tooltip("Select your Preferred Mode"));
-        initCodearea();
-        darkmode(new ActionEvent());
-//        InputStream is = getClass().getResourceAsStream("f29.png");
-//        BackgroundImage myBI = new BackgroundImage(
-//                new Image(is),
-//                BackgroundRepeat.REPEAT,
-//                BackgroundRepeat.NO_REPEAT,
-//                BackgroundPosition.DEFAULT,
-//                BackgroundSize.DEFAULT);
-//        editpane.setBackground(new Background(myBI)); 
-
-        search.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/img/search.png"), 23, 23, true, true)));
-        replace.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/img/replace.png"), 23, 23, true, true)));
+        initCodeArea();
     }
 
     public void setEditor(TextEditor edt, Stage stage) {
-        this.editor = edt;
         this.stage = stage;
     }
 
@@ -119,13 +78,11 @@ public class MainPageController implements Initializable {
         this.path = path;
     }
 
-    private void initCodearea() {
+    private void initCodeArea() {
         codearea.setPadding(new Insets(10, 8, 10, 8));
         codearea.setParagraphGraphicFactory(LineNumberFactory.get(codearea));
-        Subscription cleanupWhenNoLongerNeedIt = codearea.multiPlainChanges().successionEnds(Duration.ofMillis(256))
-                                                         .subscribe(ignore -> codearea.setStyleSpans(0, computeHighlighting(codearea.getText())));
+        // Subscription cleanupWhenNoLongerNeedIt = codearea.multiPlainChanges().successionEnds(Duration.ofMillis(256));
         codearea.replaceText(0, 0, sampleCode);
-
     }
 
     @FXML
@@ -149,24 +106,6 @@ public class MainPageController implements Initializable {
     }
 
     @FXML
-    private void chooseMode(ActionEvent event) {
-
-        choosebox.getSelectionModel().selectedIndexProperty().addListener((ov, oldv, newv) -> {
-            switch (newv.intValue()) {
-                case 0: {
-                    darkmode(event);
-                    break;
-                }
-                case 2: {
-                    lightmode(event);
-                    break;
-                }
-            }
-
-        });
-    }
-
-    @FXML
     private void openaction(ActionEvent event) {
         codearea.clear();
         FileChooser fileChooser = new FileChooser();
@@ -175,13 +114,13 @@ public class MainPageController implements Initializable {
         file = fileChooser.showOpenDialog(stage);
         path = Paths.get(file.getPath());
         String context;
-
         // 读入文件，这里使用了常规的readine方法，下面还有两种方案可供参考；
-        try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
+        try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             while ((context = reader.readLine()) != null) {
                 codearea.appendText(context + "\n");
             }
         } catch (IOException io) {
+            io.printStackTrace();
         }
     }
 
@@ -241,7 +180,7 @@ public class MainPageController implements Initializable {
     }
 
     private void savefile(Path path, String context) {
-        try (BufferedWriter writer = Files.newBufferedWriter(path, charset)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
             writer.write(context, 0, context.length());
         } catch (IOException x) {
             System.err.format("IOException Error : %s%n", x);
@@ -249,47 +188,9 @@ public class MainPageController implements Initializable {
     }
 
     @FXML
-    private void darkmode(ActionEvent event) {
-        codearea.setBackground(new Background(new BackgroundFill(Color.web("#232323", 0.64f), new CornerRadii(16), Insets.EMPTY)));
-        // editpane.getStylesheets().remove(getClass().getResource("Jeditor/LightMode.css").toExternalForm());
-        // editpane.getStylesheets().add(getClass().getResource("Jeditor/DarkMode.css").toExternalForm());
-    }
-
-    @FXML
-    private void lightmode(ActionEvent event) {
-        codearea.setBackground(new Background(new BackgroundFill(Color.web("#B9E8BA", 0.64f), new CornerRadii(16), Insets.EMPTY)));
-        // editpane.getStylesheets().remove(getClass().getResource("Jeditor/DarkMode.css").toExternalForm());
-        // editpane.getStylesheets().add(getClass().getResource("Jeditor/LightMode.css").toExternalForm());
-
-    }
-
-    @FXML
     private void genTime(ActionEvent event) {
         codearea.appendText(" [ " + DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.CHINESE)
                                               .format(new java.util.Date()).toString() + " ] ");
-    }
-
-    @FXML
-    private void visitgithub(ActionEvent event) throws URISyntaxException, IOException {
-//        try {
-//            Desktop.getDesktop().browse(new URI("https://github.com/blinderjay/jeditor"));
-//        } catch (Exception e) 
-        {
-            /*never happened :success or crashed*/
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("Fail to Open Local Browster");
-            alert.setHeaderText("Would you like to open the webview controlor?");
-
-            Optional<ButtonType> value = alert.showAndWait();
-            if (value.get() == ButtonType.OK) {
-                stage.setWidth(1536);
-                stage.centerOnScreen();
-                webpane.setMaxWidth(1024);
-                splitpane.setDividerPositions(0.6);
-                WebEngine eng = webview.getEngine();
-                eng.load(getClass().getResource("readme.html").toString());
-            }
-        }
     }
 
     private static StyleSpans<Collection<String>> computeHighlighting(String text) {
@@ -321,63 +222,61 @@ public class MainPageController implements Initializable {
 
     private static Pattern PATTERN = Pattern.compile("(?<KEYWORD>" + KEYWORD_PATTERN + ")" + "|(?<PAREN>" + PAREN_PATTERN + ")" + "|(?<BRACE>" + BRACE_PATTERN + ")" + "|(?<BRACKET>" + BRACKET_PATTERN + ")" + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")" + "|(?<STRING>" + STRING_PATTERN + ")" + "|(?<COMMENT>" + COMMENT_PATTERN + ")" + "|(?<TOSEARCH>" + tosearch + ")");
 
-//    /**
-//     * 问题是怎么把stream转为string;
-//     *
-//     * @param file
-//     */
-//    public void readTextFile(String file) {
-//        try (Stream<String> stream = Files.lines(Paths.get(file))) {
-//            stream.forEach(System.out::println);//输出重定向
-//        } catch (IOException e) {
-//        }
-//
-//    }
-//    /**
-//     * en: This method reads all the documents in at one time. Using methods
-//     * such as readLine () requires repeated access to files, and every time
-//     * readLine () calls code conversion, which reduces the speed. Therefore, in
-//     * the case of known encoding, it is the fastest way to read the files into
-//     * memory first by byte stream, and then by one-time encoding conversion.
-//     * zh: 这个方法一次把文件全部读进来。用readline()之类的方法需要反复访问文件，每次readline()都会调用编码转换，
-//     * 降低了速度，所以，在已知编码的情况下，按字节流方式先将文件都读入内存，再一次性编码转换是最快的方式。
-//     *
-//     * @param fileName
-//     * @return
-//     */ 
-//    public String readToString(String fileName) {
-//        String encoding = "UTF-8";
-//        File file = new File(fileName);
-//        Long filelength = file.length();
-//        byte[] filecontent = new byte[filelength.intValue()];
-//        try (FileInputStream in = new FileInputStream(file)) {
-//            in.read(filecontent);
-//            return new String(filecontent, encoding);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//    /**
-//     * 使用了string builder,可参考
-//     *
-//     * @param fileName
-//     * @return
-//     * @throws IOException
-//     */
-//    private static String readFileContent(String fileName) throws IOException {
-//        File file = new File(fileName);
-//        BufferedReader bf = new BufferedReader(new FileReader(file));
-//        String content = "";
-//        StringBuilder sb = new StringBuilder();
-//        while (content != null) {
-//            content = bf.readLine();
-//            if (content == null) {
-//                break;
-//            }
-//            sb.append(content.trim());
-//        }
-//        bf.close();
-//        return sb.toString();
-//    }
+    /**
+     * 问题是怎么把stream转为string;
+     * @param file
+     */
+    public void readTextFile(String file) {
+        try (Stream<String> stream = Files.lines(Paths.get(file))) {
+            stream.forEach(System.out::println);// 输出重定向
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * en: This method reads all the documents in at one time. Using methods
+     * such as readLine () requires repeated access to files, and every time
+     * readLine () calls code conversion, which reduces the speed. Therefore, in
+     * the case of known encoding, it is the fastest way to read the files into
+     * memory first by byte stream, and then by one-time encoding conversion.
+     * zh: 这个方法一次把文件全部读进来。用readline()之类的方法需要反复访问文件，每次readline()都会调用编码转换，
+     * 降低了速度，所以，在已知编码的情况下，按字节流方式先将文件都读入内存，再一次性编码转换是最快的方式。
+     * @param fileName
+     * @return
+     */
+    public String readToString(String fileName) {
+        String encoding = "UTF-8";
+        File file = new File(fileName);
+        byte[] filecontent = new byte[(int) file.length()];
+        try (FileInputStream in = new FileInputStream(file)) {
+            in.read(filecontent);
+            return new String(filecontent, encoding);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 使用了string builder,可参考
+     * @param fileName 文件名
+     * @return 文本文件的文本
+     * @throws IOException IOException
+     */
+    private static String readFileContent(String fileName) throws IOException {
+        File file = new File(fileName);
+        BufferedReader bf = new BufferedReader(new FileReader(file));
+        String content = "";
+        StringBuilder sb = new StringBuilder();
+        while (true) {
+            content = bf.readLine();
+            if (content == null) {
+                break;
+            }
+            sb.append(content.trim());
+        }
+        bf.close();
+        return sb.toString();
+    }
 }
