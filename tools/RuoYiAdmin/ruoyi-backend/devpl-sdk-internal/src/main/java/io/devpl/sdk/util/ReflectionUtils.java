@@ -1,4 +1,4 @@
-package io.devpl.sdk.util.aaaa;
+package io.devpl.sdk.util;
 
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;

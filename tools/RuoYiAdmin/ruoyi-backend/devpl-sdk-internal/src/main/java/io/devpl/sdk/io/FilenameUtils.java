@@ -1,4 +1,4 @@
-package io.devpl.sdk.util.io.io;
+package io.devpl.sdk.io;
 
 /**
  * 拷贝自apache commons-io

@@ -1,4 +1,4 @@
-package io.devpl.sdk.util;
+package io.devpl.sdk.coll;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

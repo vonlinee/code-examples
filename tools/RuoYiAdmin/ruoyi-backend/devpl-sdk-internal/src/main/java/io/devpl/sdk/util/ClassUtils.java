@@ -1,7 +1,6 @@
-package io.devpl.sdk.util.aaaa;
+package io.devpl.sdk.util;
 
 import io.devpl.sdk.lang.annotation.Nullable;
-import io.devpl.sdk.util.Assert;
 
 import java.beans.Introspector;
 import java.io.Closeable;
@@ -9,6 +8,7 @@ import java.io.Externalizable;
 import java.io.Serializable;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.Arrays;
 
 /**
  * Miscellaneous {@code java.lang.Class} utility methods. Mainly for internal
@@ -125,7 +125,7 @@ public abstract class ClassUtils {
 		Class<?>[] javaLanguageInterfaceArray = { Serializable.class, Externalizable.class, Closeable.class,
 				AutoCloseable.class, Cloneable.class, Comparable.class };
 		registerCommonClasses(javaLanguageInterfaceArray);
-		javaLanguageInterfaces = new HashSet<>(Arrays.asList(javaLanguageInterfaceArray));
+		javaLanguageInterfaces = new HashSet<>(java.util.Arrays.asList(javaLanguageInterfaceArray));
 	}
 
 	/**

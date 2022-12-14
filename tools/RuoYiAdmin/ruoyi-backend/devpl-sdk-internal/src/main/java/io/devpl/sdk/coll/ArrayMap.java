@@ -1,4 +1,4 @@
-package io.devpl.sdk.util;
+package io.devpl.sdk.coll;
 
 import java.util.Collection;
 import java.util.Map;

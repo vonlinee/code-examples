@@ -1,4 +1,4 @@
-package io.devpl.sdk.util.aaaa;
+package io.devpl.sdk.util;
 
 /**
  * StringEscaper ，数据库字符串转义

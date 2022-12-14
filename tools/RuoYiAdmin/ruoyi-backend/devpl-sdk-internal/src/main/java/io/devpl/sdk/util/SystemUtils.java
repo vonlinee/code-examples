@@ -1,4 +1,4 @@
-package io.devpl.sdk.util.aaaa;
+package io.devpl.sdk.util;
 
 import java.net.URL;
 import java.net.URLDecoder;
@@ -6,7 +6,7 @@ import java.net.URLDecoder;
 /**
  * 运行时系统
  */
-public abstract class SystemRuntime {
+public abstract class SystemUtils {
 
     private static ClassLoader loader = Thread.currentThread().getContextClassLoader();
     private static String classPath = "";

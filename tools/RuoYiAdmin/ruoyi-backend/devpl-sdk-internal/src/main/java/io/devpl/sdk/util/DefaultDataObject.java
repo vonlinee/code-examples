@@ -1,7 +1,8 @@
 package io.devpl.sdk.util;
 
+import io.devpl.sdk.coll.ArrayMap;
+
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * 采用Map结构实现

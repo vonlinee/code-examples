@@ -1,4 +1,4 @@
-package io.devpl.sdk.util.aaaa;
+package io.devpl.sdk.util;
 
 public final class Ascii {
 
@@ -330,7 +330,9 @@ public final class Ascii {
      */
     public static final char MAX = 127;
 
-    /** A bit mask which selects the bit encoding ASCII character case. */
+    /**
+     * A bit mask which selects the bit encoding ASCII character case.
+     */
     private static final char CASE_MASK = 0x20;
 
     /**

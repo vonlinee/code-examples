@@ -1,4 +1,4 @@
-package io.devpl.sdk.util.aaaa;
+package io.devpl.sdk.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

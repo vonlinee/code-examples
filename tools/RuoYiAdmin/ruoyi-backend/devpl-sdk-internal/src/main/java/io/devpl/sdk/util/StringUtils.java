@@ -1,11 +1,10 @@
 package io.devpl.sdk.util;
 
 import com.google.common.base.Preconditions;
-import io.devpl.sdk.util.aaaa.Validator;
 
 import java.nio.charset.Charset;
-import java.util.*;
 import java.util.Arrays;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -15,6 +14,15 @@ import java.util.regex.Pattern;
  * String工具类
  */
 public final class StringUtils {
+
+    private StringUtils() {
+    }
+
+    private static final int NOT_FOUND = -1;
+    public static final String DOUBLE_QUTATION = "\"";
+    public static final String SINGLE_QUTATION = "'";
+    public static final String NULL_STRING_HCASE = "NULL";
+    public static final String NULL_STRING_LCASE = "null";
 
     public static String substring(String s, String b, char c) {
         int i = b.lastIndexOf(c);
@@ -28,13 +36,6 @@ public final class StringUtils {
     public static <T> String substring(String src, Function<T, Integer> startIndexSupplier, T startIndex) {
         return src.substring(startIndexSupplier.apply(startIndex));
     }
-
-    private static final int NOT_FOUND = -1;
-
-    public static final String DOUBLE_QUTATION = "\"";
-    public static final String SINGLE_QUTATION = "'";
-    public static final String NULL_STRING_HCASE = "NULL";
-    public static final String NULL_STRING_LCASE = "null";
 
     /**
      * @param str
@@ -452,7 +453,7 @@ public final class StringUtils {
      * @return
      */
     public static String repeat(String string, int count) {
-        io.devpl.sdk.util.aaaa.Validator.whenNull(string);
+        Validator.whenNull(string);
         if (count <= 1) {
             Validator.whenTrue(count >= 0, "invalid count: %s", count);
             return (count == 0) ? "" : string;

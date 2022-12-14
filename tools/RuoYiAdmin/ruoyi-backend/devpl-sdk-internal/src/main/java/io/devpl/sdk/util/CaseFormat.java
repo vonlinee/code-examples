@@ -1,8 +1,7 @@
-package io.devpl.sdk.util.aaaa;
+package io.devpl.sdk.util;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Converter;
-import io.devpl.sdk.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -11,6 +10,9 @@ import java.util.regex.Pattern;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * 抄自谷歌的
+ */
 public enum CaseFormat {
 
     /**

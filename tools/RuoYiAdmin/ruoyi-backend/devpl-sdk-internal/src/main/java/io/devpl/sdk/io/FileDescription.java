@@ -1,4 +1,4 @@
-package io.devpl.sdk.util.io.io;
+package io.devpl.sdk.io;
 
 import java.io.File;
 
