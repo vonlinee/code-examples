@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class MyBatisPlusCodeGenerator {
 
     private static final String url = "jdbc:mysql://192.168.129.30:3306/lgdb_cloud_resource_management?useUnicode=true&characterEncoding=UTF-8&useSSL=false&&serverTimezone=GMT%2B8";
     private static final String username = "root";
-    private static final String password = "123456";
+    private static final String password = "LancooECP";
     private static final String author = "";
     private static final String outputDir = "D:\\temp";
     private static final String parentPackage = "test";
@@ -47,7 +46,6 @@ public class MyBatisPlusCodeGenerator {
                                     // .service("") // Service 包名
                                     .pathInfo(Collections.singletonMap(OutputFile.xml, "D:\\Temp")); // 设置mapperXml生成路径
                          }).strategyConfig(builder -> {
-
                              // builder
                              // .enableSkipView() // 开启大写命名
                              //.enableSchema(); // 启用 schema

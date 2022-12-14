@@ -41,9 +41,28 @@
 
     </properties>
 
-    <!-- 依赖声明 -->
+    <!-- 全局依赖版本管理 -->
     <dependencyManagement>
         <dependencies>
+            <!--Slf4j日志门面-->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.36</version>
+            </dependency>
+            <!-- logback 日志实现 -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.2.11</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>23.0.0</version>
+                <scope>compile</scope>
+            </dependency>
 
             <!-- SpringBoot的依赖配置-->
             <dependency>
@@ -192,7 +211,6 @@
                 <artifactId>ruoyi-common</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -210,6 +228,8 @@
         <module>devpl-business</module>
         <module>devpl-boot</module>
         <module>devpl-monitor</module>
+        <module>devpl-codegen</module>
+        <module>devpl-logging</module>
     </modules>
     <packaging>pom</packaging>
 

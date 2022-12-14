@@ -560,4 +560,8 @@ public final class StringUtils {
             return "<" + objectToString + " threw " + e.getClass().getName() + ">";
         }
     }
+
+    public static boolean isNotBlank(String tableName) {
+        return !isBlank(tableName);
+    }
 }

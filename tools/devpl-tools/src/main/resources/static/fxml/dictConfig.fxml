@@ -12,9 +12,11 @@
                AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                AnchorPane.topAnchor="0.0">
         <columns>
-            <TableColumn fx:id="nameColumn" sortable="false" prefWidth="75.0" text="名称" minWidth="25.0"/>
-            <TableColumn fx:id="valueColumn" sortable="false" text="值" minWidth="25.0"/>
-            <TableColumn fx:id="descColumn" editable="false" prefWidth="75.0" sortable="false" text="描述信息"/>
+            <TableColumn fx:id="tbcCode" sortable="false" prefWidth="75.0" text="编码" minWidth="25.0"/>
+            <TableColumn fx:id="tbcName" sortable="false" prefWidth="75.0" text="名称" minWidth="25.0"/>
+            <TableColumn fx:id="tbcValue" sortable="false" text="值" minWidth="25.0"/>
+            <TableColumn fx:id="tbcDesc" editable="false" prefWidth="75.0" sortable="false" text="描述信息"/>
+            <TableColumn fx:id="tbcEnabled" editable="false" prefWidth="75.0" sortable="false" text="是否有效"/>
         </columns>
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>

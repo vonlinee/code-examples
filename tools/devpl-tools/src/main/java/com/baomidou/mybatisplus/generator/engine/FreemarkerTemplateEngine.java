@@ -44,7 +44,6 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
         return this;
     }
 
-
     @Override
     public void writer(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception {
         Template template = configuration.getTemplate(templatePath);
@@ -53,7 +52,6 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
         }
         LOGGER.debug("模板:" + templatePath + ";  文件:" + outputFile);
     }
-
 
     @Override
     public @NotNull String templateFilePath(@NotNull String filePath) {

@@ -1,23 +1,9 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.baomidou.mybatisplus.generator;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
+import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Scanner;
@@ -27,7 +13,6 @@ import java.util.function.Function;
 
 /**
  * mybatis plus FastAutoGenerator
- *
  * @author L.cm, lanjerry
  * @since 2021-07-22
  */
@@ -92,7 +77,6 @@ public final class FastAutoGenerator {
 
     /**
      * 控制台输入内容读取并打印提示信息
-     *
      * @param message 提示信息
      * @return String
      */
@@ -108,7 +92,6 @@ public final class FastAutoGenerator {
 
     /**
      * 全局配置
-     *
      * @param consumer 自定义全局配置
      * @return FastAutoGenerator
      */
@@ -124,7 +107,6 @@ public final class FastAutoGenerator {
 
     /**
      * 全局配置
-     *
      * @param consumer 自定义全局配置
      * @return FastAutoGenerator
      */
@@ -140,7 +122,6 @@ public final class FastAutoGenerator {
 
     /**
      * 包配置
-     *
      * @param consumer 自定义包配置
      * @return FastAutoGenerator
      */
@@ -156,7 +137,6 @@ public final class FastAutoGenerator {
 
     /**
      * 策略配置
-     *
      * @param consumer 自定义策略配置
      * @return FastAutoGenerator
      */
@@ -172,7 +152,6 @@ public final class FastAutoGenerator {
 
     /**
      * 注入配置
-     *
      * @param consumer 自定义注入配置
      * @return FastAutoGenerator
      */
@@ -188,7 +167,6 @@ public final class FastAutoGenerator {
 
     /**
      * 模板配置
-     *
      * @param consumer 自定义模板配置
      * @return FastAutoGenerator
      */
@@ -204,28 +182,30 @@ public final class FastAutoGenerator {
 
     /**
      * 模板引擎配置
-     *
      * @param templateEngine 模板引擎
      * @return FastAutoGenerator
      */
     public FastAutoGenerator templateEngine(AbstractTemplateEngine templateEngine) {
-        this.templateEngine = templateEngine;
-        return this;
+        if (templateEngine instanceof FreemarkerTemplateEngine) {
+            this.templateEngine = templateEngine;
+            return this;
+        }
+        throw new UnsupportedOperationException("暂不支持其他模板引擎，只支持FreemarkerTemplateEngine");
     }
 
     public void execute() {
         new AutoGenerator(this.dataSourceConfigBuilder.build())
-            // 全局配置
-            .global(this.globalConfigBuilder.build())
-            // 包配置
-            .packageInfo(this.packageConfigBuilder.build())
-            // 策略配置
-            .strategy(this.strategyConfigBuilder.build())
-            // 注入配置
-            .injection(this.injectionConfigBuilder.build())
-            // 模板配置
-            .template(this.templateConfigBuilder.build())
-            // 执行
-            .execute(this.templateEngine);
+                // 全局配置
+                .global(this.globalConfigBuilder.build())
+                // 包配置
+                .packageInfo(this.packageConfigBuilder.build())
+                // 策略配置
+                .strategy(this.strategyConfigBuilder.build())
+                // 注入配置
+                .injection(this.injectionConfigBuilder.build())
+                // 模板配置
+                .template(this.templateConfigBuilder.build())
+                // 执行
+                .execute(this.templateEngine);
     }
 }

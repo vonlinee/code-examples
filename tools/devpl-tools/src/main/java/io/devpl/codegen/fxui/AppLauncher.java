@@ -2,7 +2,6 @@ package io.devpl.codegen.fxui;
 
 import io.devpl.codegen.fxui.common.MainUI;
 import javafx.application.Application;
-import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 

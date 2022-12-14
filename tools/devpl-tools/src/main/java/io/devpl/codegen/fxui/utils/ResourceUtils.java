@@ -377,7 +377,7 @@ public final class ResourceUtils {
     private static final URL CLASSPATH_ROOT = loader.getResource("");
 
     public static URL getProjectResource(String relativePath) {
-        return newURLQuietly(CLASSPATH_ROOT, relativePath);
+        return newURLQuietly(CLASSPATH_ROOT, resolve(relativePath));
     }
 
     public static File getProjectFile(String relativePath) {
@@ -453,7 +453,10 @@ public final class ResourceUtils {
     }
 
     private static String resolve(String pathname) {
-        if (pathname.startsWith("/")) {
+        if (pathname.startsWith(File.pathSeparator)) {
+            pathname = pathname.substring(1);
+        }
+        if (pathname.startsWith("\\")) {
             pathname = pathname.substring(1);
         }
         return pathname;

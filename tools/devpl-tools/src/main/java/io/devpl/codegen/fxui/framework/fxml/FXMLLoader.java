@@ -1,28 +1,3 @@
-/*
- * Copyright (c) 2010, 2018, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package io.devpl.codegen.fxui.framework.fxml;
 
 import com.sun.javafx.util.Logging;
@@ -100,7 +75,7 @@ import com.sun.javafx.reflect.MethodUtil;
 import com.sun.javafx.reflect.ReflectUtil;
 
 /**
- * 复制javafx.fxml.FXMLLoader
+ * 复制javafx.fxml.FXMLLoader，魔改
  * Loads an object hierarchy from an XML document.
  * For more information, see the
  * <a href="doc-files/introduction_to_fxml.html">Introduction to FXML</a>
@@ -117,15 +92,14 @@ public class FXMLLoader {
 
     // Abstract base class for elements
     private abstract class Element {
-        public final Element parent;
-
         public Object value = null;
-        private BeanAdapter valueAdapter = null;
+        public final Element parent;
+        public final LinkedList<Attribute> eventHandlerAttributes = new LinkedList<>();
+        public final LinkedList<Attribute> instancePropertyAttributes = new LinkedList<>();
+        public final LinkedList<Attribute> staticPropertyAttributes = new LinkedList<>();
+        public final LinkedList<PropertyElement> staticPropertyElements = new LinkedList<>();
 
-        public final LinkedList<Attribute> eventHandlerAttributes = new LinkedList<Attribute>();
-        public final LinkedList<Attribute> instancePropertyAttributes = new LinkedList<Attribute>();
-        public final LinkedList<Attribute> staticPropertyAttributes = new LinkedList<Attribute>();
-        public final LinkedList<PropertyElement> staticPropertyElements = new LinkedList<PropertyElement>();
+        private BeanAdapter valueAdapter = null;
 
         public Element() {
             parent = current;
@@ -140,14 +114,12 @@ public class FXMLLoader {
             } else {
                 Class<?> type = value.getClass();
                 DefaultProperty defaultProperty = type.getAnnotation(DefaultProperty.class);
-
                 if (defaultProperty != null) {
                     collection = getProperties().get(defaultProperty.value()) instanceof List<?>;
                 } else {
                     collection = false;
                 }
             }
-
             return collection;
         }
 
@@ -547,8 +519,10 @@ public class FXMLLoader {
                             return new MethodHandler(controller, method, t);
                         }
                     }
-                    Method method = controllerAccessor.getControllerMethods().get(SupportedType.PARAMETERLESS)
-                                                      .get(handlerName);
+                    Method method = controllerAccessor
+                            .getControllerMethods()
+                            .get(SupportedType.PARAMETERLESS)
+                            .get(handlerName);
                     if (method != null) {
                         return new MethodHandler(controller, method, SupportedType.PARAMETERLESS);
                     }
@@ -671,8 +645,9 @@ public class FXMLLoader {
 
                 ObservableValue<Object> propertyModel = getValueAdapter().getPropertyModel(key);
                 if (propertyModel == null) {
-                    throw constructLoadException(value.getClass()
-                                                      .getName() + " does not define" + " a property model for \"" + key + "\".");
+                    throw constructLoadException(value
+                            .getClass()
+                            .getName() + " does not define" + " a property model for \"" + key + "\".");
                 }
 
                 if (handlerValue.startsWith(CONTROLLER_METHOD_PREFIX)) {
@@ -793,8 +768,9 @@ public class FXMLLoader {
                 if (defaultNSURI != null) {
                     String nsVersion = defaultNSURI.substring(defaultNSURI.lastIndexOf("/") + 1);
                     if (compareJFXVersions(JAVAFX_VERSION, nsVersion) < 0) {
-                        Logging.getJavaFXLogger()
-                               .warning("Loading FXML document with JavaFX API of version " + nsVersion + " by JavaFX runtime of version " + JAVAFX_VERSION);
+                        Logging
+                                .getJavaFXLogger()
+                                .warning("Loading FXML document with JavaFX API of version " + nsVersion + " by JavaFX runtime of version " + JAVAFX_VERSION);
                     }
                 }
             }
@@ -1020,7 +996,7 @@ public class FXMLLoader {
         }
     }
 
-    // Element representing an include
+    // Element representing an included
     private class IncludeElement extends ValueElement {
         public String source = null;
         public ResourceBundle resources = FXMLLoader.this.resources;
@@ -1033,20 +1009,18 @@ public class FXMLLoader {
                     if (loadListener != null) {
                         loadListener.readInternalAttribute(localName, value);
                     }
-
                     source = value;
                 } else if (localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
                     if (loadListener != null) {
                         loadListener.readInternalAttribute(localName, value);
                     }
-
                     resources = ResourceBundle.getBundle(value, Locale.getDefault(), FXMLLoader.this.resources
-                            .getClass().getClassLoader());
+                            .getClass()
+                            .getClassLoader());
                 } else if (localName.equals(INCLUDE_CHARSET_ATTRIBUTE)) {
                     if (loadListener != null) {
                         loadListener.readInternalAttribute(localName, value);
                     }
-
                     charset = Charset.forName(value);
                 } else {
                     super.processAttribute(prefix, localName, value);
@@ -1101,6 +1075,7 @@ public class FXMLLoader {
         }
     }
 
+    // 注入Controller的值
     private void injectFields(String fieldName, Object value) throws LoadException {
         if (controller != null && fieldName != null) {
             List<Field> fields = controllerAccessor.getControllerFields().get(fieldName);
@@ -2447,8 +2422,10 @@ public class FXMLLoader {
                     injectFields(RESOURCES_KEY, resources);
 
                     // Initialize the controller
-                    Method initializeMethod = controllerAccessor.getControllerMethods().get(SupportedType.PARAMETERLESS)
-                                                                .get(INITIALIZE_METHOD_NAME);
+                    Method initializeMethod = controllerAccessor
+                            .getControllerMethods()
+                            .get(SupportedType.PARAMETERLESS)
+                            .get(INITIALIZE_METHOD_NAME);
 
                     if (initializeMethod != null) {
                         try {
@@ -2516,12 +2493,10 @@ public class FXMLLoader {
      */
     ParseTraceElement[] getParseTrace() {
         ParseTraceElement[] parseTrace = new ParseTraceElement[loaders.size()];
-
         int i = 0;
         for (FXMLLoader loader : loaders) {
             parseTrace[i++] = new ParseTraceElement(loader.location, (loader.current != null) ? loader.getLineNumber() : -1);
         }
-
         return parseTrace;
     }
 
@@ -2989,10 +2964,8 @@ public class FXMLLoader {
         if (location == null) {
             throw new NullPointerException("Location is required.");
         }
-
         FXMLLoader fxmlLoader = new FXMLLoader(location, resources, builderFactory, controllerFactory, charset);
-
-        return fxmlLoader.<T>loadImpl(callerClass);
+        return fxmlLoader.loadImpl(callerClass);
     }
 
     /**
@@ -3080,6 +3053,7 @@ public class FXMLLoader {
 
     private final ControllerAccessor controllerAccessor = new ControllerAccessor();
 
+    // 访问Controller类
     private static final class ControllerAccessor {
         private static final int PUBLIC = 1;
         private static final int PROTECTED = 2;
@@ -3120,15 +3094,12 @@ public class FXMLLoader {
         Map<String, List<Field>> getControllerFields() {
             if (controllerFields == null) {
                 controllerFields = new HashMap<>();
-
                 if (callerClassLoader == null) {
                     // allow null class loader only with permission check
                     checkClassLoaderPermission();
                 }
-
                 addAccessibleMembers(controller.getClass(), INITIAL_CLASS_ACCESS, INITIAL_MEMBER_ACCESS, FIELDS);
             }
-
             return controllerFields;
         }
 
