@@ -72,15 +72,19 @@ public abstract class AbstractTemplateEngine {
         String entityName = tableInfo.getEntityName();
         String entityPath = getPathInfo(OutputFile.entity);
         if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
-            getTemplateFilePath(template -> template.getEntity(getConfigBuilder()
+            TemplateConfig templateConfig = getConfigBuilder().getTemplateConfig();
+            boolean kotlin = getConfigBuilder()
                     .getGlobalConfig()
-                    .isKotlin())).ifPresent((entity) -> {
+                    .isKotlin();
+            String entity = templateConfig.getEntity(kotlin);
+            if (StringUtils.hasLength(entity)) {
                 String entityFile = String.format((entityPath + File.separator + "%s" + suffixJavaOrKt()), entityName);
-                outputFile(new File(entityFile), objectMap, entity, getConfigBuilder()
+                boolean fileOverride = getConfigBuilder()
                         .getStrategyConfig()
                         .entity()
-                        .isFileOverride());
-            });
+                        .isFileOverride();
+                outputFile(new File(entityFile), objectMap, entity, fileOverride);
+            }
         }
     }
 

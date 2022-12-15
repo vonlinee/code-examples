@@ -6,5 +6,9 @@ package io.devpl.codegen.mbpg.config;
  */
 public interface Builder<T> {
 
+    /**
+     * 构造对象逻辑
+     * @return 对象实例
+     */
     T build();
 }

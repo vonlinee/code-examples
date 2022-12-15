@@ -18,7 +18,7 @@ package io.devpl.codegen.mbpg.config;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
-import io.devpl.codegen.mbpg.config.rules.NamingStrategy;
+import io.devpl.codegen.mbpg.config.rules.NamingStrategyEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -65,7 +65,7 @@ public interface INameConvert {
 
         @Override
         public @NotNull String entityNameConvert(@NotNull TableInfo tableInfo) {
-            return NamingStrategy.capitalFirst(processName(tableInfo.getName(), strategyConfig.entity().getNaming(), strategyConfig.getTablePrefix(), strategyConfig.getTableSuffix()));
+            return NamingStrategyEnum.capitalFirst(processName(tableInfo.getName(), strategyConfig.entity().getNaming(), strategyConfig.getTablePrefix(), strategyConfig.getTableSuffix()));
         }
 
         @Override
@@ -73,22 +73,22 @@ public interface INameConvert {
             return processName(field.getName(), strategyConfig.entity().getColumnNaming(), strategyConfig.getFieldPrefix(), strategyConfig.getFieldSuffix());
         }
 
-        private String processName(String name, NamingStrategy strategy, Set<String> prefix, Set<String> suffix) {
+        private String processName(String name, NamingStrategyEnum strategy, Set<String> prefix, Set<String> suffix) {
             String propertyName = name;
             // 删除前缀
             if (prefix.size() > 0) {
-                propertyName = NamingStrategy.removePrefix(propertyName, prefix);
+                propertyName = NamingStrategyEnum.removePrefix(propertyName, prefix);
             }
             // 删除后缀
             if (suffix.size() > 0) {
-                propertyName = NamingStrategy.removeSuffix(propertyName, suffix);
+                propertyName = NamingStrategyEnum.removeSuffix(propertyName, suffix);
             }
             if (StringUtils.isBlank(propertyName)) {
                 throw new RuntimeException(String.format("%s 的名称转换结果为空，请检查是否配置问题", name));
             }
             // 下划线转驼峰
-            if (NamingStrategy.underline_to_camel.equals(strategy)) {
-                return NamingStrategy.underlineToCamel(propertyName);
+            if (NamingStrategyEnum.UNDERLINE_TO_CAMEL.equals(strategy)) {
+                return NamingStrategyEnum.underlineToCamel(propertyName);
             }
             return propertyName;
         }

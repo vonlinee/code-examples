@@ -25,7 +25,7 @@ import io.devpl.codegen.mbpg.ITemplate;
 import io.devpl.codegen.mbpg.config.INameConvert;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
-import io.devpl.codegen.mbpg.config.rules.NamingStrategy;
+import io.devpl.codegen.mbpg.config.rules.NamingStrategyEnum;
 import io.devpl.codegen.mbpg.function.ConverterFileName;
 import io.devpl.codegen.mbpg.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
@@ -143,13 +143,13 @@ public class Entity implements ITemplate {
     /**
      * 数据库表映射到实体的命名策略，默认下划线转驼峰命名
      */
-    private NamingStrategy naming = NamingStrategy.underline_to_camel;
+    private NamingStrategyEnum naming = NamingStrategyEnum.UNDERLINE_TO_CAMEL;
 
     /**
      * 数据库表字段映射到实体的命名策略
      * <p>未指定按照 naming 执行</p>
      */
-    private NamingStrategy columnNaming = null;
+    private NamingStrategyEnum columnNaming = null;
 
     /**
      * 开启 ActiveRecord 模式（默认 false）
@@ -197,7 +197,7 @@ public class Entity implements ITemplate {
             if (tableField != null && StringUtils.isNotBlank(tableField.value())) {
                 return tableField.value();
             }
-            if (null == columnNaming || columnNaming == NamingStrategy.no_change) {
+            if (null == columnNaming || columnNaming == NamingStrategyEnum.NO_CHANGE) {
                 return field.getName();
             }
             return StringUtils.camelToUnderline(field.getName());
@@ -205,7 +205,7 @@ public class Entity implements ITemplate {
     }
 
     @NotNull
-    public NamingStrategy getColumnNaming() {
+    public NamingStrategyEnum getColumnNaming() {
         // 未指定以 naming 策略为准
         return Optional.ofNullable(columnNaming).orElse(naming);
     }
@@ -297,7 +297,7 @@ public class Entity implements ITemplate {
     }
 
     @NotNull
-    public NamingStrategy getNaming() {
+    public NamingStrategyEnum getNaming() {
         return naming;
     }
 
@@ -505,7 +505,7 @@ public class Entity implements ITemplate {
          * @param namingStrategy 数据库表映射到实体的命名策略
          * @return this
          */
-        public Builder naming(NamingStrategy namingStrategy) {
+        public Builder naming(NamingStrategyEnum namingStrategy) {
             this.entity.naming = namingStrategy;
             return this;
         }
@@ -516,7 +516,7 @@ public class Entity implements ITemplate {
          * @param namingStrategy 数据库表字段映射到实体的命名策略
          * @return this
          */
-        public Builder columnNaming(NamingStrategy namingStrategy) {
+        public Builder columnNaming(NamingStrategyEnum namingStrategy) {
             this.entity.columnNaming = namingStrategy;
             return this;
         }

@@ -22,7 +22,7 @@ import io.devpl.codegen.mbpg.config.IKeyWordsHandler;
 import io.devpl.codegen.mbpg.config.builder.ConfigBuilder;
 import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
-import io.devpl.codegen.mbpg.config.rules.NamingStrategy;
+import io.devpl.codegen.mbpg.config.rules.NamingStrategyEnum;
 import io.devpl.codegen.mbpg.fill.Column;
 import io.devpl.codegen.mbpg.fill.Property;
 import io.devpl.codegen.mbpg.jdbc.DatabaseMetaDataWrapper;
@@ -112,11 +112,11 @@ public class TableField {
             return this;
         }
         // 下划线转驼峰策略
-        if (NamingStrategy.underline_to_camel.equals(this.entity.getColumnNaming())) {
-            this.convert = !propertyName.equalsIgnoreCase(NamingStrategy.underlineToCamel(this.columnName));
+        if (NamingStrategyEnum.UNDERLINE_TO_CAMEL.equals(this.entity.getColumnNaming())) {
+            this.convert = !propertyName.equalsIgnoreCase(NamingStrategyEnum.underlineToCamel(this.columnName));
         }
         // 原样输出策略
-        if (NamingStrategy.no_change.equals(this.entity.getColumnNaming())) {
+        if (NamingStrategyEnum.NO_CHANGE.equals(this.entity.getColumnNaming())) {
             this.convert = !propertyName.equalsIgnoreCase(this.columnName);
         }
         if (entity.isTableFieldAnnotationEnable()) {

@@ -45,7 +45,7 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
         </dependency>
-
+        <!--Devpl SDK-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>devpl-sdk-internal</artifactId>
@@ -57,23 +57,29 @@
             <artifactId>javaparser-core</artifactId>
             <version>3.24.8</version>
         </dependency>
-
+        <!--日志模块：添加所有日志的依赖-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>devpl-logging</artifactId>
             <version>3.8.3</version>
         </dependency>
-
+        <!--Apache Ant工具-->
         <dependency>
             <groupId>org.apache.ant</groupId>
             <artifactId>ant</artifactId>
             <version>1.10.12</version>
         </dependency>
-
+        <!--Guava工具类库-->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>31.1-jre</version>
+        </dependency>
+        <!--String TemplateEntity 4 模板引擎-->
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>ST4</artifactId>
+            <version>4.3.4</version>
         </dependency>
     </dependencies>
 

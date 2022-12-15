@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.devpl.codegen.mbpg.config.rules;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -24,25 +9,23 @@ import java.util.Set;
 
 /**
  * 从数据库表到文件的命名策略
- *
  * @author YangHu, tangguo
  * @since 2016/8/30
  */
-public enum NamingStrategy {
+public enum NamingStrategyEnum {
 
     /**
      * 不做任何改变，原样输出
      */
-    no_change,
+    NO_CHANGE,
 
     /**
      * 下划线转驼峰命名
      */
-    underline_to_camel;
+    UNDERLINE_TO_CAMEL;
 
     /**
      * 下划线转驼峰
-     *
      * @param name 待转内容
      */
     public static String underlineToCamel(String name) {
@@ -75,7 +58,6 @@ public enum NamingStrategy {
 
     /**
      * 去掉指定的前缀
-     *
      * @param name   表名
      * @param prefix 前缀
      * @return 转换后的字符串
@@ -86,12 +68,11 @@ public enum NamingStrategy {
         }
         // 判断是否有匹配的前缀，然后截取前缀
         return prefix.stream().filter(pf -> name.toLowerCase().startsWith(pf.toLowerCase()))
-            .findFirst().map(pf -> name.substring(pf.length())).orElse(name);
+                .findFirst().map(pf -> name.substring(pf.length())).orElse(name);
     }
 
     /**
      * 去掉下划线前缀并转成驼峰格式
-     *
      * @param name   表名
      * @param prefix 前缀
      * @return 转换后的字符串
@@ -102,7 +83,6 @@ public enum NamingStrategy {
 
     /**
      * 去掉指定的后缀
-     *
      * @param name   表名
      * @param suffix 后缀
      * @return 转换后的字符串
@@ -113,12 +93,11 @@ public enum NamingStrategy {
         }
         // 判断是否有匹配的后缀，然后截取后缀
         return suffix.stream().filter(sf -> name.toLowerCase().endsWith(sf.toLowerCase()))
-            .findFirst().map(sf -> name.substring(0, name.length() - sf.length())).orElse(name);
+                .findFirst().map(sf -> name.substring(0, name.length() - sf.length())).orElse(name);
     }
 
     /**
      * 去掉下划线后缀并转成驼峰格式
-     *
      * @param name   表名
      * @param suffix 后缀
      * @return 转换后的字符串
@@ -129,7 +108,6 @@ public enum NamingStrategy {
 
     /**
      * 实体首字母大写
-     *
      * @param name 待转换的字符串
      * @return 转换后的字符串
      */
