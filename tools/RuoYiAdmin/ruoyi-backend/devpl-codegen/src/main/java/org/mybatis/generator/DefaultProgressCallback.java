@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultProgressCallback implements ProgressCallback {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public void introspectionStarted(int totalTasks) {

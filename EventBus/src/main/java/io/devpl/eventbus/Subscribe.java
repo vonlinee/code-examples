@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 public @interface Subscribe {
 
     /**
-     * 线程模式
+     * ThreadMode
      * @return
      */
     ThreadMode threadMode() default ThreadMode.POSTING;
@@ -29,6 +29,7 @@ public @interface Subscribe {
 
     /**
      * 订阅某个主题的事件
+     * TODO 支持根据事件名称过滤
      * @return
      */
     String topic() default "";

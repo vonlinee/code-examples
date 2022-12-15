@@ -3,12 +3,13 @@ package io.devpl.eventbus;
 import io.devpl.eventbus.ext.Invocation;
 
 /**
- * 每个订阅的内容，包含订阅者信息，订阅逻辑
+ * 每个订阅的内容，包含订阅者信息，订阅逻辑，即@Subscibe注解的方法
  */
 public final class Subscription implements Comparable<Subscription> {
+    // TODO 添加订阅主题
+    String topic;
     final Object subscriber;
     final SubscriberMethod subscriberMethod;
-
     final Invocation<Object, Object> invocation;
     /**
      * Becomes false as soon as {@link DefaultEventBus#unregister(Object)} is called, which is checked by queued event delivery

@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -47,13 +47,17 @@ public class ConfigurationParser {
     private final List<String> parseErrors;
     private final Properties extraProperties;
 
+    public ConfigurationParser() {
+        this(null, null);
+    }
+
     public ConfigurationParser(List<String> warnings) {
         this(null, warnings);
     }
 
     /**
      * This constructor accepts a properties object which may be used to specify
-     * an additional property set.  Typically this property set will be Ant or Maven properties
+     * an additional property set.  Typically, this property set will be Ant or Maven properties
      * specified in the build.xml file or the POM.
      *
      * <p>If there are name collisions between the different property sets, they will be
@@ -66,66 +70,63 @@ public class ConfigurationParser {
      *   <li>Properties specified in this "extra" property set are
      *       lowest precedence.</li>
      * </ol>
-     *
      * @param extraProperties an (optional) set of properties used to resolve property
-     *     references in the configuration file
-     * @param warnings any warnings are added to this array
+     *                        references in the configuration file
+     * @param warnings        any warnings are added to this array
      */
     public ConfigurationParser(Properties extraProperties, List<String> warnings) {
         super();
         this.extraProperties = extraProperties;
-
         if (warnings == null) {
             this.warnings = new ArrayList<>();
         } else {
             this.warnings = warnings;
         }
-
         parseErrors = new ArrayList<>();
     }
 
-    public Configuration parseConfiguration(File inputFile) throws IOException,
-            XMLParserException {
-
-        FileReader fr = new FileReader(inputFile);
-
-        return parseConfiguration(fr);
-    }
-
-    public Configuration parseConfiguration(Reader reader) throws IOException,
-            XMLParserException {
-
-        InputSource is = new InputSource(reader);
-
-        return parseConfiguration(is);
+    public Configuration parseConfiguration(File inputFile) throws IOException, XMLParserException {
+        if (inputFile == null) {
+            throw new NullPointerException("input file cannot be null");
+        }
+        if (!inputFile.exists()) {
+            throw new RuntimeException("config file does not exist: " + inputFile.getAbsolutePath());
+        }
+        Configuration config;
+        try (FileReader reader = new FileReader(inputFile)) {
+            InputSource is = new InputSource(reader);
+            // Java11下不设置此属性可能报错： XML规范
+            // is.setSystemId(inputFile.toURI().toURL().toExternalForm());
+            // 或者设置，两者同时设置也可以，使用xerces进行XML解析
+            is.setCharacterStream(reader);
+            is.setEncoding(StandardCharsets.UTF_8.name());
+            config = parseConfiguration(is);
+        }
+        return config;
     }
 
     public Configuration parseConfiguration(InputStream inputStream)
             throws IOException, XMLParserException {
-
         InputSource is = new InputSource(inputStream);
-
         return parseConfiguration(is);
     }
 
-    private Configuration parseConfiguration(InputSource inputSource)
-            throws IOException, XMLParserException {
+    private Configuration parseConfiguration(InputSource inputSource) throws IOException, XMLParserException {
         parseErrors.clear();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
         factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
-        factory.setValidating(true);
-
+        // 控制DTD校验
+        factory.setValidating(false);
         try {
             factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             DocumentBuilder builder = factory.newDocumentBuilder();
-            builder.setEntityResolver(new ParserEntityResolver());
-
-            ParserErrorHandler handler = new ParserErrorHandler(warnings,
-                    parseErrors);
+            // 设置自定义的解析器
+            builder.setEntityResolver(new DOMParserEntityResolver());
+            ParserErrorHandler handler = new ParserErrorHandler(warnings, parseErrors);
             builder.setErrorHandler(handler);
-
             Document document = null;
+
             try {
                 document = builder.parse(inputSource);
             } catch (SAXParseException e) {
@@ -137,26 +138,22 @@ public class ConfigurationParser {
                     parseErrors.add(e.getException().getMessage());
                 }
             }
-
             if (document == null || !parseErrors.isEmpty()) {
                 throw new XMLParserException(parseErrors);
             }
-
             Configuration config;
             Element rootNode = document.getDocumentElement();
             DocumentType docType = document.getDoctype();
             if (rootNode.getNodeType() == Node.ELEMENT_NODE
                     && docType.getPublicId().equals(
-                            XmlConstants.MYBATIS_GENERATOR_CONFIG_PUBLIC_ID)) {
+                    XmlConstants.MYBATIS_GENERATOR_CONFIG_PUBLIC_ID)) {
                 config = parseMyBatisGeneratorConfiguration(rootNode);
             } else {
                 throw new XMLParserException(getString("RuntimeError.5")); //$NON-NLS-1$
             }
-
             if (!parseErrors.isEmpty()) {
                 throw new XMLParserException(parseErrors);
             }
-
             return config;
         } catch (ParserConfigurationException e) {
             parseErrors.add(e.getMessage());

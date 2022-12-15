@@ -13,10 +13,9 @@ import java.util.concurrent.Executors;
  * Create a new builder using {@link DefaultEventBus#builder()}.
  */
 @SuppressWarnings("unused")
-@Data
 public class EventBusBuilder {
     private final static ExecutorService DEFAULT_EXECUTOR_SERVICE = Executors.newCachedThreadPool();
-
+    boolean allowHasNoSubscribeMethod = false;
     boolean logSubscriberExceptions = true;
     boolean logNoSubscriberMessages = true;
     boolean sendSubscriberExceptionEvent = true;
@@ -171,7 +170,12 @@ public class EventBusBuilder {
     /**
      * Builds an EventBus based on the current configuration.
      */
-    public EventBus build() {
+    public DefaultEventBus build() {
         return new DefaultEventBus(this);
+    }
+
+    public EventBusBuilder allowHasNoSubscribeMethod(boolean allowHasNoSubscribeMethod) {
+        this.allowHasNoSubscribeMethod = allowHasNoSubscribeMethod;
+        return this;
     }
 }

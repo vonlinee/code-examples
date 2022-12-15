@@ -20,10 +20,7 @@ import io.devpl.eventbus.meta.SubscriberInfoIndex;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 class SubscriberMethodFinder {
@@ -47,12 +44,23 @@ class SubscriberMethodFinder {
     private static final int POOL_SIZE = 4;
     private static final FindState[] FIND_STATE_POOL = new FindState[POOL_SIZE];
 
-    SubscriberMethodFinder(List<SubscriberInfoIndex> subscriberInfoIndexes, boolean strictMethodVerification,
-                           boolean ignoreGeneratedIndex) {
+    /**
+     * 是否允许被注册的对象没有@Subscriber标注的方法
+     *
+     * @see SubscriberMethodFinder#findSubscriberMethods(Class)
+     */
+    private final boolean allowHasNoSubscribeMethod;
+
+    SubscriberMethodFinder(List<SubscriberInfoIndex> subscriberInfoIndexes,
+                           boolean strictMethodVerification,
+                           boolean ignoreGeneratedIndex,
+                           boolean allowHasNoSubscribeMethod) {
         this.subscriberInfoIndexes = subscriberInfoIndexes;
         this.strictMethodVerification = strictMethodVerification;
         this.ignoreGeneratedIndex = ignoreGeneratedIndex;
+        this.allowHasNoSubscribeMethod = allowHasNoSubscribeMethod;
     }
+
 
     List<SubscriberMethod> findSubscriberMethods(Class<?> subscriberClass) {
         List<SubscriberMethod> subscriberMethods = METHOD_CACHE.get(subscriberClass);
@@ -66,8 +74,11 @@ class SubscriberMethodFinder {
             subscriberMethods = findUsingInfo(subscriberClass);
         }
         if (subscriberMethods.isEmpty()) {
-            throw new EventBusException("Subscriber " + subscriberClass
-                    + " and its super classes have no public methods with the @Subscribe annotation");
+            if (!allowHasNoSubscribeMethod) {
+                throw new EventBusException("Subscriber " + subscriberClass
+                        + " and its super classes have no public methods with the @Subscribe annotation");
+            }
+            return Collections.emptyList();
         } else {
             METHOD_CACHE.put(subscriberClass, subscriberMethods);
             return subscriberMethods;
@@ -151,6 +162,7 @@ class SubscriberMethodFinder {
 
     /**
      * 反射提取所有的订阅方法
+     *
      * @param findState
      */
     private void findUsingReflectionInSingleClass(FindState findState) {
@@ -245,9 +257,10 @@ class SubscriberMethodFinder {
 
         /**
          * 检查
-         * @param method
-         * @param eventType
-         * @return
+         *
+         * @param method    方法
+         * @param eventType 事件类型
+         * @return 是否通过检查
          */
         boolean checkAdd(Method method, Class<?> eventType) {
             // 2 level check: 1st level with event type only (fast), 2nd level with complete signature when required.
@@ -293,7 +306,7 @@ class SubscriberMethodFinder {
                 clazz = clazz.getSuperclass();
                 String clazzName = clazz.getName();
                 // Skip system classes, this degrades performance.
-                // Also we might avoid some ClassNotFoundException (see FAQ for background).
+                // Also, we might avoid some ClassNotFoundException (see FAQ for background).
                 if (clazzName.startsWith("java.") || clazzName.startsWith("javax.") ||
                         clazzName.startsWith("android.") || clazzName.startsWith("androidx.")) {
                     clazz = null;

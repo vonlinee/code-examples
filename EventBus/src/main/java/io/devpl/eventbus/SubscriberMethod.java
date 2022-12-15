@@ -15,7 +15,7 @@ public class SubscriberMethod implements Invocation<Object, Object> {
     final ThreadMode threadMode;
     final Class<?> eventType;
     final int priority;
-    final boolean sticky;
+    final boolean sticky;   // 是否是粘性事件
 
     /**
      * Used for efficient comparison
@@ -24,6 +24,8 @@ public class SubscriberMethod implements Invocation<Object, Object> {
     Object subscriber;
 
     String subscribedTopic;
+
+    Class<?> resultType;  // 订阅者方法返回值类型
 
     public SubscriberMethod(Method method, Class<?> eventType, ThreadMode threadMode, int priority, boolean sticky) {
         this.method = method;

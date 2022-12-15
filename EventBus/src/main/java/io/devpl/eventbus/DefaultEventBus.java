@@ -1,11 +1,12 @@
 package io.devpl.eventbus;
 
+import io.devpl.eventbus.ext.EventMatcher;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 
 /**
@@ -16,42 +17,28 @@ import java.util.logging.Level;
  * Once registered, subscribers receive events until {@link #unregister(Object)} is called.
  * Event handling methods must be annotated by {@link Subscribe}, must be public, return nothing (void),
  * and have exactly one parameter (the event).
+ *
  * @author Markus Junginger, greenrobot
  */
 public class DefaultEventBus implements EventBus {
-
-    static volatile DefaultEventBus defaultInstance;
-
     public static final EventBusBuilder DEFAULT_BUILDER = new EventBusBuilder();
     private static final Map<Class<?>, List<Class<?>>> eventTypesCache = new HashMap<>();
-
     private final Map<Class<?>, CopyOnWriteArrayList<Subscription>> subscriptionsByEventType;
     private final Map<Object, List<Class<?>>> typesBySubscriber;
     private final Map<Class<?>, Object> stickyEvents;
-
-    private final ThreadLocal<PostingThreadState> currentPostingThreadState = new ThreadLocal<PostingThreadState>() {
-        @Override
-        protected PostingThreadState initialValue() {
-            return new PostingThreadState();
-        }
-    };
-
-    // @Nullable
-    private final MainThreadSupport mainThreadSupport;
-    // @Nullable
-    private final Poster mainThreadPoster;
+    private final ThreadLocal<PostingThreadState> currentPostingThreadState = ThreadLocal.withInitial(PostingThreadState::new);
+    private final MainThreadSupport mainThreadSupport; // @Nullable
+    private final Poster mainThreadPoster; // @Nullable
     private final BackgroundPoster backgroundPoster;
     private final AsyncPoster asyncPoster;
     private final SubscriberMethodFinder subscriberMethodFinder;
     private final ExecutorService executorService;
-
     private final boolean throwSubscriberException;
     private final boolean logSubscriberExceptions;
     private final boolean logNoSubscriberMessages;
     private final boolean sendSubscriberExceptionEvent;
     private final boolean sendNoSubscriberEvent;
     private final boolean eventInheritance;
-
     private final int indexCount;
     private final Logger logger;
 
@@ -86,7 +73,7 @@ public class DefaultEventBus implements EventBus {
         asyncPoster = new AsyncPoster(this);
         indexCount = builder.subscriberInfoIndexes != null ? builder.subscriberInfoIndexes.size() : 0;
         subscriberMethodFinder = new SubscriberMethodFinder(builder.subscriberInfoIndexes,
-                builder.strictMethodVerification, builder.ignoreGeneratedIndex);
+                builder.strictMethodVerification, builder.ignoreGeneratedIndex, builder.allowHasNoSubscribeMethod);
         logSubscriberExceptions = builder.logSubscriberExceptions;
         logNoSubscriberMessages = builder.logNoSubscriberMessages;
         sendSubscriberExceptionEvent = builder.sendSubscriberExceptionEvent;
@@ -221,25 +208,15 @@ public class DefaultEventBus implements EventBus {
 
     @Override
     public void publish(Object event) {
-        publish(null, event, null);
-    }
-
-    @Override
-    public void publish(String topic, Object event) {
-        publish(topic, event, null);
-    }
-
-    @Override
-    public void publish(Object event, Predicate<Subscription> filter) {
-        publish(null, event, filter);
+        publish(null, event);
     }
 
     /**
      * Posts the given event to the event bus.
      */
-    public void publish(String topic, Object event, Predicate<Subscription> filter) {
+    @Override
+    public void publish(String topic, Object event) {
         PostingThreadState postingState = currentPostingThreadState.get();
-        postingState.filter = filter;
         postingState.currentTopic = topic;
         List<Object> eventQueue = postingState.eventQueue;
         eventQueue.add(event);
@@ -256,7 +233,6 @@ public class DefaultEventBus implements EventBus {
             } finally {
                 postingState.isPosting = false;
                 postingState.isMainThread = false;
-                postingState.filter = null;
                 postingState.currentTopic = null;
             }
         }
@@ -299,6 +275,7 @@ public class DefaultEventBus implements EventBus {
 
     /**
      * Gets the most recent sticky event for the given type.
+     *
      * @see #postSticky(Object)
      */
     public <T> T getStickyEvent(Class<T> eventType) {
@@ -309,6 +286,7 @@ public class DefaultEventBus implements EventBus {
 
     /**
      * Remove and gets the recent sticky event for the given event type.
+     *
      * @see #postSticky(Object)
      */
     public <T> T removeStickyEvent(Class<T> eventType) {
@@ -319,6 +297,7 @@ public class DefaultEventBus implements EventBus {
 
     /**
      * Removes the sticky event if it equals to the given event.
+     *
      * @return true if the events matched and the sticky event was removed.
      */
     public boolean removeStickyEvent(Object event) {
@@ -361,13 +340,15 @@ public class DefaultEventBus implements EventBus {
 
     /**
      * 提交单个事件
-     * @param event
-     * @param postingState
+     *
+     * @param event        事件内容
+     * @param postingState 当前线程事件发布状态
      * @throws Error
      */
     private void postSingleEvent(Object event, PostingThreadState postingState) throws Error {
         Class<?> eventClass = event.getClass();
         boolean subscriptionFound = false;
+        // 是否事件继承
         if (eventInheritance) {
             // 找到发布事件的所有父类，包括接口作为事件类型
             List<Class<?>> eventTypes = lookupAllEventTypes(eventClass);
@@ -377,6 +358,7 @@ public class DefaultEventBus implements EventBus {
                 subscriptionFound |= postSingleEventForEventType(event, postingState, eventTypeClass);
             }
         } else {
+            // 发布单个事件类型
             subscriptionFound = postSingleEventForEventType(event, postingState, eventClass);
         }
         if (!subscriptionFound) {
@@ -393,6 +375,7 @@ public class DefaultEventBus implements EventBus {
 
     /**
      * 针对该事件类型发布事件
+     *
      * @param event
      * @param postingState
      * @param eventClass
@@ -403,33 +386,18 @@ public class DefaultEventBus implements EventBus {
         synchronized (this) {
             subscriptions = subscriptionsByEventType.get(eventClass);
         }
-
         if (subscriptions == null || subscriptions.isEmpty()) {
             return false;
         }
-        // 过滤订阅
-        List<Subscription> filterdSubscriptions = null;
-        if (postingState.filter != null) {
-            filterdSubscriptions = new LinkedList<>();
-            // 过滤
-            for (int i = 0; i < subscriptions.size(); i++) {
-                Subscription subscription = subscriptions.get(i);
-                if (postingState.filter.test(subscription)) {
-                    filterdSubscriptions.add(subscription);
-                }
-            }
-        }
-        if (filterdSubscriptions == null) {
-            filterdSubscriptions = subscriptions;
-        }
+        // TODO 提前过滤订阅
 
         // 遍历所有针对该事件类型的订阅
-        for (Subscription subscription : filterdSubscriptions) {
+        for (Subscription subscription : subscriptions) {
             postingState.event = event;
             postingState.subscription = subscription;
             boolean aborted;
             try {
-                // 过滤主题
+                // 默认的过滤规则
                 if (postingState.currentTopic != null) {
                     if (postingState.currentTopic.equals(subscription.subscriberMethod.subscribedTopic)) {
                         postToSubscription(subscription, event, postingState.isMainThread);
@@ -442,7 +410,6 @@ public class DefaultEventBus implements EventBus {
                 postingState.event = null;
                 postingState.subscription = null;
                 postingState.canceled = false;
-                postingState.filter = null;
             }
             if (aborted) {
                 break;
@@ -507,7 +474,7 @@ public class DefaultEventBus implements EventBus {
     }
 
     /**
-     * Recurses through super interfaces.
+     * Recurse through super interfaces.
      */
     static void addInterfaces(List<Class<?>> eventTypes, Class<?>[] interfaces) {
         for (Class<?> interfaceClass : interfaces) {
@@ -545,6 +512,7 @@ public class DefaultEventBus implements EventBus {
 
     /**
      * 处理订阅异常
+     *
      * @param subscription
      * @param event
      * @param cause
@@ -582,16 +550,17 @@ public class DefaultEventBus implements EventBus {
 
     /**
      * For ThreadLocal, much faster to set (and get multiple values).
+     * 让ThreadLocal直接缓存一个对象
      */
     final static class PostingThreadState {
         final List<Object> eventQueue = new ArrayList<>();
-        Predicate<Subscription> filter;
+        EventMatcher subscriptionMatcher; // 用于匹配当前订阅是否符合发布事件的条件
         boolean isPosting;
         boolean isMainThread;
         Subscription subscription;
         Object event;
         boolean canceled;
-        // 当前的主题
+        // 当前的事件主题
         String currentTopic;
     }
 

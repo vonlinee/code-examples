@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.devpl.codegen.mbpg.type;
 
 import io.devpl.codegen.mbpg.config.GlobalConfig;
@@ -27,8 +12,6 @@ import java.util.Map;
 
 /**
  * 类型注册处理类
- *
- * @author nieqiurong 2022/5/11.
  */
 public class TypeRegistry {
 
@@ -43,16 +26,16 @@ public class TypeRegistry {
         typeMap.put(Types.BLOB, DbColumnType.BYTE_ARRAY);
         typeMap.put(Types.LONGVARBINARY, DbColumnType.BYTE_ARRAY);
         typeMap.put(Types.VARBINARY, DbColumnType.BYTE_ARRAY);
-        //byte
+        // byte
         typeMap.put(Types.TINYINT, DbColumnType.BYTE);
-        //long
+        // long
         typeMap.put(Types.BIGINT, DbColumnType.LONG);
-        //boolean
+        // boolean
         typeMap.put(Types.BIT, DbColumnType.BOOLEAN);
         typeMap.put(Types.BOOLEAN, DbColumnType.BOOLEAN);
-        //short
+        // short
         typeMap.put(Types.SMALLINT, DbColumnType.SHORT);
-        //string
+        // string
         typeMap.put(Types.CHAR, DbColumnType.STRING);
         typeMap.put(Types.CLOB, DbColumnType.STRING);
         typeMap.put(Types.VARCHAR, DbColumnType.STRING);
@@ -61,23 +44,23 @@ public class TypeRegistry {
         typeMap.put(Types.NCHAR, DbColumnType.STRING);
         typeMap.put(Types.NCLOB, DbColumnType.STRING);
         typeMap.put(Types.NVARCHAR, DbColumnType.STRING);
-        //date
+        // date
         typeMap.put(Types.DATE, DbColumnType.DATE);
-        //timestamp
+        // timestamp
         typeMap.put(Types.TIMESTAMP, DbColumnType.TIMESTAMP);
-        //double
+        // double
         typeMap.put(Types.FLOAT, DbColumnType.DOUBLE);
         typeMap.put(Types.REAL, DbColumnType.DOUBLE);
-        //int
+        // int
         typeMap.put(Types.INTEGER, DbColumnType.INTEGER);
-        //bigDecimal
+        // bigDecimal
         typeMap.put(Types.NUMERIC, DbColumnType.BIG_DECIMAL);
         typeMap.put(Types.DECIMAL, DbColumnType.BIG_DECIMAL);
-        //TODO 类型需要补充完整
+        // TODO 类型需要补充完整
     }
 
     public IColumnType getColumnType(TableField.MetaInfo metaInfo) {
-        //TODO 是否用包装类??? 可以尝试判断字段是否允许为null来判断是否用包装类
+        // TODO 是否用包装类??? 可以尝试判断字段是否允许为null来判断是否用包装类
         int typeCode = metaInfo.getJdbcType().TYPE_CODE;
         switch (typeCode) {
             // TODO 需要增加类型处理，尚未补充完整
@@ -155,5 +138,4 @@ public class TypeRegistry {
         }
         return dbColumnType;
     }
-
 }

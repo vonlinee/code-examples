@@ -1,0 +1,30 @@
+package use;
+
+import io.devpl.sdk.util.ResourceUtils;
+import org.mybatis.generator.DefaultProgressCallback;
+import org.mybatis.generator.api.MyBatisGenerator;
+import org.mybatis.generator.config.Configuration;
+import org.mybatis.generator.config.xml.ConfigurationParser;
+import org.mybatis.generator.internal.DefaultShellCallback;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MBGGenerator {
+
+    public static void main(String[] args) throws Exception {
+
+        List<String> warnings = new ArrayList<>();
+
+        File file = new File("D:\\Develop\\Code\\code-samples\\tools\\RuoYiAdmin\\ruoyi-backend\\devpl-codegen\\src\\main\\resources\\mbg-config.xml");
+
+        // 解析XML配置
+        ConfigurationParser cp = new ConfigurationParser(warnings);
+        Configuration config = cp.parseConfiguration(file);
+        DefaultShellCallback shellCallback = new DefaultShellCallback(true);
+        MyBatisGenerator generator = new MyBatisGenerator(config, shellCallback, warnings);
+        DefaultProgressCallback progressCallback = new DefaultProgressCallback();
+        generator.generate(progressCallback, null, null, true);
+    }
+}
