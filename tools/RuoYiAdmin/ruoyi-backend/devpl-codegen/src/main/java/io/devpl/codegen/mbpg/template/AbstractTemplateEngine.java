@@ -74,8 +74,6 @@ public abstract class AbstractTemplateEngine {
         if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
             TemplateConfig templateConfig = getConfigBuilder().getTemplateConfig();
             boolean kotlin = getConfigBuilder()
-        if (StringUtils.hasText(entityName) && StringUtils.hasText(entityPath)) {
-            getTemplateFilePath(template -> template.getEntity(getConfigBuilder()
                     .getGlobalConfig()
                     .isKotlin();
             String entity = templateConfig.getEntity(kotlin);
