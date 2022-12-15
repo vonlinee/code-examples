@@ -57,6 +57,12 @@
             <artifactId>javaparser-core</artifactId>
             <version>3.24.8</version>
         </dependency>
+        <!--使用Java代码来生成Java代码-->
+        <dependency>
+            <groupId>com.squareup</groupId>
+            <artifactId>javapoet</artifactId>
+            <version>1.13.0</version>
+        </dependency>
         <!--日志模块：添加所有日志的依赖-->
         <dependency>
             <groupId>com.ruoyi</groupId>

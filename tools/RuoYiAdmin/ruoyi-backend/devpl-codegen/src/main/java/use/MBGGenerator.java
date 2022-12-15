@@ -14,11 +14,8 @@ import java.util.List;
 public class MBGGenerator {
 
     public static void main(String[] args) throws Exception {
-
         List<String> warnings = new ArrayList<>();
-
-        File file = new File("D:\\Develop\\Code\\code-samples\\tools\\RuoYiAdmin\\ruoyi-backend\\devpl-codegen\\src\\main\\resources\\mbg-config.xml");
-
+        File file = ResourceUtils.getFile("classpath:mbg-config.xml");
         // 解析XML配置
         ConfigurationParser cp = new ConfigurationParser(warnings);
         Configuration config = cp.parseConfiguration(file);

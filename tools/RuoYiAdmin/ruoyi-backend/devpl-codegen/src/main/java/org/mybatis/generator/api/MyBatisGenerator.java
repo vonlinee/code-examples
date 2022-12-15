@@ -183,16 +183,13 @@ public class MyBatisGenerator {
     public void generate(ProgressCallback callback, Set<String> contextIds,
                          Set<String> fullyQualifiedTableNames, boolean writeFiles) throws SQLException,
             IOException, InterruptedException {
-
         if (callback == null) {
             callback = NULL_PROGRESS_CALLBACK;
         }
-
         generatedJavaFiles.clear();
         generatedXmlFiles.clear();
         ObjectFactory.reset();
         RootClassInfo.reset();
-
         // calculate the contexts to run
         List<Context> contextsToRun;
         if (contextIds == null || contextIds.isEmpty()) {
@@ -218,29 +215,24 @@ public class MyBatisGenerator {
             totalSteps += context.getIntrospectionSteps();
         }
         callback.introspectionStarted(totalSteps);
-
         // 加载数据库表信息
         for (Context context : contextsToRun) {
             context.introspectTables(callback, warnings,
                     fullyQualifiedTableNames);
         }
-
         // now run the generates
         totalSteps = 0;
         for (Context context : contextsToRun) {
             totalSteps += context.getGenerationSteps();
         }
         callback.generationStarted(totalSteps);
-
         for (Context context : contextsToRun) {
             context.generateFiles(callback, generatedJavaFiles,
                     generatedXmlFiles, generatedKotlinFiles, otherGeneratedFiles, warnings);
         }
-
         // now save the files
         if (writeFiles) {
             callback.saveStarted(generatedXmlFiles.size() + generatedJavaFiles.size());
-
             // XML文件
             for (GeneratedXmlFile gxf : generatedXmlFiles) {
                 projects.add(gxf.getTargetProject());
@@ -261,12 +253,10 @@ public class MyBatisGenerator {
                 projects.add(gf.getTargetProject());
                 writeGeneratedFile(gf, callback);
             }
-
             for (String project : projects) {
                 shellCallback.refreshProject(project);
             }
         }
-
         callback.done();
     }
 

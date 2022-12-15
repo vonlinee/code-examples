@@ -105,12 +105,6 @@ public class ConfigurationParser {
         return config;
     }
 
-    public Configuration parseConfiguration(InputStream inputStream)
-            throws IOException, XMLParserException {
-        InputSource is = new InputSource(inputStream);
-        return parseConfiguration(is);
-    }
-
     private Configuration parseConfiguration(InputSource inputSource) throws IOException, XMLParserException {
         parseErrors.clear();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -126,7 +120,6 @@ public class ConfigurationParser {
             ParserErrorHandler handler = new ParserErrorHandler(warnings, parseErrors);
             builder.setErrorHandler(handler);
             Document document = null;
-
             try {
                 document = builder.parse(inputSource);
             } catch (SAXParseException e) {
@@ -163,8 +156,7 @@ public class ConfigurationParser {
 
     private Configuration parseMyBatisGeneratorConfiguration(Element rootNode)
             throws XMLParserException {
-        MyBatisGeneratorConfigurationParser parser = new MyBatisGeneratorConfigurationParser(
-                extraProperties);
+        MyBatisGeneratorConfigurationParser parser = new MyBatisGeneratorConfigurationParser(extraProperties);
         return parser.parseConfiguration(rootNode);
     }
 }
