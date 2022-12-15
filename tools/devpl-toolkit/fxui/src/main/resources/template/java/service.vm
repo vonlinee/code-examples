@@ -1,6 +1,0 @@
-package $!table.get("basePackage") .service;
-
-
-public class ${table.entityName}Service{
-
-}

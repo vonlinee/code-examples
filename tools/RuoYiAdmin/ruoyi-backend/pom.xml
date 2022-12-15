@@ -230,6 +230,7 @@
         <module>devpl-monitor</module>
         <module>devpl-codegen</module>
         <module>devpl-logging</module>
+        <module>devpl-toolkit</module>
     </modules>
     <packaging>pom</packaging>
 

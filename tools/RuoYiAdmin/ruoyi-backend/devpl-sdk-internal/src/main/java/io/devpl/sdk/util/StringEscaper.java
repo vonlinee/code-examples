@@ -53,7 +53,6 @@ public class StringEscaper {
 
     /**
      * 转义字符串
-     *
      * @param escapeStr
      * @return
      */

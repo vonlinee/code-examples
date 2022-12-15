@@ -1,8 +1,0 @@
-package $!table.get("basePackage") .controller;
-
-
-public class ${table.entityName}Controller{
-
-
-
-}

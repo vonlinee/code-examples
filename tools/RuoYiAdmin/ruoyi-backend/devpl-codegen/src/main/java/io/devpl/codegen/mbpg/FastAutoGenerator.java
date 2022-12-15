@@ -1,8 +1,8 @@
 package io.devpl.codegen.mbpg;
 
 import io.devpl.codegen.mbpg.config.*;
-import io.devpl.codegen.mbpg.engine.AbstractTemplateEngine;
-import io.devpl.codegen.mbpg.engine.FreemarkerTemplateEngine;
+import io.devpl.codegen.mbpg.template.AbstractTemplateEngine;
+import io.devpl.codegen.mbpg.template.FreemarkerTemplateEngine;
 import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 

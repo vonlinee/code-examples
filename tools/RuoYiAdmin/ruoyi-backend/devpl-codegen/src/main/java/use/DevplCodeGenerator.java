@@ -3,7 +3,7 @@ package use;
 import io.devpl.codegen.mbpg.FastAutoGenerator;
 import io.devpl.codegen.mbpg.config.OutputFile;
 import io.devpl.codegen.mbpg.config.rules.DateType;
-import io.devpl.codegen.mbpg.engine.FreemarkerTemplateEngine;
+import io.devpl.codegen.mbpg.template.FreemarkerTemplateEngine;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +18,7 @@ public class DevplCodeGenerator {
 
     private static final String url = "jdbc:mysql://192.168.129.30:3306/lgdb_cloud_resource_management?useUnicode=true&characterEncoding=UTF-8&useSSL=false&&serverTimezone=GMT%2B8";
     private static final String username = "root";
-    private static final String password = "LancooECP";
+    private static final String password = "xxxx";
     private static final String author = "someone";
     private static final String outputDir = "D:\\temp";
     private static final String parentPackage = "";
