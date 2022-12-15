@@ -1,6 +1,7 @@
 package io.devpl.spring.extension.utils;
 
 import io.devpl.sdk.util.ClassUtils;
+import io.devpl.sdk.util.Lists;
 import org.springframework.cglib.beans.BeanMap;
 
 import java.util.Collections;

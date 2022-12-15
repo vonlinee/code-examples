@@ -35,7 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.mybatis.generator.internal.util.ClassloaderUtility.getCustomClassloader;
+import static org.mybatis.generator.internal.util.ClassloaderUtils.getCustomClassloader;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**

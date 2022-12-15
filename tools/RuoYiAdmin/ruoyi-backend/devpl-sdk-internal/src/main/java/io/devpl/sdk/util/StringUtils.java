@@ -1814,4 +1814,8 @@ public final class StringUtils {
     public static String arrayToCommaDelimitedString(@Nullable Object[] arr) {
         return arrayToDelimitedString(arr, ",");
     }
+
+    public static boolean isNotBlank(String str) {
+        return hasText(str);
+    }
 }

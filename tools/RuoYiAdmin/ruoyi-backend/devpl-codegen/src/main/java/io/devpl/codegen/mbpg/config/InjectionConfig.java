@@ -73,7 +73,6 @@ public class InjectionConfig {
     /**
      * 输出文件前
      */
-    @NotNull
     public void beforeOutputFile(TableInfo tableInfo, Map<String, Object> objectMap) {
         if (!customMap.isEmpty()) {
             objectMap.putAll(customMap);

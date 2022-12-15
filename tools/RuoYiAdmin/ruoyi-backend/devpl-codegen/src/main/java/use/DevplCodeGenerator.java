@@ -4,10 +4,12 @@ import io.devpl.codegen.mbpg.FastAutoGenerator;
 import io.devpl.codegen.mbpg.config.OutputFile;
 import io.devpl.codegen.mbpg.config.rules.DateType;
 import io.devpl.codegen.mbpg.template.FreemarkerTemplateEngine;
+import io.devpl.sdk.util.PropertiesUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * 整合mybatis generator和mybatis-plus generator
@@ -16,9 +18,9 @@ import java.util.List;
  */
 public class DevplCodeGenerator {
 
-    private static final String url = "jdbc:mysql://192.168.129.30:3306/lgdb_cloud_resource_management?useUnicode=true&characterEncoding=UTF-8&useSSL=false&&serverTimezone=GMT%2B8";
-    private static final String username = "root";
-    private static final String password = "xxxx";
+    // 配置从本地文件加载
+    private static final String JDBC_CONFIG_FILE = "D:/Temp/devpl-jdbc.properties";
+
     private static final String author = "someone";
     private static final String outputDir = "D:\\temp";
     private static final String parentPackage = "";
@@ -32,9 +34,14 @@ public class DevplCodeGenerator {
 
     public static void main(String[] args) {
         tableNamesToBeGenerated();
+        final Properties properties = PropertiesUtils.loadProperties(JDBC_CONFIG_FILE);
+        final String url = properties.getProperty("url");
+        final String username = properties.getProperty("username");
+        final String password = properties.getProperty("password");
         FastAutoGenerator.create(url, username, password).globalConfig(builder -> {
                              builder.author(author) // 设置作者名 baomidou 默认值:作者
-                                    .fileOverride().enableSwagger() // 开启 swagger 模式
+                                    .fileOverride()
+                                    .enableSwagger() // 开启 swagger 模式
                                     .enableSpringdoc()  // 开启 springdoc 模式
                                     .dateType(DateType.TIME_PACK)  // 时间策略
                                     .commentDate("yyyy-MM-dd HH:mm:ss") // 注释日期 默认值: yyyy-MM-dd

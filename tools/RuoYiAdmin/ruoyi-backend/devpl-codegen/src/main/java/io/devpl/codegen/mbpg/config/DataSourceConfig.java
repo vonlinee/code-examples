@@ -197,31 +197,44 @@ public class DataSourceConfig {
      */
     @NotNull
     public Connection getConnection() {
-        logger.info("获取数据库连接 >>>>>>>>>>>>> ");
         try {
             if (connection != null && !connection.isClosed()) {
                 return connection;
             } else {
-                synchronized (this) {
-                    if (dataSource != null) {
-                        connection = dataSource.getConnection();
-                    } else {
-                        Properties properties = new Properties();
-                        connectionProperties.forEach(properties::setProperty);
-                        properties.put("user", username);
-                        properties.put("password", password);
-                        // 使用元数据查询方式时，有些数据库需要增加属性才能读取注释
-                        this.processProperties(properties);
-                        this.connection = DriverManager.getConnection(url, properties);
-                    }
-                }
+                return getConnectionInternal();
             }
         } catch (SQLException e) {
+            logger.error("获取数据库连接失败", e);
             throw new RuntimeException(e);
         }
-        return connection;
     }
 
+    /**
+     * 从数据源获取数据库连接，或者直接进行获取
+     * @return Connection
+     * @throws SQLException SQLException
+     */
+    private Connection getConnectionInternal() throws SQLException {
+        synchronized (this) {
+            if (dataSource != null) {
+                this.connection = dataSource.getConnection();
+            }
+            Properties properties = new Properties();
+            connectionProperties.forEach(properties::setProperty);
+            properties.put("user", username);
+            properties.put("password", password);
+            // 使用元数据查询方式时，有些数据库需要增加属性才能读取注释
+            this.processProperties(properties);
+            logger.info("\n获取数据库连接: {} \nproperties: {}", url, properties);
+            this.connection = DriverManager.getConnection(url, properties);
+        }
+        return this.connection;
+    }
+
+    /**
+     * 使用元数据查询方式时，有些数据库需要增加属性才能读取注释
+     * @param properties 数据库连接配置
+     */
     private void processProperties(Properties properties) {
         if (this.databaseQueryClass.getName().equals(DefaultQuery.class.getName())) {
             switch (this.getDbType()) {

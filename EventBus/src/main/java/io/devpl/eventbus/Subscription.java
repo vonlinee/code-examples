@@ -4,6 +4,7 @@ import io.devpl.eventbus.ext.Invocation;
 
 /**
  * 每个订阅的内容，包含订阅者信息，订阅逻辑
+ * 即@Subscibe注解的方法
  */
 public final class Subscription implements Comparable<Subscription> {
     final Object subscriber;

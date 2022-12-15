@@ -2,11 +2,12 @@ package io.devpl.sdk.util;
 
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 运行时系统
  */
-public abstract class SystemUtils {
+public class SystemUtils {
 
     private static ClassLoader loader = Thread.currentThread().getContextClassLoader();
     private static String classPath = "";
@@ -20,7 +21,7 @@ public abstract class SystemUtils {
             // get class path
             if (url != null) {
                 classPath = url.getPath();
-                classPath = URLDecoder.decode(classPath, "utf-8");
+                classPath = URLDecoder.decode(classPath, StandardCharsets.UTF_8);
             }
             // 如果是jar包内的，则返回当前路径
             if (Validator.isNullOrEmpty(classPath) || classPath.contains(".jar!")) {

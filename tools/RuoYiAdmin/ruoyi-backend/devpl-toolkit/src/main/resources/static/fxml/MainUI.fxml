@@ -25,7 +25,7 @@
 <?import javafx.scene.text.Text?>
 
 <BorderPane prefHeight="613.0" prefWidth="918.0" stylesheets="@../../style.css" xmlns="http://javafx.com/javafx/11"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.codegen.fxui.controller.MainUIController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.toolkit.fxui.controller.MainUIController">
     <top>
         <VBox style="-fx-background-color: red">
             <ToolBar minHeight="70.0" prefHeight="81.0" prefWidth="918.0" BorderPane.alignment="CENTER">

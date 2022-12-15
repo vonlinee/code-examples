@@ -54,14 +54,6 @@ public final class Status {
      * 枚举常量池
      */
     private static final KeyedEnumPool<Integer, Status> pool = new KeyedEnumPool<>() {
-        @Override
-        public Status put(Integer key, Status instance) {
-            Status oldStatus = enumerations.put(key, instance);
-            if (oldStatus == null) {
-                return instance;
-            }
-            return oldStatus;
-        }
     };
 
     public static Status valueOf(int code, String message, boolean putIfNotExists) {
@@ -119,7 +111,7 @@ public final class Status {
     }
 
     public static List<Status> listAll() {
-        return new ArrayList<>(pool.values());
+        return pool.values();
     }
 
     /**

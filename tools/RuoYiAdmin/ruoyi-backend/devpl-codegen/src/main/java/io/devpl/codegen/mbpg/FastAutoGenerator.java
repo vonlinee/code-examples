@@ -194,18 +194,12 @@ public final class FastAutoGenerator {
     }
 
     public void execute() {
-        new AutoGenerator(this.dataSourceConfigBuilder.build())
-                // 全局配置
-                .global(this.globalConfigBuilder.build())
-                // 包配置
-                .packageInfo(this.packageConfigBuilder.build())
-                // 策略配置
-                .strategy(this.strategyConfigBuilder.build())
-                // 注入配置
-                .injection(this.injectionConfigBuilder.build())
-                // 模板配置
-                .template(this.templateConfigBuilder.build())
-                // 执行
-                .execute(this.templateEngine);
+        final AutoGenerator generator = new AutoGenerator(this.dataSourceConfigBuilder.build());
+        generator.global(this.globalConfigBuilder.build()); // 全局配置
+        generator.packageInfo(this.packageConfigBuilder.build()); // 包配置
+        generator.strategy(this.strategyConfigBuilder.build()); // 策略配置
+        generator.injection(this.injectionConfigBuilder.build()); // 注入配置
+        generator.template(this.templateConfigBuilder.build()); // 模板配置
+        generator.execute(this.templateEngine); // 执行
     }
 }

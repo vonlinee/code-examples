@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="io.devpl.codegen.fxui.controller.MainUIController"
+            fx:controller="io.devpl.toolkit.fxui.controller.MainUIController"
             prefHeight="400.0" prefWidth="600.0">
 
     <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"

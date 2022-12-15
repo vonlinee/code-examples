@@ -1,7 +1,5 @@
 package io.devpl.eventbus;
 
-import java.util.function.Predicate;
-
 public interface EventBus {
 
     String name();
@@ -9,8 +7,6 @@ public interface EventBus {
     void publish(Object event);
 
     void publish(String topic, Object event);
-
-    void publish(Object event, Predicate<Subscription> filter);
 
     void register(Object subscriber);
 

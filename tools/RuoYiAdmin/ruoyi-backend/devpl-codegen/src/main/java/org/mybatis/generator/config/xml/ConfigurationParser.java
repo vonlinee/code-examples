@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -85,18 +85,24 @@ public class ConfigurationParser {
         parseErrors = new ArrayList<>();
     }
 
-    public Configuration parseConfiguration(File inputFile) throws IOException,
-            XMLParserException {
-
-        FileReader fr = new FileReader(inputFile);
-
-        return parseConfiguration(fr);
-    }
-
-    public Configuration parseConfiguration(Reader reader) throws IOException,
-            XMLParserException {
-        InputSource is = new InputSource(reader);
-        return parseConfiguration(is);
+    public Configuration parseConfiguration(File inputFile) throws IOException, XMLParserException {
+        if (inputFile == null) {
+            throw new NullPointerException("input file cannot be null");
+        }
+        if (!inputFile.exists()) {
+            throw new RuntimeException("config file does not exist: " + inputFile.getAbsolutePath());
+        }
+        Configuration config;
+        try (FileReader reader = new FileReader(inputFile)) {
+            InputSource is = new InputSource(reader);
+            // Java11下不设置此属性可能报错： XML规范
+            // is.setSystemId(inputFile.toURI().toURL().toExternalForm());
+            // 或者设置，两者同时设置也可以，使用xerces进行XML解析
+            is.setCharacterStream(reader);
+            is.setEncoding(StandardCharsets.UTF_8.name());
+            config = parseConfiguration(is);
+        }
+        return config;
     }
 
     public Configuration parseConfiguration(InputStream inputStream)
@@ -105,22 +111,22 @@ public class ConfigurationParser {
         return parseConfiguration(is);
     }
 
-    private Configuration parseConfiguration(InputSource inputSource)
-            throws IOException, XMLParserException {
+    private Configuration parseConfiguration(InputSource inputSource) throws IOException, XMLParserException {
         parseErrors.clear();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
         factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
-        factory.setValidating(true);
+        // 控制DTD校验
+        factory.setValidating(false);
         try {
             factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             DocumentBuilder builder = factory.newDocumentBuilder();
-            builder.setEntityResolver(new ParserEntityResolver());
-            ParserErrorHandler handler = new ParserErrorHandler(warnings,
-                    parseErrors);
+            // 设置自定义的解析器
+            builder.setEntityResolver(new DOMParserEntityResolver());
+            ParserErrorHandler handler = new ParserErrorHandler(warnings, parseErrors);
             builder.setErrorHandler(handler);
-
             Document document = null;
+
             try {
                 document = builder.parse(inputSource);
             } catch (SAXParseException e) {

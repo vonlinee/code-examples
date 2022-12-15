@@ -52,8 +52,8 @@ public abstract class AbstractTemplateEngine {
         String entityName = tableInfo.getEntityName();
         String parentPath = getPathInfo(OutputFile.parent);
         customFiles.forEach(file -> {
-            String filePath = StringUtils.isNotBlank(file.getFilePath()) ? file.getFilePath() : parentPath;
-            if (StringUtils.isNotBlank(file.getPackageName())) {
+            String filePath = StringUtils.hasText(file.getFilePath()) ? file.getFilePath() : parentPath;
+            if (StringUtils.hasText(file.getPackageName())) {
                 filePath = filePath + File.separator + file.getPackageName();
                 filePath = filePath.replaceAll("\\.", StringPool.BACK_SLASH + File.separator);
             }
@@ -71,7 +71,7 @@ public abstract class AbstractTemplateEngine {
     protected void outputEntity(@NotNull TableInfo tableInfo, @NotNull Map<String, Object> objectMap) {
         String entityName = tableInfo.getEntityName();
         String entityPath = getPathInfo(OutputFile.entity);
-        if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
+        if (StringUtils.hasText(entityName) && StringUtils.hasText(entityPath)) {
             getTemplateFilePath(template -> template.getEntity(getConfigBuilder()
                     .getGlobalConfig()
                     .isKotlin())).ifPresent((entity) -> {
@@ -94,7 +94,7 @@ public abstract class AbstractTemplateEngine {
         // MpMapper.java
         String entityName = tableInfo.getEntityName();
         String mapperPath = getPathInfo(OutputFile.mapper);
-        if (StringUtils.isNotBlank(tableInfo.getMapperName()) && StringUtils.isNotBlank(mapperPath)) {
+        if (StringUtils.hasText(tableInfo.getMapperName()) && StringUtils.isNotBlank(mapperPath)) {
             getTemplateFilePath(TemplateConfig::getMapper).ifPresent(mapper -> {
                 String mapperFile = String.format((mapperPath + File.separator + tableInfo.getMapperName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(mapperFile), objectMap, mapper, getConfigBuilder()
@@ -227,7 +227,7 @@ public abstract class AbstractTemplateEngine {
         try {
             ConfigBuilder config = this.getConfigBuilder();
             List<TableInfo> tableInfoList = config.getTableInfoList();
-            tableInfoList.forEach(tableInfo -> {
+            for (TableInfo tableInfo : tableInfoList) {
                 Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
                 Optional.ofNullable(config.getInjectionConfig()).ifPresent(t -> {
                     // 添加自定义属性
@@ -243,7 +243,7 @@ public abstract class AbstractTemplateEngine {
                 outputService(tableInfo, objectMap);
                 // controller
                 outputController(tableInfo, objectMap);
-            });
+            }
         } catch (Exception e) {
             throw new RuntimeException("无法创建文件，请检查配置信息！", e);
         }
@@ -262,7 +262,6 @@ public abstract class AbstractTemplateEngine {
 //        this.writer(objectMap, templatePath, outputFile.getPath());
 //        logger.debug("模板:" + templatePath + ";  文件:" + outputFile);
 //    }
-    @NotNull
     public abstract void writer(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception;
 
     /**
@@ -274,7 +273,7 @@ public abstract class AbstractTemplateEngine {
             System.err.println("未找到输出目录：" + outDir);
         } else if (getConfigBuilder().getGlobalConfig().isOpen()) {
             try {
-                RuntimeUtils.openDir(outDir);
+                RuntimeUtils.openDirectory(outDir);
             } catch (IOException e) {
                 LOGGER.error(e.getMessage(), e);
             }
