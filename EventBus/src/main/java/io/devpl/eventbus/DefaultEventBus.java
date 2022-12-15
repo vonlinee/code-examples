@@ -1,11 +1,12 @@
 package io.devpl.eventbus;
 
+import io.devpl.eventbus.ext.EventMatcher;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 
 /**
@@ -207,20 +208,15 @@ public class DefaultEventBus implements EventBus {
 
     @Override
     public void publish(Object event) {
-        publish(null, event, null);
-    }
-
-    @Override
-    public void publish(String topic, Object event) {
-        publish(topic, event, null);
+        publish(null, event);
     }
 
     /**
      * Posts the given event to the event bus.
      */
-    private void publish(String topic, Object event, Predicate<Subscription> filter) {
+    @Override
+    public void publish(String topic, Object event) {
         PostingThreadState postingState = currentPostingThreadState.get();
-        postingState.filter = filter;
         postingState.currentTopic = topic;
         List<Object> eventQueue = postingState.eventQueue;
         eventQueue.add(event);
@@ -237,7 +233,6 @@ public class DefaultEventBus implements EventBus {
             } finally {
                 postingState.isPosting = false;
                 postingState.isMainThread = false;
-                postingState.filter = null;
                 postingState.currentTopic = null;
             }
         }
@@ -391,29 +386,13 @@ public class DefaultEventBus implements EventBus {
         synchronized (this) {
             subscriptions = subscriptionsByEventType.get(eventClass);
         }
-
         if (subscriptions == null || subscriptions.isEmpty()) {
             return false;
         }
-        // 过滤订阅 - 新加的功能
-        List<Subscription> filteredSubscriptions = null;
-        if (postingState.filter != null) {
-            filteredSubscriptions = new LinkedList<>();
-            // 过滤
-            for (int i = 0; i < subscriptions.size(); i++) {
-                Subscription subscription = subscriptions.get(i);
-                if (postingState.filter.test(subscription)) {
-                    filteredSubscriptions.add(subscription);
-                }
-            }
-        }
-        if (filteredSubscriptions == null) {
-            filteredSubscriptions = subscriptions;
-        }
+        // TODO 提前过滤订阅
 
         // 遍历所有针对该事件类型的订阅
-        for (Subscription subscription : filteredSubscriptions) {
-            // TODO 这里不需要同步？
+        for (Subscription subscription : subscriptions) {
             postingState.event = event;
             postingState.subscription = subscription;
             boolean aborted;
@@ -431,7 +410,6 @@ public class DefaultEventBus implements EventBus {
                 postingState.event = null;
                 postingState.subscription = null;
                 postingState.canceled = false;
-                postingState.filter = null;
             }
             if (aborted) {
                 break;
@@ -496,7 +474,7 @@ public class DefaultEventBus implements EventBus {
     }
 
     /**
-     * Recurses through super interfaces.
+     * Recurse through super interfaces.
      */
     static void addInterfaces(List<Class<?>> eventTypes, Class<?>[] interfaces) {
         for (Class<?> interfaceClass : interfaces) {
@@ -576,7 +554,7 @@ public class DefaultEventBus implements EventBus {
      */
     final static class PostingThreadState {
         final List<Object> eventQueue = new ArrayList<>();
-        Predicate<Subscription> filter;
+        EventMatcher subscriptionMatcher; // 用于匹配当前订阅是否符合发布事件的条件
         boolean isPosting;
         boolean isMainThread;
         Subscription subscription;

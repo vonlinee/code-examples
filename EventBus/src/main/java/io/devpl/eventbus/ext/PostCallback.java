@@ -1,4 +1,6 @@
-package io.devpl.eventbus;
+package io.devpl.eventbus.ext;
+
+import io.devpl.eventbus.SubscriberExceptionEvent;
 
 import java.util.List;
 

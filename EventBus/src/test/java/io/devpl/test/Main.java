@@ -1,14 +1,13 @@
 package io.devpl.test;
 
-
 import io.devpl.eventbus.DefaultEventBus;
-import io.devpl.eventbus.EventBus;
-import io.devpl.eventbus.EventBusBuilder;
 import io.devpl.eventbus.Subscribe;
 import javafx.event.Event;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 /**
  * @since created on 2022年10月16日
@@ -19,8 +18,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        EventBus bus = DefaultEventBus.builder()
-                .setAllowHasNoSubscribeMethod(true)
+        DefaultEventBus bus = DefaultEventBus.builder()
+                .allowHasNoSubscribeMethod(true)
+                .sendNoSubscriberEvent(false)
+                .logNoSubscriberMessages(false)
                 .build();
 
         Main main = new Main();
@@ -30,6 +31,8 @@ public class Main {
         Event event = new Event(main, Event.NULL_SOURCE_TARGET, Event.ANY);
         start = System.currentTimeMillis();
         bus.publish("subscriber1", event);
+
+
     }
 
     @Subscribe(priority = 2, topic = "subscriber1")
