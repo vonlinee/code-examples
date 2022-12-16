@@ -98,16 +98,8 @@ public class MyBatisGenerator {
         } else {
             this.configuration = configuration;
         }
-        if (shellCallback == null) {
-            this.shellCallback = new DefaultShellCallback(false);
-        } else {
-            this.shellCallback = shellCallback;
-        }
-        if (warnings == null) {
-            this.warnings = new ArrayList<>();
-        } else {
-            this.warnings = warnings;
-        }
+        this.shellCallback = shellCallback == null ? new DefaultShellCallback(false) : shellCallback;
+        this.warnings = warnings == null ? new ArrayList<>() : warnings;
         this.configuration.validate();
     }
 
@@ -202,25 +194,23 @@ public class MyBatisGenerator {
                 }
             }
         }
-
-        // setup custom classloader if required
+        // 按需初始化自定义的类加载器  setup custom classloader if required
         if (!configuration.getClassPathEntries().isEmpty()) {
             ClassLoader classLoader = getCustomClassloader(configuration.getClassPathEntries());
             ObjectFactory.addExternalClassLoader(classLoader);
         }
 
-        // now run the introspections...
+        // 进行数据库表信息获取
         int totalSteps = 0;
         for (Context context : contextsToRun) {
             totalSteps += context.getIntrospectionSteps();
         }
         callback.introspectionStarted(totalSteps);
-        // 加载数据库表信息
-        for (Context context : contextsToRun) {
-            context.introspectTables(callback, warnings,
-                    fullyQualifiedTableNames);
+        for (Context context : contextsToRun) {  // 加载数据库表信息
+            context.introspectTables(callback, warnings, fullyQualifiedTableNames);
         }
-        // now run the generates
+
+        // 运行代码生成
         totalSteps = 0;
         for (Context context : contextsToRun) {
             totalSteps += context.getGenerationSteps();

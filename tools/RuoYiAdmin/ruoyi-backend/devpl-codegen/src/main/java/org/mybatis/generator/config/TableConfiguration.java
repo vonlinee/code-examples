@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       https://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.config;
 
 import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
@@ -28,22 +13,19 @@ import java.util.Optional;
 
 import org.mybatis.generator.internal.util.messages.Messages;
 
+/**
+ * 包含表的配置信息
+ */
 public class TableConfiguration extends PropertyHolder {
 
+    // 是否添加一些自定义标签，与mapper方法
     private boolean insertStatementEnabled;
-
     private boolean selectByPrimaryKeyStatementEnabled;
-
     private boolean selectByExampleStatementEnabled;
-
     private boolean updateByPrimaryKeyStatementEnabled;
-
     private boolean deleteByPrimaryKeyStatementEnabled;
-
     private boolean deleteByExampleStatementEnabled;
-
     private boolean countByExampleStatementEnabled;
-
     private boolean updateByExampleStatementEnabled;
 
     private final List<ColumnOverride> columnOverrides;
@@ -85,12 +67,9 @@ public class TableConfiguration extends PropertyHolder {
 
     public TableConfiguration(Context context) {
         super();
-
         this.modelType = context.getDefaultModelType();
-
         columnOverrides = new ArrayList<>();
         ignoredColumns = new HashMap<>();
-
         insertStatementEnabled = true;
         selectByPrimaryKeyStatementEnabled = true;
         selectByExampleStatementEnabled = true;
@@ -317,14 +296,12 @@ public class TableConfiguration extends PropertyHolder {
      */
     public List<String> getIgnoredColumnsInError() {
         List<String> answer = new ArrayList<>();
-
         for (Map.Entry<IgnoredColumn, Boolean> entry : ignoredColumns
                 .entrySet()) {
             if (Boolean.FALSE.equals(entry.getValue())) {
                 answer.add(entry.getKey().getColumnName());
             }
         }
-
         return answer;
     }
 

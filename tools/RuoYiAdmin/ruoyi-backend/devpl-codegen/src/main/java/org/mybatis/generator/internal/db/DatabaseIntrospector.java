@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       https://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.internal.db;
 
 import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
@@ -66,8 +51,8 @@ public class DatabaseIntrospector {
     private final Log logger;
 
     public DatabaseIntrospector(Context context,
-            DatabaseMetaData databaseMetaData,
-            JavaTypeResolver javaTypeResolver, List<String> warnings) {
+                                DatabaseMetaData databaseMetaData,
+                                JavaTypeResolver javaTypeResolver, List<String> warnings) {
         super();
         this.context = context;
         this.databaseMetaData = databaseMetaData;
@@ -77,7 +62,7 @@ public class DatabaseIntrospector {
     }
 
     private void calculatePrimaryKey(FullyQualifiedTable table,
-            IntrospectedTable introspectedTable) {
+                                     IntrospectedTable introspectedTable) {
         ResultSet rs;
 
         try {
@@ -161,15 +146,11 @@ public class DatabaseIntrospector {
 
     /**
      * Returns a List of IntrospectedTable elements that matches the specified table configuration.
-     *
-     * @param tc
-     *            the table configuration
+     * @param tc the table configuration
      * @return a list of introspected tables
-     * @throws SQLException
-     *             if any errors in introspection
+     * @throws SQLException if any errors in introspection
      */
-    public List<IntrospectedTable> introspectTables(TableConfiguration tc)
-            throws SQLException {
+    public List<IntrospectedTable> introspectTables(TableConfiguration tc) throws SQLException {
 
         // get the raw columns from the DB
         Map<ActualTableName, List<IntrospectedColumn>> columns = getColumns(tc);
@@ -199,7 +180,7 @@ public class DatabaseIntrospector {
                 // add warning that the table has no columns, remove from the
                 // list
                 String warning = getString(
-                                "Warning.1", introspectedTable.getFullyQualifiedTable().toString()); //$NON-NLS-1$
+                        "Warning.1", introspectedTable.getFullyQualifiedTable().toString()); //$NON-NLS-1$
                 warnings.add(warning);
                 iter.remove();
             } else if (!introspectedTable.hasPrimaryKeyColumns()
@@ -207,7 +188,7 @@ public class DatabaseIntrospector {
                 // add warning that the table has only BLOB columns, remove from
                 // the list
                 String warning = getString(
-                                "Warning.18", introspectedTable.getFullyQualifiedTable().toString()); //$NON-NLS-1$
+                        "Warning.18", introspectedTable.getFullyQualifiedTable().toString()); //$NON-NLS-1$
                 warnings.add(warning);
                 iter.remove();
             } else {
@@ -223,11 +204,11 @@ public class DatabaseIntrospector {
     }
 
     private void removeIgnoredColumns(TableConfiguration tc,
-            Map<ActualTableName, List<IntrospectedColumn>> columns) {
+                                      Map<ActualTableName, List<IntrospectedColumn>> columns) {
         for (Map.Entry<ActualTableName, List<IntrospectedColumn>> entry : columns
                 .entrySet()) {
             Iterator<IntrospectedColumn> tableColumns = entry.getValue()
-                    .iterator();
+                                                             .iterator();
             while (tableColumns.hasNext()) {
                 IntrospectedColumn introspectedColumn = tableColumns.next();
                 if (tc
@@ -245,13 +226,13 @@ public class DatabaseIntrospector {
     }
 
     private void calculateExtraColumnInformation(TableConfiguration tc,
-            Map<ActualTableName, List<IntrospectedColumn>> columns) {
+                                                 Map<ActualTableName, List<IntrospectedColumn>> columns) {
         StringBuilder sb = new StringBuilder();
         Pattern pattern = null;
         String replaceString = null;
         if (tc.getColumnRenamingRule() != null) {
             pattern = Pattern.compile(tc.getColumnRenamingRule()
-                    .getSearchString());
+                                        .getSearchString());
             replaceString = tc.getColumnRenamingRule().getReplaceString();
             replaceString = replaceString == null ? "" : replaceString; //$NON-NLS-1$
         }
@@ -274,7 +255,7 @@ public class DatabaseIntrospector {
                     introspectedColumn.setJavaProperty(
                             JavaBeansUtil.getValidPropertyName(calculatedColumnName));
                 } else if (isTrue(tc
-                                .getProperty(PropertyRegistry.TABLE_USE_COMPOUND_PROPERTY_NAMES))) {
+                        .getProperty(PropertyRegistry.TABLE_USE_COMPOUND_PROPERTY_NAMES))) {
                     sb.setLength(0);
                     sb.append(calculatedColumnName);
                     sb.append('_');
@@ -324,7 +305,7 @@ public class DatabaseIntrospector {
 
                 if (context.autoDelimitKeywords()
                         && SqlReservedWords.containsWord(introspectedColumn
-                            .getActualColumnName())) {
+                        .getActualColumnName())) {
                     introspectedColumn.setColumnNameDelimited(true);
                 }
 
@@ -363,7 +344,7 @@ public class DatabaseIntrospector {
     }
 
     private void applyColumnOverrides(TableConfiguration tc,
-            Map<ActualTableName, List<IntrospectedColumn>> columns) {
+                                      Map<ActualTableName, List<IntrospectedColumn>> columns) {
         for (Map.Entry<ActualTableName, List<IntrospectedColumn>> entry : columns
                 .entrySet()) {
             for (IntrospectedColumn introspectedColumn : entry.getValue()) {
@@ -411,12 +392,17 @@ public class DatabaseIntrospector {
 
                     introspectedColumn.setProperties(columnOverride
                             .getProperties());
-
                 }
             }
         }
     }
 
+    /**
+     * 获取表中的所有列
+     * @param tc 表配置信息
+     * @return
+     * @throws SQLException
+     */
     private Map<ActualTableName, List<IntrospectedColumn>> getColumns(
             TableConfiguration tc) throws SQLException {
         String localCatalog;
@@ -433,16 +419,12 @@ public class DatabaseIntrospector {
             localSchema = tc.getSchema();
             localTableName = tc.getTableName();
         } else if (databaseMetaData.storesLowerCaseIdentifiers()) {
-            localCatalog = tc.getCatalog() == null ? null : tc.getCatalog()
-                    .toLowerCase();
-            localSchema = tc.getSchema() == null ? null : tc.getSchema()
-                    .toLowerCase();
+            localCatalog = tc.getCatalog() == null ? null : tc.getCatalog().toLowerCase();
+            localSchema = tc.getSchema() == null ? null : tc.getSchema().toLowerCase();
             localTableName = tc.getTableName().toLowerCase();
         } else if (databaseMetaData.storesUpperCaseIdentifiers()) {
-            localCatalog = tc.getCatalog() == null ? null : tc.getCatalog()
-                    .toUpperCase();
-            localSchema = tc.getSchema() == null ? null : tc.getSchema()
-                    .toUpperCase();
+            localCatalog = tc.getCatalog() == null ? null : tc.getCatalog().toUpperCase();
+            localSchema = tc.getSchema() == null ? null : tc.getSchema().toUpperCase();
             localTableName = tc.getTableName().toUpperCase();
         } else {
             localCatalog = tc.getCatalog();
@@ -452,11 +434,9 @@ public class DatabaseIntrospector {
 
         if (tc.isWildcardEscapingEnabled()) {
             String escapeString = databaseMetaData.getSearchStringEscape();
-
             if (localSchema != null) {
                 localSchema = escapeName(localSchema, escapeString);
             }
-
             localTableName = escapeName(localTableName, escapeString);
         }
 
@@ -464,10 +444,11 @@ public class DatabaseIntrospector {
 
         if (logger.isDebugEnabled()) {
             String fullTableName = composeFullyQualifiedTableName(localCatalog, localSchema,
-                            localTableName, '.');
+                    localTableName, '.');
             logger.debug(getString("Tracing.1", fullTableName)); //$NON-NLS-1$
         }
 
+        // 获取所有的列
         ResultSet rs = databaseMetaData.getColumns(localCatalog, localSchema,
                 localTableName, "%"); //$NON-NLS-1$
 
@@ -626,7 +607,6 @@ public class DatabaseIntrospector {
      * such as remarks associated with the table and the type.
      *
      * <p>If there is any error, we just add a warning and continue.
-     *
      * @param introspectedTable the introspected table to enhance
      */
     private void enhanceIntrospectedTable(IntrospectedTable introspectedTable) {

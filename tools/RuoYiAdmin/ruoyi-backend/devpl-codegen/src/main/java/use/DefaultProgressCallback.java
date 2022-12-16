@@ -1,8 +1,6 @@
-package org.mybatis.generator;
+package use;
 
 import org.mybatis.generator.api.ProgressCallback;
-import org.mybatis.generator.logging.Log;
-import org.mybatis.generator.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

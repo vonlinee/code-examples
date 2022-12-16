@@ -8,7 +8,7 @@ public interface HandleMethod {
     //去除空行
     HandleMethod removeBlankLines = input -> {
         List<String> lines = input.getLines();
-        lines.removeIf(String::isBlank);
+        // lines.removeIf(String::isBlank);
         return input;
     };
 }

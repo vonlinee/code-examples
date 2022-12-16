@@ -18,8 +18,7 @@ package org.mybatis.generator.config;
 import java.util.Properties;
 
 /**
- * 自带一个property属性
- * 选择继承还是组合
+ * 自带一个property属性 选择继承还是组合
  */
 public abstract class PropertyHolder {
     private final Properties properties;

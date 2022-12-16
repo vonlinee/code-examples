@@ -34,8 +34,9 @@ public abstract class FXController implements EventTarget, Initializable {
 
     /**
      * 将自身注册进事件总线
+     * 如果没有@Subscribe修饰的方法，那么会报错
      */
-    public final void register() {
+    public final void registerThis() {
         bus.register(this);
     }
 

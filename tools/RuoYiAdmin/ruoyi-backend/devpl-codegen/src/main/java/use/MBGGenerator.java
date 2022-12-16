@@ -1,7 +1,6 @@
 package use;
 
 import io.devpl.sdk.util.ResourceUtils;
-import org.mybatis.generator.DefaultProgressCallback;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.xml.ConfigurationParser;
