@@ -25,7 +25,7 @@ import org.mybatis.generator.api.dom.java.Field;
 import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
-import org.mybatis.generator.config.PropertyRegistry;
+import org.mybatis.generator.config.ConfigKeyRegistry;
 
 public abstract class AbstractJavaGenerator extends AbstractGenerator {
     public abstract List<CompilationUnit> getCompilationUnits();
@@ -51,10 +51,10 @@ public abstract class AbstractJavaGenerator extends AbstractGenerator {
     }
 
     public String getRootClass() {
-        String rootClass = introspectedTable.getTableConfigurationProperty(PropertyRegistry.ANY_ROOT_CLASS);
+        String rootClass = introspectedTable.getTableConfigurationProperty(ConfigKeyRegistry.ANY_ROOT_CLASS);
         if (rootClass == null) {
             Properties properties = context.getJavaModelGeneratorConfiguration().getProperties();
-            rootClass = properties.getProperty(PropertyRegistry.ANY_ROOT_CLASS);
+            rootClass = properties.getProperty(ConfigKeyRegistry.ANY_ROOT_CLASS);
         }
 
         return rootClass;

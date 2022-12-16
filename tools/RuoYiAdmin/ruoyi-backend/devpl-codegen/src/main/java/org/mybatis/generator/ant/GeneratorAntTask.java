@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.ant;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.io.File;
@@ -133,7 +133,7 @@ public class GeneratorAntTask extends Task {
 
     private Set<String> calculateContexts() {
         Set<String> contexts = new HashSet<>();
-        if (stringHasValue(contextIds)) {
+        if (hasLength(contextIds)) {
             StringTokenizer st = new StringTokenizer(contextIds, ","); //$NON-NLS-1$
             while (st.hasMoreTokens()) {
                 String s = st.nextToken().trim();
@@ -147,7 +147,7 @@ public class GeneratorAntTask extends Task {
 
     private Set<String> calculateTables() {
         Set<String> fullyqualifiedTables = new HashSet<>();
-        if (stringHasValue(fullyQualifiedTableNames)) {
+        if (hasLength(fullyQualifiedTableNames)) {
             StringTokenizer st = new StringTokenizer(fullyQualifiedTableNames,
                     ","); //$NON-NLS-1$
             while (st.hasMoreTokens()) {
@@ -161,7 +161,7 @@ public class GeneratorAntTask extends Task {
     }
 
     private File calculateConfigurationFile() {
-        if (!stringHasValue(configfile)) {
+        if (!hasLength(configfile)) {
             throw new BuildException(getString("RuntimeError.0")); //$NON-NLS-1$
         }
 

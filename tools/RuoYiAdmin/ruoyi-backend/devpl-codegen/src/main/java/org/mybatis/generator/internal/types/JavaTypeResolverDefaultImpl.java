@@ -27,8 +27,8 @@ import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.JavaTypeResolver;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.config.Context;
-import org.mybatis.generator.config.PropertyRegistry;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.config.ConfigKeyRegistry;
+import org.mybatis.generator.internal.util.StringUtils;
 
 public class JavaTypeResolverDefaultImpl implements JavaTypeResolver {
 
@@ -127,12 +127,12 @@ public class JavaTypeResolverDefaultImpl implements JavaTypeResolver {
     @Override
     public void addConfigurationProperties(Properties properties) {
         this.properties.putAll(properties);
-        forceBigDecimals = StringUtility
+        forceBigDecimals = StringUtils
                 .isTrue(properties
-                        .getProperty(PropertyRegistry.TYPE_RESOLVER_FORCE_BIG_DECIMALS));
-        useJSR310Types = StringUtility
+                        .getProperty(ConfigKeyRegistry.TYPE_RESOLVER_FORCE_BIG_DECIMALS));
+        useJSR310Types = StringUtils
                 .isTrue(properties
-                        .getProperty(PropertyRegistry.TYPE_RESOLVER_USE_JSR310_TYPES));
+                        .getProperty(ConfigKeyRegistry.TYPE_RESOLVER_USE_JSR310_TYPES));
     }
 
     @Override

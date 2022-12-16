@@ -19,9 +19,9 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.IntrospectedTable.TargetRuntime;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.codegen.mybatis3.ListUtilities;
-import org.mybatis.generator.config.PropertyRegistry;
+import org.mybatis.generator.config.ConfigKeyRegistry;
 import org.mybatis.generator.config.TableConfiguration;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.internal.util.StringUtils;
 
 /**
  * This class centralizes all the rules related to code generation - including
@@ -42,8 +42,8 @@ public abstract class BaseRules implements Rules {
         super();
         this.introspectedTable = introspectedTable;
         this.tableConfiguration = introspectedTable.getTableConfiguration();
-        String modelOnly = tableConfiguration.getProperty(PropertyRegistry.TABLE_MODEL_ONLY);
-        isModelOnly = StringUtility.isTrue(modelOnly);
+        String modelOnly = tableConfiguration.getProperty(ConfigKeyRegistry.TABLE_MODEL_ONLY);
+        isModelOnly = StringUtils.isTrue(modelOnly);
     }
 
     /**

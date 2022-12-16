@@ -3,13 +3,14 @@ package io.devpl.codegen.mbpg.template;
 import io.devpl.codegen.mbpg.config.*;
 import io.devpl.codegen.mbpg.config.builder.ConfigBuilder;
 import io.devpl.codegen.mbpg.config.builder.CustomFile;
+import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.util.FileUtils;
 import io.devpl.codegen.mbpg.util.RuntimeUtils;
 import io.devpl.codegen.mbpg.util.StringPool;
-import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mybatis.generator.internal.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,8 +55,8 @@ public abstract class AbstractTemplateEngine {
         String entityName = tableInfo.getEntityName();
         String parentPath = getPathInfo(OutputFile.parent);
         customFiles.forEach(file -> {
-            String filePath = StringUtils.hasText(file.getFilePath()) ? file.getFilePath() : parentPath;
-            if (StringUtils.hasText(file.getPackageName())) {
+            String filePath = io.devpl.sdk.util.StringUtils.hasText(file.getFilePath()) ? file.getFilePath() : parentPath;
+            if (io.devpl.sdk.util.StringUtils.hasText(file.getPackageName())) {
                 filePath = filePath + File.separator + file.getPackageName();
                 filePath = filePath.replaceAll("\\.", StringPool.BACK_SLASH + File.separator);
             }
@@ -75,19 +76,25 @@ public abstract class AbstractTemplateEngine {
         LOGGER.info("输出实体文件");
         String entityName = tableInfo.getEntityName();
         String entityPath = getPathInfo(OutputFile.entity);
-        if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
+        if (io.devpl.sdk.util.StringUtils.isNotBlank(entityName) && io.devpl.sdk.util.StringUtils.isNotBlank(entityPath)) {
             TemplateConfig templateConfig = getConfigBuilder().getTemplateConfig();
             boolean kotlin = getConfigBuilder()
                     .getGlobalConfig()
                     .isKotlin();
             String entity = templateConfig.getEntity(kotlin);
-            if (StringUtils.hasLength(entity)) {
+            if (io.devpl.sdk.util.StringUtils.hasLength(entity)) {
                 String entityFile = String.format((entityPath + File.separator + "%s" + suffixJavaOrKt()), entityName);
                 boolean fileOverride = getConfigBuilder()
                         .getStrategyConfig()
                         .entity()
                         .isFileOverride();
-                outputFile(new File(entityFile), objectMap, entity, fileOverride);
+                String entityTemplatePath = templateFilePath(entity);
+                for (TableField field : tableInfo.getFields()) {
+                    if (!StringUtils.hasLength(field.getComment())) {
+                        field.setComment(" "); // 占位
+                    }
+                }
+                outputFile(new File(entityFile), objectMap, entityTemplatePath, fileOverride);
             }
         }
     }
@@ -103,7 +110,7 @@ public abstract class AbstractTemplateEngine {
         // MpMapper.java
         String entityName = tableInfo.getEntityName();
         String mapperPath = getPathInfo(OutputFile.mapper);
-        if (StringUtils.hasText(tableInfo.getMapperName()) && StringUtils.isNotBlank(mapperPath)) {
+        if (io.devpl.sdk.util.StringUtils.hasText(tableInfo.getMapperName()) && io.devpl.sdk.util.StringUtils.isNotBlank(mapperPath)) {
             getTemplateFilePath(TemplateConfig::getMapper).ifPresent(mapper -> {
                 String mapperFile = String.format((mapperPath + File.separator + tableInfo.getMapperName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(mapperFile), objectMap, mapper, getConfigBuilder()
@@ -114,7 +121,7 @@ public abstract class AbstractTemplateEngine {
         }
         // MpMapper.xml
         String xmlPath = getPathInfo(OutputFile.xml);
-        if (StringUtils.isNotBlank(tableInfo.getXmlName()) && StringUtils.isNotBlank(xmlPath)) {
+        if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getXmlName()) && io.devpl.sdk.util.StringUtils.isNotBlank(xmlPath)) {
             getTemplateFilePath(TemplateConfig::getXml).ifPresent(xml -> {
                 String xmlFile = String.format((xmlPath + File.separator + tableInfo.getXmlName() + ConstVal.XML_SUFFIX), entityName);
                 outputFile(new File(xmlFile), objectMap, xml, getConfigBuilder()
@@ -136,7 +143,7 @@ public abstract class AbstractTemplateEngine {
         // IMpService.java
         String entityName = tableInfo.getEntityName();
         String servicePath = getPathInfo(OutputFile.service);
-        if (StringUtils.isNotBlank(tableInfo.getServiceName()) && StringUtils.isNotBlank(servicePath)) {
+        if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getServiceName()) && io.devpl.sdk.util.StringUtils.isNotBlank(servicePath)) {
             getTemplateFilePath(TemplateConfig::getService).ifPresent(service -> {
                 String serviceFile = String.format((servicePath + File.separator + tableInfo.getServiceName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(serviceFile), objectMap, service, getConfigBuilder()
@@ -147,7 +154,7 @@ public abstract class AbstractTemplateEngine {
         }
         // MpServiceImpl.java
         String serviceImplPath = getPathInfo(OutputFile.serviceImpl);
-        if (StringUtils.isNotBlank(tableInfo.getServiceImplName()) && StringUtils.isNotBlank(serviceImplPath)) {
+        if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getServiceImplName()) && io.devpl.sdk.util.StringUtils.isNotBlank(serviceImplPath)) {
             getTemplateFilePath(TemplateConfig::getServiceImpl).ifPresent(serviceImpl -> {
                 String implFile = String.format((serviceImplPath + File.separator + tableInfo.getServiceImplName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(implFile), objectMap, serviceImpl, getConfigBuilder()
@@ -168,7 +175,7 @@ public abstract class AbstractTemplateEngine {
     protected void outputController(@NotNull TableInfo tableInfo, @NotNull Map<String, Object> objectMap) {
         // MpController.java
         String controllerPath = getPathInfo(OutputFile.controller);
-        if (StringUtils.isNotBlank(tableInfo.getControllerName()) && StringUtils.isNotBlank(controllerPath)) {
+        if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getControllerName()) && io.devpl.sdk.util.StringUtils.isNotBlank(controllerPath)) {
             getTemplateFilePath(TemplateConfig::getController).ifPresent(controller -> {
                 String entityName = tableInfo.getEntityName();
                 String controllerFile = String.format((controllerPath + File.separator + tableInfo.getControllerName() + suffixJavaOrKt()), entityName);
@@ -216,7 +223,7 @@ public abstract class AbstractTemplateEngine {
     protected Optional<String> getTemplateFilePath(@NotNull Function<TemplateConfig, String> function) {
         TemplateConfig templateConfig = getConfigBuilder().getTemplateConfig();
         String filePath = function.apply(templateConfig);
-        if (StringUtils.isNotBlank(filePath)) {
+        if (io.devpl.sdk.util.StringUtils.isNotBlank(filePath)) {
             return Optional.of(templateFilePath(filePath));
         }
         return Optional.empty();
@@ -286,7 +293,7 @@ public abstract class AbstractTemplateEngine {
      */
     public void open() {
         String outDir = getConfigBuilder().getGlobalConfig().getOutputDir();
-        if (StringUtils.isBlank(outDir) || !new File(outDir).exists()) {
+        if (io.devpl.sdk.util.StringUtils.isBlank(outDir) || !new File(outDir).exists()) {
             System.err.println("未找到输出目录：" + outDir);
         } else if (getConfigBuilder().getGlobalConfig().isOpen()) {
             try {
@@ -328,7 +335,7 @@ public abstract class AbstractTemplateEngine {
         if (strategyConfig.isEnableSchema()) {
             // 存在 schemaName 设置拼接 . 组合表名
             schemaName = config.getDataSourceConfig().getSchemaName();
-            if (StringUtils.isNotBlank(schemaName)) {
+            if (io.devpl.sdk.util.StringUtils.isNotBlank(schemaName)) {
                 schemaName += ".";
                 tableInfo.setConvert(true);
             }

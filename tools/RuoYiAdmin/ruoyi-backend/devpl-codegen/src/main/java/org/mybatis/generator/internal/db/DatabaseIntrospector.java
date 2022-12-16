@@ -1,10 +1,10 @@
 package org.mybatis.generator.internal.db;
 
-import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
-import static org.mybatis.generator.internal.util.StringUtility.stringContainsSQLWildcard;
-import static org.mybatis.generator.internal.util.StringUtility.stringContainsSpace;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualifiedTableName;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.stringContainsSQLWildcard;
+import static org.mybatis.generator.internal.util.StringUtils.stringContainsSpace;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.sql.DatabaseMetaData;
@@ -31,7 +31,7 @@ import org.mybatis.generator.api.dom.java.JavaReservedWords;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.Context;
 import org.mybatis.generator.config.GeneratedKey;
-import org.mybatis.generator.config.PropertyRegistry;
+import org.mybatis.generator.config.ConfigKeyRegistry;
 import org.mybatis.generator.config.TableConfiguration;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
@@ -251,11 +251,11 @@ public class DatabaseIntrospector {
                 }
 
                 if (isTrue(tc
-                        .getProperty(PropertyRegistry.TABLE_USE_ACTUAL_COLUMN_NAMES))) {
+                        .getProperty(ConfigKeyRegistry.TABLE_USE_ACTUAL_COLUMN_NAMES))) {
                     introspectedColumn.setJavaProperty(
                             JavaBeansUtil.getValidPropertyName(calculatedColumnName));
                 } else if (isTrue(tc
-                        .getProperty(PropertyRegistry.TABLE_USE_COMPOUND_PROPERTY_NAMES))) {
+                        .getProperty(ConfigKeyRegistry.TABLE_USE_COMPOUND_PROPERTY_NAMES))) {
                     sb.setLength(0);
                     sb.append(calculatedColumnName);
                     sb.append('_');
@@ -283,7 +283,7 @@ public class DatabaseIntrospector {
                     ColumnOverride co = tc.getColumnOverride(introspectedColumn
                             .getActualColumnName());
                     if (co != null
-                            && stringHasValue(co.getJavaType())) {
+                            && hasLength(co.getJavaType())) {
                         warn = false;
                     }
 
@@ -359,26 +359,26 @@ public class DatabaseIntrospector {
                                         .getKey().toString()));
                     }
 
-                    if (stringHasValue(columnOverride
+                    if (hasLength(columnOverride
                             .getJavaProperty())) {
                         introspectedColumn.setJavaProperty(columnOverride
                                 .getJavaProperty());
                     }
 
-                    if (stringHasValue(columnOverride
+                    if (hasLength(columnOverride
                             .getJavaType())) {
                         introspectedColumn
                                 .setFullyQualifiedJavaType(new FullyQualifiedJavaType(
                                         columnOverride.getJavaType()));
                     }
 
-                    if (stringHasValue(columnOverride
+                    if (hasLength(columnOverride
                             .getJdbcType())) {
                         introspectedColumn.setJdbcTypeName(columnOverride
                                 .getJdbcType());
                     }
 
-                    if (stringHasValue(columnOverride
+                    if (hasLength(columnOverride
                             .getTypeHandler())) {
                         introspectedColumn.setTypeHandler(columnOverride
                                 .getTypeHandler());
@@ -572,15 +572,15 @@ public class DatabaseIntrospector {
             // configuration, then some sort of DB default is being returned
             // and we don't want that in our SQL
             FullyQualifiedTable table = new FullyQualifiedTable(
-                    stringHasValue(tc.getCatalog()) ? atn.getCatalog() : null,
-                    stringHasValue(tc.getSchema()) ? atn.getSchema() : null,
+                    hasLength(tc.getCatalog()) ? atn.getCatalog() : null,
+                    hasLength(tc.getSchema()) ? atn.getSchema() : null,
                     atn.getTableName(),
                     tc.getDomainObjectName(),
                     tc.getAlias(),
-                    isTrue(tc.getProperty(PropertyRegistry.TABLE_IGNORE_QUALIFIERS_AT_RUNTIME)),
-                    tc.getProperty(PropertyRegistry.TABLE_RUNTIME_CATALOG),
-                    tc.getProperty(PropertyRegistry.TABLE_RUNTIME_SCHEMA),
-                    tc.getProperty(PropertyRegistry.TABLE_RUNTIME_TABLE_NAME),
+                    isTrue(tc.getProperty(ConfigKeyRegistry.TABLE_IGNORE_QUALIFIERS_AT_RUNTIME)),
+                    tc.getProperty(ConfigKeyRegistry.TABLE_RUNTIME_CATALOG),
+                    tc.getProperty(ConfigKeyRegistry.TABLE_RUNTIME_SCHEMA),
+                    tc.getProperty(ConfigKeyRegistry.TABLE_RUNTIME_TABLE_NAME),
                     delimitIdentifiers,
                     tc.getDomainObjectRenamingRule(),
                     context);

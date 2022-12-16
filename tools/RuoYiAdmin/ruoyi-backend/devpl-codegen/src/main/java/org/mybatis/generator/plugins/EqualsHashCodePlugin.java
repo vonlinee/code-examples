@@ -16,7 +16,7 @@
 package org.mybatis.generator.plugins;
 
 import static org.mybatis.generator.internal.util.JavaBeansUtil.getGetterMethodName;
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
 
 import java.util.Iterator;
 import java.util.List;

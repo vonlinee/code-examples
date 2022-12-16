@@ -165,7 +165,6 @@ public class MyBatisCodeGenerator {
         daoConfig.setTargetPackage(generatorConfig.getDaoPackage());
         daoConfig.setTargetProject(generatorConfig.getProjectFolder() + "/" + generatorConfig.getDaoTargetFolder());
 
-
         context.setId("myid");
         context.addTableConfiguration(tableConfig);
         context.setJdbcConnectionConfiguration(jdbcConfig);
@@ -183,7 +182,7 @@ public class MyBatisCodeGenerator {
         }
         context.setCommentGeneratorConfiguration(commentConfig);
         // set java file encoding
-        context.addProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING, generatorConfig.getEncoding());
+        context.addProperty(ConfigKeyRegistry.CONTEXT_JAVA_FILE_ENCODING, generatorConfig.getEncoding());
 
         // 实体添加序列化
         addPluginConfiguration(context, SerializablePlugin.class);
@@ -230,11 +229,13 @@ public class MyBatisCodeGenerator {
         }
 
         if (generatorConfig.isSwaggerSupport()) {
-            log.info("enable swagger");
+            // log.info("enable swagger");
         }
 
+        context.addPluginConfiguration(MyBatisPlusPlugin.class);
+
         if (generatorConfig.isFullMVCSupport()) {
-            log.info("support mvc");
+            // log.info("support mvc");
             addPluginConfiguration(context, FullMVCSupportPlugin.class);
         }
 

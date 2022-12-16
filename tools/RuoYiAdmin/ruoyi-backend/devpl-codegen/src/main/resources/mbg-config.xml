@@ -39,10 +39,10 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!--生成的表配置 -->
-        <table schema="db_mysql" tableName="t_user"
-               domainObjectName="User" enableCountByExample="false"
+        <table schema="dbs" tableName="dbs"
+               domainObjectName="Dbs" enableCountByExample="false"
                enableDeleteByExample="false" enableInsert="true"
-               enableSelectByExample="false" mapperName="UserMapper">
+               enableSelectByExample="false" mapperName="DbsMapper">
             <property name="useActualColumnNames" value="true"/>
             <!--主键 -->
             <generatedKey column="USER_ID" sqlStatement="MySql"

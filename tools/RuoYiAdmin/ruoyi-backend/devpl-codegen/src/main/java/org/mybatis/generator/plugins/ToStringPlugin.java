@@ -1,21 +1,6 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       https://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.plugins;
 
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
 
 import java.util.List;
 import java.util.Properties;
@@ -46,7 +31,7 @@ public class ToStringPlugin extends PluginAdapter {
 
     @Override
     public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass,
-            IntrospectedTable introspectedTable) {
+                                                 IntrospectedTable introspectedTable) {
         generateToString(introspectedTable, topLevelClass);
         return true;
     }
@@ -60,13 +45,18 @@ public class ToStringPlugin extends PluginAdapter {
 
     @Override
     public boolean modelPrimaryKeyClassGenerated(TopLevelClass topLevelClass,
-            IntrospectedTable introspectedTable) {
+                                                 IntrospectedTable introspectedTable) {
         generateToString(introspectedTable, topLevelClass);
         return true;
     }
 
+    /**
+     * 添加toString方法
+     * @param introspectedTable 表信息
+     * @param topLevelClass
+     */
     private void generateToString(IntrospectedTable introspectedTable,
-            TopLevelClass topLevelClass) {
+                                  TopLevelClass topLevelClass) {
         Method method = new Method("toString"); //$NON-NLS-1$
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(FullyQualifiedJavaType.getStringInstance());
@@ -89,8 +79,8 @@ public class ToStringPlugin extends PluginAdapter {
             String property = field.getName();
             sb.setLength(0);
             sb.append("sb.append(\"").append(", ").append(property) //$NON-NLS-1$ //$NON-NLS-2$
-                    .append("=\")").append(".append(").append(property) //$NON-NLS-1$ //$NON-NLS-2$
-                    .append(");"); //$NON-NLS-1$
+              .append("=\")").append(".append(").append(property) //$NON-NLS-1$ //$NON-NLS-2$
+              .append(");"); //$NON-NLS-1$
             method.addBodyLine(sb.toString());
         }
 

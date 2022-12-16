@@ -217,10 +217,11 @@ public class MyBatisGenerator {
         }
         callback.generationStarted(totalSteps);
         for (Context context : contextsToRun) {
+            // 确定生成的文件，执行插件逻辑
             context.generateFiles(callback, generatedJavaFiles,
                     generatedXmlFiles, generatedKotlinFiles, otherGeneratedFiles, warnings);
         }
-        // now save the files
+        // 保存文件
         if (writeFiles) {
             callback.saveStarted(generatedXmlFiles.size() + generatedJavaFiles.size());
             // XML文件

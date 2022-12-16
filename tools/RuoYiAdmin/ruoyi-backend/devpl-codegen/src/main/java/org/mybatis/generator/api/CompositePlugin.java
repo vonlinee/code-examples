@@ -723,7 +723,6 @@ public abstract class CompositePlugin implements Plugin {
                 return false;
             }
         }
-
         return true;
     }
 

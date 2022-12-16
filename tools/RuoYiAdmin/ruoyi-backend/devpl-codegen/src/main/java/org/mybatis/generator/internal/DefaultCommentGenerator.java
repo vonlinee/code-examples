@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.internal;
 
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
 
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
@@ -40,8 +40,8 @@ import org.mybatis.generator.api.dom.kotlin.KotlinFile;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.config.MergeConstants;
-import org.mybatis.generator.config.PropertyRegistry;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.config.ConfigKeyRegistry;
+import org.mybatis.generator.internal.util.StringUtils;
 
 public class DefaultCommentGenerator implements CommentGenerator {
 
@@ -104,18 +104,18 @@ public class DefaultCommentGenerator implements CommentGenerator {
     public void addConfigurationProperties(Properties props) {
         this.properties.putAll(props);
 
-        suppressDate = isTrue(properties.getProperty(PropertyRegistry.COMMENT_GENERATOR_SUPPRESS_DATE));
+        suppressDate = isTrue(properties.getProperty(ConfigKeyRegistry.COMMENT_GENERATOR_SUPPRESS_DATE));
 
-        suppressAllComments = isTrue(properties.getProperty(PropertyRegistry.COMMENT_GENERATOR_SUPPRESS_ALL_COMMENTS));
+        suppressAllComments = isTrue(properties.getProperty(ConfigKeyRegistry.COMMENT_GENERATOR_SUPPRESS_ALL_COMMENTS));
 
-        addRemarkComments = isTrue(properties.getProperty(PropertyRegistry.COMMENT_GENERATOR_ADD_REMARK_COMMENTS));
+        addRemarkComments = isTrue(properties.getProperty(ConfigKeyRegistry.COMMENT_GENERATOR_ADD_REMARK_COMMENTS));
 
-        if (isTrue(properties.getProperty(PropertyRegistry.COMMENT_GENERATOR_USE_LEGACY_GENERATED_ANNOTATION))) {
+        if (isTrue(properties.getProperty(ConfigKeyRegistry.COMMENT_GENERATOR_USE_LEGACY_GENERATED_ANNOTATION))) {
             generatedImport = new FullyQualifiedJavaType("javax.annotation.Generated"); //$NON-NLS-1$
         }
 
-        String dateFormatString = properties.getProperty(PropertyRegistry.COMMENT_GENERATOR_DATE_FORMAT);
-        if (StringUtility.stringHasValue(dateFormatString)) {
+        String dateFormatString = properties.getProperty(ConfigKeyRegistry.COMMENT_GENERATOR_DATE_FORMAT);
+        if (StringUtils.hasLength(dateFormatString)) {
             dateFormat = new SimpleDateFormat(dateFormatString);
         }
     }
@@ -210,7 +210,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
         topLevelClass.addJavaDocLine("/**"); //$NON-NLS-1$
 
         String remarks = introspectedTable.getRemarks();
-        if (addRemarkComments && StringUtility.stringHasValue(remarks)) {
+        if (addRemarkComments && StringUtils.hasLength(remarks)) {
             topLevelClass.addJavaDocLine(" * Database Table Remarks:"); //$NON-NLS-1$
             String[] remarkLines = remarks.split(System.getProperty("line.separator")); //$NON-NLS-1$
             for (String remarkLine : remarkLines) {
@@ -258,7 +258,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
         field.addJavaDocLine("/**"); //$NON-NLS-1$
 
         String remarks = introspectedColumn.getRemarks();
-        if (addRemarkComments && StringUtility.stringHasValue(remarks)) {
+        if (addRemarkComments && StringUtils.hasLength(remarks)) {
             field.addJavaDocLine(" * Database Column Remarks:"); //$NON-NLS-1$
             String[] remarkLines = remarks.split(System.getProperty("line.separator")); //$NON-NLS-1$
             for (String remarkLine : remarkLines) {
@@ -424,7 +424,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
         if (!suppressAllComments && addRemarkComments) {
             String remarks = introspectedColumn.getRemarks();
-            if (addRemarkComments && StringUtility.stringHasValue(remarks)) {
+            if (addRemarkComments && StringUtils.hasLength(remarks)) {
                 field.addJavaDocLine("/**"); //$NON-NLS-1$
                 field.addJavaDocLine(" * Database Column Remarks:"); //$NON-NLS-1$
                 String[] remarkLines = remarks.split(System.getProperty("line.separator")); //$NON-NLS-1$

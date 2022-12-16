@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.runtime.dynamic.sql;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.codegen.AbstractJavaClientGenerator;
 import org.mybatis.generator.codegen.AbstractXmlGenerator;
-import org.mybatis.generator.config.PropertyRegistry;
+import org.mybatis.generator.config.ConfigKeyRegistry;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
 import org.mybatis.generator.runtime.dynamic.sql.elements.AbstractMethodGenerator;
 import org.mybatis.generator.runtime.dynamic.sql.elements.BasicInsertMethodGenerator;
@@ -148,13 +148,13 @@ public class DynamicSqlMapperGenerator extends AbstractJavaClientGenerator {
         interfaze.addAnnotation("@Mapper"); //$NON-NLS-1$
 
         String rootInterface = introspectedTable
-                .getTableConfigurationProperty(PropertyRegistry.ANY_ROOT_INTERFACE);
-        if (!stringHasValue(rootInterface)) {
+                .getTableConfigurationProperty(ConfigKeyRegistry.ANY_ROOT_INTERFACE);
+        if (!hasLength(rootInterface)) {
             rootInterface = context.getJavaClientGeneratorConfiguration()
-                    .getProperty(PropertyRegistry.ANY_ROOT_INTERFACE);
+                    .getProperty(ConfigKeyRegistry.ANY_ROOT_INTERFACE);
         }
 
-        if (stringHasValue(rootInterface)) {
+        if (hasLength(rootInterface)) {
             FullyQualifiedJavaType fqjt = new FullyQualifiedJavaType(rootInterface);
             interfaze.addSuperInterface(fqjt);
             interfaze.addImportedType(fqjt);

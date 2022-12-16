@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 
 public class CommonDAOInterfacePlugin extends PluginAdapter {
 
@@ -39,7 +39,7 @@ public class CommonDAOInterfacePlugin extends PluginAdapter {
         String javaFileEncoding = context.getProperty("javaFileEncoding");
         Interface mapperInterface = new Interface(daoTargetPackage + DEFAULT_DAO_SUPER_CLASS);
 
-        if (stringHasValue(daoTargetPackage)) {
+        if (hasLength(daoTargetPackage)) {
             mapperInterface.addImportedType(SERIALIZEBLE_TYPE);
 
             mapperInterface.setVisibility(JavaVisibility.PUBLIC);

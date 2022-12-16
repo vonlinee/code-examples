@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.internal;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.sql.Connection;
@@ -70,11 +70,11 @@ public class JDBCConnectionFactory implements ConnectionFactory {
 
         Properties props = new Properties();
 
-        if (stringHasValue(userId)) {
+        if (hasLength(userId)) {
             props.setProperty("user", userId); //$NON-NLS-1$
         }
 
-        if (stringHasValue(password)) {
+        if (hasLength(password)) {
             props.setProperty("password", password); //$NON-NLS-1$
         }
 

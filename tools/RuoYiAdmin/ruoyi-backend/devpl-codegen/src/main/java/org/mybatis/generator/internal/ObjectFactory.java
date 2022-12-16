@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.internal;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.net.URL;
@@ -42,7 +42,7 @@ import org.mybatis.generator.config.ConnectionFactoryConfiguration;
 import org.mybatis.generator.config.Context;
 import org.mybatis.generator.config.JavaTypeResolverConfiguration;
 import org.mybatis.generator.config.PluginConfiguration;
-import org.mybatis.generator.config.PropertyRegistry;
+import org.mybatis.generator.config.ConfigKeyRegistry;
 import org.mybatis.generator.config.TableConfiguration;
 import org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl;
 import org.mybatis.generator.runtime.dynamic.sql.IntrospectedTableMyBatis3DynamicSqlImpl;
@@ -165,18 +165,20 @@ public class ObjectFactory {
         return url;
     }
 
+    /**
+     * 通过默认构造器创建对象实例
+     * @param type 全类名
+     * @return
+     */
     public static Object createInternalObject(String type) {
         Object answer;
-
         try {
             Class<?> clazz = internalClassForName(type);
-
             answer = clazz.getConstructor().newInstance();
         } catch (Exception e) {
             throw new RuntimeException(getString(
                     "RuntimeError.6", type), e); //$NON-NLS-1$
         }
-
         return answer;
     }
 
@@ -209,8 +211,7 @@ public class ObjectFactory {
 
     public static Plugin createPlugin(Context context,
                                       PluginConfiguration pluginConfiguration) {
-        Plugin plugin = (Plugin) createInternalObject(pluginConfiguration
-                .getConfigurationType());
+        Plugin plugin = (Plugin) createInternalObject(pluginConfiguration.getConfigurationType());
         plugin.setContext(context);
         plugin.setProperties(pluginConfiguration.getProperties());
         return plugin;
@@ -255,8 +256,8 @@ public class ObjectFactory {
     }
 
     public static JavaFormatter createJavaFormatter(Context context) {
-        String type = context.getProperty(PropertyRegistry.CONTEXT_JAVA_FORMATTER);
-        if (!stringHasValue(type)) {
+        String type = context.getProperty(ConfigKeyRegistry.CONTEXT_JAVA_FORMATTER);
+        if (!hasLength(type)) {
             type = DefaultJavaFormatter.class.getName();
         }
 
@@ -268,8 +269,8 @@ public class ObjectFactory {
     }
 
     public static KotlinFormatter createKotlinFormatter(Context context) {
-        String type = context.getProperty(PropertyRegistry.CONTEXT_KOTLIN_FORMATTER);
-        if (!stringHasValue(type)) {
+        String type = context.getProperty(ConfigKeyRegistry.CONTEXT_KOTLIN_FORMATTER);
+        if (!hasLength(type)) {
             type = DefaultKotlinFormatter.class.getName();
         }
 
@@ -281,8 +282,8 @@ public class ObjectFactory {
     }
 
     public static XmlFormatter createXmlFormatter(Context context) {
-        String type = context.getProperty(PropertyRegistry.CONTEXT_XML_FORMATTER);
-        if (!stringHasValue(type)) {
+        String type = context.getProperty(ConfigKeyRegistry.CONTEXT_XML_FORMATTER);
+        if (!hasLength(type)) {
             type = DefaultXmlFormatter.class.getName();
         }
 
@@ -311,7 +312,7 @@ public class ObjectFactory {
      */
     public static IntrospectedTable createIntrospectedTableForValidation(Context context) {
         String type = context.getTargetRuntime();
-        if (!stringHasValue(type)) {
+        if (!hasLength(type)) {
             type = IntrospectedTableMyBatis3DynamicSqlImpl.class.getName();
         } else if ("MyBatis3".equalsIgnoreCase(type)) { //$NON-NLS-1$
             type = IntrospectedTableMyBatis3Impl.class.getName();
@@ -331,7 +332,7 @@ public class ObjectFactory {
 
     public static IntrospectedColumn createIntrospectedColumn(Context context) {
         String type = context.getIntrospectedColumnImpl();
-        if (!stringHasValue(type)) {
+        if (!hasLength(type)) {
             type = IntrospectedColumn.class.getName();
         }
 

@@ -6,13 +6,13 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.config.GeneratedKey;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.internal.util.StringUtils;
 
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
 
 /**
  * 此插件使用数据库表中列的注释来生成Java Model中属性的注释
@@ -108,7 +108,7 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
     public void addFieldComment(Field field,
                                 IntrospectedTable introspectedTable,
                                 IntrospectedColumn introspectedColumn) {
-        if (StringUtility.stringHasValue(introspectedColumn.getRemarks())) {
+        if (StringUtils.hasLength(introspectedColumn.getRemarks())) {
             field.addJavaDocLine("/**");
             StringBuilder sb = new StringBuilder();
             sb.append(" * ");

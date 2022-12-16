@@ -1,8 +1,8 @@
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.composeFullyQualifiedTableName;
+import static org.mybatis.generator.internal.util.StringUtils.isTrue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -354,7 +354,7 @@ public class TableConfiguration extends PropertyHolder {
     }
 
     public void validate(List<String> errors, int listPosition) {
-        if (!stringHasValue(tableName)) {
+        if (!hasLength(tableName)) {
             errors.add(Messages.getString(
                     "ValidationError.6", Integer.toString(listPosition))); //$NON-NLS-1$
         }
@@ -368,11 +368,11 @@ public class TableConfiguration extends PropertyHolder {
 
         // when using column indexes, either both or neither query ids
         // should be set
-        if (isTrue(getProperty(PropertyRegistry.TABLE_USE_COLUMN_INDEXES))
+        if (isTrue(getProperty(ConfigKeyRegistry.TABLE_USE_COLUMN_INDEXES))
                 && selectByExampleStatementEnabled
                 && selectByPrimaryKeyStatementEnabled) {
-            boolean queryId1Set = stringHasValue(selectByExampleQueryId);
-            boolean queryId2Set = stringHasValue(selectByPrimaryKeyQueryId);
+            boolean queryId1Set = hasLength(selectByExampleQueryId);
+            boolean queryId2Set = hasLength(selectByPrimaryKeyQueryId);
 
             if (queryId1Set != queryId2Set) {
                 errors.add(Messages.getString("ValidationError.13", //$NON-NLS-1$
@@ -443,10 +443,10 @@ public class TableConfiguration extends PropertyHolder {
     }
 
     public String getDynamicSqlSupportClassName() {
-        return getProperty(PropertyRegistry.TABLE_DYNAMIC_SQL_SUPPORT_CLASS_NAME);
+        return getProperty(ConfigKeyRegistry.TABLE_DYNAMIC_SQL_SUPPORT_CLASS_NAME);
     }
 
     public String getDynamicSqlTableObjectName() {
-        return getProperty(PropertyRegistry.TABLE_DYNAMIC_SQL_TABLE_OBJECT_NAME);
+        return getProperty(ConfigKeyRegistry.TABLE_DYNAMIC_SQL_TABLE_OBJECT_NAME);
     }
 }

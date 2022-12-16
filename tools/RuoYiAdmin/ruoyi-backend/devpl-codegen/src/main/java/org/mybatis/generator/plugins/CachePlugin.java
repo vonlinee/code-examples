@@ -22,7 +22,7 @@ import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.Document;
 import org.mybatis.generator.api.dom.xml.XmlElement;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.internal.util.StringUtils;
 
 /**
  * This plugin adds a cache element to generated sqlMaps.  This plugin
@@ -102,7 +102,7 @@ public class CachePlugin extends PluginAdapter {
             property = properties.getProperty(cacheProperty.getPropertyName());
         }
 
-        if (StringUtility.stringHasValue(property)) {
+        if (StringUtils.hasLength(property)) {
             element.addAttribute(new Attribute(cacheProperty.getAttributeName(), property));
         }
     }

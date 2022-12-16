@@ -15,8 +15,8 @@
  */
 package org.mybatis.generator.codegen.mybatis3;
 
-import static org.mybatis.generator.internal.util.StringUtility.escapeStringForJava;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.escapeStringForJava;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 
@@ -38,7 +38,7 @@ public class MyBatis3FormattingUtilities {
         sb.append(",jdbcType="); //$NON-NLS-1$
         sb.append(introspectedColumn.getJdbcTypeName());
 
-        if (stringHasValue(introspectedColumn.getTypeHandler())) {
+        if (hasLength(introspectedColumn.getTypeHandler())) {
             sb.append(",typeHandler="); //$NON-NLS-1$
             sb.append(introspectedColumn.getTypeHandler());
         }
@@ -57,7 +57,7 @@ public class MyBatis3FormattingUtilities {
      * @return the proper phrase
      */
     public static String getSelectListPhrase(IntrospectedColumn introspectedColumn) {
-        if (stringHasValue(introspectedColumn.getTableAlias())) {
+        if (hasLength(introspectedColumn.getTableAlias())) {
             StringBuilder sb = new StringBuilder();
 
             sb.append(getAliasedEscapedColumnName(introspectedColumn));
@@ -90,7 +90,7 @@ public class MyBatis3FormattingUtilities {
     }
 
     public static String getAliasedEscapedColumnName(IntrospectedColumn introspectedColumn) {
-        if (stringHasValue(introspectedColumn.getTableAlias())) {
+        if (hasLength(introspectedColumn.getTableAlias())) {
             return introspectedColumn.getTableAlias() + '.' + getEscapedColumnName(introspectedColumn);
         } else {
             return getEscapedColumnName(introspectedColumn);
@@ -111,7 +111,7 @@ public class MyBatis3FormattingUtilities {
      */
     public static String getAliasedActualColumnName(IntrospectedColumn introspectedColumn) {
         StringBuilder sb = new StringBuilder();
-        if (stringHasValue(introspectedColumn.getTableAlias())) {
+        if (hasLength(introspectedColumn.getTableAlias())) {
             sb.append(introspectedColumn.getTableAlias());
             sb.append('.');
         }
@@ -138,7 +138,7 @@ public class MyBatis3FormattingUtilities {
      * @return the renamed column name
      */
     public static String getRenamedColumnNameForResultMap(IntrospectedColumn introspectedColumn) {
-        if (stringHasValue(introspectedColumn.getTableAlias())) {
+        if (hasLength(introspectedColumn.getTableAlias())) {
             return introspectedColumn.getTableAlias() + '_' + introspectedColumn.getActualColumnName();
         } else {
             return introspectedColumn.getActualColumnName();

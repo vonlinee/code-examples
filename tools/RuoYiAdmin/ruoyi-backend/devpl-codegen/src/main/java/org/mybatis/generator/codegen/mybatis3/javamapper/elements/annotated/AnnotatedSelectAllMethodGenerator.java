@@ -16,14 +16,14 @@
 package org.mybatis.generator.codegen.mybatis3.javamapper.elements.annotated;
 
 import static org.mybatis.generator.api.dom.OutputUtilities.javaIndent;
-import static org.mybatis.generator.internal.util.StringUtility.escapeStringForJava;
+import static org.mybatis.generator.internal.util.StringUtils.escapeStringForJava;
 
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.codegen.mybatis3.javamapper.elements.SelectAllMethodGenerator;
-import org.mybatis.generator.config.PropertyRegistry;
-import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.config.ConfigKeyRegistry;
+import org.mybatis.generator.internal.util.StringUtils;
 
 public class AnnotatedSelectAllMethodGenerator extends SelectAllMethodGenerator {
 
@@ -44,8 +44,8 @@ public class AnnotatedSelectAllMethodGenerator extends SelectAllMethodGenerator 
         sb.append('\"');
 
         String orderByClause = introspectedTable.getTableConfigurationProperty(
-                PropertyRegistry.TABLE_SELECT_ALL_ORDER_BY_CLAUSE);
-        boolean hasOrderBy = StringUtility.stringHasValue(orderByClause);
+                ConfigKeyRegistry.TABLE_SELECT_ALL_ORDER_BY_CLAUSE);
+        boolean hasOrderBy = StringUtils.hasLength(orderByClause);
         if (hasOrderBy) {
             sb.append(',');
         }

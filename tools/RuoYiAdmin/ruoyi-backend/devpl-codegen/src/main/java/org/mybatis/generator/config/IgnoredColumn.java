@@ -15,8 +15,8 @@
  */
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringContainsSpace;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.stringContainsSpace;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.List;
@@ -56,7 +56,7 @@ public class IgnoredColumn {
     }
 
     public void validate(List<String> errors, String tableName) {
-        if (!stringHasValue(columnName)) {
+        if (!hasLength(columnName)) {
             errors.add(getString("ValidationError.21", //$NON-NLS-1$
                     tableName));
         }

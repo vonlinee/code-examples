@@ -15,6 +15,8 @@
  */
 package org.mybatis.generator.config;
 
+import org.mybatis.generator.internal.util.StringUtils;
+
 import java.util.Properties;
 
 /**
@@ -38,5 +40,16 @@ public abstract class PropertyHolder {
 
     public Properties getProperties() {
         return properties;
+    }
+
+    public boolean getBoolean(String key) {
+        final String property = properties.getProperty(key);
+        if ("true".equals(property)) {
+            return true;
+        }
+        if ("false".equals(property)) {
+            return false;
+        }
+        throw new RuntimeException("key = " + key + ", value = " + property);
     }
 }

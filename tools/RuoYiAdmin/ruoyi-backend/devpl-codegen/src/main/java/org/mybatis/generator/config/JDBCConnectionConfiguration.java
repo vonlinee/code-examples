@@ -15,7 +15,7 @@
  */
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.StringUtils.hasLength;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.List;
@@ -67,11 +67,11 @@ public class JDBCConnectionConfiguration extends PropertyHolder {
     }
 
     public void validate(List<String> errors) {
-        if (!stringHasValue(driverClass)) {
+        if (!hasLength(driverClass)) {
             errors.add(getString("ValidationError.4")); //$NON-NLS-1$
         }
 
-        if (!stringHasValue(connectionURL)) {
+        if (!hasLength(connectionURL)) {
             errors.add(getString("ValidationError.5")); //$NON-NLS-1$
         }
     }

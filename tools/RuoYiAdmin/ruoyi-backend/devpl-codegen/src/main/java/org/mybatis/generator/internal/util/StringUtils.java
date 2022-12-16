@@ -17,16 +17,16 @@ package org.mybatis.generator.internal.util;
 
 import java.util.StringTokenizer;
 
-public class StringUtility {
+public class StringUtils {
 
     /**
      * Utility class. No instances allowed
      */
-    private StringUtility() {
+    private StringUtils() {
         super();
     }
 
-    public static boolean stringHasValue(String s) {
+    public static boolean hasLength(String s) {
         return s != null && s.length() > 0;
     }
 
@@ -34,12 +34,12 @@ public class StringUtility {
             String schema, String tableName, char separator) {
         StringBuilder sb = new StringBuilder();
 
-        if (stringHasValue(catalog)) {
+        if (hasLength(catalog)) {
             sb.append(catalog);
             sb.append(separator);
         }
 
-        if (stringHasValue(schema)) {
+        if (hasLength(schema)) {
             sb.append(schema);
             sb.append(separator);
         } else {
@@ -91,6 +91,14 @@ public class StringUtility {
 
     public static boolean isTrue(String s) {
         return "true".equalsIgnoreCase(s); //$NON-NLS-1$
+    }
+
+    public static boolean isFalse(String s) {
+        return "false".equalsIgnoreCase(s); //$NON-NLS-1$
+    }
+
+    public static boolean isBoolean(String s) {
+        return isTrue(s) || isFalse(s);
     }
 
     public static boolean stringContainsSQLWildcard(String s) {
