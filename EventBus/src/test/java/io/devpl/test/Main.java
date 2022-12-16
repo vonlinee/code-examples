@@ -2,12 +2,11 @@ package io.devpl.test;
 
 import io.devpl.eventbus.DefaultEventBus;
 import io.devpl.eventbus.Subscribe;
+import io.devpl.eventbus.ThreadMode;
 import javafx.event.Event;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 
 /**
  * @since created on 2022年10月16日
@@ -31,11 +30,9 @@ public class Main {
         Event event = new Event(main, Event.NULL_SOURCE_TARGET, Event.ANY);
         start = System.currentTimeMillis();
         bus.publish("subscriber1", event);
-
-
     }
 
-    @Subscribe(priority = 2, topic = "subscriber1")
+    @Subscribe(threadMode = ThreadMode.POSTING, priority = 2, topic = "subscriber1")
     public Map<String, Object> subscriber1(Event event) {
         System.out.println((System.currentTimeMillis() - start) + " ms");
         Map<String, Object> map = new HashMap<>();

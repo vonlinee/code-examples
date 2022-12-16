@@ -200,6 +200,7 @@ public final class FastAutoGenerator {
         generator.strategy(this.strategyConfigBuilder.build()); // 策略配置
         generator.injection(this.injectionConfigBuilder.build()); // 注入配置
         generator.template(this.templateConfigBuilder.build()); // 模板配置
-        generator.execute(this.templateEngine); // 执行
+        // 执行
+        generator.execute(this.templateEngine);
     }
 }

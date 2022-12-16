@@ -46,6 +46,8 @@ public class NettySample2 {
 						}
 					});
 			ChannelFuture future = serverBootstrap.bind().sync(); // sync()阻塞直到绑定完成
+
+
 			future.channel().closeFuture().sync(); // 获取Channel的CloseFuture，并且阻塞当前线程直到它完成
 		} catch (Exception e) {
 			e.printStackTrace();

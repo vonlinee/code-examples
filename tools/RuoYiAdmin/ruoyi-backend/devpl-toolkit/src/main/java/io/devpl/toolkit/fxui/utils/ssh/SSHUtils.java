@@ -13,9 +13,9 @@ import java.time.Duration;
 /**
  * 封装
  */
-public class SSHClient {
+public class SSHUtils {
 
-    private final Logger log = LoggerFactory.getLogger(SSHClient.class);
+    private final Logger log = LoggerFactory.getLogger(SSHUtils.class);
 
     private final SshClient sshClient = ClientBuilder.builder()
             .build(true);
@@ -52,7 +52,7 @@ public class SSHClient {
     }
 
     public static void main(String[] args) throws IOException {
-        final SSHClient client = new SSHClient();
+        final SSHUtils client = new SSHUtils();
         client.start();
         final ClientSession session = client.connect("localhost", 22, "root", "123456");
 

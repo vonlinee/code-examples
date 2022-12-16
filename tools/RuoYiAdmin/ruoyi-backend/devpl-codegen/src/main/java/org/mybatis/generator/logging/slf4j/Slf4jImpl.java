@@ -220,7 +220,7 @@ public class Slf4jImpl implements Log {
 
     @Override
     public void info(String msg) {
-
+        log.info(msg);
     }
 
     @Override

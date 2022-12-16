@@ -11,9 +11,10 @@ import io.devpl.log.slf4j.Slf4jLoggingLogFactory;
  */
 public class LogFactory {
     private static AbstractLogFactory theFactory;
-    public static final String MARKER = "MYBATIS-GENERATOR"; //$NON-NLS-1$
+    public static final String MARKER = "DEVPL"; //$NON-NLS-1$
 
     static {
+        // 优先实现Slf4j门面
         tryImplementation(new Slf4jLoggingLogFactory());
         tryImplementation(new JakartaCommonsLoggingLogFactory());
         tryImplementation(new Log4j2LoggingLogFactory());
@@ -68,14 +69,16 @@ public class LogFactory {
         if (theFactory == null) {
             try {
                 setImplementation(factory);
+                System.out.println("实现成功" + factory);
             } catch (LogException e) {
                 // ignore
+                System.out.println("实现失败" + factory);
             }
         }
     }
 
     /**
-     * @param factory 不同的日志实现类
+     * @param factory 不同的日志工厂实现类
      */
     private static void setImplementation(AbstractLogFactory factory) {
         try {

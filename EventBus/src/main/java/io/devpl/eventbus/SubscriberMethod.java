@@ -16,15 +16,12 @@ public class SubscriberMethod implements Invocation<Object, Object> {
     final Class<?> eventType;
     final int priority;
     final boolean sticky;   // 是否是粘性事件
-
     /**
      * Used for efficient comparison
      */
     String methodString;
     Object subscriber;
-
     String subscribedTopic;
-
     Class<?> resultType;  // 订阅者方法返回值类型
 
     public SubscriberMethod(Method method, Class<?> eventType, ThreadMode threadMode, int priority, boolean sticky) {

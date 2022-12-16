@@ -20,7 +20,6 @@ public class FXMLScanner {
     private static int i = 0;
 
     public static Map<String, String> scan() {
-        FilenameFilter filter = (dir, name) -> name != null && name.endsWith(".fxml");
         final URL classpathRoot = ResourceUtils.getClassLoader().getResource(parentPath);
         if (classpathRoot == null) {
             return Collections.emptyMap();
@@ -30,7 +29,7 @@ public class FXMLScanner {
             final String absoluteRootPath = rootDirectory.getAbsolutePath().replace("\\", "/");
             i = absoluteRootPath.indexOf(parentPath);
             Map<String, String> map = new LinkedHashMap<>();
-            doScan(rootDirectory.getAbsolutePath(), filter, map);
+            doScan(rootDirectory.getAbsolutePath(), map);
             return map;
         } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(e);
@@ -40,13 +39,14 @@ public class FXMLScanner {
     /**
      * TODO:递归扫描指定文件夹下面的指定文件
      */
-    private static void doScan(String folderPath, final FilenameFilter filter, final Map<String, String> result) throws FileNotFoundException {
+    private static void doScan(String folderPath, final Map<String, String> result) throws FileNotFoundException {
         File directory = new File(folderPath);
         if (!directory.isDirectory()) {
             return;
         }
         if (directory.isDirectory()) {
-            File[] files = directory.listFiles(filter);
+            // 不应该过滤
+            File[] files = directory.listFiles();
             if (files == null || files.length == 0) {
                 return;
             }
@@ -54,7 +54,7 @@ public class FXMLScanner {
                 // 如果当前是文件夹，进入递归扫描文件夹
                 if (file.isDirectory()) {
                     // 递归扫描下面的文件夹
-                    doScan(file.getAbsolutePath(), filter, result);
+                    doScan(file.getAbsolutePath(), result);
                 } else {  // 非文件夹
                     //
                     final String absolutePath = file.getAbsolutePath().intern();

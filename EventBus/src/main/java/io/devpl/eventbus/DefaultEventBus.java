@@ -556,12 +556,11 @@ public class DefaultEventBus implements EventBus {
         final List<Object> eventQueue = new ArrayList<>();
         EventMatcher subscriptionMatcher; // 用于匹配当前订阅是否符合发布事件的条件
         boolean isPosting;
-        boolean isMainThread;
-        Subscription subscription;
+        boolean isMainThread;       // 是否主线程
+        Subscription subscription;  // 当前的事件发布匹配的一个订阅
         Object event;
         boolean canceled;
-        // 当前的事件主题
-        String currentTopic;
+        String currentTopic; // 当前的事件主题
     }
 
     ExecutorService getExecutorService() {

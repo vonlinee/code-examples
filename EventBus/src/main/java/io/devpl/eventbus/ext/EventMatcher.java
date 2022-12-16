@@ -12,7 +12,7 @@ public interface EventMatcher {
      *
      * @param publication  事件发布信息
      * @param subscription 事件订阅信息
-     * @return
+     * @return 件发布和事件订阅是否匹配
      */
     boolean matches(Publication publication, Subscription subscription);
 }

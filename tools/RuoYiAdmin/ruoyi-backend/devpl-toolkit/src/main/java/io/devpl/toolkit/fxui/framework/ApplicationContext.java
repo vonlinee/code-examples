@@ -43,8 +43,6 @@ public final class ApplicationContext {
      * 缓存所有的FXML位置信息
      */
     private final Map<String, FXMLCache> fxmlCacheMap = new ConcurrentHashMap<>();
-    private final Map<Class<?>, Object> controllerCacheMap = new ConcurrentHashMap<>();
-    private final Map<Class<?>, FXMLCache> controllerFxmlRelationMap = new ConcurrentHashMap<>();
 
     public void addFxmlMappings(Map<String, String> fxmlMappings) {
         if (fxmlMappings == null || fxmlMappings.isEmpty()) {
@@ -61,41 +59,15 @@ public final class ApplicationContext {
         });
     }
 
-    private ControllerFactory controllerFactory;
-
-    /**
-     * Sets the controller factory used by this loader.
-     * @param controllerFactory the controller factory
-     * @since JavaFX 2.1
-     */
-    public void setControllerFactory(ControllerFactory controllerFactory) {
-        this.controllerFactory = controllerFactory;
-    }
-
     /**
      * 加载FXML，可能从缓存中加载
-     * @param fxmlKey
-     * @return
+     *
+     * @param fxmlKey FXML相对路径
+     * @return 缓存的FXMLLoader实例
      */
-    public FXMLLoader loadFXML(String fxmlKey) {
+    public FXMLLoader getFXMLLoader(String fxmlKey) {
         final FXMLCache fxmlCache = fxmlCacheMap.get(fxmlKey);
         return fxmlCache.getFXMLLoader();
-    }
-
-    /**
-     * 获取控制器
-     * @param controllerType
-     * @param <T>
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public <T> T getController(Class<T> controllerType) {
-        Object controller = controllerCacheMap.get(controllerType);
-        if (controller == null) {
-            final FXMLCache fxmlCache = controllerFxmlRelationMap.get(controllerType);
-            controller = fxmlCache.getFXMLLoader().getController();
-        }
-        return (T) controller;
     }
 
     private ClassLoader classLoader = null;
@@ -103,6 +75,7 @@ public final class ApplicationContext {
     /**
      * Sets the classloader used by this loader and clears any existing
      * imports.
+     *
      * @param classLoader the classloader
      * @since JavaFX 2.1
      */
@@ -115,6 +88,7 @@ public final class ApplicationContext {
 
     /**
      * Returns the classloader used by this loader.
+     *
      * @return the classloader
      * @since JavaFX 2.1
      */
@@ -144,6 +118,7 @@ public final class ApplicationContext {
 
     /**
      * 是否检查权限
+     *
      * @param caller 调用者所在类
      * @return 是否需要检查权限
      */

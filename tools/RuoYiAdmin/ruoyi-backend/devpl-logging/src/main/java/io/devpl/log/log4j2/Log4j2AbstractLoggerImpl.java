@@ -16,6 +16,7 @@ public class Log4j2AbstractLoggerImpl implements Log {
 
     private static final String FQCN = Log4j2Impl.class.getName();
 
+    // org.apache.logging.log4j.spi.ExtendedLoggerWrapper
     private final ExtendedLoggerWrapper log;
 
     public Log4j2AbstractLoggerImpl(AbstractLogger abstractLogger) {

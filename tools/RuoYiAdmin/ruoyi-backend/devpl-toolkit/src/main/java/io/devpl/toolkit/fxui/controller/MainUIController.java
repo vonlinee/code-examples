@@ -138,10 +138,8 @@ public class MainUIController extends FXControllerBase {
             DictConfigController controller = (DictConfigController) loadFXMLPage("字典管理", FXMLPage.DICT_CONFIG, false);
             controller.showDialogStage();
         });
-
         labTextHandle.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
         labBeanDefCreate.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
-
         // 生成配置管理
         configsLabel.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
         configsLabel.setOnMouseClicked(event -> {

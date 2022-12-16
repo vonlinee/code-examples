@@ -13,4 +13,5 @@ public class MyBatisPlusPlugin extends PluginAdapter {
     public boolean validate(List<String> warnings) {
         return true;
     }
+
 }

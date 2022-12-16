@@ -12,8 +12,9 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- * A MyBatis Generator plugin to use Lombok's annotations.
+ * A MyBatis Generator plugin to use annotations of Lombok.
  * For example, use @Data annotation instead of getter ands setter.
+ *
  * @author Paolo Predonzani (<a href="http://softwareloop.com/">...</a>)
  */
 public class LombokPlugin extends PluginAdapter {
@@ -24,7 +25,7 @@ public class LombokPlugin extends PluginAdapter {
      * LombokPlugin constructor
      */
     public LombokPlugin() {
-        annotations = new LinkedHashSet<LombokAnnotation>(LombokAnnotation.values().length);
+        annotations = new LinkedHashSet<>(LombokAnnotation.values().length);
     }
 
     /**
@@ -37,6 +38,7 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * Intercepts base record class generation
+     *
      * @param topLevelClass     the generated base record class
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database
@@ -50,6 +52,7 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * Intercepts primary key class generation
+     *
      * @param topLevelClass     the generated primary key class
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database
@@ -63,6 +66,7 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * Intercepts "record with blob" class generation
+     *
      * @param topLevelClass     the generated record with BLOBs class
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database
@@ -77,6 +81,7 @@ public class LombokPlugin extends PluginAdapter {
     /**
      * Prevents all getters from being generated.
      * See SimpleModelGenerator
+     *
      * @param method             the getter, or accessor, method generated for the specified
      *                           column
      * @param topLevelClass      the partially implemented model class
@@ -94,6 +99,7 @@ public class LombokPlugin extends PluginAdapter {
     /**
      * Prevents all setters from being generated
      * See SimpleModelGenerator
+     *
      * @param method             the setter, or mutator, method generated for the specified
      *                           column
      * @param topLevelClass      the partially implemented model class
@@ -111,6 +117,7 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * Adds the lombok annotations' imports and annotations to the class
+     *
      * @param topLevelClass the partially implemented model class
      */
     private void addDataAnnotation(TopLevelClass topLevelClass) {
@@ -143,24 +150,21 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * 添加@Mapper注解
-     * @param interfaze         the generated interface if any, may be null
+     *
+     * @param interfaceType     the generated interface if any, may be null
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database
      * @return
      */
     @Override
-    public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
-        interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Mapper"));
-        interfaze.addAnnotation("@Mapper");
+    public boolean clientGenerated(Interface interfaceType, IntrospectedTable introspectedTable) {
+        interfaceType.addImportedType(new FullyQualifiedJavaType(ClassName.MYBATIS_MAPPER));
+        interfaceType.addAnnotation("@Mapper");
         return true;
     }
 
     private enum LombokAnnotation {
-        DATA("data", "@Data", "lombok.Data"),
-        BUILDER("builder", "@Builder", "lombok.Builder"),
-        ALL_ARGS_CONSTRUCTOR("allArgsConstructor", "@AllArgsConstructor", "lombok.AllArgsConstructor"),
-        NO_ARGS_CONSTRUCTOR("noArgsConstructor", "@NoArgsConstructor", "lombok.NoArgsConstructor"),
-        TO_STRING("toString", "@ToString", "lombok.ToString");
+        DATA("data", "@Data", "lombok.Data"), BUILDER("builder", "@Builder", "lombok.Builder"), ALL_ARGS_CONSTRUCTOR("allArgsConstructor", "@AllArgsConstructor", "lombok.AllArgsConstructor"), NO_ARGS_CONSTRUCTOR("noArgsConstructor", "@NoArgsConstructor", "lombok.NoArgsConstructor"), TO_STRING("toString", "@ToString", "lombok.ToString");
 
         private final String paramName;
         private final String name;
@@ -174,14 +178,16 @@ public class LombokPlugin extends PluginAdapter {
 
         private static LombokAnnotation getValueOf(String paramName) {
             for (LombokAnnotation annotation : LombokAnnotation.values())
-                if (String.CASE_INSENSITIVE_ORDER.compare(paramName, annotation.paramName) == 0) return annotation;
-
+                if (String.CASE_INSENSITIVE_ORDER.compare(paramName, annotation.paramName) == 0) {
+                    return annotation;
+                }
             return null;
         }
 
         private static Collection<LombokAnnotation> getDependencies(LombokAnnotation annotation) {
-            if (annotation == ALL_ARGS_CONSTRUCTOR) return Collections.singleton(NO_ARGS_CONSTRUCTOR);
-            else return Collections.emptyList();
+            if (annotation == ALL_ARGS_CONSTRUCTOR) {
+                return Collections.singleton(NO_ARGS_CONSTRUCTOR);
+            } else return Collections.emptyList();
         }
     }
 }

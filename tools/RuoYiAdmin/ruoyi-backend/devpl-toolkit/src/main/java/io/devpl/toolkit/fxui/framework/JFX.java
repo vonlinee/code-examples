@@ -38,7 +38,7 @@ public final class JFX {
     }
 
     public static FXMLLoader getFXMLLoader(String fxmlKey) {
-        return context.loadFXML(fxmlKey);
+        return context.getFXMLLoader(fxmlKey);
     }
 
     public static Stage newStage(String title, Window owner, Modality modality, Scene scene) {

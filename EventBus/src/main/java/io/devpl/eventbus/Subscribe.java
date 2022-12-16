@@ -9,7 +9,7 @@ public @interface Subscribe {
 
     /**
      * ThreadMode
-     * @return
+     * @return ThreadMode
      */
     ThreadMode threadMode() default ThreadMode.POSTING;
 
@@ -29,8 +29,7 @@ public @interface Subscribe {
 
     /**
      * 订阅某个主题的事件
-     * TODO 支持根据事件名称过滤
-     * @return
+     * @return 事件主题
      */
     String topic() default "";
 }
