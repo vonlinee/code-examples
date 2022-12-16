@@ -55,7 +55,7 @@ public final class StringUtils {
      * @return
      */
     public static boolean hasLength(String str) {
-        return str == null || str.length() == 0;
+        return hasLength((CharSequence) str);
     }
 
     /**

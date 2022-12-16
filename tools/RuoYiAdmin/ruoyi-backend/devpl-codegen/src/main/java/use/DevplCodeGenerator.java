@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * 基于模板的代码生成
  * 整合mybatis generator和mybatis-plus generator
  * mybatis-plus generator 3.5.2版本
  * 官方文档：<a href="https://github.com/baomidou/generator">...</a>
@@ -48,7 +49,7 @@ public class DevplCodeGenerator {
                     builder.author(author) // 设置作者名 baomidou 默认值:作者
                             .fileOverride()
                             // .enableSwagger() // 开启 swagger 模式
-                            .enableSpringdoc()  // 开启 springdoc 模式
+                            // .enableSpringdoc()  // 开启 springdoc 模式  @Schema注解
                             .dateType(DateType.TIME_PACK)  // 时间策略
                             .commentDate("yyyy-MM-dd HH:mm:ss") // 注释日期 默认值: yyyy-MM-dd
                             .outputDir(outputDir); // 指定输出目录 /opt/baomidou/ 默认值: windows:D:// linux or mac : /tmp
