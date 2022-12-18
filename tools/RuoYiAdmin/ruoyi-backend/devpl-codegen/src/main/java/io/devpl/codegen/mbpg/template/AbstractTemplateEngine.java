@@ -250,7 +250,6 @@ public abstract class AbstractTemplateEngine {
             List<TableInfo> tableInfoList = config.getTableInfoList();
             for (TableInfo tableInfo : tableInfoList) {
                 Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
-
                 InjectionConfig injectionConfig = config.getInjectionConfig();
                 if (injectionConfig != null) {
                     // 添加自定义属性

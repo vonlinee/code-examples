@@ -54,10 +54,9 @@ public class MyBatisCodeGenerator {
         Configuration configuration = new Configuration();
         Context context = new Context(ModelType.CONDITIONAL);
         configuration.addContext(context);
-
         context.addProperty(StringKey.JAVA_FILE_ENCODING, StandardCharsets.UTF_8.name());
-
         String dbType = selectedDatabaseConfig.getDbType();
+        // 驱动文件
         String connectorLibPath = ConfigHelper.findConnectorLibPath(dbType);
         log.info("connectorLibPath: {}", connectorLibPath);
         configuration.addClasspathEntry(connectorLibPath);

@@ -1,5 +1,6 @@
 package io.devpl.toolkit.fxui.controller;
 
+import io.devpl.toolkit.fxui.event.UpdateCodeGenConfigEvent;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -29,13 +30,8 @@ public class GeneratorConfigController extends FXControllerBase {
     @FXML
     private TableColumn opsColumn;
 
-    private MainUIController mainUIController;
-
-    private GeneratorConfigController controller;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        controller = this;
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         // 自定义操作列
         opsColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -57,10 +53,10 @@ public class GeneratorConfigController extends FXControllerBase {
                         try {
                             // 应用配置
                             CodeGenConfiguration generatorConfig = ConfigHelper.loadGeneratorConfig(item.toString());
-                            mainUIController.setGeneratorConfigIntoUI(generatorConfig);
-                            controller.closeDialogStage();
+                            post(new UpdateCodeGenConfigEvent(generatorConfig));
+                            getStage(event).close();
                         } catch (Exception e) {
-                            Alerts.showErrorAlert(e.getMessage());
+                            Alerts.error(e.getMessage()).showAndWait();
                         }
                     });
                     btn2.setOnAction(event -> {
@@ -87,9 +83,5 @@ public class GeneratorConfigController extends FXControllerBase {
         } catch (Exception e) {
             Alerts.showErrorAlert(e.getMessage());
         }
-    }
-
-    void setMainUIController(MainUIController mainUIController) {
-        this.mainUIController = mainUIController;
     }
 }

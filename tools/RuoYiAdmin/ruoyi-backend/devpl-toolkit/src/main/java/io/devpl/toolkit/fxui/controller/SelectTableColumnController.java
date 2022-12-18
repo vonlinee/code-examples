@@ -3,7 +3,9 @@ package io.devpl.toolkit.fxui.controller;
 import io.devpl.toolkit.fxui.common.model.ColumnCustomConfiguration;
 import io.devpl.toolkit.fxui.utils.CollectionUtils;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -72,7 +74,7 @@ public class SelectTableColumnController extends FXControllerBase {
      * 应用配置项目
      */
     @FXML
-    public void applyConfig() {
+    public void applyConfig(ActionEvent event) {
         ObservableList<ColumnCustomConfiguration> items = columnListView.getItems();
         if (CollectionUtils.isNotEmpty(items)) {
             List<IgnoredColumn> ignoredColumns = new ArrayList<>();
@@ -95,20 +97,20 @@ public class SelectTableColumnController extends FXControllerBase {
             mainUIController.setIgnoredColumns(ignoredColumns);
             mainUIController.setColumnOverrides(columnOverrides);
         }
-        getDialogStage().close();
+        // 关闭窗口
     }
 
     @FXML
-    public void cancel() {
-        getDialogStage().close();
+    public void cancel(ActionEvent event) {
+        getStage(event).close();
     }
 
     @FXML
-    public void configAction() {
+    public void configAction(ActionEvent event) {
         TableColumnConfigsController controller = (TableColumnConfigsController) loadFXMLPage("定制列配置", FXMLPage.TABLE_COLUMN_CONFIG, true);
         controller.setColumnListView(this.columnListView);
         controller.setTableName(this.tableName);
-        controller.showDialogStage();
+        getStage(event).show();
     }
 
     public void setColumnList(ObservableList<ColumnCustomConfiguration> columns) {
@@ -126,6 +128,4 @@ public class SelectTableColumnController extends FXControllerBase {
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
-
-
 }

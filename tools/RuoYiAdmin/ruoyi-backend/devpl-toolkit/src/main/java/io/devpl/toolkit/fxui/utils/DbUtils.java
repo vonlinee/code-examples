@@ -11,6 +11,7 @@ import io.devpl.sdk.util.ResourceUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.File;
 import java.sql.*;
@@ -246,4 +247,5 @@ public class DbUtils {
             throw new RuntimeException("找不到" + dbType.getConnectorJarFile() + "驱动");
         }
     }
+
 }

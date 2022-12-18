@@ -1,36 +1,24 @@
 package io.devpl.toolkit.fxui.framework.mvc;
 
-import javafx.event.EventDispatchChain;
-import javafx.event.EventTarget;
+import javafx.event.Event;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.greenrobot.eventbus.EventBus;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * 所有控制器的基类，控制器是单例对象
  */
-public abstract class FXController implements EventTarget, Initializable {
+public abstract class FXController implements Initializable {
 
     protected final Log log = LogFactory.getLog(getClass());
 
     // Android的事件总线
     private static final EventBus bus = new EventBus();
-
-    /**
-     * 缓存单例控制器
-     * 并不是所有的都会在一开始初始化
-     */
-    private static final Map<Class<? extends FXController>, FXController> controllers = new ConcurrentHashMap<>();
-
-    public FXController() {
-        // This逃逸问题？
-        controllers.put(this.getClass(), this);
-    }
 
     /**
      * 将自身注册进事件总线
@@ -54,17 +42,38 @@ public abstract class FXController implements EventTarget, Initializable {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends FXController> T getController(Class<T> controllerType) {
-        return (T) controllers.get(controllerType);
-    }
-
-    @Override
-    public EventDispatchChain buildEventDispatchChain(EventDispatchChain tail) {
-        return tail;
-    }
-
-    @SuppressWarnings("unchecked")
     protected final <T> T getUserData(Node node) {
         return (T) node.getUserData();
+    }
+
+    /**
+     * 从事件获取当前事件源所在的舞台对象
+     * When accessing a Stage, timing is important, as the Stage is not created
+     * until the very end of a View-creation process.
+     * <a href="https://edencoding.com/stage-controller/">...</a>
+     * @param event JavaFX event
+     * @return 当前事件源所在的舞台对象
+     * @throws RuntimeException 如果事件源不是Node
+     */
+    protected Stage getStage(Event event) {
+        final Object source = event.getSource();
+        if (source instanceof Node) {
+            final Node node = (Node) source;
+            return getStage(node);
+        } else {
+            throw new RuntimeException("event source is not a node");
+        }
+    }
+
+    protected Stage getStage(Node node) {
+        final Scene scene = node.getScene();
+        if (scene == null) {
+            throw new RuntimeException("node [" + node + "] has not been bind to a scene!");
+        }
+        final Window window = scene.getWindow();
+        if (window instanceof Stage) {
+            return (Stage) window;
+        }
+        throw new RuntimeException("the window [" + window + "] is not a stage");
     }
 }

@@ -210,6 +210,11 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <!--JDBC工具类-->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jdbc</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
@@ -302,7 +307,12 @@
             <artifactId>jna</artifactId>
             <version>3.0.9</version>
         </dependency>
-
+        <!--Google Java代码格式化-->
+        <dependency>
+            <groupId>com.google.googlejavaformat</groupId>
+            <artifactId>google-java-format</artifactId>
+            <version>1.15.0</version>
+        </dependency>
     </dependencies>
     <build>
         <!--资源打包配置-->

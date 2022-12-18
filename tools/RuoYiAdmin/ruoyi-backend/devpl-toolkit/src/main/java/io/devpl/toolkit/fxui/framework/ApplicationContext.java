@@ -2,7 +2,8 @@ package io.devpl.toolkit.fxui.framework;
 
 import io.devpl.toolkit.fxui.framework.fxml.ControllerFactory;
 import io.devpl.toolkit.fxui.framework.fxml.FXMLCache;
-import io.devpl.toolkit.fxui.framework.fxml.FXMLLoader;
+import io.devpl.toolkit.fxui.utils.ClassUtils;
+import javafx.fxml.FXMLLoader;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
 
@@ -15,14 +16,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 应用上下文
- * <p>
- * <p>
  * Scene loads too slow
- * https://stackoverflow.com/questions/22328087/scene-loads-too-slow
+ * <a href="https://stackoverflow.com/questions/22328087/scene-loads-too-slow">...</a>
  * 提升性能
- * https://stackoverflow.com/questions/11734885/javafx2-very-poor-performance-when-adding-custom-made-fxmlpanels-to-gridpane
+ * <a href="https://stackoverflow.com/questions/11734885/javafx2-very-poor-performance-when-adding-custom-made-fxmlpanels-to-gridpane">...</a>
  */
-public final class ApplicationContext {
+public final class ApplicationContext implements ControllerFactory {
 
     private final Log log = LogFactory.getLog(ApplicationContext.class);
 
@@ -31,6 +30,24 @@ public final class ApplicationContext {
     // Indicates permission to get the ClassLoader
     private static final RuntimePermission GET_CLASSLOADER_PERMISSION = new RuntimePermission("getClassLoader");
 
+    private final Map<Class<?>, String> controllerFXMLMapping = new ConcurrentHashMap<>();
+
+    // TODO 待完善
+    @Override
+    public Object getController(Class<?> param) {
+        final String fxmlKey = controllerFXMLMapping.get(param);
+        if (fxmlKey == null) {
+            // 首次加载
+            return ClassUtils.instantiate(param);
+        }
+        final FXMLCache holder = fxmlCacheMap.get(fxmlKey);
+        final FXMLLoader loader = holder.getFXMLLoader();
+        return loader.getController();
+    }
+
+    /**
+     * 单例
+     */
     private static class Holder {
         static final ApplicationContext instance = new ApplicationContext();
     }
@@ -50,9 +67,7 @@ public final class ApplicationContext {
         }
         fxmlMappings.forEach((fxmlKey, fxmlUrl) -> {
             try {
-                final FXMLLoader loader = new FXMLLoader(new URL(fxmlUrl));
-                // loader.setControllerFactory(controllerFactory);
-                this.fxmlCacheMap.put(fxmlKey, new FXMLCache(loader));
+                this.fxmlCacheMap.put(fxmlKey, new FXMLCache(new URL(fxmlUrl)));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -61,7 +76,6 @@ public final class ApplicationContext {
 
     /**
      * 加载FXML，可能从缓存中加载
-     *
      * @param fxmlKey FXML相对路径
      * @return 缓存的FXMLLoader实例
      */
@@ -75,7 +89,6 @@ public final class ApplicationContext {
     /**
      * Sets the classloader used by this loader and clears any existing
      * imports.
-     *
      * @param classLoader the classloader
      * @since JavaFX 2.1
      */
@@ -88,7 +101,6 @@ public final class ApplicationContext {
 
     /**
      * Returns the classloader used by this loader.
-     *
      * @return the classloader
      * @since JavaFX 2.1
      */
@@ -118,7 +130,6 @@ public final class ApplicationContext {
 
     /**
      * 是否检查权限
-     *
      * @param caller 调用者所在类
      * @return 是否需要检查权限
      */

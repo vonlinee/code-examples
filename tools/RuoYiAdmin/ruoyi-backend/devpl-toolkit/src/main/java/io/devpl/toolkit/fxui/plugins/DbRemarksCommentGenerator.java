@@ -8,6 +8,8 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.config.GeneratedKey;
 import org.mybatis.generator.internal.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
@@ -28,7 +30,6 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
         super();
         properties = new Properties();
     }
-
 
     public void addJavaFileComment(CompilationUnit compilationUnit) {
         // add no file level comments by default
@@ -55,7 +56,6 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
 
     @Override
     public void addGeneralMethodAnnotation(Method method, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> set) {
-
 
     }
 
@@ -90,11 +90,18 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
                                 IntrospectedTable introspectedTable) {
     }
 
+    /**
+     * 增加实体类的类上的注释
+     * @param topLevelClass     the top level class
+     * @param introspectedTable the introspected table
+     */
     public void addModelClassComment(TopLevelClass topLevelClass,
                                      IntrospectedTable introspectedTable) {
         topLevelClass.addJavaDocLine("/**");
         topLevelClass.addJavaDocLine(" * @author ");
         topLevelClass.addJavaDocLine(" * " + introspectedTable.getRemarks());
+        final String nowTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
+        topLevelClass.addJavaDocLine(" * Created On " + nowTime);
         topLevelClass.addJavaDocLine(" */");
         if (isAnnotations) {
             topLevelClass.addAnnotation("@Table(name=\"" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + "\")");
@@ -105,17 +112,21 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
                                IntrospectedTable introspectedTable) {
     }
 
+    /**
+     * 添加实体类的字段注释
+     * @param field              the field
+     * @param introspectedTable  the introspected table
+     * @param introspectedColumn the introspected column
+     */
     public void addFieldComment(Field field,
                                 IntrospectedTable introspectedTable,
                                 IntrospectedColumn introspectedColumn) {
-        if (StringUtils.hasLength(introspectedColumn.getRemarks())) {
-            field.addJavaDocLine("/**");
-            StringBuilder sb = new StringBuilder();
-            sb.append(" * ");
-            sb.append(introspectedColumn.getRemarks());
-            field.addJavaDocLine(sb.toString());
-            field.addJavaDocLine(" */");
-        }
+        field.addJavaDocLine("/**");
+        StringBuilder sb = new StringBuilder();
+        sb.append(" * " + introspectedColumn.getRemarks());
+        sb.append(introspectedColumn.getRemarks());
+        field.addJavaDocLine(sb.toString());
+        field.addJavaDocLine(" */");
 
         if (isAnnotations) {
             boolean isId = false;
@@ -130,11 +141,8 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
             if (!introspectedColumn.isNullable() && !isId) {
                 field.addAnnotation("@NotEmpty");
             }
-
             Optional<GeneratedKey> generatedKey = introspectedTable.getTableConfiguration().getGeneratedKey();
-
             if (generatedKey.isPresent()) {
-
                 GeneratedKey key = generatedKey.get();
                 if (introspectedColumn.isIdentity()) {
                     if (key.getRuntimeSqlStatement().equals("JDBC")) {

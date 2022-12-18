@@ -2,6 +2,9 @@ package io.devpl.toolkit.fxui.framework.fxml;
 
 import javafx.util.Callback;
 
+/**
+ * 控制器工厂类
+ */
 public interface ControllerFactory extends Callback<Class<?>, Object> {
 
     @Override
@@ -10,6 +13,4 @@ public interface ControllerFactory extends Callback<Class<?>, Object> {
     }
 
     Object getController(Class<?> param);
-
-    boolean contains(Class<?> controllerClass);
 }

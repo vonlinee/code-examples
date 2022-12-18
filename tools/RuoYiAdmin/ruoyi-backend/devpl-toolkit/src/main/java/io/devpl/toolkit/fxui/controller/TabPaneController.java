@@ -3,12 +3,20 @@ package io.devpl.toolkit.fxui.controller;
 import com.jcraft.jsch.Session;
 
 import io.devpl.toolkit.fxui.config.DatabaseConfig;
+import io.devpl.toolkit.fxui.framework.JFX;
 import io.devpl.toolkit.fxui.utils.DbUtils;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.EOFException;
@@ -27,27 +35,20 @@ public class TabPaneController extends FXControllerBase {
     private OverSshController tabControlBController;
     private boolean isOverssh;
 
-    private MainUIController mainUIController;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tabPane.setPrefHeight(((AnchorPane) tabPane.getSelectionModel().getSelectedItem()
-                                                   .getContent()).getPrefHeight());
+        tabPane.setPrefHeight(((AnchorPane) tabPane
+                .getSelectionModel()
+                .getSelectedItem()
+                .getContent()).getPrefHeight());
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             isOverssh = observable.getValue().getText().equals("SSH");
-            tabPane.prefHeightProperty().bind(((AnchorPane) tabPane.getSelectionModel().getSelectedItem()
-                                                                   .getContent()).prefHeightProperty());
-            getDialogStage().close();
-            getDialogStage().show();
+            final Pane content = (Pane) tabPane.getSelectionModel().getSelectedItem().getContent();
+            tabPane.prefHeightProperty().bind(content.prefHeightProperty());
+            final Stage stage = getStage(tabPane);
+            stage.close();
+            stage.show();
         });
-    }
-
-    public void setMainUIController(MainUIController mainUIController) {
-        this.mainUIController = mainUIController;
-        this.tabControlAController.setMainUIController(mainUIController);
-        this.tabControlAController.setTabPaneController(this);
-        this.tabControlBController.setMainUIController(mainUIController);
-        this.tabControlBController.setTabPaneController(this);
     }
 
     public void setConfig(DatabaseConfig selectedConfig) {
@@ -68,16 +69,16 @@ public class TabPaneController extends FXControllerBase {
     }
 
     @FXML
-    private void saveConnection() {
+    private void saveConnection(ActionEvent event) {
         if (isOverssh) {
-            tabControlBController.saveConfig();
+            tabControlBController.saveConfig(event);
         } else {
-            tabControlAController.saveConnection();
+            tabControlAController.saveConnection(event);
         }
     }
 
     @FXML
-    void testConnection() {
+    public void testConnection(ActionEvent actionEvent) {
         DatabaseConfig config = extractConfigForUI();
         if (config == null) {
             return;
@@ -89,10 +90,9 @@ public class TabPaneController extends FXControllerBase {
         Session sshSession = DbUtils.getSSHSession(config);
         if (isOverssh && sshSession != null) {
             PictureProcessStateController pictureProcessState = new PictureProcessStateController();
-            pictureProcessState.setDialogStage(getDialogStage());
             pictureProcessState.startPlay();
             // 如果不用异步，则视图会等方法返回才会显示
-            Task task = new Task<Void>() {
+            Task<Void> task = new Task<>() {
                 @Override
                 protected Void call() throws Exception {
                     DbUtils.engagePortForwarding(sshSession, config);
@@ -111,7 +111,6 @@ public class TabPaneController extends FXControllerBase {
                     pictureProcessState.playFailState("连接失败:" + e.getMessage(), true);
                     return;
                 }
-
                 if (e.getCause() instanceof EOFException) {
                     pictureProcessState.playFailState("连接失败, 请检查数据库的主机名，并且检查端口和目标端口是否一致", true);
                     // 端口转发已经成功，但是数据库连接不上，故需要释放连接
@@ -136,18 +135,15 @@ public class TabPaneController extends FXControllerBase {
             try {
                 DbUtils.getConnection(config);
                 Alerts.showInfoAlert("连接成功");
-            } catch (RuntimeException e) {
-                log.error("", e);
-                Alerts.showWarnAlert("连接失败, " + e.getMessage());
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                Alerts.showWarnAlert("连接失败");
+                Alerts.showWarnAlert("连接失败: " + e.getMessage());
             }
         }
     }
 
     @FXML
-    void cancel() {
-        getDialogStage().close();
+    public void cancel(ActionEvent event) {
+        getStage(event).close();
     }
 }

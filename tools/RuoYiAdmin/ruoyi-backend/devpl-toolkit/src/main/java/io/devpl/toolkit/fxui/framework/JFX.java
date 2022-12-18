@@ -1,16 +1,18 @@
 package io.devpl.toolkit.fxui.framework;
 
-import io.devpl.toolkit.fxui.framework.fxml.FXMLLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -22,6 +24,7 @@ import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -34,6 +37,13 @@ public final class JFX {
 
     public static Scene createScene(String fxmlKey) {
         FXMLLoader loader = getFXMLLoader(fxmlKey);
+        if (loader.getRoot() == null) {
+            try {
+                loader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return new Scene(loader.getRoot());
     }
 
@@ -53,6 +63,22 @@ public final class JFX {
         if (scene != null) stage.setScene(scene);
         stage.setMaximized(false);
         stage.setResizable(resiable);
+        return stage;
+    }
+
+    public static MenuItem newMenuItem(String text, EventHandler<ActionEvent> actionEventHandler) {
+        final MenuItem menuItem = new MenuItem(text);
+        menuItem.setOnAction(actionEventHandler);
+        return menuItem;
+    }
+
+    public static Stage newDialogStage(String title, Window owner, Scene scene) {
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.initOwner(owner);
+        stage.setScene(scene);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setResizable(true);
         return stage;
     }
 
@@ -190,7 +216,7 @@ public final class JFX {
      * Observable集合实质上也是对普通集合的包装
      * @param elements 元素
      * @param <E>      元素类型
-     * @return
+     * @return FXCollections.observableArrayList
      */
     public static <E> ObservableList<E> arrayOf(E[] elements) {
         return FXCollections.observableArrayList(elements);
@@ -203,21 +229,6 @@ public final class JFX {
     // ================================ 集合封装 ===========================
 
     /**
-     * When accessing a Stage, timing is important, as the Stage is not created
-     * until the very end of a View-creation process.
-     * https://edencoding.com/stage-controller/
-     * @param event JavaFX event
-     * @return
-     */
-    public static <W extends Window> W getStage(@NotNull Event event) {
-        final Object nodeSource = event.getSource();
-        if (nodeSource instanceof Node) {
-            return getStage((Node) nodeSource);
-        }
-        return null;
-    }
-
-    /**
      * 不要在Controller的构造，initialize方法里调用
      * @param node 节点
      * @param <W>
@@ -226,5 +237,32 @@ public final class JFX {
     public static <W extends Window> W getStage(@NotNull Node node) {
         @SuppressWarnings("unchecked") final W window = (W) node.getScene().getWindow();
         return window;
+    }
+
+    /**
+     * 从事件获取当前事件源所在的舞台对象
+     * When accessing a Stage, timing is important, as the Stage is not created
+     * until the very end of a View-creation process.
+     * <a href="https://edencoding.com/stage-controller/">...</a>
+     * @param event JavaFX event
+     * @return 当前事件源所在的舞台对象
+     * @throws RuntimeException 如果事件源不是Node
+     */
+    public static Stage getStage(Event event) {
+        final Object source = event.getSource();
+        if (source instanceof Node) {
+            final Node node = (Node) source;
+            final Scene scene = node.getScene();
+            if (scene == null) {
+                throw new RuntimeException("node [" + node + "] has not been bind to a scene!");
+            }
+            final Window window = scene.getWindow();
+            if (window instanceof Stage) {
+                return (Stage) window;
+            }
+            throw new RuntimeException("the window [" + window + "] is not a stage");
+        } else {
+            throw new RuntimeException("event source is not a node");
+        }
     }
 }

@@ -3,13 +3,15 @@ package io.devpl.toolkit.fxui.controller;
 import io.devpl.toolkit.fxui.config.Constants;
 import io.devpl.toolkit.fxui.config.DBDriver;
 import io.devpl.toolkit.fxui.config.DatabaseConfig;
+import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.framework.JFX;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
+import io.devpl.toolkit.fxui.utils.StringUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import org.apache.commons.lang3.StringUtils;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -37,8 +39,6 @@ public class DbConnectionController extends FXControllerBase {
     @FXML
     protected ChoiceBox<String> dbTypeChoice;  // 数据库类型选择
 
-    protected MainUIController mainUIController;
-    protected TabPaneController tabPaneController;
     protected boolean isUpdate = false;
     protected Integer primayKey;
 
@@ -53,28 +53,19 @@ public class DbConnectionController extends FXControllerBase {
         portField.setText(String.valueOf(Constants.DEFAULT_MYSQL_SERVER_PORT));
     }
 
-    final void saveConnection() {
+    final void saveConnection(ActionEvent event) {
         DatabaseConfig config = extractConfigForUI();
         if (config == null) {
             return;
         }
         try {
             ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, config);
-            this.tabPaneController.getDialogStage().close();
-            mainUIController.loadLeftDBTree();
+            JFX.getStage(event).close();
+            this.post(new LoadDbTreeEvent());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             Alerts.error(e.getMessage()).show();
         }
-    }
-
-    void setMainUIController(MainUIController controller) {
-        this.mainUIController = controller;
-        super.setDialogStage(mainUIController.getDialogStage());
-    }
-
-    public void setTabPaneController(TabPaneController tabPaneController) {
-        this.tabPaneController = tabPaneController;
     }
 
     public DatabaseConfig extractConfigForUI() {
@@ -96,7 +87,7 @@ public class DbConnectionController extends FXControllerBase {
         config.setSchema(schema);
         config.setEncoding(encoding);
         if (StringUtils.isAnyEmpty(name, host, port, userName, encoding, dbType, schema)) {
-            Alerts.showWarnAlert("密码以外其他字段必填");
+            Alerts.warn("密码以外其他字段必填").showAndWait();
             return null;
         }
         return config;
@@ -114,5 +105,4 @@ public class DbConnectionController extends FXControllerBase {
         dbTypeChoice.setValue(config.getDbType());
         schemaField.setText(config.getSchema());
     }
-
 }

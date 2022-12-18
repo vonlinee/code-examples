@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.common.view;
 
-import io.devpl.toolkit.fxui.common.utils.DataObject;
+import io.devpl.toolkit.fxui.common.DataObject;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TableView;

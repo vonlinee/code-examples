@@ -1,5 +1,7 @@
 package io.devpl.toolkit.fxui.utils;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 /**
  * 统一工具类
  */
@@ -68,5 +70,37 @@ public final class StringUtils {
 
     public static boolean containsAny(final CharSequence cs, final CharSequence... searchCharSequences) {
         return org.apache.commons.lang3.StringUtils.containsAny(cs, searchCharSequences);
+    }
+
+    /**
+     * <p>Checks if any of the CharSequences are empty ("") or null.</p>
+     *
+     * <pre>
+     * StringUtils.isAnyEmpty((String) null)    = true
+     * StringUtils.isAnyEmpty((String[]) null)  = false
+     * StringUtils.isAnyEmpty(null, "foo")      = true
+     * StringUtils.isAnyEmpty("", "bar")        = true
+     * StringUtils.isAnyEmpty("bob", "")        = true
+     * StringUtils.isAnyEmpty("  bob  ", null)  = true
+     * StringUtils.isAnyEmpty(" ", "bar")       = false
+     * StringUtils.isAnyEmpty("foo", "bar")     = false
+     * StringUtils.isAnyEmpty(new String[]{})   = false
+     * StringUtils.isAnyEmpty(new String[]{""}) = true
+     * </pre>
+     *
+     * @param css  the CharSequences to check, may be null or empty
+     * @return {@code true} if any of the CharSequences are empty or null
+     * @since 3.2
+     */
+    public static boolean isAnyEmpty(final CharSequence... css) {
+        if (ArrayUtils.isEmpty(css)) {
+            return false;
+        }
+        for (final CharSequence cs : css) {
+            if (isEmpty(cs)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

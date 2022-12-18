@@ -22,8 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class FullyQualifiedJavaType implements
-        Comparable<FullyQualifiedJavaType> {
+/**
+ * Java类的类型：类，接口，注解，枚举等等
+ */
+public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType> {
 
     private static final String JAVA_LANG = "java.lang"; //$NON-NLS-1$
 
@@ -41,10 +43,14 @@ public class FullyQualifiedJavaType implements
 
     private static FullyQualifiedJavaType generatedCriteriaInstance = null;
 
-    /** The short name without any generic arguments. */
+    /**
+     * The short name without any generic arguments.
+     */
     private String baseShortName;
 
-    /** The fully qualified name without any generic arguments. */
+    /**
+     * The fully qualified name without any generic arguments.
+     */
     private String baseQualifiedName;
 
     private boolean explicitlyImported;
@@ -68,9 +74,7 @@ public class FullyQualifiedJavaType implements
 
     /**
      * Use this constructor to construct a generic type with the specified type parameters.
-     *
-     * @param fullTypeSpecification
-     *            the full type specification
+     * @param fullTypeSpecification the full type specification
      */
     public FullyQualifiedJavaType(String fullTypeSpecification) {
         super();
@@ -84,7 +88,6 @@ public class FullyQualifiedJavaType implements
 
     /**
      * Returns the fully qualified name - including any generic type parameters.
-     *
      * @return Returns the fullyQualifiedName.
      */
     public String getFullyQualifiedName() {
@@ -114,7 +117,6 @@ public class FullyQualifiedJavaType implements
                     sb.append(", "); //$NON-NLS-1$
                 }
                 sb.append(fqjt.getFullyQualifiedName());
-
             }
             sb.append('>');
         }
@@ -129,7 +131,6 @@ public class FullyQualifiedJavaType implements
     /**
      * Returns a list of Strings that are the fully qualified names of this type, and any generic type argument
      * associated with this type.
-     *
      * @return the import list
      */
     public List<String> getImportList() {
@@ -195,7 +196,6 @@ public class FullyQualifiedJavaType implements
                     sb.append(", "); //$NON-NLS-1$
                 }
                 sb.append(fqjt.getShortName());
-
             }
             sb.append('>');
         }
@@ -310,8 +310,7 @@ public class FullyQualifiedJavaType implements
 
     public static FullyQualifiedJavaType getGeneratedCriteriaInstance() {
         if (generatedCriteriaInstance == null) {
-            generatedCriteriaInstance = new FullyQualifiedJavaType(
-                    "GeneratedCriteria"); //$NON-NLS-1$
+            generatedCriteriaInstance = new FullyQualifiedJavaType("GeneratedCriteria"); //$NON-NLS-1$
         }
 
         return generatedCriteriaInstance;
@@ -352,8 +351,7 @@ public class FullyQualifiedJavaType implements
                 simpleParse(fullTypeSpecification.substring(0, index));
                 int endIndex = fullTypeSpecification.lastIndexOf('>');
                 if (endIndex == -1) {
-                    throw new RuntimeException(getString(
-                            "RuntimeError.22", fullTypeSpecification)); //$NON-NLS-1$
+                    throw new RuntimeException(getString("RuntimeError.22", fullTypeSpecification)); //$NON-NLS-1$
                 }
                 genericParse(fullTypeSpecification.substring(index, endIndex + 1));
             }
@@ -370,8 +368,7 @@ public class FullyQualifiedJavaType implements
         baseQualifiedName = typeSpecification.trim();
         if (baseQualifiedName.contains(".")) { //$NON-NLS-1$
             packageName = getPackage(baseQualifiedName);
-            baseShortName = baseQualifiedName
-                    .substring(packageName.length() + 1);
+            baseShortName = baseQualifiedName.substring(packageName.length() + 1);
             int index = baseShortName.lastIndexOf('.');
             if (index != -1) {
                 baseShortName = baseShortName.substring(index + 1);
@@ -385,42 +382,42 @@ public class FullyQualifiedJavaType implements
             packageName = ""; //$NON-NLS-1$
 
             switch (baseQualifiedName) {
-            case "byte":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getByteInstance();
-                break;
-            case "short":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getShortInstance();
-                break;
-            case "int":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getIntegerInstance();
-                break;
-            case "long":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getLongInstance();
-                break;
-            case "char":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getCharacterInstance();
-                break;
-            case "float":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getFloatInstance();
-                break;
-            case "double":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getDoubleInstance();
-                break;
-            case "boolean":  //$NON-NLS-1$
-                primitive = true;
-                primitiveTypeWrapper = PrimitiveTypeWrapper.getBooleanInstance();
-                break;
-            default:
-                primitive = false;
-                primitiveTypeWrapper = null;
-                break;
+                case "byte":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getByteInstance();
+                    break;
+                case "short":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getShortInstance();
+                    break;
+                case "int":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getIntegerInstance();
+                    break;
+                case "long":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getLongInstance();
+                    break;
+                case "char":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getCharacterInstance();
+                    break;
+                case "float":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getFloatInstance();
+                    break;
+                case "double":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getDoubleInstance();
+                    break;
+                case "boolean":  //$NON-NLS-1$
+                    primitive = true;
+                    primitiveTypeWrapper = PrimitiveTypeWrapper.getBooleanInstance();
+                    break;
+                default:
+                    primitive = false;
+                    primitiveTypeWrapper = null;
+                    break;
             }
         }
     }
@@ -429,8 +426,7 @@ public class FullyQualifiedJavaType implements
         int lastIndex = genericSpecification.lastIndexOf('>');
         if (lastIndex == -1) {
             // shouldn't happen - should be caught already, but just in case...
-            throw new RuntimeException(getString(
-                    "RuntimeError.22", genericSpecification)); //$NON-NLS-1$
+            throw new RuntimeException(getString("RuntimeError.22", genericSpecification)); //$NON-NLS-1$
         }
         String argumentString = genericSpecification.substring(1, lastIndex);
         // need to find "," outside of a <> bounds
@@ -447,8 +443,7 @@ public class FullyQualifiedJavaType implements
                 openCount--;
             } else if (",".equals(token)) { //$NON-NLS-1$
                 if (openCount == 0) {
-                    typeArguments
-                            .add(new FullyQualifiedJavaType(sb.toString()));
+                    typeArguments.add(new FullyQualifiedJavaType(sb.toString()));
                     sb.setLength(0);
                 } else {
                     sb.append(token);
@@ -459,8 +454,7 @@ public class FullyQualifiedJavaType implements
         }
 
         if (openCount != 0) {
-            throw new RuntimeException(getString(
-                    "RuntimeError.22", genericSpecification)); //$NON-NLS-1$
+            throw new RuntimeException(getString("RuntimeError.22", genericSpecification)); //$NON-NLS-1$
         }
 
         String finalType = sb.toString();
@@ -475,9 +469,7 @@ public class FullyQualifiedJavaType implements
      * <p>This method calculates the package as the part of the fully qualified name up to, but not including, the last
      * element. Therefore, it does not support fully qualified inner classes. Not totally fool proof, but correct in
      * most instances.
-     *
-     * @param baseQualifiedName
-     *            the base qualified name
+     * @param baseQualifiedName the base qualified name
      * @return the package
      */
     private static String getPackage(String baseQualifiedName) {

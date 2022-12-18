@@ -9,7 +9,6 @@ public abstract class JavaFXApplication extends Application {
     @Override
     public final void init() throws Exception {
         super.init();
-        Messages.init();
         final ApplicationContext applicationContext = createApplicationContext();
         prepareApplicationContext(applicationContext);
         this.onInit();
@@ -20,6 +19,7 @@ public abstract class JavaFXApplication extends Application {
     }
 
     private void prepareApplicationContext(ApplicationContext context) {
+        // 扫描所有的FXML文件
         context.addFxmlMappings(FXMLScanner.scan());
     }
 

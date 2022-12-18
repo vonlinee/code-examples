@@ -33,7 +33,7 @@ public class LeftDbTreeCell extends TreeCell<DatabaseConfig> {
             TreeItem<DatabaseConfig> newTreeItem = getTreeItem();
             if (newTreeItem != null) {
                 newTreeItem.graphicProperty().addListener(weakTreeItemGraphicListener);
-                treeItemRef = new WeakReference<TreeItem<DatabaseConfig>>(newTreeItem);
+                treeItemRef = new WeakReference<>(newTreeItem);
             }
         }
     };

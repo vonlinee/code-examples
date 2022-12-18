@@ -24,7 +24,6 @@ import org.mybatis.generator.internal.util.StringUtils;
 
 /**
  * This class holds information about an introspected column.
- *
  * @author Jeff Butler
  */
 public class IntrospectedColumn {
@@ -66,6 +65,7 @@ public class IntrospectedColumn {
     protected final Properties properties;
 
     // any database comment associated with this column. May be null
+    // 列关联的注释信息
     protected String remarks;
 
     protected String defaultValue;
@@ -334,7 +334,6 @@ public class IntrospectedColumn {
      * The platform specific type name as reported by the JDBC driver. This value is determined
      * from the DatabaseMetadata.getColumns() call - specifically ResultSet.getString("TYPE_NAME").
      * This value is platform dependent.
-     *
      * @return the platform specific type name as reported by the JDBC driver
      */
     public String getActualTypeName() {

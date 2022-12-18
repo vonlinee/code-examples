@@ -4,6 +4,7 @@ import io.devpl.toolkit.fxui.config.Constants;
 import io.devpl.toolkit.fxui.common.model.ColumnCustomConfiguration;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
@@ -36,17 +37,16 @@ public class TableColumnConfigsController extends FXControllerBase {
     }
 
     @FXML
-    public void cancel() {
-        this.closeDialogStage();
+    public void cancel(ActionEvent event) {
+        getStage(event).close();
     }
 
     @FXML
-    public void confirm() {
+    public void confirm(ActionEvent event) {
         try {
             // 1. generator bean property name
             genPropertyNameByColumnNamePrefix();
-            // close window
-            closeDialogStage();
+            getStage(event).close(); // close window
         } catch (Exception e) {
             log.error("confirm throw exception.", e);
             Alerts.showErrorAlert(e.getMessage());
@@ -97,5 +97,4 @@ public class TableColumnConfigsController extends FXControllerBase {
             });
         }
     }
-
 }

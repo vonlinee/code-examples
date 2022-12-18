@@ -22,18 +22,8 @@ public final class Messages {
 
     private static final Log log = LogFactory.getLog(Messages.class);
 
-    public static void init() {
-        try {
-            final File file = ResourceUtils.getResourcesAsFile("message.properties", true);
-            init(file);
-        } catch (FileNotFoundException e) {
-            log.error("messages init failed", e);
-            System.exit(0);
-        }
-    }
-
-    public static void init(File file) {
-        try (FileInputStream inputStream = new FileInputStream(file);) {
+    static {
+        try (FileInputStream inputStream = new FileInputStream(ResourceUtils.getResourcesAsFile("message.properties", true));) {
             messages.load(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);

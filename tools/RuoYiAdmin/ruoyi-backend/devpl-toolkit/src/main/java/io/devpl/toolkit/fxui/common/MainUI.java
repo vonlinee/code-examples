@@ -3,13 +3,10 @@ package io.devpl.toolkit.fxui.common;
 import io.devpl.toolkit.fxui.controller.MainUIController;
 import io.devpl.toolkit.fxui.framework.JFX;
 import io.devpl.toolkit.fxui.framework.JavaFXApplication;
-import io.devpl.toolkit.fxui.framework.fxml.FXMLLoader;
-import io.devpl.toolkit.fxui.utils.ConfigHelper;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import javax.xml.stream.XMLInputFactory;
 
 /**
  * 这是本软件的主入口,要运行本软件请直接运行本类就可以了,不用传入任何参数
@@ -23,7 +20,7 @@ public class MainUI extends JavaFXApplication {
     public void start(Stage primaryStage) throws Exception {
         final FXMLLoader loader = JFX.getFXMLLoader("static/fxml/MainUI.fxml");
         primaryStage.setResizable(true);
-        primaryStage.setScene(new Scene(loader.getRoot()));
+        primaryStage.setScene(new Scene(loader.load()));
         primaryStage.setTitle(MAIN_WINDOW_TITLE);
         primaryStage.getIcons().add(new Image("static/icons/mybatis-logo.png"));
         primaryStage.show();
@@ -32,7 +29,7 @@ public class MainUI extends JavaFXApplication {
     }
 
     // JFX 11 运行此类不行，会提示缺少JavaFX运行时组件
-    // public static void main(String[] args) {
-    //     launch(args);
-    // }
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

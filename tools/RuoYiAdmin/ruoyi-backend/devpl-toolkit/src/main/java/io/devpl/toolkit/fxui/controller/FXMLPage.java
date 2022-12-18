@@ -1,5 +1,7 @@
 package io.devpl.toolkit.fxui.controller;
 
+import java.net.URL;
+
 public enum FXMLPage {
 
     NEW_CONNECTION("static/fxml/newConnection.fxml"),
@@ -16,5 +18,9 @@ public enum FXMLPage {
 
     public String getFxml() {
         return this.fxml;
+    }
+
+    public URL getLocation() {
+        return Thread.currentThread().getContextClassLoader().getResource(fxml);
     }
 }

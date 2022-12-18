@@ -1,8 +1,8 @@
 package io.devpl.toolkit.fxui.test;
 
 import io.devpl.toolkit.fxui.framework.JavaFXApplication;
-import io.devpl.toolkit.fxui.framework.fxml.FXMLLoader;
 import io.devpl.sdk.util.ResourceUtils;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;

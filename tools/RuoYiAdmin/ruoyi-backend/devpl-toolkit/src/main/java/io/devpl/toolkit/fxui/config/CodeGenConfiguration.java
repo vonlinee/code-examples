@@ -1,6 +1,5 @@
 package io.devpl.toolkit.fxui.config;
 
-import io.devpl.toolkit.fxui.common.ConfigMap;
 import lombok.Data;
 
 /**
@@ -8,11 +7,6 @@ import lombok.Data;
  */
 @Data
 public class CodeGenConfiguration {
-
-    /**
-     * 所有的配置项
-     */
-    private final ConfigMap configMap = new ConfigMap();
 
     /**
      * 本配置的名称

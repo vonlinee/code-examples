@@ -94,10 +94,9 @@ public class ConfigHelper {
     }
 
     public static void saveGeneratorConfig(CodeGenConfiguration generatorConfig) throws Exception {
-        ResultSet rs = null;
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             String jsonStr = JSONUtils.toString(generatorConfig);
-            String sql = String.format("INSERT INTO generator_config values('%s', '%s')", generatorConfig.getName(), jsonStr);
+            String sql = String.format("INSERT INTO generator_config (name, value) values('%s', '%s')", generatorConfig.getName(), jsonStr);
             stat.executeUpdate(sql);
         }
     }

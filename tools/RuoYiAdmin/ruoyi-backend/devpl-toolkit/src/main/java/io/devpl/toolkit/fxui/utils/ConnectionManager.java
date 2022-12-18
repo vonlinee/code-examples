@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.File;
 import java.sql.Connection;
@@ -30,10 +31,12 @@ public class ConnectionManager {
     }
 
     private static boolean embedConnection;
+    public static JdbcTemplate template = new JdbcTemplate();
 
     static {
         final HikariConfig config = initHikariConfig();
         dataSource = new HikariDataSource(config);
+        template.setDataSource(dataSource);
         try {
             Class.forName("org.sqlite.JDBC");
             embedConnection = true;

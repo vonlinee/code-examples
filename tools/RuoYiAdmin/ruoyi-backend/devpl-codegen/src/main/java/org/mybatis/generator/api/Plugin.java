@@ -196,7 +196,7 @@ public interface Plugin {
      * first plugin returning false will disable the calling of further
      * plugins.
      */
-    default boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
+    default boolean clientGenerated(Interface interfaceData, IntrospectedTable introspectedTable) {
         return true;
     }
 

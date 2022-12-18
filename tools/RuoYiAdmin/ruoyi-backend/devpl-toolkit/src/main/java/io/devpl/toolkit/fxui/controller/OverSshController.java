@@ -3,6 +3,7 @@ package io.devpl.toolkit.fxui.controller;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import io.devpl.toolkit.fxui.config.DatabaseConfig;
+import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import io.devpl.toolkit.fxui.utils.DbUtils;
@@ -56,7 +57,7 @@ public class OverSshController extends DbConnectionController {
     @FXML
     public Label sshPubkeyPasswordNote;
 
-    private FileChooser fileChooser = new FileChooser();
+    private final FileChooser fileChooser = new FileChooser();
 
     private File privateKey;
 
@@ -66,7 +67,7 @@ public class OverSshController extends DbConnectionController {
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         authTypeChoice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if ("PubKey".equals(newValue)) {
-                //公钥认证
+                // 公钥认证
                 sshPasswordField.setVisible(false);
                 sshPasswordLabel.setVisible(false);
                 pubkeyBox.setVisible(true);
@@ -75,7 +76,7 @@ public class OverSshController extends DbConnectionController {
                 sshPubkeyPasswordLabel.setVisible(true);
                 sshPubkeyPasswordNote.setVisible(true);
             } else {
-                //密码认证
+                // 密码认证
                 pubkeyBox.setVisible(false);
                 pubkeyBoxLabel.setVisible(false);
                 sshPubkeyPasswordField.setVisible(false);
@@ -99,7 +100,7 @@ public class OverSshController extends DbConnectionController {
         this.rportField.setText(databaseConfig.getRport());
         this.sshUserField.setText(databaseConfig.getSshUser());
         this.sshPasswordField.setText(databaseConfig.getSshPassword());
-        //例如：默认从本机的 3306 -> 转发到 3306
+        // 例如：默认从本机的 3306 -> 转发到 3306
         if (StringUtils.isBlank(this.lportField.getText())) {
             this.lportField.setText(databaseConfig.getPort());
         }
@@ -117,19 +118,11 @@ public class OverSshController extends DbConnectionController {
     @FXML
     public void checkInput() {
         DatabaseConfig databaseConfig = extractConfigFromUi();
-        if (authTypeChoice.getValue().equals("Password") && (
-                StringUtils.isBlank(databaseConfig.getSshHost())
-                        || StringUtils.isBlank(databaseConfig.getSshPort())
-                        || StringUtils.isBlank(databaseConfig.getSshUser())
-                        || StringUtils.isBlank(databaseConfig.getSshPassword())
-        )
-                || authTypeChoice.getValue().equals("PubKey") && (
-                StringUtils.isBlank(databaseConfig.getSshHost())
-                        || StringUtils.isBlank(databaseConfig.getSshPort())
-                        || StringUtils.isBlank(databaseConfig.getSshUser())
-                        || StringUtils.isBlank(databaseConfig.getPrivateKey())
-        )
-        ) {
+        if (authTypeChoice
+                .getValue()
+                .equals("Password") && (StringUtils.isBlank(databaseConfig.getSshHost()) || StringUtils.isBlank(databaseConfig.getSshPort()) || StringUtils.isBlank(databaseConfig.getSshUser()) || StringUtils.isBlank(databaseConfig.getSshPassword())) || authTypeChoice
+                .getValue()
+                .equals("PubKey") && (StringUtils.isBlank(databaseConfig.getSshHost()) || StringUtils.isBlank(databaseConfig.getSshPort()) || StringUtils.isBlank(databaseConfig.getSshUser()) || StringUtils.isBlank(databaseConfig.getPrivateKey()))) {
             note.setText("当前SSH配置输入不完整，OVER SSH不生效");
             note.setTextFill(Paint.valueOf("#ff666f"));
         } else {
@@ -172,29 +165,24 @@ public class OverSshController extends DbConnectionController {
         config.setSshUser(this.sshUserField.getText());
         config.setSshPassword(this.sshPasswordField.getText());
         if ("PubKey".equals(authType)) {
-            config.setPrivateKey(this.privateKey.getAbsolutePath());
-            config.setPrivateKeyPassword(this.sshPubkeyPasswordField.getText());
+            if (this.privateKey != null) {
+                config.setPrivateKey(this.privateKey.getAbsolutePath());
+                config.setPrivateKeyPassword(this.sshPubkeyPasswordField.getText());
+            }
         }
         return config;
     }
 
-    public void saveConfig() {
+    public void saveConfig(ActionEvent event) {
         DatabaseConfig databaseConfig = extractConfigFromUi();
-        if (StringUtils.isAnyEmpty(
-                databaseConfig.getName(),
-                databaseConfig.getHost(),
-                databaseConfig.getPort(),
-                databaseConfig.getUsername(),
-                databaseConfig.getEncoding(),
-                databaseConfig.getDbType(),
-                databaseConfig.getSchema())) {
+        if (StringUtils.isAnyEmpty(databaseConfig.getName(), databaseConfig.getHost(), databaseConfig.getPort(), databaseConfig.getUsername(), databaseConfig.getEncoding(), databaseConfig.getDbType(), databaseConfig.getSchema())) {
             Alerts.showWarnAlert("密码以外其他字段必填");
             return;
         }
         try {
             ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, databaseConfig);
-            this.tabPaneController.getDialogStage().close();
-            mainUIController.loadLeftDBTree();
+            getStage(event).close();
+            post(new LoadDbTreeEvent());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             Alerts.showErrorAlert(e.getMessage());
@@ -245,8 +233,16 @@ public class OverSshController extends DbConnectionController {
         recoverNotice();
     }
 
+    /**
+     * 选择公钥文件
+     * @param actionEvent 点击事件
+     */
+    @FXML
     public void choosePubKey(ActionEvent actionEvent) {
-        this.privateKey = fileChooser.showOpenDialog(getDialogStage());
+        this.privateKey = fileChooser.showOpenDialog(getStage(actionEvent));
+        if (this.privateKey == null) {
+            return;
+        }
         sshPubKeyField.setText(this.privateKey.getAbsolutePath());
     }
 }
