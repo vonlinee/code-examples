@@ -2,6 +2,8 @@ package io.devpl.toolkit.fxui.utils;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import static org.apache.commons.lang3.StringUtils.isAnyBlank;
+
 /**
  * 统一工具类
  */
@@ -87,8 +89,7 @@ public final class StringUtils {
      * StringUtils.isAnyEmpty(new String[]{})   = false
      * StringUtils.isAnyEmpty(new String[]{""}) = true
      * </pre>
-     *
-     * @param css  the CharSequences to check, may be null or empty
+     * @param css the CharSequences to check, may be null or empty
      * @return {@code true} if any of the CharSequences are empty or null
      * @since 3.2
      */
@@ -102,5 +103,79 @@ public final class StringUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * <p>Checks if a CharSequence is empty (""), null or whitespace only.</p>
+     *
+     * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.</p>
+     *
+     * <pre>
+     * StringUtils.isBlank(null)      = true
+     * StringUtils.isBlank("")        = true
+     * StringUtils.isBlank(" ")       = true
+     * StringUtils.isBlank("bob")     = false
+     * StringUtils.isBlank("  bob  ") = false
+     * </pre>
+     * @param cs the CharSequence to check, may be null
+     * @return {@code true} if the CharSequence is null, empty or whitespace only
+     * @since 2.0
+     * @since 3.0 Changed signature from isBlank(String) to isBlank(CharSequence)
+     */
+    public static boolean isBlank(final CharSequence cs) {
+        final int strLen = length(cs);
+        if (strLen == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Gets a CharSequence length or {@code 0} if the CharSequence is
+     * {@code null}.
+     * @param cs a CharSequence or {@code null}
+     * @return CharSequence length or {@code 0} if the CharSequence is
+     * {@code null}.
+     * @since 2.4
+     * @since 3.0 Changed signature from length(String) to length(CharSequence)
+     */
+    public static int length(final CharSequence cs) {
+        return cs == null ? 0 : cs.length();
+    }
+
+    public static boolean isNotBlank(String string) {
+        return !isBlank(string);
+    }
+
+    /**
+     * <p>Checks if none of the CharSequences are empty (""), null or whitespace only.</p>
+     *
+     * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.</p>
+     *
+     * <pre>
+     * StringUtils.isNoneBlank((String) null)    = false
+     * StringUtils.isNoneBlank((String[]) null)  = true
+     * StringUtils.isNoneBlank(null, "foo")      = false
+     * StringUtils.isNoneBlank(null, null)       = false
+     * StringUtils.isNoneBlank("", "bar")        = false
+     * StringUtils.isNoneBlank("bob", "")        = false
+     * StringUtils.isNoneBlank("  bob  ", null)  = false
+     * StringUtils.isNoneBlank(" ", "bar")       = false
+     * StringUtils.isNoneBlank(new String[] {})  = true
+     * StringUtils.isNoneBlank(new String[]{""}) = false
+     * StringUtils.isNoneBlank("foo", "bar")     = true
+     * </pre>
+     *
+     * @param css  the CharSequences to check, may be null or empty
+     * @return {@code true} if none of the CharSequences are empty or null or whitespace only
+     * @since 3.2
+     */
+    public static boolean isNoneBlank(final CharSequence... css) {
+        return !isAnyBlank(css);
     }
 }

@@ -2,6 +2,7 @@ package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.Session;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
+import io.devpl.toolkit.fxui.common.StageTitle;
 import io.devpl.toolkit.fxui.common.model.ColumnCustomConfiguration;
 import io.devpl.toolkit.fxui.common.ProgressDialog;
 import io.devpl.toolkit.fxui.config.CodeGenConfiguration;
@@ -16,10 +17,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
@@ -28,7 +27,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.greenrobot.eventbus.Subscribe;
 import org.mybatis.generator.config.ColumnOverride;
@@ -36,7 +34,6 @@ import org.mybatis.generator.config.IgnoredColumn;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.SoftReference;
 import java.net.URL;
 import java.sql.SQLRecoverableException;
 import java.util.*;
@@ -127,9 +124,7 @@ public class MainUIController extends FXControllerBase {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         registerThis();
-
         encodingChoice.setItems(JFX.arrayOf(Constants.SUPPORTED_ENCODING));
         // 默认选中第一个，否则如果忘记选择，没有对应错误提示
         encodingChoice.getSelectionModel().selectFirst();
@@ -139,7 +134,7 @@ public class MainUIController extends FXControllerBase {
         connectionLabel.setOnMouseClicked(event -> {
             FXMLLoader loader = new FXMLLoader(FXMLPage.NEW_CONNECTION.getLocation());
             try {
-                JFX.newDialogStage("新建数据库连接", getStage(event), new Scene(loader.load())).show();
+                JFX.newDialogStage(StageTitle.NEW_CONNECTION, getStage(event), new Scene(loader.load())).show();
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
                 Alerts.error(e.getMessage()).showAndWait();
@@ -157,7 +152,7 @@ public class MainUIController extends FXControllerBase {
             FXMLLoader loader = new FXMLLoader(FXMLPage.GENERATOR_CONFIG.getLocation());
             try {
                 // fix bug: 嵌套弹出时会发生dialogStage被覆盖的情况
-                JFX.newDialogStage("配置", getStage(event), new Scene(loader.load())).show();
+                JFX.newDialogStage(StageTitle.CONFIG, getStage(event), new Scene(loader.load())).show();
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
                 Alerts.error(e.getMessage()).showAndWait();
@@ -196,7 +191,7 @@ public class MainUIController extends FXControllerBase {
                     MenuItem item1 = JFX.newMenuItem("关闭连接", event1 -> treeItem.getChildren().clear());
                     MenuItem item2 = JFX.newMenuItem("编辑连接", event1 -> {
                         DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
-                        TabPaneController controller = (TabPaneController) loadFXMLPage("编辑数据库连接", FXMLPage.NEW_CONNECTION, false);
+                        NewConnectionController controller = (NewConnectionController) loadFXMLPage("编辑数据库连接", FXMLPage.NEW_CONNECTION, false);
                         controller.setConfig(selectedConfig);
                         getStage(event1).show();
                     });

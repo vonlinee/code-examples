@@ -4,16 +4,16 @@
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
 <GridPane alignment="center" hgap="10" stylesheets="@../../style.css" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.toolkit.fxui.controller.TabPaneController">
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.toolkit.fxui.controller.NewConnectionController">
     <rowConstraints>
         <RowConstraints maxHeight="697.0" minHeight="170.0"/>
         <RowConstraints maxHeight="422.0" minHeight="45.0"/>
     </rowConstraints>
     <TabPane fx:id="tabPane" prefHeight="390.0" prefWidth="769.0" tabClosingPolicy="UNAVAILABLE">
-        <Tab text="TCP/IP">
+        <Tab fx:id="tabTcpIpConnection" text="TCP/IP">
             <fx:include fx:id="tabControlA" source="basicConnection.fxml"/>
         </Tab>
-        <Tab text="SSH">
+        <Tab fx:id="tabSshConnection"  text="SSH">
             <fx:include fx:id="tabControlB" source="sshBasedConnection.fxml"/>
         </Tab>
     </TabPane>

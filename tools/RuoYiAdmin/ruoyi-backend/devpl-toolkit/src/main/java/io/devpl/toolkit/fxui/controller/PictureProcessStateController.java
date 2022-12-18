@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-
 import static javafx.scene.paint.Color.DARKSEAGREEN;
 
 public class PictureProcessStateController {
@@ -33,6 +32,7 @@ public class PictureProcessStateController {
     private double initY;
     private Stage parentStage;
     private final Button button = new Button("");
+
     public void setDialogStage(Stage stage) {
         this.parentStage = stage;
     }
@@ -47,11 +47,9 @@ public class PictureProcessStateController {
         dialogStage.initOwner(parentStage);
         dialogStage.centerOnScreen();
         dialogStage.setTitle("OverSSH");
-
         rect.setArcHeight(10);
         rect.setArcWidth(10);
         rect.setFill(DARKSEAGREEN);
-
         rotateTransition.setNode(rect);
         rotateTransition.setDuration(Duration.seconds(0.8d));
         rotateTransition.setFromAngle(0);
@@ -63,32 +61,27 @@ public class PictureProcessStateController {
         vBoxRect.getChildren().add(rect);
         VBox.setMargin(rect, new Insets(125, 0, 0, 350));
         rotateTransition.play();
-
-
         text.setFont(Font.font(12));
         VBox vBoxLabel = new VBox();
         vBoxLabel.getChildren().add(text);
         VBox.setMargin(text, new Insets(175, 0, 15, 40));
-
-
         button.setPrefSize(90, 40);
         HBox hBoxButton = new HBox();
         hBoxButton.setPrefSize(505, 170);
         hBoxButton.getChildren().add(button);
         hBoxButton.setAlignment(Pos.BOTTOM_RIGHT);
-        hBoxButton.getStylesheets().add(Thread.currentThread().getContextClassLoader().getResource("style.css").toExternalForm());
+        hBoxButton.getStylesheets()
+                .add(Thread.currentThread().getContextClassLoader().getResource("style.css").toExternalForm());
         HBox.setMargin(button, new Insets(0, 15, 5, 0));
         button.setStyle("-fx-border-width: 0px;");
         button.setStyle("-fx-border-color: transparent;");
         button.setStyle("-fx-background-color: transparent;");
         rootGroup.getChildren().addAll(dbImage, vBoxRect, vBoxLabel, hBoxButton);
         dialogStage.show();
-
         button.setOnMouseClicked((event) -> dialogStage.close());
-
         rootGroup.setOnMousePressed((me) -> {
-                initX = me.getScreenX() - dialogStage.getX();
-                initY = me.getScreenY() - dialogStage.getY();
+            initX = me.getScreenX() - dialogStage.getX();
+            initY = me.getScreenY() - dialogStage.getY();
         });
         rootGroup.setOnMouseDragged((me) -> {
             dialogStage.setX(me.getScreenX() - initX);

@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -264,5 +265,9 @@ public final class JFX {
         } else {
             throw new RuntimeException("event source is not a node");
         }
+    }
+
+    public static Insets newInsets(double size) {
+        return new Insets(size);
     }
 }

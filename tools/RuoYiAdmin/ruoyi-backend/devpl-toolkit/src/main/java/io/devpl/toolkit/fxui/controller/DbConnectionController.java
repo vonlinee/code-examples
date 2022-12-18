@@ -68,25 +68,21 @@ public class DbConnectionController extends FXControllerBase {
         }
     }
 
+    /**
+     * 将界面上的数据提取到Model中
+     * @return
+     */
     public DatabaseConfig extractConfigForUI() {
-        String name = nameField.getText();
-        String host = hostField.getText();
-        String port = portField.getText();
-        String userName = userNameField.getText();
-        String password = passwordField.getText();
-        String encoding = encodingChoice.getValue();
-        String dbType = dbTypeChoice.getValue();
-        String schema = schemaField.getText();
         DatabaseConfig config = new DatabaseConfig();
-        config.setName(name);
-        config.setDbType(dbType);
-        config.setHost(host);
-        config.setPort(port);
-        config.setUsername(userName);
-        config.setPassword(password);
-        config.setSchema(schema);
-        config.setEncoding(encoding);
-        if (StringUtils.isAnyEmpty(name, host, port, userName, encoding, dbType, schema)) {
+        config.setName(nameField.getText());
+        config.setDbType(dbTypeChoice.getValue());
+        config.setHost(hostField.getText());
+        config.setPort(portField.getText());
+        config.setUsername(userNameField.getText());
+        config.setPassword(passwordField.getText());
+        config.setSchema(schemaField.getText());
+        config.setEncoding(encodingChoice.getValue());
+        if (StringUtils.isAnyEmpty(config.getName(), config.getHost(), config.getPort(), config.getUsername(), config.getEncoding(), config.getDbType(), config.getSchema())) {
             Alerts.warn("密码以外其他字段必填").showAndWait();
             return null;
         }

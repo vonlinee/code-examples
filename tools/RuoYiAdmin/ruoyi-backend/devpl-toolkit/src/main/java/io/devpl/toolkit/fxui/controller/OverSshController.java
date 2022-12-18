@@ -7,13 +7,13 @@ import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import io.devpl.toolkit.fxui.utils.DbUtils;
+import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -176,7 +176,7 @@ public class OverSshController extends DbConnectionController {
     public void saveConfig(ActionEvent event) {
         DatabaseConfig databaseConfig = extractConfigFromUi();
         if (StringUtils.isAnyEmpty(databaseConfig.getName(), databaseConfig.getHost(), databaseConfig.getPort(), databaseConfig.getUsername(), databaseConfig.getEncoding(), databaseConfig.getDbType(), databaseConfig.getSchema())) {
-            Alerts.showWarnAlert("密码以外其他字段必填");
+            Alerts.warn("密码以外其他字段必填").showAndWait();
             return;
         }
         try {
