@@ -15,22 +15,28 @@ public class Mocker {
 
     private static final String PROJECT_BASE_PACKAGE = "自己项目的包名";
 
+    public static <T> void fillDefaultValue(T obj) {
+        if (obj == null) return;
+        final Class<?> clazz = obj.getClass();
+    }
+
     public static <T> T getObjDefault(Class<T> clazz) throws IllegalAccessException, InstantiationException {
         T instance = clazz.newInstance();
         Field[] fs = clazz.getDeclaredFields();
         for (int i = 0; i < fs.length; i++) {
             Field f = fs[i];
-            // 设置些属性是可以访问的
-            boolean isStatic = Modifier.isStatic(f.getModifiers());
-            if (isStatic) {
+            f.setAccessible(true); // 设置属性是访问权限
+            if (Modifier.isStatic(f.getModifiers())) {
                 continue;
             }
-            // 设置些属性是可以访问的
-            f.setAccessible(true);
             try {
                 Class<?> type = f.getType();
-                // 是基本数据类型
+                // 是基本数据类型，不用手动填充默认值
                 if (type.isPrimitive()) continue;
+                if (type.isInterface()) {
+                    // 接口没办法知道具体的类型
+                    continue;
+                }
                 // 得到此属性的值
                 Object val = f.get(instance);
                 // 得到此属性的类型

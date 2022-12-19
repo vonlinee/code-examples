@@ -72,6 +72,8 @@ public class MyBatisCodeGenerator {
         }
 
         context.addProperty(StringKey.AUTO_DELIMIT_KEYWORDS, "true");
+
+        // 数据库schema
         if (DBDriver.MySQL5.name().equals(dbType) || DBDriver.MySQL8.name().equals(dbType)) {
             tableConfig.setSchema(selectedDatabaseConfig.getSchema());
             // 由于beginningDelimiter和endingDelimiter的默认值为双引号(")，在Mysql中不能这么写，所以还要将这两个默认值改为`
@@ -235,12 +237,12 @@ public class MyBatisCodeGenerator {
 
         if (generatorConfig.isFullMVCSupport()) {
             // log.info("support mvc");
-            addPluginConfiguration(context, FullMVCSupportPlugin.class);
+            context.addPluginConfiguration(WebMVCSupportPlugin.class);
         }
 
         // 设置运行时环境
         context.setTargetRuntime("MyBatis3");
-        addPluginConfiguration(context, FullMVCSupportPlugin.class);
+        addPluginConfiguration(context, WebMVCSupportPlugin.class);
         List<String> warnings = new ArrayList<>();
         Set<String> fullyQualifiedTables = new HashSet<>();
         Set<String> contexts = new HashSet<>();

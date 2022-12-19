@@ -18,7 +18,6 @@ public class JavaTypeResolverJsr310Impl extends JavaTypeResolverDefaultImpl {
     @Override
     protected FullyQualifiedJavaType overrideDefaultType(IntrospectedColumn column, FullyQualifiedJavaType defaultType) {
         FullyQualifiedJavaType answer = defaultType;
-
         switch (column.getJdbcType()) {
             case Types.BIT:
                 answer = calculateBitReplacement(column, defaultType);

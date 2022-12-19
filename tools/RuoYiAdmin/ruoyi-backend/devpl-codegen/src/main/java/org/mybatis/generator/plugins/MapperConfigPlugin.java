@@ -15,14 +15,6 @@
  */
 package org.mybatis.generator.plugins;
 
-import static org.mybatis.generator.internal.util.StringUtils.hasLength;
-import static org.mybatis.generator.internal.util.messages.Messages.getString;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
 import org.mybatis.generator.api.GeneratedXmlFile;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
@@ -31,6 +23,14 @@ import org.mybatis.generator.api.dom.xml.Document;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.XmlConstants;
+import org.mybatis.generator.internal.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
  * This plugin generates a MapperConfig file containing mapper entries for SQL
@@ -63,7 +63,7 @@ public class MapperConfigPlugin extends PluginAdapter {
     public boolean validate(List<String> warnings) {
         boolean valid = true;
 
-        if (!hasLength(properties
+        if (!StringUtils.hasLength(properties
                 .getProperty("targetProject"))) { //$NON-NLS-1$
             warnings.add(getString("ValidationError.18", //$NON-NLS-1$
                     "MapperConfigPlugin", //$NON-NLS-1$
@@ -71,7 +71,7 @@ public class MapperConfigPlugin extends PluginAdapter {
             valid = false;
         }
 
-        if (!hasLength(properties
+        if (!StringUtils.hasLength(properties
                 .getProperty("targetPackage"))) { //$NON-NLS-1$
             warnings.add(getString("ValidationError.18", //$NON-NLS-1$
                     "MapperConfigPlugin", //$NON-NLS-1$

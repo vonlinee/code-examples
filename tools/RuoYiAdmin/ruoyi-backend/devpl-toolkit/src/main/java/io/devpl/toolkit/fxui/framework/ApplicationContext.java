@@ -38,11 +38,12 @@ public final class ApplicationContext implements ControllerFactory {
         final String fxmlKey = controllerFXMLMapping.get(param);
         if (fxmlKey == null) {
             // 首次加载
+            System.out.println("首次加载" + param);
             return ClassUtils.instantiate(param);
         }
+        log.info("第二次加载 {}", param);
         final FXMLCache holder = fxmlCacheMap.get(fxmlKey);
-        final FXMLLoader loader = holder.getFXMLLoader();
-        return loader.getController();
+        return holder.getController();
     }
 
     /**
@@ -67,7 +68,9 @@ public final class ApplicationContext implements ControllerFactory {
         }
         fxmlMappings.forEach((fxmlKey, fxmlUrl) -> {
             try {
-                this.fxmlCacheMap.put(fxmlKey, new FXMLCache(new URL(fxmlUrl)));
+                final FXMLCache fxmlCache = new FXMLCache(new URL(fxmlUrl));
+                fxmlCache.setControllerFactory(this);
+                this.fxmlCacheMap.put(fxmlKey, fxmlCache);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -79,9 +82,8 @@ public final class ApplicationContext implements ControllerFactory {
      * @param fxmlKey FXML相对路径
      * @return 缓存的FXMLLoader实例
      */
-    public FXMLLoader getFXMLLoader(String fxmlKey) {
-        final FXMLCache fxmlCache = fxmlCacheMap.get(fxmlKey);
-        return fxmlCache.getFXMLLoader();
+    public FXMLCache getFXMLCache(String fxmlKey) {
+        return fxmlCacheMap.get(fxmlKey);
     }
 
     private ClassLoader classLoader = null;

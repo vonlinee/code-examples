@@ -3,30 +3,23 @@ package io.devpl.toolkit.fxui.utils;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-public class ClassUtils {
+public final class ClassUtils {
+
+    public ClassUtils() {
+    }
 
     // getConstructor 方法入参是可变长参数列表，对应类中构造方法的入参类型，这里使用无参构造。
     // newInstance 返回的是泛型 T，取决于 clazz 的类型 Class<T>。这里直接用 Object 接收了。
     public static <T> T instantiate(Class<T> clazz) throws RuntimeException {
         try {
-            return getConstructor(clazz, (Class<?>) null).newInstance();
+            final Constructor<T> constructor = clazz.getConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException("failed to instantiate class " + clazz + " cause:", e);
-        }
-    }
-
-    public static <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... parameterTypes) throws RuntimeException {
-        Constructor<T> constructor;
-        try {
-            if (parameterTypes == null) {
-                parameterTypes = new Class[0];
-            }
-            constructor = clazz.getDeclaredConstructor(parameterTypes);
-            constructor.setAccessible(true);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("failed to instantiate class " + clazz + " cause: no default constructor in Class[" + clazz + "]", e);
         }
-        return constructor;
     }
 
     /**

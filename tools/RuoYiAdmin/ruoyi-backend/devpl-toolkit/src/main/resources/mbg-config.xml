@@ -44,8 +44,7 @@
                enableSelectByExample="false" mapperName="UserMapper">
             <property name="useActualColumnNames" value="true"/>
             <!--主键 -->
-            <generatedKey column="USER_ID" sqlStatement="MySql"
-                          identity="true"/>
+            <generatedKey column="USER_ID" sqlStatement="MySql" identity="true"/>
             <!-- <columnOverride column="DATE_FIELD" property="startDate"/> -->
             <!-- <ignoreColumn column="FRED"/> -->
             <!-- <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR"/> -->

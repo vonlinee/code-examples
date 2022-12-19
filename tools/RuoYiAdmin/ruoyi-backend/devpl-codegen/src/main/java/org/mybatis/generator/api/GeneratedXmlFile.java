@@ -17,6 +17,8 @@ package org.mybatis.generator.api;
 
 import org.mybatis.generator.api.dom.xml.Document;
 
+import java.nio.charset.StandardCharsets;
+
 public class GeneratedXmlFile extends GeneratedFile {
 
     private final Document document;
@@ -66,6 +68,6 @@ public class GeneratedXmlFile extends GeneratedFile {
 
     @Override
     public String getFileEncoding() {
-        return "UTF-8"; //$NON-NLS-1$
+        return StandardCharsets.UTF_8.name();
     }
 }

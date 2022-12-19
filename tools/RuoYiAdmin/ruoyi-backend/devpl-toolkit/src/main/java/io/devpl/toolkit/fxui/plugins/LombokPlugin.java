@@ -14,7 +14,6 @@ import java.util.Map.Entry;
 /**
  * A MyBatis Generator plugin to use annotations of Lombok.
  * For example, use @Data annotation instead of getter ands setter.
- *
  * @author Paolo Predonzani (<a href="http://softwareloop.com/">...</a>)
  */
 public class LombokPlugin extends PluginAdapter {
@@ -38,7 +37,6 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * Intercepts base record class generation
-     *
      * @param topLevelClass     the generated base record class
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database
@@ -52,7 +50,6 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * Intercepts primary key class generation
-     *
      * @param topLevelClass     the generated primary key class
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database
@@ -66,7 +63,6 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * Intercepts "record with blob" class generation
-     *
      * @param topLevelClass     the generated record with BLOBs class
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database
@@ -81,7 +77,6 @@ public class LombokPlugin extends PluginAdapter {
     /**
      * Prevents all getters from being generated.
      * See SimpleModelGenerator
-     *
      * @param method             the getter, or accessor, method generated for the specified
      *                           column
      * @param topLevelClass      the partially implemented model class
@@ -99,7 +94,6 @@ public class LombokPlugin extends PluginAdapter {
     /**
      * Prevents all setters from being generated
      * See SimpleModelGenerator
-     *
      * @param method             the setter, or mutator, method generated for the specified
      *                           column
      * @param topLevelClass      the partially implemented model class
@@ -117,7 +111,6 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * Adds the lombok annotations' imports and annotations to the class
-     *
      * @param topLevelClass the partially implemented model class
      */
     private void addDataAnnotation(TopLevelClass topLevelClass) {
@@ -150,7 +143,6 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * 添加@Mapper注解
-     *
      * @param interfaceType     the generated interface if any, may be null
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database

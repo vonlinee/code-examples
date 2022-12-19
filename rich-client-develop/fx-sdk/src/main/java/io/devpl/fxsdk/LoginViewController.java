@@ -28,10 +28,6 @@ public class LoginViewController implements ControlledStage, Initializable {
 
     @FXML
     public void login(MouseEvent mouseEvent) {
-        Stage stage = WindowManager.getInstance().createChildStage();
-        stage.setWidth(400.0);
-        stage.setHeight(200.0);
-        stage.setTitle("子模态窗口");
-        stage.show();
+        myController.setStage(MainApp.mainViewID);
     }
 }

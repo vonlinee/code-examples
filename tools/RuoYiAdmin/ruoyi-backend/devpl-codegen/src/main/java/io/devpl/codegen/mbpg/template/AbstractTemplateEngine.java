@@ -8,9 +8,9 @@ import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.util.FileUtils;
 import io.devpl.codegen.mbpg.util.RuntimeUtils;
 import io.devpl.codegen.mbpg.util.StringPool;
+import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mybatis.generator.internal.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,6 @@ import java.util.function.Function;
 
 /**
  * 模板引擎抽象类
- *
  * @author hubin
  * @since 2018-01-10
  */
@@ -45,7 +44,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出自定义模板文件
-     *
      * @param customFiles 自定义模板文件列表
      * @param tableInfo   表信息
      * @param objectMap   渲染数据
@@ -67,7 +65,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出实体文件
-     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -76,18 +73,13 @@ public abstract class AbstractTemplateEngine {
         LOGGER.info("输出实体文件");
         String entityName = tableInfo.getEntityName();
         String entityPath = getPathInfo(OutputFile.entity);
-        if (io.devpl.sdk.util.StringUtils.isNotBlank(entityName) && io.devpl.sdk.util.StringUtils.isNotBlank(entityPath)) {
+        if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
             TemplateConfig templateConfig = getConfigBuilder().getTemplateConfig();
-            boolean kotlin = getConfigBuilder()
-                    .getGlobalConfig()
-                    .isKotlin();
+            boolean kotlin = getConfigBuilder().getGlobalConfig().isKotlin();
             String entity = templateConfig.getEntity(kotlin);
-            if (io.devpl.sdk.util.StringUtils.hasLength(entity)) {
+            if (StringUtils.hasLength(entity)) {
                 String entityFile = String.format((entityPath + File.separator + "%s" + suffixJavaOrKt()), entityName);
-                boolean fileOverride = getConfigBuilder()
-                        .getStrategyConfig()
-                        .entity()
-                        .isFileOverride();
+                boolean fileOverride = getConfigBuilder().getStrategyConfig().entity().isFileOverride();
                 String entityTemplatePath = templateFilePath(entity);
                 for (TableField field : tableInfo.getFields()) {
                     if (!StringUtils.hasLength(field.getComment())) {
@@ -101,7 +93,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出Mapper文件(含xml)
-     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -134,7 +125,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出service文件
-     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -167,7 +157,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出controller文件
-     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -189,7 +178,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出文件
-     *
      * @param file         文件
      * @param objectMap    渲染信息
      * @param templatePath 模板路径
@@ -214,7 +202,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 获取模板路径
-     *
      * @param function function
      * @return 模板路径
      * @since 3.5.0
@@ -231,7 +218,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 获取路径信息
-     *
      * @param outputFile 输出文件
      * @return 路径信息
      */
@@ -274,7 +260,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 将模板转化成为文件
-     *
      * @param objectMap    渲染对象 MAP 信息
      * @param templatePath 模板文件
      * @param outputFile   文件生成的目录
@@ -305,7 +290,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 渲染对象 MAP 信息
-     *
      * @param config    配置信息
      * @param tableInfo 表信息对象
      * @return ignore
@@ -347,7 +331,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 模板真实文件路径
-     *
      * @param filePath 文件路径
      * @return ignore
      */
@@ -356,7 +339,6 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 检查文件是否创建文件
-     *
      * @param file         文件
      * @param fileOverride 是否覆盖已有文件
      * @return 是否创建文件

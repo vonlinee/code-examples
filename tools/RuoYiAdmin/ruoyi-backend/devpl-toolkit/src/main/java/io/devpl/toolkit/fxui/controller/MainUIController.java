@@ -6,6 +6,7 @@ import io.devpl.toolkit.fxui.common.StageTitle;
 import io.devpl.toolkit.fxui.common.model.ColumnCustomConfiguration;
 import io.devpl.toolkit.fxui.common.ProgressDialog;
 import io.devpl.toolkit.fxui.config.CodeGenConfiguration;
+import io.devpl.toolkit.fxui.config.CodeGenConfigurationModel;
 import io.devpl.toolkit.fxui.config.Constants;
 import io.devpl.toolkit.fxui.config.DatabaseConfig;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
@@ -27,7 +28,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
 import org.greenrobot.eventbus.Subscribe;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
@@ -51,17 +51,17 @@ public class MainUIController extends FXControllerBase {
     @FXML
     public Label labBeanDefCreate; // 创建Bean定义
     @FXML
-    public TextField txfParentPackageName;
-    @FXML
     private Label connectionLabel; // toolbar buttons
     @FXML
     private Label configsLabel;
+    @FXML
+    public TextField txfParentPackageName;
     @FXML
     private TextField modelTargetPackage;
     @FXML
     private TextField mapperTargetPackage;
     @FXML
-    private TextField daoTargetPackage;  // DAO接口包名
+    private TextField txfMapperPackageName;  // DAO接口包名
     @FXML
     private TextField tableNameField;
     @FXML
@@ -110,20 +110,21 @@ public class MainUIController extends FXControllerBase {
     private TreeView<String> trvDbTreeList; // 数据库表列表
     @FXML
     public TextField filterTreeBox;
+    @FXML
+    private ChoiceBox<String> encodingChoice;
     // Current selected databaseConfig
     private DatabaseConfig selectedDatabaseConfig;
     // Current selected tableName
     private String tableName;
 
     private List<IgnoredColumn> ignoredColumns;
-
     private List<ColumnOverride> columnOverrides;
 
-    @FXML
-    private ChoiceBox<String> encodingChoice;
+    CodeGenConfigurationModel codeGenConfig = new CodeGenConfigurationModel();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         registerThis();
         encodingChoice.setItems(JFX.arrayOf(Constants.SUPPORTED_ENCODING));
         // 默认选中第一个，否则如果忘记选择，没有对应错误提示
@@ -163,8 +164,9 @@ public class MainUIController extends FXControllerBase {
         dictConfigLabel.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
         useExample.setOnMouseClicked(event -> offsetLimitCheckBox.setDisable(!useExample.isSelected()));
         // selectedProperty().addListener 解决应用配置的时候未触发Clicked事件
-        useLombokPlugin.selectedProperty()
-                       .addListener((observable, oldValue, newValue) -> needToStringHashcodeEquals.setDisable(newValue));
+        useLombokPlugin
+                .selectedProperty()
+                .addListener((observable, oldValue, newValue) -> needToStringHashcodeEquals.setDisable(newValue));
 
         // 设置可以多选
         trvDbTreeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -193,7 +195,8 @@ public class MainUIController extends FXControllerBase {
                         DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
                         NewConnectionController controller = (NewConnectionController) loadFXMLPage("编辑数据库连接", FXMLPage.NEW_CONNECTION, false);
                         controller.setConfig(selectedConfig);
-                        getStage(event1).show();
+                        // 此处MenuItem不是Node类型
+                        getStage(trvDbTreeList).show();
                     });
                     MenuItem item3 = JFX.newMenuItem("删除连接", event1 -> {
                         try {
@@ -233,7 +236,7 @@ public class MainUIController extends FXControllerBase {
      */
     private void initializePlaceholderValue() {
         mapperTargetPackage.setText("mapping");
-        daoTargetPackage.setText("mapper");
+        txfMapperPackageName.setText("mapper");
         modelTargetPackage.setText("model");
         projectFolderField.setText("D:/Temp/test");
     }
@@ -373,18 +376,16 @@ public class MainUIController extends FXControllerBase {
      */
     @FXML
     public void openTextHandleToolkit(MouseEvent mouseEvent) {
-
+        Alerts.error("暂未开发").showAndWait();
     }
 
     /**
      * 打开Bean定义创建界面
      * @param mouseEvent 鼠标点击事件
      */
+    @FXML
     public void openBeanDefCreateFrame(MouseEvent mouseEvent) {
-        final Scene scene = JFX.createScene("static/fxml/class_definition.fxml");
-        final Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
+        Alerts.error("此功能暂未开发").showAndWait();
     }
 
     static class DoNothing extends Task<Void> {
@@ -449,7 +450,7 @@ public class MainUIController extends FXControllerBase {
         generatorConfig.setModelPackage(modelTargetPackage.getText());
         generatorConfig.setGenerateKeys(generateKeysField.getText());
         generatorConfig.setModelPackageTargetFolder(modelTargetProject.getText());
-        generatorConfig.setDaoPackage(daoTargetPackage.getText());
+        generatorConfig.setDaoPackage(txfMapperPackageName.getText());
         generatorConfig.setDaoTargetFolder(daoTargetProject.getText());
         generatorConfig.setMapperName(mapperName.getText());
         generatorConfig.setMappingXMLPackage(mapperTargetPackage.getText());
@@ -486,11 +487,22 @@ public class MainUIController extends FXControllerBase {
      * @param generatorConfig 代码生成配置
      */
     public void setGeneratorConfigIntoUI(CodeGenConfiguration generatorConfig) {
+
+        // 表单数据绑定
+        codeGenConfig.parentPackageProperty().bindBidirectional(txfParentPackageName.textProperty());
+
+        codeGenConfig.daoTargetFolderProperty().bindBidirectional(mapperTargetPackage.textProperty());
+        codeGenConfig.jsr310SupportProperty().bindBidirectional(jsr310Support.selectedProperty());
+
+        // 项目所在目录
+        codeGenConfig.projectFolderProperty().bindBidirectional(projectFolderField.textProperty());
+        codeGenConfig.modelPackageTargetFolderProperty().bindBidirectional(modelTargetPackage.textProperty());
+
         projectFolderField.setText(generatorConfig.getProjectFolder());
         modelTargetPackage.setText(generatorConfig.getModelPackage());
         generateKeysField.setText(generatorConfig.getGenerateKeys());
         modelTargetProject.setText(generatorConfig.getModelPackageTargetFolder());
-        daoTargetPackage.setText(generatorConfig.getDaoPackage());
+        txfMapperPackageName.setText(generatorConfig.getDaoPackage());
         daoTargetProject.setText(generatorConfig.getDaoTargetFolder());
         mapperTargetPackage.setText(generatorConfig.getMappingXMLPackage());
         mappingTargetProject.setText(generatorConfig.getMappingXMLTargetFolder());

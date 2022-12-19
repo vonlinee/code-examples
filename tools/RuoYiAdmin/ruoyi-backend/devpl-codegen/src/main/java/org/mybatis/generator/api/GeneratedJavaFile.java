@@ -19,6 +19,7 @@ import org.mybatis.generator.api.dom.java.CompilationUnit;
 
 public class GeneratedJavaFile extends GeneratedFile {
 
+    // Java文件所表示的编译单元
     private final CompilationUnit compilationUnit;
 
     private final String fileEncoding;

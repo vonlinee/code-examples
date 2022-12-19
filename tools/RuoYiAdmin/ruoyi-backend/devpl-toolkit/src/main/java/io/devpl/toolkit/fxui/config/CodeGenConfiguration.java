@@ -1,11 +1,13 @@
 package io.devpl.toolkit.fxui.config;
 
-import lombok.Data;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  * 除了数据库配置外的配置
  */
-@Data
 public class CodeGenConfiguration {
 
     /**
@@ -28,12 +30,12 @@ public class CodeGenConfiguration {
     /**
      * 父包名
      */
-    private String parentPackage;
+    private final StringProperty parentPackage = new SimpleStringProperty();
 
     /**
      * 是否使用mybatis
      */
-    private boolean useMyBatisPlus;
+    private final BooleanProperty useMyBatisPlus = new SimpleBooleanProperty(true);
 
     private String modelPackageTargetFolder;
 
@@ -49,6 +51,7 @@ public class CodeGenConfiguration {
 
     private String tableName;
 
+    // 表映射的实体名称：表名一般是 table_name -> TableName
     private String domainObjectName;
 
     private boolean offsetLimit;
@@ -335,5 +338,29 @@ public class CodeGenConfiguration {
 
     public boolean isUseDAOExtendStyle() {
         return useDAOExtendStyle;
+    }
+
+    public String getParentPackage() {
+        return parentPackage.get();
+    }
+
+    public StringProperty parentPackageProperty() {
+        return parentPackage;
+    }
+
+    public void setParentPackage(String parentPackage) {
+        this.parentPackage.set(parentPackage);
+    }
+
+    public boolean isUseMyBatisPlus() {
+        return useMyBatisPlus.get();
+    }
+
+    public BooleanProperty useMyBatisPlusProperty() {
+        return useMyBatisPlus;
+    }
+
+    public void setUseMyBatisPlus(boolean useMyBatisPlus) {
+        this.useMyBatisPlus.set(useMyBatisPlus);
     }
 }

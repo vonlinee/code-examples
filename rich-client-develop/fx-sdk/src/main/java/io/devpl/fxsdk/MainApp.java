@@ -26,7 +26,7 @@ public class MainApp extends Application {
         WindowManager.setPrimaryStage(primaryStage);
 
         //显示MainView舞台
-        stageController.setStage(loginViewID);
+        stageController.setStage(mainViewID);
     }
 
 

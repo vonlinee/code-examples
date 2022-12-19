@@ -6,10 +6,12 @@ import javafx.application.Application;
 
 public abstract class JavaFXApplication extends Application {
 
+    protected ApplicationContext applicationContext;
+
     @Override
     public final void init() throws Exception {
         super.init();
-        final ApplicationContext applicationContext = createApplicationContext();
+        applicationContext = createApplicationContext();
         prepareApplicationContext(applicationContext);
         this.onInit();
     }

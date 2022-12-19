@@ -34,23 +34,7 @@ import java.util.Arrays;
  */
 public final class JFX {
 
-    private final static ApplicationContext context = ApplicationContext.getInstance();
-
-    public static Scene createScene(String fxmlKey) {
-        FXMLLoader loader = getFXMLLoader(fxmlKey);
-        if (loader.getRoot() == null) {
-            try {
-                loader.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return new Scene(loader.getRoot());
-    }
-
-    public static FXMLLoader getFXMLLoader(String fxmlKey) {
-        return context.getFXMLLoader(fxmlKey);
-    }
+    public final static ApplicationContext context = ApplicationContext.getInstance();
 
     public static Stage newStage(String title, Window owner, Modality modality, Scene scene) {
         return newStage(title, owner, modality, scene, true);

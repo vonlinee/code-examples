@@ -4,6 +4,8 @@ import javafx.event.Event;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.greenrobot.eventbus.EventBus;
@@ -60,9 +62,8 @@ public abstract class FXController implements Initializable {
         if (source instanceof Node) {
             final Node node = (Node) source;
             return getStage(node);
-        } else {
-            throw new RuntimeException("event source is not a node");
         }
+        throw new RuntimeException("event source is not a node");
     }
 
     protected Stage getStage(Node node) {
