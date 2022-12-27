@@ -1,25 +1,10 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.devpl.codegen.mbpg.config.po;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.IKeyWordsHandler;
-import io.devpl.codegen.mbpg.config.builder.ConfigBuilder;
+import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
 import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
 import io.devpl.codegen.mbpg.config.rules.NamingStrategyEnum;
@@ -33,12 +18,10 @@ import java.util.Map;
 
 /**
  * 表字段信息
- *
- * @author YangHu
- * @since 2016-12-03
  */
 public class TableField {
-    private boolean convert;
+
+    private boolean convert; // 是否生成@TableField
     private boolean keyFlag;
     /**
      * 主键是否为自增类型
@@ -52,13 +35,11 @@ public class TableField {
     private String fill;
     /**
      * 是否关键字
-     *
      * @since 3.3.2
      */
     private boolean keyWords;
     /**
      * 数据库字段（关键字含转义符号）
-     *
      * @since 3.3.2
      */
     private String columnName;
@@ -69,7 +50,6 @@ public class TableField {
 
     /**
      * 字段元数据信息
-     *
      * @since 3.5.0
      */
     private MetaInfo metaInfo;
@@ -82,12 +62,11 @@ public class TableField {
 
     /**
      * 构造方法
-     *
      * @param configBuilder 配置构建
      * @param name          数据库字段名称
      * @since 3.5.0
      */
-    public TableField(@NotNull ConfigBuilder configBuilder, @NotNull String name) {
+    public TableField(@NotNull CodeGenConfiguration configBuilder, @NotNull String name) {
         this.name = name;
         this.columnName = name;
         this.entity = configBuilder.getStrategyConfig().entity();
@@ -97,7 +76,6 @@ public class TableField {
 
     /**
      * 设置属性名称
-     *
      * @param propertyName 属性名
      * @param columnType   字段类型
      * @return this
@@ -105,8 +83,7 @@ public class TableField {
      */
     public TableField setPropertyName(@NotNull String propertyName, @NotNull IColumnType columnType) {
         this.columnType = columnType;
-        if (entity.isBooleanColumnRemoveIsPrefix()
-            && "boolean".equalsIgnoreCase(this.getPropertyType()) && propertyName.startsWith("is")) {
+        if (entity.isBooleanColumnRemoveIsPrefix() && "boolean".equalsIgnoreCase(this.getPropertyType()) && propertyName.startsWith("is")) {
             this.convert = true;
             this.propertyName = StringUtils.removePrefixAfterPrefixToLower(propertyName, 2);
             return this;
@@ -154,7 +131,6 @@ public class TableField {
 
     /**
      * 获取注解字段名称
-     *
      * @return 字段
      * @since 3.3.2
      */
@@ -169,33 +145,28 @@ public class TableField {
 
     /**
      * 是否为乐观锁字段
-     *
      * @return 是否为乐观锁字段
      * @since 3.5.0
      */
     public boolean isVersionField() {
         String propertyName = entity.getVersionPropertyName();
         String columnName = entity.getVersionColumnName();
-        return StringUtils.isNotBlank(propertyName) && this.propertyName.equals(propertyName)
-            || StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
+        return StringUtils.isNotBlank(propertyName) && this.propertyName.equals(propertyName) || StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
     }
 
     /**
      * 是否为逻辑删除字段
-     *
      * @return 是否为逻辑删除字段
      * @since 3.5.0
      */
     public boolean isLogicDeleteField() {
         String propertyName = entity.getLogicDeletePropertyName();
         String columnName = entity.getLogicDeleteColumnName();
-        return StringUtils.isNotBlank(propertyName) && this.propertyName.equals(propertyName)
-            || StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
+        return StringUtils.isNotBlank(propertyName) && this.propertyName.equals(propertyName) || StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
     }
 
     /**
      * 设置主键
-     *
      * @param autoIncrement 自增标识
      * @return this
      * @since 3.5.0
@@ -216,9 +187,8 @@ public class TableField {
     }
 
     public TableField setComment(String comment) {
-        //TODO 暂时挪动到这
-        this.comment = this.globalConfig.isSwagger()
-            && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
+        // TODO 暂时挪动到这
+        this.comment = this.globalConfig.isSwagger() && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
         return this;
     }
 
@@ -271,11 +241,15 @@ public class TableField {
 
     public String getFill() {
         if (StringUtils.isBlank(fill)) {
-            entity.getTableFillList().stream()
-                //忽略大写字段问题
-                .filter(tf -> tf instanceof Column && tf.getName().equalsIgnoreCase(name)
-                    || tf instanceof Property && tf.getName().equals(propertyName))
-                .findFirst().ifPresent(tf -> this.fill = tf.getFieldFill().name());
+            entity
+                    .getTableFillList()
+                    .stream()
+                    // 忽略大写字段问题
+                    .filter(tf -> tf instanceof Column && tf
+                            .getName()
+                            .equalsIgnoreCase(name) || tf instanceof Property && tf.getName().equals(propertyName))
+                    .findFirst()
+                    .ifPresent(tf -> this.fill = tf.getFieldFill().name());
         }
         return fill;
     }
@@ -302,7 +276,6 @@ public class TableField {
 
     /**
      * 元数据信息
-     *
      * @author nieqiurong 2021/2/8
      * @since 3.5.0
      */
@@ -359,14 +332,7 @@ public class TableField {
 
         @Override
         public String toString() {
-            return "MetaInfo{" +
-                "length=" + length +
-                ", nullable=" + nullable +
-                ", remarks='" + remarks + '\'' +
-                ", defaultValue='" + defaultValue + '\'' +
-                ", scale=" + scale +
-                ", jdbcType=" + jdbcType +
-                '}';
+            return "MetaInfo{" + "length=" + length + ", nullable=" + nullable + ", remarks='" + remarks + '\'' + ", defaultValue='" + defaultValue + '\'' + ", scale=" + scale + ", jdbcType=" + jdbcType + '}';
         }
     }
 }

@@ -5,9 +5,9 @@ import io.devpl.codegen.mbpg.config.converts.TypeConverts;
 import io.devpl.codegen.mbpg.config.querys.DbQueryDecorator;
 import io.devpl.codegen.mbpg.config.querys.DbQueryRegistry;
 import io.devpl.codegen.mbpg.jdbc.DbType;
-import io.devpl.codegen.mbpg.query.AbstractDatabaseQuery;
-import io.devpl.codegen.mbpg.query.DefaultQuery;
-import io.devpl.codegen.mbpg.query.IDatabaseQuery;
+import io.devpl.codegen.mbpg.query.AbstractDatabaseIntrospector;
+import io.devpl.codegen.mbpg.query.DefaultDatabaseIntrospector;
+import io.devpl.codegen.mbpg.query.DatabaseIntrospector;
 import io.devpl.codegen.mbpg.query.SQLQuery;
 import io.devpl.codegen.mbpg.type.ITypeConvertHandler;
 import io.devpl.sdk.util.StringUtils;
@@ -92,11 +92,11 @@ public class DataSourceConfig {
 
     /**
      * 查询方式
-     * @see DefaultQuery 默认查询方式，配合{@link #getTypeConvertHandler()} 使用
+     * @see DefaultDatabaseIntrospector 默认查询方式，配合{@link #getTypeConvertHandler()} 使用
      * @see SQLQuery SQL语句查询方式，配合{@link #typeConvert} 使用
      * @since 3.5.3
      */
-    private Class<? extends AbstractDatabaseQuery> databaseQueryClass = DefaultQuery.class;
+    private Class<? extends AbstractDatabaseIntrospector> databaseQueryClass = DefaultDatabaseIntrospector.class;
 
     /**
      * 类型转换处理
@@ -236,7 +236,7 @@ public class DataSourceConfig {
      * @param properties 数据库连接配置
      */
     private void processProperties(Properties properties) {
-        if (this.databaseQueryClass.getName().equals(DefaultQuery.class.getName())) {
+        if (this.databaseQueryClass.getName().equals(DefaultDatabaseIntrospector.class.getName())) {
             switch (this.getDbType()) {
                 case MYSQL:
                     properties.put("remarks", "true");
@@ -301,7 +301,7 @@ public class DataSourceConfig {
     }
 
     @NotNull
-    public Class<? extends IDatabaseQuery> getDatabaseQueryClass() {
+    public Class<? extends DatabaseIntrospector> getDatabaseQueryClass() {
         return databaseQueryClass;
     }
 
@@ -407,7 +407,7 @@ public class DataSourceConfig {
          * @return this
          * @since 3.5.3
          */
-        public Builder databaseQueryClass(@NotNull Class<? extends AbstractDatabaseQuery> databaseQueryClass) {
+        public Builder databaseQueryClass(@NotNull Class<? extends AbstractDatabaseIntrospector> databaseQueryClass) {
             this.dataSourceConfig.databaseQueryClass = databaseQueryClass;
             return this;
         }

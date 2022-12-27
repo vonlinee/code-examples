@@ -27,9 +27,9 @@ public class GeneratorConfigController extends FXControllerBase {
     @FXML
     private TableView<CodeGenConfiguration> configTable;
     @FXML
-    private TableColumn nameColumn;
+    private TableColumn<?, String> nameColumn;
     @FXML
-    private TableColumn opsColumn;
+    private TableColumn<?, ?> opsColumn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

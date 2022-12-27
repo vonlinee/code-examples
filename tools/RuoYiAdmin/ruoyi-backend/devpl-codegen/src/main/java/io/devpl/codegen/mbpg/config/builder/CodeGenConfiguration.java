@@ -1,10 +1,12 @@
 package io.devpl.codegen.mbpg.config.builder;
 
 import io.devpl.codegen.mbpg.config.po.TableInfo;
-import io.devpl.codegen.mbpg.query.IDatabaseQuery;
+import io.devpl.codegen.mbpg.query.DatabaseIntrospector;
 import io.devpl.codegen.mbpg.config.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -13,7 +15,9 @@ import java.util.regex.Pattern;
 /**
  * 配置汇总 传递给文件生成工具
  */
-public class ConfigBuilder {
+public class CodeGenConfiguration {
+
+    private static final Logger log = LoggerFactory.getLogger(CodeGenConfiguration.class);
 
     /**
      * 模板路径配置信息
@@ -64,7 +68,7 @@ public class ConfigBuilder {
      * 数据查询实例
      * @since 3.5.3
      */
-    private final IDatabaseQuery databaseQuery;
+    private final DatabaseIntrospector databaseQuery;
 
     /**
      * 在构造器中处理配置
@@ -74,7 +78,7 @@ public class ConfigBuilder {
      * @param templateConfig   模板配置
      * @param globalConfig     全局配置
      */
-    public ConfigBuilder(@Nullable PackageConfig packageConfig, @NotNull DataSourceConfig dataSourceConfig, @Nullable StrategyConfig strategyConfig, @Nullable TemplateConfig templateConfig, @Nullable GlobalConfig globalConfig, @Nullable InjectionConfig injectionConfig) {
+    public CodeGenConfiguration(@Nullable PackageConfig packageConfig, @NotNull DataSourceConfig dataSourceConfig, @Nullable StrategyConfig strategyConfig, @Nullable TemplateConfig templateConfig, @Nullable GlobalConfig globalConfig, @Nullable InjectionConfig injectionConfig) {
         this.dataSourceConfig = dataSourceConfig;
         this.strategyConfig = Optional.ofNullable(strategyConfig).orElseGet(GeneratorBuilder::strategyConfig);
         this.globalConfig = Optional.ofNullable(globalConfig).orElseGet(GeneratorBuilder::globalConfig);
@@ -82,10 +86,11 @@ public class ConfigBuilder {
         this.packageConfig = Optional.ofNullable(packageConfig).orElseGet(GeneratorBuilder::packageConfig);
         this.injectionConfig = Optional.ofNullable(injectionConfig).orElseGet(GeneratorBuilder::injectionConfig);
         this.pathInfo.putAll(new PathInfoHandler(this.globalConfig, this.templateConfig, this.packageConfig).getPathInfo());
-        Class<? extends IDatabaseQuery> databaseQueryClass = dataSourceConfig.getDatabaseQueryClass();
+        Class<? extends DatabaseIntrospector> databaseQueryClass = dataSourceConfig.getDatabaseQueryClass();
         try {
-            Constructor<? extends IDatabaseQuery> declaredConstructor = databaseQueryClass.getDeclaredConstructor(this.getClass());
+            Constructor<? extends DatabaseIntrospector> declaredConstructor = databaseQueryClass.getDeclaredConstructor(this.getClass());
             this.databaseQuery = declaredConstructor.newInstance(this);
+            log.info("数据库查询接口 {}", databaseQuery);
         } catch (ReflectiveOperationException exception) {
             throw new RuntimeException("创建IDatabaseQuery实例出现错误:", exception);
         }
@@ -102,19 +107,19 @@ public class ConfigBuilder {
     }
 
     @NotNull
-    public ConfigBuilder setStrategyConfig(@NotNull StrategyConfig strategyConfig) {
+    public CodeGenConfiguration setStrategyConfig(@NotNull StrategyConfig strategyConfig) {
         this.strategyConfig = strategyConfig;
         return this;
     }
 
     @NotNull
-    public ConfigBuilder setGlobalConfig(@NotNull GlobalConfig globalConfig) {
+    public CodeGenConfiguration setGlobalConfig(@NotNull GlobalConfig globalConfig) {
         this.globalConfig = globalConfig;
         return this;
     }
 
     @NotNull
-    public ConfigBuilder setInjectionConfig(@NotNull InjectionConfig injectionConfig) {
+    public CodeGenConfiguration setInjectionConfig(@NotNull InjectionConfig injectionConfig) {
         this.injectionConfig = injectionConfig;
         return this;
     }

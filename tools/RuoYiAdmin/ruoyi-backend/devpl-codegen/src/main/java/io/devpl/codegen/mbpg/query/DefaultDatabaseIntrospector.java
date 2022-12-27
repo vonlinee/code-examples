@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg.query;
 
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
-import io.devpl.codegen.mbpg.config.builder.ConfigBuilder;
+import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
 import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
@@ -30,11 +30,11 @@ import java.util.Map;
  * </p>
  * @since 3.5.3
  */
-public class DefaultQuery extends AbstractDatabaseQuery {
+public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
 
     private final TypeRegistry typeRegistry;
 
-    public DefaultQuery(@NotNull ConfigBuilder configBuilder) {
+    public DefaultDatabaseIntrospector(@NotNull CodeGenConfiguration configBuilder) {
         super(configBuilder);
         typeRegistry = new TypeRegistry(configBuilder.getGlobalConfig());
     }

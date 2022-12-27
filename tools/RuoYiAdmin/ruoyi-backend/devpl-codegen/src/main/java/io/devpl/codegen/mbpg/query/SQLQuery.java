@@ -2,7 +2,7 @@ package io.devpl.codegen.mbpg.query;
 
 import io.devpl.codegen.mbpg.config.IDbQuery;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
-import io.devpl.codegen.mbpg.config.builder.ConfigBuilder;
+import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
 import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
@@ -23,9 +23,9 @@ import java.util.*;
  * @see ITypeConvert 类型适配处理
  * @since 3.5.0
  */
-public class SQLQuery extends AbstractDatabaseQuery {
+public class SQLQuery extends AbstractDatabaseIntrospector {
 
-    public SQLQuery(@NotNull ConfigBuilder configBuilder) {
+    public SQLQuery(@NotNull CodeGenConfiguration configBuilder) {
         super(configBuilder);
     }
 

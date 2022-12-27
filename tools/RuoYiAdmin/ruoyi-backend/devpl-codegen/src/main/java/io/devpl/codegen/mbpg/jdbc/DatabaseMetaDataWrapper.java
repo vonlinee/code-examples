@@ -14,8 +14,6 @@ import java.util.*;
 
 /**
  * 数据库数据元包装类
- * @author nieqiurong 2021/2/8.
- * @since 3.5.0
  */
 public class DatabaseMetaDataWrapper {
 
@@ -34,7 +32,14 @@ public class DatabaseMetaDataWrapper {
             Connection connection = dataSourceConfig.getConnection();
             this.databaseMetaData = connection.getMetaData();
             this.catalog = connection.getCatalog();
-            this.schema = dataSourceConfig.getSchemaName();
+            if (dataSourceConfig.getSchemaName() == null) {
+                this.schema = connection.getSchema();
+            } else {
+                this.schema = dataSourceConfig.getSchemaName();
+            }
+            if (schema == null) {
+                logger.warn("schema is null, {}", dataSourceConfig.getUrl());
+            }
         } catch (SQLException e) {
             throw new RuntimeException("获取元数据错误:", e);
         }

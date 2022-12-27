@@ -24,7 +24,7 @@ public class DevplCodeGenerator {
     private static final String JDBC_CONFIG_FILE = "D:/Temp/devpl-jdbc.properties";
 
     private static final String author = "someone";
-    private static final String outputRootDir = "D:\\temp";
+    private static final String outputRootDir = "D:\\Temp";
     // 父包配置
     private static final String parentPackage = "";
     // 要生成的表名列表
@@ -44,7 +44,7 @@ public class DevplCodeGenerator {
         FastAutoGenerator.create(url, username, password).globalConfig(builder -> {
                              builder.author(author) // 设置作者名 baomidou 默认值:作者
                                     .fileOverride()
-                                    // .enableSwagger() // 开启 swagger 模式
+                                    .enableSwagger() // 开启 swagger 模式
                                     // .enableSpringdoc()  // 开启 springdoc 模式  @Schema注解
                                     .dateType(DateType.TIME_PACK)  // 时间策略
                                     .commentDate("yyyy-MM-dd HH:mm:ss") // 注释日期 默认值: yyyy-MM-dd
@@ -57,9 +57,11 @@ public class DevplCodeGenerator {
                                     // .service("") // Service 包名
                                     .pathInfo(Collections.singletonMap(OutputFile.xml, "D:\\Temp")); // 设置mapperXml生成路径
                          }).injectionConfig(builder -> {
-
+                             builder.beforeOutputFile((tableInfo, stringObjectMap) -> {
+                                 // System.out.println(tableInfo);
+                                 // System.out.println(stringObjectMap);
+                             });
                          }).strategyConfig(builder -> {
-
                              // builder
                              // .enableSkipView() // 开启大写命名
                              //.enableSchema(); // 启用 schema
@@ -71,6 +73,7 @@ public class DevplCodeGenerator {
                                      .entityBuilder()
                                      .enableFileOverride()
                                      .enableLombok()
+                                     .enableTableFieldAnnotation()  // 字段添加TableField注解
                                      .mapperBuilder()
                                      .enableFileOverride()
                                      .enableBaseResultMap()

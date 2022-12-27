@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg.template;
 
 import io.devpl.codegen.mbpg.config.*;
-import io.devpl.codegen.mbpg.config.builder.ConfigBuilder;
+import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
 import io.devpl.codegen.mbpg.config.builder.CustomFile;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
@@ -34,13 +34,13 @@ public abstract class AbstractTemplateEngine {
     /**
      * 配置信息
      */
-    private ConfigBuilder configBuilder;
+    private CodeGenConfiguration configBuilder;
 
     /**
      * 模板引擎初始化
      */
     @NotNull
-    public abstract AbstractTemplateEngine init(@NotNull ConfigBuilder configBuilder);
+    public abstract AbstractTemplateEngine init(@NotNull CodeGenConfiguration configBuilder);
 
     /**
      * 输出自定义模板文件
@@ -70,7 +70,6 @@ public abstract class AbstractTemplateEngine {
      * @since 3.5.0
      */
     protected void outputEntity(@NotNull TableInfo tableInfo, @NotNull Map<String, Object> objectMap) {
-        LOGGER.info("输出实体文件");
         String entityName = tableInfo.getEntityName();
         String entityPath = getPathInfo(OutputFile.entity);
         if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
@@ -193,7 +192,7 @@ public abstract class AbstractTemplateEngine {
                     File parentFile = file.getParentFile();
                     FileUtils.forceMkdir(parentFile);
                 }
-                writer(objectMap, templatePath, file);
+                write(objectMap, templatePath, file);
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
@@ -232,7 +231,7 @@ public abstract class AbstractTemplateEngine {
     @NotNull
     public AbstractTemplateEngine batchOutput() {
         try {
-            ConfigBuilder config = this.getConfigBuilder();
+            CodeGenConfiguration config = this.getConfigBuilder();
             List<TableInfo> tableInfoList = config.getTableInfoList();
             for (TableInfo tableInfo : tableInfoList) {
                 Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
@@ -270,7 +269,7 @@ public abstract class AbstractTemplateEngine {
 //        this.writer(objectMap, templatePath, outputFile.getPath());
 //        logger.debug("模板:" + templatePath + ";  文件:" + outputFile);
 //    }
-    public abstract void writer(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception;
+    public abstract void write(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception;
 
     /**
      * 打开输出目录
@@ -295,7 +294,7 @@ public abstract class AbstractTemplateEngine {
      * @return ignore
      */
     @NotNull
-    public Map<String, Object> getObjectMap(@NotNull ConfigBuilder config, @NotNull TableInfo tableInfo) {
+    public Map<String, Object> getObjectMap(@NotNull CodeGenConfiguration config, @NotNull TableInfo tableInfo) {
         StrategyConfig strategyConfig = config.getStrategyConfig();
         Map<String, Object> controllerData = strategyConfig.controller().renderData(tableInfo);
         Map<String, Object> objectMap = new HashMap<>(controllerData);
@@ -359,12 +358,12 @@ public abstract class AbstractTemplateEngine {
     }
 
     @NotNull
-    public ConfigBuilder getConfigBuilder() {
+    public CodeGenConfiguration getConfigBuilder() {
         return configBuilder;
     }
 
     @NotNull
-    public AbstractTemplateEngine setConfigBuilder(@NotNull ConfigBuilder configBuilder) {
+    public AbstractTemplateEngine setConfigBuilder(@NotNull CodeGenConfiguration configBuilder) {
         this.configBuilder = configBuilder;
         return this;
     }

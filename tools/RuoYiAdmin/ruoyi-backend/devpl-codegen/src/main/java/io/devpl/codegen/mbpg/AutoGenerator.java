@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg;
 
 import io.devpl.codegen.mbpg.config.*;
-import io.devpl.codegen.mbpg.config.builder.ConfigBuilder;
+import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.template.AbstractTemplateEngine;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ public class AutoGenerator {
     /**
      * 配置信息
      */
-    protected ConfigBuilder config;
+    protected CodeGenConfiguration config;
     /**
      * 注入配置
      */
@@ -123,7 +123,7 @@ public class AutoGenerator {
      * @return this
      * @since 3.5.0
      */
-    public AutoGenerator config(@NotNull ConfigBuilder configBuilder) {
+    public AutoGenerator config(@NotNull CodeGenConfiguration configBuilder) {
         this.config = configBuilder;
         return this;
     }
@@ -136,7 +136,7 @@ public class AutoGenerator {
         logger.debug("==========================准备生成文件...==========================");
         // 初始化配置
         if (null == config) {
-            config = new ConfigBuilder(packageInfo, dataSource, strategy, templateConfig, globalConfig, injection);
+            config = new CodeGenConfiguration(packageInfo, dataSource, strategy, templateConfig, globalConfig, injection);
         }
         if (null == templateEngine) {
             // 为了兼容之前逻辑，采用 Velocity 引擎 【 默认 】
@@ -155,11 +155,11 @@ public class AutoGenerator {
      * @return ignore
      */
     @NotNull
-    protected List<TableInfo> getAllTableInfoList(@NotNull ConfigBuilder config) {
+    protected List<TableInfo> getAllTableInfoList(@NotNull CodeGenConfiguration config) {
         return config.getTableInfoList();
     }
 
-    public ConfigBuilder getConfig() {
+    public CodeGenConfiguration getConfig() {
         return config;
     }
 

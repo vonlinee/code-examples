@@ -65,7 +65,7 @@ public interface INameConvert {
 
         @Override
         public @NotNull String entityNameConvert(@NotNull TableInfo tableInfo) {
-            return NamingStrategyEnum.capitalFirst(processName(tableInfo.getName(), strategyConfig.entity().getNaming(), strategyConfig.getTablePrefix(), strategyConfig.getTableSuffix()));
+            return NamingStrategyEnum.capitalFirst(processName(tableInfo.getName(), strategyConfig.entity().getNamingStrategy(), strategyConfig.getTablePrefix(), strategyConfig.getTableSuffix()));
         }
 
         @Override

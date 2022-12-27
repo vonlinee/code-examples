@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.devpl.codegen.mbpg.config.po;
 
 import com.baomidou.mybatisplus.annotation.*;
@@ -20,7 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 // import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.mbpg.config.builder.ConfigBuilder;
+import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
 import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
 import org.jetbrains.annotations.NotNull;
@@ -29,10 +14,8 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 /**
  * 表信息，关联到当前字段信息
- *
  * @author YangHu, lanjerry
  * @since 2016/8/30
  */
@@ -125,12 +108,11 @@ public class TableInfo {
 
     /**
      * 构造方法
-     *
      * @param configBuilder 配置构建
      * @param name          表名
      * @since 3.5.0
      */
-    public TableInfo(@NotNull ConfigBuilder configBuilder, @NotNull String name) {
+    public TableInfo(@NotNull CodeGenConfiguration configBuilder, @NotNull String name) {
         this.strategyConfig = configBuilder.getStrategyConfig();
         this.globalConfig = configBuilder.getGlobalConfig();
         this.entity = configBuilder.getStrategyConfig().entity();
@@ -159,14 +141,13 @@ public class TableInfo {
      */
     public TableInfo setEntityName(@NotNull String entityName) {
         this.entityName = entityName;
-        //TODO 先放置在这里
+        // TODO 先放置在这里
         setConvert();
         return this;
     }
 
     /**
      * 添加字段
-     *
      * @param field 字段
      * @since 3.5.0
      */
@@ -199,7 +180,7 @@ public class TableInfo {
      * 转换filed实体为 xml mapper 中的 base column 字符串信息
      */
     public String getFieldNames() {
-        //TODO 感觉这个也啥必要,不打算公开set方法了
+        // TODO 感觉这个也啥必要,不打算公开set方法了
         if (StringUtils.isBlank(fieldNames)) {
             this.fieldNames = this.fields.stream().map(TableField::getColumnName).collect(Collectors.joining(", "));
         }
@@ -208,7 +189,6 @@ public class TableInfo {
 
     /**
      * 导包处理
-     *
      * @since 3.5.0
      */
     public void importPackage() {
@@ -255,7 +235,7 @@ public class TableInfo {
             if (null != field.getFill()) {
                 // 填充字段
                 importPackages.add(com.baomidou.mybatisplus.annotation.TableField.class.getCanonicalName());
-                //TODO 好像default的不用处理也行,这个做优化项目.
+                // TODO 好像default的不用处理也行,这个做优化项目.
                 importPackages.add(FieldFill.class.getCanonicalName());
             }
             if (field.isVersionField()) {
@@ -269,7 +249,6 @@ public class TableInfo {
 
     /**
      * 处理表信息(文件名与导包)
-     *
      * @since 3.5.0
      */
     public void processTable() {
@@ -284,9 +263,8 @@ public class TableInfo {
     }
 
     public TableInfo setComment(String comment) {
-        //TODO 暂时挪动到这
-        this.comment = this.globalConfig.isSwagger()
-            && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
+        // TODO 暂时挪动到这
+        this.comment = this.globalConfig.isSwagger() && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
         return this;
     }
 
@@ -353,5 +331,29 @@ public class TableInfo {
     @NotNull
     public List<TableField> getCommonFields() {
         return commonFields;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("TableInfo{");
+        sb.append("strategyConfig=").append(strategyConfig);
+        sb.append(", globalConfig=").append(globalConfig);
+        sb.append(", importPackages=").append(importPackages);
+        sb.append(", convert=").append(convert);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", comment='").append(comment).append('\'');
+        sb.append(", entityName='").append(entityName).append('\'');
+        sb.append(", mapperName='").append(mapperName).append('\'');
+        sb.append(", xmlName='").append(xmlName).append('\'');
+        sb.append(", serviceName='").append(serviceName).append('\'');
+        sb.append(", serviceImplName='").append(serviceImplName).append('\'');
+        sb.append(", controllerName='").append(controllerName).append('\'');
+        sb.append(", fields=").append(fields);
+        sb.append(", havePrimaryKey=").append(havePrimaryKey);
+        sb.append(", commonFields=").append(commonFields);
+        sb.append(", fieldNames='").append(fieldNames).append('\'');
+        sb.append(", entity=").append(entity);
+        sb.append('}');
+        return sb.toString();
     }
 }
