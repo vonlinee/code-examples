@@ -1,6 +1,7 @@
 package io.devpl.toolkit.fxui.controller;
 
 import io.devpl.toolkit.fxui.event.UpdateCodeGenConfigEvent;
+import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -43,12 +44,9 @@ public class GeneratorConfigController extends FXControllerBase {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    Button btn1 = new Button("应用");
-                    Button btn2 = new Button("删除");
-                    HBox hBox = new HBox();
+                    Button btn1 = new Button("应用"), btn2 = new Button("删除");
+                    HBox hBox = new HBox(btn1, btn2);
                     hBox.setSpacing(10);
-                    hBox.getChildren().add(btn1);
-                    hBox.getChildren().add(btn2);
                     btn1.setOnAction(event -> {
                         try {
                             // 应用配置
@@ -81,7 +79,7 @@ public class GeneratorConfigController extends FXControllerBase {
             List<CodeGenConfiguration> configs = ConfigHelper.loadGeneratorConfigs();
             configTable.setItems(FXCollections.observableList(configs));
         } catch (Exception e) {
-            Alerts.showErrorAlert(e.getMessage());
+            Alerts.error(e.getMessage()).show();
         }
     }
 }

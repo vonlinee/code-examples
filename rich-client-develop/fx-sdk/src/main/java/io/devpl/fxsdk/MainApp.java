@@ -16,7 +16,6 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
         //将主舞台交给控制器处理
         stageController.setPrimaryStage("primaryStage", primaryStage);
         //加载两个舞台，每个界面一个舞台
@@ -24,7 +23,6 @@ public class MainApp extends Application {
         stageController.loadStage(mainViewID, mainViewRes);
 
         WindowManager.setPrimaryStage(primaryStage);
-
         //显示MainView舞台
         stageController.setStage(mainViewID);
     }

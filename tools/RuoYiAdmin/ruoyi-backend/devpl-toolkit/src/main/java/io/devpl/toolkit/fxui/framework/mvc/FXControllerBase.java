@@ -1,8 +1,8 @@
-package io.devpl.toolkit.fxui.controller;
+package io.devpl.toolkit.fxui.framework.mvc;
 
+import io.devpl.toolkit.fxui.controller.FXMLPage;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.framework.JFX;
-import io.devpl.toolkit.fxui.framework.mvc.FXController;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -12,7 +12,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.lang.ref.SoftReference;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 

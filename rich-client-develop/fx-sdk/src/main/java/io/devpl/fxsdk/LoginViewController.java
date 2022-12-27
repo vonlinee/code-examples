@@ -1,5 +1,6 @@
 package io.devpl.fxsdk;
 
+import com.jfoenix.controls.JFXAlert;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
@@ -29,5 +30,8 @@ public class LoginViewController implements ControlledStage, Initializable {
     @FXML
     public void login(MouseEvent mouseEvent) {
         myController.setStage(MainApp.mainViewID);
+
+        JFXAlert<Object> alert = new JFXAlert<>();
+        alert.show();
     }
 }

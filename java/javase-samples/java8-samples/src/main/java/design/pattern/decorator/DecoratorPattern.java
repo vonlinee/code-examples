@@ -1,20 +1,25 @@
 package design.pattern.decorator;
 
+import java.io.*;
+
 /**
  * 有时想用一些现存的组件。这些组件可能只是完成了一些核心功能。但在不改变其结构的情况下，可以动态地扩展其功能。 所有这些都可以釆用装饰器模式来实现
- * 
+ * <p>
  * 装饰器模式（Decorator Pattern）允许向一个现有的对象添加新的功能，同时又不改变其结构。
  * 这种类型的设计模式属于结构型模式，它是作为现有的类的一个包装
- * 
- * https://www.cnblogs.com/yxlaisj/p/10446504.html
- * 
+ * <p>
+ * <a href="https://www.cnblogs.com/yxlaisj/p/10446504.html">...</a>
+ *
  * @author vonline
  */
 public class DecoratorPattern {
 
-	static void print(Coffee c) {
+	static void print(Coffee c) throws FileNotFoundException {
 		System.out.println("花费了: " + c.getCost());
 		System.out.println("配料: " + c.getIngredients());
+
+
+
 	}
 
 	public static void main(String[] args) {

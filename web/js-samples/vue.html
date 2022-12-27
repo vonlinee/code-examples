@@ -22,6 +22,8 @@
       var MyComponent = Vue.extend({
         template: "#comp"
       });  // typeof MyComponent => Function
+
+      console.log(MyComponent);
       // 全局挂载组件
       Vue.component("my-component", MyComponent);
       // 创建 Vue 实例，得到 ViewModel

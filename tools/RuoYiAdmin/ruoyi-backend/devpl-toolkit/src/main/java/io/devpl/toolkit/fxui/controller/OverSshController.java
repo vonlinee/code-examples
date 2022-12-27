@@ -6,7 +6,7 @@ import io.devpl.toolkit.fxui.config.DatabaseConfig;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
-import io.devpl.toolkit.fxui.utils.DbUtils;
+import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -191,9 +191,9 @@ public class OverSshController extends DbConnectionController {
 
     @FXML
     public void testSSH() {
-        Session session = DbUtils.getSSHSession(extractConfigFromUi());
+        Session session = DBUtils.getSSHSession(extractConfigFromUi());
         if (session == null) {
-            Alerts.showErrorAlert("请检查主机，端口，用户名，以及密码/秘钥是否填写正确");
+            Alerts.error("请检查主机，端口，用户名，以及密码/秘钥是否填写正确").show();
             return;
         }
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -212,12 +212,12 @@ public class OverSshController extends DbConnectionController {
                 throw new TimeoutException("连接超时");
             }
             result.get();
-            Alerts.showInfoAlert("连接SSH服务器成功，恭喜你可以使用OverSSH功能");
+            Alerts.info("连接SSH服务器成功，恭喜你可以使用OverSSH功能").show();
             recoverNotice();
         } catch (Exception e) {
             Alerts.showErrorAlert("请检查主机，端口，用户名，以及密码/秘钥是否填写正确: " + e.getMessage());
         } finally {
-            DbUtils.shutdownPortForwarding(session);
+            DBUtils.shutdownPortForwarding(session);
         }
     }
 

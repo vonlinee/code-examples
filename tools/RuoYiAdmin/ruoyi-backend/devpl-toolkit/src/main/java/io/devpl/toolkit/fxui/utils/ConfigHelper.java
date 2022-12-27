@@ -4,8 +4,11 @@ import io.devpl.sdk.util.ResourceUtils;
 import io.devpl.toolkit.fxui.config.CodeGenConfiguration;
 import io.devpl.toolkit.fxui.config.DBDriver;
 import io.devpl.toolkit.fxui.config.DatabaseConfig;
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,8 +42,10 @@ public class ConfigHelper {
     }
 
     static void createEmptyXMLFile(File uiConfigFile) throws IOException {
-        try (InputStream fis = Thread.currentThread().getContextClassLoader()
-                                     .getResourceAsStream("sqlite3.db"); FileOutputStream fos = new FileOutputStream(uiConfigFile)) {
+        try (InputStream fis = Thread
+                .currentThread()
+                .getContextClassLoader()
+                .getResourceAsStream("sqlite3.db"); FileOutputStream fos = new FileOutputStream(uiConfigFile)) {
             byte[] buffer = new byte[1024];
             int byteread;
             while (true) {
@@ -86,7 +91,6 @@ public class ConfigHelper {
     }
 
     public static void deleteDatabaseConfig(DatabaseConfig databaseConfig) throws Exception {
-        ResultSet rs = null;
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             String sql = String.format("delete from dbs where id=%d", databaseConfig.getId());
             stat.executeUpdate(sql);

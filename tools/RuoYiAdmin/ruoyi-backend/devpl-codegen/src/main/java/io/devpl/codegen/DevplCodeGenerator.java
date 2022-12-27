@@ -1,20 +1,16 @@
 package io.devpl.codegen;
 
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.TypeSpec;
 import io.devpl.codegen.mbpg.FastAutoGenerator;
 import io.devpl.codegen.mbpg.config.OutputFile;
 import io.devpl.codegen.mbpg.config.rules.DateType;
 import io.devpl.codegen.mbpg.template.FreemarkerTemplateEngine;
-import io.devpl.codegen.mbpg.util.RuntimeUtils;
-import io.devpl.sdk.util.CollectionUtils;
-import io.devpl.sdk.util.Maps;
 import io.devpl.sdk.util.PropertiesUtils;
 
-import javax.lang.model.element.Modifier;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * 基于模板的代码生成
@@ -40,10 +36,6 @@ public class DevplCodeGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-//        Process process = RuntimeUtils.openTextFile(JDBC_CONFIG_FILE);
-//        while (process.isAlive()) {
-//            // 等待编辑配置结束
-//        }
         tableNamesToBeGenerated();
         final Properties properties = PropertiesUtils.loadProperties(JDBC_CONFIG_FILE);
         final String url = properties.getProperty("url");

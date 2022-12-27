@@ -119,13 +119,11 @@ public class TableConfiguration extends PropertyHolder {
                 return true;
             }
         }
-
         for (IgnoredColumnPattern ignoredColumnPattern : ignoredColumnPatterns) {
             if (ignoredColumnPattern.matches(columnName)) {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -146,13 +144,10 @@ public class TableConfiguration extends PropertyHolder {
         if (this == obj) {
             return true;
         }
-
         if (!(obj instanceof TableConfiguration)) {
             return false;
         }
-
         TableConfiguration other = (TableConfiguration) obj;
-
         return Objects.equals(this.catalog, other.catalog) && Objects.equals(this.schema, other.schema) && Objects.equals(this.tableName, other.tableName);
     }
 

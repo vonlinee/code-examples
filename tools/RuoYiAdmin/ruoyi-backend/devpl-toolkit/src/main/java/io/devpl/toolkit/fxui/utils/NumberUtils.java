@@ -24,11 +24,27 @@ public class NumberUtils {
         }
     }
 
-    public static Integer parseInt(final String str, int defaultValue) {
+    /**
+     * 解析字符串为int类型,解析失败返回默认值
+     * @param str          字符串
+     * @param defaultValue 默认值
+     * @return Integer
+     */
+    public static Integer parseInteger(final String str, int defaultValue) {
         try {
             return Integer.parseInt(str);
         } catch (NumberFormatException e) {
             return defaultValue;
         }
+    }
+
+    /**
+     * 解析字符串为int类型,解析失败返回默认值
+     * @param str          字符串
+     * @param defaultValue 默认值
+     * @return int
+     */
+    public static int parseInt(final String str, int defaultValue) {
+        return parseInteger(str, defaultValue);
     }
 }

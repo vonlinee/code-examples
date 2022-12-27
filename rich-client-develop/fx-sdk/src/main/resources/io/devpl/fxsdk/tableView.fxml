@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="io.devpl.fxsdk.DynamicTableViewController">
+    <top>
+        <HBox prefHeight="42.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" text="首页" onAction="#toIndex">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" text="新增">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" text="查询">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" text="修改">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" text="删除">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </HBox.margin>
+                </Button>
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox prefHeight="43.0" prefWidth="800.0">
+                    <children>
+                        <Label id="codeLabel" fx:id="codeLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT"
+                               prefWidth="75.0" text="编码：" textAlignment="CENTER">
+                            <HBox.margin>
+                                <Insets bottom="10.0" left="10.0" top="10.0"/>
+                            </HBox.margin>
+                        </Label>
+                        <TextField id="codeText" prefWidth="180.0" fx:id="coedTextField">
+                            <HBox.margin>
+                                <Insets bottom="5.0" right="5.0" top="5.0"/>
+                            </HBox.margin>
+                        </TextField>
+                        <Label id="nameLabel" fx:id="nameLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT"
+                               prefWidth="75.0" text="名称：" textAlignment="CENTER">
+                            <HBox.margin>
+                                <Insets bottom="10.0" left="20.0" top="10.0"/>
+                            </HBox.margin>
+                        </Label>
+                        <TextField id="codeText" prefWidth="180.0" fx:id="nameTextField">
+                            <HBox.margin>
+                                <Insets bottom="5.0" right="5.0" top="5.0"/>
+                            </HBox.margin>
+                        </TextField>
+                    </children>
+                </HBox>
+                <HBox prefHeight="42.0" prefWidth="800.0">
+                    <children>
+                        <Label text="开始时间：">
+                            <HBox.margin>
+                                <Insets bottom="10.0" left="10.0" top="10.0"/>
+                            </HBox.margin>
+                        </Label>
+                        <DatePicker prefWidth="180.0" fx:id="beginDatePicker">
+                            <HBox.margin>
+                                <Insets bottom="5.0" right="5.0" top="5.0"/>
+                            </HBox.margin>
+                        </DatePicker>
+                        <Label text="结束时间：">
+                            <HBox.margin>
+                                <Insets bottom="10.0" left="20.0" top="10.0"/>
+                            </HBox.margin>
+                        </Label>
+                        <DatePicker prefWidth="180.0" fx:id="endDatePicker">
+                            <HBox.margin>
+                                <Insets bottom="5.0" right="5.0" top="5.0"/>
+                            </HBox.margin>
+                        </DatePicker>
+                    </children>
+                </HBox>
+                <HBox prefHeight="473.0" prefWidth="800.0" fx:id="parent">
+                    <children>
+                        <!--实现分页插件与表格控件结合的关键在于两者要在同一个父容器下-->
+                        <TableView prefHeight="100.0" prefWidth="802.0" fx:id="tableView"/>
+                        <Pagination fx:id="pagination" pageCount="10" prefHeight="35.0" prefWidth="800.0"
+                                    BorderPane.alignment="CENTER"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+    <bottom>
+        <!--错误位置-->
+        <!--<Pagination fx:id="pagination" pageCount="10" prefHeight="35.0" prefWidth="800.0" BorderPane.alignment="CENTER" />-->
+    </bottom>
+</BorderPane>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--代码生成配置汇总-->
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<TabPane fx:id="tabpRoot" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         fx:controller="io.devpl.toolkit.fxui.controller.CodegenConfigSummaryController">
+
+    <!--通用配置-->
+    <Tab closable="false">
+        <fx:include source="./codegen_common_config.fxml"/>
+    </Tab>
+</TabPane>

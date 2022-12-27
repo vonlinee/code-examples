@@ -1,11 +1,8 @@
 package io.devpl.toolkit.fxui.framework.mvc;
 
 import javafx.event.Event;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.greenrobot.eventbus.EventBus;
@@ -15,7 +12,7 @@ import org.mybatis.generator.logging.LogFactory;
 /**
  * 所有控制器的基类，控制器是单例对象
  */
-public abstract class FXController implements Initializable {
+public abstract class FXController {
 
     protected final Log log = LogFactory.getLog(getClass());
 

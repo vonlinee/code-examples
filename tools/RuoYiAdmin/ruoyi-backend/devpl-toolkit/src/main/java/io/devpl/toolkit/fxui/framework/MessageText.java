@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 /**
  * 统一管理字符串提示信息
  */
+@SuppressWarnings("unused")
 public final class MessageText {
 
     private static final String BUNDLE_NAME = "org.mybatis.generator.internal.util.messages.messages"; //$NON-NLS-1$
@@ -25,26 +26,26 @@ public final class MessageText {
         }
     }
 
-    public static String getString(String key, String parm1) {
+    public static String getString(String key, String param1) {
         try {
-            return MessageFormat.format(RESOURCE_BUNDLE.getString(key), parm1);
+            return MessageFormat.format(RESOURCE_BUNDLE.getString(key), param1);
         } catch (MissingResourceException e) {
             return '!' + key + '!';
         }
     }
 
-    public static String getString(String key, String parm1, String parm2) {
+    public static String getString(String key, String param1, String param2) {
         try {
-            return MessageFormat.format(RESOURCE_BUNDLE.getString(key), parm1, parm2);
+            return MessageFormat.format(RESOURCE_BUNDLE.getString(key), param1, param2);
         } catch (MissingResourceException e) {
             return '!' + key + '!';
         }
     }
 
-    public static String getString(String key, String parm1, String parm2,
-                                   String parm3) {
+    public static String getString(String key, String param1, String param2,
+                                   String param3) {
         try {
-            return MessageFormat.format(RESOURCE_BUNDLE.getString(key), parm1, parm2, parm3);
+            return MessageFormat.format(RESOURCE_BUNDLE.getString(key), param1, param2, param3);
         } catch (MissingResourceException e) {
             return '!' + key + '!';
         }

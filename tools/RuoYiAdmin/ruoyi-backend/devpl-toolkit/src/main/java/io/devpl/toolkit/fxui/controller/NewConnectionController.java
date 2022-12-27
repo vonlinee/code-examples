@@ -3,7 +3,8 @@ package io.devpl.toolkit.fxui.controller;
 import com.jcraft.jsch.Session;
 import io.devpl.toolkit.fxui.config.DatabaseConfig;
 import io.devpl.toolkit.fxui.framework.Alerts;
-import io.devpl.toolkit.fxui.utils.DbUtils;
+import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -94,7 +95,7 @@ public class NewConnectionController extends FXControllerBase {
             Alerts.warn("密码以外其他字段必填").showAndWait();
             return;
         }
-        Session sshSession = DbUtils.getSSHSession(config);
+        Session sshSession = DBUtils.getSSHSession(config);
         if (isOverssh && sshSession != null) {
             PictureProcessStateController pictureProcessState = new PictureProcessStateController();
             pictureProcessState.startPlay();
@@ -102,8 +103,8 @@ public class NewConnectionController extends FXControllerBase {
             Task<Void> task = new Task<>() {
                 @Override
                 protected Void call() throws Exception {
-                    DbUtils.engagePortForwarding(sshSession, config);
-                    DbUtils.getConnection(config);
+                    DBUtils.engagePortForwarding(sshSession, config);
+                    DBUtils.getConnection(config);
                     return null;
                 }
             };
@@ -121,17 +122,17 @@ public class NewConnectionController extends FXControllerBase {
                 if (e.getCause() instanceof EOFException) {
                     pictureProcessState.playFailState("连接失败, 请检查数据库的主机名，并且检查端口和目标端口是否一致", true);
                     // 端口转发已经成功，但是数据库连接不上，故需要释放连接
-                    DbUtils.shutdownPortForwarding(sshSession);
+                    DBUtils.shutdownPortForwarding(sshSession);
                     return;
                 }
                 pictureProcessState.playFailState("连接失败:" + e.getMessage(), true);
                 // 可能是端口转发已经成功，但是数据库连接不上，故需要释放连接
-                DbUtils.shutdownPortForwarding(sshSession);
+                DBUtils.shutdownPortForwarding(sshSession);
             });
             task.setOnSucceeded(event -> {
                 try {
                     pictureProcessState.playSuccessState("连接成功", true);
-                    DbUtils.shutdownPortForwarding(sshSession);
+                    DBUtils.shutdownPortForwarding(sshSession);
                     tabControlBController.recoverNotice();
                 } catch (Exception e) {
                     log.error("", e);
@@ -140,7 +141,7 @@ public class NewConnectionController extends FXControllerBase {
             new Thread(task).start();
         } else {
             try {
-                DbUtils.getConnection(config);
+                DBUtils.getConnection(config);
                 Alerts.info("连接成功").showAndWait();
             } catch (Exception e) {
                 log.error(e.getMessage(), e);

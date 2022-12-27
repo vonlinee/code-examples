@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -25,13 +24,12 @@ import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * 便捷的方法用于创建JavaFX控件
- * 类似于SWT
+ * 便捷的方法用于创建JavaFX控件，减少代码行数
  */
+@SuppressWarnings("unused")
 public final class JFX {
 
     public final static ApplicationContext context = ApplicationContext.getInstance();
@@ -40,14 +38,14 @@ public final class JFX {
         return newStage(title, owner, modality, scene, true);
     }
 
-    public static Stage newStage(String title, Window owner, Modality modality, Scene scene, boolean resiable) {
+    public static Stage newStage(String title, Window owner, Modality modality, Scene scene, boolean resizable) {
         Stage stage = new Stage();
         if (title != null) stage.setTitle(title);
         if (owner != null) stage.initOwner(owner);
         if (modality != null) stage.initModality(modality);
         if (scene != null) stage.setScene(scene);
         stage.setMaximized(false);
-        stage.setResizable(resiable);
+        stage.setResizable(resizable);
         return stage;
     }
 
@@ -121,8 +119,8 @@ public final class JFX {
 
     /**
      * 给控件添加一个按钮
-     * @param group
-     * @param text
+     * @param group Group容器
+     * @param text  按钮文本
      */
     public static Button addButton(Group group, String text, EventHandler<? super MouseEvent> value) {
         Button btn = newButton(text, value);
@@ -132,8 +130,8 @@ public final class JFX {
 
     /**
      * 给控件添加一个按钮
-     * @param pane
-     * @param text
+     * @param pane 容器面板
+     * @param text 文本
      */
     public static Button addButton(Pane pane, String text, EventHandler<? super MouseEvent> value) {
         Button btn = newButton(text, value);
@@ -170,10 +168,10 @@ public final class JFX {
 
     /**
      * ImageView对象是否可以缓存
-     * @param pathname
-     * @param size
-     * @param userData
-     * @return
+     * @param pathname 路径名称
+     * @param size     图片尺寸大小
+     * @param userData 节点缓存的数据
+     * @return ImageView实例
      */
     public static ImageView loadImageView(String pathname, double size, Object userData) {
         ImageView dbImage = new ImageView(pathname);
@@ -216,8 +214,8 @@ public final class JFX {
     /**
      * 不要在Controller的构造，initialize方法里调用
      * @param node 节点
-     * @param <W>
-     * @return
+     * @param <W>  Window
+     * @return Window
      */
     public static <W extends Window> W getStage(@NotNull Node node) {
         @SuppressWarnings("unchecked") final W window = (W) node.getScene().getWindow();

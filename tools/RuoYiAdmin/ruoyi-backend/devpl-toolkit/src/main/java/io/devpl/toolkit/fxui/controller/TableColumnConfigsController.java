@@ -3,6 +3,7 @@ package io.devpl.toolkit.fxui.controller;
 import io.devpl.toolkit.fxui.config.Constants;
 import io.devpl.toolkit.fxui.common.model.ColumnCustomConfiguration;
 import io.devpl.toolkit.fxui.framework.Alerts;
+import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

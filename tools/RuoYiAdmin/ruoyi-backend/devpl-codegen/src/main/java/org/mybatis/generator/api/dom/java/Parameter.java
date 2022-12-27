@@ -20,6 +20,9 @@ import java.util.List;
 
 import org.mybatis.generator.api.dom.java.render.ParameterRenderer;
 
+/**
+ * 参数
+ */
 public class Parameter {
     private final String name;
     private final FullyQualifiedJavaType type;

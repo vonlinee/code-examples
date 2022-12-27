@@ -3,10 +3,7 @@ package io.devpl.toolkit.fxui.common;
 /**
  * 存储所有的key字符串
  */
-public final class StringKey {
-
-    private StringKey() {
-    }
+public class StringKey {
 
     public static final String JAVA_FILE_ENCODING = "javaFileEncoding";
     public static final String AUTO_DELIMIT_KEYWORDS = "autoDelimitKeywords";
@@ -18,9 +15,12 @@ public final class StringKey {
     public static final String USE_INFORMATION_SCHEMA = "useInformationSchema";
     public static final String COLUMN_REMARKS = "columnRemarks";
     public static final String ANNOTATIONS = "annotations";
-
     // 插件类的类型名，即类的全类名
     public static final String PLUGIN_TYPE = "type";
+    // 使用Example类
     public static final String USE_EXAMPLE = "useExample";
-
+    // 父包名
+    public static final String PARENT_PACKAGE = "parentPackage";
+    // 目标项目
+    public static final String TARGET_PROJECT = "targetProject";
 }

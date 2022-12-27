@@ -6,6 +6,7 @@ import io.devpl.toolkit.fxui.config.DatabaseConfig;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.framework.JFX;
+import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.event.ActionEvent;

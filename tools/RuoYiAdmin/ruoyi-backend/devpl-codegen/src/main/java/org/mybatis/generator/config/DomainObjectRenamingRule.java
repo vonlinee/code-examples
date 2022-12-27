@@ -46,9 +46,7 @@ import java.util.List;
  * <code>java.util.regex.Matcher.replaceAll</code> method for this function. See
  * the documentation of that method for example of the regular expression
  * language used in Java.
- *
  * @author liuzh
- *
  */
 public class DomainObjectRenamingRule {
     private String searchString;

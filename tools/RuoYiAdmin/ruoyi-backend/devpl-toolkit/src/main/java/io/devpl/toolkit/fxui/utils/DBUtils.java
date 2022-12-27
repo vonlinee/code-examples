@@ -11,7 +11,7 @@ import io.devpl.sdk.util.ResourceUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.*;
 
 import java.io.File;
 import java.sql.*;
@@ -19,9 +19,12 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class DbUtils {
+/**
+ * 封装JDBC Template进行数据库操作
+ */
+public class DBUtils {
 
-    private static final Log log = LogFactory.getLog(DbUtils.class);
+    private static final Log log = LogFactory.getLog(DBUtils.class);
 
     /**
      * 数据库连接超时时长
@@ -35,6 +38,14 @@ public class DbUtils {
     private static final Map<Integer, Session> portForwardingSession = new ConcurrentHashMap<>();
 
     private static final JSch jsch = new JSch();
+
+    private static final JdbcTemplate template = new JdbcTemplate();
+
+    static {
+        template.setDataSource(ConnectionManager.dataSource);
+        template.setQueryTimeout(3);
+        template.setIgnoreWarnings(false);
+    }
 
     public static Session getSSHSession(DatabaseConfig databaseConfig) {
         if (StringUtils.isBlank(databaseConfig.getSshHost()) || StringUtils.isBlank(databaseConfig.getSshPort()) || StringUtils.isBlank(databaseConfig.getSshUser()) || (StringUtils.isBlank(databaseConfig.getPrivateKey()) && StringUtils.isBlank(databaseConfig.getSshPassword()))) {
@@ -65,14 +76,15 @@ public class DbUtils {
             AtomicInteger assinged_port = new AtomicInteger();
             Future<?> result = executorService.submit(() -> {
                 try {
-                    Integer lport = NumberUtils.decode(config.getLport(), NumberUtils.parseInt(config.getLport(), 3306));
-                    Integer rport = NumberUtils.decode(config.getRport(), NumberUtils.parseInt(config.getRport(), 3306));
+                    Integer lport = NumberUtils.decode(config.getLport(), NumberUtils.parseInteger(config.getLport(), 3306));
+                    Integer rport = NumberUtils.decode(config.getRport(), NumberUtils.parseInteger(config.getRport(), 3306));
                     Session session = portForwardingSession.get(lport);
                     if (session != null && session.isConnected()) {
                         String s = session.getPortForwardingL()[0];
                         String[] split = StringUtils.split(s, ":");
-                        boolean portForwarding = String.format("%s:%s", split[0], split[1])
-                                                       .equals(lport + ":" + config.getHost());
+                        boolean portForwarding = String
+                                .format("%s:%s", split[0], split[1])
+                                .equals(lport + ":" + config.getHost());
                         if (portForwarding) {
                             return;
                         }
@@ -248,4 +260,51 @@ public class DbUtils {
         }
     }
 
+    /**
+     * 获取元数据
+     * @param conn 连接
+     * @return 元数据
+     */
+    public static List<TableMetadata> getTablesMetadata(Connection conn) {
+        return getTablesMetadata(conn, null, null);
+    }
+
+    public static List<TableMetadata> getTablesMetadata(Connection conn, String[] types) {
+        return getTablesMetadata(conn, null, types);
+    }
+
+    public static List<TableMetadata> getTablesMetadata(Connection conn, String tableNamePattern, String[] types) {
+        List<TableMetadata> tmdList;
+        try {
+            final DatabaseMetaData dmd = conn.getMetaData();
+            final String catalog = conn.getCatalog();
+            final String schema = conn.getSchema();
+            tmdList = getTablesMetadata(dmd, catalog, schema, tableNamePattern, types);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return tmdList;
+    }
+
+    public static List<TableMetadata> getTablesMetadata(DatabaseMetaData dbmd, String catalog, String schemaPattern, String tableNamePattern, String[] types) {
+        List<TableMetadata> tmdList = new ArrayList<>();
+        try (ResultSet rs = dbmd.getTables(catalog, schemaPattern, tableNamePattern, types)) {
+            final DataClassRowMapper<TableMetadata> rowMapper = new DataClassRowMapper<>(TableMetadata.class);
+            int rowIndex = 0;
+            while (rs.next()) {
+                tmdList.add(rowMapper.mapRow(rs, rowIndex++));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return tmdList;
+    }
+
+    public static void main(String[] args) throws Exception {
+        final Connection connection = ConnectionManager.getConnection();
+
+        final List<TableMetadata> tmds = DBUtils.getTablesMetadata(connection);
+
+        System.out.println(tmds);
+    }
 }

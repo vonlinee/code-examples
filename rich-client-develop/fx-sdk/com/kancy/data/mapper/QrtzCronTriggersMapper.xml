@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kancy.data.mapper.QrtzCronTriggersMapper">
+    <sql id="tableName">
+        qrtz_cron_triggers
+    </sql>
+
+    <sql id="baseColumn">
+        sched_name,trigger_name,trigger_group,cron_expression,time_zone_id
+    </sql>
+
+</mapper>

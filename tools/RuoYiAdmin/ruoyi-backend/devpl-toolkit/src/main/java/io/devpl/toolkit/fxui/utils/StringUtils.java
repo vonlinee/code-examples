@@ -9,6 +9,11 @@ import static org.apache.commons.lang3.StringUtils.isAnyBlank;
  */
 public final class StringUtils {
 
+    /**
+     * 下划线字符
+     */
+    public static final char UNDERLINE = '_';
+
     private StringUtils() {
     }
 
@@ -170,12 +175,36 @@ public final class StringUtils {
      * StringUtils.isNoneBlank(new String[]{""}) = false
      * StringUtils.isNoneBlank("foo", "bar")     = true
      * </pre>
-     *
-     * @param css  the CharSequences to check, may be null or empty
+     * @param css the CharSequences to check, may be null or empty
      * @return {@code true} if none of the CharSequences are empty or null or whitespace only
      * @since 3.2
      */
     public static boolean isNoneBlank(final CharSequence... css) {
         return !isAnyBlank(css);
+    }
+
+    /**
+     * 字符串下划线转驼峰格式
+     * @param param 需要转换的字符串
+     * @return 转换好的字符串
+     */
+    public static String underlineToCamel(String param) {
+        if (isBlank(param)) {
+            return String.valueOf(param);
+        }
+        String temp = param.toLowerCase();
+        int len = temp.length();
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            char c = temp.charAt(i);
+            if (c == UNDERLINE) {
+                if (++i < len) {
+                    sb.append(Character.toUpperCase(temp.charAt(i)));
+                }
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 }

@@ -16,4 +16,18 @@ public class PluginConfiguration extends TypedPropertyHolder {
                     contextId));
         }
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof PluginConfiguration) {
+            PluginConfiguration pc = (PluginConfiguration) obj;
+            return this.getConfigurationType().equals(pc.getConfigurationType());
+        }
+        return false;
+    }
 }

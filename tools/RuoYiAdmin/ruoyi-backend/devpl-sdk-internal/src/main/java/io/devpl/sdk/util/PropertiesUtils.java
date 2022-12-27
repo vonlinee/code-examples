@@ -27,26 +27,24 @@ public class PropertiesUtils {
         }
         InputStream is = null;
         try {
-            // LOG.debug("Trying to load " + file + " from FileSystem.");
             is = new FileInputStream(file);
         } catch (FileNotFoundException e) {
-            // LOG.debug("Trying to load " + file + " from Classpath.");
             try {
                 is = PropertiesUtils.class.getResourceAsStream(file);
             } catch (Exception ex) {
-                // LOG.warn("Can not load resource " + file, ex);
+                ex.printStackTrace();
             }
         }
         if (is != null) {
             try {
                 properties.load(is);
             } catch (Exception e) {
-                // LOG.error("Exception occurred while loading " + file, e);
+                e.printStackTrace();
             } finally {
                 try {
                     is.close();
                 } catch (Exception e) {
-                    // LOG.debug("Can not close Inputstream.", e);
+                    e.printStackTrace();
                 }
             }
         }

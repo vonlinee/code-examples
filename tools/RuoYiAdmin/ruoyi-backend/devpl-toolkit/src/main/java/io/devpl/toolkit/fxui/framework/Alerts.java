@@ -68,18 +68,6 @@ public final class Alerts {
         return alert;
     }
 
-    public static void showInfoAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(message);
-        alert.show();
-    }
-
-    public static void showWarnAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setContentText(message);
-        alert.show();
-    }
-
     public static void showErrorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setContentText(message);

@@ -6,7 +6,6 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.config.GeneratedKey;
-import org.mybatis.generator.internal.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,7 +17,6 @@ import static org.mybatis.generator.internal.util.StringUtils.isTrue;
 
 /**
  * 此插件使用数据库表中列的注释来生成Java Model中属性的注释
- * @author Owen Zou
  */
 public class DbRemarksCommentGenerator implements CommentGenerator {
 
@@ -80,14 +78,11 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
 
     public void addConfigurationProperties(Properties properties) {
         this.properties.putAll(properties);
-        columnRemarks = isTrue(properties
-                .getProperty("columnRemarks"));
-        isAnnotations = isTrue(properties
-                .getProperty("annotations"));
+        columnRemarks = isTrue(properties.getProperty("columnRemarks"));
+        isAnnotations = isTrue(properties.getProperty("annotations"));
     }
 
-    public void addClassComment(InnerClass innerClass,
-                                IntrospectedTable introspectedTable) {
+    public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable) {
     }
 
     /**
@@ -95,11 +90,10 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
      * @param topLevelClass     the top level class
      * @param introspectedTable the introspected table
      */
-    public void addModelClassComment(TopLevelClass topLevelClass,
-                                     IntrospectedTable introspectedTable) {
+    public void addModelClassComment(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         topLevelClass.addJavaDocLine("/**");
-        topLevelClass.addJavaDocLine(" * @author ");
         topLevelClass.addJavaDocLine(" * " + introspectedTable.getRemarks());
+        topLevelClass.addJavaDocLine(" * @author ");
         final String nowTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
         topLevelClass.addJavaDocLine(" * Created On " + nowTime);
         topLevelClass.addJavaDocLine(" */");
@@ -108,8 +102,7 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
         }
     }
 
-    public void addEnumComment(InnerEnum innerEnum,
-                               IntrospectedTable introspectedTable) {
+    public void addEnumComment(InnerEnum innerEnum, IntrospectedTable introspectedTable) {
     }
 
     /**
@@ -118,16 +111,12 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
      * @param introspectedTable  the introspected table
      * @param introspectedColumn the introspected column
      */
-    public void addFieldComment(Field field,
-                                IntrospectedTable introspectedTable,
-                                IntrospectedColumn introspectedColumn) {
+    public void addFieldComment(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
         field.addJavaDocLine("/**");
         StringBuilder sb = new StringBuilder();
-        sb.append(" * " + introspectedColumn.getRemarks());
-        sb.append(introspectedColumn.getRemarks());
+        sb.append(" * ").append(introspectedColumn.getRemarks());
         field.addJavaDocLine(sb.toString());
         field.addJavaDocLine(" */");
-
         if (isAnnotations) {
             boolean isId = false;
             for (IntrospectedColumn column : introspectedTable.getPrimaryKeyColumns()) {
@@ -160,22 +149,16 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
     public void addFieldComment(Field field, IntrospectedTable introspectedTable) {
     }
 
-    public void addGeneralMethodComment(Method method,
-                                        IntrospectedTable introspectedTable) {
+    public void addGeneralMethodComment(Method method, IntrospectedTable introspectedTable) {
     }
 
-    public void addGetterComment(Method method,
-                                 IntrospectedTable introspectedTable,
-                                 IntrospectedColumn introspectedColumn) {
+    public void addGetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
     }
 
-    public void addSetterComment(Method method,
-                                 IntrospectedTable introspectedTable,
-                                 IntrospectedColumn introspectedColumn) {
+    public void addSetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
     }
 
-    public void addClassComment(InnerClass innerClass,
-                                IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
+    public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
         innerClass.addJavaDocLine("/**"); //$NON-NLS-1$
         innerClass.addJavaDocLine(" */"); //$NON-NLS-1$
     }

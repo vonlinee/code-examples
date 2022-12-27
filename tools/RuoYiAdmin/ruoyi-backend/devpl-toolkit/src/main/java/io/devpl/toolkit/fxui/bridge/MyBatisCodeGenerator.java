@@ -7,7 +7,7 @@ import io.devpl.toolkit.fxui.config.DBDriver;
 import io.devpl.toolkit.fxui.config.DatabaseConfig;
 import io.devpl.toolkit.fxui.plugins.*;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
-import io.devpl.toolkit.fxui.utils.DbUtils;
+import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.api.Plugin;
@@ -146,7 +146,7 @@ public class MyBatisCodeGenerator {
             jdbcConfig.addProperty(StringKey.USE_INFORMATION_SCHEMA, "true");
         }
         jdbcConfig.setDriverClass(DBDriver.valueOf(dbType).getDriverClass());
-        jdbcConfig.setConnectionURL(DbUtils.getConnectionUrlWithSchema(selectedDatabaseConfig));
+        jdbcConfig.setConnectionURL(DBUtils.getConnectionUrlWithSchema(selectedDatabaseConfig));
         jdbcConfig.setUserId(selectedDatabaseConfig.getUsername());
         jdbcConfig.setPassword(selectedDatabaseConfig.getPassword());
         if (DBDriver.ORACLE.name().equals(dbType)) {
@@ -181,13 +181,13 @@ public class MyBatisCodeGenerator {
         if (generatorConfig.isAnnotation()) {
             commentConfig.addProperty(StringKey.ANNOTATIONS, "true");
         }
+        // 父包名
+        context.addProperty(StringKey.PARENT_PACKAGE, generatorConfig.getParentPackage());
         context.setCommentGeneratorConfiguration(commentConfig);
         // set java file encoding
         context.addProperty(ConfigKeyRegistry.CONTEXT_JAVA_FILE_ENCODING, generatorConfig.getEncoding());
-
         // 实体添加序列化
         addPluginConfiguration(context, SerializablePlugin.class);
-
         // Lombok 插件
         if (generatorConfig.isUseLombokPlugin()) {
             addPluginConfiguration(context, LombokPlugin.class);
@@ -200,7 +200,8 @@ public class MyBatisCodeGenerator {
         // limit/offset插件  
         if (generatorConfig.isOffsetLimit()) {
             if (DBDriver.MySQL5.name().equals(dbType) || DBDriver.MySQL8.name().equals(dbType) || DBDriver.POSTGRE_SQL
-                    .name().equals(dbType)) {
+                    .name()
+                    .equals(dbType)) {
                 addPluginConfiguration(context, MySQLLimitPlugin.class);
             }
         }
@@ -228,21 +229,17 @@ public class MyBatisCodeGenerator {
                 pf.addProperty(StringKey.USE_EXAMPLE, String.valueOf(generatorConfig.isUseExample()));
             }
         }
-
         if (generatorConfig.isSwaggerSupport()) {
-            // log.info("enable swagger");
+            context.addPluginConfiguration(SwaggerSupportPlugin.class);
         }
-
-        context.addPluginConfiguration(MyBatisPlusPlugin.class);
-
         if (generatorConfig.isFullMVCSupport()) {
-            // log.info("support mvc");
             context.addPluginConfiguration(WebMVCSupportPlugin.class);
         }
 
+        context.addPluginConfiguration(WebMVCSupportPlugin.class);
+
         // 设置运行时环境
         context.setTargetRuntime("MyBatis3");
-        addPluginConfiguration(context, WebMVCSupportPlugin.class);
         List<String> warnings = new ArrayList<>();
         Set<String> fullyQualifiedTables = new HashSet<>();
         Set<String> contexts = new HashSet<>();

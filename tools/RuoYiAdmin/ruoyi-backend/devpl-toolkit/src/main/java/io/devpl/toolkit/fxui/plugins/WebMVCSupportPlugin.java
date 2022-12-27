@@ -1,10 +1,13 @@
 package io.devpl.toolkit.fxui.plugins;
 
+import io.devpl.toolkit.fxui.common.StringKey;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
+import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
+import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.config.Context;
 import org.mybatis.generator.config.TableConfiguration;
 
@@ -22,9 +25,7 @@ import java.util.Properties;
  */
 public class WebMVCSupportPlugin extends PluginAdapter {
 
-    public WebMVCSupportPlugin() {
-
-    }
+    private String parentPackage;
 
     @Override
     public boolean validate(List<String> warnings) {
@@ -34,6 +35,7 @@ public class WebMVCSupportPlugin extends PluginAdapter {
     @Override
     public void setContext(Context context) {
         super.setContext(context);
+        this.parentPackage = context.getProperty(StringKey.PARENT_PACKAGE);
     }
 
     @Override
@@ -41,10 +43,15 @@ public class WebMVCSupportPlugin extends PluginAdapter {
         super.setProperties(properties);
     }
 
+    /**
+     * 添加其他文件
+     * @return 生成Java文件
+     */
     @Override
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles() {
         List<GeneratedJavaFile> mvcFiles = new ArrayList<>(prepareServiceFiles());
         mvcFiles.addAll(prepareControllerFiles());
+        mvcFiles.addAll(prepareServiceFiles());
         return mvcFiles;
     }
 
@@ -53,10 +60,22 @@ public class WebMVCSupportPlugin extends PluginAdapter {
         final List<IntrospectedTable> introspectedTables = context.getIntrospectedTables();
         for (IntrospectedTable introspectedTable : introspectedTables) {
 
+            final String tableName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
+            final String className = StringUtils.underlineToCamel(tableName);
+            String name = parentPackage + ".controller." + className + "Controller";
+            final FullyQualifiedJavaType type = new FullyQualifiedJavaType(name);
+
+            final TopLevelClass controllerClass = new TopLevelClass(type);
+
+            new GeneratedJavaFile(controllerClass, "", null);
         }
         return controllerFiles;
     }
 
+    /**
+     * 生成Service文件
+     * @return Service文件
+     */
     private List<GeneratedJavaFile> prepareServiceFiles() {
         List<GeneratedJavaFile> serviceFiles = new ArrayList<>();
         final List<IntrospectedTable> introspectedTables = context.getIntrospectedTables();

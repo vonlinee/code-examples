@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.fxui.framework.mvc.FXController;
+import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
 import javafx.fxml.FXML;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
@@ -8,7 +8,7 @@ import javafx.scene.layout.BorderPane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ClassDefinitionController extends FXController {
+public class ClassDefinitionController extends FXControllerBase {
 
     @FXML
     public TitledPane tilpStaticFieldDef;
