@@ -15,10 +15,10 @@
  */
 package org.mybatis.generator.api.dom.java.render;
 
-import static org.mybatis.generator.api.dom.java.render.RenderingUtilities.renderImports;
-import static org.mybatis.generator.api.dom.java.render.RenderingUtilities.renderInnerInterfaceNoIndent;
-import static org.mybatis.generator.api.dom.java.render.RenderingUtilities.renderPackage;
-import static org.mybatis.generator.api.dom.java.render.RenderingUtilities.renderStaticImports;
+import static org.mybatis.generator.api.dom.java.render.RenderingUtils.renderImports;
+import static org.mybatis.generator.api.dom.java.render.RenderingUtils.renderInnerInterfaceNoIndent;
+import static org.mybatis.generator.api.dom.java.render.RenderingUtils.renderPackage;
+import static org.mybatis.generator.api.dom.java.render.RenderingUtils.renderStaticImports;
 
 import java.util.ArrayList;
 import java.util.List;

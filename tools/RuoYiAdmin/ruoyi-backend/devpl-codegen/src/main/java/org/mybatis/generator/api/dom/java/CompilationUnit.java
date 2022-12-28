@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * 描述Java的编译单元，如类，接口，枚举等
  * This interface describes methods common to all Java compilation units (Java
  * classes, interfaces, and enums).
  * @author Jeff Butler

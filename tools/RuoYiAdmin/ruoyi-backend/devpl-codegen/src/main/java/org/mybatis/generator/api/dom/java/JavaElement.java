@@ -18,6 +18,9 @@ package org.mybatis.generator.api.dom.java;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Java元素
+ */
 public abstract class JavaElement {
 
     private final List<String> javaDocLines = new ArrayList<>();

@@ -37,8 +37,8 @@ import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TypeParameter;
 import org.mybatis.generator.internal.util.CustomCollectors;
 
-public class RenderingUtilities {
-    private RenderingUtilities() {}
+public class RenderingUtils {
+    private RenderingUtils() {}
 
     public static final String JAVA_INDENT = "    "; //$NON-NLS-1$
     private static final TypeParameterRenderer typeParameterRenderer = new TypeParameterRenderer();
@@ -64,18 +64,18 @@ public class RenderingUtilities {
 
     private static Stream<String> renderField(Field field, CompilationUnit compilationUnit) {
         return addEmptyLine(fieldRenderer.render(field, compilationUnit).stream()
-                .map(RenderingUtilities::javaIndent));
+                .map(RenderingUtils::javaIndent));
     }
 
     public static List<String> renderInitializationBlocks(List<InitializationBlock> initializationBlocks) {
         return initializationBlocks.stream()
-                .flatMap(RenderingUtilities::renderInitializationBlock)
+                .flatMap(RenderingUtils::renderInitializationBlock)
                 .collect(Collectors.toList());
     }
 
     private static Stream<String> renderInitializationBlock(InitializationBlock initializationBlock) {
         return addEmptyLine(initializationBlockRenderer.render(initializationBlock).stream()
-                .map(RenderingUtilities::javaIndent));
+                .map(RenderingUtils::javaIndent));
     }
 
     public static List<String> renderClassOrEnumMethods(List<Method> methods, CompilationUnit compilationUnit) {
@@ -92,7 +92,7 @@ public class RenderingUtilities {
 
     private static Stream<String> renderMethod(Method method, boolean inInterface, CompilationUnit compilationUnit) {
         return addEmptyLine(methodRenderer.render(method, inInterface, compilationUnit).stream()
-                .map(RenderingUtilities::javaIndent));
+                .map(RenderingUtils::javaIndent));
     }
 
     private static Stream<String> addEmptyLine(Stream<String> in) {
@@ -112,7 +112,7 @@ public class RenderingUtilities {
 
     private static Stream<String> renderInnerClass(InnerClass innerClass, CompilationUnit compilationUnit) {
         return addEmptyLine(innerClassRenderer.render(innerClass, compilationUnit).stream()
-                .map(RenderingUtilities::javaIndent));
+                .map(RenderingUtils::javaIndent));
     }
 
     public static List<String> renderInnerInterfaces(List<InnerInterface> innerInterfaces,
@@ -129,7 +129,7 @@ public class RenderingUtilities {
 
     private static Stream<String> renderInnerInterface(InnerInterface innerInterface, CompilationUnit compilationUnit) {
         return addEmptyLine(innerInterfaceRenderer.render(innerInterface, compilationUnit).stream()
-                .map(RenderingUtilities::javaIndent));
+                .map(RenderingUtils::javaIndent));
     }
 
     public static List<String> renderInnerEnums(List<InnerEnum> innerEnums, CompilationUnit compilationUnit) {
@@ -144,12 +144,11 @@ public class RenderingUtilities {
 
     private static Stream<String> renderInnerEnum(InnerEnum innerEnum, CompilationUnit compilationUnit) {
         return addEmptyLine(innerEnumRenderer.render(innerEnum, compilationUnit).stream()
-                .map(RenderingUtilities::javaIndent));
+                .map(RenderingUtils::javaIndent));
     }
 
     public static List<String> renderPackage(CompilationUnit compilationUnit) {
         List<String> answer = new ArrayList<>();
-
         String pack = compilationUnit.getType().getPackageName();
         if (hasLength(pack)) {
             answer.add("package " + pack + ";"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -162,7 +161,6 @@ public class RenderingUtilities {
         if (compilationUnit.getStaticImports().isEmpty()) {
             return Collections.emptyList();
         }
-
         return addEmptyLine(compilationUnit.getStaticImports().stream()
                 .map(s -> "import static " + s + ";")) //$NON-NLS-1$ //$NON-NLS-2$
                 .collect(Collectors.toList());
@@ -182,7 +180,7 @@ public class RenderingUtilities {
         return imports.stream()
                 .map(FullyQualifiedJavaType::getImportList)
                 .flatMap(List::stream)
-                .map(RenderingUtilities::toFullImport)
+                .map(RenderingUtils::toFullImport)
                 .collect(Collectors.toCollection(TreeSet::new));
     }
 
@@ -195,7 +193,6 @@ public class RenderingUtilities {
         if (in.isEmpty()) {
             return in; // don't indent empty lines
         }
-
         return JAVA_INDENT + in;
     }
 

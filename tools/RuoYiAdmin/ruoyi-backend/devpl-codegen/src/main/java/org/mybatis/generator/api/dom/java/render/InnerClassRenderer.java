@@ -31,14 +31,14 @@ public class InnerClassRenderer {
         lines.addAll(innerClass.getJavaDocLines());
         lines.addAll(innerClass.getAnnotations());
         lines.add(renderFirstLine(innerClass, compilationUnit));
-        lines.addAll(RenderingUtilities.renderFields(innerClass.getFields(), compilationUnit));
-        lines.addAll(RenderingUtilities.renderInitializationBlocks(innerClass.getInitializationBlocks()));
-        lines.addAll(RenderingUtilities.renderClassOrEnumMethods(innerClass.getMethods(), compilationUnit));
-        lines.addAll(RenderingUtilities.renderInnerClasses(innerClass.getInnerClasses(), compilationUnit));
-        lines.addAll(RenderingUtilities.renderInnerInterfaces(innerClass.getInnerInterfaces(), compilationUnit));
-        lines.addAll(RenderingUtilities.renderInnerEnums(innerClass.getInnerEnums(), compilationUnit));
+        lines.addAll(RenderingUtils.renderFields(innerClass.getFields(), compilationUnit));
+        lines.addAll(RenderingUtils.renderInitializationBlocks(innerClass.getInitializationBlocks()));
+        lines.addAll(RenderingUtils.renderClassOrEnumMethods(innerClass.getMethods(), compilationUnit));
+        lines.addAll(RenderingUtils.renderInnerClasses(innerClass.getInnerClasses(), compilationUnit));
+        lines.addAll(RenderingUtils.renderInnerInterfaces(innerClass.getInnerInterfaces(), compilationUnit));
+        lines.addAll(RenderingUtils.renderInnerEnums(innerClass.getInnerEnums(), compilationUnit));
 
-        lines = RenderingUtilities.removeLastEmptyLine(lines);
+        lines = RenderingUtils.removeLastEmptyLine(lines);
 
         lines.add("}"); //$NON-NLS-1$
 
@@ -64,7 +64,7 @@ public class InnerClassRenderer {
 
         sb.append("class "); //$NON-NLS-1$
         sb.append(innerClass.getType().getShortName());
-        sb.append(RenderingUtilities.renderTypeParameters(innerClass.getTypeParameters(), compilationUnit));
+        sb.append(RenderingUtils.renderTypeParameters(innerClass.getTypeParameters(), compilationUnit));
         sb.append(renderSuperClass(innerClass, compilationUnit));
         sb.append(renderSuperInterfaces(innerClass, compilationUnit));
         sb.append(" {"); //$NON-NLS-1$

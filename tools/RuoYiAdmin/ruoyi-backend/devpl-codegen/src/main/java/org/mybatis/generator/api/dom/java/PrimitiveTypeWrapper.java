@@ -1,21 +1,6 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       https://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.api.dom.java;
 
-public class PrimitiveTypeWrapper extends FullyQualifiedJavaType {
+public final class PrimitiveTypeWrapper extends FullyQualifiedJavaType {
     private static PrimitiveTypeWrapper booleanInstance;
     private static PrimitiveTypeWrapper byteInstance;
     private static PrimitiveTypeWrapper characterInstance;
@@ -36,8 +21,7 @@ public class PrimitiveTypeWrapper extends FullyQualifiedJavaType {
      * @param toPrimitiveMethod
      *            the method that returns the wrapped primitive
      */
-    private PrimitiveTypeWrapper(String fullyQualifiedName,
-            String toPrimitiveMethod) {
+    private PrimitiveTypeWrapper(String fullyQualifiedName, String toPrimitiveMethod) {
         super(fullyQualifiedName);
         this.toPrimitiveMethod = toPrimitiveMethod;
     }
@@ -51,11 +35,9 @@ public class PrimitiveTypeWrapper extends FullyQualifiedJavaType {
         if (this == obj) {
             return true;
         }
-
         if (!(obj instanceof PrimitiveTypeWrapper)) {
             return false;
         }
-
         PrimitiveTypeWrapper other = (PrimitiveTypeWrapper) obj;
 
         return getFullyQualifiedName().equals(other.getFullyQualifiedName());
@@ -107,7 +89,6 @@ public class PrimitiveTypeWrapper extends FullyQualifiedJavaType {
             floatInstance = new PrimitiveTypeWrapper("java.lang.Float", //$NON-NLS-1$
                     "floatValue()"); //$NON-NLS-1$
         }
-
         return floatInstance;
     }
 

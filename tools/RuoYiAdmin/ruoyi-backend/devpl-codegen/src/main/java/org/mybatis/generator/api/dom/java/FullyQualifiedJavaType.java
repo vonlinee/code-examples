@@ -55,14 +55,15 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
 
     private boolean explicitlyImported;
 
-    private String packageName;
+    private String packageName; // 包名
 
-    private boolean primitive;
+    private boolean primitive; // 是否基本类型
 
-    private boolean isArray;
+    private boolean isArray; // 是否是数组
 
     private PrimitiveTypeWrapper primitiveTypeWrapper;
 
+    // 类型参数
     private final List<FullyQualifiedJavaType> typeArguments;
 
     // the following three values are used for dealing with wildcard types
@@ -212,13 +213,10 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         if (this == obj) {
             return true;
         }
-
         if (!(obj instanceof FullyQualifiedJavaType)) {
             return false;
         }
-
         FullyQualifiedJavaType other = (FullyQualifiedJavaType) obj;
-
         return getFullyQualifiedName().equals(other.getFullyQualifiedName());
     }
 
@@ -244,7 +242,6 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         if (intInstance == null) {
             intInstance = new FullyQualifiedJavaType("int"); //$NON-NLS-1$
         }
-
         return intInstance;
     }
 
@@ -280,7 +277,6 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         if (booleanPrimitiveInstance == null) {
             booleanPrimitiveInstance = new FullyQualifiedJavaType("boolean"); //$NON-NLS-1$
         }
-
         return booleanPrimitiveInstance;
     }
 
@@ -288,7 +284,6 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         if (objectInstance == null) {
             objectInstance = new FullyQualifiedJavaType("java.lang.Object"); //$NON-NLS-1$
         }
-
         return objectInstance;
     }
 
@@ -429,7 +424,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
             throw new RuntimeException(getString("RuntimeError.22", genericSpecification)); //$NON-NLS-1$
         }
         String argumentString = genericSpecification.substring(1, lastIndex);
-        // need to find "," outside of a <> bounds
+        // need to find "," outside a <> bounds
         StringTokenizer st = new StringTokenizer(argumentString, ",<>", true); //$NON-NLS-1$
         int openCount = 0;
         StringBuilder sb = new StringBuilder();

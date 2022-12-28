@@ -289,7 +289,6 @@ public interface Log {
      */
     void debug(Marker marker, String msg, Throwable t);
 
-
     void warn(String s);
 
     /**
@@ -350,7 +349,6 @@ public interface Log {
      * @param t   the exception (throwable) to log
      */
     void info(String msg, Throwable t);
-
 
     /**
      * Is the logger instance enabled for the WARN level?
@@ -476,13 +474,11 @@ public interface Log {
      */
     boolean isErrorEnabled(Marker marker);
 
-
     /**
      * Log a message at the ERROR level.
      * @param msg the message string to be logged
      */
     void error(String msg);
-
 
     /**
      * Log a message at the ERROR level according to the specified format
@@ -529,7 +525,6 @@ public interface Log {
      * @param t   the exception (throwable) to log
      */
     void error(String msg, Throwable t);
-
 
     /**
      * Log a message with the specific Marker at the ERROR level.

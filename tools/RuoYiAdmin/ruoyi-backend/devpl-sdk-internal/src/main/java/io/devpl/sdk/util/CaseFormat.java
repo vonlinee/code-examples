@@ -114,7 +114,7 @@ public enum CaseFormat {
     /**
      * Converts the specified {@code String str} from this format to the specified
      * {@code format}. A "best effort" approach is taken; if {@code str} does not
-     * conform to the assumed format, then the behavior of this method is undefined
+     * conform to the assumed format, then the behavior of this method is undefined,
      * but we make a reasonable effort at converting anyway.
      */
     public final String to(CaseFormat format, String str) {
@@ -140,8 +140,9 @@ public enum CaseFormat {
             out.append(format.wordSeparator);
             i = j + wordSeparator.length();
         }
-        return (i == 0) ? format.normalizeFirstWord(s)
-                : requireNonNull(out).append(format.normalizeWord(s.substring(i))).toString();
+        return (i == 0) ? format.normalizeFirstWord(s) : requireNonNull(out)
+                .append(format.normalizeWord(s.substring(i)))
+                .toString();
     }
 
     /**
@@ -197,7 +198,7 @@ public enum CaseFormat {
 
     abstract String normalizeWord(String word);
 
-    //normalize 规范化
+    // normalize 规范化
     String normalizeFirstWord(String word) {
         return normalizeWord(word);
     }
@@ -244,8 +245,7 @@ public enum CaseFormat {
      * @return 转换后的驼峰式命名
      */
     public static String camelize(String tabAttr) {
-        if (StringUtils.isBlank(tabAttr))
-            return tabAttr;
+        if (StringUtils.isBlank(tabAttr)) return tabAttr;
         Pattern pattern = Pattern.compile("(.*)_(\\w)(.*)");
         Matcher matcher = pattern.matcher(tabAttr);
         if (matcher.find()) {

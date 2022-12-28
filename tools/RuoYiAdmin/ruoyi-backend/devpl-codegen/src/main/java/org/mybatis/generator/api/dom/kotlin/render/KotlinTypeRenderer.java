@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.mybatis.generator.api.dom.java.render.RenderingUtilities;
+import org.mybatis.generator.api.dom.java.render.RenderingUtils;
 import org.mybatis.generator.api.dom.kotlin.KotlinNamedItem;
 import org.mybatis.generator.api.dom.kotlin.KotlinProperty;
 import org.mybatis.generator.api.dom.kotlin.KotlinType;
@@ -71,7 +71,7 @@ public class KotlinTypeRenderer {
             answer.add(""); //$NON-NLS-1$
         }
 
-        answer = RenderingUtilities.removeLastEmptyLine(answer);
+        answer = RenderingUtils.removeLastEmptyLine(answer);
 
         if (!kotlinType.getNamedItems().isEmpty()) {
             answer.add("}"); //$NON-NLS-1$

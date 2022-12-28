@@ -33,14 +33,14 @@ public class InnerEnumRenderer {
         lines.addAll(innerEnum.getAnnotations());
         lines.add(renderFirstLine(innerEnum, compilationUnit));
         lines.addAll(renderEnumConstants(innerEnum));
-        lines.addAll(RenderingUtilities.renderFields(innerEnum.getFields(), compilationUnit));
-        lines.addAll(RenderingUtilities.renderInitializationBlocks(innerEnum.getInitializationBlocks()));
-        lines.addAll(RenderingUtilities.renderClassOrEnumMethods(innerEnum.getMethods(), compilationUnit));
-        lines.addAll(RenderingUtilities.renderInnerClasses(innerEnum.getInnerClasses(), compilationUnit));
-        lines.addAll(RenderingUtilities.renderInnerInterfaces(innerEnum.getInnerInterfaces(), compilationUnit));
-        lines.addAll(RenderingUtilities.renderInnerEnums(innerEnum.getInnerEnums(), compilationUnit));
+        lines.addAll(RenderingUtils.renderFields(innerEnum.getFields(), compilationUnit));
+        lines.addAll(RenderingUtils.renderInitializationBlocks(innerEnum.getInitializationBlocks()));
+        lines.addAll(RenderingUtils.renderClassOrEnumMethods(innerEnum.getMethods(), compilationUnit));
+        lines.addAll(RenderingUtils.renderInnerClasses(innerEnum.getInnerClasses(), compilationUnit));
+        lines.addAll(RenderingUtils.renderInnerInterfaces(innerEnum.getInnerInterfaces(), compilationUnit));
+        lines.addAll(RenderingUtils.renderInnerEnums(innerEnum.getInnerEnums(), compilationUnit));
 
-        lines = RenderingUtilities.removeLastEmptyLine(lines);
+        lines = RenderingUtils.removeLastEmptyLine(lines);
 
         lines.add("}"); //$NON-NLS-1$
 
@@ -72,9 +72,9 @@ public class InnerEnumRenderer {
             String enumConstant = iter.next();
 
             if (iter.hasNext()) {
-                answer.add(RenderingUtilities.JAVA_INDENT + enumConstant + ","); //$NON-NLS-1$
+                answer.add(RenderingUtils.JAVA_INDENT + enumConstant + ","); //$NON-NLS-1$
             } else {
-                answer.add(RenderingUtilities.JAVA_INDENT + enumConstant + ";"); //$NON-NLS-1$
+                answer.add(RenderingUtils.JAVA_INDENT + enumConstant + ";"); //$NON-NLS-1$
             }
         }
 
