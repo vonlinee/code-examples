@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <button @click="show">show</button>
-    <HelloWorld msg="`${this.parentData}`" ref="hw" :title="标题"/>
+    <HelloWorld msg="message" :callbackFunction = "showValue" ref="hw"/>
   </div>
 </template>
 
@@ -21,7 +21,15 @@ export default {
   methods: {
     show() {
       console.log(this.$refs.hw)
+    },
+    showValue(val) {
+      console.log("子组件调用回调函数:", val)
     }
+  },
+  mounted() {
+    this.$refs.hw.$on('myevent', function(val) {
+      console.log(val)
+    })
   }
 }
 </script>

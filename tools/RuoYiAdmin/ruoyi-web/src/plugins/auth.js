@@ -2,7 +2,7 @@ import store from '@/store'
 
 /**
  * 判断是否具有权限
- * @param {*} permission 
+ * @param {*} permission 权限
  * @returns 
  */
 function authPermission(permission) {
