@@ -68,8 +68,7 @@ public class ObjectFactory {
      * interfaces, etc.
      * @param classLoader the class loader
      */
-    public static synchronized void addExternalClassLoader(
-            ClassLoader classLoader) {
+    public static synchronized void addExternalClassLoader(ClassLoader classLoader) {
         ObjectFactory.externalClassLoaders.add(classLoader);
     }
 
@@ -81,11 +80,8 @@ public class ObjectFactory {
      * @return the Class loaded from the external classloader
      * @throws ClassNotFoundException the class not found exception
      */
-    public static Class<?> externalClassForName(String type)
-            throws ClassNotFoundException {
-
+    public static Class<?> externalClassForName(String type) throws ClassNotFoundException {
         Class<?> clazz;
-
         for (ClassLoader classLoader : externalClassLoaders) {
             try {
                 clazz = Class.forName(type, true, classLoader);
@@ -94,59 +90,47 @@ public class ObjectFactory {
                 // ignore - fail safe below
             }
         }
-
         return internalClassForName(type);
     }
 
     public static Object createExternalObject(String type) {
         Object answer;
-
         try {
             Class<?> clazz = externalClassForName(type);
             answer = clazz.getConstructor().newInstance();
         } catch (Exception e) {
-            throw new RuntimeException(getString(
-                    "RuntimeError.6", type), e); //$NON-NLS-1$
+            throw new RuntimeException(getString("RuntimeError.6", type), e); //$NON-NLS-1$
         }
-
         return answer;
     }
 
-    public static Class<?> internalClassForName(String type)
-            throws ClassNotFoundException {
+    public static Class<?> internalClassForName(String type) throws ClassNotFoundException {
         Class<?> clazz = null;
-
         try {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             clazz = Class.forName(type, true, cl);
         } catch (Exception e) {
             // ignore - failsafe below
         }
-
         if (clazz == null) {
             clazz = Class.forName(type, true, ObjectFactory.class.getClassLoader());
         }
-
         return clazz;
     }
 
     public static URL getResource(String resource) {
         URL url;
-
         for (ClassLoader classLoader : externalClassLoaders) {
             url = classLoader.getResource(resource);
             if (url != null) {
                 return url;
             }
         }
-
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         url = cl.getResource(resource);
-
         if (url == null) {
             url = ObjectFactory.class.getClassLoader().getResource(resource);
         }
-
         return url;
     }
 
@@ -161,18 +145,14 @@ public class ObjectFactory {
             Class<?> clazz = internalClassForName(type);
             answer = clazz.getConstructor().newInstance();
         } catch (Exception e) {
-            throw new RuntimeException(getString(
-                    "RuntimeError.6", type), e); //$NON-NLS-1$
+            throw new RuntimeException(getString("RuntimeError.6", type), e); //$NON-NLS-1$
         }
         return answer;
     }
 
-    public static JavaTypeResolver createJavaTypeResolver(Context context,
-                                                          List<String> warnings) {
-        JavaTypeResolverConfiguration config = context
-                .getJavaTypeResolverConfiguration();
+    public static JavaTypeResolver createJavaTypeResolver(Context context, List<String> warnings) {
+        JavaTypeResolverConfiguration config = context.getJavaTypeResolverConfiguration();
         String type;
-
         if (config != null && config.getConfigurationType() != null) {
             type = config.getConfigurationType();
             if ("DEFAULT".equalsIgnoreCase(type)) { //$NON-NLS-1$
@@ -181,21 +161,16 @@ public class ObjectFactory {
         } else {
             type = JavaTypeResolverDefaultImpl.class.getName();
         }
-
         JavaTypeResolver answer = (JavaTypeResolver) createInternalObject(type);
         answer.setWarnings(warnings);
-
         if (config != null) {
             answer.addConfigurationProperties(config.getProperties());
         }
-
         answer.setContext(context);
-
         return answer;
     }
 
-    public static Plugin createPlugin(Context context,
-                                      PluginConfiguration pluginConfiguration) {
+    public static Plugin createPlugin(Context context, PluginConfiguration pluginConfiguration) {
         Plugin plugin = (Plugin) createInternalObject(pluginConfiguration.getConfigurationType());
         plugin.setContext(context);
         plugin.setProperties(pluginConfiguration.getProperties());
@@ -203,24 +178,18 @@ public class ObjectFactory {
     }
 
     public static CommentGenerator createCommentGenerator(Context context) {
-
-        CommentGeneratorConfiguration config = context
-                .getCommentGeneratorConfiguration();
+        CommentGeneratorConfiguration config = context.getCommentGeneratorConfiguration();
         CommentGenerator answer;
-
         String type;
         if (config == null || config.getConfigurationType() == null) {
             type = DefaultCommentGenerator.class.getName();
         } else {
             type = config.getConfigurationType();
         }
-
         answer = (CommentGenerator) createInternalObject(type);
-
         if (config != null) {
             answer.addConfigurationProperties(config.getProperties());
         }
-
         return answer;
     }
 
@@ -279,9 +248,7 @@ public class ObjectFactory {
         return answer;
     }
 
-    public static IntrospectedTable createIntrospectedTable(
-            TableConfiguration tableConfiguration, FullyQualifiedTable table,
-            Context context) {
+    public static IntrospectedTable createIntrospectedTable(TableConfiguration tableConfiguration, FullyQualifiedTable table, Context context) {
 
         IntrospectedTable answer = createIntrospectedTableForValidation(context);
         answer.setFullyQualifiedTable(table);

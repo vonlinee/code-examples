@@ -3,9 +3,17 @@ package use;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.TypeSpec;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ThisExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.squareup.javapoet.*;
 import io.devpl.codegen.mbpg.util.FastJsonUtils;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 
@@ -15,11 +23,14 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-public class Utils {
+public class CodeGenUtils {
+
+    public static void test() {
+
+    }
 
     public static void generate(File file) {
         final Map<String, Object> map = FastJsonUtils.read(file);
-
         final TopLevelClass clazz = new TopLevelClass("");
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             final String key = entry.getKey();
@@ -36,10 +47,10 @@ public class Utils {
         }
     }
 
-    public static void json2ObjectSchema() throws IOException {
-        final Map<String, Object> map = FastJsonUtils.toMap("    {\n" + "      \"ActName\": \"集结\",\n" + "      \"ActCover\": \"~/App_Data/ActivityFile/1670415194089495.jpg\",\n" + "      \"ActTypeID\": \"bd8d1775-9fb8-43b2-89f2-463f55155e8d\",\n" + "      \"ActTypeName\": \"无敌\",\n" + "      \"ActState\": 2,\n" + "      \"InitiatorID\": \"admincxx\",\n" + "      \"InitiatorName\": \"陈显溪超管\",\n" + "      \"ActPlace\": \"302\",\n" + "      \"StartTime\": \"2022-12-08T20:13:00\",\n" + "      \"EndTime\": \"2022-12-22T20:13:00\",\n" + "      \"CreateTime\": \"2022-12-07T20:14:05.797\",\n" + "      \"Cmt_Ct\": 0,\n" + "      \"Gain_Ct\": 0,\n" + "      \"Prtp_Ct\": 8\n" + "    }");
+    public static void json2ObjectSchema(String jsonStr, String packageName, String className) throws IOException {
+        final Map<String, Object> map = FastJsonUtils.toMap(jsonStr);
 
-        final TypeSpec.Builder builder = TypeSpec.classBuilder("A").addModifiers(Modifier.PUBLIC);
+        final TypeSpec.Builder builder = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC);
 
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             final String key = entry.getKey();
@@ -55,12 +66,17 @@ public class Utils {
                 fieldType = String.class;
             }
 
-            builder.addField(FieldSpec.builder(fieldType, key, Modifier.PUBLIC).build());
+            final FieldSpec field = FieldSpec
+                    .builder(fieldType, key, Modifier.PUBLIC)
+                    .addAnnotation(AnnotationSpec
+                            .builder(ClassName.bestGuess("com.fasterxml.jackson.annotation.JsonAlias"))
+                            .addMember("value", "", "")
+                            .build())
+                    .build();
+            builder.addField(field);
         }
         final TypeSpec type = builder.build();
-
-        final JavaFile file = JavaFile.builder("sample", type).build();
-
+        final JavaFile file = JavaFile.builder(packageName, type).build();
         file.writeTo(System.out);
     }
 
@@ -73,8 +89,6 @@ public class Utils {
     }
 
     public static void main(String[] args) throws IOException {
-        // CreateTime
-        // json2ObjectSchema();
-        System.out.println(StringUtils.underlineToCamel("Prtp_Ct"));
+
     }
 }

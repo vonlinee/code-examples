@@ -29,8 +29,7 @@ public class DefaultShellCallback implements ShellCallback {
 
         File project = new File(targetProject);
         if (!project.isDirectory()) {
-            throw new ShellException(getString("Warning.9", //$NON-NLS-1$
-                    targetProject));
+            throw new ShellException(getString("Warning.9", targetProject)); //$NON-NLS-1$
         }
 
         StringBuilder sb = new StringBuilder();
@@ -44,11 +43,9 @@ public class DefaultShellCallback implements ShellCallback {
         if (!directory.isDirectory()) {
             boolean rc = directory.mkdirs();
             if (!rc) {
-                throw new ShellException(getString("Warning.10", //$NON-NLS-1$
-                        directory.getAbsolutePath()));
+                throw new ShellException(getString("Warning.10",  directory.getAbsolutePath())); //$NON-NLS-1$
             }
         }
-
         return directory;
     }
 

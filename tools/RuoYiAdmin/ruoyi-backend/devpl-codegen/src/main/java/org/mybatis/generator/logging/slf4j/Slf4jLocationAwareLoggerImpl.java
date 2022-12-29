@@ -21,6 +21,9 @@ import org.mybatis.generator.logging.Marker;
 import org.slf4j.MarkerFactory;
 import org.slf4j.spi.LocationAwareLogger;
 
+/**
+ * Slfj桥接接口
+ */
 class Slf4jLocationAwareLoggerImpl implements Log {
 
     private static final org.slf4j.Marker MARKER = MarkerFactory.getMarker(LogFactory.MARKER);
@@ -45,47 +48,47 @@ class Slf4jLocationAwareLoggerImpl implements Log {
 
     @Override
     public void trace(String msg) {
-
+        logger.trace(msg);
     }
 
     @Override
     public void trace(String format, Object arg) {
-
+        logger.trace(format, arg);
     }
 
     @Override
     public void trace(String format, Object arg1, Object arg2) {
-
+        logger.trace(format, arg1, arg2);
     }
 
     @Override
     public void trace(String format, Object... arguments) {
-
+        logger.trace(format, arguments);
     }
 
     @Override
     public void trace(String msg, Throwable t) {
-
+        logger.trace(msg, t);
     }
 
     @Override
     public boolean isTraceEnabled(Marker marker) {
-        return false;
+        return logger.isTraceEnabled(new Slf4jMarkerBridge(marker));
     }
 
     @Override
     public void trace(Marker marker, String msg) {
-
+        logger.trace(new Slf4jMarkerBridge(marker), msg);
     }
 
     @Override
     public void trace(Marker marker, String format, Object arg) {
-
+        logger.trace(new Slf4jMarkerBridge(marker), format, arg);
     }
 
     @Override
     public void trace(Marker marker, String format, Object arg1, Object arg2) {
-
+        logger.trace(new Slf4jMarkerBridge(marker), format, arg1, arg2);
     }
 
     @Override
@@ -307,5 +310,4 @@ class Slf4jLocationAwareLoggerImpl implements Log {
     public boolean isErrorEnabled(Marker marker) {
         return false;
     }
-
 }

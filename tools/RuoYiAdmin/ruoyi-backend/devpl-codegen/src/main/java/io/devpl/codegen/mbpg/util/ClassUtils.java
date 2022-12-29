@@ -3,18 +3,52 @@ package io.devpl.codegen.mbpg.util;
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
 import io.devpl.sdk.util.StringUtils;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.regex.Pattern;
+
 public final class ClassUtils {
 
     private ClassUtils() {
     }
 
+    // getConstructor 方法入参是可变长参数列表，对应类中构造方法的入参类型，这里使用无参构造。
+    // newInstance 返回的是泛型 T，取决于 clazz 的类型 Class<T>。这里直接用 Object 接收了。
+    public static <T> T instantiate(Class<T> clazz) throws RuntimeException {
+        try {
+            final Constructor<T> constructor = clazz.getConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException("failed to instantiate class " + clazz + " cause:", e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("failed to instantiate class " + clazz + " cause: no default constructor in Class[" + clazz + "]", e);
+        }
+    }
+
     /**
      * 获取类名
-     * @param className className 全类名
+     * @param className className 全类名，格式aaa.bbb.ccc.xxx
      * @return ignore
      */
     public static String getSimpleName(String className) {
         return StringUtils.isBlank(className) ? null : className.substring(className.lastIndexOf(StringPool.DOT) + 1);
+    }
+
+    private static final Pattern CLASS_NAME_PATTERN = Pattern.compile("");
+
+    public static boolean isQualifiedClassName(String str) {
+        return false;
+    }
+
+    public static String getPackageName(String qualifiedClassName) {
+        if (qualifiedClassName == null || qualifiedClassName.length() == 0) {
+            return qualifiedClassName;
+        }
+        if (!qualifiedClassName.contains(".")) {
+            return "";
+        }
+        return getSimpleName(qualifiedClassName);
     }
 
     /**
@@ -24,7 +58,7 @@ public final class ClassUtils {
      * @param name 类名称
      * @return 返回转换后的 Class
      */
-    public static Class<?> toClassConfident(String name) {
+    public static Class<?> forName(String name) {
         try {
             return Class.forName(name, false, getDefaultClassLoader());
         } catch (ClassNotFoundException e) {

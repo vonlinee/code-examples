@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       https://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.api;
 
 import java.io.File;
@@ -24,12 +9,13 @@ import org.mybatis.generator.exception.ShellException;
  * the generator
  * to work. A "shell" is defined as the execution environment (i.e. an
  * Eclipse plugin, and Ant task, a NetBeans plugin, etc.)
+ * <p>
+ * Shell表示执行环境
  *
  * <p>The default ShellCallback that is very low function and does
  * not support the merging of Java files. The default shell callback is
  * appropriate for use in well controlled environments where no changes
  * made to generated Java files.
- *
  * @author Jeff Butler
  */
 public interface ShellCallback {
@@ -47,19 +33,14 @@ public interface ShellCallback {
      *
      * <p>The default shell callback interprets both values as directories and simply concatenates the two values to
      * generate the default directory.
-     *
-     * @param targetProject
-     *            the target project
-     * @param targetPackage
-     *            the target package
+     * @param targetProject the target project  项目根路径
+     * @param targetPackage the target package  包名
      * @return the directory (must exist)
-     * @throws ShellException
-     *             if the project/package cannot be resolved into a directory on the file system. In this case, the
-     *             generator will not save the file it is currently working on. The generator will add the exception
-     *             message to the list of warnings automatically.
+     * @throws ShellException if the project/package cannot be resolved into a directory on the file system. In this case, the
+     *                        generator will not save the file it is currently working on. The generator will add the exception
+     *                        message to the list of warnings automatically.
      */
-    File getDirectory(String targetProject, String targetPackage)
-            throws ShellException;
+    File getDirectory(String targetProject, String targetPackage) throws ShellException;
 
     /**
      * This method is called if a newly generated Java file would
@@ -83,28 +64,21 @@ public interface ShellCallback {
      *
      * <p>This method is called only if you return <code>true</code> from
      * <code>isMergeSupported()</code>.
-     *
-     * @param newFileSource
-     *            the source of the newly generated Java file
-     * @param existingFile
-     *            the existing Java file
-     * @param javadocTags
-     *            the JavaDoc tags that denotes which methods and fields in the
-     *            old file to delete (if the Java element has any of these tags,
-     *            the element is eligible for merge)
-     * @param fileEncoding
-     *            the file encoding for reading existing Java files.  Can be null,
-     *            in which case the platform default encoding will be used.
+     * @param newFileSource the source of the newly generated Java file
+     * @param existingFile  the existing Java file
+     * @param javadocTags   the JavaDoc tags that denotes which methods and fields in the
+     *                      old file to delete (if the Java element has any of these tags,
+     *                      the element is eligible for merge)
+     * @param fileEncoding  the file encoding for reading existing Java files.  Can be null,
+     *                      in which case the platform default encoding will be used.
      * @return the merged source, properly formatted. The source will be saved
-     *         exactly as returned from this method.
-     * @throws ShellException
-     *             if the file cannot be merged for some reason. If this
-     *             exception is thrown, nothing will be saved and the
-     *             existing file will remain undisturbed. The generator will add the
-     *             exception message to the list of warnings automatically.
+     * exactly as returned from this method.
+     * @throws ShellException if the file cannot be merged for some reason. If this
+     *                        exception is thrown, nothing will be saved and the
+     *                        existing file will remain undisturbed. The generator will add the
+     *                        exception message to the list of warnings automatically.
      */
-    default String mergeJavaFile(String newFileSource, File existingFile,
-            String[] javadocTags, String fileEncoding) throws ShellException {
+    default String mergeJavaFile(String newFileSource, File existingFile, String[] javadocTags, String fileEncoding) throws ShellException {
         throw new UnsupportedOperationException();
     }
 
@@ -113,19 +87,17 @@ public interface ShellCallback {
      * once for each unique project that was affected by the generation
      * run. This method is useful if your IDE needs to be informed that file
      * system objects have been created or updated. If you are running
-     * outside of an IDE, your implementation need not do anything in this
+     * outside an IDE, your implementation need not do anything in this
      * method.
-     *
-     * @param project
-     *            the project to be refreshed
+     * @param project the project to be refreshed
      */
-    default void refreshProject(String project) {}
+    default void refreshProject(String project) {
+    }
 
     /**
      * Return true if the callback supports Java merging, otherwise false.
      * The <code>mergeJavaFile()</code> method will be called only if this
      * method returns <code>true</code>.
-     *
      * @return a boolean specifying whether Java merge is supported or not
      */
     default boolean isMergeSupported() {
@@ -138,7 +110,6 @@ public interface ShellCallback {
      * returns <code>false</code> and a file exists that would be overwritten by
      * a generated file. If you return <code>true</code>, then we will log a
      * warning specifying what file was overwritten.
-     *
      * @return true if you want to overwrite existing files
      */
     boolean isOverwriteEnabled();

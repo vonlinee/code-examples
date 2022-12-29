@@ -5,7 +5,6 @@ import org.mybatis.generator.logging.Marker;
 import org.slf4j.Logger;
 
 /**
- * TODO
  * Slf4j日志实现
  */
 class Slf4jLoggerImpl implements Log {

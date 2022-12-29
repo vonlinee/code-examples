@@ -41,6 +41,18 @@
             <artifactId>mybatis-plus-core</artifactId>
             <version>3.5.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>commons-dbutils</groupId>
+            <artifactId>commons-dbutils</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.10</version>
+        </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
@@ -68,12 +80,6 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>devpl-logging</artifactId>
             <version>3.8.3</version>
-        </dependency>
-        <!--Apache Ant工具-->
-        <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant</artifactId>
-            <version>1.10.12</version>
         </dependency>
         <!--Guava工具类库-->
         <dependency>

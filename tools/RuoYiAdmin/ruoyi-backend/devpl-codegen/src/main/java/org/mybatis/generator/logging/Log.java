@@ -16,7 +16,7 @@ public interface Log {
     int ERROR_INT = 40;
 
     /**
-     * Case insensitive String constant used to retrieve the name of the root logger.
+     * Case-insensitive String constant used to retrieve the name of the root logger.
      * @since 1.3
      */
     String ROOT_LOGGER_NAME = "ROOT";

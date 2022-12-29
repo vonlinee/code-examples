@@ -6,11 +6,29 @@ import java.util.Objects;
 /**
  * @see java.sql.DatabaseMetaData#getTables(String, String, String, String[])
  */
-public final class TableMetadata {
+public class TableMetadata implements Serializable {
 
+    private static final long serialVersionUID = 7207765860662369964L;
+
+    /**
+     * TABLE_CAT String => table catalog (may be null)
+     */
     private String tableCat;
+
+    /**
+     * TABLE_SCHEM String => table schema (may be null)
+     */
     private String tableSchem;
+
+    /**
+     * TABLE_NAME String => table name
+     */
     private String tableName;
+
+    /**
+     * TABLE_TYPE String => table type. Typical types are
+     * "TABLE", "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM".
+     */
     private String tableType;
 
     /**
@@ -27,8 +45,20 @@ public final class TableMetadata {
      * String => the types schema (may be null)
      */
     private String typeSchem;
+
+    /**
+     * TYPE_NAME String => type name (may be null)
+     */
     private String typeName;
+
+    /**
+     * SELF_REFERENCING_COL_NAME String => name of the designated "identifier" column of a typed table (may be null)
+     */
     private String selfReferencingColName;
+
+    /**
+     * REF_GENERATION String => specifies how values in SELF_REFERENCING_COL_NAME are created. Values are "SYSTEM", "USER", "DERIVED". (may be null)
+     */
     private String refGeneration;
 
     public String getTableCat() {
@@ -113,19 +143,17 @@ public final class TableMetadata {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("TableMetadata{");
-        sb.append("tableCat='").append(tableCat).append('\'');
-        sb.append(", tableSchem='").append(tableSchem).append('\'');
-        sb.append(", tableName='").append(tableName).append('\'');
-        sb.append(", tableType='").append(tableType).append('\'');
-        sb.append(", remarks='").append(remarks).append('\'');
-        sb.append(", typeCat='").append(typeCat).append('\'');
-        sb.append(", typeSchem='").append(typeSchem).append('\'');
-        sb.append(", typeName='").append(typeName).append('\'');
-        sb.append(", selfReferencingColName='").append(selfReferencingColName).append('\'');
-        sb.append(", refGeneration='").append(refGeneration).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "TableMetadata{" + "tableCat='" + tableCat + '\'' +
+                ", tableSchem='" + tableSchem + '\'' +
+                ", tableName='" + tableName + '\'' +
+                ", tableType='" + tableType + '\'' +
+                ", remarks='" + remarks + '\'' +
+                ", typeCat='" + typeCat + '\'' +
+                ", typeSchem='" + typeSchem + '\'' +
+                ", typeName='" + typeName + '\'' +
+                ", selfReferencingColName='" + selfReferencingColName + '\'' +
+                ", refGeneration='" + refGeneration + '\'' +
+                '}';
     }
 
     @Override

@@ -99,5 +99,4 @@ public interface Marker extends Serializable {
      * @since 1.5.1
      */
     int hashCode();
-
 }

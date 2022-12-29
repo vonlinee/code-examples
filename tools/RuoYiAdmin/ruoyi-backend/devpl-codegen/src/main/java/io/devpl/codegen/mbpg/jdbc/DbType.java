@@ -152,6 +152,7 @@ public enum DbType {
      * 数据库名称
      */
     private final String db;
+
     /**
      * 描述
      */

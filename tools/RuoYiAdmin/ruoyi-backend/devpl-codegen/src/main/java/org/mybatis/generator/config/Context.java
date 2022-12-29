@@ -7,6 +7,8 @@ import org.mybatis.generator.internal.PluginAggregator;
 import org.mybatis.generator.internal.db.DatabaseIntrospector;
 import org.mybatis.generator.internal.util.StringUtils;
 import org.mybatis.generator.internal.util.messages.Messages;
+import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.LogFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,17 +21,23 @@ import java.util.Set;
  */
 public class Context extends PropertyHolder {
 
+    private final Log log = LogFactory.getLog(Context.class);
+
     private String id;
 
     private JDBCConnectionConfiguration jdbcConnectionConfiguration;
 
     private ConnectionFactoryConfiguration connectionFactoryConfiguration;
+
     // Mapper.xml配置项
     private SqlMapGeneratorConfiguration sqlMapGeneratorConfiguration;
+
     // Java类型解析器配置项
     private JavaTypeResolverConfiguration javaTypeResolverConfiguration;
+
     // Entity生成配置项
     private JavaModelGeneratorConfiguration javaModelGeneratorConfiguration;
+
     // Mapper.java接口配置项
     private JavaClientGeneratorConfiguration javaClientGeneratorConfiguration;
 
@@ -375,9 +383,11 @@ public class Context extends PropertyHolder {
 
     public void generateFiles(ProgressCallback callback, List<GeneratedJavaFile> generatedJavaFiles, List<GeneratedXmlFile> generatedXmlFiles, List<GeneratedKotlinFile> generatedKotlinFiles, List<GeneratedFile> otherGeneratedFiles, List<String> warnings) throws InterruptedException {
         pluginAggregator = new PluginAggregator();
+        // 添加运行时需要的插件
         for (PluginConfiguration pluginConfiguration : pluginConfigurations) {
             Plugin plugin = ObjectFactory.createPlugin(this, pluginConfiguration);
             if (plugin.validate(warnings)) {
+                log.info("添加插件 {}", plugin);
                 pluginAggregator.addPlugin(plugin);
             } else {
                 warnings.add(Messages.getString("Warning.24", //$NON-NLS-1$
@@ -385,6 +395,7 @@ public class Context extends PropertyHolder {
             }
         }
 
+        // 初始化操作
         // initialize everything first before generating. This allows plugins to know about other
         // items in the configuration.
         for (IntrospectedTable introspectedTable : introspectedTables) {
@@ -403,7 +414,7 @@ public class Context extends PropertyHolder {
             generatedKotlinFiles.addAll(pluginAggregator.contextGenerateAdditionalKotlinFiles(introspectedTable));
             otherGeneratedFiles.addAll(pluginAggregator.contextGenerateAdditionalFiles(introspectedTable));
         }
-
+        // 执行插件的部分逻辑
         generatedJavaFiles.addAll(pluginAggregator.contextGenerateAdditionalJavaFiles());
         generatedXmlFiles.addAll(pluginAggregator.contextGenerateAdditionalXmlFiles());
         generatedKotlinFiles.addAll(pluginAggregator.contextGenerateAdditionalKotlinFiles());

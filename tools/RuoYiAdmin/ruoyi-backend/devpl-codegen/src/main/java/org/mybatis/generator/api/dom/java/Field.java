@@ -19,16 +19,24 @@ import java.util.Optional;
 
 public class Field extends JavaElement {
     private FullyQualifiedJavaType type;
+
     private String name;
+
+    /**
+     * 初始化字符串
+     */
     private String initializationString;
+
     private boolean isTransient;
+
     private boolean isVolatile;
+
     private boolean isFinal;
 
     public Field() {
 
     }
-    
+
     public Field(String name, FullyQualifiedJavaType type) {
         this.name = name;
         this.type = type;

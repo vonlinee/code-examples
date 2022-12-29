@@ -592,7 +592,7 @@ public class Entity implements ITemplate {
 
         private Optional<Class<?>> tryLoadClass(String className) {
             try {
-                return Optional.of(ClassUtils.toClassConfident(className));
+                return Optional.of(ClassUtils.forName(className));
             } catch (Exception e) {
                 // 当父类实体存在类加载器的时候,识别父类实体字段，不存在的情况就只有通过指定superEntityColumns属性了。
             }

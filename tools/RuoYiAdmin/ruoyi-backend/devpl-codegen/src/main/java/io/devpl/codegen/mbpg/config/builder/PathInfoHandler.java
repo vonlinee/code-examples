@@ -11,9 +11,6 @@ import java.util.Map;
 
 /**
  * 路径信息处理
- * @author nieqiurong hubin
- * @since 2020-10-06
- * @since 3.5.0
  */
 class PathInfoHandler {
 

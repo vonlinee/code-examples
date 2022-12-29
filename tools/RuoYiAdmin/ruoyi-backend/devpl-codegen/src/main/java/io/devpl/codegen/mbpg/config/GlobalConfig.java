@@ -27,6 +27,11 @@ public class GlobalConfig {
     private String outputDir = System.getProperty("os.name").toLowerCase().contains("windows") ? "D://" : "/tmp";
 
     /**
+     * 默认输出目录
+     */
+    private String defaultOutputRootDir;
+
+    /**
      * 是否覆盖已有文件（默认 false）（已迁移到策略配置中，3.5.4版本会删除此方法）
      */
     @Deprecated
@@ -35,7 +40,7 @@ public class GlobalConfig {
     /**
      * 是否打开输出目录
      */
-    private boolean open = true;
+    private boolean openOutputDir = true;
 
     /**
      * 作者
@@ -51,6 +56,7 @@ public class GlobalConfig {
      * 开启 swagger 模式（默认 false 与 springdoc 不可同时使用）
      */
     private boolean swagger;
+
     /**
      * 开启 springdoc 模式（默认 false 与 swagger 不可同时使用）
      */
@@ -79,8 +85,8 @@ public class GlobalConfig {
         return fileOverride;
     }
 
-    public boolean isOpen() {
-        return open;
+    public boolean isOpenOutputDir() {
+        return openOutputDir;
     }
 
     public String getAuthor() {
@@ -93,7 +99,7 @@ public class GlobalConfig {
 
     public boolean isSwagger() {
         // springdoc 设置优先于 swagger
-        return springdoc ? false : swagger;
+        return !springdoc && swagger;
     }
 
     public boolean isSpringdoc() {
@@ -112,10 +118,8 @@ public class GlobalConfig {
 
     /**
      * 全局配置构建
-     * @author nieqiurong 2020/10/11.
-     * @since 3.5.0
      */
-    public static class Builder implements io.devpl.codegen.mbpg.config.Builder<GlobalConfig> {
+    public static class Builder {
 
         private final GlobalConfig globalConfig;
 
@@ -137,7 +141,7 @@ public class GlobalConfig {
          * 禁止打开输出目录
          */
         public Builder disableOpenDir() {
-            this.globalConfig.open = false;
+            this.globalConfig.openOutputDir = false;
             return this;
         }
 
@@ -211,7 +215,6 @@ public class GlobalConfig {
             return commentDate(() -> new SimpleDateFormat(pattern).format(new Date()));
         }
 
-        @Override
         public GlobalConfig build() {
             return this.globalConfig;
         }

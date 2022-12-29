@@ -299,7 +299,6 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         if (criteriaInstance == null) {
             criteriaInstance = new FullyQualifiedJavaType("Criteria"); //$NON-NLS-1$
         }
-
         return criteriaInstance;
     }
 
@@ -307,7 +306,6 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         if (generatedCriteriaInstance == null) {
             generatedCriteriaInstance = new FullyQualifiedJavaType("GeneratedCriteria"); //$NON-NLS-1$
         }
-
         return generatedCriteriaInstance;
     }
 
@@ -322,7 +320,6 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
 
     private void parse(String fullTypeSpecification) {
         String spec = fullTypeSpecification.trim();
-
         if (spec.startsWith("?")) { //$NON-NLS-1$
             wildcardType = true;
             spec = spec.substring(1).trim();
@@ -368,14 +365,12 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
             if (index != -1) {
                 baseShortName = baseShortName.substring(index + 1);
             }
-
             //$NON-NLS-1$
             explicitlyImported = !JAVA_LANG.equals(packageName);
         } else {
             baseShortName = baseQualifiedName;
             explicitlyImported = false;
             packageName = ""; //$NON-NLS-1$
-
             switch (baseQualifiedName) {
                 case "byte":  //$NON-NLS-1$
                     primitive = true;
