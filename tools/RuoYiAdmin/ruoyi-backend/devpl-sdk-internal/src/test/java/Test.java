@@ -1,19 +1,25 @@
-import io.devpl.sdk.util.DataClass;
-import io.devpl.sdk.util.DataObject;
-import io.devpl.sdk.util.IdUtils;
+import io.devpl.sdk.collection.ArrayMap;
+import io.devpl.sdk.DataClass;
+import io.devpl.sdk.DataObject;
+import io.devpl.sdk.collection.Lists;
+
+import java.util.Map;
 
 public class Test {
 
     public static void main(String[] args) {
-        DataObject obj = DataClass.newObject();
-        obj.put("age", "28");
-        obj.put("name", "孙允珠");
+        final DataObject obj = DataClass.newObject();
+        obj.put("name", "zs")
+           .put("age", 30)
+           .put("sex", "女")
+           .put("country", "Korea");
 
-        final String name = obj.getValue("name", String.class);
+        final Map<String, Object> map = obj.asMap();
 
-        obj.put("map", DataClass.newObject());
+        ArrayMap<String, Object> map1 = (ArrayMap<String, Object>) map;
 
-        System.out.println(obj.asMap());
-        System.out.println(IdUtils.simpleULID());
+        map1.removeAll(Lists.linkOf("name", "age"));
+
+        System.out.println(map1);
     }
 }

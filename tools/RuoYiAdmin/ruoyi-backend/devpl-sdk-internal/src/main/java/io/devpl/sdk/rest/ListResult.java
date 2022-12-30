@@ -1,6 +1,6 @@
 package io.devpl.sdk.rest;
 
-import io.devpl.sdk.DelegationList;
+import io.devpl.sdk.collection.DelegationList;
 
 import java.util.List;
 

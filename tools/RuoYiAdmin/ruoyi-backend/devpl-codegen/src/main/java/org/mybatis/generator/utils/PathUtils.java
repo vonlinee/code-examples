@@ -59,28 +59,37 @@ public class PathUtils {
         return parseWindowPath(path, true).path;
     }
 
-    // package-private
-    // removes redundant slashes and check input for invalid characters
-    static String normalizeAndCheckLinuxPath(String input) {
+    // 删除多余的斜杠(Slash)并检查输入中的无效字符
+    public static String normalizeAndCheckLinuxPath(String input) {
         int n = input.length();
-        char prevChar = 0;
+        char prevChar = 0; // 0 -> '\u0000'
         for (int i = 0; i < n; i++) {
             char c = input.charAt(i);
-            if ((c == '/') && (prevChar == '/')) return normalizeLinuxPath(input, n, i - 1);
+            if ((c == '/') && prevChar == '/') {
+                return normalizeLinuxPath(input, n, i - 1);
+            }
             checkNotNul(input, c);
             prevChar = c;
         }
-        if (prevChar == '/') return normalizeLinuxPath(input, n, n - 1);
+        if (prevChar == '/') {
+            return normalizeLinuxPath(input, n, n - 1);
+        }
         return input;
     }
 
-    private static String normalizeLinuxPath(String input, int len, int off) {
-        if (len == 0) return input;
+    public static String normalizeLinuxPath(String input, int len, int off) {
+        if (len == 0) {
+            return input;
+        }
         int n = len;
-        while ((n > 0) && (input.charAt(n - 1) == '/')) n--;
+        while ((n > 0) && (input.charAt(n - 1) == '/')) {
+            n--;
+        }
         if (n == 0) return "/";
         StringBuilder sb = new StringBuilder(input.length());
-        if (off > 0) sb.append(input.substring(0, off));
+        if (off > 0) {
+            sb.append(input, 0, off);
+        }
         char prevChar = 0;
         for (int i = off; i < n; i++) {
             char c = input.charAt(i);
@@ -187,10 +196,6 @@ public class PathUtils {
         public String toString() {
             return root + " " + path;
         }
-    }
-
-    public static void main(String[] args) {
-        System.out.println(PathUtils.getPath("///a/\\b", "dcs", "///f"));
     }
 
     /**

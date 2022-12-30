@@ -4,9 +4,7 @@ import io.devpl.sdk.util.ResourceUtils;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 

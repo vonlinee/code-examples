@@ -1,5 +1,7 @@
 package io.devpl.sdk.util;
 
+import io.devpl.sdk.ULID;
+
 import java.util.UUID;
 
 public final class IdUtils {

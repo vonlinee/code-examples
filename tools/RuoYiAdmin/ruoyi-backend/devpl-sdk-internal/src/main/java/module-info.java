@@ -12,7 +12,6 @@ open module devpl.sdk.internal {
     requires lombok;
     requires jsr305;
 
-    requires hutool.all;
     requires com.google.gson;
     requires org.joda.convert;
     requires com.google.common;
@@ -21,6 +20,8 @@ open module devpl.sdk.internal {
     requires spring.core;
     requires spring.jcl;
 
+    requires org.apache.commons.io;
+
     // 表示允许访问指定包的public成员(编译及运行时)
     // 如果反射不直接通过类名调用，只是运行时通过包名使用，则只需open或opens即可
     // 如果是通过类名来反射，由于用到了该类，需要通过exports指定可以访问，不指定则编译期立即报错
@@ -28,10 +29,12 @@ open module devpl.sdk.internal {
     // 如果有exports，但是没有open，因此编译通过运行时报错
     exports io.devpl.sdk;
     exports io.devpl.sdk.beans;
-    exports io.devpl.sdk.util;
     exports io.devpl.sdk.io;
     exports io.devpl.sdk.beans.impl.map;
-    exports io.devpl.sdk.coll;
+    exports io.devpl.sdk.collection;
+    exports io.devpl.sdk.validation;
+    exports io.devpl.sdk.util;
+    exports io.devpl.sdk.concurrent;
 
     // 表示允许运行时通过反射使用
     // open的作用是表示该模块下的所有的包在runtime都允许deep reflection( 包括public及private类型);

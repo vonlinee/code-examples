@@ -4,11 +4,8 @@ import io.devpl.sdk.util.ResourceUtils;
 import io.devpl.toolkit.fxui.config.CodeGenConfiguration;
 import io.devpl.toolkit.fxui.config.DBDriver;
 import io.devpl.toolkit.fxui.config.DatabaseConfig;
-import org.apache.commons.dbutils.DbUtils;
-import org.apache.commons.dbutils.QueryRunner;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;

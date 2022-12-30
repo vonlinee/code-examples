@@ -2,6 +2,7 @@ package io.devpl.sdk.util;
 
 import com.google.common.base.Preconditions;
 import io.devpl.sdk.lang.Interpolations;
+import io.devpl.sdk.validation.Validator;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -26,8 +27,7 @@ public final class StringUtils {
     }
 
     public static final String SINGLE_QUTATION = "'";
-    public static final String NULL_STRING_HCASE = "NULL";
-    public static final String NULL_STRING_LCASE = "null";
+    public static final String NULL_STRING = "NULL";
     private static final String[] EMPTY_STRING_ARRAY = {};
     private static final String FOLDER_SEPARATOR = "/";
     private static final char FOLDER_SEPARATOR_CHAR = '/';
@@ -281,15 +281,10 @@ public final class StringUtils {
 
     /**
      * <p>
-     * The maximum size to which the padding constant(s) can expand.
+     * The maximum size to which the padding(填充) constant(s) can expand.
      * </p>
      */
     private static final int PAD_LIMIT = 8192;
-
-    /**
-     * Pattern used in {@link # stripAccents(String)}.
-     */
-    private static final Pattern STRIP_ACCENTS_PATTERN = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 
     /**
      * Check whether the given {@code String} contains actual <em>text</em>.
@@ -613,7 +608,7 @@ public final class StringUtils {
      */
     public static String valueOf(Object o) {
         if (o == null) {
-            return NULL_STRING_HCASE;
+            return NULL_STRING;
         }
         try {
             return o.toString();

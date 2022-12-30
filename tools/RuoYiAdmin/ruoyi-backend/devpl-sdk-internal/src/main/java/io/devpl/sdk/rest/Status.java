@@ -1,8 +1,7 @@
 package io.devpl.sdk.rest;
 
-import io.devpl.sdk.util.KeyedEnumPool;
+import io.devpl.sdk.KeyedEnumPool;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 

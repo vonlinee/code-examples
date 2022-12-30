@@ -2,7 +2,8 @@ package io.devpl.spring.extension.utils.print.enums;
 
 public enum Alignment {
 
-    LEFT, RIGHT,
+    LEFT,
+    RIGHT,
 
     /**
      * Indicates the elements should be aligned to the origin. For the horizontal
