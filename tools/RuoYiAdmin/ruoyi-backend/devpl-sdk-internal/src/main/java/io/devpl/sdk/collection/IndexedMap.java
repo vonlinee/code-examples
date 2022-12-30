@@ -48,6 +48,9 @@ abstract class IndexedMap<K, V> {
         }
     }
 
+    /**
+     * ArrayMap中不存在Entry对象
+     */
     final class MapIterator implements Iterator<Map.Entry<K, V>>, Map.Entry<K, V> {
         int mEnd;
         int mIndex;
@@ -65,7 +68,9 @@ abstract class IndexedMap<K, V> {
 
         @Override
         public Map.Entry<K, V> next() {
-            if (!hasNext()) throw new NoSuchElementException();
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
             mIndex++;
             mEntryValid = true;
             return this;
@@ -83,6 +88,7 @@ abstract class IndexedMap<K, V> {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public K getKey() {
             if (!mEntryValid) {
                 throw new IllegalStateException("This container does not support retaining Map.Entry objects");
@@ -91,6 +97,7 @@ abstract class IndexedMap<K, V> {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public V getValue() {
             if (!mEntryValid) {
                 throw new IllegalStateException("This container does not support retaining Map.Entry objects");

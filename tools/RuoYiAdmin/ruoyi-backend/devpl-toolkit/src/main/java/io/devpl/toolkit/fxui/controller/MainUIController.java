@@ -14,6 +14,7 @@ import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.framework.JFX;
 import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
 import io.devpl.toolkit.fxui.model.DBTableListModel;
+import io.devpl.toolkit.fxui.model.DbTreeViewItemDataModel;
 import io.devpl.toolkit.fxui.utils.*;
 import io.devpl.toolkit.fxui.view.CodeGenMainView;
 import javafx.collections.FXCollections;
@@ -31,6 +32,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import org.greenrobot.eventbus.Subscribe;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
@@ -55,6 +57,10 @@ public class MainUIController extends FXControllerBase {
     public CheckBox chbEnableSwagger;
     @FXML
     public Label labBeanDefCreate; // 创建Bean定义
+    @FXML
+    public Tab tabTableConfig;  // 表配置标签
+    @FXML
+    public ScrollPane scpTableConfigRoot;
     @FXML
     private Label connectionLabel; // toolbar buttons
     @FXML
@@ -112,7 +118,7 @@ public class MainUIController extends FXControllerBase {
     @FXML
     private CheckBox jsr310Support;
     @FXML
-    private TreeView<String> trvDbTreeList; // 数据库表列表
+    private TreeView<DbTreeViewItemDataModel> trvDbTreeList; // 数据库表列表，只读
     @FXML
     public TextField filterTreeBox;
     @FXML
@@ -131,7 +137,6 @@ public class MainUIController extends FXControllerBase {
     public void initialize(URL location, ResourceBundle resources) {
 
         bindCodeGenConfiguration(codeGenConfig);
-
         registerThis();
         encodingChoice.setItems(JFX.arrayOf(Constants.SUPPORTED_ENCODING));
         // 默认选中第一个，否则如果忘记选择，没有对应错误提示
@@ -147,10 +152,6 @@ public class MainUIController extends FXControllerBase {
                 log.error(e.getMessage(), e);
                 Alerts.error(e.getMessage()).showAndWait();
             }
-        });
-        // 字典管理界面
-        dictConfigLabel.setOnMouseClicked(event -> {
-            Alerts.error("字典管理暂未开发").showAndWait();
         });
         labTextHandle.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
         labBeanDefCreate.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
@@ -171,12 +172,11 @@ public class MainUIController extends FXControllerBase {
         dictConfigLabel.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
         useExample.setOnMouseClicked(event -> offsetLimitCheckBox.setDisable(!useExample.isSelected()));
         // selectedProperty().addListener 解决应用配置的时候未触发Clicked事件
-        useLombokPlugin
-                .selectedProperty()
-                .addListener((observable, oldValue, newValue) -> needToStringHashcodeEquals.setDisable(newValue));
+        useLombokPlugin.selectedProperty()
+                       .addListener((observable, oldValue, newValue) -> needToStringHashcodeEquals.setDisable(newValue));
 
-        trvDbTreeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // 设置可以多选
-        trvDbTreeList.setShowRoot(false);
+        // trvDbTreeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // 设置可以多选
+        // trvDbTreeList.setShowRoot(false);
         trvDbTreeList.setRoot(new TreeItem<>()); // 根节点
 
         filterTreeBox.setOnKeyPressed(event -> {
@@ -185,13 +185,40 @@ public class MainUIController extends FXControllerBase {
                 event.consume();
             }
         });
+
+        final StringConverter<DbTreeViewItemDataModel> stringConverter = new StringConverter<>() {
+
+            final TreeView<DbTreeViewItemDataModel> treeView = trvDbTreeList;
+
+            {
+                if (treeView.isEditable()) {
+                    treeView.setEditable(false);
+                }
+            }
+
+            @Override
+            public String toString(DbTreeViewItemDataModel object) {
+                return object.getTableName();
+            }
+
+            /**
+             * 不可编辑状态下不会调用此方法
+             * @param string the {@code String} to convert
+             * @return
+             */
+            @Override
+            public DbTreeViewItemDataModel fromString(String string) {
+                return null;
+            }
+        };
+
         // 设置单元格工厂 Callback<TreeView<T>, TreeCell<T>> value
-        trvDbTreeList.setCellFactory((TreeView<String> tv) -> {
-            TreeCell<String> cell = new TextFieldTreeCell<>(); // 创建一个单元格
+        trvDbTreeList.setCellFactory((TreeView<DbTreeViewItemDataModel> tv) -> {
+            TreeCell<DbTreeViewItemDataModel> cell = new TextFieldTreeCell<>(stringConverter); // 创建一个单元格
             cell.setOnMouseClicked(event -> {
-                @SuppressWarnings("unchecked") TreeCell<String> treeCell = (TreeCell<String>) event.getSource();
+                @SuppressWarnings("unchecked") TreeCell<DbTreeViewItemDataModel> treeCell = (TreeCell<DbTreeViewItemDataModel>) event.getSource();
                 // 获取单元格
-                TreeItem<String> treeItem = treeCell.getTreeItem();
+                TreeItem<DbTreeViewItemDataModel> treeItem = treeCell.getTreeItem();
                 int level = treeCell.getTreeView().getTreeItemLevel(treeItem);
                 if (level == 1) { // 层级为1，点击每个连接
                     addContexMenuIfRequired(treeCell);
@@ -205,15 +232,24 @@ public class MainUIController extends FXControllerBase {
                 if (level == 2 && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) { // 双击
                     selectedDatabaseConfig = (DatabaseConfig) treeItem.getParent().getGraphic().getUserData();
 
-                    tableNameField.setText(this.tableName = treeCell.getTreeItem().getValue());
+                    tableNameField.setText(this.tableName = treeCell.getTreeItem().getValue().getTableName());
                     domainObjectNameField.setText(StringUtils.dbStringToCamelStyle(this.tableName));
                     mapperName.setText(domainObjectNameField.getText().concat("Mapper"));
+
+                    CodeGenMainView view = (CodeGenMainView) tabTableConfig.getContent();
+                    final DBTableListModel row = new DBTableListModel();
+                    row.setSelected(true);
+                    row.setTableName(tableName);
+                    row.setTableComment(tableName);
+                    view.addRow(row);
                 }
             });
             return cell;
         });
         loadLeftDBTree();
         setTooltip();
+
+        tabTableConfig.setContent(new CodeGenMainView());
     }
 
     private void addContexMenuIfRequired(TreeCell<?> cell) {
@@ -235,7 +271,6 @@ public class MainUIController extends FXControllerBase {
         menuItemDelConnection.setOnAction(event -> {
             try {
                 final DatabaseConfig userData = (DatabaseConfig) cell.getTreeItem().getGraphic().getUserData();
-
                 ConfigHelper.deleteDatabaseConfig(userData);
                 this.loadLeftDBTree(); // 刷新界面
             } catch (Exception e) {
@@ -256,20 +291,22 @@ public class MainUIController extends FXControllerBase {
         projectFolderField.setText("D:/Temp/test");
     }
 
-    private void displayTables(TreeItem<String> treeItem) {
+    private void displayTables(TreeItem<DbTreeViewItemDataModel> treeItem) {
         if (treeItem.isLeaf() && !treeItem.isExpanded()) return;
         DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
         try {
             String filter = filterTreeBox.getText();
             List<String> tables = DBUtils.getTableNames(selectedConfig, filter);
             if (tables.size() > 0) {
-                ObservableList<TreeItem<String>> children = treeItem.getChildren();
+                ObservableList<TreeItem<DbTreeViewItemDataModel>> children = treeItem.getChildren();
                 children.clear();
                 for (String tableName : tables) {
-                    TreeItem<String> newTreeItem = new TreeItem<>();
+                    TreeItem<DbTreeViewItemDataModel> newTreeItem = new TreeItem<>();
                     ImageView imageView = JFX.loadImageView("static/icons/table.png", 16);
                     newTreeItem.setGraphic(imageView);
-                    newTreeItem.setValue(tableName);
+                    DbTreeViewItemDataModel tableInfo = new DbTreeViewItemDataModel();
+                    tableInfo.setTableName(tableName);
+                    newTreeItem.setValue(tableInfo);
                     children.add(newTreeItem);
                 }
             } else if (StringUtils.hasText(filter)) {
@@ -292,14 +329,18 @@ public class MainUIController extends FXControllerBase {
     }
 
     public void loadLeftDBTree() {
-        TreeItem<String> rootTreeItem = trvDbTreeList.getRoot();
+        TreeItem<DbTreeViewItemDataModel> rootTreeItem = trvDbTreeList.getRoot();
         rootTreeItem.getChildren().clear();
         try {
             // 加载所有的数据库配置
             List<DatabaseConfig> dbConfigs = ConfigHelper.loadDatabaseConfig();
             for (DatabaseConfig dbConfig : dbConfigs) {
-                TreeItem<String> treeItem = new TreeItem<>();
-                treeItem.setValue(dbConfig.getName());
+                TreeItem<DbTreeViewItemDataModel> treeItem = new TreeItem<>();
+
+                final String name = dbConfig.getName();
+                final DbTreeViewItemDataModel tableInfo = new DbTreeViewItemDataModel();
+                tableInfo.setTableName(name);
+                treeItem.setValue(tableInfo);
                 treeItem.setGraphic(JFX.loadImageView("static/icons/computer.png", 16, dbConfig));
                 rootTreeItem.getChildren().add(treeItem);
             }
@@ -335,7 +376,6 @@ public class MainUIController extends FXControllerBase {
             Alerts.error(result).showAndWait();
             return;
         }
-
         if (!checkDirs(codeGenConfig)) {
             return;
         }
@@ -348,6 +388,7 @@ public class MainUIController extends FXControllerBase {
         ProgressDialog alert = new ProgressDialog(Alert.AlertType.INFORMATION);
         mbgGenerator.setProgressCallback(alert);
         alert.show();
+
         PictureProcessStateController pictureProcessStateController = null;
         try {
             // Engage PortForwarding
@@ -360,7 +401,8 @@ public class MainUIController extends FXControllerBase {
             try {
                 mbgGenerator.generate();
             } catch (Exception exception) {
-                Alerts.error("生成失败: " + exception.getMessage()).showAndWait();
+                alert.closeIfShowing();
+                Alerts.exception("生成失败", exception).showAndWait();
             }
             if (pictureProcessStateController != null) {
                 Task<Void> task = new DoNothing();
@@ -456,10 +498,9 @@ public class MainUIController extends FXControllerBase {
                 return;
             }
             try {
-                CodeGenConfiguration generatorConfig = getGeneratorConfigFromUI();
-                generatorConfig.setName(name);
+                codeGenConfig.setName(name);
                 ConfigHelper.deleteGeneratorConfig(name);
-                ConfigHelper.saveGeneratorConfig(generatorConfig);
+                ConfigHelper.saveGeneratorConfig(codeGenConfig);
             } catch (Exception e) {
                 log.error("保存配置失败", e);
                 Alerts.error("保存配置失败").show();
@@ -467,42 +508,10 @@ public class MainUIController extends FXControllerBase {
         }
     }
 
-    private CodeGenConfiguration getGeneratorConfigFromUI() {
-        CodeGenConfiguration generatorConfig = new CodeGenConfiguration();
-        generatorConfig.setProjectFolder(projectFolderField.getText());
-        generatorConfig.setModelPackage(modelTargetPackage.getText());
-        generatorConfig.setGenerateKeys(generateKeysField.getText());
-        generatorConfig.setModelPackageTargetFolder(modelTargetProject.getText());
-        generatorConfig.setDaoPackage(txfMapperPackageName.getText());
-        generatorConfig.setDaoTargetFolder(daoTargetProject.getText());
-        generatorConfig.setMapperName(mapperName.getText());
-        generatorConfig.setMappingXMLPackage(mapperTargetPackage.getText());
-        generatorConfig.setMappingXMLTargetFolder(mappingTargetProject.getText());
-        generatorConfig.setTableName(tableNameField.getText());
-        generatorConfig.setDomainObjectName(domainObjectNameField.getText());
-        generatorConfig.setOffsetLimit(offsetLimitCheckBox.isSelected());
-        generatorConfig.setComment(commentCheckBox.isSelected());
-        generatorConfig.setOverrideXML(overrideXML.isSelected());
-        generatorConfig.setNeedToStringHashcodeEquals(needToStringHashcodeEquals.isSelected());
-        generatorConfig.setUseLombokPlugin(useLombokPlugin.isSelected());
-        generatorConfig.setSwaggerSupport(chbEnableSwagger.isSelected());
-        generatorConfig.setUseTableNameAlias(useTableNameAliasCheckbox.isSelected());
-        generatorConfig.setNeedForUpdate(forUpdateCheckBox.isSelected());
-        generatorConfig.setAnnotationDAO(annotationDAOCheckBox.isSelected());
-        generatorConfig.setAnnotation(annotationCheckBox.isSelected());
-        generatorConfig.setUseActualColumnNames(useActualColumnNamesCheckbox.isSelected());
-        generatorConfig.setEncoding(encodingChoice.getValue());
-        generatorConfig.setUseExample(useExample.isSelected());
-        generatorConfig.setUseDAOExtendStyle(useDAOExtendStyle.isSelected());
-        generatorConfig.setUseSchemaPrefix(useSchemaPrefix.isSelected());
-        generatorConfig.setJsr310Support(jsr310Support.isSelected());
-        generatorConfig.setParentPackage(txfParentPackageName.getText());
-        return generatorConfig;
-    }
-
     @Subscribe
     public void updateCodeGenConfig(UpdateCodeGenConfigEvent event) {
         log.info("更新代码生成配置", event);
+        // TOOD
         final CodeGenConfiguration config = event.getGeneratorConfig();
     }
 
@@ -515,6 +524,7 @@ public class MainUIController extends FXControllerBase {
         modelTargetPackage.textProperty().bindBidirectional(generatorConfig.modelPackageProperty());
         generateKeysField.textProperty().bindBidirectional(generatorConfig.generateKeysProperty());
         modelTargetProject.textProperty().bindBidirectional(generatorConfig.modelPackageTargetFolderProperty());
+        txfParentPackageName.textProperty().bindBidirectional(generatorConfig.parentPackageProperty());
         txfMapperPackageName.textProperty().bindBidirectional(generatorConfig.daoPackageProperty());
         daoTargetProject.textProperty().bindBidirectional(generatorConfig.daoTargetFolderProperty());
         mapperTargetPackage.textProperty().bindBidirectional(generatorConfig.mappingXMLPackageProperty());
@@ -525,18 +535,16 @@ public class MainUIController extends FXControllerBase {
         offsetLimitCheckBox.selectedProperty().bindBidirectional(generatorConfig.offsetLimitProperty());
         commentCheckBox.selectedProperty().bindBidirectional(generatorConfig.commentProperty());
         overrideXML.selectedProperty().bindBidirectional(generatorConfig.overrideXMLProperty());
-        needToStringHashcodeEquals
-                .selectedProperty()
-                .bindBidirectional(generatorConfig.needToStringHashcodeEqualsProperty());
+        needToStringHashcodeEquals.selectedProperty()
+                                  .bindBidirectional(generatorConfig.needToStringHashcodeEqualsProperty());
         useLombokPlugin.selectedProperty().bindBidirectional(generatorConfig.useLombokPluginProperty());
         // 是否使用表别名
         useTableNameAliasCheckbox.selectedProperty().bindBidirectional(generatorConfig.useTableNameAliasProperty());
         forUpdateCheckBox.selectedProperty().bindBidirectional(generatorConfig.needForUpdateProperty());
         annotationDAOCheckBox.selectedProperty().bindBidirectional(generatorConfig.annotationDAOProperty());
         annotationCheckBox.selectedProperty().bindBidirectional(generatorConfig.annotationProperty());
-        useActualColumnNamesCheckbox
-                .selectedProperty()
-                .bindBidirectional(generatorConfig.useActualColumnNamesProperty());
+        useActualColumnNamesCheckbox.selectedProperty()
+                                    .bindBidirectional(generatorConfig.useActualColumnNamesProperty());
         encodingChoice.valueProperty().bindBidirectional(generatorConfig.encodingProperty());
         useExample.selectedProperty().bindBidirectional(generatorConfig.useExampleProperty());
         useDAOExtendStyle.selectedProperty().bindBidirectional(generatorConfig.useDAOExtendStyleProperty());
@@ -618,8 +626,7 @@ public class MainUIController extends FXControllerBase {
 
     @FXML
     public void openTargetFolder() {
-        CodeGenConfiguration generatorConfig = getGeneratorConfigFromUI();
-        String projectFolder = generatorConfig.getProjectFolder();
+        String projectFolder = codeGenConfig.getProjectFolder();
         try {
             FileUtils.show(new File(projectFolder));
         } catch (Exception e) {

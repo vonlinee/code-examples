@@ -59,4 +59,10 @@ public class ProgressDialog extends Alert implements ProgressCallback {
         progressTextBuilder.append("checkCancel => 取消\n");
         progressText.setValue(progressTextBuilder.toString());
     }
+
+    public void closeIfShowing() {
+        if (isShowing()) {
+            this.close();
+        }
+    }
 }

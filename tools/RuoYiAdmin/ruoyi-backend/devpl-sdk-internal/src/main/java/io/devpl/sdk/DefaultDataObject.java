@@ -13,7 +13,7 @@ final class DefaultDataObject implements DataObject {
     private static final long serialVersionUID = 4967941937079805838L;
 
     /**
-     * 小驼峰命名
+     * 小驼峰命名:以字母开头
      */
     private static final Pattern NAME_PATTERN = Pattern.compile("[a-zA-z_][a-zA-z0-9_]*");
 
@@ -55,14 +55,14 @@ final class DefaultDataObject implements DataObject {
      * @param name 数据项名称
      */
     private void ensureValidName(String name) {
-        if (strict && !isAllowed(name)) {
+        if (strict && !isKeyAllowed(name)) {
             throw new IllegalArgumentException("illegal item name [" + name + "] of data!");
         }
     }
 
     @Override
     public boolean containsKey(String name) {
-        return isAllowed(name) && data.containsKey(name);
+        return isKeyAllowed(name) && data.containsKey(name);
     }
 
     @Override
@@ -90,51 +90,65 @@ final class DefaultDataObject implements DataObject {
      * @param name 数据项名称
      * @return 数据项名称是否符合规则
      */
-    private boolean isAllowed(String name) {
+    private boolean isKeyAllowed(String name) {
         return NAME_PATTERN.matcher(name).matches();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <V> V getTypedValue(String name) {
-        if (!isAllowed(name)) {
+        if (!isKeyAllowed(name)) {
             return null;
         }
         return (V) data.get(name);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <V> V getTypedValue(String name, Class<V> valueType) {
-        return null;
+        final Object typedValue = getTypedValue(name);
+        if (typedValue == null || isAssignableFrom(typedValue.getClass(), valueType)) {
+            return null;
+        }
+        return (V) typedValue;
     }
 
     @Override
     public <V> V getTypedValue(String name, V defaultValue) {
+        final Object typedValue = getTypedValue(name);
+        if (typedValue == null) {
+            return defaultValue;
+        }
         return null;
     }
 
     @Override
     public <V> V getTypedValue(String name, Class<V> valueType, V defaultValue) {
+        final Object typedValue = getTypedValue(name);
+        if (typedValue == null || isAssignableFrom(typedValue.getClass(), valueType)) {
+            return defaultValue;
+        }
         return null;
     }
 
     @Override
-    public boolean equals(DataObject obj) {
-        return false;
-    }
-
-    boolean isCompatiable(Class<?> valType, Class<?> expectedType) {
-        return expectedType != null && expectedType.isAssignableFrom(valType);
+    @SuppressWarnings("unchecked")
+    public <V> V remove(String key) {
+        return (V) data.remove(key);
     }
 
     @Override
-    public Iterator<KVPair<String, Object>> iterator() {
-        final Set<Map.Entry<String, Object>> entries = data.entrySet();
-        final List<KVPair<String, Object>> list = new ArrayList<>();
-        for (Map.Entry<String, Object> entry : entries) {
-            list.add(new KVPair<>(entry.getKey(), entry.getValue()));
-        }
-        return list.iterator();
+    public void remove(String... keys) {
+        data.removeAll(Arrays.asList(keys));
+    }
+
+    @Override
+    public boolean equals(DataObject obj) {
+        return Objects.equals(this.asMap(), obj.asMap());
+    }
+
+    private boolean isAssignableFrom(Class<?> aClass, Class<?> bClass) {
+        return false;
     }
 
     @Override

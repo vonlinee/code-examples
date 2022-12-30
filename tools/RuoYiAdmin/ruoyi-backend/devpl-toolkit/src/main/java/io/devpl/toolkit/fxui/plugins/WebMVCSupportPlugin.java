@@ -48,7 +48,7 @@ public class WebMVCSupportPlugin extends PluginAdapter {
      * @return 生成Java文件
      */
     @Override
-    public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles() {
+    public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
         List<GeneratedJavaFile> mvcFiles = new ArrayList<>(prepareServiceFiles());
         mvcFiles.addAll(prepareControllerFiles());
         mvcFiles.addAll(prepareServiceFiles());

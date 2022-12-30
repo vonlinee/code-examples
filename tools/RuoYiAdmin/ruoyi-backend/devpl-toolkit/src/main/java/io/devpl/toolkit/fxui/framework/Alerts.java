@@ -1,6 +1,11 @@
 package io.devpl.toolkit.fxui.framework;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextArea;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * FX弹窗警告
@@ -16,12 +21,19 @@ public final class Alerts {
     private static final Alert NONE = new Alert(Alert.AlertType.NONE);
     private static final Alert CONFIRM = new Alert(Alert.AlertType.CONFIRMATION);
 
+    private static final Alert EXCEPTION = new Alert(Alert.AlertType.ERROR);
+
     static {
         INFO.setResizable(true);
         WARN.setResizable(true);
         ERROR.setResizable(true);
         NONE.setResizable(true);
         CONFIRM.setResizable(true);
+
+        final TextArea textArea = new TextArea();
+        EXCEPTION.getDialogPane().setContent(textArea);
+        EXCEPTION.setResizable(true);
+        EXCEPTION.contentTextProperty().bindBidirectional(textArea.textProperty());
     }
 
     public static Alert info(String message) {
@@ -42,6 +54,16 @@ public final class Alerts {
         alert.setResizable(true);
         alert.setContentText(message);
         return alert;
+    }
+
+    public static Alert exception(String header, Throwable throwable) {
+        final StringWriter sw = new StringWriter();
+        try (PrintWriter pw = new PrintWriter(sw, true)) {
+            throwable.printStackTrace(pw);
+        }
+        EXCEPTION.setHeaderText(header);
+        EXCEPTION.setContentText(sw.toString());
+        return EXCEPTION;
     }
 
     /**

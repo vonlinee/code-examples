@@ -23,7 +23,7 @@
         </javaTypeResolver>
         <!--生成Model类存放位置 -->
         <javaModelGenerator
-                targetPackage="com.zsdn.gateway.route.pojo" targetProject="D:/Temp">
+                targetPackage="entity" targetProject="D:/Temp">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>

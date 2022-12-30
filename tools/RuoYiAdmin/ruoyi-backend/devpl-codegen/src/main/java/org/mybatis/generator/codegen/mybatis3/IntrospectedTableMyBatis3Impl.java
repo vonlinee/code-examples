@@ -1,18 +1,3 @@
-/*
- *    Copyright 2006-2022 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       https://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 package org.mybatis.generator.codegen.mybatis3;
 
 import java.util.ArrayList;
@@ -41,6 +26,7 @@ import org.mybatis.generator.codegen.mybatis3.model.RecordWithBLOBsGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
 import org.mybatis.generator.config.ConfigKeyRegistry;
 import org.mybatis.generator.internal.ObjectFactory;
+import org.mybatis.generator.internal.rules.Rule;
 import org.mybatis.generator.internal.util.StringUtils;
 
 /**
@@ -125,25 +111,26 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 
     protected void calculateJavaModelGenerators(List<String> warnings,
                                                 ProgressCallback progressCallback) {
-        log.info("use rule impl => ", getRules());
-        if (getRules().generateExampleClass()) {
+        final Rule rule = getRules();
+        // Example类
+        if (rule.generateExampleClass()) {
             AbstractJavaGenerator javaGenerator = new ExampleGenerator(getExampleProject());
             initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
             javaGenerators.add(javaGenerator);
         }
-        if (getRules().generatePrimaryKeyClass()) {
+        // PrimaryKey类
+        if (rule.generatePrimaryKeyClass()) {
             AbstractJavaGenerator javaGenerator = new PrimaryKeyGenerator(getModelProject());
             initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
             javaGenerators.add(javaGenerator);
         }
-
-        if (getRules().generateBaseRecordClass()) {
+        // 实体类
+        if (rule.generateBaseRecordClass()) {
             AbstractJavaGenerator javaGenerator = new BaseRecordGenerator(getModelProject());
             initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
             javaGenerators.add(javaGenerator);
         }
-
-        if (getRules().generateRecordWithBLOBsClass()) {
+        if (rule.generateRecordWithBLOBsClass()) {
             AbstractJavaGenerator javaGenerator = new RecordWithBLOBsGenerator(getModelProject());
             initializeAbstractGenerator(javaGenerator, warnings, progressCallback);
             javaGenerators.add(javaGenerator);
@@ -155,7 +142,6 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         if (abstractGenerator == null) {
             return;
         }
-
         abstractGenerator.setContext(context);
         abstractGenerator.setIntrospectedTable(this);
         abstractGenerator.setProgressCallback(progressCallback);
@@ -165,7 +151,6 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     @Override
     public List<GeneratedJavaFile> getGeneratedJavaFiles() {
         List<GeneratedJavaFile> answer = new ArrayList<>();
-
         for (AbstractJavaGenerator javaGenerator : javaGenerators) {
             List<CompilationUnit> compilationUnits = javaGenerator.getCompilationUnits();
             for (CompilationUnit compilationUnit : compilationUnits) {
@@ -176,7 +161,6 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
                 answer.add(gjf);
             }
         }
-
         return answer;
     }
 

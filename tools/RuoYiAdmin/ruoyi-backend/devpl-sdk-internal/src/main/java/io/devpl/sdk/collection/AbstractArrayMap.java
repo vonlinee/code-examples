@@ -514,7 +514,6 @@ public abstract class AbstractArrayMap<K, V> {
         if (index >= 0) {
             return removeAt(index);
         }
-
         return null;
     }
 

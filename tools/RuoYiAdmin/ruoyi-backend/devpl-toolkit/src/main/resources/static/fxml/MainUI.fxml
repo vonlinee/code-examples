@@ -70,7 +70,7 @@
             <AnchorPane prefHeight="700.0" prefWidth="350.0">
                 <TreeView fx:id="trvDbTreeList" layoutX="-14.0" maxWidth="134.0" prefHeight="503.0" prefWidth="134.0"
                           AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                          AnchorPane.topAnchor="0.0">
+                          AnchorPane.topAnchor="0.0" showRoot="false">
                 </TreeView>
                 <TextField fx:id="filterTreeBox" layoutY="504.0" prefHeight="26.0" prefWidth="134.0" promptText="搜索"
                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
@@ -344,9 +344,9 @@
                 <Tab closable="false" text="文本处理工具">
                     <fx:include source="text_handle.fxml"/>
                 </Tab>
-                <Tab closable="false" text="全局配置">
-                    <ScrollPane prefHeight="200" prefWidth="200">
-                        <Text>待完善</Text>
+                <Tab fx:id="tabTableConfig" closable="false" text="表配置">
+                    <ScrollPane fx:id="scpTableConfigRoot" prefHeight="200" prefWidth="200">
+
                     </ScrollPane>
                 </Tab>
             </TabPane>

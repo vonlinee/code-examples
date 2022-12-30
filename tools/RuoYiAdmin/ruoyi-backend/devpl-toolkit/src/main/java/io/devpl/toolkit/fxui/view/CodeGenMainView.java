@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.AccessibleRole;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -32,7 +33,6 @@ public class CodeGenMainView extends BorderPane {
     public TableColumn<DBTableListModel, String> tblcTableCreatedTime;
 
     public CodeGenMainView() {
-
         // 第一行
         final Label labelDs = new Label("数据源");
         labelDs.setMinWidth(60);
@@ -70,22 +70,15 @@ public class CodeGenMainView extends BorderPane {
         GridPane.setColumnIndex(labelDs, 0);
         GridPane.setColumnIndex(chobDs, 1);
         GridPane.setColumnIndex(btnManageDs, 2);
-
-        chobDs
-                .prefWidthProperty()
-                .bind(hBox.widthProperty().subtract(labelDs.getPrefWidth()).subtract(btnManageDs.getPrefWidth()));
-
+        chobDs.prefWidthProperty()
+              .bind(hBox.widthProperty().subtract(labelDs.getPrefWidth()).subtract(btnManageDs.getPrefWidth()));
         grpTop = new GridPane();
         grpTop.setVgap(5.0);
         grpTop.getChildren().add(hBox);
-
         grpTop.setPadding(new Insets(5, 5, 5, 5));
-
         // 宽高绑定
         hBox.prefWidthProperty().bind(grpTop.widthProperty());
-
         initSecondRowOfGridPane(grpTop);
-
         setTop(grpTop);
         initTableView(); // Center
     }

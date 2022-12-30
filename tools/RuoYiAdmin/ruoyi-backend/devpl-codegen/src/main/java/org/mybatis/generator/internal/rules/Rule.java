@@ -25,7 +25,7 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
  * to those objects.
  * @author Jeff Butler
  */
-public interface Rules {
+public interface Rule {
 
     /**
      * Implements the rule for generating the insert SQL Map element and DAO

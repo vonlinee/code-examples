@@ -409,12 +409,12 @@ public class Context extends PropertyHolder {
             generatedJavaFiles.addAll(introspectedTable.getGeneratedJavaFiles());
             generatedXmlFiles.addAll(introspectedTable.getGeneratedXmlFiles());
             generatedKotlinFiles.addAll(introspectedTable.getGeneratedKotlinFiles());
+            // 执行插件
             generatedJavaFiles.addAll(pluginAggregator.contextGenerateAdditionalJavaFiles(introspectedTable));
             generatedXmlFiles.addAll(pluginAggregator.contextGenerateAdditionalXmlFiles(introspectedTable));
             generatedKotlinFiles.addAll(pluginAggregator.contextGenerateAdditionalKotlinFiles(introspectedTable));
             otherGeneratedFiles.addAll(pluginAggregator.contextGenerateAdditionalFiles(introspectedTable));
         }
-        // 执行插件的部分逻辑
         generatedJavaFiles.addAll(pluginAggregator.contextGenerateAdditionalJavaFiles());
         generatedXmlFiles.addAll(pluginAggregator.contextGenerateAdditionalXmlFiles());
         generatedKotlinFiles.addAll(pluginAggregator.contextGenerateAdditionalKotlinFiles());

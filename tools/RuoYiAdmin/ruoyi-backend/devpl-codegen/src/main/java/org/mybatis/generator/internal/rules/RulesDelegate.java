@@ -57,10 +57,10 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
  * @author Jeff Butler
  *
  */
-public class RulesDelegate implements Rules {
-    protected final Rules rules;
+public class RulesDelegate implements Rule {
+    protected final Rule rules;
 
-    public RulesDelegate(Rules rules) {
+    public RulesDelegate(Rule rules) {
         this.rules = rules;
     }
 

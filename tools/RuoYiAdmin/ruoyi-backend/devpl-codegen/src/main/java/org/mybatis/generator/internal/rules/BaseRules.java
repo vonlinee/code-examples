@@ -15,7 +15,7 @@ import org.mybatis.generator.internal.util.StringUtils;
  *
  * @author Jeff Butler
  */
-public abstract class BaseRules implements Rules {
+public abstract class BaseRules implements Rule {
 
     protected final TableConfiguration tableConfiguration;
 
@@ -334,11 +334,9 @@ public abstract class BaseRules implements Rules {
             // this is a model only context - don't generate the example class
             return false;
         }
-
         if (isModelOnly) {
             return false;
         }
-
         return tableConfiguration.isSelectByExampleStatementEnabled()
                 || tableConfiguration.isDeleteByExampleStatementEnabled()
                 || tableConfiguration.isCountByExampleStatementEnabled()
@@ -359,7 +357,6 @@ public abstract class BaseRules implements Rules {
         if (isModelOnly) {
             return false;
         }
-
         return tableConfiguration.isUpdateByExampleStatementEnabled();
     }
 

@@ -76,17 +76,26 @@ public interface DataObject extends Serializable, Cloneable {
     <V> V getTypedValue(String name, Class<V> valueType, V defaultValue);
 
     /**
+     * 删除某个名称的值
+     * @param key 名称
+     * @return 旧值
+     * @throws ClassCastException 如果实际的类型和期望的值类型不兼容，会抛出ClassCastException
+     */
+    <V> V remove(String key);
+
+    /**
+     * 删除某个名称的值
+     * @param keys 名称
+     * @throws ClassCastException 如果实际的类型和期望的值类型不兼容，会抛出ClassCastException
+     */
+    void remove(String... keys);
+
+    /**
      * 判断两个DataObject是否相等，只需要比较DataObject所包含的数据，和DataObject本身无关系
      * @param obj 另一个DataObject
      * @return boolean
      */
     boolean equals(DataObject obj);
-
-    /**
-     * 返回一个数据项的迭代器
-     * @return 迭代器
-     */
-    Iterator<KVPair<String, Object>> iterator();
 
     /**
      * 返回数据的key集合

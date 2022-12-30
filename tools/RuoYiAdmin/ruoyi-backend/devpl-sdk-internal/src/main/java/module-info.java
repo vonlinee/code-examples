@@ -13,9 +13,7 @@ open module devpl.sdk.internal {
     requires jsr305;
 
     requires com.google.gson;
-    requires org.joda.convert;
     requires com.google.common;
-    requires org.joda.collect;
     requires org.jetbrains.annotations;
     requires spring.core;
     requires spring.jcl;
@@ -28,9 +26,7 @@ open module devpl.sdk.internal {
     // 如果是通过类名来反射使用public方法或newInstance，如果没有exports，则运行时报错
     // 如果有exports，但是没有open，因此编译通过运行时报错
     exports io.devpl.sdk;
-    exports io.devpl.sdk.beans;
     exports io.devpl.sdk.io;
-    exports io.devpl.sdk.beans.impl.map;
     exports io.devpl.sdk.collection;
     exports io.devpl.sdk.validation;
     exports io.devpl.sdk.util;

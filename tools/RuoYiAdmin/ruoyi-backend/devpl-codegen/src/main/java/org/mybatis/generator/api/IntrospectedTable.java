@@ -27,7 +27,7 @@ import org.mybatis.generator.config.TableConfiguration;
 import org.mybatis.generator.internal.rules.ConditionalModelRules;
 import org.mybatis.generator.internal.rules.FlatModelRules;
 import org.mybatis.generator.internal.rules.HierarchicalModelRules;
-import org.mybatis.generator.internal.rules.Rules;
+import org.mybatis.generator.internal.rules.Rule;
 import org.mybatis.generator.internal.util.StringUtils;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
@@ -97,7 +97,7 @@ public abstract class IntrospectedTable {
 
     protected Context context;
 
-    protected Rules rules;
+    protected Rule rules;
 
     protected final List<IntrospectedColumn> primaryKeyColumns = new ArrayList<>();
 
@@ -149,11 +149,10 @@ public abstract class IntrospectedTable {
     }
 
     public Optional<IntrospectedColumn> getColumn(String columnName) {
-        return Stream
-                .of(primaryKeyColumns.stream(), baseColumns.stream(), blobColumns.stream())
-                .flatMap(Function.identity())
-                .filter(ic -> columnMatches(ic, columnName))
-                .findFirst();
+        return Stream.of(primaryKeyColumns.stream(), baseColumns.stream(), blobColumns.stream())
+                     .flatMap(Function.identity())
+                     .filter(ic -> columnMatches(ic, columnName))
+                     .findFirst();
     }
 
     private boolean columnMatches(IntrospectedColumn introspectedColumn, String columnName) {
@@ -170,10 +169,9 @@ public abstract class IntrospectedTable {
      * @return true if the table contains DATE columns
      */
     public boolean hasJDBCDateColumns() {
-        return Stream
-                .of(primaryKeyColumns.stream(), baseColumns.stream())
-                .flatMap(Function.identity())
-                .anyMatch(IntrospectedColumn::isJDBCDateColumn);
+        return Stream.of(primaryKeyColumns.stream(), baseColumns.stream())
+                     .flatMap(Function.identity())
+                     .anyMatch(IntrospectedColumn::isJDBCDateColumn);
     }
 
     /**
@@ -182,10 +180,9 @@ public abstract class IntrospectedTable {
      * @return true if the table contains TIME columns
      */
     public boolean hasJDBCTimeColumns() {
-        return Stream
-                .of(primaryKeyColumns.stream(), baseColumns.stream())
-                .flatMap(Function.identity())
-                .anyMatch(IntrospectedColumn::isJDBCTimeColumn);
+        return Stream.of(primaryKeyColumns.stream(), baseColumns.stream())
+                     .flatMap(Function.identity())
+                     .anyMatch(IntrospectedColumn::isJDBCTimeColumn);
     }
 
     /**
@@ -212,10 +209,9 @@ public abstract class IntrospectedTable {
      * @return a List of ColumnDefinition objects for all columns in the table
      */
     public List<IntrospectedColumn> getAllColumns() {
-        return Stream
-                .of(primaryKeyColumns.stream(), baseColumns.stream(), blobColumns.stream())
-                .flatMap(Function.identity())
-                .collect(Collectors.toList());
+        return Stream.of(primaryKeyColumns.stream(), baseColumns.stream(), blobColumns.stream())
+                     .flatMap(Function.identity())
+                     .collect(Collectors.toList());
     }
 
     /**
@@ -223,10 +219,9 @@ public abstract class IntrospectedTable {
      * @return a List of ColumnDefinition objects for columns in the table that are non BLOBs
      */
     public List<IntrospectedColumn> getNonBLOBColumns() {
-        return Stream
-                .of(primaryKeyColumns.stream(), baseColumns.stream())
-                .flatMap(Function.identity())
-                .collect(Collectors.toList());
+        return Stream.of(primaryKeyColumns.stream(), baseColumns.stream())
+                     .flatMap(Function.identity())
+                     .collect(Collectors.toList());
     }
 
     public int getNonBLOBColumnCount() {
@@ -234,10 +229,9 @@ public abstract class IntrospectedTable {
     }
 
     public List<IntrospectedColumn> getNonPrimaryKeyColumns() {
-        return Stream
-                .of(baseColumns.stream(), blobColumns.stream())
-                .flatMap(Function.identity())
-                .collect(Collectors.toList());
+        return Stream.of(baseColumns.stream(), blobColumns.stream())
+                     .flatMap(Function.identity())
+                     .collect(Collectors.toList());
     }
 
     public List<IntrospectedColumn> getBLOBColumns() {
@@ -252,7 +246,7 @@ public abstract class IntrospectedTable {
         return !baseColumns.isEmpty();
     }
 
-    public Rules getRules() {
+    public Rule getRules() {
         return rules;
     }
 
@@ -384,7 +378,6 @@ public abstract class IntrospectedTable {
         } else {
             rules = new ConditionalModelRules(this);
         }
-        log.info("初始化插件");
         context.getPlugins().initialized(this);
     }
 
@@ -805,6 +798,7 @@ public abstract class IntrospectedTable {
     }
 
     /**
+     * 初始化代码生成器
      * This method can be used to initialize the generators before they will be called.
      *
      * <p>This method is called after all the setX methods, but before getNumberOfSubtasks(), getGeneratedJavaFiles, and
@@ -815,6 +809,7 @@ public abstract class IntrospectedTable {
     public abstract void calculateGenerators(List<String> warnings, ProgressCallback progressCallback);
 
     /**
+     * 计算要生成哪些文件
      * This method should return a list of generated Java files related to this
      * table. This list could include various types of model classes, as well as
      * DAO classes.
@@ -848,7 +843,7 @@ public abstract class IntrospectedTable {
      * This method exists to give plugins the opportunity to replace the calculated rules if necessary.
      * @param rules the new rules
      */
-    public void setRules(Rules rules) {
+    public void setRules(Rule rules) {
         this.rules = rules;
     }
 

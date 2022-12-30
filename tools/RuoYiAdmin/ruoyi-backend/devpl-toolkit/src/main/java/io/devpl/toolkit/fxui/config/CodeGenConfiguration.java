@@ -30,7 +30,7 @@ public class CodeGenConfiguration {
     /**
      * 父包名
      */
-    private final StringProperty parentPackage = new SimpleStringProperty();
+    private final StringProperty parentPackage = new SimpleStringProperty("org.example");
 
     /**
      * 是否使用mybatis
