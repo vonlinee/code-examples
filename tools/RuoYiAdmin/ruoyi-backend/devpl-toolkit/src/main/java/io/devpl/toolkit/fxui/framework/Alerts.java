@@ -1,11 +1,13 @@
 package io.devpl.toolkit.fxui.framework;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextArea;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Optional;
 
 /**
  * FX弹窗警告
@@ -105,5 +107,12 @@ public final class Alerts {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setContentText(message);
         return alert;
+    }
+
+    public static Optional<ButtonType> assertTrue(boolean expression, String message) {
+        if (!expression) {
+            return error(message).showAndWait();
+        }
+        return Optional.empty();
     }
 }

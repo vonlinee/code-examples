@@ -63,7 +63,7 @@ public abstract class FXController {
         throw new RuntimeException("event source is not a node");
     }
 
-    protected Stage getStage(Node node) {
+    public Stage getStage(Node node) {
         final Scene scene = node.getScene();
         if (scene == null) {
             throw new RuntimeException("node [" + node + "] has not been bind to a scene!");

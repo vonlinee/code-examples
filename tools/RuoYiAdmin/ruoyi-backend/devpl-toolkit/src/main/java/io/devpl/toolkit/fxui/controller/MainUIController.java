@@ -2,37 +2,36 @@ package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.Session;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
+import io.devpl.toolkit.fxui.common.ProgressDialog;
 import io.devpl.toolkit.fxui.common.StageTitle;
 import io.devpl.toolkit.fxui.common.model.ColumnCustomConfiguration;
-import io.devpl.toolkit.fxui.common.ProgressDialog;
 import io.devpl.toolkit.fxui.config.CodeGenConfiguration;
 import io.devpl.toolkit.fxui.config.Constants;
 import io.devpl.toolkit.fxui.config.DatabaseConfig;
+import io.devpl.toolkit.fxui.event.CustomEvent;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.fxui.event.UpdateCodeGenConfigEvent;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.framework.JFX;
 import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
 import io.devpl.toolkit.fxui.model.DBTableListModel;
-import io.devpl.toolkit.fxui.model.DbTreeViewItemDataModel;
+import io.devpl.toolkit.fxui.model.DbTreeViewCellFactory;
+import io.devpl.toolkit.fxui.model.DbTreeViewItemValue;
 import io.devpl.toolkit.fxui.utils.*;
 import io.devpl.toolkit.fxui.view.CodeGenMainView;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import org.greenrobot.eventbus.Subscribe;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
@@ -41,9 +40,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.SQLRecoverableException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class MainUIController extends FXControllerBase {
 
@@ -74,9 +75,9 @@ public class MainUIController extends FXControllerBase {
     @FXML
     private TextField txfMapperPackageName;  // DAO接口包名
     @FXML
-    private TextField tableNameField;
+    public TextField tableNameField;
     @FXML
-    private TextField domainObjectNameField;
+    public TextField domainObjectNameField;
     @FXML
     private TextField generateKeysField;    // 主键ID
     @FXML
@@ -86,7 +87,7 @@ public class MainUIController extends FXControllerBase {
     @FXML
     private TextField daoTargetProject;
     @FXML
-    private TextField mapperName;
+    public TextField mapperName;
     @FXML
     private TextField projectFolderField;
     @FXML
@@ -118,15 +119,15 @@ public class MainUIController extends FXControllerBase {
     @FXML
     private CheckBox jsr310Support;
     @FXML
-    private TreeView<DbTreeViewItemDataModel> trvDbTreeList; // 数据库表列表，只读
+    private TreeView<DbTreeViewItemValue> trvDbTreeList; // 数据库表列表，只读
     @FXML
     public TextField filterTreeBox;
     @FXML
     private ChoiceBox<String> encodingChoice;
     // Current selected databaseConfig
-    private DatabaseConfig selectedDatabaseConfig;
+    public DatabaseConfig selectedDatabaseConfig;
     // Current selected tableName
-    private String tableName;
+    public String tableName;
 
     private List<IgnoredColumn> ignoredColumns;
     private List<ColumnOverride> columnOverrides;
@@ -135,7 +136,6 @@ public class MainUIController extends FXControllerBase {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         bindCodeGenConfiguration(codeGenConfig);
         registerThis();
         encodingChoice.setItems(JFX.arrayOf(Constants.SUPPORTED_ENCODING));
@@ -181,104 +181,22 @@ public class MainUIController extends FXControllerBase {
 
         filterTreeBox.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                trvDbTreeList.getRoot().getChildren().filtered(TreeItem::isExpanded).forEach(this::displayTables);
+                Event.fireEvent(trvDbTreeList, new Event(CustomEvent.DISPLAY_TREE_VIEW));
                 event.consume();
             }
         });
 
-        final StringConverter<DbTreeViewItemDataModel> stringConverter = new StringConverter<>() {
-
-            final TreeView<DbTreeViewItemDataModel> treeView = trvDbTreeList;
-
-            {
-                if (treeView.isEditable()) {
-                    treeView.setEditable(false);
-                }
-            }
-
-            @Override
-            public String toString(DbTreeViewItemDataModel object) {
-                return object.getTableName();
-            }
-
-            /**
-             * 不可编辑状态下不会调用此方法
-             * @param string the {@code String} to convert
-             * @return
-             */
-            @Override
-            public DbTreeViewItemDataModel fromString(String string) {
-                return null;
-            }
-        };
+        trvDbTreeList.addEventHandler(CustomEvent.DISPLAY_TREE_VIEW, event -> {
+            DbTreeViewCellFactory factory = (DbTreeViewCellFactory) trvDbTreeList.getCellFactory();
+            trvDbTreeList.getRoot().getChildren().filtered(TreeItem::isExpanded).forEach(factory::displayTables);
+            event.consume();
+        });
 
         // 设置单元格工厂 Callback<TreeView<T>, TreeCell<T>> value
-        trvDbTreeList.setCellFactory((TreeView<DbTreeViewItemDataModel> tv) -> {
-            TreeCell<DbTreeViewItemDataModel> cell = new TextFieldTreeCell<>(stringConverter); // 创建一个单元格
-            cell.setOnMouseClicked(event -> {
-                @SuppressWarnings("unchecked") TreeCell<DbTreeViewItemDataModel> treeCell = (TreeCell<DbTreeViewItemDataModel>) event.getSource();
-                // 获取单元格
-                TreeItem<DbTreeViewItemDataModel> treeItem = treeCell.getTreeItem();
-                int level = treeCell.getTreeView().getTreeItemLevel(treeItem);
-                if (level == 1) { // 层级为1，点击每个连接
-                    addContexMenuIfRequired(treeCell);
-                    if (event.getClickCount() != 2) {
-                        event.consume();
-                        return;
-                    }
-                    treeItem.setExpanded(!treeItem.isExpanded()); // 双击切换是否展开
-                    displayTables(treeItem);
-                }
-                if (level == 2 && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) { // 双击
-                    selectedDatabaseConfig = (DatabaseConfig) treeItem.getParent().getGraphic().getUserData();
-
-                    tableNameField.setText(this.tableName = treeCell.getTreeItem().getValue().getTableName());
-                    domainObjectNameField.setText(StringUtils.dbStringToCamelStyle(this.tableName));
-                    mapperName.setText(domainObjectNameField.getText().concat("Mapper"));
-
-                    CodeGenMainView view = (CodeGenMainView) tabTableConfig.getContent();
-                    final DBTableListModel row = new DBTableListModel();
-                    row.setSelected(true);
-                    row.setTableName(tableName);
-                    row.setTableComment(tableName);
-                    view.addRow(row);
-                }
-            });
-            return cell;
-        });
+        trvDbTreeList.setCellFactory(new DbTreeViewCellFactory(this));
         loadLeftDBTree();
         setTooltip();
-
         tabTableConfig.setContent(new CodeGenMainView());
-    }
-
-    private void addContexMenuIfRequired(TreeCell<?> cell) {
-        if (cell.getContextMenu() != null) return;
-        final ContextMenu contextMenu = new ContextMenu();
-        final MenuItem menuItemCloseConnection = new MenuItem("关闭连接");
-        menuItemCloseConnection.setOnAction(event -> {
-            cell.getTreeItem().getChildren().clear();
-        });
-        final MenuItem menuItemEditConnection = new MenuItem("编辑连接");
-        menuItemEditConnection.setOnAction(event -> {
-            DatabaseConfig selectedConfig = (DatabaseConfig) cell.getTreeItem().getGraphic().getUserData();
-            NewConnectionController controller = (NewConnectionController) loadFXMLPage("编辑数据库连接", FXMLPage.NEW_CONNECTION, false);
-            controller.setConfig(selectedConfig);
-            // 此处MenuItem不是Node类型
-            getStage(cell.getTreeView()).show();
-        });
-        final MenuItem menuItemDelConnection = new MenuItem("删除连接");
-        menuItemDelConnection.setOnAction(event -> {
-            try {
-                final DatabaseConfig userData = (DatabaseConfig) cell.getTreeItem().getGraphic().getUserData();
-                ConfigHelper.deleteDatabaseConfig(userData);
-                this.loadLeftDBTree(); // 刷新界面
-            } catch (Exception e) {
-                Alerts.error("Delete connection failed! Reason: " + e.getMessage()).show();
-            }
-        });
-        contextMenu.getItems().addAll(menuItemCloseConnection, menuItemEditConnection, menuItemDelConnection);
-        cell.setContextMenu(contextMenu);
     }
 
     /**
@@ -291,61 +209,27 @@ public class MainUIController extends FXControllerBase {
         projectFolderField.setText("D:/Temp/test");
     }
 
-    private void displayTables(TreeItem<DbTreeViewItemDataModel> treeItem) {
-        if (treeItem.isLeaf() && !treeItem.isExpanded()) return;
-        DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
-        try {
-            String filter = filterTreeBox.getText();
-            List<String> tables = DBUtils.getTableNames(selectedConfig, filter);
-            if (tables.size() > 0) {
-                ObservableList<TreeItem<DbTreeViewItemDataModel>> children = treeItem.getChildren();
-                children.clear();
-                for (String tableName : tables) {
-                    TreeItem<DbTreeViewItemDataModel> newTreeItem = new TreeItem<>();
-                    ImageView imageView = JFX.loadImageView("static/icons/table.png", 16);
-                    newTreeItem.setGraphic(imageView);
-                    DbTreeViewItemDataModel tableInfo = new DbTreeViewItemDataModel();
-                    tableInfo.setTableName(tableName);
-                    newTreeItem.setValue(tableInfo);
-                    children.add(newTreeItem);
-                }
-            } else if (StringUtils.hasText(filter)) {
-                treeItem.getChildren().clear();
-            }
-            String imageViewName = StringUtils.hasText(filter) ? "static/icons/filter.png" : "static/icons/computer.png";
-            treeItem.setGraphic(JFX.loadImageView(imageViewName, 16, treeItem.getGraphic().getUserData()));
-        } catch (SQLRecoverableException e) {
-            log.error(e.getMessage(), e);
-            Alerts.error("连接超时").show();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            Alerts.error(e.getMessage()).show();
-        }
-    }
-
     @Subscribe
     public void loadDbInfo(LoadDbTreeEvent event) {
         loadLeftDBTree();
     }
 
     public void loadLeftDBTree() {
-        TreeItem<DbTreeViewItemDataModel> rootTreeItem = trvDbTreeList.getRoot();
+        TreeItem<DbTreeViewItemValue> rootTreeItem = trvDbTreeList.getRoot();
         rootTreeItem.getChildren().clear();
         try {
             // 加载所有的数据库配置
             List<DatabaseConfig> dbConfigs = ConfigHelper.loadDatabaseConfig();
             for (DatabaseConfig dbConfig : dbConfigs) {
-                TreeItem<DbTreeViewItemDataModel> treeItem = new TreeItem<>();
-
+                TreeItem<DbTreeViewItemValue> treeItem = new TreeItem<>();
                 final String name = dbConfig.getName();
-                final DbTreeViewItemDataModel tableInfo = new DbTreeViewItemDataModel();
+                final DbTreeViewItemValue tableInfo = new DbTreeViewItemValue();
                 tableInfo.setTableName(name);
                 treeItem.setValue(tableInfo);
                 treeItem.setGraphic(JFX.loadImageView("static/icons/computer.png", 16, dbConfig));
                 rootTreeItem.getChildren().add(treeItem);
             }
         } catch (Exception e) {
-            log.error("connect db failed, reason", e);
             Alerts.error(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e)).showAndWait();
         }
     }
@@ -356,11 +240,9 @@ public class MainUIController extends FXControllerBase {
      */
     @FXML
     public void chooseProjectFolder(ActionEvent event) {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        File selectedFolder = directoryChooser.showDialog(getStage(event));
-        if (selectedFolder != null) {
-            projectFolderField.setText(selectedFolder.getAbsolutePath());
-        }
+        FileChooserDialog.showDirectoryDialog(getStage(event)).ifPresent(file -> {
+            projectFolderField.setText(file.getAbsolutePath());
+        });
     }
 
     private final MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
@@ -473,10 +355,20 @@ public class MainUIController extends FXControllerBase {
         if (StringUtils.isEmpty(domainObjectNameField.getText())) {
             return "类名不能为空";
         }
-//        if (StringUtils.isAnyEmpty(modelTargetPackage.getText(), mapperTargetPackage.getText(), daoTargetPackage.getText())) {
-//            return "包名不能为空";
-//        }
+        
         return null;
+    }
+
+    private TextInputDialog dialog;
+
+    public TextInputDialog getConfigSaveDialog() {
+        if (dialog == null) {
+            dialog = new TextInputDialog();
+            dialog.setTitle("保存当前配置");
+            dialog.setContentText("请输入配置名称");
+            codeGenConfig.nameProperty().bind(this.dialog.resultProperty());
+        }
+        return dialog;
     }
 
     /**
@@ -484,27 +376,18 @@ public class MainUIController extends FXControllerBase {
      */
     @FXML
     public void saveGeneratorConfig(ActionEvent event) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("保存当前配置");
-        dialog.setResizable(true);
-        dialog.setWidth(400.0);
-        dialog.setHeight(400.0);
-        dialog.setContentText("请输入配置名称");
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            String name = result.get();
-            if (StringUtils.isEmpty(name)) {
-                Alerts.error("名称不能为空").showAndWait();
-                return;
-            }
-            try {
-                codeGenConfig.setName(name);
-                ConfigHelper.deleteGeneratorConfig(name);
-                ConfigHelper.saveGeneratorConfig(codeGenConfig);
-            } catch (Exception e) {
-                log.error("保存配置失败", e);
-                Alerts.error("保存配置失败").show();
-            }
+        final TextInputDialog dialog = getConfigSaveDialog();
+        if (dialog.isShowing()) return;
+        String name = this.dialog.showAndWait().orElse("");
+        if (StringUtils.isEmpty(name)) {
+            Alerts.error("名称不能为空").showAndWait();
+            return;
+        }
+        try {
+            ConfigHelper.deleteGeneratorConfig(name);
+            ConfigHelper.saveGeneratorConfig(codeGenConfig);
+        } catch (Exception e) {
+            Alerts.error("保存配置失败").show();
         }
     }
 
@@ -626,16 +509,14 @@ public class MainUIController extends FXControllerBase {
 
     @FXML
     public void openTargetFolder() {
-        String projectFolder = codeGenConfig.getProjectFolder();
         try {
-            FileUtils.show(new File(projectFolder));
+            FileUtils.show(new File(codeGenConfig.getProjectFolder()));
         } catch (Exception e) {
             Alerts.error("打开目录失败，请检查目录是否填写正确" + e.getMessage()).showAndWait();
         }
     }
 
     private void setTooltip() {
-        encodingChoice.setTooltip(new Tooltip("生成文件的编码，必选"));
         generateKeysField.setTooltip(new Tooltip("insert时可以返回主键ID"));
         offsetLimitCheckBox.setTooltip(new Tooltip("是否要生成分页查询代码"));
         commentCheckBox.setTooltip(new Tooltip("使用数据库的列注释作为实体类字段名的Java注释 "));

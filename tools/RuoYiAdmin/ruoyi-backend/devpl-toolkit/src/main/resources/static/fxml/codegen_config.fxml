@@ -177,7 +177,7 @@
                 </padding>
                 <HBox alignment="CENTER_LEFT">
                     <Label text="生成文件的编码"/>
-                    <ChoiceBox fx:id="encodingChoice" prefHeight="23.0"
+                    <ChoiceBox fx:id="encodingChoice" prefHeight="23.0" tooltip="生成文件的编码，必选"
                                prefWidth="71.0">
                     </ChoiceBox>
                 </HBox>

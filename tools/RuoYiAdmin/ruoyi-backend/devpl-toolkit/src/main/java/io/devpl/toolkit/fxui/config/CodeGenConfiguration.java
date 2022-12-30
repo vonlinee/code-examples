@@ -13,7 +13,19 @@ public class CodeGenConfiguration {
     /**
      * 本配置的名称
      */
-    private String name;
+    private final StringProperty name = new SimpleStringProperty();
+
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
+    }
 
     private String connectorJarPath;
 
@@ -139,14 +151,6 @@ public class CodeGenConfiguration {
 
     public void setUseExample(boolean useExample) {
         this.useExample.set(useExample);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getConnectorJarPath() {
