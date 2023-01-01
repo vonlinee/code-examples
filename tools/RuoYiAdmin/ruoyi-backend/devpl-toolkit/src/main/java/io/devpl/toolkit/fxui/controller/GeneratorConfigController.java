@@ -11,7 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
-import io.devpl.toolkit.fxui.config.CodeGenConfiguration;
+import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import io.devpl.toolkit.fxui.framework.Alerts;
 
@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 public class GeneratorConfigController extends FXControllerBase {
 
     @FXML
-    private TableView<CodeGenConfiguration> configTable;
+    private TableView<GenericConfiguration> configTable;
     @FXML
     private TableColumn<?, String> nameColumn;
     @FXML
@@ -50,7 +50,7 @@ public class GeneratorConfigController extends FXControllerBase {
                     btn1.setOnAction(event -> {
                         try {
                             // 应用配置
-                            CodeGenConfiguration generatorConfig = ConfigHelper.loadGeneratorConfig(item.toString());
+                            GenericConfiguration generatorConfig = ConfigHelper.loadGeneratorConfig(item.toString());
                             post(new UpdateCodeGenConfigEvent(generatorConfig));
                             getStage(event).close();
                         } catch (Exception e) {
@@ -60,7 +60,6 @@ public class GeneratorConfigController extends FXControllerBase {
                     btn2.setOnAction(event -> {
                         try {
                             // 删除配置
-                            log.debug("item: {}", item);
                             ConfigHelper.deleteGeneratorConfig(item.toString());
                             refreshTableView();
                         } catch (Exception e) {
@@ -76,7 +75,7 @@ public class GeneratorConfigController extends FXControllerBase {
 
     public void refreshTableView() {
         try {
-            List<CodeGenConfiguration> configs = ConfigHelper.loadGeneratorConfigs();
+            List<GenericConfiguration> configs = ConfigHelper.loadGeneratorConfigs();
             configTable.setItems(FXCollections.observableList(configs));
         } catch (Exception e) {
             Alerts.error(e.getMessage()).show();

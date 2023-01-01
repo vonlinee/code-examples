@@ -1,7 +1,7 @@
 package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.Session;
-import io.devpl.toolkit.fxui.config.DatabaseConfig;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
 import io.devpl.toolkit.fxui.utils.DBUtils;
@@ -55,7 +55,7 @@ public class NewConnectionController extends FXControllerBase {
         });
     }
 
-    public void setConfig(DatabaseConfig selectedConfig) {
+    public void setConfig(DatabaseInfo selectedConfig) {
         tabControlAController.setConfig(selectedConfig);
         tabControlBController.setDbConnectionConfig(selectedConfig);
         if (StringUtils.isNoneBlank(selectedConfig.getSshHost(), selectedConfig.getSshPassword(), selectedConfig.getSshPort(), selectedConfig.getSshUser(), selectedConfig.getLport())) {
@@ -64,7 +64,7 @@ public class NewConnectionController extends FXControllerBase {
         }
     }
 
-    private DatabaseConfig extractConfigForUI() {
+    private DatabaseInfo extractConfigForUI() {
         if (isOverssh) {
             return tabControlBController.extractConfigFromUi();
         } else {
@@ -87,7 +87,7 @@ public class NewConnectionController extends FXControllerBase {
      */
     @FXML
     public void testConnection(ActionEvent actionEvent) {
-        DatabaseConfig config = extractConfigForUI();
+        DatabaseInfo config = extractConfigForUI();
         if (config == null) {
             return;
         }

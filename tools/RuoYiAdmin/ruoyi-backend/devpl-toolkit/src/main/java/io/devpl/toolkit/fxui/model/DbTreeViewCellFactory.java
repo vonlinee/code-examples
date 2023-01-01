@@ -1,78 +1,53 @@
 package io.devpl.toolkit.fxui.model;
 
-import io.devpl.toolkit.fxui.config.DatabaseConfig;
-import io.devpl.toolkit.fxui.controller.FXMLPage;
-import io.devpl.toolkit.fxui.controller.MainUIController;
-import io.devpl.toolkit.fxui.controller.NewConnectionController;
+import io.devpl.toolkit.fxui.event.CommandEvent;
+import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.framework.JFX;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import io.devpl.toolkit.fxui.utils.DBUtils;
-import io.devpl.toolkit.fxui.utils.StringUtils;
-import io.devpl.toolkit.fxui.view.CodeGenMainView;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
+import org.greenrobot.eventbus.EventBus;
 
 import java.sql.SQLRecoverableException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据库列表TreeView的单元格工厂
  */
-public class DbTreeViewCellFactory implements Callback<TreeView<DbTreeViewItemValue>, TreeCell<DbTreeViewItemValue>> {
-
-    MainUIController mainUIController;
-
-    public DbTreeViewCellFactory(MainUIController mainUIController) {
-        this.mainUIController = mainUIController;
-    }
-
-    StringConverter<DbTreeViewItemValue> converter = new FunctionalStringConverter<>(DbTreeViewItemValue::getTableName, null);
+public class DbTreeViewCellFactory implements Callback<TreeView<String>, TreeCell<String>> {
 
     @Override
-    public TreeCell<DbTreeViewItemValue> call(TreeView<DbTreeViewItemValue> treeView) {
-        TreeCell<DbTreeViewItemValue> cell = new TextFieldTreeCell<>(converter); // 创建一个单元格
+    public TreeCell<String> call(TreeView<String> treeView) {
+        TreeCell<String> cell = new TextFieldTreeCell<>(); // 创建一个单元格
         cell.setOnMouseClicked(event -> {
-            @SuppressWarnings("unchecked") TreeCell<DbTreeViewItemValue> treeCell = (TreeCell<DbTreeViewItemValue>) event.getSource();
+            if (!isPrimaryButtonDoubleClicked(event)) {
+                event.consume();
+                return;
+            }
             // 获取单元格
-            TreeItem<DbTreeViewItemValue> treeItem = treeCell.getTreeItem();
-            int level = treeCell.getTreeView().getTreeItemLevel(treeItem);
+            TreeItem<String> treeItem = cell.getTreeItem();
+            int level = cell.getTreeView().getTreeItemLevel(treeItem);
             if (level == 1) { // 层级为1，点击每个连接
-                addContexMenuIfRequired(treeCell);
-                if (event.getClickCount() != 2) {
-                    event.consume();
-                    return;
+                addContexMenuIfRequired(cell);
+                if (treeItem.getChildren().isEmpty()) {
+                    displayTables(treeItem);
                 }
-                treeItem.setExpanded(!treeItem.isExpanded()); // 双击切换是否展开
-                displayTables(treeItem);
+                // 有子节点则双击切换展开状态
+                treeItem.setExpanded(!treeItem.isExpanded());
+            } else if (level == 2) { // 双击表
+                Event.fireEvent(treeView, new CommandEvent(CommandEvent.TABLES_SELECTED, null));
             }
-            if (level == 2 && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) { // 双击
-                mainUIController.selectedDatabaseConfig = (DatabaseConfig) treeItem.getParent()
-                                                                                   .getGraphic()
-                                                                                   .getUserData();
-
-                mainUIController.tableNameField.setText(this.mainUIController.tableName = treeCell.getTreeItem()
-                                                                                                  .getValue()
-                                                                                                  .getTableName());
-                mainUIController.domainObjectNameField.setText(StringUtils.dbStringToCamelStyle(this.mainUIController.tableName));
-                mainUIController.mapperName.setText(mainUIController.domainObjectNameField.getText().concat("Mapper"));
-
-                DbTreeViewItemValue value = treeItem.getValue();
-                if (!value.isSelected()) {
-                    value.setSelected(true);
-                    CodeGenMainView view = (CodeGenMainView) mainUIController.tabTableConfig.getContent();
-                    final DBTableListModel row = new DBTableListModel();
-                    row.setSelected(true);
-                    row.setTableName(mainUIController.tableName);
-                    row.setTableComment(mainUIController.tableName);
-                    view.addRow(row);
-                }
-            }
+            event.consume();
         });
         return cell;
     }
@@ -86,18 +61,15 @@ public class DbTreeViewCellFactory implements Callback<TreeView<DbTreeViewItemVa
         });
         final MenuItem menuItemEditConnection = new MenuItem("编辑连接");
         menuItemEditConnection.setOnAction(event -> {
-            DatabaseConfig selectedConfig = (DatabaseConfig) cell.getTreeItem().getGraphic().getUserData();
-            NewConnectionController controller = (NewConnectionController) mainUIController.loadFXMLPage("编辑数据库连接", FXMLPage.NEW_CONNECTION, false);
-            controller.setConfig(selectedConfig);
-            // 此处MenuItem不是Node类型
-            mainUIController.getStage(cell.getTreeView()).show();
+            DatabaseInfo selectedConfig = (DatabaseInfo) cell.getTreeItem().getGraphic().getUserData();
+            Event.fireEvent(cell.getTreeView(), new CommandEvent(CommandEvent.OPEN_DB_CONNECTION, selectedConfig));
         });
         final MenuItem menuItemDelConnection = new MenuItem("删除连接");
         menuItemDelConnection.setOnAction(event -> {
             try {
-                final DatabaseConfig userData = (DatabaseConfig) cell.getTreeItem().getGraphic().getUserData();
+                final DatabaseInfo userData = (DatabaseInfo) cell.getTreeItem().getGraphic().getUserData();
                 ConfigHelper.deleteDatabaseConfig(userData);
-                mainUIController.loadLeftDBTree(); // 刷新界面
+                EventBus.getDefault().post(new LoadDbTreeEvent());
             } catch (Exception e) {
                 Alerts.error("Delete connection failed! Reason: " + e.getMessage()).show();
             }
@@ -106,33 +78,35 @@ public class DbTreeViewCellFactory implements Callback<TreeView<DbTreeViewItemVa
         cell.setContextMenu(contextMenu);
     }
 
-    public void displayTables(TreeItem<DbTreeViewItemValue> treeItem) {
-        if (treeItem.isLeaf() && !treeItem.isExpanded()) return;
-        DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
+    /**
+     * 展示数据表
+     * @param treeItem
+     */
+    private void displayTables(TreeItem<String> treeItem) {
+        DatabaseInfo dbConfig = (DatabaseInfo) treeItem.getGraphic().getUserData();
         try {
-            String filter = mainUIController.filterTreeBox.getText();
-            List<String> tables = DBUtils.getTableNames(selectedConfig, filter);
+            List<String> tables = DBUtils.getTableNames(dbConfig, "");
             if (tables.size() > 0) {
-                ObservableList<TreeItem<DbTreeViewItemValue>> children = treeItem.getChildren();
+                ObservableList<TreeItem<String>> children = treeItem.getChildren();
                 children.clear();
                 for (String tableName : tables) {
-                    TreeItem<DbTreeViewItemValue> newTreeItem = new TreeItem<>();
+                    TreeItem<String> newTreeItem = new TreeItem<>();
                     ImageView imageView = JFX.loadImageView("static/icons/table.png", 16);
                     newTreeItem.setGraphic(imageView);
-                    DbTreeViewItemValue tableInfo = new DbTreeViewItemValue();
-                    tableInfo.setTableName(tableName);
-                    newTreeItem.setValue(tableInfo);
+                    newTreeItem.setValue(tableName);
                     children.add(newTreeItem);
                 }
-            } else if (StringUtils.hasText(filter)) {
-                treeItem.getChildren().clear();
             }
-            String imageViewName = StringUtils.hasText(filter) ? "static/icons/filter.png" : "static/icons/computer.png";
-            treeItem.setGraphic(JFX.loadImageView(imageViewName, 16, treeItem.getGraphic().getUserData()));
+            final Object userData = treeItem.getGraphic().getUserData();
+            treeItem.setGraphic(JFX.loadImageView("static/icons/computer.png", 16, userData));
         } catch (SQLRecoverableException e) {
             Alerts.error("连接超时").show();
         } catch (Exception e) {
             Alerts.error(e.getMessage()).show();
         }
+    }
+
+    private boolean isPrimaryButtonDoubleClicked(MouseEvent event) {
+        return event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2;
     }
 }

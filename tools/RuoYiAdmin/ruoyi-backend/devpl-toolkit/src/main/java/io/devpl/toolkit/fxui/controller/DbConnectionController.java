@@ -1,8 +1,8 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.fxui.config.Constants;
-import io.devpl.toolkit.fxui.config.DBDriver;
-import io.devpl.toolkit.fxui.config.DatabaseConfig;
+import io.devpl.toolkit.fxui.common.Constants;
+import io.devpl.toolkit.fxui.common.DBDriver;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.framework.JFX;
@@ -55,7 +55,7 @@ public class DbConnectionController extends FXControllerBase {
     }
 
     final void saveConnection(ActionEvent event) {
-        DatabaseConfig config = extractConfigForUI();
+        DatabaseInfo config = extractConfigForUI();
         if (config == null) {
             return;
         }
@@ -73,8 +73,8 @@ public class DbConnectionController extends FXControllerBase {
      * 将界面上的数据提取到Model中
      * @return
      */
-    public DatabaseConfig extractConfigForUI() {
-        DatabaseConfig config = new DatabaseConfig();
+    public DatabaseInfo extractConfigForUI() {
+        DatabaseInfo config = new DatabaseInfo();
         config.setName(nameField.getText());
         config.setDbType(dbTypeChoice.getValue());
         config.setHost(hostField.getText());
@@ -90,7 +90,7 @@ public class DbConnectionController extends FXControllerBase {
         return config;
     }
 
-    public void setConfig(DatabaseConfig config) {
+    public void setConfig(DatabaseInfo config) {
         isUpdate = true;
         primayKey = config.getId(); // save id for update config
         nameField.setText(config.getName());

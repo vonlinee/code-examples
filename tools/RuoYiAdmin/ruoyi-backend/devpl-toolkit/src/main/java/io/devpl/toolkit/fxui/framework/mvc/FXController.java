@@ -60,7 +60,7 @@ public abstract class FXController {
             final Node node = (Node) source;
             return getStage(node);
         }
-        throw new RuntimeException("event source is not a node");
+        throw new RuntimeException("event source is [" + source.getClass() + "] instead of a [Node]");
     }
 
     public Stage getStage(Node node) {

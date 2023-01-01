@@ -3,10 +3,11 @@ package io.devpl.toolkit.fxui.utils;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import io.devpl.toolkit.fxui.common.model.ColumnCustomConfiguration;
+import io.devpl.codegen.mbpg.jdbc.TableMetadata;
+import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.toolkit.fxui.framework.Alerts;
-import io.devpl.toolkit.fxui.config.DatabaseConfig;
-import io.devpl.toolkit.fxui.config.DBDriver;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
+import io.devpl.toolkit.fxui.common.DBDriver;
 import io.devpl.sdk.util.ResourceUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.logging.Log;
@@ -47,7 +48,7 @@ public class DBUtils {
         template.setIgnoreWarnings(false);
     }
 
-    public static Session getSSHSession(DatabaseConfig databaseConfig) {
+    public static Session getSSHSession(DatabaseInfo databaseConfig) {
         if (StringUtils.isBlank(databaseConfig.getSshHost()) || StringUtils.isBlank(databaseConfig.getSshPort()) || StringUtils.isBlank(databaseConfig.getSshUser()) || (StringUtils.isBlank(databaseConfig.getPrivateKey()) && StringUtils.isBlank(databaseConfig.getSshPassword()))) {
             return null;
         }
@@ -71,7 +72,7 @@ public class DBUtils {
         return session;
     }
 
-    public static void engagePortForwarding(Session sshSession, DatabaseConfig config) {
+    public static void engagePortForwarding(Session sshSession, DatabaseInfo config) {
         if (sshSession != null) {
             AtomicInteger assinged_port = new AtomicInteger();
             Future<?> result = executorService.submit(() -> {
@@ -82,9 +83,8 @@ public class DBUtils {
                     if (session != null && session.isConnected()) {
                         String s = session.getPortForwardingL()[0];
                         String[] split = StringUtils.split(s, ":");
-                        boolean portForwarding = String
-                                .format("%s:%s", split[0], split[1])
-                                .equals(lport + ":" + config.getHost());
+                        boolean portForwarding = String.format("%s:%s", split[0], split[1])
+                                                       .equals(lport + ":" + config.getHost());
                         if (portForwarding) {
                             return;
                         }
@@ -126,7 +126,7 @@ public class DBUtils {
         }
     }
 
-    public static Connection getConnection(DatabaseConfig config) throws SQLException {
+    public static Connection getConnection(DatabaseInfo config) throws SQLException {
         DBDriver dbType = DBDriver.valueOf(config.getDbType());
         loadDbDriver(dbType);
         String url = getConnectionUrlWithSchema(config);
@@ -149,7 +149,7 @@ public class DBUtils {
         }
     }
 
-    public static List<String> getTableNames(DatabaseConfig config, String filter) throws Exception {
+    public static List<String> getTableNames(DatabaseInfo config, String filter) throws Exception {
         Session sshSession = getSSHSession(config);
         engagePortForwarding(sshSession, config);
         try (Connection connection = getConnection(config)) {
@@ -189,7 +189,7 @@ public class DBUtils {
         }
     }
 
-    public static List<ColumnCustomConfiguration> getTableColumns(DatabaseConfig dbConfig, String tableName) throws Exception {
+    public static List<ColumnCustomConfiguration> getTableColumns(DatabaseInfo dbConfig, String tableName) throws Exception {
         String url = getConnectionUrlWithSchema(dbConfig);
         log.info("getTableColumns, connection url: {}", url);
         Session sshSession = getSSHSession(dbConfig);
@@ -213,7 +213,7 @@ public class DBUtils {
         }
     }
 
-    public static String getConnectionUrlWithSchema(DatabaseConfig dbConfig) {
+    public static String getConnectionUrlWithSchema(DatabaseInfo dbConfig) {
         DBDriver dbType = DBDriver.valueOf(dbConfig.getDbType());
         String connectionUrl = String.format(dbType.getConnectionUrlPattern(), portForwaring ? "127.0.0.1" : dbConfig.getHost(), portForwaring ? dbConfig.getLport() : dbConfig.getPort(), dbConfig.getSchema(), dbConfig.getEncoding());
         log.info("getConnectionUrlWithSchema, connection url: {}", connectionUrl);
@@ -298,13 +298,5 @@ public class DBUtils {
             throw new RuntimeException(e);
         }
         return tmdList;
-    }
-
-    public static void main(String[] args) throws Exception {
-        final Connection connection = ConnectionManager.getConnection();
-
-        final List<TableMetadata> tmds = DBUtils.getTablesMetadata(connection);
-
-        System.out.println(tmds);
     }
 }

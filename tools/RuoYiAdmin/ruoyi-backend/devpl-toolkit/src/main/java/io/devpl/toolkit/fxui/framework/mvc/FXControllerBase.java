@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.framework.mvc;
 
-import io.devpl.toolkit.fxui.controller.FXMLPage;
+import io.devpl.toolkit.fxui.common.FXMLPage;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.framework.JFX;
 import javafx.fxml.FXMLLoader;

@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.common.view;
 
-import io.devpl.toolkit.fxui.config.DatabaseConfig;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.WeakInvalidationListener;
@@ -13,11 +13,11 @@ import java.lang.ref.WeakReference;
 /**
  * 数据库属性列表单元格
  */
-public class LeftDbTreeCell extends TreeCell<DatabaseConfig> {
+public class LeftDbTreeCell extends TreeCell<DatabaseInfo> {
 
     private HBox hbox;
 
-    private WeakReference<TreeItem<DatabaseConfig>> treeItemRef;
+    private WeakReference<TreeItem<DatabaseInfo>> treeItemRef;
 
     private final InvalidationListener treeItemGraphicListener = observable -> {
         updateDisplay(getItem(), isEmpty());
@@ -26,11 +26,11 @@ public class LeftDbTreeCell extends TreeCell<DatabaseConfig> {
     private final InvalidationListener treeItemListener = new InvalidationListener() {
         @Override
         public void invalidated(Observable observable) {
-            TreeItem<DatabaseConfig> oldTreeItem = treeItemRef == null ? null : treeItemRef.get();
+            TreeItem<DatabaseInfo> oldTreeItem = treeItemRef == null ? null : treeItemRef.get();
             if (oldTreeItem != null) {
                 oldTreeItem.graphicProperty().removeListener(weakTreeItemGraphicListener);
             }
-            TreeItem<DatabaseConfig> newTreeItem = getTreeItem();
+            TreeItem<DatabaseInfo> newTreeItem = getTreeItem();
             if (newTreeItem != null) {
                 newTreeItem.graphicProperty().addListener(weakTreeItemGraphicListener);
                 treeItemRef = new WeakReference<>(newTreeItem);
@@ -52,14 +52,14 @@ public class LeftDbTreeCell extends TreeCell<DatabaseConfig> {
         }
     }
 
-    void updateDisplay(DatabaseConfig item, boolean empty) {
+    void updateDisplay(DatabaseInfo item, boolean empty) {
         if (item == null || empty) {
             hbox = null;
             setText(null);
             setGraphic(null);
         } else {
             // update the graphic if one is set in the TreeItem
-            TreeItem<DatabaseConfig> treeItem = getTreeItem();
+            TreeItem<DatabaseInfo> treeItem = getTreeItem();
             if (treeItem != null && treeItem.getGraphic() != null) {
                 hbox = null;
                 setText(item.toString());
@@ -73,7 +73,7 @@ public class LeftDbTreeCell extends TreeCell<DatabaseConfig> {
     }
 
     @Override
-    public void updateItem(DatabaseConfig item, boolean empty) {
+    public void updateItem(DatabaseInfo item, boolean empty) {
         super.updateItem(item, empty);
         updateDisplay(item, empty);
     }

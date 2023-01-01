@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.fxui.common.model.SysDictData;
+import io.devpl.toolkit.fxui.model.SysDictData;
 import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

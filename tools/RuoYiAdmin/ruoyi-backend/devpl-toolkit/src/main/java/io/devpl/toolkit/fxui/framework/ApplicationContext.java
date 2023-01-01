@@ -38,10 +38,8 @@ public final class ApplicationContext implements ControllerFactory {
         final String fxmlKey = controllerFXMLMapping.get(param);
         if (fxmlKey == null) {
             // 首次加载
-            System.out.println("首次加载" + param);
             return ClassUtils.instantiate(param);
         }
-        log.info("第二次加载 {}", param);
         final FXMLCache holder = fxmlCacheMap.get(fxmlKey);
         return holder.getController();
     }

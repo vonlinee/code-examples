@@ -2,7 +2,7 @@ package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import io.devpl.toolkit.fxui.config.DatabaseConfig;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.fxui.framework.Alerts;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
@@ -88,7 +88,7 @@ public class OverSshController extends DbConnectionController {
         });
     }
 
-    public void setDbConnectionConfig(DatabaseConfig databaseConfig) {
+    public void setDbConnectionConfig(DatabaseInfo databaseConfig) {
         if (databaseConfig == null) {
             return;
         }
@@ -117,7 +117,7 @@ public class OverSshController extends DbConnectionController {
 
     @FXML
     public void checkInput() {
-        DatabaseConfig databaseConfig = extractConfigFromUi();
+        DatabaseInfo databaseConfig = extractConfigFromUi();
         if (authTypeChoice
                 .getValue()
                 .equals("Password") && (StringUtils.isBlank(databaseConfig.getSshHost()) || StringUtils.isBlank(databaseConfig.getSshPort()) || StringUtils.isBlank(databaseConfig.getSshUser()) || StringUtils.isBlank(databaseConfig.getSshPassword())) || authTypeChoice
@@ -139,7 +139,7 @@ public class OverSshController extends DbConnectionController {
         this.lPortLabel.setText("注意不要填写被其他程序占用的端口");
     }
 
-    public DatabaseConfig extractConfigFromUi() {
+    public DatabaseInfo extractConfigFromUi() {
         String name = nameField.getText();
         String host = hostField.getText();
         String port = portField.getText();
@@ -149,7 +149,7 @@ public class OverSshController extends DbConnectionController {
         String dbType = dbTypeChoice.getValue();
         String schema = schemaField.getText();
         String authType = authTypeChoice.getValue();
-        DatabaseConfig config = new DatabaseConfig();
+        DatabaseInfo config = new DatabaseInfo();
         config.setName(name);
         config.setDbType(dbType);
         config.setHost(host);
@@ -174,7 +174,7 @@ public class OverSshController extends DbConnectionController {
     }
 
     public void saveConfig(ActionEvent event) {
-        DatabaseConfig databaseConfig = extractConfigFromUi();
+        DatabaseInfo databaseConfig = extractConfigFromUi();
         if (StringUtils.isAnyEmpty(databaseConfig.getName(), databaseConfig.getHost(), databaseConfig.getPort(), databaseConfig.getUsername(), databaseConfig.getEncoding(), databaseConfig.getDbType(), databaseConfig.getSchema())) {
             Alerts.warn("密码以外其他字段必填").showAndWait();
             return;

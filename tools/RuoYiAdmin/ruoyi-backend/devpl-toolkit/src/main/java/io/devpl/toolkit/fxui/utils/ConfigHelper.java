@@ -1,9 +1,9 @@
 package io.devpl.toolkit.fxui.utils;
 
 import io.devpl.sdk.util.ResourceUtils;
-import io.devpl.toolkit.fxui.config.CodeGenConfiguration;
-import io.devpl.toolkit.fxui.config.DBDriver;
-import io.devpl.toolkit.fxui.config.DatabaseConfig;
+import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
+import io.devpl.toolkit.fxui.common.DBDriver;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
 
@@ -53,13 +53,13 @@ public class ConfigHelper {
         }
     }
 
-    public static List<DatabaseConfig> loadDatabaseConfig() throws Exception {
+    public static List<DatabaseInfo> loadDatabaseConfig() throws Exception {
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement(); ResultSet rs = stat.executeQuery("SELECT * FROM dbs")) {
-            List<DatabaseConfig> configs = new ArrayList<>();
+            List<DatabaseInfo> configs = new ArrayList<>();
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String value = rs.getString("value");
-                DatabaseConfig databaseConfig = JSONUtils.fromString(value, DatabaseConfig.class);
+                DatabaseInfo databaseConfig = JSONUtils.fromString(value, DatabaseInfo.class);
                 databaseConfig.setId(id);
                 configs.add(databaseConfig);
             }
@@ -67,7 +67,7 @@ public class ConfigHelper {
         }
     }
 
-    public static void saveDatabaseConfig(boolean isUpdate, Integer primaryKey, DatabaseConfig dbConfig) throws Exception {
+    public static void saveDatabaseConfig(boolean isUpdate, Integer primaryKey, DatabaseInfo dbConfig) throws Exception {
         String configName = dbConfig.getName();
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             if (!isUpdate) {
@@ -87,14 +87,14 @@ public class ConfigHelper {
         }
     }
 
-    public static void deleteDatabaseConfig(DatabaseConfig databaseConfig) throws Exception {
+    public static void deleteDatabaseConfig(DatabaseInfo databaseConfig) throws Exception {
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             String sql = String.format("delete from dbs where id=%d", databaseConfig.getId());
             stat.executeUpdate(sql);
         }
     }
 
-    public static void saveGeneratorConfig(CodeGenConfiguration generatorConfig) throws Exception {
+    public static void saveGeneratorConfig(GenericConfiguration generatorConfig) throws Exception {
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             String jsonStr = JSONUtils.toString(generatorConfig);
             String sql = String.format("INSERT INTO generator_config (name, value) values('%s', '%s')", generatorConfig.getName(), jsonStr);
@@ -102,31 +102,31 @@ public class ConfigHelper {
         }
     }
 
-    public static CodeGenConfiguration loadGeneratorConfig(String name) throws Exception {
+    public static GenericConfiguration loadGeneratorConfig(String name) throws Exception {
         ResultSet rs;
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             String sql = String.format("SELECT * FROM generator_config where name='%s'", name);
             _LOG.info("sql: {}", sql);
             rs = stat.executeQuery(sql);
-            CodeGenConfiguration generatorConfig = null;
+            GenericConfiguration generatorConfig = null;
             if (rs.next()) {
                 String value = rs.getString("value");
-                generatorConfig = JSONUtils.fromString(value, CodeGenConfiguration.class);
+                generatorConfig = JSONUtils.fromString(value, GenericConfiguration.class);
             }
             return generatorConfig;
         }
     }
 
-    public static List<CodeGenConfiguration> loadGeneratorConfigs() throws Exception {
+    public static List<GenericConfiguration> loadGeneratorConfigs() throws Exception {
         ResultSet rs = null;
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             String sql = String.format("SELECT * FROM generator_config");
             _LOG.info("sql: {}", sql);
             rs = stat.executeQuery(sql);
-            List<CodeGenConfiguration> configs = new ArrayList<>();
+            List<GenericConfiguration> configs = new ArrayList<>();
             while (rs.next()) {
                 String value = rs.getString("value");
-                configs.add(JSONUtils.fromString(value, CodeGenConfiguration.class));
+                configs.add(JSONUtils.fromString(value, GenericConfiguration.class));
             }
             return configs;
         }
