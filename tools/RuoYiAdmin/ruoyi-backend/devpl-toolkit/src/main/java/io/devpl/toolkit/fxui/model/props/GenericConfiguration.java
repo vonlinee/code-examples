@@ -1,9 +1,9 @@
 package io.devpl.toolkit.fxui.model.props;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import java.nio.file.Path;
 
 /**
  * 除了数据库配置外的配置:通用配置项
@@ -17,20 +17,45 @@ public class GenericConfiguration {
 
     private String connectorJarPath;
 
-    private final StringProperty projectFolder = new SimpleStringProperty(); // 项目所在根路径
-    private final StringProperty modelPackage = new SimpleStringProperty(); // model类所在包名
-    private final StringProperty parentPackage = new SimpleStringProperty("org.example"); // 父包名
-    private final BooleanProperty useMyBatisPlus = new SimpleBooleanProperty(true); // 是否使用mybatis
-    private final StringProperty modelPackageTargetFolder = new SimpleStringProperty("src/main/java");
-    private final StringProperty daoPackage = new SimpleStringProperty();
-    private final StringProperty daoTargetFolder = new SimpleStringProperty("");
-    private final StringProperty mapperName = new SimpleStringProperty("");
-    private final StringProperty mappingXMLPackage = new SimpleStringProperty("");
-    private final StringProperty mappingXMLTargetFolder = new SimpleStringProperty("");
-    private final StringProperty tableName = new SimpleStringProperty();
+    /**
+     * 项目所在根路径
+     */
+    private final StringProperty projectFolder = new SimpleStringProperty();
 
-    // 表映射的实体名称：表名一般是 table_name -> TableName
-    private final StringProperty domainObjectName = new SimpleStringProperty();
+    /**
+     * 父包名
+     */
+    private final StringProperty parentPackage = new SimpleStringProperty("org.example");
+
+    /**
+     * 实体类所在包名
+     */
+    private final StringProperty modelPackage = new SimpleStringProperty(); //
+
+    /**
+     * 实体类存放目录
+     */
+    private final StringProperty modelPackageTargetFolder = new SimpleStringProperty("src/main/java");
+
+    /**
+     * Mapper接口包名
+     */
+    private final StringProperty daoPackage = new SimpleStringProperty();
+
+    /**
+     * Mapper接口存放目录
+     */
+    private final StringProperty daoTargetFolder = new SimpleStringProperty("");
+
+    /**
+     * 映射XML文件包名
+     */
+    private final StringProperty mappingXMLPackage = new SimpleStringProperty("");
+
+    /**
+     * 映射XML文件存放目录
+     */
+    private final StringProperty mappingXMLTargetFolder = new SimpleStringProperty("");
 
     public String getConnectorJarPath() {
         return connectorJarPath;
@@ -76,18 +101,6 @@ public class GenericConfiguration {
         this.parentPackage.set(parentPackage);
     }
 
-    public boolean isUseMyBatisPlus() {
-        return useMyBatisPlus.get();
-    }
-
-    public BooleanProperty useMyBatisPlusProperty() {
-        return useMyBatisPlus;
-    }
-
-    public void setUseMyBatisPlus(boolean useMyBatisPlus) {
-        this.useMyBatisPlus.set(useMyBatisPlus);
-    }
-
     public String getModelPackageTargetFolder() {
         return modelPackageTargetFolder.get();
     }
@@ -124,18 +137,6 @@ public class GenericConfiguration {
         this.daoTargetFolder.set(daoTargetFolder);
     }
 
-    public String getMapperName() {
-        return mapperName.get();
-    }
-
-    public StringProperty mapperNameProperty() {
-        return mapperName;
-    }
-
-    public void setMapperName(String mapperName) {
-        this.mapperName.set(mapperName);
-    }
-
     public String getMappingXMLPackage() {
         return mappingXMLPackage.get();
     }
@@ -160,39 +161,40 @@ public class GenericConfiguration {
         this.mappingXMLTargetFolder.set(mappingXMLTargetFolder);
     }
 
-    public String getTableName() {
-        return tableName.get();
-    }
-
-    public StringProperty tableNameProperty() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName.set(tableName);
-    }
-
-    public String getDomainObjectName() {
-        return domainObjectName.get();
-    }
-
-    public StringProperty domainObjectNameProperty() {
-        return domainObjectName;
-    }
-
-    public void setDomainObjectName(String domainObjectName) {
-        this.domainObjectName.set(domainObjectName);
-    }
-
-    public StringProperty nameProperty() {
-        return name;
-    }
-
     public String getName() {
         return name.get();
     }
 
     public void setName(String name) {
         this.name.set(name);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("GenericConfiguration{");
+        sb.append("name=").append(name);
+        sb.append(", connectorJarPath='").append(connectorJarPath).append('\'');
+        sb.append(", projectFolder=").append(projectFolder.get());
+        sb.append(", modelPackage=").append(modelPackage.get());
+        sb.append(", parentPackage=").append(parentPackage.get());
+        sb.append(", modelPackageTargetFolder=").append(modelPackageTargetFolder.get());
+        sb.append(", daoPackage=").append(daoPackage.get());
+        sb.append(", daoTargetFolder=").append(daoTargetFolder.get());
+        sb.append(", mappingXMLPackage=").append(mappingXMLPackage.get());
+        sb.append(", mappingXMLTargetFolder=").append(mappingXMLTargetFolder.get());
+        sb.append('}');
+        return sb.toString();
+    }
+
+    public Path getEntityTargetDirectory() {
+        return Path.of(getProjectFolder().replace(".", "/"), parentPackage.get().replace(".", "/"), modelPackage.get().replace(".", "/"));
+    }
+
+    public Path getMapperTargetDirectory() {
+        return Path.of(projectFolder.get().replace(".", "/"), parentPackage.get().replace(".", "/"), daoPackage.get().replace(".", "/"));
+    }
+
+    public Path getMappingXMLTargetDirectory() {
+        return Path.of(projectFolder.get().replace(".", "/"), parentPackage.get().replace(".", "/"), mappingXMLPackage.get().replace(".", "/"));
     }
 }

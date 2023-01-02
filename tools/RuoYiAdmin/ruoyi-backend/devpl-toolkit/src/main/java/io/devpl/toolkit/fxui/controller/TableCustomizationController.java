@@ -9,6 +9,8 @@ import io.devpl.toolkit.fxui.model.TableOption;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.toolkit.fxui.utils.CollectionUtils;
 import io.devpl.toolkit.fxui.utils.DBUtils;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -87,9 +89,21 @@ public class TableCustomizationController extends FXControllerBase {
     @FXML
     private TableColumn<ColumnCustomConfiguration, String> typeHandlerColumn;
 
+    TableCodeGeneration tableInfo;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         accoConfig.setExpandedPane(accoConfig.getPanes().get(1));
+        accoConfig.expandedPaneProperty().addListener((observable, oldValue, newValue) -> {
+            final ObservableList<TitledPane> panes = accoConfig.getPanes();
+            int expanedCount = 0;
+            for (TitledPane pane : panes) {
+                if (pane.isExpanded()) expanedCount++;
+            }
+            if (expanedCount == 0) {
+                accoConfig.setExpandedPane(panes.get(0));
+            }
+        });
 
         checkedColumn.setCellFactory(param -> {
             TableCell<ColumnCustomConfiguration, Boolean> cell = new CheckBoxTableCell<>(null);
@@ -131,7 +145,7 @@ public class TableCustomizationController extends FXControllerBase {
         });
         // 初始化数据
         root.addEventHandler(CommandEvent.COMMAND, event -> {
-            TableCodeGeneration tableInfo = (TableCodeGeneration) event.getData();
+            tableInfo = (TableCodeGeneration) event.getData();
             List<ColumnCustomConfiguration> tableColumns = null;
             try {
                 tableColumns = DBUtils.getTableColumns(tableInfo.getDatabaseInfo(), tableInfo.getTableName());
@@ -141,15 +155,11 @@ public class TableCustomizationController extends FXControllerBase {
             assert tableColumns != null;
             labelCurrentTableName.setText(tableInfo.getTableName());
             columnListView.setItems(FXCollections.observableList(tableColumns));
-
             // 每次都是重新加载FXML
-            if (labelCurrentTableName.getText() != null) {
-                initTableCodeGenerationOptionBindding(tableInfo.getOption());
-            }
-
-            labelCurrentTableName.setOnMouseClicked(event1 -> {
-                System.out.println(tableInfo.getOption());
-            });
+            initTableCodeGenerationOptionBindding(tableInfo.getOption());
+        });
+        labelCurrentTableName.setOnMouseClicked(event1 -> {
+            System.out.println(tableInfo.getOption());
         });
     }
 
@@ -158,17 +168,14 @@ public class TableCustomizationController extends FXControllerBase {
      * @param option
      */
     public void initTableCodeGenerationOptionBindding(TableOption option) {
-        // 只绑定一次
-        if (!option.isBinded()) {
-            option.setBinded(true);
-            option.useExampleProperty().bind(chbUseExample.selectedProperty());
-            option.annotationDAOProperty().bind(chbAnnotationDao.selectedProperty());
-            option.commentProperty().bind(chbComment.selectedProperty());
-            option.overrideXMLProperty().bind(chbOverrideXML.selectedProperty());
-            option.jsr310SupportProperty().bind(chbJsr310Support.selectedProperty());
-            option.useSchemaPrefixProperty().bind(chbUseSchemaPrefix.selectedProperty());
-            option.useDAOExtendStyleProperty().bind(chbMapperExtend.selectedProperty());
-        }
+        // TODO 只绑定一次，如果每次绑定的根节点没有变化，那么无需进行绑定
+        option.useExampleProperty().bind(chbUseExample.selectedProperty());
+        option.annotationDAOProperty().bind(chbAnnotationDao.selectedProperty());
+        option.commentProperty().bind(chbComment.selectedProperty());
+        option.overrideXMLProperty().bind(chbOverrideXML.selectedProperty());
+        option.jsr310SupportProperty().bind(chbJsr310Support.selectedProperty());
+        option.useSchemaPrefixProperty().bind(chbUseSchemaPrefix.selectedProperty());
+        option.useDAOExtendStyleProperty().bind(chbMapperExtend.selectedProperty());
     }
 
     /**

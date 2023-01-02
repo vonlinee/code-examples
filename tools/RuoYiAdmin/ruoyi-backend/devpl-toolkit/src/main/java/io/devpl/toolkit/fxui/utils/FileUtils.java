@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -104,6 +105,27 @@ public class FileUtils {
         return mkdirs(directory);
     }
 
+    public static boolean forceMkdir(File... dirs) throws IOException {
+        for (File dir : dirs) {
+            forceMkdir(dir);
+        }
+        return true;
+    }
+
+    public static boolean forceMkdir(Path... dirs) throws IOException {
+        for (Path dir : dirs) {
+            forceMkdir(dir.toFile());
+        }
+        return true;
+    }
+
+    public static boolean forceMkdir(List<Path> dirs) throws IOException {
+        for (Path dir : dirs) {
+            forceMkdir(dir.toFile());
+        }
+        return true;
+    }
+
     /**
      * Calls {@link File#mkdirs()} and throws an exception on failure.
      * @param directory the receiver for {@code mkdirs()}, may be null.
@@ -127,7 +149,6 @@ public class FileUtils {
     public static void delete(File file) {
         org.apache.commons.io.FileUtils.deleteQuietly(file);
     }
-
 
     /**
      * Cleans a directory without deleting it.
@@ -154,7 +175,6 @@ public class FileUtils {
             throw new IOExceptionList(causeList);
         }
     }
-
 
     /**
      * Deletes a file or directory. For a directory, delete it and all sub-directories.
@@ -195,7 +215,6 @@ public class FileUtils {
         return files;
     }
 
-
     /**
      * Requires that the given {@code File} exists and is a directory.
      * @param directory The {@code File} to check.
@@ -209,7 +228,6 @@ public class FileUtils {
         requireDirectory(directory, name);
         return directory;
     }
-
 
     /**
      * Requires that the given {@code File} exists and throws an {@link IllegalArgumentException} if it doesn't.
@@ -226,7 +244,6 @@ public class FileUtils {
         }
         return file;
     }
-
 
     /**
      * Requires that the given {@code File} is a directory.

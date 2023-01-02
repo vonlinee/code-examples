@@ -11,16 +11,6 @@ import lombok.Data;
  */
 public class TableOption {
 
-    private boolean binded;
-
-    public boolean isBinded() {
-        return binded;
-    }
-
-    public void setBinded(boolean binded) {
-        this.binded = binded;
-    }
-
     private final BooleanProperty useMyBatisPlus = new SimpleBooleanProperty(true); // 是否使用mybatis-plus
     private final BooleanProperty offsetLimit = new SimpleBooleanProperty();
     private final BooleanProperty comment = new SimpleBooleanProperty();
@@ -282,7 +272,7 @@ public class TableOption {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("TableOption{");
-        sb.append("binded=").append(binded);
+        sb.append(", useExample=").append(useExample.get());
         sb.append(", useMyBatisPlus=").append(useMyBatisPlus.get());
         sb.append(", offsetLimit=").append(offsetLimit.get());
         sb.append(", comment=").append(comment.get());
@@ -293,7 +283,6 @@ public class TableOption {
         sb.append(", annotationDAO=").append(annotationDAO.get());
         sb.append(", annotation=").append(annotation.get());
         sb.append(", useActualColumnNames=").append(useActualColumnNames.get());
-        sb.append(", useExample=").append(useExample.get());
         sb.append(", generateKeys=").append(generateKeys.get());
         sb.append(", encoding=").append(encoding.get());
         sb.append(", useTableNameAlias=").append(useTableNameAlias.get());

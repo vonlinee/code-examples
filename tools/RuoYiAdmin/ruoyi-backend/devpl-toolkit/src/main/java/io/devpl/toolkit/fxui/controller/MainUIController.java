@@ -1,6 +1,7 @@
 package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.Session;
+import de.saxsys.mvvmfx.core.FxmlLocation;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.toolkit.fxui.common.FXMLPage;
 import io.devpl.toolkit.fxui.common.ProgressDialog;
@@ -21,19 +22,25 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@FxmlLocation(location = "static/fxml/MainUI.fxml")
 public class MainUIController extends FXControllerBase {
 
     @FXML
@@ -55,17 +62,11 @@ public class MainUIController extends FXControllerBase {
     @FXML
     private TextField daoTargetProject;
     @FXML
-    public TextField mapperName;
-    @FXML
     private TextField projectFolderField;
     @FXML
     private TreeView<String> trvDbTreeList; // 数据库表列表，只读
     @FXML
     public TextField filterTreeBox; // TODO 过滤数据库表
-    // Current selected databaseConfig
-    public DatabaseInfo selectedDatabaseConfig;
-    // Current selected tableName
-    public String tableName;
     @FXML
     public TableView<TableCodeGeneration> tblvTableCustomization;
     @FXML
@@ -73,11 +74,13 @@ public class MainUIController extends FXControllerBase {
     @FXML
     public TableColumn<TableCodeGeneration, String> tblcTableName;
 
+    // Current selected databaseConfig
+    public DatabaseInfo selectedDatabaseConfig;
     private final MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
     // 通用配置项
-    private GenericConfiguration codeGenConfig = new GenericConfiguration();
+    private final GenericConfiguration codeGenConfig = new GenericConfiguration();
     // 保存哪些表需要进行代码生成
-    private final Map<String, TableCodeGeneration> tableNamesToBeGenerated = new ConcurrentHashMap<>(10);
+    private final Map<String, TableCodeGeneration> tableConfigsToBeGenerated = new ConcurrentHashMap<>(10);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -117,14 +120,14 @@ public class MainUIController extends FXControllerBase {
             ObservableList<TreeItem<String>> selectedItems = trvDbTreeList.getSelectionModel().getSelectedItems();
             for (TreeItem<String> selectedItem : selectedItems) {
                 String tableName = selectedItem.getValue();
-                if (tableNamesToBeGenerated.containsKey(tableName)) {
+                if (tableConfigsToBeGenerated.containsKey(tableName)) {
                     continue;
                 }
                 TableCodeGeneration tableConfig = new TableCodeGeneration();
                 tableConfig.setTableName(tableName);
                 tableConfig.setDatabaseInfo((DatabaseInfo) selectedItem.getParent().getGraphic().getUserData());
                 tableConfig.setDbName(selectedItem.getParent().getValue());
-                tableNamesToBeGenerated.put(tableName, tableConfig);
+                tableConfigsToBeGenerated.put(tableName, tableConfig);
                 tblvTableCustomization.getItems().add(tableConfig);
             }
             event.consume();
@@ -138,7 +141,19 @@ public class MainUIController extends FXControllerBase {
         });
 
         tblcDbName.setCellValueFactory(new PropertyValueFactory<>("dbName"));
+        tblcDbName.setCellFactory(param -> {
+            TableCell<TableCodeGeneration, String> cell = new TextFieldTableCell<>();
+            cell.setAlignment(Pos.CENTER);
+            cell.setTextAlignment(TextAlignment.CENTER);
+            return cell;
+        });
         tblcTableName.setCellValueFactory(new PropertyValueFactory<>("tableName"));
+        tblcTableName.setCellFactory(param -> {
+            TableCell<TableCodeGeneration, String> cell = new TextFieldTableCell<>();
+            cell.setAlignment(Pos.CENTER);
+            cell.setTextAlignment(TextAlignment.CENTER);
+            return cell;
+        });
         tblvTableCustomization.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tblvTableCustomization.setRowFactory(param -> {
             TableRow<TableCodeGeneration> row = new TableRow<>();
@@ -147,7 +162,7 @@ public class MainUIController extends FXControllerBase {
             deleteThisRowMenuItem.setOnAction(event -> {
                 final TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
                 param.getItems().remove(item);
-                tableNamesToBeGenerated.remove(item.getTableName()); // 移除该表
+                tableConfigsToBeGenerated.remove(item.getTableName()); // 移除该表
             });
             customizeMenuItem.setOnAction(event -> {
                 TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
@@ -205,16 +220,11 @@ public class MainUIController extends FXControllerBase {
     }
 
     @FXML
-    public void generateCode() {
-        if (tableName == null) {
-            Alerts.warn("请先在左侧选择数据库表").showAndWait();
+    public void generateCode(ActionEvent actionEvent) {
+        if (tableConfigsToBeGenerated.isEmpty()) {
             return;
         }
-        String result = validateConfig();
-        if (result != null) {
-            Alerts.error(result).showAndWait();
-            return;
-        }
+        System.out.println(codeGenConfig);
         if (!checkDirs(codeGenConfig)) {
             return;
         }
@@ -265,22 +275,9 @@ public class MainUIController extends FXControllerBase {
         }
     }
 
-    /**
-     * 校验配置项
-     * @return 提示信息
-     */
-    private String validateConfig() {
-        String projectFolder = projectFolderField.getText();
-        if (StringUtils.isEmpty(projectFolder)) {
-            return "项目目录不能为空";
-        }
-        return null;
-    }
-
     @Subscribe
     public void updateCodeGenConfig(UpdateCodeGenConfigEvent event) {
         log.info("更新代码生成配置", event);
-        // TOOD
         final GenericConfiguration config = event.getGeneratorConfig();
     }
 
@@ -297,7 +294,6 @@ public class MainUIController extends FXControllerBase {
         daoTargetProject.textProperty().bindBidirectional(generatorConfig.daoTargetFolderProperty());
         mapperTargetPackage.textProperty().bindBidirectional(generatorConfig.mappingXMLPackageProperty());
         mappingTargetProject.textProperty().bindBidirectional(generatorConfig.mappingXMLTargetFolderProperty());
-        mapperName.textProperty().bindBidirectional(generatorConfig.mapperNameProperty());
     }
 
     /**
@@ -305,29 +301,29 @@ public class MainUIController extends FXControllerBase {
      * @return 是否创建成功
      */
     private boolean checkDirs(GenericConfiguration config) {
-        List<String> dirs = new ArrayList<>();
-        dirs.add(config.getProjectFolder());
-        dirs.add(config.getProjectFolder().concat("/").concat(config.getModelPackageTargetFolder()));
-        dirs.add(config.getProjectFolder().concat("/").concat(config.getDaoTargetFolder()));
-        dirs.add(config.getProjectFolder().concat("/").concat(config.getMappingXMLTargetFolder()));
-        boolean haveNotExistFolder = false;
-        for (String dir : dirs) {
-            File file = new File(dir);
-            if (!file.exists()) {
-                haveNotExistFolder = true;
+        List<Path> targetDirs = new ArrayList<>();
+        targetDirs.add(Path.of(config.getProjectFolder()));
+        targetDirs.add(config.getEntityTargetDirectory());
+        targetDirs.add(config.getMappingXMLTargetDirectory());
+        targetDirs.add(config.getMapperTargetDirectory());
+
+        StringBuilder sb = new StringBuilder();
+        for (Path dir : targetDirs) {
+            if (!Files.exists(dir)) {
+                sb.append(dir).append("\n");
             }
         }
-        if (haveNotExistFolder) {
+        if (sb.length() > 0) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setContentText(Messages.getString("PromptText.2"));
+            alert.setContentText("以下目录不存在, 是否创建?\n" + sb.toString());
             Optional<ButtonType> optional = alert.showAndWait();
+            optional.ifPresent(buttonType -> {
+
+            });
             if (optional.isPresent()) {
                 if (ButtonType.OK == optional.get()) {
                     try {
-                        for (String dir : dirs) {
-                            FileUtils.forceMkdir(new File(dir));
-                        }
-                        return true;
+                        return FileUtils.forceMkdir(targetDirs);
                     } catch (Exception e) {
                         Alerts.error(Messages.getString("PromptText.3")).show();
                     }

@@ -56,7 +56,6 @@
                             <RowConstraints minHeight="30.0" maxHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
                             <RowConstraints minHeight="30.0" maxHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
                             <RowConstraints minHeight="30.0" maxHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
-                            <RowConstraints minHeight="30.0" maxHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
                         </rowConstraints>
                         <Label text="项目所在根目录" GridPane.rowIndex="0"/>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
@@ -114,31 +113,19 @@
                                 <Insets left="5.0"/>
                             </GridPane.margin>
                         </TextField>
-                        <Label text="自定义接口名称(选填)" GridPane.rowIndex="4">
-                            <padding>
-                                <Insets left="5.0"/>
-                            </padding>
-                        </Label>
-                        <TextField fx:id="mapperName" prefHeight="27.0" prefWidth="532.0"
-                                   promptText="默认格式:XxxMapper" GridPane.columnIndex="1"
-                                   GridPane.columnSpan="4" GridPane.rowIndex="4">
-                            <GridPane.margin>
-                                <Insets left="5.0"/>
-                            </GridPane.margin>
-                        </TextField>
                         <!--映射XML文件包名-->
                         <Label prefHeight="27.0" prefWidth="99.0" text="映射XML文件包名"
-                               GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                               GridPane.columnIndex="0" GridPane.rowIndex="4"/>
                         <TextField fx:id="mapperTargetPackage" prefHeight="27.0" prefWidth="248.0"
-                                   promptText="com.example" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                   promptText="com.example" GridPane.columnIndex="1" GridPane.rowIndex="4">
                             <GridPane.margin>
                                 <Insets left="5.0" right="5.0"/>
                             </GridPane.margin>
                         </TextField>
-                        <Label text="存放目录" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+                        <Label text="存放目录" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
                         <TextField fx:id="mappingTargetProject" prefHeight="27.0" prefWidth="155.0"
                                    promptText="src/main/resources" text="src/main/resources"
-                                   GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="5">
+                                   GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="4">
                             <GridPane.margin>
                                 <Insets left="5.0"/>
                             </GridPane.margin>
@@ -154,7 +141,7 @@
                     </TableView>
                 </TitledPane>
                 <HBox>
-                    <Button text="生成"/>
+                    <Button text="生成" onAction="#generateCode"/>
                 </HBox>
             </VBox>
         </SplitPane>
