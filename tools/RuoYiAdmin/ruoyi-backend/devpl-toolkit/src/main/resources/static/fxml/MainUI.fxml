@@ -29,8 +29,8 @@
     </top>
     <center>
         <SplitPane dividerPositions="0.25">
-            <VBox>
-                <TextField fx:id="filterTreeBox" promptText="搜索"/>
+            <VBox fx:id="vboxLeft">
+                <TextField fx:id="filterTreeBox" promptText="搜索" minHeight="30" maxHeight="30"/>
                 <TreeView fx:id="trvDbTreeList" showRoot="false">
                     <root>
                         <TreeItem/>

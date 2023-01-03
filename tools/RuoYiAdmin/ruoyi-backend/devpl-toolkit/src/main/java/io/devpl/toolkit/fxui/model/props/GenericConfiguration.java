@@ -169,6 +169,10 @@ public class GenericConfiguration {
         this.name.set(name);
     }
 
+    public StringProperty nameProperty() {
+        return name;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("GenericConfiguration{");

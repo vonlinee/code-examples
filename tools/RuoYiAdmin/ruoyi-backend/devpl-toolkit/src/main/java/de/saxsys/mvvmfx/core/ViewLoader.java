@@ -1,12 +1,8 @@
 package de.saxsys.mvvmfx.core;
 
 import de.saxsys.mvvmfx.fxml.FxmlViewControllerFactory;
-import de.saxsys.mvvmfx.utils.LRUCache;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import de.saxsys.mvvmfx.utils.WeakValueHashMap;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 
 /**
@@ -38,11 +34,10 @@ import java.net.URL;
  * {@link FxmlView} and {@link NodeView} with the first method call. After that
  * you will only get builder-methods that are suitable for the view type you
  * have chosen.
- * @author manuel.mauky
  */
 public class ViewLoader {
 
-    private final LRUCache<Class<?>, ViewComponent> viewCache = new LRUCache<>(100);
+    private final WeakValueHashMap<Class<?>, ViewComponent> viewCache = new WeakValueHashMap<>(3);
 
     static final FxmlViewControllerFactory viewControllerFactory = new FxmlViewControllerFactory();
 
@@ -52,9 +47,7 @@ public class ViewLoader {
     private static final ViewLoader loader = new ViewLoader();
 
     public static ViewComponent loadByClass(Class<?> viewClass) {
-        ViewComponent vc = loader.load(viewClass);
-        vc.onCreate();
-        return vc;
+        return loader.load(viewClass);
     }
 
     public ViewComponent load(Class<?> viewClass) {
@@ -78,7 +71,7 @@ public class ViewLoader {
     }
 
     public FxmlViewComponent loadFxmlView(Class<FxmlView<?>> viewClass) {
-        FxmlViewComponent viewElement = null;
+        FxmlViewComponent viewElement;
         FxmlLocation fxmlLocationAnnotation = viewClass.getAnnotation(FxmlLocation.class);
         String location;
         if (fxmlLocationAnnotation == null) {
@@ -91,7 +84,7 @@ public class ViewLoader {
         if (resource == null) {
             throw new RuntimeException("fxml [" + location + "] does not exists!");
         }
-        viewElement = new FxmlViewComponent(location, resource, null, viewControllerFactory);
+        viewElement = new FxmlViewComponent();
         return viewElement;
     }
 }

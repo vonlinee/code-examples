@@ -2,6 +2,7 @@ package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.Session;
 import de.saxsys.mvvmfx.core.FxmlLocation;
+import de.saxsys.mvvmfx.utils.StageHelper;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.toolkit.fxui.common.FXMLPage;
 import io.devpl.toolkit.fxui.common.ProgressDialog;
@@ -28,6 +29,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,6 +45,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @FxmlLocation(location = "static/fxml/MainUI.fxml")
 public class MainUIController extends FXControllerBase {
 
+    @FXML
+    public VBox vboxLeft;
     @FXML
     private Label connectionLabel; // toolbar buttons
     @FXML
@@ -89,26 +93,14 @@ public class MainUIController extends FXControllerBase {
         // 新建连接
         connectionLabel.setGraphic(JFX.loadImageView("static/icons/computer.png", 40));
         connectionLabel.setOnMouseClicked(event -> {
-            FXMLLoader loader = new FXMLLoader(FXMLPage.NEW_CONNECTION.getLocation());
-            try {
-                JFX.newDialogStage("新建连接", getStage(event), new Scene(loader.load())).show();
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-                Alerts.error(e.getMessage()).showAndWait();
-            }
+            StageHelper.show(FXMLLoaderUtils.load(FXMLPage.NEW_CONNECTION.getLocation()));
         });
         // 生成配置管理
         configsLabel.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
         configsLabel.setOnMouseClicked(event -> {
-            FXMLLoader loader = new FXMLLoader(FXMLPage.GENERATOR_CONFIG.getLocation());
-            try {
-                // fix bug: 嵌套弹出时会发生dialogStage被覆盖的情况
-                JFX.newDialogStage("新建连接", getStage(event), new Scene(loader.load())).show();
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-                Alerts.error(e.getMessage()).showAndWait();
-            }
+            StageHelper.show(FXMLLoaderUtils.load(FXMLPage.GENERATOR_CONFIG.getLocation()));
         });
+        trvDbTreeList.prefHeightProperty().bind(vboxLeft.heightProperty().subtract(filterTreeBox.getHeight()));
         trvDbTreeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // 设置可以多选
 
         // 设置单元格工厂 Callback<TreeView<T>, TreeCell<T>> value
@@ -224,18 +216,19 @@ public class MainUIController extends FXControllerBase {
         if (tableConfigsToBeGenerated.isEmpty()) {
             return;
         }
-        System.out.println(codeGenConfig);
+        if (StringUtils.hasNotText(codeGenConfig.getProjectFolder())) {
+            Alerts.error("项目根目录不能为空").show();
+            return;
+        }
         if (!checkDirs(codeGenConfig)) {
             return;
         }
         mbgGenerator.setGeneratorConfig(codeGenConfig);
         mbgGenerator.setDatabaseConfig(selectedDatabaseConfig);
-
         // 进度回调
         ProgressDialog alert = new ProgressDialog(Alert.AlertType.INFORMATION);
         mbgGenerator.setProgressCallback(alert);
         alert.show();
-
         PictureProcessStateController pictureProcessStateController = null;
         try {
             // Engage PortForwarding
@@ -278,7 +271,6 @@ public class MainUIController extends FXControllerBase {
     @Subscribe
     public void updateCodeGenConfig(UpdateCodeGenConfigEvent event) {
         log.info("更新代码生成配置", event);
-        final GenericConfiguration config = event.getGeneratorConfig();
     }
 
     /**
@@ -306,7 +298,6 @@ public class MainUIController extends FXControllerBase {
         targetDirs.add(config.getEntityTargetDirectory());
         targetDirs.add(config.getMappingXMLTargetDirectory());
         targetDirs.add(config.getMapperTargetDirectory());
-
         StringBuilder sb = new StringBuilder();
         for (Path dir : targetDirs) {
             if (!Files.exists(dir)) {
@@ -314,13 +305,10 @@ public class MainUIController extends FXControllerBase {
             }
         }
         if (sb.length() > 0) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setContentText("以下目录不存在, 是否创建?\n" + sb.toString());
-            Optional<ButtonType> optional = alert.showAndWait();
-            optional.ifPresent(buttonType -> {
-
-            });
-            if (optional.isPresent()) {
+            Optional<ButtonType> optional = Alerts.confirm("以下目录不存在, 是否创建?\n" + sb).showAndWait();
+            if (!optional.isPresent()) {
+                System.out.println(111);
+            } else {
                 if (ButtonType.OK == optional.get()) {
                     try {
                         return FileUtils.forceMkdir(targetDirs);

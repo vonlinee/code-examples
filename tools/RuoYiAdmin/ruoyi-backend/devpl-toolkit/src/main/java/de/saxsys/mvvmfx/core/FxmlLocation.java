@@ -15,6 +15,8 @@
  ******************************************************************************/
 package de.saxsys.mvvmfx.core;
 
+import javafx.fxml.FXML;
+
 import java.lang.annotation.*;
 
 /**

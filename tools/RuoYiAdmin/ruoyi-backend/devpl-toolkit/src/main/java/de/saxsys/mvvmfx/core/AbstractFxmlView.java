@@ -15,24 +15,14 @@ import java.util.ResourceBundle;
  */
 public abstract class AbstractFxmlView<R extends Parent> implements FxmlView<R>, Initializable {
 
-    @Inject
-    protected FxmlViewComponent fxmlViewComponent;
-
     @Override
     public final void initialize(URL location, ResourceBundle resources) {
-        onInit(fxmlViewComponent);
+
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public R getRoot() {
-        return (R) fxmlViewComponent.getRoot();
-    }
-
-    /**
-     * 初始化方法
-     */
-    protected void onInit(ViewComponent viewComponent) {
-
+        return null;
     }
 }

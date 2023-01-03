@@ -207,4 +207,8 @@ public final class StringUtils {
         }
         return sb.toString();
     }
+
+    public static boolean hasNotText(CharSequence sequence) {
+        return !hasText(sequence);
+    }
 }

@@ -16,7 +16,6 @@ import javafx.scene.Parent;
  * The instance of this class is also known as the "code-behind" of the View in terms of the Model-View-ViewModel
  * pattern.
  * </p>
- * @param <T> the type of the viewModel.
  * @author manuel.mauky
  */
 public interface FxmlView<R extends Parent> extends View {
