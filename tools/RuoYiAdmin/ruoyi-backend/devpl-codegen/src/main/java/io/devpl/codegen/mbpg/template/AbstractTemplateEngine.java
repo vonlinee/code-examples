@@ -73,9 +73,7 @@ public abstract class AbstractTemplateEngine {
         String entityName = tableInfo.getEntityName();
         String entityPath = getPathInfo(OutputFile.entity);
         if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
-
             final CodeGenConfiguration config = getConfigBuilder();
-
             TemplateConfig templateConfig = config.getTemplateConfig();
             boolean kotlin = config.getGlobalConfig().isKotlin();
             String entity = templateConfig.getEntity(kotlin);
