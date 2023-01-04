@@ -26,6 +26,6 @@ public class WebMVCConfiguration implements WebMvcConfigurer {
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
         List<HttpMessageConverter<?>> converters = new ArrayList<>();
         converters.add(new RestHttpMessageConverter());
-        handlers.add(new ControllerMethodProcessor(converters));
+        // handlers.add(new ControllerMethodProcessor(converters));
     }
 }

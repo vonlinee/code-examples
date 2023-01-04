@@ -2,13 +2,13 @@ package io.devpl.spring.data.mbp;
 
 import java.util.Map;
 
-import cn.hutool.core.map.MapWrapper;
 import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.reflection.wrapper.MapWrapper;
 
 public class DefaultMapWrapper extends MapWrapper {
 
 	public DefaultMapWrapper(MetaObject metaObject, Map<String, Object> map) {
-		super(map);
+		super(metaObject, map);
 	}
 
 	public String findProperty(String name, boolean useCamelCaseMapping) {

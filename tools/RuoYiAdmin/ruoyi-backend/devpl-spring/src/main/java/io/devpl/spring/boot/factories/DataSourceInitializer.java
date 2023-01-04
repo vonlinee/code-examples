@@ -1,6 +1,7 @@
 package io.devpl.spring.boot.factories;
 
-import io.devpl.sdk.beans.impl.map.BeanMap;
+import io.devpl.sdk.DataClass;
+import io.devpl.sdk.DataObject;
 import io.devpl.spring.context.PropertyBindCallback;
 import io.devpl.spring.data.jdbc.DataSourceManager;
 import io.devpl.spring.data.jpa.entity.DataSourceInformation;
@@ -68,16 +69,17 @@ public class DataSourceInitializer implements SpringApplicationRunListener, Orde
         List<DataSourceInformation> dataSourceInformations = new ArrayList<>();
         // 配置属性名称
         ConfigurationPropertyName cpn = ConfigurationPropertyName.of(prefix);
-        Bindable<BeanMap> bindable = Bindable.of(BeanMap.class);
+        Bindable<DataObject> bindable = Bindable.of(DataObject.class);
         for (PropertySource<?> source : propertySources) {
             if (!StringUtils.startsWithIgnoreCase(source.getName(), DevplConstant.NAME)) {
                 continue;
             }
             // 如何把 Java properties 转换为具有层级结构的字典
             Binder binder = new Binder(ConfigurationPropertySources.from(source));
-            BeanMap map = binder.bind(cpn, bindable, new PropertyBindCallback()).orElse(new BeanMap());
+
+            DataObject map = binder.bind(cpn, bindable, new PropertyBindCallback()).orElse(DataClass.newObject());
             // 获取所有的数据源名称
-            String dataSourceNames = map.getString("name-list", "");
+            String dataSourceNames = map.getTypedValue("name-list", "");
             if (!StringUtils.hasLength(dataSourceNames)) {
                 continue;
             }
@@ -92,7 +94,7 @@ public class DataSourceInitializer implements SpringApplicationRunListener, Orde
                 String psName = "devpl.datasource." + dataSourceId;
                 Map<String, Object> dataSourceInfoMap = new HashMap<>();
                 dataSourceInfoMap.put(psName + ".name", dataSourceId);
-                Map<String, String> info = map.getMap(dataSourceId);
+                Map<String, String> info = map.getTypedValue(dataSourceId, Map.class);
                 if (info != null) {
                     info.forEach((k, v) -> {
                         dataSourceInfoMap.put(psName + "." + k, v);
