@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 import Cookies from 'js-cookie'
 
+// 引入ElementUI
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
 

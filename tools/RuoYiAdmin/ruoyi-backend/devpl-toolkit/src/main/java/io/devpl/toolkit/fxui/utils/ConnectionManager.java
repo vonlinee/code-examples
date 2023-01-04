@@ -21,7 +21,7 @@ public class ConnectionManager {
 
     private static HikariConfig initHikariConfig() {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/devpl");
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/ruoyi");
         config.setUsername("root");
         config.setPassword("123456");
         config.addDataSourceProperty("cachePrepStmts", "true");

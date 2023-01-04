@@ -1,16 +1,13 @@
 package io.devpl.toolkit.fxui.utils;
 
+import io.devpl.log.Log;
+import io.devpl.log.LogFactory;
 import io.devpl.sdk.util.ResourceUtils;
-import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
 import io.devpl.toolkit.fxui.common.DBDriver;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
-import org.mybatis.generator.logging.Log;
-import org.mybatis.generator.logging.LogFactory;
+import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,32 +24,6 @@ public class ConfigHelper {
     private static final String BASE_DIR = "config";
     private static final String CONFIG_FILE = "/sqlite3.db";
 
-    public static void createEmptyFiles() throws Exception {
-        File file = new File(BASE_DIR);
-        if (!file.exists()) {
-            boolean mkdir = file.mkdir();
-        }
-        File uiConfigFile = new File(BASE_DIR + CONFIG_FILE);
-        if (!uiConfigFile.exists()) {
-            createEmptyXMLFile(uiConfigFile);
-        }
-    }
-
-    static void createEmptyXMLFile(File uiConfigFile) throws IOException {
-        try (InputStream fis = Thread
-                .currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream("sqlite3.db"); FileOutputStream fos = new FileOutputStream(uiConfigFile)) {
-            byte[] buffer = new byte[1024];
-            int byteread;
-            while (true) {
-                assert fis != null;
-                if ((byteread = fis.read(buffer)) == -1) break;
-                fos.write(buffer, 0, byteread);
-            }
-        }
-    }
-
     public static List<DatabaseInfo> loadDatabaseConfig() throws Exception {
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement(); ResultSet rs = stat.executeQuery("SELECT * FROM dbs")) {
             List<DatabaseInfo> configs = new ArrayList<>();
@@ -67,11 +38,15 @@ public class ConfigHelper {
         }
     }
 
+    private static final String sql1 = "SELECT * from dbs where name = %s";
+    private static final String sql2 = "UPDATE dbs SET name = '%s', value = '%s' where id = %d";
+    private static final String sql3 = "INSERT INTO dbs (name, value) values('%s', '%s')";
+
     public static void saveDatabaseConfig(boolean isUpdate, Integer primaryKey, DatabaseInfo dbConfig) throws Exception {
         String configName = dbConfig.getName();
         try (Connection conn = ConnectionManager.getConnection(); Statement stat = conn.createStatement()) {
             if (!isUpdate) {
-                ResultSet rs1 = stat.executeQuery("SELECT * from dbs where name = '" + configName + "'");
+                ResultSet rs1 = stat.executeQuery(String.format(sql1, sql1));
                 if (rs1.next()) {
                     throw new RuntimeException("配置已经存在, 请使用其它名字");
                 }
@@ -79,9 +54,9 @@ public class ConfigHelper {
             String jsonStr = JSONUtils.toString(dbConfig);
             String sql;
             if (isUpdate) {
-                sql = String.format("UPDATE dbs SET name = '%s', value = '%s' where id = %d", configName, jsonStr, primaryKey);
+                sql = String.format(sql2, configName, jsonStr, primaryKey);
             } else {
-                sql = String.format("INSERT INTO dbs (name, value) values('%s', '%s')", configName, jsonStr);
+                sql = String.format(sql3, configName, jsonStr);
             }
             stat.executeUpdate(sql);
         }

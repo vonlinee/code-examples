@@ -1,10 +1,11 @@
-package io.devpl.toolkit.fxui.common;
+package io.devpl.toolkit.fxui.app;
 
 import io.devpl.toolkit.fxui.controller.MainUIController;
 import io.devpl.toolkit.fxui.framework.JFX;
 import io.devpl.toolkit.fxui.framework.JavaFXApplication;
 import io.devpl.toolkit.fxui.framework.fxml.FXMLCache;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -21,7 +22,8 @@ public class MainUI extends JavaFXApplication {
     public void start(Stage primaryStage) throws Exception {
         final FXMLCache cache = applicationContext.getFXMLCache("static/fxml/MainUI.fxml");
         primaryStage.setResizable(true);
-        primaryStage.setScene(new Scene(cache.getRoot()));
+        Parent root= cache.getRoot();
+        primaryStage.setScene(new Scene(root));
         primaryStage.setTitle(MAIN_WINDOW_TITLE);
         primaryStage.getIcons().add(new Image("static/icons/mybatis-logo.png"));
         primaryStage.show();

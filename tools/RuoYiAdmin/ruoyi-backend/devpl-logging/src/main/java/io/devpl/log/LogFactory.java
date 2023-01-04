@@ -69,10 +69,8 @@ public class LogFactory {
         if (theFactory == null) {
             try {
                 setImplementation(factory);
-                System.out.println("实现成功" + factory);
             } catch (LogException e) {
                 // ignore
-                System.out.println("实现失败" + factory);
             }
         }
     }
