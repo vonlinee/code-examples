@@ -1,21 +1,22 @@
 package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.Session;
-import de.saxsys.mvvmfx.core.FxmlLocation;
-import de.saxsys.mvvmfx.utils.StageHelper;
+import io.devpl.toolkit.framework.Alerts;
+import io.devpl.toolkit.framework.JFX;
+import io.devpl.toolkit.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.FxmlView;
+import io.devpl.toolkit.framework.mvc.ViewLoader;
+import io.devpl.toolkit.framework.utils.StageHelper;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.toolkit.fxui.common.FXMLPage;
 import io.devpl.toolkit.fxui.common.ProgressDialog;
-import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
-import io.devpl.toolkit.fxui.model.DatabaseInfo;
-import io.devpl.toolkit.fxui.model.TableCodeGeneration;
 import io.devpl.toolkit.fxui.event.CommandEvent;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.fxui.event.UpdateCodeGenConfigEvent;
-import io.devpl.toolkit.fxui.framework.Alerts;
-import io.devpl.toolkit.fxui.framework.JFX;
-import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.model.DbTreeViewCellFactory;
+import io.devpl.toolkit.fxui.model.TableCodeGeneration;
+import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
 import io.devpl.toolkit.fxui.utils.*;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -34,7 +35,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -42,7 +42,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-@FxmlLocation(location = "static/fxml/MainUI.fxml")
+@FxmlView(location = "static/fxml/MainUI.fxml")
 public class MainUIController extends FXControllerBase {
 
     @FXML
@@ -93,12 +93,12 @@ public class MainUIController extends FXControllerBase {
         // 新建连接
         connectionLabel.setGraphic(JFX.loadImageView("static/icons/computer.png", 40));
         connectionLabel.setOnMouseClicked(event -> {
-            StageHelper.show(FXMLLoaderUtils.load(FXMLPage.NEW_CONNECTION.getLocation()));
+            StageHelper.show("新建连接", NewConnectionController.class);
         });
         // 生成配置管理
         configsLabel.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
         configsLabel.setOnMouseClicked(event -> {
-            StageHelper.show(FXMLLoaderUtils.load(FXMLPage.GENERATOR_CONFIG.getLocation()));
+            StageHelper.show("新建连接", GeneratorConfigController.class);
         });
         trvDbTreeList.prefHeightProperty().bind(vboxLeft.heightProperty().subtract(filterTreeBox.getHeight()));
         trvDbTreeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // 设置可以多选
@@ -126,8 +126,8 @@ public class MainUIController extends FXControllerBase {
         });
 
         trvDbTreeList.addEventHandler(CommandEvent.OPEN_DB_CONNECTION, event -> {
-            NewConnectionController controller = (NewConnectionController) loadFXMLPage("编辑数据库连接", FXMLPage.NEW_CONNECTION, false);
-            controller.setConfig((DatabaseInfo) event.getData());
+            StageHelper.show("编辑数据库连接", ViewLoader.load(NewConnectionController.class).getRoot());
+            publish(event.getData());
             // 此处MenuItem不是Node类型
             getStage(trvDbTreeList).show();
         });

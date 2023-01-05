@@ -1,10 +1,11 @@
 package io.devpl.toolkit.fxui.controller;
 
-import de.saxsys.mvvmfx.core.FxmlLocation;
-import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
+import io.devpl.toolkit.framework.Alerts;
+import io.devpl.toolkit.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.FxmlView;
 import io.devpl.toolkit.fxui.event.UpdateCodeGenConfigEvent;
-import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
-import javafx.beans.value.ObservableValue;
+import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
+import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -14,10 +15,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-
-import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
-import io.devpl.toolkit.fxui.utils.ConfigHelper;
-import io.devpl.toolkit.fxui.framework.Alerts;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Callback;
 
@@ -28,7 +25,7 @@ import java.util.ResourceBundle;
 /**
  * 管理GeneratorConfig的Controller
  */
-@FxmlLocation(location = "static/fxml/generatorConfigs.fxml")
+@FxmlView(location = "static/fxml/generatorConfigs.fxml")
 public class GeneratorConfigController extends FXControllerBase {
 
     @FXML

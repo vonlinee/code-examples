@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.FXControllerBase;
 import io.devpl.toolkit.fxui.toolkit.text.TextHandleMap;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import io.devpl.toolkit.fxui.utils.xml.XMLUtils;

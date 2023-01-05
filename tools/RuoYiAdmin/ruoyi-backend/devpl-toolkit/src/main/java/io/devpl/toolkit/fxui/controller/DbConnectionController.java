@@ -1,12 +1,13 @@
 package io.devpl.toolkit.fxui.controller;
 
+import io.devpl.toolkit.framework.mvc.FxmlView;
 import io.devpl.toolkit.fxui.common.Constants;
 import io.devpl.toolkit.fxui.common.DBDriver;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
-import io.devpl.toolkit.fxui.framework.Alerts;
-import io.devpl.toolkit.fxui.framework.JFX;
-import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.Alerts;
+import io.devpl.toolkit.framework.JFX;
+import io.devpl.toolkit.framework.mvc.FXControllerBase;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.event.ActionEvent;
@@ -21,6 +22,7 @@ import java.util.ResourceBundle;
  * 数据库连接控制器
  * 负责从界面的配置连接数据库
  */
+@FxmlView(location = "static/fxml/newConnection.fxml")
 public class DbConnectionController extends FXControllerBase {
 
     @FXML

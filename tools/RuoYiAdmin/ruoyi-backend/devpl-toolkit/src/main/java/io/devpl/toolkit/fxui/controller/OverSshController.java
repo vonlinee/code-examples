@@ -2,9 +2,10 @@ package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import io.devpl.toolkit.framework.mvc.FxmlView;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
-import io.devpl.toolkit.fxui.framework.Alerts;
+import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.StringUtils;
@@ -20,6 +21,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
+@FxmlView(location = "static/fxml/sshBasedConnection.fxml")
 public class OverSshController extends DbConnectionController {
 
     @FXML

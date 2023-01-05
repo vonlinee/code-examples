@@ -2,15 +2,13 @@ package io.devpl.toolkit.fxui.controller;
 
 import io.devpl.toolkit.fxui.common.FXMLPage;
 import io.devpl.toolkit.fxui.event.CommandEvent;
-import io.devpl.toolkit.fxui.framework.Alerts;
-import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.Alerts;
+import io.devpl.toolkit.framework.mvc.FXControllerBase;
 import io.devpl.toolkit.fxui.model.TableCodeGeneration;
 import io.devpl.toolkit.fxui.model.TableOption;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.toolkit.fxui.utils.CollectionUtils;
 import io.devpl.toolkit.fxui.utils.DBUtils;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,7 +18,6 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
-import javafx.util.Callback;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
 

@@ -5,7 +5,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import io.devpl.codegen.mbpg.jdbc.TableMetadata;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
-import io.devpl.toolkit.fxui.framework.Alerts;
+import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.common.DBDriver;
 import io.devpl.sdk.util.ResourceUtils;

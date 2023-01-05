@@ -6,3 +6,20 @@ t1()::="<name>"
 
 test(name) ::= "<name:bracket()>" // apply bracket template to each name
 bracket(x) ::= "[<x>]"   // surround parameter with square brackets
+
+show_user(user) ::= "<user>"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -15,7 +15,7 @@ public class JSONUtils {
         return converter.toJSONString(obj);
     }
 
-    public static <T> T fromString(String jsonStr, Class<T> requiredType) {
+    public static <T> T toObject(String jsonStr, Class<T> requiredType) {
         return converter.toObject(jsonStr, requiredType);
     }
 }

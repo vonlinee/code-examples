@@ -30,7 +30,7 @@ public class ConfigHelper {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String value = rs.getString("value");
-                DatabaseInfo databaseConfig = JSONUtils.fromString(value, DatabaseInfo.class);
+                DatabaseInfo databaseConfig = JSONUtils.toObject(value, DatabaseInfo.class);
                 databaseConfig.setId(id);
                 configs.add(databaseConfig);
             }
@@ -86,7 +86,7 @@ public class ConfigHelper {
             GenericConfiguration generatorConfig = null;
             if (rs.next()) {
                 String value = rs.getString("value");
-                generatorConfig = JSONUtils.fromString(value, GenericConfiguration.class);
+                generatorConfig = JSONUtils.toObject(value, GenericConfiguration.class);
             }
             return generatorConfig;
         }
@@ -101,7 +101,7 @@ public class ConfigHelper {
             List<GenericConfiguration> configs = new ArrayList<>();
             while (rs.next()) {
                 String value = rs.getString("value");
-                configs.add(JSONUtils.fromString(value, GenericConfiguration.class));
+                configs.add(JSONUtils.toObject(value, GenericConfiguration.class));
             }
             return configs;
         }

@@ -12,7 +12,6 @@ public class CommandEvent extends Event {
     private static final long serialVersionUID = -7087734786834852265L;
 
     public static final EventType<CommandEvent> COMMAND = new EventType<>(EventType.ROOT, "root-commant");
-    public static final EventType<CommandEvent> INSERT_ROW = new EventType<>(CommandEvent.COMMAND, "insert-row");
 
     // 选择事件
     public static final EventType<CommandEvent> TABLES_SELECTED = new EventType<>(CommandEvent.COMMAND, "tables-selected");

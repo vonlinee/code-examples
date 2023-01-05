@@ -2,8 +2,8 @@ package io.devpl.toolkit.fxui.controller;
 
 import io.devpl.toolkit.fxui.common.Constants;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
-import io.devpl.toolkit.fxui.framework.Alerts;
-import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.Alerts;
+import io.devpl.toolkit.framework.mvc.FXControllerBase;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

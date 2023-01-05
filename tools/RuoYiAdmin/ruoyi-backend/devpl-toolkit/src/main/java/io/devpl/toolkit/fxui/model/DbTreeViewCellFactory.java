@@ -2,8 +2,8 @@ package io.devpl.toolkit.fxui.model;
 
 import io.devpl.toolkit.fxui.event.CommandEvent;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
-import io.devpl.toolkit.fxui.framework.Alerts;
-import io.devpl.toolkit.fxui.framework.JFX;
+import io.devpl.toolkit.framework.Alerts;
+import io.devpl.toolkit.framework.JFX;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import javafx.collections.ObservableList;
@@ -17,9 +17,7 @@ import javafx.util.Callback;
 import org.greenrobot.eventbus.EventBus;
 
 import java.sql.SQLRecoverableException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 数据库列表TreeView的单元格工厂

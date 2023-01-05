@@ -5,6 +5,8 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
+import java.util.*;
+
 /**
  * 基于String Template 4
  * 官网：<a href="https://www.stringtemplate.org/">...</a>
@@ -42,6 +44,38 @@ public class StringTemplate {
         st.add("name", "ww");
         String result = st.render(); // yields "int x = 0;"
         System.out.println(result);
+    }
+
+    @Test
+    public void test4() {
+        STGroup group = new STGroupFile("st/test.stg");
+        ST st = group.getInstanceOf("show_user");
+        st.add("user", new Object());
+        String result = st.render(); // yields "int x = 0;"
+        System.out.println(result);
+    }
+
+    @Test
+    public void test6() {
+        STGroup group = new STGroupFile("st/test.stg");
+        ST st = group.getInstanceOf("show_user");
+        Dictionary<String, Object> map = new Hashtable<>();
+        map.put("zs", 1);
+        map.put("ls", 2);
+        st.add("user", map);
+        System.out.println(map);
+        String result = st.render(); // yields "int x = 0;"
+        System.out.println(result);
+    }
+
+    @Test
+    public void test7() {
+        int[] num =
+                new int[]{3, 9, 20, 2, 1, 4, 6, 32, 5, 6, 77, 888, 2, 1, 6, 32, 5, 6, 77,
+                        4, 9, 20, 2, 1, 4, 63, 9, 20, 2, 1, 4, 6, 32, 5, 6, 77, 6, 32, 5, 6, 77,
+                        3, 9, 20, 2, 1, 4, 6, 32, 5, 6, 77, 888, 1, 6, 32, 5};
+        String t = ST.format(30, "int <%1>[] = { <%2; wrap, anchor, separator=\", \"> };", "a", num);
+        System.out.println(t);
     }
 
     @Test

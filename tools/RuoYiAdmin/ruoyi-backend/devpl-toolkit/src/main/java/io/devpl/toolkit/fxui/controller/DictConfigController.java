@@ -1,7 +1,7 @@
 package io.devpl.toolkit.fxui.controller;
 
 import io.devpl.toolkit.fxui.model.SysDictData;
-import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.FXControllerBase;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -23,7 +23,7 @@ public class DictConfigController extends FXControllerBase {
     @FXML
     public TableView<SysDictData> dictConfigTable;
     @FXML
-    public TableColumn<SysDictData, String> tbcName;
+    public TableColumn<SysDictData, String>  tbcName;
     @FXML
     public TableColumn<SysDictData, String> tbcCode;
     @FXML

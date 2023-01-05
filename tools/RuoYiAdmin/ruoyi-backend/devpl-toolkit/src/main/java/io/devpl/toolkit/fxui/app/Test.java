@@ -26,6 +26,10 @@ public class Test extends Application {
 
         root.setTop(hBox);
 
+        btn.setOnAction(event -> {
+
+        });
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }

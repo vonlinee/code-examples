@@ -1,10 +1,8 @@
 package io.devpl.toolkit.fxui.app;
 
 import io.devpl.toolkit.fxui.controller.MainUIController;
-import io.devpl.toolkit.fxui.framework.JFX;
-import io.devpl.toolkit.fxui.framework.JavaFXApplication;
-import io.devpl.toolkit.fxui.framework.fxml.FXMLCache;
-import javafx.fxml.FXMLLoader;
+import io.devpl.toolkit.framework.JavaFXApplication;
+import io.devpl.toolkit.framework.fxml.FXMLCache;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;

@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.FXControllerBase;
 import javafx.fxml.FXML;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;

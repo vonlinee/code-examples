@@ -1,9 +1,10 @@
 package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.Session;
+import io.devpl.toolkit.framework.mvc.FxmlView;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
-import io.devpl.toolkit.fxui.framework.Alerts;
-import io.devpl.toolkit.fxui.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.Alerts;
+import io.devpl.toolkit.framework.mvc.FXControllerBase;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.concurrent.Task;
@@ -14,6 +15,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.EOFException;
 import java.net.URL;
@@ -22,6 +24,7 @@ import java.util.ResourceBundle;
 /**
  * 新建数据库连接控制器
  */
+@FxmlView(location = "static/fxml/newConnection.fxml")
 public class NewConnectionController extends FXControllerBase {
 
     @FXML
@@ -55,6 +58,7 @@ public class NewConnectionController extends FXControllerBase {
         });
     }
 
+    @Subscribe
     public void setConfig(DatabaseInfo selectedConfig) {
         tabControlAController.setConfig(selectedConfig);
         tabControlBController.setDbConnectionConfig(selectedConfig);

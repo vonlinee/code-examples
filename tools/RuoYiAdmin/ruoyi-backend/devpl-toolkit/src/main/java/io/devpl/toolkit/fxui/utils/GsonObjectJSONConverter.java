@@ -20,7 +20,7 @@ public class GsonObjectJSONConverter implements ObjectJSONConverter {
     public GsonObjectJSONConverter() {
         final GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls(); // 不忽略null值
-        builder.registerTypeAdapter(Property.class, null);
+        // builder.registerTypeAdapter(Property.class, null);
         this.gson = builder.create();
     }
 

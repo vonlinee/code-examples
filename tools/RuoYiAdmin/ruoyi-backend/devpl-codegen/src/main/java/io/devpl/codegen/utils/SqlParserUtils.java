@@ -10,7 +10,11 @@ import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.ComparisonOperator;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.create.table.ColDataType;
+import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
+import net.sf.jsqlparser.statement.create.table.CreateTable;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.util.TablesNamesFinder;
 import net.sf.jsqlparser.util.deparser.ExpressionDeParser;
@@ -239,8 +243,19 @@ public class SqlParserUtils {
                 "  `party_activity_times` int(11) NOT NULL COMMENT '党建活动次数',\n" +
                 "  PRIMARY KEY (`school_code`) USING BTREE\n" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='党建党风概况';";
-        final Statement stmt = CCJSqlParserUtil.parse(sql);
+        Statement stmt = CCJSqlParserUtil.parse(sql);
+        CreateTable createTable = (CreateTable) stmt;
 
-        System.out.println(stmt);
+        final List<ColumnDefinition> columnDefinitions = createTable.getColumnDefinitions();
+
+        for (ColumnDefinition columnDefinition : columnDefinitions) {
+            final ColDataType colDataType = columnDefinition.getColDataType();
+            System.out.println(colDataType.getDataType());
+            System.out.println(colDataType.getArrayData());
+            System.out.println(colDataType.getArgumentsStringList());
+            System.out.println(colDataType.getCharacterSet());
+
+            System.out.println("\n");
+        }
     }
 }
