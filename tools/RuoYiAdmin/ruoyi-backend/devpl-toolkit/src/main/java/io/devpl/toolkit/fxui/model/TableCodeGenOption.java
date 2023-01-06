@@ -4,12 +4,11 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import lombok.Data;
 
 /**
  * 针对单个表生成的配置选项
  */
-public class TableOption {
+public class TableCodeGenOption {
 
     private final BooleanProperty useMyBatisPlus = new SimpleBooleanProperty(true); // 是否使用mybatis-plus
     private final BooleanProperty offsetLimit = new SimpleBooleanProperty();

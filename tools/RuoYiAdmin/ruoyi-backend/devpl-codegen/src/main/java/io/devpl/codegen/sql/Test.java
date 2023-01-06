@@ -1,6 +1,11 @@
 package io.devpl.codegen.sql;
 
 import com.alibaba.druid.DbType;
+import com.alibaba.druid.sql.SQLUtils;
+import com.alibaba.druid.sql.ast.SQLStatement;
+import com.alibaba.druid.sql.ast.statement.SQLDropTableStatement;
+
+import java.util.List;
 
 public class Test {
 
@@ -22,7 +27,6 @@ public class Test {
 
     public static void main(String[] args) {
         DruidSqlParser parser = new DruidSqlParser(sql1, DbType.mysql);
-
         parser.parseCreate();
     }
 }

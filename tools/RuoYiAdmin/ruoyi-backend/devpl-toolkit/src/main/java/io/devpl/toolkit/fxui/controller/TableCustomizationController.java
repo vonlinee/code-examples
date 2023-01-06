@@ -1,11 +1,12 @@
 package io.devpl.toolkit.fxui.controller;
 
+import io.devpl.toolkit.framework.mvc.FxmlView;
 import io.devpl.toolkit.fxui.common.FXMLPage;
 import io.devpl.toolkit.fxui.event.CommandEvent;
 import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.framework.mvc.FXControllerBase;
 import io.devpl.toolkit.fxui.model.TableCodeGeneration;
-import io.devpl.toolkit.fxui.model.TableOption;
+import io.devpl.toolkit.fxui.model.TableCodeGenOption;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.toolkit.fxui.utils.CollectionUtils;
 import io.devpl.toolkit.fxui.utils.DBUtils;
@@ -29,6 +30,7 @@ import java.util.ResourceBundle;
 /**
  * 表定制化控制器
  */
+@FxmlView(location = "static/fxml/table_customization.fxml")
 public class TableCustomizationController extends FXControllerBase {
 
     @FXML
@@ -162,9 +164,9 @@ public class TableCustomizationController extends FXControllerBase {
 
     /**
      * 初始化表生成选项数据绑定
-     * @param option
+     * @param option 表生成选项
      */
-    public void initTableCodeGenerationOptionBindding(TableOption option) {
+    public void initTableCodeGenerationOptionBindding(TableCodeGenOption option) {
         // TODO 只绑定一次，如果每次绑定的根节点没有变化，那么无需进行绑定
         option.useExampleProperty().bind(chbUseExample.selectedProperty());
         option.annotationDAOProperty().bind(chbAnnotationDao.selectedProperty());

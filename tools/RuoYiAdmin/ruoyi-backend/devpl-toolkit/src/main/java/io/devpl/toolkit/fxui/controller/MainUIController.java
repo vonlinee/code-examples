@@ -127,7 +127,7 @@ public class MainUIController extends FXControllerBase {
 
         trvDbTreeList.addEventHandler(CommandEvent.OPEN_DB_CONNECTION, event -> {
             StageHelper.show("编辑数据库连接", ViewLoader.load(NewConnectionController.class).getRoot());
-            publish(event.getData());
+            // publish(event.getData());
             // 此处MenuItem不是Node类型
             getStage(trvDbTreeList).show();
         });
@@ -152,26 +152,17 @@ public class MainUIController extends FXControllerBase {
             MenuItem deleteThisRowMenuItem = new MenuItem("删除");
             MenuItem customizeMenuItem = new MenuItem("定制列");
             deleteThisRowMenuItem.setOnAction(event -> {
-                final TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
+                TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
                 param.getItems().remove(item);
                 tableConfigsToBeGenerated.remove(item.getTableName()); // 移除该表
             });
             customizeMenuItem.setOnAction(event -> {
                 TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
-                FXMLLoader loader = new FXMLLoader(FXMLPage.SELECT_TABLE_COLUMN.getLocation());
-                try {
-                    Parent root = loader.load();
-                    Event.fireEvent(root, new CommandEvent(CommandEvent.COMMAND, item));
-                    final Stage stage = new Stage();
-                    stage.setTitle("表生成定制");
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                    event.consume();
-                } catch (IOException e) {
-                    Alerts.exception("", e).show();
-                }
+                Parent root = ViewLoader.load(TableCustomizationController.class).getRoot();
+                Event.fireEvent(root, new CommandEvent(CommandEvent.COMMAND, item));
+                StageHelper.show("表生成定制", root);
+                event.consume();
             });
-
             ContextMenu menu = new ContextMenu(deleteThisRowMenuItem, customizeMenuItem);
             row.setContextMenu(menu);
             return row;

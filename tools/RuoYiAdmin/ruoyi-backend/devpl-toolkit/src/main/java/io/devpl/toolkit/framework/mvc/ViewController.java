@@ -1,10 +1,7 @@
 package io.devpl.toolkit.framework.mvc;
 
-import org.greenrobot.eventbus.EventBus;
+import javafx.event.EventTarget;
 
-public interface ViewController {
+public interface ViewController extends EventTarget {
 
-    default void publish(Object event) {
-        EventBus.getDefault().post(event);
-    }
 }

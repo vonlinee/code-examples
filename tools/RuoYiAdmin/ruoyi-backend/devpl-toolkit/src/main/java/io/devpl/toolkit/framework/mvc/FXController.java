@@ -12,7 +12,7 @@ import org.mybatis.generator.logging.LogFactory;
 /**
  * 所有控制器的基类，控制器是单例对象
  */
-public abstract class FXController implements ViewController {
+public abstract class FXController extends AbstractViewController {
 
     protected final Log log = LogFactory.getLog(getClass());
 

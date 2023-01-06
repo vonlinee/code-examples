@@ -2,10 +2,14 @@ package io.devpl.codegen.sql;
 
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.SQLUtils;
+import com.alibaba.druid.sql.ast.SQLDataType;
+import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLIndex;
 import com.alibaba.druid.sql.ast.SQLStatement;
+import com.alibaba.druid.sql.ast.expr.SQLIntegerExpr;
 import com.alibaba.druid.sql.ast.statement.SQLCharacterDataType;
 import com.alibaba.druid.sql.ast.statement.SQLColumnDefinition;
+import com.alibaba.druid.sql.ast.statement.SQLNotNullConstraint;
 import com.alibaba.druid.sql.ast.statement.SQLTableElement;
 import com.alibaba.druid.sql.dialect.mysql.ast.MySqlKey;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
@@ -33,27 +37,28 @@ public class DruidSqlParser {
         this.statemens = SQLUtils.parseStatements(rawSql, dbType);
     }
 
-
     public void parseCreate() {
         for (SQLStatement sqlStatement : statemens) {
             MySqlCreateTableStatement ddlCreate = (MySqlCreateTableStatement) sqlStatement;
-            List<SQLColumnDefinition> columnDefinitions = ddlCreate.getColumnDefinitions();
-
-            for (SQLColumnDefinition columnDefinition : columnDefinitions) {
-                String columnName = columnDefinition.getColumnName();
-                System.out.println(columnDefinition.getDefaultExpr());
-            }
-
             SQLColumnDefinition newColDef = new SQLColumnDefinition();
             newColDef.setName("create_time");
             newColDef.setComment("创建时间");
             final SQLCharacterDataType dataType = new SQLCharacterDataType("VARCHAR");
+            dataType.addArgument(new SQLIntegerExpr(36));
             newColDef.setDataType(dataType);
+            newColDef.addConstraint(new SQLNotNullConstraint());
+            ddlCreate.addColumn(newColDef);
 
-            final List<MySqlKey> mysqlKeys = ddlCreate.getMysqlKeys();
-
-            List<SQLTableElement> tableElementList = ddlCreate.getTableElementList();
+            System.out.println(ddlCreate);
         }
+    }
+
+    /**
+     * 新增一列的定义信息
+     * @return SQLColumnDefinition
+     */
+    public SQLColumnDefinition newColumnDefinition(String columnName) {
+        return null;
     }
 
     public void sort(List<SQLTableElement> tableElementList) {

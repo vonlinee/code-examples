@@ -2,14 +2,16 @@ package io.devpl.codegen.sql;
 
 import com.alibaba.druid.sql.ast.SQLDataType;
 import com.alibaba.druid.sql.ast.statement.SQLColumnDefinition;
+import lombok.Data;
 
 /**
  * 通用的列定义信息
  * @see com.alibaba.druid.sql.ast.statement.SQLColumnDefinition
  */
+@Data
 public class ColumnDefinition {
     private String columnName;
-    private SqlType sqlType;
+    private SqlDataTypeEnum sqlType;
     private Boolean hasDefaultExpression;
     private String defaultExpression;
 
@@ -34,11 +36,11 @@ public class ColumnDefinition {
         return defaultExpression == null ? "" : defaultExpression;
     }
 
-    public SqlType getSqlType() {
+    public SqlDataTypeEnum getSqlType() {
         if (sqlType == null) {
             final SQLDataType dataType = columnDefinition.getDataType();
-            if (dataType == null) return SqlType.NULL;
-            sqlType = SqlType.valueOf(dataType.jdbcType());
+            if (dataType == null) return SqlDataTypeEnum.NULL;
+            sqlType = SqlDataTypeEnum.valueOf(dataType.jdbcType());
         }
         return sqlType;
     }

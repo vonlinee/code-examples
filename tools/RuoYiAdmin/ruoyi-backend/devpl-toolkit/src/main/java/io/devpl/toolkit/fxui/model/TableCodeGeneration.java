@@ -20,7 +20,7 @@ public class TableCodeGeneration {
     /**
      * 表生成选项
      */
-    private TableOption option = new TableOption();
+    private TableCodeGenOption option = new TableCodeGenOption();
 
     /**
      * 该表名称所对应的数据库信息
