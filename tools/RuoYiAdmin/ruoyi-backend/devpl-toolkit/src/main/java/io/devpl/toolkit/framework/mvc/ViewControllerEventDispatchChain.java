@@ -1,5 +1,6 @@
 package io.devpl.toolkit.framework.mvc;
 
+import com.sun.javafx.event.EventDispatchChainImpl;
 import javafx.event.Event;
 import javafx.event.EventDispatchChain;
 import javafx.event.EventDispatcher;
@@ -9,18 +10,24 @@ import javafx.event.EventDispatcher;
  */
 public class ViewControllerEventDispatchChain implements EventDispatchChain {
 
+    private final EventDispatchChainImpl chainImpl;
+
+    public ViewControllerEventDispatchChain() {
+        this.chainImpl = new EventDispatchChainImpl();
+    }
+
     @Override
     public EventDispatchChain append(EventDispatcher eventDispatcher) {
-        return null;
+        return chainImpl.append(eventDispatcher);
     }
 
     @Override
     public EventDispatchChain prepend(EventDispatcher eventDispatcher) {
-        return null;
+        return chainImpl.prepend(eventDispatcher);
     }
 
     @Override
     public Event dispatchEvent(Event event) {
-        return null;
+        return chainImpl.dispatchEvent(event);
     }
 }

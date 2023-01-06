@@ -1,6 +1,9 @@
 package io.devpl.toolkit.framework.mvc;
 
-import javafx.event.*;
+import javafx.event.Event;
+import javafx.event.EventDispatchChain;
+import javafx.event.EventDispatcher;
+import javafx.event.EventHandler;
 
 public abstract class AbstractViewController implements ViewController {
 
@@ -18,21 +21,6 @@ public abstract class AbstractViewController implements ViewController {
     }
 
     /**
-     * Registers an event filter to this node. The filter is called when the
-     * node receives an {@code Event} of the specified type during the capturing
-     * phase of event delivery.
-     * @param <T>         the specific event class of the filter
-     * @param eventType   the type of the events to receive by the filter
-     * @param eventFilter the filter to register
-     * @throws NullPointerException if the event type or filter is null
-     */
-    public final <T extends Event> void addEventFilter(
-            final EventType<T> eventType,
-            final EventHandler<? super T> eventFilter) {
-
-    }
-
-    /**
      * Registers an event handler to this node. The handler is called when the
      * node receives an {@code Event} of the specified type during the bubbling
      * phase of event delivery.
@@ -41,9 +29,13 @@ public abstract class AbstractViewController implements ViewController {
      * @param eventHandler the handler to register
      * @throws NullPointerException if the event type or handler is null
      */
-    public final <T extends Event> void addEventHandler(
-            final EventType<T> eventType,
+    public final <T extends Event> void subscribe(
+            final String eventType,
             final EventHandler<? super T> eventHandler) {
+
+    }
+
+    public final void publish(String event) {
 
     }
 }
