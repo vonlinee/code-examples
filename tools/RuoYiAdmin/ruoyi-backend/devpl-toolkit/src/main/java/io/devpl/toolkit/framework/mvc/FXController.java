@@ -14,8 +14,6 @@ import org.mybatis.generator.logging.LogFactory;
  */
 public abstract class FXController extends AbstractViewController {
 
-    protected final Log log = LogFactory.getLog(getClass());
-
     // Android的事件总线
     private static final EventBus bus = new EventBus();
 
@@ -38,11 +36,6 @@ public abstract class FXController extends AbstractViewController {
     public final boolean hasSubscriberForEvent(Class<?> eventClass) {
         if (eventClass == null) return false;
         return bus.hasSubscriberForEvent(eventClass);
-    }
-
-    @SuppressWarnings("unchecked")
-    protected final <T> T getUserData(Node node) {
-        return (T) node.getUserData();
     }
 
     /**

@@ -1,8 +1,12 @@
 package io.devpl.toolkit.framework.mvc;
 
 import javafx.event.*;
+import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.LogFactory;
 
 public abstract class AbstractViewController implements ViewController {
+
+    protected final Log log = LogFactory.getLog(getClass());
 
     /**
      * 事件分派者链
@@ -38,7 +42,9 @@ public abstract class AbstractViewController implements ViewController {
      * @param eventHandler the handler to register
      * @throws NullPointerException if the event type or handler is null
      */
-    public final <T extends Event> void subscribe(final EventType<T> eventType, final EventHandler<? super T> eventHandler) {
+    public final <T extends Event> void subscribe(
+            final EventType<T> eventType,
+            final EventHandler<? super T> eventHandler) {
         final String name = eventType.getName();
         if (name == null || name.length() == 0) {
             throw new IllegalArgumentException("event type cannot be empty");
