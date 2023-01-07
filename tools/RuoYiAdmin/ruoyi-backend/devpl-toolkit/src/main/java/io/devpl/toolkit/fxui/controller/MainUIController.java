@@ -8,7 +8,6 @@ import io.devpl.toolkit.framework.mvc.FxmlView;
 import io.devpl.toolkit.framework.mvc.ViewLoader;
 import io.devpl.toolkit.framework.utils.StageHelper;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
-import io.devpl.toolkit.fxui.common.FXMLPage;
 import io.devpl.toolkit.fxui.common.ProgressDialog;
 import io.devpl.toolkit.fxui.event.CommandEvent;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
@@ -23,19 +22,15 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -102,10 +97,6 @@ public class MainUIController extends FXControllerBase {
         // 设置单元格工厂 Callback<TreeView<T>, TreeCell<T>> value
         trvDbTreeList.setCellFactory(new DbTreeViewCellFactory());
         loadLeftDBTree();
-
-        trvDbTreeList.setOnDragDetected(event -> {
-            System.out.println("拖拽");
-        });
         // 新增一行
         trvDbTreeList.addEventHandler(CommandEvent.TABLES_SELECTED, event -> {
             ObservableList<TreeItem<String>> selectedItems = trvDbTreeList.getSelectionModel().getSelectedItems();
