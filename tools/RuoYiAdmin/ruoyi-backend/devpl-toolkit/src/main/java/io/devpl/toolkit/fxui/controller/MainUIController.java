@@ -92,14 +92,10 @@ public class MainUIController extends FXControllerBase {
         registerThis();
         // 新建连接
         connectionLabel.setGraphic(JFX.loadImageView("static/icons/computer.png", 40));
-        connectionLabel.setOnMouseClicked(event -> {
-            StageHelper.show("新建连接", NewConnectionController.class);
-        });
+        connectionLabel.setOnMouseClicked(event -> StageHelper.show("新建连接", NewConnectionController.class));
         // 生成配置管理
         configsLabel.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
-        configsLabel.setOnMouseClicked(event -> {
-            StageHelper.show("新建连接", GeneratorConfigController.class);
-        });
+        configsLabel.setOnMouseClicked(event -> StageHelper.show("新建连接", GeneratorConfigController.class));
         trvDbTreeList.prefHeightProperty().bind(vboxLeft.heightProperty().subtract(filterTreeBox.getHeight()));
         trvDbTreeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // 设置可以多选
 
@@ -107,6 +103,9 @@ public class MainUIController extends FXControllerBase {
         trvDbTreeList.setCellFactory(new DbTreeViewCellFactory());
         loadLeftDBTree();
 
+        trvDbTreeList.setOnDragDetected(event -> {
+            System.out.println("拖拽");
+        });
         // 新增一行
         trvDbTreeList.addEventHandler(CommandEvent.TABLES_SELECTED, event -> {
             ObservableList<TreeItem<String>> selectedItems = trvDbTreeList.getSelectionModel().getSelectedItems();
@@ -126,10 +125,10 @@ public class MainUIController extends FXControllerBase {
         });
 
         trvDbTreeList.addEventHandler(CommandEvent.OPEN_DB_CONNECTION, event -> {
-            StageHelper.show("编辑数据库连接", ViewLoader.load(NewConnectionController.class).getRoot());
+            StageHelper.show("编辑数据库连接", NewConnectionController.class);
             // publish(event.getData());
             // 此处MenuItem不是Node类型
-            getStage(trvDbTreeList).show();
+            // getStage(trvDbTreeList).show();
         });
 
         tblcDbName.setCellValueFactory(new PropertyValueFactory<>("dbName"));
@@ -197,9 +196,7 @@ public class MainUIController extends FXControllerBase {
      */
     @FXML
     public void chooseProjectFolder(ActionEvent event) {
-        FileChooserDialog.showDirectoryDialog(getStage(event)).ifPresent(file -> {
-            projectFolderField.setText(file.getAbsolutePath());
-        });
+        FileChooserDialog.showDirectoryDialog(getStage(event)).ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
     }
 
     @FXML
@@ -297,7 +294,7 @@ public class MainUIController extends FXControllerBase {
         }
         if (sb.length() > 0) {
             Optional<ButtonType> optional = Alerts.confirm("以下目录不存在, 是否创建?\n" + sb).showAndWait();
-            if (!optional.isPresent()) {
+            if (optional.isEmpty()) {
                 System.out.println(111);
             } else {
                 if (ButtonType.OK == optional.get()) {

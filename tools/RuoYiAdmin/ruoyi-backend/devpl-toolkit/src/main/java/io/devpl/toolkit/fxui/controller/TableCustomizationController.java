@@ -1,6 +1,7 @@
 package io.devpl.toolkit.fxui.controller;
 
 import io.devpl.toolkit.framework.mvc.FxmlView;
+import io.devpl.toolkit.framework.utils.StageHelper;
 import io.devpl.toolkit.fxui.common.FXMLPage;
 import io.devpl.toolkit.fxui.event.CommandEvent;
 import io.devpl.toolkit.framework.Alerts;
@@ -13,6 +14,8 @@ import io.devpl.toolkit.fxui.utils.DBUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -206,7 +209,8 @@ public class TableCustomizationController extends FXControllerBase {
 
     @FXML
     public void configAction(ActionEvent event) {
-        TableColumnConfigsController controller = (TableColumnConfigsController) loadFXMLPage("定制列配置", FXMLPage.TABLE_COLUMN_CONFIG, true);
+        // StageHelper.show("定制列配置", TableColumnConfigsController.class);
+        TableColumnConfigsController controller = (TableColumnConfigsController) loadFXMLPage("", FXMLPage.TABLE_COLUMN_CONFIG, true);
         controller.setColumnListView(this.columnListView);
         // controller.setTableName(this.tableName);
         getStage(event).show();
