@@ -52,13 +52,13 @@ public class ColumnMetadata implements Serializable {
     private Integer bufferLength;
 
     /**
-     * DECIMAL_DIGITS int => the number of fractional digits. Null is returned for data
+     * DECIMAL_DIGITS int => the number of fractional digits(小数位数). Null is returned for data
      * types where DECIMAL_DIGITS is not applicable.
      */
     private String decimalDigits;
 
     /**
-     * NUM_PREC_RADIX int => Radix (typically either 10 or 2)
+     * NUM_PREC_RADIX int => Radix (typically either 10 or 2) (基数,即十进制或者二进制)
      */
     private Integer numPrecRadix;
 
@@ -342,5 +342,38 @@ public class ColumnMetadata implements Serializable {
 
     public void setIsGeneratedcolumn(String isGeneratedcolumn) {
         this.isGeneratedcolumn = isGeneratedcolumn;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ColumnMetadata{");
+        sb.append("tableCat='").append(tableCat).append('\'');
+        sb.append(", tableSchem='").append(tableSchem).append('\'');
+        sb.append(", tableName='").append(tableName).append('\'');
+        sb.append(", columnName='").append(columnName).append('\'');
+        sb.append(", dataType=").append(dataType);
+        sb.append(", typeName='").append(typeName).append('\'');
+        sb.append(", columnSize=").append(columnSize);
+        sb.append(", bufferLength=").append(bufferLength);
+        sb.append(", decimalDigits='").append(decimalDigits).append('\'');
+        sb.append(", numPrecRadix=").append(numPrecRadix);
+        sb.append(", nullable=").append(nullable);
+        sb.append(", remarks='").append(remarks).append('\'');
+        sb.append(", columnDef='").append(columnDef).append('\'');
+        sb.append(", sqlDataType=").append(sqlDataType);
+        sb.append(", sqlDatetimeSub=").append(sqlDatetimeSub);
+        sb.append(", charOctetLength=").append(charOctetLength);
+        sb.append(", ordinalPosition=").append(ordinalPosition);
+        sb.append(", isNullable='").append(isNullable).append('\'');
+        sb.append(", scopeCatalog='").append(scopeCatalog).append('\'');
+        sb.append(", scopeSchema='").append(scopeSchema).append('\'');
+        sb.append(", scopeTable='").append(scopeTable).append('\'');
+        sb.append(", sourceDataType='").append(sourceDataType).append('\'');
+        sb.append(", isAutoincrement='").append(isAutoincrement).append('\'');
+        sb.append(", isGeneratedcolumn='")
+          .append(isGeneratedcolumn)
+          .append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

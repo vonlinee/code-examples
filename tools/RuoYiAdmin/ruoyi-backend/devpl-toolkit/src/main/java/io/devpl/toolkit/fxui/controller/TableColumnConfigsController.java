@@ -4,7 +4,7 @@ import io.devpl.toolkit.framework.mvc.FxmlView;
 import io.devpl.toolkit.fxui.common.Constants;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  * 定制列配置控制器
  */
 @FxmlView(location = "static/fxml/tableColumnConfigs.fxml")
-public class TableColumnConfigsController extends FXControllerBase {
+public class TableColumnConfigsController extends AbstractViewController {
 
     @FXML
     private Label currentTableNameLabel;

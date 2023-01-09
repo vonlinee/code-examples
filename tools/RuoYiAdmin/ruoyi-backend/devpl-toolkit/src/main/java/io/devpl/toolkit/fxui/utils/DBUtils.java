@@ -3,6 +3,7 @@ package io.devpl.toolkit.fxui.utils;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import io.devpl.codegen.mbpg.jdbc.ColumnMetadata;
 import io.devpl.codegen.mbpg.jdbc.TableMetadata;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.toolkit.framework.Alerts;
@@ -96,7 +97,9 @@ public class DBUtils {
                     log.info("portForwarding Enabled, {}", assinged_port);
                 } catch (JSchException e) {
                     log.error("Connect Over SSH failed", e);
-                    if (e.getCause() != null && e.getCause().getMessage().equals("Address already in use: JVM_Bind")) {
+                    if (e.getCause() != null && e.getCause()
+                                                 .getMessage()
+                                                 .equals("Address already in use: JVM_Bind")) {
                         throw new RuntimeException("Address already in use: JVM_Bind");
                     }
                     throw new RuntimeException(e.getMessage());
@@ -113,7 +116,8 @@ public class DBUtils {
                     throw new RuntimeException("OverSSH 连接超时：超过5秒");
                 }
                 log.info("executorService isShutdown:{}", executorService.isShutdown());
-                Alerts.error("OverSSH 失败，请检查连接设置:" + e.getMessage()).showAndWait();
+                Alerts.error("OverSSH 失败，请检查连接设置:" + e.getMessage())
+                      .showAndWait();
             }
         }
     }
@@ -163,7 +167,8 @@ public class DBUtils {
                     tables.add(rs.getString("name"));
                 }
             } else if (DBDriver.valueOf(config.getDbType()) == DBDriver.ORACLE) {
-                rs = md.getTables(null, config.getUsername().toUpperCase(), null, new String[]{"TABLE", "VIEW"});
+                rs = md.getTables(null, config.getUsername()
+                                              .toUpperCase(), null, new String[]{"TABLE", "VIEW"});
             } else if (DBDriver.valueOf(config.getDbType()) == DBDriver.SQLITE) {
                 String sql = SQL.Sqllite.SELECT;
                 rs = connection.createStatement().executeQuery(sql);
@@ -178,7 +183,8 @@ public class DBUtils {
                 tables.add(rs.getString(3));
             }
             if (StringUtils.isNotBlank(filter)) {
-                tables.removeIf(x -> !x.contains(filter) && !(x.replaceAll("_", "").contains(filter)));
+                tables.removeIf(x -> !x.contains(filter) && !(x.replaceAll("_", "")
+                                                               .contains(filter)));
             }
             if (tables.size() > 1) {
                 Collections.sort(tables);
@@ -229,7 +235,8 @@ public class DBUtils {
             }
             final File[] jarFiles = FileUtils.listAllFiles(file);
             for (int i = 0; i < jarFiles.length; i++) {
-                if (jarFiles[i].isFile() && jarFiles[i].getAbsolutePath().endsWith(".jar")) {
+                if (jarFiles[i].isFile() && jarFiles[i].getAbsolutePath()
+                                                       .endsWith(".jar")) {
                     jarFilePathList.add(jarFiles[i].getAbsolutePath());
                 }
             }
@@ -271,6 +278,29 @@ public class DBUtils {
 
     public static List<TableMetadata> getTablesMetadata(Connection conn, String[] types) {
         return getTablesMetadata(conn, null, types);
+    }
+
+    public static List<ColumnMetadata> getColumnsMetadata(Connection conn, String tableNamePattern) {
+        List<ColumnMetadata> cmdList;
+        try {
+            final DatabaseMetaData dbmd = conn.getMetaData();
+            final String catalog = conn.getCatalog();
+            final String schema = conn.getSchema();
+
+            cmdList = new ArrayList<>();
+            try (ResultSet rs = dbmd.getColumns(catalog, schema, tableNamePattern, null)) {
+                final DataClassRowMapper<ColumnMetadata> rowMapper = new DataClassRowMapper<>(ColumnMetadata.class);
+                int rowIndex = 0;
+                while (rs.next()) {
+                    cmdList.add(rowMapper.mapRow(rs, rowIndex++));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return cmdList;
     }
 
     public static List<TableMetadata> getTablesMetadata(Connection conn, String tableNamePattern, String[] types) {

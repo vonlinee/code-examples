@@ -326,6 +326,29 @@
             <artifactId>google-java-format</artifactId>
             <version>1.15.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>devpl-spring</artifactId>
+            <version>3.8.3</version>
+        </dependency>
+
+        <!-- Excel导出工具 EasyPoi-->
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-spring-boot-starter</artifactId>
+            <version>4.4.0</version>
+        </dependency>
     </dependencies>
     <build>
         <!--资源打包配置-->

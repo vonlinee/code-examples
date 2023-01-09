@@ -48,7 +48,6 @@ public class DruidSqlParser {
             newColDef.setDataType(dataType);
             newColDef.addConstraint(new SQLNotNullConstraint());
             ddlCreate.addColumn(newColDef);
-
             System.out.println(ddlCreate);
         }
     }

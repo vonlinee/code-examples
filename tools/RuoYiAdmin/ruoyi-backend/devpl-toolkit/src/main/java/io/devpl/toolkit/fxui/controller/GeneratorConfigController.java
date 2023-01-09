@@ -1,7 +1,7 @@
 package io.devpl.toolkit.fxui.controller;
 
 import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import io.devpl.toolkit.framework.mvc.FxmlView;
 import io.devpl.toolkit.fxui.event.UpdateCodeGenConfigEvent;
 import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
  * 管理GeneratorConfig的Controller
  */
 @FxmlView(location = "static/fxml/generatorConfigs.fxml")
-public class GeneratorConfigController extends FXControllerBase {
+public class GeneratorConfigController extends AbstractViewController {
 
     @FXML
     private TableView<GenericConfiguration> configTable;

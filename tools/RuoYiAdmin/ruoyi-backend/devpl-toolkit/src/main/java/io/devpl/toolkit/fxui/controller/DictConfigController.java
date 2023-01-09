@@ -1,7 +1,7 @@
 package io.devpl.toolkit.fxui.controller;
 
 import io.devpl.toolkit.fxui.model.SysDictData;
-import io.devpl.toolkit.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 /**
  * 字典配置管理控制器
  */
-public class DictConfigController extends FXControllerBase {
+public class DictConfigController extends AbstractViewController {
 
     @FXML
     public TableView<SysDictData> dictConfigTable;

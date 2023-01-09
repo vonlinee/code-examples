@@ -3,8 +3,11 @@ package io.devpl.toolkit.jast;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,6 +35,8 @@ public class JavaParserUtils {
     }
 
     public static void main(String[] args) throws IOException {
-
+        try (XWPFDocument document = new XWPFDocument()){
+            document.write(new FileOutputStream("C:\\Users\\Von\\Desktop\\1.doc"));
+        }
     }
 }

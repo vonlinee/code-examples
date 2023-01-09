@@ -1,11 +1,11 @@
 package io.devpl.toolkit.fxui.controller;
 
 import io.devpl.toolkit.framework.mvc.FxmlView;
+import io.devpl.toolkit.framework.mvc.ViewLoader;
 import io.devpl.toolkit.framework.utils.StageHelper;
-import io.devpl.toolkit.fxui.common.FXMLPage;
 import io.devpl.toolkit.fxui.event.CommandEvent;
 import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import io.devpl.toolkit.fxui.model.TableCodeGeneration;
 import io.devpl.toolkit.fxui.model.TableCodeGenOption;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
@@ -14,8 +14,6 @@ import io.devpl.toolkit.fxui.utils.DBUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -34,7 +32,7 @@ import java.util.ResourceBundle;
  * 表定制化控制器
  */
 @FxmlView(location = "static/fxml/table_customization.fxml")
-public class TableCustomizationController extends FXControllerBase {
+public class TableCustomizationController extends AbstractViewController {
 
     @FXML
     public BorderPane root;
@@ -209,8 +207,9 @@ public class TableCustomizationController extends FXControllerBase {
 
     @FXML
     public void configAction(ActionEvent event) {
-        // StageHelper.show("定制列配置", TableColumnConfigsController.class);
-        TableColumnConfigsController controller = (TableColumnConfigsController) loadFXMLPage("", FXMLPage.TABLE_COLUMN_CONFIG, true);
+        final ViewLoader viewLoader = ViewLoader.load(TableColumnConfigsController.class);
+        StageHelper.show("定制列配置", viewLoader.getRoot());
+        TableColumnConfigsController controller = viewLoader.getViewController();
         controller.setColumnListView(this.columnListView);
         // controller.setTableName(this.tableName);
         getStage(event).show();

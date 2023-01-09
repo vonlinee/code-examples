@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
-<AnchorPane stylesheets="@../../style.css" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.devpl.toolkit.fxui.controller.OverSshController">
     <GridPane fx:id="gridPane" alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" AnchorPane.topAnchor="15.0">
         <columnConstraints>

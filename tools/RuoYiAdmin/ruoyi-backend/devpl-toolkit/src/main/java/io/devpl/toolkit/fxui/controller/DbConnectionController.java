@@ -7,7 +7,7 @@ import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.framework.JFX;
-import io.devpl.toolkit.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.event.ActionEvent;
@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
  * 负责从界面的配置连接数据库
  */
 @FxmlView(location = "static/fxml/newConnection.fxml")
-public class DbConnectionController extends FXControllerBase {
+public class DbConnectionController extends AbstractViewController {
 
     @FXML
     protected TextField nameField; // 数据库名称

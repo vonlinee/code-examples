@@ -71,7 +71,7 @@ public class PictureProcessStateController {
         hBoxButton.getChildren().add(button);
         hBoxButton.setAlignment(Pos.BOTTOM_RIGHT);
         hBoxButton.getStylesheets()
-                .add(Thread.currentThread().getContextClassLoader().getResource("style.css").toExternalForm());
+                .add(Thread.currentThread().getContextClassLoader().getResource("static/css/style.css").toExternalForm());
         HBox.setMargin(button, new Insets(0, 15, 5, 0));
         button.setStyle("-fx-border-width: 0px;");
         button.setStyle("-fx-border-color: transparent;");

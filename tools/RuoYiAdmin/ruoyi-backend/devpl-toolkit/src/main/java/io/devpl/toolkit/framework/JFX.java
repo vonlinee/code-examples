@@ -29,10 +29,7 @@ import java.util.Arrays;
 /**
  * 便捷的方法用于创建JavaFX控件，减少代码行数
  */
-@SuppressWarnings("unused")
 public final class JFX {
-
-    public final static ApplicationContext context = ApplicationContext.getInstance();
 
     public static Stage newStage(String title, Window owner, Modality modality, Scene scene) {
         return newStage(title, owner, modality, scene, true);

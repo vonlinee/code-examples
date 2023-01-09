@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import io.devpl.toolkit.fxui.toolkit.text.TextHandleMap;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import io.devpl.toolkit.fxui.utils.xml.XMLUtils;
@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 /**
  * 文本处理工具
  */
-public class TextHandleController extends FXControllerBase {
+public class TextHandleController extends AbstractViewController {
 
     @FXML
     public BorderPane bopRoot;

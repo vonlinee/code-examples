@@ -52,7 +52,8 @@ public class ViewLoader {
         return (T) rootNode;
     }
 
-    public ViewController getViewController() {
-        return (ViewController) viewController;
+    @SuppressWarnings("unchecked")
+    public <T extends ViewController> T getViewController() {
+        return (T) viewController;
     }
 }

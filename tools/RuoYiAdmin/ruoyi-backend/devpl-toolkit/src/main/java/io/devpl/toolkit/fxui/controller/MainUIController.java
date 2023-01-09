@@ -3,7 +3,7 @@ package io.devpl.toolkit.fxui.controller;
 import com.jcraft.jsch.Session;
 import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.framework.JFX;
-import io.devpl.toolkit.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import io.devpl.toolkit.framework.mvc.FxmlView;
 import io.devpl.toolkit.framework.mvc.ViewLoader;
 import io.devpl.toolkit.framework.utils.StageHelper;
@@ -38,7 +38,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @FxmlView(location = "static/fxml/MainUI.fxml")
-public class MainUIController extends FXControllerBase {
+public class MainUIController extends AbstractViewController {
 
     @FXML
     public VBox vboxLeft;

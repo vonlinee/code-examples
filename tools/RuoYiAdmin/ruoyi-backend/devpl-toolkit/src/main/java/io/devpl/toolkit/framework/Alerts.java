@@ -34,7 +34,8 @@ public final class Alerts {
         final TextArea textArea = new TextArea();
         EXCEPTION.getDialogPane().setContent(textArea);
         EXCEPTION.setResizable(true);
-        EXCEPTION.contentTextProperty().bindBidirectional(textArea.textProperty());
+        EXCEPTION.contentTextProperty()
+                 .bindBidirectional(textArea.textProperty());
     }
 
     public static Alert info(String message) {

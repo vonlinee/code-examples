@@ -119,4 +119,44 @@ public class ReflectionUtils {
             return null;
         });
     }
+
+    public static <V> V getFieldValue(Object obj, String filedName, Class<V> valueType) {
+        try {
+            Field filed = findFiled(obj.getClass(), filedName);
+            if (filed != null) {
+                filed.setAccessible(true);
+                return (V) filed.get(obj);
+            }
+            return null;
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+    }
+
+    public static <V> boolean setFieldValue(Object obj, String filedName, V newValue) {
+        try {
+            Field filed = findFiled(obj.getClass(), filedName);
+            if (filed != null) {
+                filed.setAccessible(true);
+                filed.set(obj, newValue);
+            }
+            return true;
+        } catch (IllegalAccessException e) {
+            return false;
+        }
+    }
+
+    public static Field findFiled(Class<?> clazz, String filedName) {
+        Field field;
+        try {
+            field = clazz.getDeclaredField(filedName);
+        } catch (NoSuchFieldException e) {
+            try {
+                field = clazz.getField(filedName);
+            } catch (NoSuchFieldException ex) {
+                return null;
+            }
+        }
+        return field;
+    }
 }

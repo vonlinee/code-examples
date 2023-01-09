@@ -4,7 +4,7 @@ import com.jcraft.jsch.Session;
 import io.devpl.toolkit.framework.mvc.FxmlView;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.framework.mvc.FXControllerBase;
+import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.concurrent.Task;
@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
  * 新建数据库连接控制器
  */
 @FxmlView(location = "static/fxml/newConnection.fxml")
-public class NewConnectionController extends FXControllerBase {
+public class NewConnectionController extends AbstractViewController {
 
     @FXML
     public Tab tabTcpIpConnection;

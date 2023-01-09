@@ -1,5 +1,6 @@
 package io.devpl.toolkit.fxui.app;
 
+import io.devpl.toolkit.framework.mvc.ViewLoader;
 import io.devpl.toolkit.fxui.controller.MainUIController;
 import io.devpl.toolkit.framework.JavaFXApplication;
 import io.devpl.toolkit.framework.fxml.FXMLCache;
@@ -18,15 +19,13 @@ public class MainUI extends JavaFXApplication {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        final FXMLCache cache = applicationContext.getFXMLCache("static/fxml/MainUI.fxml");
+        ViewLoader mainUIViewLoader = ViewLoader.load(MainUIController.class);
         primaryStage.setResizable(true);
-        Parent root= cache.getRoot();
+        Parent root = mainUIViewLoader.getRoot();
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle(MAIN_WINDOW_TITLE);
         primaryStage.getIcons().add(new Image("static/icons/mybatis-logo.png"));
         primaryStage.show();
-        MainUIController controller = (MainUIController) cache.getController();
-        controller.setPrimaryStage(primaryStage);
     }
 
     // JFX 11 运行此类不行，会提示缺少JavaFX运行时组件
