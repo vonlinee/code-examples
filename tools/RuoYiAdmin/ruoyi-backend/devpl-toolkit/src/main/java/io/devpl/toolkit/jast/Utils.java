@@ -3,7 +3,6 @@ package io.devpl.toolkit.jast;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -17,7 +16,7 @@ public class Utils {
     public static Path getProjectClassFilePathOfClass(Class<?> clazz) {
         try {
             return Path.of(Objects.requireNonNull(new File(Objects.requireNonNull(clazz.getResource(""))
-                                                                  .toURI()).getPath()), clazz.getSimpleName() + ".class");
+                    .toURI()).getPath()), clazz.getSimpleName() + ".class");
         } catch (URISyntaxException e) {
             return null;
         }
@@ -39,5 +38,20 @@ public class Utils {
         } catch (URISyntaxException e) {
             return null;
         }
+    }
+
+    public static File getDesktopDirectory() {
+        String home = System.getProperty("user.home");
+        return Path.of(home, "Desktop").toFile();
+    }
+
+    public static File getDesktopDirectoryFile(String filename) {
+        String home = System.getProperty("user.home");
+        return Path.of(home, "Desktop", filename).toFile();
+    }
+
+    public static Path getDesktopDirectoryPath(String filename) {
+        String home = System.getProperty("user.home");
+        return Path.of(home, "Desktop", filename);
     }
 }
