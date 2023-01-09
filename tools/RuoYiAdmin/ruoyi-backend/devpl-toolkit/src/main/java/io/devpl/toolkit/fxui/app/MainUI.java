@@ -1,9 +1,8 @@
 package io.devpl.toolkit.fxui.app;
 
 import io.devpl.toolkit.framework.mvc.ViewLoader;
-import io.devpl.toolkit.fxui.controller.MainUIController;
+import io.devpl.toolkit.fxui.controller.MainFrameController;
 import io.devpl.toolkit.framework.JavaFXApplication;
-import io.devpl.toolkit.framework.fxml.FXMLCache;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -19,7 +18,7 @@ public class MainUI extends JavaFXApplication {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        ViewLoader mainUIViewLoader = ViewLoader.load(MainUIController.class);
+        ViewLoader mainUIViewLoader = ViewLoader.load(MainFrameController.class);
         primaryStage.setResizable(true);
         Parent root = mainUIViewLoader.getRoot();
         primaryStage.setScene(new Scene(root));

@@ -10,6 +10,7 @@ import io.devpl.toolkit.framework.utils.StageHelper;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.toolkit.fxui.common.ProgressDialog;
 import io.devpl.toolkit.fxui.event.CommandEvent;
+import io.devpl.toolkit.fxui.event.EventTypes;
 import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.fxui.event.UpdateCodeGenConfigEvent;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
@@ -37,8 +38,11 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 主窗口控制器
+ */
 @FxmlView(location = "static/fxml/MainUI.fxml")
-public class MainUIController extends AbstractViewController {
+public class MainFrameController extends AbstractViewController {
 
     @FXML
     public VBox vboxLeft;
@@ -74,7 +78,6 @@ public class MainUIController extends AbstractViewController {
     public TableColumn<TableCodeGeneration, String> tblcTableName;
 
     // Current selected databaseConfig
-    public DatabaseInfo selectedDatabaseConfig;
     private final MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
     // 通用配置项
     private final GenericConfiguration codeGenConfig = new GenericConfiguration();
@@ -83,8 +86,8 @@ public class MainUIController extends AbstractViewController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        bindCodeGenConfiguration(codeGenConfig);
         registerThis();
+        bindCodeGenConfiguration(codeGenConfig);
         // 新建连接
         connectionLabel.setGraphic(JFX.loadImageView("static/icons/computer.png", 40));
         connectionLabel.setOnMouseClicked(event -> StageHelper.show("新建连接", NewConnectionController.class));
@@ -96,7 +99,7 @@ public class MainUIController extends AbstractViewController {
 
         // 设置单元格工厂 Callback<TreeView<T>, TreeCell<T>> value
         trvDbTreeList.setCellFactory(new DbTreeViewCellFactory());
-        loadLeftDBTree();
+
         // 新增一行
         trvDbTreeList.addEventHandler(CommandEvent.TABLES_SELECTED, event -> {
             ObservableList<TreeItem<String>> selectedItems = trvDbTreeList.getSelectionModel().getSelectedItems();
@@ -114,12 +117,8 @@ public class MainUIController extends AbstractViewController {
             }
             event.consume();
         });
-
         trvDbTreeList.addEventHandler(CommandEvent.OPEN_DB_CONNECTION, event -> {
             StageHelper.show("编辑数据库连接", NewConnectionController.class);
-            // publish(event.getData());
-            // 此处MenuItem不是Node类型
-            // getStage(trvDbTreeList).show();
         });
 
         tblcDbName.setCellValueFactory(new PropertyValueFactory<>("dbName"));
@@ -157,28 +156,30 @@ public class MainUIController extends AbstractViewController {
             row.setContextMenu(menu);
             return row;
         });
-    }
 
-    @Subscribe
-    public void loadDbInfo(LoadDbTreeEvent event) {
-        loadLeftDBTree();
-    }
-
-    public void loadLeftDBTree() {
-        TreeItem<String> rootTreeItem = trvDbTreeList.getRoot();
-        rootTreeItem.getChildren().clear();
-        try {
-            // 加载所有的数据库配置
-            List<DatabaseInfo> dbConfigs = ConfigHelper.loadDatabaseConfig();
-            for (DatabaseInfo dbConfig : dbConfigs) {
-                TreeItem<String> treeItem = new TreeItem<>();
-                treeItem.setValue(dbConfig.getName());
-                treeItem.setGraphic(JFX.loadImageView("static/icons/computer.png", 16, dbConfig));
-                rootTreeItem.getChildren().add(treeItem);
+        trvDbTreeList.addEventHandler(EventTypes.ACTION_SHOW_TABLES, event -> {
+            @SuppressWarnings("unchecked")
+            final TreeView<String> sourceTableView = (TreeView<String>) event.getTarget();
+            TreeItem<String> rootTreeItem = sourceTableView.getRoot();
+            final ObservableList<TreeItem<String>> children = rootTreeItem.getChildren();
+            if (children.size() > 0) {
+                children.clear();
+            } else {
+                try {
+                    // 加载所有的数据库配置
+                    List<DatabaseInfo> dbConfigs = ConfigHelper.loadDatabaseConfig();
+                    for (DatabaseInfo dbConfig : dbConfigs) {
+                        TreeItem<String> treeItem = new TreeItem<>();
+                        treeItem.setValue(dbConfig.getName());
+                        treeItem.setGraphic(JFX.loadImageView("static/icons/computer.png", 16, dbConfig));
+                        rootTreeItem.getChildren().add(treeItem);
+                    }
+                } catch (Exception e) {
+                    Alerts.error(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e)).showAndWait();
+                }
             }
-        } catch (Exception e) {
-            Alerts.error(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e)).showAndWait();
-        }
+        });
+        Event.fireEvent(trvDbTreeList, new Event(null, trvDbTreeList, EventTypes.ACTION_SHOW_TABLES));
     }
 
     /**
@@ -187,7 +188,8 @@ public class MainUIController extends AbstractViewController {
      */
     @FXML
     public void chooseProjectFolder(ActionEvent event) {
-        FileChooserDialog.showDirectoryDialog(getStage(event)).ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
+        FileChooserDialog.showDirectoryDialog(getStage(event))
+                         .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
     }
 
     @FXML
@@ -203,39 +205,19 @@ public class MainUIController extends AbstractViewController {
             return;
         }
         mbgGenerator.setGeneratorConfig(codeGenConfig);
-        mbgGenerator.setDatabaseConfig(selectedDatabaseConfig);
         // 进度回调
         ProgressDialog alert = new ProgressDialog(Alert.AlertType.INFORMATION);
         mbgGenerator.setProgressCallback(alert);
         alert.show();
-        PictureProcessStateController pictureProcessStateController = null;
         try {
-            // Engage PortForwarding
-            Session sshSession = DBUtils.getSSHSession(selectedDatabaseConfig);
-            DBUtils.engagePortForwarding(sshSession, selectedDatabaseConfig);
-            if (sshSession != null) {
-                pictureProcessStateController = new PictureProcessStateController();
-                pictureProcessStateController.startPlay();
-            }
             try {
                 mbgGenerator.generate();
             } catch (Exception exception) {
                 alert.closeIfShowing();
                 Alerts.exception("生成失败", exception).showAndWait();
             }
-            if (pictureProcessStateController != null) {
-                Task<Void> task = new DoNothing();
-                PictureProcessStateController finalPictureProcessStateController = pictureProcessStateController;
-                task.setOnSucceeded(event -> finalPictureProcessStateController.close());
-                task.setOnFailed(event -> finalPictureProcessStateController.close());
-                new Thread(task).start();
-            }
         } catch (Exception e) {
             Alerts.error(e.getMessage()).showAndWait();
-            if (pictureProcessStateController != null) {
-                pictureProcessStateController.close();
-                pictureProcessStateController.playFailState(e.getMessage(), true);
-            }
         }
     }
 

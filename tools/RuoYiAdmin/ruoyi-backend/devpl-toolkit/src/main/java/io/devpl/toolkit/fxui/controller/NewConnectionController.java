@@ -43,19 +43,23 @@ public class NewConnectionController extends AbstractViewController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tabPane.setPrefHeight(((AnchorPane) tabPane
-                .getSelectionModel()
-                .getSelectedItem()
-                .getContent()).getPrefHeight());
+        tabPane.setPrefHeight(((AnchorPane) tabPane.getSelectionModel()
+                                                   .getSelectedItem()
+                                                   .getContent()).getPrefHeight());
         // 监听tab切换
-        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            isOverssh = observable.getValue().getText().equals("SSH");
-            final Pane content = (Pane) tabPane.getSelectionModel().getSelectedItem().getContent();
-            tabPane.prefHeightProperty().bind(content.prefHeightProperty());
-            final Stage stage = getStage(tabPane);
-            stage.close();
-            stage.show();
-        });
+        tabPane.getSelectionModel()
+               .selectedItemProperty()
+               .addListener((observable, oldValue, newValue) -> {
+                   isOverssh = observable.getValue().getText().equals("SSH");
+                   final Pane content = (Pane) tabPane.getSelectionModel()
+                                                      .getSelectedItem()
+                                                      .getContent();
+                   tabPane.prefHeightProperty()
+                          .bind(content.prefHeightProperty());
+                   final Stage stage = getStage(tabPane);
+                   stage.close();
+                   stage.show();
+               });
     }
 
     @Subscribe
@@ -116,7 +120,8 @@ public class NewConnectionController extends AbstractViewController {
                 Throwable e = task.getException();
                 log.error("task Failed", e);
                 if (e instanceof RuntimeException) {
-                    if (e.getMessage().equals("Address already in use: JVM_Bind")) {
+                    if (e.getMessage()
+                         .equals("Address already in use: JVM_Bind")) {
                         tabControlBController.setLPortLabelText(config.getLport() + "已经被占用，请换其他端口");
                     }
                     // 端口转发一定不成功，导致数据库连接不上

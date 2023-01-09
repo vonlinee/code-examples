@@ -13,8 +13,5 @@ public @interface FxmlView {
      */
     String location() default "";
 
-    // TODO 支持国际化
-    String locale() default "";
-
-    String resourceBundle() default "";
+    Class<? extends ViewModel> vm() default ViewModel.class;
 }

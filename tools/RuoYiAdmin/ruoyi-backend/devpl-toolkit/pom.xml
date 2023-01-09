@@ -258,12 +258,6 @@
             <artifactId>richtextfx</artifactId>
             <version>0.11.0</version>
         </dependency>
-        <!--事件总线-->
-        <dependency>
-            <groupId>org.greenrobot</groupId>
-            <artifactId>eventbus</artifactId>
-            <version>3.2.0</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.calcite/calcite-core -->
         <dependency>
             <groupId>org.apache.calcite</groupId>
