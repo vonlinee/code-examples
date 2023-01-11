@@ -18,6 +18,9 @@ package org.greenrobot.eventbus;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 悬而未决的事件发布
+ */
 final class PendingPost {
     private final static List<PendingPost> pendingPostPool = new ArrayList<PendingPost>();
 
@@ -55,5 +58,4 @@ final class PendingPost {
             }
         }
     }
-
 }

@@ -1,18 +1,15 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.framework.mvc.FxmlView;
-import io.devpl.toolkit.fxui.common.Constants;
-import io.devpl.toolkit.fxui.common.DBDriver;
-import io.devpl.toolkit.fxui.event.EventTypes;
-import io.devpl.toolkit.fxui.model.DatabaseInfo;
-import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.framework.JFX;
 import io.devpl.toolkit.framework.mvc.AbstractViewController;
+import io.devpl.toolkit.framework.mvc.FxmlView;
+import io.devpl.toolkit.fxui.common.Constants;
+import io.devpl.toolkit.fxui.common.DBDriver;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;

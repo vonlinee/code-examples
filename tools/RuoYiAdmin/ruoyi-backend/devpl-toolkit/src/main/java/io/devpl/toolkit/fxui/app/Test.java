@@ -1,8 +1,10 @@
 package io.devpl.toolkit.fxui.app;
 
+import com.jfoenix.controls.JFXTreeView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.web.WebEngine;
@@ -21,36 +23,16 @@ public class Test extends Application {
 
     @Override
     public void start(Stage primaryStage) throws MalformedURLException {
-        BorderPane root = new BorderPane();
 
-        WebView webView = new WebView();
-        WebEngine engine = webView.getEngine();
+        JFXTreeView<String> treeView = new JFXTreeView<>();
 
-        File file = new File("C:\\Users\\vonline\\Downloads\\ace-builds-1.5.0\\index.html");
+        treeView.setRoot(new TreeItem<>());
 
-        if (file.exists()) {
-            System.out.println("文件存在");
+        for (int i = 0; i < 10; i++) {
+            treeView.getRoot().getChildren().add(new TreeItem<>("" + i));
         }
 
-        URL url = file.toURI().toURL();
-
-
-        engine.load(url.toExternalForm());
-
-        Scene scene = new Scene(webView, 1200, 800);
-
-        HBox hBox = new HBox();
-
-        Button btn = new Button("Button");
-
-        hBox.getChildren().add(btn);
-
-        root.setTop(hBox);
-
-        btn.setOnAction(event -> {
-
-        });
-
+        Scene scene = new Scene(treeView, 1200, 800);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

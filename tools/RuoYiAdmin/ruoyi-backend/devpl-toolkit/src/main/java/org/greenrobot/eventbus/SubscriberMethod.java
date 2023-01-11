@@ -62,16 +62,22 @@ public class SubscriberMethod {
     private synchronized void checkMethodString() {
         if (methodString == null) {
             // Method.toString has more overhead, just take relevant parts of the method
-            StringBuilder builder = new StringBuilder(64);
-            builder.append(method.getDeclaringClass().getName());
-            builder.append('#').append(method.getName());
-            builder.append('(').append(eventType.getName());
-            methodString = builder.toString();
+            methodString = method.getDeclaringClass().getName() +
+                    '#' + method.getName() +
+                    '(' + eventType.getName();
         }
     }
 
     @Override
     public int hashCode() {
         return method.hashCode();
+    }
+
+    public boolean isSticky() {
+        return sticky;
+    }
+
+    public String getEventName() {
+        return eventName;
     }
 }

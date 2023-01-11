@@ -15,16 +15,14 @@
  */
 package org.greenrobot.eventbus;
 
-import javafx.geometry.Pos;
+import jakarta.annotation.Nullable;
 import org.greenrobot.eventbus.android.AndroidDependenciesDetector;
-import org.greenrobot.eventbus.extension.PostEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
-import java.util.function.BiConsumer;
 import java.util.logging.Level;
 
 /**
@@ -57,9 +55,9 @@ public class EventBus {
 
     private final ThreadLocal<PostingThreadState> currentPostingThreadState = ThreadLocal.withInitial(PostingThreadState::new);
 
-    // @Nullable
+    @Nullable
     private final MainThreadSupport mainThreadSupport;
-    // @Nullable
+    @Nullable
     private final Poster mainThreadPoster;
     private final BackgroundPoster backgroundPoster;
     private final AsyncPoster asyncPoster;
@@ -134,6 +132,15 @@ public class EventBus {
     }
 
     /**
+     * 手动注册通过名称区分的事件
+     * @param eventName 事件唯一名称
+     * @param callback  事件处理逻辑
+     */
+    public <P, R> void register(String eventName, Callback<P, R> callback) {
+
+    }
+
+    /**
      * Registers the given subscriber to receive events. Subscribers must call {@link #unregister(Object)} once they
      * are no longer interested in receiving events.
      * <p/>
@@ -142,16 +149,25 @@ public class EventBus {
      * ThreadMode} and priority.
      */
     public void register(Object subscriber) {
-        if (AndroidDependenciesDetector.isAndroidSDKAvailable() && !AndroidDependenciesDetector.areAndroidComponentsAvailable()) {
-            // Crash if the user (developer) has not imported the Android compatibility library.
-            throw new RuntimeException("It looks like you are using EventBus on Android, " + "make sure to add the \"eventbus\" Android library to your dependencies.");
+        // 检查Android环境
+        // if (AndroidDependenciesDetector.isAndroidSDKAvailable() && !AndroidDependenciesDetector.areAndroidComponentsAvailable()) {
+        //     // Crash if the user (developer) has not imported the Android compatibility library.
+        //     throw new RuntimeException("It looks like you are using EventBus on Android, " + "make sure to add the \"eventbus\" Android library to your dependencies.");
+        // }
+
+        // 获取包含订阅方法属性对象SubscriberMethod的集合
+        Class<?> subscriberClass = subscriber.getClass();
+
+        if (subscriberClass.getAnnotation(Subscriber.class) == null) {
+            logger.log(Level.WARNING, "[register failed] the subscriber class [" + subscriberClass.getName() + "] is not annotated with @Subscriber Annotation");
+            return;
         }
 
-        Class<?> subscriberClass = subscriber.getClass();
         List<SubscriberMethod> subscriberMethods = subscriberMethodFinder.findSubscriberMethods(subscriberClass);
 
         synchronized (this) {
             for (SubscriberMethod subscriberMethod : subscriberMethods) {
+                // 遍历，以订阅方法事件类型分类，将订阅方法包装对象存放到Map中
                 subscribe(subscriber, subscriberMethod);
             }
         }
@@ -163,7 +179,7 @@ public class EventBus {
 
         // 获取订阅了某种类型数据的 Subscription 。 使用 CopyOnWriteArrayList ，这个是线程安全的，
         // 在更新的时候，重新生成一份 copy，其他线程使用的是copy，不存在什么线程安全性的问题。
-        Subscription newSubscription = new Subscription(subscriber, subscriberMethod);
+        Subscription newSubscription = new MethodSubscription(subscriber, subscriberMethod);
         CopyOnWriteArrayList<Subscription> subscriptions = subscriptionsByEventType.get(eventType);
         if (subscriptions == null) {
             subscriptions = new CopyOnWriteArrayList<>();
@@ -177,26 +193,22 @@ public class EventBus {
         int size = subscriptions.size();
         for (int i = 0; i <= size; i++) {
             // 根据优先级进行插入，其实这里可以替换为优先级队列的
-            if (i == size || subscriberMethod.priority > subscriptions.get(i).subscriberMethod.priority) {
+            if (i == size || subscriberMethod.priority > subscriptions.get(i).getPriority()) {
                 subscriptions.add(i, newSubscription);
                 break;
             }
         }
 
-        List<Class<?>> subscribedEvents = typesBySubscriber.get(subscriber);
-        if (subscribedEvents == null) {
-            subscribedEvents = new ArrayList<>();
-            typesBySubscriber.put(subscriber, subscribedEvents);
-        }
+        List<Class<?>> subscribedEvents = typesBySubscriber.computeIfAbsent(subscriber, k -> new ArrayList<>());
         subscribedEvents.add(eventType);
 
-        if (subscriberMethod.sticky) {
+        if (subscriberMethod.isSticky()) {
             // 是否支持继承，这个可以在 Builder 的时候指定，如果不支持，那么可能有20%以上的性能提升
             if (eventInheritance) {
                 // Existing sticky events of all subclasses of eventType have to be considered.
                 // Note: Iterating over all events may be inefficient with lots of sticky events,
                 // thus data structure should be changed to allow a more efficient lookup
-                // (e.g. an additional map storing sub classes of super classes: Class -> List<Class>).
+                // (e.g. an additional map storing subclasses of super classes: Class -> List<Class>).
                 Set<Map.Entry<Class<?>, Object>> entries = stickyEvents.entrySet();
                 for (Map.Entry<Class<?>, Object> entry : entries) {
                     Class<?> candidateEventType = entry.getKey();
@@ -244,11 +256,15 @@ public class EventBus {
             int size = subscriptions.size();
             for (int i = 0; i < size; i++) {
                 Subscription subscription = subscriptions.get(i);
-                if (subscription.subscriber == subscriber) {
-                    subscription.active = false;
-                    subscriptions.remove(i);
-                    i--;
-                    size--;
+                // 方法订阅
+                if (subscription instanceof MethodSubscription) {
+                    MethodSubscription ms = (MethodSubscription) subscription;
+                    if (ms.getSubscriber() == subscriber) {
+                        subscription.setActive(false);
+                        subscriptions.remove(i);
+                        i--;
+                        size--;
+                    }
                 }
             }
         }
@@ -267,13 +283,6 @@ public class EventBus {
         } else {
             logger.log(Level.WARNING, "Subscriber to unregister was not registered before: " + subscriber.getClass());
         }
-    }
-
-    public final PostEvent expected(String eventName, Object arg) {
-        final PostEvent postEvent = new PostEvent(this);
-        postEvent.setEventName(eventName);
-        postEvent.setEventArg(arg);
-        return postEvent;
     }
 
     /**
@@ -316,7 +325,7 @@ public class EventBus {
             throw new EventBusException("Event may not be null");
         } else if (postingState.event != event) {
             throw new EventBusException("Only the currently handled event may be aborted");
-        } else if (postingState.subscription.subscriberMethod.threadMode != ThreadMode.POSTING) {
+        } else if (postingState.subscription.getThredMode() != ThreadMode.POSTING) {
             throw new EventBusException(" event handlers may only abort the incoming event");
         }
 
@@ -383,17 +392,15 @@ public class EventBus {
 
     public boolean hasSubscriberForEvent(Class<?> eventClass) {
         List<Class<?>> eventTypes = lookupAllEventTypes(eventClass);
-        if (eventTypes != null) {
-            int countTypes = eventTypes.size();
-            for (int h = 0; h < countTypes; h++) {
-                Class<?> clazz = eventTypes.get(h);
-                CopyOnWriteArrayList<Subscription> subscriptions;
-                synchronized (this) {
-                    subscriptions = subscriptionsByEventType.get(clazz);
-                }
-                if (subscriptions != null && !subscriptions.isEmpty()) {
-                    return true;
-                }
+        int countTypes = eventTypes.size();
+        for (int h = 0; h < countTypes; h++) {
+            Class<?> clazz = eventTypes.get(h);
+            CopyOnWriteArrayList<Subscription> subscriptions;
+            synchronized (this) {
+                subscriptions = subscriptionsByEventType.get(clazz);
+            }
+            if (subscriptions != null && !subscriptions.isEmpty()) {
+                return true;
             }
         }
         return false;
@@ -405,53 +412,24 @@ public class EventBus {
      * @throws Error
      */
     private void postSingleEvent(Object event, PostingThreadState postingState) throws Error {
-        if (event instanceof PostEvent) {
-            postForPostEvent((PostEvent) event);
+        Class<?> eventClass = event.getClass();
+        boolean subscriptionFound = false;
+        if (eventInheritance) {
+            List<Class<?>> eventTypes = lookupAllEventTypes(eventClass);
+            int countTypes = eventTypes.size();
+            for (int h = 0; h < countTypes; h++) {
+                Class<?> clazz = eventTypes.get(h);
+                subscriptionFound |= postSingleEventForEventType(event, postingState, clazz);
+            }
         } else {
-            Class<?> eventClass = event.getClass();
-            boolean subscriptionFound = false;
-            if (eventInheritance) {
-                List<Class<?>> eventTypes = lookupAllEventTypes(eventClass);
-                int countTypes = eventTypes.size();
-                for (int h = 0; h < countTypes; h++) {
-                    Class<?> clazz = eventTypes.get(h);
-                    subscriptionFound |= postSingleEventForEventType(event, postingState, clazz);
-                }
-            } else {
-                subscriptionFound = postSingleEventForEventType(event, postingState, eventClass);
-            }
-            if (!subscriptionFound) {
-                if (logNoSubscriberMessages) {
-                    logger.log(Level.FINE, "No subscribers registered for event " + eventClass);
-                }
-                if (sendNoSubscriberEvent && eventClass != NoSubscriberEvent.class && eventClass != SubscriberExceptionEvent.class) {
-                    post(new NoSubscriberEvent(this, event));
-                }
-            }
+            subscriptionFound = postSingleEventForEventType(event, postingState, eventClass);
         }
-    }
-
-    private void postForPostEvent(PostEvent postEvent) {
-        final String eventName = postEvent.getEventName();
-        for (CopyOnWriteArrayList<Subscription> list : subscriptionsByEventType.values()) {
-            for (Subscription subscription : list) {
-                if (!subscription.subscriberMethod.eventName.equals(eventName)) {
-                    continue;
-                }
-                if (!postEvent.getMatcher()
-                              .matches(subscription.subscriber, subscription.subscriberMethod)) {
-                    logger.log(Level.INFO, "匹配失败");
-                    continue;
-                }
-                try {
-                    Object result = subscription.subscriberMethod.method.invoke(subscription.subscriber, postEvent.getEventArg());
-                    if (postEvent.getConsumer() != null) {
-                        postEvent.getConsumer().accept(result);
-                    }
-                    postEvent.setResponse(result);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
-                }
+        if (!subscriptionFound) {
+            if (logNoSubscriberMessages) {
+                logger.log(Level.FINE, "No subscribers registered for event " + eventClass);
+            }
+            if (sendNoSubscriberEvent && eventClass != NoSubscriberEvent.class && eventClass != SubscriberExceptionEvent.class) {
+                post(new NoSubscriberEvent(this, event));
             }
         }
     }
@@ -484,15 +462,26 @@ public class EventBus {
         return false;
     }
 
+    /**
+     * 发起事件，经到这里会匹配发起事件的线程模式
+     * @param subscription
+     * @param event        事件
+     * @param isMainThread
+     */
     private void postToSubscription(Subscription subscription, Object event, boolean isMainThread) {
-        switch (subscription.subscriberMethod.threadMode) {
+        switch (subscription.getThredMode()) {
             case POSTING:
+                // 直接通过invoke反射调用订阅方法的方法执行通知
                 invokeSubscriber(subscription, event);
                 break;
             case MAIN:
                 if (isMainThread) {
+                    // 直接通过invoke反射调用订阅方法的方法执行通知
                     invokeSubscriber(subscription, event);
                 } else {
+                    // mainThreadPoster实现类 HandlerPoster extends Handler,
+                    // 即如果发送通知不在主线程，该通知会通过Handler将线程切换到主线程，
+                    // 然后通过Android消息机制在主线程的handleMessage中通过invoke反射调用订阅方法的方法执行通知
                     mainThreadPoster.enqueue(subscription, event);
                 }
                 break;
@@ -506,16 +495,21 @@ public class EventBus {
                 break;
             case BACKGROUND:
                 if (isMainThread) {
+                    // 如果在主线程中发送了事件通知， 会通过BackgroundPoster
+                    // 将事件处理交给工作线程线程池ExecutorService.execute(this)处理，终在工作线程中
+                    // 通过invoke反射调用订阅方法的方法执行通知
                     backgroundPoster.enqueue(subscription, event);
                 } else {
+                    // 直接通过invoke反射调用订阅方法的方法执行通知
                     invokeSubscriber(subscription, event);
                 }
                 break;
             case ASYNC:
+                // 后台线程执行该事件-订阅方法
                 asyncPoster.enqueue(subscription, event);
                 break;
             default:
-                throw new IllegalStateException("Unknown thread mode: " + subscription.subscriberMethod.threadMode);
+                throw new IllegalStateException("Unknown thread mode: " + subscription.getThredMode());
         }
     }
 
@@ -561,40 +555,53 @@ public class EventBus {
         Object event = pendingPost.event;
         Subscription subscription = pendingPost.subscription;
         PendingPost.releasePendingPost(pendingPost);
-        if (subscription.active) {
+        if (subscription.isActive()) {
             invokeSubscriber(subscription, event);
         }
     }
 
     private void invokeSubscriber(Subscription subscription, Object event) {
         try {
-            subscription.subscriberMethod.method.invoke(subscription.subscriber, event);
+            subscription.invokeSubscriber(event);
         } catch (InvocationTargetException e) {
-            handleSubscriberException(subscription, event, e.getCause());
+            // e.getCause(); 即可拿到订阅方法里抛出的异常
+            if (subscription instanceof MethodSubscription) {
+                handleSubscriberException((MethodSubscription) subscription, event, e.getCause());
+            } else {
+                logger.log(Level.SEVERE, e.getMessage());
+            }
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Unexpected exception", e);
         }
     }
 
-    private void handleSubscriberException(Subscription subscription, Object event, Throwable cause) {
+    /**
+     * 处理订阅者异常信息
+     * @param subscription
+     * @param event
+     * @param cause
+     */
+    private void handleSubscriberException(MethodSubscription subscription, Object event, Throwable cause) {
         if (event instanceof SubscriberExceptionEvent) {
             if (logSubscriberExceptions) {
                 // Don't send another SubscriberExceptionEvent to avoid infinite event recursion, just log
-                logger.log(Level.SEVERE, "SubscriberExceptionEvent subscriber " + subscription.subscriber.getClass() + " threw an exception", cause);
+                logger.log(Level.SEVERE, "SubscriberExceptionEvent subscriber " + subscription.getSubscriber()
+                                                                                              .getClass() + " threw an exception", cause);
                 SubscriberExceptionEvent exEvent = (SubscriberExceptionEvent) event;
                 logger.log(Level.SEVERE, "Initial event " + exEvent.causingEvent + " caused exception in " + exEvent.causingSubscriber, exEvent.throwable);
             }
-        } else {
-            if (throwSubscriberException) {
-                throw new EventBusException("Invoking subscriber failed", cause);
-            }
-            if (logSubscriberExceptions) {
-                logger.log(Level.SEVERE, "Could not dispatch event: " + event.getClass() + " to subscribing class " + subscription.subscriber.getClass(), cause);
-            }
-            if (sendSubscriberExceptionEvent) {
-                SubscriberExceptionEvent exEvent = new SubscriberExceptionEvent(this, cause, event, subscription.subscriber);
-                post(exEvent);
-            }
+            return;
+        }
+        if (throwSubscriberException) {
+            throw new EventBusException("Invoking subscriber failed", cause);
+        }
+        if (logSubscriberExceptions) {
+            logger.log(Level.SEVERE, "Could not dispatch event: " + event.getClass() + " to subscribing class " + subscription.getSubscriber()
+                                                                                                                              .getClass(), cause);
+            return;
+        }
+        if (sendSubscriberExceptionEvent) {
+            post(new SubscriberExceptionEvent(this, cause, event, subscription.getSubscriber()));
         }
     }
 

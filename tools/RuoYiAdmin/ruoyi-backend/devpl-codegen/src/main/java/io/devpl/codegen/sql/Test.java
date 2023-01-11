@@ -1,32 +1,79 @@
 package io.devpl.codegen.sql;
 
 import com.alibaba.druid.DbType;
-import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
-import com.alibaba.druid.sql.ast.statement.SQLDropTableStatement;
+import com.alibaba.druid.sql.ast.statement.*;
+import com.alibaba.druid.sql.parser.SQLParserUtils;
+import com.alibaba.druid.sql.parser.SQLStatementParser;
+import io.devpl.sdk.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Test {
 
-    static final String sql1 = "CREATE TABLE `dataview_item` (\n" +
-            "\t`item_id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '数据项ID',\n" +
-            "\t`dataview_id` TINYINT(4) DEFAULT NULL COMMENT '数据视图ID',\n" +
-            "\t`dataview_name` TINYINT(4) DEFAULT NULL COMMENT '数据视图名称',\n" +
-            "\t`block_title` VARCHAR(50) NOT NULL COMMENT '数据块标题',\n" +
-            "\t`display_title` VARCHAR(50) NOT NULL COMMENT '数据项展示名称',\n" +
-            "\t`display_value` VARCHAR(50) NOT NULL DEFAULT '0' COMMENT '数据项的值',\n" +
-            "\t`value_type` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '数据项的值类型:整数|小数|字符',\n" +
-            "\t`display_unit_name` VARCHAR(50) NOT NULL COMMENT '数据项展示单位名称',\n" +
-            "\t`source_db_name` VARCHAR(36) NOT NULL COMMENT '数据项来源表名称',\n" +
-            "\t`source_column_name` VARCHAR(50) NOT NULL COMMENT '数据项来源表字段名称',\n" +
-            "\t`source_row_id` VARCHAR(50) NOT NULL COMMENT '数据项来源行ID',\n" +
-            "\t`editable` TINYINT(1) NOT NULL COMMENT '是否可编辑',\n" +
-            "\tPRIMARY KEY (`item_id`) USING BTREE\n" +
-            ") ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '动态数据视图数据项记录表'";
+    public static final String testSqlFile = "C:\\Users\\Von\\Desktop\\test.sql";
 
-    public static void main(String[] args) {
-        DruidSqlParser parser = new DruidSqlParser(sql1, DbType.mysql);
-        parser.parseCreate();
+    public static void main(String[] args) throws IOException {
+
+        String sql = FileUtils.readFileToString(new File(testSqlFile));
+        final SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(sql, DbType.mysql, true);
+
+        final List<SQLStatement> sqlStatements = parser.parseStatementList();
+        for (SQLStatement sqlStatement : sqlStatements) {
+            if (sqlStatement instanceof SQLSelectStatement) {
+                SQLSelectStatement selectStmt = (SQLSelectStatement) sqlStatement;
+
+                SQLSelect select = selectStmt.getSelect();
+                SQLSelectQuery query = select.getQuery();
+
+                if (query instanceof SQLSelectQueryBlock) {
+                    SQLSelectQueryBlock queryBlock = (SQLSelectQueryBlock) query;
+                    List<SQLSelectItem> selectList = queryBlock.getSelectList();
+                    SQLTableSource from = queryBlock.getFrom();
+                    Map<String, String> tableNames = findAllTalbeNames(from);
+                }
+            }
+        }
+    }
+
+    private static Map<String, String> findAllTalbeNames(SQLTableSource from) {
+        Map<String, String> tableAliasMapping = new LinkedHashMap<>();
+        // 存在表连接
+        if (from instanceof SQLJoinTableSource) {
+            SQLTableSource tmp = from;
+            for (; ; ) {
+                if (!(tmp instanceof SQLJoinTableSource)) {
+                    if (tmp instanceof SQLExprTableSource) {
+                        SQLExprTableSource tableSource = (SQLExprTableSource) tmp;
+                        final String alias = tableSource.getAlias();
+                        tableAliasMapping.put(alias, tableSource.getTableName());
+                    }
+                    break;
+                }
+                // 当前表：倒数第二个表
+                SQLJoinTableSource currentTableSource = (SQLJoinTableSource) tmp;
+                tmp = currentTableSource.getLeft();
+                // 获取右连接表
+                SQLTableSource right = currentTableSource.getRight();
+
+                String currTableName = null;
+                if (right instanceof SQLExprTableSource) {
+                    SQLExprTableSource sqlExprTableSource = (SQLExprTableSource) right;
+                    currTableName = sqlExprTableSource.getTableName();
+                }
+                String alias = right.getAlias();
+                if (alias == null) {
+                    throw new RuntimeException("别名为空");
+                }
+                tableAliasMapping.put(alias, currTableName);
+            }
+        } else if (from instanceof SQLExprTableSource) {
+            // 单表
+        }
+        return tableAliasMapping;
     }
 }

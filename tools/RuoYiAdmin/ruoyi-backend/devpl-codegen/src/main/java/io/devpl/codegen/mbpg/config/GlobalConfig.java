@@ -130,7 +130,6 @@ public class GlobalConfig {
         /**
          * 覆盖已有文件（已迁移到策略配置中，3.5.4版本会删除此方法）
          */
-        @Deprecated
         public Builder fileOverride() {
             LOGGER.warn("全局覆盖已有文件的配置已失效，已迁移到策略配置中");
             this.globalConfig.fileOverride = true;

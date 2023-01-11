@@ -32,7 +32,7 @@ public class DevplCodeGenerator {
 
     // 在此处填写要生成的表名
     private static void tableNamesToBeGenerated() {
-        tableNamesToBeGenerated.add("dbs");
+        tableNamesToBeGenerated.add("base_data_view");
     }
 
     public static void main(String[] args) throws IOException {

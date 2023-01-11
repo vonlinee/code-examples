@@ -1,7 +1,7 @@
 package io.devpl.codegen.sql;
 
 import io.devpl.codegen.utils.AvaticaUtils;
-import io.devpl.codegen.utils.ByteString;
+import io.devpl.codegen.utils.ByteArray;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -297,9 +297,9 @@ public enum SqlDataTypeEnum {
     CHAR(Types.CHAR, String.class),
     VARCHAR(Types.VARCHAR, String.class),
     LONGVARCHAR(Types.LONGVARCHAR, String.class),
-    BINARY(Types.BINARY, byte[].class, ByteString.class, String.class),
-    VARBINARY(Types.VARBINARY, byte[].class, ByteString.class, String.class),
-    LONGVARBINARY(Types.LONGVARBINARY, byte[].class, ByteString.class, String.class),
+    BINARY(Types.BINARY, byte[].class, ByteArray.class, String.class),
+    VARBINARY(Types.VARBINARY, byte[].class, ByteArray.class, String.class),
+    LONGVARBINARY(Types.LONGVARBINARY, byte[].class, ByteArray.class, String.class),
     NULL(Types.NULL, Void.class),
     ANY(Types.JAVA_OBJECT, Object.class),
     SYMBOL(Types.OTHER, Object.class),

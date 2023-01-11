@@ -1,6 +1,5 @@
 package io.devpl.toolkit.fxui;
 
-import io.devpl.toolkit.fxui.app.MainUI;
 import io.devpl.toolkit.fxui.app.Test;
 import javafx.application.Application;
 

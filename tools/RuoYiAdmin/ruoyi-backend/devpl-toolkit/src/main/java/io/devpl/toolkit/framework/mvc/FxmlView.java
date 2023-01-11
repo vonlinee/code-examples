@@ -9,7 +9,7 @@ public @interface FxmlView {
 
     /**
      * FXML路径
-     * @return FXML路径
+     * @return FXML相对路径
      */
     String location() default "";
 

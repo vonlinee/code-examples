@@ -85,9 +85,4 @@ public abstract class AbstractViewController implements ViewController, Initiali
         eventDispatcher = new ViewControllerEventDispatcher();
         viewControllerDispatcherChain.append(eventDispatcher);
     }
-
-    @Override
-    public EventDispatcher getEventDispatcher() {
-        return eventDispatcher;
-    }
 }

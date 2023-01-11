@@ -1,6 +1,5 @@
 package io.devpl.toolkit.fxui.event;
 
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
 

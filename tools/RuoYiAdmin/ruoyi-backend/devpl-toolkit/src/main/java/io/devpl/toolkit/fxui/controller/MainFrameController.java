@@ -1,6 +1,5 @@
 package io.devpl.toolkit.fxui.controller;
 
-import com.jcraft.jsch.Session;
 import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.framework.JFX;
 import io.devpl.toolkit.framework.mvc.AbstractViewController;
@@ -11,8 +10,6 @@ import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.toolkit.fxui.common.ProgressDialog;
 import io.devpl.toolkit.fxui.event.CommandEvent;
 import io.devpl.toolkit.fxui.event.EventTypes;
-import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
-import io.devpl.toolkit.fxui.event.UpdateCodeGenConfigEvent;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.model.DbTreeViewCellFactory;
 import io.devpl.toolkit.fxui.model.TableCodeGeneration;
@@ -30,7 +27,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.net.URL;
 import java.nio.file.Files;
@@ -227,11 +223,6 @@ public class MainFrameController extends AbstractViewController {
             Thread.sleep(3000);
             return null;
         }
-    }
-
-    @Subscribe
-    public void updateCodeGenConfig(UpdateCodeGenConfigEvent event) {
-        log.info("更新代码生成配置", event);
     }
 
     /**
