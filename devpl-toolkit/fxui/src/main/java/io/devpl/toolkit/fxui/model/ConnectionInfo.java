@@ -1,5 +1,8 @@
 package io.devpl.toolkit.fxui.model;
 
+import io.devpl.toolkit.fxui.common.DynamicPropertyBean;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -10,13 +13,14 @@ public class ConnectionInfo {
 
     // 连接名称
     private final StringProperty name = new SimpleStringProperty();
+    private final StringProperty dbType = new SimpleStringProperty();
+    private final StringProperty host = new SimpleStringProperty();
+    private final IntegerProperty port = new SimpleIntegerProperty(3306);
+    private final StringProperty schema = new SimpleStringProperty();
+    private final StringProperty username = new SimpleStringProperty();
+    private final StringProperty password = new SimpleStringProperty();
+    private final StringProperty encoding = new SimpleStringProperty();
 
-    private Integer id;
-    private String dbType;
-    private String host;
-    private String port;
-    private String schema;
-    private String username;
-    private String password;
-    private String encoding;
+    // 基本信息
+    DynamicPropertyBean commonInfo;
 }

@@ -2,6 +2,7 @@ package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.Session;
 import io.devpl.toolkit.framework.mvc.FxmlView;
+import io.devpl.toolkit.fxui.model.ConnectionInfo;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.framework.mvc.AbstractViewController;
@@ -10,12 +11,10 @@ import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.io.EOFException;
 import java.net.URL;
@@ -33,6 +32,8 @@ public class NewConnectionController extends AbstractViewController {
     public Tab tabSshConnection;
     @FXML
     private TabPane tabPane;
+
+    ConnectionInfo connectionInfo;
 
     // fx:include可以自动注入Controller，只要名称为${fx:id}Controller
     @FXML
@@ -68,19 +69,20 @@ public class NewConnectionController extends AbstractViewController {
     }
 
     private DatabaseInfo extractConfigForUI() {
-        if (isOverssh) {
-            return tabControlBController.extractConfigFromUi();
-        } else {
+        if (tabTcpIpConnection.isSelected()) {
             return tabControlAController.extractConfigForUI();
+        } else if (tabSshConnection.isSelected()) {
+            return tabControlBController.extractConfigFromUi();
         }
+        return null;
     }
 
     @FXML
     private void saveConnection(ActionEvent event) {
-        if (isOverssh) {
-            tabControlBController.saveConfig(event);
-        } else {
-            tabControlAController.saveConnection(event);
+        if (tabTcpIpConnection.isSelected()) {
+
+        } else if (tabSshConnection.isSelected()) {
+
         }
     }
 

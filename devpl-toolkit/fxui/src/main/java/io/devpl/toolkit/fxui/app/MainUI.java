@@ -25,6 +25,7 @@ public class MainUI extends JavaFXApplication {
         primaryStage.setTitle(MAIN_WINDOW_TITLE);
         primaryStage.getIcons().add(new Image("static/icons/mybatis-logo.png"));
         primaryStage.show();
+
     }
 
     // JFX 11 运行此类不行，会提示缺少JavaFX运行时组件

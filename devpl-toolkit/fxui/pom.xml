@@ -11,8 +11,6 @@
     <artifactId>fxui</artifactId>
 
     <dependencies>
-
-
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
             <groupId>mysql</groupId>
@@ -20,7 +18,6 @@
             <version>8.0.28</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.jfoenix/jfoenix -->
-        <!--暂时没用到-->
         <dependency>
             <groupId>com.jfoenix</groupId>
             <artifactId>jfoenix</artifactId>
@@ -36,14 +33,12 @@
             <artifactId>mybatis-dynamic-sql</artifactId>
             <version>1.4.0</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.kordamp.ikonli/ikonli-javafx -->
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>
             <version>12.3.1</version>
         </dependency>
-
         <!--Java EE注解API-->
         <dependency>
             <groupId>jakarta.annotation</groupId>
@@ -113,7 +108,6 @@
             <artifactId>mybatis-plus-core</artifactId>
             <version>3.5.2</version>
         </dependency>
-
         <!--数据库工具类-->
         <dependency>
             <groupId>commons-dbutils</groupId>
@@ -164,13 +158,11 @@
             <artifactId>calcite-core</artifactId>
             <version>1.32.0</version>
         </dependency>
-
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>
             <version>2.2</version>
         </dependency>
-
         <!-- 在 java11 发布时，oracle官方就宣布移除了以下两个特性：-->
         <!-- Remove JAXB (Java Architecture for XML Binding)-->
         <!-- Remove JAX-WS (Java API for XML Web Services)-->
@@ -225,20 +217,15 @@
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
-
-
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>4.1.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
         </dependency>
-
-
         <dependency>
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-base</artifactId>

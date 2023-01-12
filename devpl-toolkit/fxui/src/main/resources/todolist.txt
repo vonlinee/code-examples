@@ -2,3 +2,5 @@
 2.新建表
 3.修改表结构
 
+
+--module-path "D:\Develop\SDK\javafx-sdk-11.0.2\lib" --add-modules=javafx.controls,javafx.fxml
