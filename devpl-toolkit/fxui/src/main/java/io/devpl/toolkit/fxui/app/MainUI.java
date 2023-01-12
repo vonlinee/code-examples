@@ -18,14 +18,12 @@ public class MainUI extends JavaFXApplication {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        ViewLoader mainUIViewLoader = ViewLoader.load(MainFrameController.class);
         primaryStage.setResizable(true);
-        Parent root = mainUIViewLoader.getRoot();
+        Parent root = ViewLoader.load(MainFrameController.class).getRoot();
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle(MAIN_WINDOW_TITLE);
         primaryStage.getIcons().add(new Image("static/icons/mybatis-logo.png"));
         primaryStage.show();
-
     }
 
     // JFX 11 运行此类不行，会提示缺少JavaFX运行时组件

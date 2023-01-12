@@ -1,5 +1,7 @@
 package io.devpl.toolkit.framework.mvc;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.*;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -15,15 +17,15 @@ import org.mybatis.generator.logging.LogFactory;
  * 所有控制器的基类，控制器是单例对象
  */
 @Subscriber
-public abstract class AbstractViewController implements ViewController, Initializable {
+public abstract class AbstractViewController implements ViewController, EventTarget, Initializable {
 
     protected final Log log = LogFactory.getLog(getClass());
 
     // 事件总线
     private static final EventBus bus = EventBus.builder()
-                                                .logNoSubscriberMessages(true)
-                                                .allowEmptySubscriber(true)
-                                                .build();
+            .logNoSubscriberMessages(true)
+            .allowEmptySubscriber(true)
+            .build();
 
     /**
      * 将自身注册进事件总线
@@ -71,23 +73,70 @@ public abstract class AbstractViewController implements ViewController, Initiali
         throw new RuntimeException("the window [" + window + "] is not a stage");
     }
 
-    /**
-     * 事件分派者链
-     */
-    private static final ViewControllerEventDispatchChain viewControllerDispatcherChain = new ViewControllerEventDispatchChain();
-
     @Override
     public EventDispatchChain buildEventDispatchChain(EventDispatchChain tail) {
-        return viewControllerDispatcherChain;
+        return tail.append(getInternalEventDispatcher());
     }
 
     /**
      * 对于Controller来说只有一个事件分派者
      */
-    private final ViewControllerEventDispatcher eventDispatcher;
+    private ViewControllerEventDispatcher internalEventDispatcher;
 
-    public AbstractViewController() {
-        eventDispatcher = new ViewControllerEventDispatcher();
-        viewControllerDispatcherChain.append(eventDispatcher);
+    public final ObjectProperty<EventDispatcher> eventDispatcherProperty() {
+        initializeInternalEventDispatcher();
+        return eventDispatcher;
+    }
+
+    /**
+     * Specifies the event dispatcher for this node. The default event
+     * dispatcher sends the received events to the registered event handlers and
+     * filters. When replacing the value with a new {@code EventDispatcher},
+     * the new dispatcher should forward events to the replaced dispatcher
+     * to maintain the node's default event handling behavior.
+     */
+    private ObjectProperty<EventDispatcher> eventDispatcher;
+
+    private void initializeInternalEventDispatcher() {
+        if (internalEventDispatcher == null) {
+            internalEventDispatcher = createInternalEventDispatcher();
+            eventDispatcher = new SimpleObjectProperty<>(
+                    AbstractViewController.this,
+                    "eventDispatcher",
+                    internalEventDispatcher);
+        }
+    }
+
+    private ViewControllerEventDispatcher createInternalEventDispatcher() {
+        return new ViewControllerEventDispatcher(this);
+    }
+
+    private ViewControllerEventDispatcher getInternalEventDispatcher() {
+        initializeInternalEventDispatcher();
+        return internalEventDispatcher;
+    }
+
+    /**
+     * Sets the handler to use for this event type. There can only be one such handler
+     * specified at a time. This handler is guaranteed to be called as the last, after
+     * handlers added using { #addEventHandler(javafx.event.EventType, javafx.event.EventHandler)}.
+     * This is used for registering the user-defined onFoo event handlers.
+     * @param <T>          the specific event class of the handler
+     * @param eventType    the event type to associate with the given eventHandler
+     * @param eventHandler the handler to register, or null to unregister
+     * @throws NullPointerException if the event type is null
+     */
+    protected final <T extends Event> void setEventHandler(
+            final EventType<T> eventType,
+            final EventHandler<? super T> eventHandler) {
+        // TODO
+    }
+
+    public final void fireEvent(Event event) {
+        Event.fireEvent(this, event);
+    }
+
+    public final <T extends Event> void fireEvent(EventType<T> eventType) {
+        fireEvent(new Event(eventType));
     }
 }

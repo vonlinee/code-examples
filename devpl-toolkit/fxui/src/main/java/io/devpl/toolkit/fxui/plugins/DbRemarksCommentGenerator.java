@@ -32,7 +32,7 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
     public void addJavaFileComment(CompilationUnit compilationUnit) {
         // add no file level comments by default
         if (isAnnotations) {
-            compilationUnit.addImportedType(new FullyQualifiedJavaType("javax.persistence.Table"));
+            compilationUnit.addImportedType(new FullyQualifiedJavaType("javax.persistence.TableTreeItem"));
             compilationUnit.addImportedType(new FullyQualifiedJavaType("javax.persistence.Id"));
             compilationUnit.addImportedType(new FullyQualifiedJavaType("javax.persistence.Column"));
             compilationUnit.addImportedType(new FullyQualifiedJavaType("javax.persistence.GeneratedValue"));
@@ -98,7 +98,7 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
         topLevelClass.addJavaDocLine(" * Created On " + nowTime);
         topLevelClass.addJavaDocLine(" */");
         if (isAnnotations) {
-            topLevelClass.addAnnotation("@Table(name=\"" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + "\")");
+            topLevelClass.addAnnotation("@TableTreeItem(name=\"" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + "\")");
         }
     }
 

@@ -42,7 +42,7 @@ public class MyBatisCodeGenerator {
         //     String connectorLibPath = ConfigHelper.findConnectorLibPath(dbType);
         //     log.info("connectorLibPath: {}", connectorLibPath);
         //     configuration.addClasspathEntry(connectorLibPath);
-        //     // Table configuration
+        //     // TableTreeItem configuration
         //     TableConfiguration tableConfig = new TableConfiguration(context);
         //     tableConfig.setTableName(generatorConfig.getTableName());
         //     tableConfig.setDomainObjectName(generatorConfig.getDomainObjectName());

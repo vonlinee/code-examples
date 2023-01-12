@@ -217,14 +217,6 @@ public class MainFrameController extends AbstractViewController {
         }
     }
 
-    static class DoNothing extends Task<Void> {
-        @Override
-        protected Void call() throws Exception {
-            Thread.sleep(3000);
-            return null;
-        }
-    }
-
     /**
      * 绑定数据
      * @param generatorConfig 代码生成配置

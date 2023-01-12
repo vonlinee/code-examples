@@ -8,13 +8,21 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * EventHandlerManager也是 EventDispatcher
  * @see com.sun.javafx.scene.NodeEventDispatcher
  */
 public class ViewControllerEventDispatcher implements EventDispatcher {
 
     private static final Logger log = LoggerFactory.getLogger(ViewControllerEventDispatcher.class);
 
-    private final Map<EventType<? extends Event>,
+    private final ViewController controller;
+
+    public ViewControllerEventDispatcher(ViewController viewController) {
+        this.controller = viewController;
+    }
+
+    // 全局事件注册中心
+    private static final Map<EventType<? extends Event>,
             EventHandler<? extends Event>> eventHandlerMap = new LinkedHashMap<>();
 
     public final <T extends Event> void addEventHandler(

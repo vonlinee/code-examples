@@ -166,6 +166,7 @@ public class EventBus {
         // 获取包含订阅方法属性对象SubscriberMethod的集合
         Class<?> subscriberClass = subscriber.getClass();
 
+        // 检查是否被@Subscriber注解修饰
         boolean hasSubscriberAnnotation = false;
         Class<?> superClass = subscriberClass;
         while (superClass != Object.class) {

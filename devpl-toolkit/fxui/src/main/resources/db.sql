@@ -15,7 +15,7 @@ SET
 FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for t_class
+-- TableTreeItem structure for t_class
 -- ----------------------------
 DROP TABLE IF EXISTS `t_class`;
 CREATE TABLE `t_class`
@@ -37,7 +37,7 @@ INSERT INTO `t_class`
 VALUES ('800c1fcd-7419-11ec-9b88-38142830461b', '02111708', '8班', '', '');
 
 -- ----------------------------
--- Table structure for t_cource
+-- TableTreeItem structure for t_cource
 -- ----------------------------
 DROP TABLE IF EXISTS `t_cource`;
 CREATE TABLE `t_cource`
@@ -52,7 +52,7 @@ CREATE TABLE `t_cource`
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for t_department
+-- TableTreeItem structure for t_department
 -- ----------------------------
 DROP TABLE IF EXISTS `t_department`;
 CREATE TABLE `t_department`
@@ -77,7 +77,7 @@ INSERT INTO `t_department`
 VALUES ('05f3d35f-741f-11ec-9b88-38142830461b', 'D0004', '网络与信息安全学院', '020-1213212');
 
 -- ----------------------------
--- Table structure for t_score
+-- TableTreeItem structure for t_score
 -- ----------------------------
 DROP TABLE IF EXISTS `t_score`;
 CREATE TABLE `t_score`
@@ -92,7 +92,7 @@ CREATE TABLE `t_score`
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for t_student
+-- TableTreeItem structure for t_student
 -- ----------------------------
 DROP TABLE IF EXISTS `t_student`;
 CREATE TABLE `t_student`
@@ -125,7 +125,7 @@ INSERT INTO `t_student`
 VALUES ('7b844e92-741a-11ec-9b88-38142830461b', 'S006', '男', '罗城', '中国', 'D6', 'C006');
 
 -- ----------------------------
--- Table structure for t_teacher
+-- TableTreeItem structure for t_teacher
 -- ----------------------------
 DROP TABLE IF EXISTS `t_teacher`;
 CREATE TABLE `t_teacher`

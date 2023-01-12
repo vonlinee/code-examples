@@ -1,0 +1,40 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' } // 加载其他Maven仓库
+        mavenCentral()
+    }
+    dependencies {
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.3.12.RELEASE')// 加载插件，用到里面的函数方法
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+// 使用spring boot 框架
+apply plugin: 'org.springframework.boot'
+// 使用spring boot的自动依赖管理
+apply plugin: 'io.spring.dependency-management'
+
+// 执行项目中所使用的的资源仓库
+repositories {
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    mavenCentral()
+}
+
+// 项目中需要的依赖
+dependencies {
+    // 添加 spring-boot-starter-web 的依赖 必须 排除了security 根据自身需求
+    // 具有依赖管理，不用写版本号
+    implementation('org.springframework.boot:spring-boot-starter-web') {
+        exclude group: 'org.springframework.security', module: 'spring-security-config'
+    }
+    // 添加 spring-boot-starter-test 该依赖对于编译测试是必须的，默认包含编译产品依赖和编译时依赖
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+// 第二种排除依赖方法
+//configurations {
+//    compile.exclude group:"org.codehaus.jackson", module:"jackson-mapper-asl" // 排除依赖
+//}
+
+
