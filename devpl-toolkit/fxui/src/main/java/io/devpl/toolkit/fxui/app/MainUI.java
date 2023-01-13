@@ -7,12 +7,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.LogFactory;
 
 /**
  * 这是本软件的主入口,要运行本软件请直接运行本类就可以了,不用传入任何参数
  * 本软件要求jkd版本大于1.8.0.40
  */
 public class MainUI extends JavaFXApplication {
+
+    private final Log log = LogFactory.getLog(MainUI.class);
 
     private static final String MAIN_WINDOW_TITLE = "代码生成器";
 

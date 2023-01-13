@@ -184,7 +184,7 @@ public class OverSshController extends DbConnectionController {
         try {
             ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, databaseConfig);
             getStage(event).close();
-            post(new LoadDbTreeEvent());
+            publish(new LoadDbTreeEvent());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             Alerts.showErrorAlert(e.getMessage());

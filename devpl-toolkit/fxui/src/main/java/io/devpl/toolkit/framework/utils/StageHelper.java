@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 public class StageHelper {
@@ -28,8 +29,10 @@ public class StageHelper {
         Scene scene = rootNode.getScene();
         Stage stage;
         if (scene == null) {
-            stage = newDefaultStage(400, 400);
+            stage = new Stage(StageStyle.DECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(rootNode));
+            stage.setTitle(title);
         } else {
             Window window = scene.getWindow();
             if (window instanceof Stage) {

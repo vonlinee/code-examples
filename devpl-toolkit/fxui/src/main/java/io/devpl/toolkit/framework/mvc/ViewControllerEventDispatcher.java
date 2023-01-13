@@ -1,19 +1,21 @@
 package io.devpl.toolkit.framework.mvc;
 
 import javafx.event.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.LogFactory;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * EventHandlerManager也是 EventDispatcher
+ * Controller之间的事件传递就不需要有父子关系，全局事件总线
  * @see com.sun.javafx.scene.NodeEventDispatcher
  */
 public class ViewControllerEventDispatcher implements EventDispatcher {
 
-    private static final Logger log = LoggerFactory.getLogger(ViewControllerEventDispatcher.class);
+    private final Log log = LogFactory.getLog(getClass());
 
     private final ViewController controller;
 
@@ -22,24 +24,31 @@ public class ViewControllerEventDispatcher implements EventDispatcher {
     }
 
     // 全局事件注册中心
-    private static final Map<EventType<? extends Event>,
-            EventHandler<? extends Event>> eventHandlerMap = new LinkedHashMap<>();
+    private static final Map<EventType<? extends Event>, CopyOnWriteArrayList<EventHandler<Event>>>
+            eventHandlerMap = new LinkedHashMap<>();
 
     public final <T extends Event> void addEventHandler(
             final EventType<T> eventType,
             final EventHandler<? super T> eventHandler) {
-        eventHandlerMap.put(eventType, eventHandler);
+        CopyOnWriteArrayList<EventHandler<Event>> eventHandlers = eventHandlerMap.get(eventType);
+        if (eventHandlers == null) {
+            eventHandlers = new CopyOnWriteArrayList<>();
+            eventHandlerMap.put(eventType, eventHandlers);
+        }
+        @SuppressWarnings("unchecked")
+        EventHandler<Event> handler = (EventHandler<Event>) eventHandler;
+        eventHandlers.add(handler);
     }
 
     @Override
     public Event dispatchEvent(Event event, EventDispatchChain tail) {
-        @SuppressWarnings("unchecked")
-        EventHandler<Event> handler = (EventHandler<Event>) eventHandlerMap.get(event.getEventType());
-        if (handler != null) {
+        CopyOnWriteArrayList<EventHandler<Event>> eventHandlers = eventHandlerMap.get(event.getEventType());
+        if (eventHandlers == null || eventHandlers.isEmpty()) {
+            log.info("no match event will be fired!");
+            return event;
+        }
+        for (EventHandler<Event> handler : eventHandlers) {
             handler.handle(event);
-            event.consume();
-        } else {
-            log.warn("不存在事件 {}", event);
         }
         return event;
     }

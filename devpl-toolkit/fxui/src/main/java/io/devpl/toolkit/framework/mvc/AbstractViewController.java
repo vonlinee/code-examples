@@ -21,10 +21,10 @@ public abstract class AbstractViewController implements ViewController, EventTar
 
     protected final Log log = LogFactory.getLog(getClass());
 
-    // 事件总线
+    // 全局事件总线
     private static final EventBus bus = EventBus.builder()
             .logNoSubscriberMessages(true)
-            .allowEmptySubscriber(true)
+            .allowEmptySubscriber(true)  // 允许没有@Subscribe方法
             .build();
 
     /**
@@ -35,7 +35,7 @@ public abstract class AbstractViewController implements ViewController, EventTar
         bus.register(this);
     }
 
-    public final void post(Object event) {
+    public final void publish(Object event) {
         bus.post(event);
     }
 
@@ -126,10 +126,10 @@ public abstract class AbstractViewController implements ViewController, EventTar
      * @param eventHandler the handler to register, or null to unregister
      * @throws NullPointerException if the event type is null
      */
-    protected final <T extends Event> void setEventHandler(
+    protected final <T extends Event> void addEventHandler(
             final EventType<T> eventType,
             final EventHandler<? super T> eventHandler) {
-        // TODO
+        getInternalEventDispatcher().addEventHandler(eventType, eventHandler);
     }
 
     public final void fireEvent(Event event) {
@@ -137,6 +137,6 @@ public abstract class AbstractViewController implements ViewController, EventTar
     }
 
     public final <T extends Event> void fireEvent(EventType<T> eventType) {
-        fireEvent(new Event(eventType));
+        fireEvent(new Event(this, this, eventType));
     }
 }

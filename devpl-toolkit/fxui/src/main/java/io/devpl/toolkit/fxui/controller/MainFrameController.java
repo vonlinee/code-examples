@@ -16,7 +16,6 @@ import io.devpl.toolkit.fxui.model.TableCodeGeneration;
 import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
 import io.devpl.toolkit.fxui.utils.*;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -154,8 +153,7 @@ public class MainFrameController extends AbstractViewController {
         });
 
         trvDbTreeList.addEventHandler(EventTypes.ACTION_SHOW_TABLES, event -> {
-            @SuppressWarnings("unchecked")
-            final TreeView<String> sourceTableView = (TreeView<String>) event.getTarget();
+            @SuppressWarnings("unchecked") final TreeView<String> sourceTableView = (TreeView<String>) event.getTarget();
             TreeItem<String> rootTreeItem = sourceTableView.getRoot();
             final ObservableList<TreeItem<String>> children = rootTreeItem.getChildren();
             if (children.size() > 0) {
@@ -185,7 +183,7 @@ public class MainFrameController extends AbstractViewController {
     @FXML
     public void chooseProjectFolder(ActionEvent event) {
         FileChooserDialog.showDirectoryDialog(getStage(event))
-                         .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
+                .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
     }
 
     @FXML
