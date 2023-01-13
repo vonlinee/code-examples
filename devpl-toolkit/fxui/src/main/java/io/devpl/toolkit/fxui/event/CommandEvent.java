@@ -10,12 +10,10 @@ import javafx.event.EventType;
 public class CommandEvent extends Event {
 
     private static final long serialVersionUID = -7087734786834852265L;
-
+    // 通用命令
     public static final EventType<CommandEvent> COMMAND = new EventType<>(EventType.ROOT, "root-commant");
-
     // 选择事件
     public static final EventType<CommandEvent> TABLES_SELECTED = new EventType<>(CommandEvent.COMMAND, "tables-selected");
-
     // 打开数据库连接窗口
     public static final EventType<CommandEvent> OPEN_DB_CONNECTION = new EventType<>(CommandEvent.COMMAND, "open-db-connection");
 

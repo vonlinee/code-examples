@@ -9,7 +9,7 @@ import lombok.Data;
  * @see com.alibaba.druid.sql.ast.statement.SQLColumnDefinition
  */
 @Data
-public class ColumnDefinition {
+public class ColumnDefinitionWrapper {
     private String columnName;
     private SqlDataTypeEnum sqlType;
     private Boolean hasDefaultExpression;
@@ -17,7 +17,7 @@ public class ColumnDefinition {
 
     final SQLColumnDefinition columnDefinition;
 
-    public ColumnDefinition(SQLColumnDefinition columnDefinition) {
+    public ColumnDefinitionWrapper(SQLColumnDefinition columnDefinition) {
         this.columnDefinition = columnDefinition;
         this.columnName = columnDefinition.getColumnName();
     }

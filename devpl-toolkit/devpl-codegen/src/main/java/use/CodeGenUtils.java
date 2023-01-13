@@ -3,16 +3,6 @@ package use;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.squareup.javapoet.*;
 import io.devpl.codegen.mbpg.util.FastJsonUtils;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
@@ -51,7 +41,6 @@ public class CodeGenUtils {
         final Map<String, Object> map = FastJsonUtils.toMap(jsonStr);
 
         final TypeSpec.Builder builder = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC);
-
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             final String key = entry.getKey();
             final Object value = entry.getValue();
@@ -65,7 +54,6 @@ public class CodeGenUtils {
             } else {
                 fieldType = String.class;
             }
-
             final FieldSpec field = FieldSpec
                     .builder(fieldType, key, Modifier.PUBLIC)
                     .addAnnotation(AnnotationSpec

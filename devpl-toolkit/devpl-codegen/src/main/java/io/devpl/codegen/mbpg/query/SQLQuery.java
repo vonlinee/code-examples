@@ -8,7 +8,7 @@ import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.querys.H2Query;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
-import io.devpl.codegen.mbpg.jdbc.DatabaseMetaDataWrapper;
+import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
 import io.devpl.codegen.mbpg.jdbc.DbType;
 import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;

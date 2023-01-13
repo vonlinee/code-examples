@@ -1,4 +1,4 @@
-package io.devpl.codegen.mbpg.jdbc.mysql;
+package io.devpl.codegen.mbpg.jdbc.dialect.mysql;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
+import io.devpl.codegen.mbpg.fill.FieldFill;
 import org.jetbrains.annotations.NotNull;
 
 /**

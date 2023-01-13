@@ -1,7 +1,7 @@
 package io.devpl.toolkit.jast;
 
-import io.devpl.codegen.mbpg.jdbc.mysql.InfoSchemaColumn;
-import io.devpl.codegen.mbpg.jdbc.mysql.InfoSchemaTable;
+import io.devpl.codegen.mbpg.jdbc.dialect.mysql.InfoSchemaColumn;
+import io.devpl.codegen.mbpg.jdbc.dialect.mysql.InfoSchemaTable;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlException;

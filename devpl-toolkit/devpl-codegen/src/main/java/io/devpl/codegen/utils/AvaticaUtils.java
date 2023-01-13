@@ -1,7 +1,5 @@
 package io.devpl.codegen.utils;
 
-import org.apache.calcite.avatica.util.UnsynchronizedBuffer;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandle;

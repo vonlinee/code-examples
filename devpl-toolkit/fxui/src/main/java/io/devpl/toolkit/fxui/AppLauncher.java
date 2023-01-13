@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui;
 
-import io.devpl.toolkit.fxui.app.MainUI;
+import io.devpl.toolkit.fxui.app.Test;
 import javafx.application.Application;
 
 import java.io.IOException;
@@ -10,6 +10,6 @@ import java.io.IOException;
  */
 public class AppLauncher {
     public static void main(String[] args) throws IOException {
-        Application.launch(MainUI.class);
+        Application.launch(Test.class);
     }
 }

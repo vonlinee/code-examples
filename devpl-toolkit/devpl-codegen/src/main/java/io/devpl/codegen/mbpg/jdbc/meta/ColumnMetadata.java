@@ -1,4 +1,4 @@
-package io.devpl.codegen.mbpg.jdbc;
+package io.devpl.codegen.mbpg.jdbc.meta;
 
 import java.io.Serializable;
 

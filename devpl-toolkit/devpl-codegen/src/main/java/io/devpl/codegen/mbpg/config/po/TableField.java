@@ -10,7 +10,7 @@ import io.devpl.codegen.mbpg.config.rules.IColumnType;
 import io.devpl.codegen.mbpg.config.rules.NamingStrategyEnum;
 import io.devpl.codegen.mbpg.fill.Column;
 import io.devpl.codegen.mbpg.fill.Property;
-import io.devpl.codegen.mbpg.jdbc.DatabaseMetaDataWrapper;
+import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
 import io.devpl.codegen.mbpg.jdbc.JdbcType;
 import org.jetbrains.annotations.NotNull;
 

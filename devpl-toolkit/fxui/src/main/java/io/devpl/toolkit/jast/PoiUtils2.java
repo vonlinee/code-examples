@@ -2,8 +2,8 @@ package io.devpl.toolkit.jast;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
-import io.devpl.codegen.mbpg.jdbc.mysql.InfoSchemaColumn;
-import io.devpl.codegen.mbpg.jdbc.mysql.InfoSchemaTable;
+import io.devpl.codegen.mbpg.jdbc.dialect.mysql.InfoSchemaColumn;
+import io.devpl.codegen.mbpg.jdbc.dialect.mysql.InfoSchemaTable;
 import io.devpl.toolkit.fxui.utils.CollectionUtils;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import lombok.Data;

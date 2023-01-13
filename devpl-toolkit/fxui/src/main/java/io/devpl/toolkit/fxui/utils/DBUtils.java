@@ -3,8 +3,8 @@ package io.devpl.toolkit.fxui.utils;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import io.devpl.codegen.mbpg.jdbc.ColumnMetadata;
-import io.devpl.codegen.mbpg.jdbc.TableMetadata;
+import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
+import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
@@ -286,10 +286,9 @@ public class DBUtils {
             final DatabaseMetaData dbmd = conn.getMetaData();
             final String catalog = conn.getCatalog();
             final String schema = conn.getSchema();
-
             cmdList = new ArrayList<>();
             try (ResultSet rs = dbmd.getColumns(catalog, schema, tableNamePattern, null)) {
-                final DataClassRowMapper<ColumnMetadata> rowMapper = new DataClassRowMapper<>(ColumnMetadata.class);
+                DataClassRowMapper<ColumnMetadata> rowMapper = new DataClassRowMapper<>(ColumnMetadata.class);
                 int rowIndex = 0;
                 while (rs.next()) {
                     cmdList.add(rowMapper.mapRow(rs, rowIndex++));

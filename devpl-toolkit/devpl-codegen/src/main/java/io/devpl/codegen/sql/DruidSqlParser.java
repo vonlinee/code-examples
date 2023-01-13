@@ -20,7 +20,7 @@ public class DruidSqlParser {
 
     private final String rawSql;
     private final DbType dbType;
-    private List<SQLStatement> statemens;
+    private final List<SQLStatement> statemens;
 
     /**
      * 解析单条sql

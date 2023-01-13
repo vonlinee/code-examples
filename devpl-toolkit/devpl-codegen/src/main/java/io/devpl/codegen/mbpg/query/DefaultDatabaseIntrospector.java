@@ -6,7 +6,7 @@ import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
-import io.devpl.codegen.mbpg.jdbc.DatabaseMetaDataWrapper;
+import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
 import io.devpl.codegen.mbpg.type.ITypeConvertHandler;
 import io.devpl.codegen.mbpg.type.TypeRegistry;
 import io.devpl.sdk.util.StringUtils;

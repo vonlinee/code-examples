@@ -1,6 +1,5 @@
 package use;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,15 +14,5 @@ public class DocUtils {
             list.add(i + ": " + entry.getKey() + " => " + entry.getValue().getClass().getSimpleName());
         }
         return list;
-    }
-
-    public static void main(String[] args) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("a", 1);
-        map.put("b", 2);
-        map.put("c", 3);
-
-        toDocText(map).forEach(System.out::println);
-
     }
 }

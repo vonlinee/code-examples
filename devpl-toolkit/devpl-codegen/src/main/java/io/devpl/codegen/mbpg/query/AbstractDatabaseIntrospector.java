@@ -6,7 +6,7 @@ import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.querys.DbQueryDecorator;
-import io.devpl.codegen.mbpg.jdbc.DatabaseMetaDataWrapper;
+import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
 import io.devpl.codegen.mbpg.util.StringPool;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
