@@ -6,6 +6,10 @@ import io.devpl.toolkit.fxui.model.ConnectionInfo;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.view.navigation.impl.DatabaseItem;
 import javafx.scene.control.TreeItem;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeBrands;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -24,9 +28,13 @@ public class ConnectionTreeItem extends TreeItem<String> {
     public ConnectionTreeItem(ConnectionInfo connectionInfo) {
         this.connectionInfo = connectionInfo;
         dbItems = new TreeItem<>("数据库");
+        dbItems.setGraphic(FontIcon.of(FontAwesomeSolid.FOLDER_OPEN));
         userItems = new TreeItem<>("用户");
+        userItems.setGraphic(FontIcon.of(FontAwesomeSolid.FOLDER_OPEN));
         adminUserItems = new TreeItem<>("管理员");
+        adminUserItems.setGraphic(FontIcon.of(FontAwesomeSolid.FOLDER_OPEN));
         systemInfoItems = new TreeItem<>("系统信息");
+        systemInfoItems.setGraphic(FontIcon.of(FontAwesomeSolid.FOLDER_OPEN));
         getChildren().addAll(List.of(dbItems, userItems, adminUserItems, systemInfoItems));
     }
 
@@ -51,28 +59,25 @@ public class ConnectionTreeItem extends TreeItem<String> {
         }
         setValue("jdbc:mysql://localhost:3306");
         List<TableMetadata> tablesMetadata = DBUtils.getTablesMetadata(connection, null, null);
-        DatabaseItem databaseItem = new DatabaseItem();
-        databaseItem.setDatabaseName("lgdb_campus_intelligent_portrait");
-
 
         final DatabaseTreeItem databaseTreeItem = new DatabaseTreeItem();
         databaseTreeItem.setDatabaseName("lgdb_campus_intelligent_portrait");
         dbItems.getChildren().add(databaseTreeItem);
-
+        databaseTreeItem.setGraphic(new FontIcon(FontAwesomeSolid.DATABASE));
 
         for (TableMetadata table : tablesMetadata) {
 
             TableTreeItem item = new TableTreeItem();
             item.setValue(table.getTableName());
-
+            item.setGraphic(FontIcon.of(FontAwesomeSolid.TABLE));
             databaseTreeItem.getChildren().add(item);
 
             // 列
             List<ColumnMetadata> columns = DBUtils.getColumnsMetadata(connection, table.getTableName());
             for (ColumnMetadata column : columns) {
                 ColumnTreeItem columnTreeItem = new ColumnTreeItem();
+                columnTreeItem.setGraphic(FontIcon.of(FontAwesomeSolid.COLUMNS));
                 columnTreeItem.setValue(column.getColumnName());
-
                 item.getChildren().add(columnTreeItem);
             }
         }

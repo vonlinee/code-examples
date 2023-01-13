@@ -3,7 +3,6 @@ package io.devpl.toolkit.fxui.controller;
 import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import io.devpl.toolkit.framework.mvc.FxmlView;
-import io.devpl.toolkit.fxui.event.UpdateCodeGenConfigEvent;
 import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import javafx.collections.FXCollections;
@@ -58,7 +57,6 @@ public class GeneratorConfigController extends AbstractViewController {
                                 try {
                                     // 应用配置
                                     GenericConfiguration generatorConfig = ConfigHelper.loadGeneratorConfig(item.toString());
-                                    post(new UpdateCodeGenConfigEvent(generatorConfig));
                                     getStage(event).close();
                                 } catch (Exception e) {
                                     Alerts.error(e.getMessage()).showAndWait();

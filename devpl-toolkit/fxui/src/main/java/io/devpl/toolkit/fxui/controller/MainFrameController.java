@@ -89,7 +89,7 @@ public class MainFrameController extends AbstractViewController {
         connectionLabel.setOnMouseClicked(event -> StageHelper.show("新建连接", NewConnectionController.class));
         // 生成配置管理
         configsLabel.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
-        configsLabel.setOnMouseClicked(event -> StageHelper.show("新建连接", GeneratorConfigController.class));
+        configsLabel.setOnMouseClicked(event -> StageHelper.show("生成配置", GeneratorConfigController.class));
         trvDbTreeList.prefHeightProperty().bind(vboxLeft.heightProperty().subtract(filterTreeBox.getHeight()));
         trvDbTreeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // 设置可以多选
 

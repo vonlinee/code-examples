@@ -5,6 +5,7 @@ import io.devpl.toolkit.fxui.view.navigation.impl.DatabaseNavigationView;
 import io.devpl.toolkit.fxui.view.navigation.DatabaseNavigationTreeView;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -21,15 +22,18 @@ public class Test extends Application {
 
         BorderPane root = new BorderPane();
 
-        DatabaseNavigationView treeView = new DatabaseNavigationView();
+        DatabaseNavigationTreeView view = new DatabaseNavigationTreeView();
 
-        final DatabaseNavigationTreeView view = new DatabaseNavigationTreeView();
+        ScrollPane leftDbTree = new ScrollPane();
+        leftDbTree.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        view.prefWidthProperty().bind(leftDbTree.widthProperty());
 
+        leftDbTree.setContent(view);
         ConnectionInfo connectionInfo = new ConnectionInfo();
 
         view.addConnection(connectionInfo);
 
-        root.setLeft(view);
+        root.setCenter(leftDbTree);
         Scene scene = new Scene(root, 800, 400);
         primaryStage.setScene(scene);
         primaryStage.show();

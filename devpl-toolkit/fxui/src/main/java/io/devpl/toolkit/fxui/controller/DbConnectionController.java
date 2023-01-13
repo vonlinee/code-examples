@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -28,7 +29,7 @@ import java.util.ResourceBundle;
 public class DbConnectionController extends AbstractViewController {
 
     @FXML
-    public AnchorPane anpRoot;
+    public GridPane grpRoot;
     @FXML
     protected TextField nameField; // 数据库名称
     @FXML
@@ -59,7 +60,7 @@ public class DbConnectionController extends AbstractViewController {
         userNameField.setText(Constants.MYSQL_ROOT_USERNAME);
         portField.setText(String.valueOf(Constants.DEFAULT_MYSQL_SERVER_PORT));
 
-        anpRoot.addEventHandler(MessageEvent.ANY, event -> {
+        grpRoot.addEventHandler(MessageEvent.ANY, event -> {
             Object message = event.getMessage();
             setConfig((DatabaseInfo) message);
         });

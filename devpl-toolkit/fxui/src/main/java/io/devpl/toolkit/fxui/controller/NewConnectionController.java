@@ -44,7 +44,7 @@ public class NewConnectionController extends AbstractViewController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tabPane.setPrefHeight(((AnchorPane) tabPane.getSelectionModel()
+        tabPane.setPrefHeight(((Pane) tabPane.getSelectionModel()
                                                    .getSelectedItem()
                                                    .getContent()).getPrefHeight());
 
