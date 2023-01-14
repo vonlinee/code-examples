@@ -5,7 +5,7 @@
 <BorderPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.devpl.toolkit.fxui.controller.NewConnectionController">
     <center>
-        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
+        <TabPane tabClosingPolicy="UNAVAILABLE">
             <!-- fx:include可以自动注入Controller，只要名称为${fx:id}Controller-->
             <Tab fx:id="tabTcpIpConnection" text="TCP/IP">
                 <fx:include source="basicConnection.fxml"/>

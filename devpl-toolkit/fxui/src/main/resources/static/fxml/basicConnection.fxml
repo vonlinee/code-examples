@@ -3,9 +3,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane fx:id="grpRoot" alignment="CENTER_RIGHT" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0"
-          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0" xmlns="http://javafx.com/javafx/11"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.toolkit.fxui.controller.DbConnectionController">
+<GridPane fx:id="grpRoot"
+          xmlns="http://javafx.com/javafx/11"
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="io.devpl.toolkit.fxui.controller.DbConnectionController">
     <padding>
         <Insets topRightBottomLeft="10"/>
     </padding>
