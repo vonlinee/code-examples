@@ -1,4 +1,4 @@
-package io.devpl.codegen.sql;
+package io.devpl.toolkit.test;
 
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.ast.SQLExpr;
@@ -6,7 +6,6 @@ import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.*;
 import com.alibaba.druid.sql.parser.SQLParserUtils;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
-import io.devpl.codegen.mbpg.jdbc.DBUtils;
 import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
 import io.devpl.sdk.io.FileUtils;
 
@@ -22,7 +21,7 @@ import java.util.Map;
 
 public class Test {
 
-    public static final String testSqlFile = "C:\\Users\\Von\\Desktop\\test.sql";
+    public static final String testSqlFile = "C:\\Users\\vonline\\Desktop\\test.sql";
 
     public static void main(String[] args) throws IOException {
         String sql = FileUtils.readFileToString(new File(testSqlFile));
@@ -31,8 +30,7 @@ public class Test {
 
         final SQLStatement sqlStatement = sqlStatements.get(0);
         if (sqlStatement instanceof SQLSelectStatement) {
-            final List<String> selectedColumns = getSelectedColumns((SQLSelectStatement) sqlStatement);
-            System.out.println(selectedColumns);
+            List<String> selectedColumns = getSelectedColumns((SQLSelectStatement) sqlStatement);
         }
     }
 
@@ -54,6 +52,7 @@ public class Test {
             SQLSelectQueryBlock queryBlock = (SQLSelectQueryBlock) query;
             List<SQLSelectItem> selectList = queryBlock.getSelectList();
             SQLTableSource from = queryBlock.getFrom();
+            // 找到所有的别名和表明映射
             Map<String, String> tableNames = findAllTalbeNames(from);
             for (SQLSelectItem sqlSelectItem : selectList) {
                 final SQLExpr expr = sqlSelectItem.getExpr();
@@ -61,7 +60,7 @@ public class Test {
                 String[] tableColumnNames = selectColumn.split("\\.");
                 if (tableColumnNames.length == 2) {
                     String tableAlias = tableColumnNames[0];
-                    final String tableName = tableNames.get(tableAlias);
+                    String tableName = tableNames.get(tableAlias);
                     selectedColumnNames.add(tableName + "." + tableColumnNames[1]);
                 }
             }
@@ -95,9 +94,11 @@ public class Test {
                     currTableName = sqlExprTableSource.getTableName();
                 }
                 String alias = right.getAlias();
+                // 没有别名
                 if (alias == null) {
-                    throw new RuntimeException("别名为空");
+                    alias = currTableName;
                 }
+
                 tableAliasMapping.put(alias, currTableName);
             }
         } else if (from instanceof SQLExprTableSource) {
