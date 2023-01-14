@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="io.devpl.toolkit.fxui.controller.PojoEditorController">
+
+    <top>
+        <ToolBar>
+            <Button text="SQL"/>
+            <Button text="解析字段" onAction="#parseColumns"/>
+            <Button text="转换实体类"/>
+        </ToolBar>
+    </top>
+
+    <center>
+        <TextArea fx:id="txaContent">
+
+        </TextArea>
+    </center>
+
+    <bottom>
+        <HBox>
+
+        </HBox>
+    </bottom>
+
+</BorderPane>

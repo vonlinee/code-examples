@@ -4,3 +4,6 @@
 
 
 --module-path "D:\Develop\SDK\javafx-sdk-11.0.2\lib" --add-modules=javafx.controls,javafx.fxml
+
+
+1.国际化

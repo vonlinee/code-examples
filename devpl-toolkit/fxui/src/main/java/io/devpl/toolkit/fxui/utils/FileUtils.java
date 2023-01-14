@@ -42,9 +42,9 @@ public class FileUtils {
 
     public static List<File> filter(File[] files, FileFilter fileFilter) {
         final List<File> fileList = new ArrayList<>(files.length);
-        for (int i = 0; i < files.length; i++) {
-            if (fileFilter != null && fileFilter.accept(files[i])) {
-                fileList.add(files[i]);
+        for (File file : files) {
+            if (fileFilter != null && fileFilter.accept(file)) {
+                fileList.add(file);
             }
         }
         return fileList;

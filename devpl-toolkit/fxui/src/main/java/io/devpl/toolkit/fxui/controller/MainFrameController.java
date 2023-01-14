@@ -42,6 +42,8 @@ public class MainFrameController extends AbstractViewController {
     @FXML
     public VBox vboxLeft;
     @FXML
+    public Button entityEditor;
+    @FXML
     private Label connectionLabel; // toolbar buttons
     @FXML
     private Label configsLabel;
@@ -183,7 +185,7 @@ public class MainFrameController extends AbstractViewController {
     @FXML
     public void chooseProjectFolder(ActionEvent event) {
         FileChooserDialog.showDirectoryDialog(getStage(event))
-                .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
+                         .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
     }
 
     @FXML
@@ -263,6 +265,11 @@ public class MainFrameController extends AbstractViewController {
             }
         }
         return true;
+    }
+
+    @FXML
+    public void showEntityEditorDialog(ActionEvent actionEvent) {
+        StageHelper.show("实体类编辑", PojoEditorController.class);
     }
 
     // private void setTooltip() {

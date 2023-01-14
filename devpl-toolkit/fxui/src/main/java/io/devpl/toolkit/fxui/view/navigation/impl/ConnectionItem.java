@@ -2,7 +2,7 @@ package io.devpl.toolkit.fxui.view.navigation.impl;
 
 import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
-import io.devpl.toolkit.fxui.model.ConnectionInfo;
+import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

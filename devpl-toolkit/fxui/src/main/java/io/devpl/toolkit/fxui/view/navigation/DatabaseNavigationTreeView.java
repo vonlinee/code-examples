@@ -1,16 +1,9 @@
 package io.devpl.toolkit.fxui.view.navigation;
 
-import io.devpl.toolkit.fxui.model.ConnectionInfo;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeCell;
+import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.util.Callback;
-import org.kordamp.ikonli.Ikon;
-import org.kordamp.ikonli.Ikonli;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeBrands;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeBrandsIkonHandler;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
 import org.kordamp.ikonli.javafx.FontIcon;
 

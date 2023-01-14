@@ -1,7 +1,6 @@
 package io.devpl.toolkit.fxui.app;
 
-import io.devpl.toolkit.fxui.model.ConnectionInfo;
-import io.devpl.toolkit.fxui.view.navigation.impl.DatabaseNavigationView;
+import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
 import io.devpl.toolkit.fxui.view.navigation.DatabaseNavigationTreeView;
 import javafx.application.Application;
 import javafx.scene.Scene;

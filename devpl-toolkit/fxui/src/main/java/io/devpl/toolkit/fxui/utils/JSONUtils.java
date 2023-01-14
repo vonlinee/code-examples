@@ -2,10 +2,10 @@ package io.devpl.toolkit.fxui.utils;
 
 public class JSONUtils {
 
-    private static final ObjectJSONConverter converter;
+    private static final JSONConverter converter;
 
     static {
-        converter = new GsonObjectJSONConverter();
+        converter = new GsonConverter();
     }
 
     public static String toString(Object obj) {

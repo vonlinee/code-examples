@@ -4,7 +4,7 @@ import com.jcraft.jsch.Session;
 import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import io.devpl.toolkit.framework.mvc.FxmlView;
-import io.devpl.toolkit.fxui.model.ConnectionInfo;
+import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.StringUtils;
@@ -40,7 +40,7 @@ public class NewConnectionController extends AbstractViewController {
     }
 
     @FXML
-    private void saveConnection(ActionEvent event) {
+    void saveConnection(ActionEvent event) {
 
     }
 
@@ -49,7 +49,7 @@ public class NewConnectionController extends AbstractViewController {
      * @param actionEvent ActionEvent
      */
     @FXML
-    public void testConnection(ActionEvent actionEvent) {
+    void testConnection(ActionEvent actionEvent) {
         DatabaseInfo config = extractConfigForUI();
         if (config == null) {
             return;
