@@ -4,6 +4,9 @@ import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.event.EventType;
 
+/**
+ * 传递消息事件
+ */
 public final class MessageEvent extends Event {
 
     private static final long serialVersionUID = -3388823807425619785L;

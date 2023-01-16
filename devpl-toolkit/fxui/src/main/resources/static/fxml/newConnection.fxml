@@ -2,8 +2,15 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="io.devpl.toolkit.fxui.controller.NewConnectionController">
+<BorderPane
+        stylesheets="@/static/css/global_style.css"
+        xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="io.devpl.toolkit.fxui.controller.NewConnectionController">
+    <top>
+        <ToolBar minHeight="60" maxHeight="60">
+            <Button text="填充默认值" onAction="#fillDefaultConnectionInfo"/>
+        </ToolBar>
+    </top>
     <center>
         <TabPane tabClosingPolicy="UNAVAILABLE">
             <!-- fx:include可以自动注入Controller，只要名称为${fx:id}Controller-->
@@ -16,13 +23,13 @@
         </TabPane>
     </center>
     <bottom>
-        <HBox>
-            <Button layoutX="56.0" layoutY="16.0" mnemonicParsing="false" onAction="#testConnection" text="测试连接"
-                    AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="56.0" AnchorPane.topAnchor="16.0">
+        <AnchorPane style="-fx-background-color: #d2cccc" minHeight="60" minWidth="400" maxHeight="60">
+            <Button styleClass="btn-success" HBox.hgrow="NEVER" mnemonicParsing="false" onAction="#testConnection"
+                    text="测试连接" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="15" AnchorPane.bottomAnchor="15">
             </Button>
-            <Button mnemonicParsing="false" onAction="#saveConnection" text="保存" AnchorPane.bottomAnchor="15.0"
-                    AnchorPane.rightAnchor="15.0">
+            <Button styleClass="btn-success" minWidth="60" maxWidth="60" HBox.hgrow="NEVER" mnemonicParsing="false" onAction="#saveConnection"
+                    text="保存" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="15" AnchorPane.bottomAnchor="15">
             </Button>
-        </HBox>
+        </AnchorPane>
     </bottom>
 </BorderPane>

@@ -27,7 +27,7 @@ export default {
     }
   },
   mounted() {
-    this.$refs.hw.$on('myevent', function(val) {
+    this.$refs.hw.$on('event', function(val) {
       console.log(val)
     })
   }

@@ -28,10 +28,10 @@ import java.lang.annotation.Target;
 public @interface Subscribe {
 
     /**
-     * 订阅事件名称
+     * 订阅名称
      * @return 事件名称
      */
-    String event() default "";
+    String name() default "";
 
     /**
      * 线程模式

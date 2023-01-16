@@ -2,11 +2,10 @@ package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import io.devpl.toolkit.framework.Alerts;
+import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import io.devpl.toolkit.framework.mvc.FxmlView;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
-import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
-import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.event.ActionEvent;
@@ -22,7 +21,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
 @FxmlView(location = "static/fxml/sshBasedConnection.fxml")
-public class OverSshController extends DbConnectionController {
+public class OverSshController extends AbstractViewController {
 
     @FXML
     public CheckBox savePwdCheckBox;
@@ -94,8 +93,6 @@ public class OverSshController extends DbConnectionController {
         if (databaseConfig == null) {
             return;
         }
-        isUpdate = true;
-        super.setConfig(databaseConfig);
         this.sshdPortField.setText(databaseConfig.getSshPort());
         this.sshHostField.setText(databaseConfig.getSshHost());
         this.lportField.setText(databaseConfig.getLport());
@@ -142,24 +139,8 @@ public class OverSshController extends DbConnectionController {
     }
 
     public DatabaseInfo extractConfigFromUi() {
-        String name = nameField.getText();
-        String host = hostField.getText();
-        String port = portField.getText();
-        String userName = userNameField.getText();
-        String password = passwordField.getText();
-        String encoding = encodingChoice.getValue();
-        String dbType = dbTypeChoice.getValue();
-        String schema = schemaField.getText();
         String authType = authTypeChoice.getValue();
         DatabaseInfo config = new DatabaseInfo();
-        config.setName(name);
-        config.setDbType(dbType);
-        config.setHost(host);
-        config.setPort(port);
-        config.setUsername(userName);
-        config.setPassword(password);
-        config.setSchema(schema);
-        config.setEncoding(encoding);
         config.setSshHost(this.sshHostField.getText());
         config.setSshPort(this.sshdPortField.getText());
         config.setLport(this.lportField.getText());
@@ -182,9 +163,7 @@ public class OverSshController extends DbConnectionController {
             return;
         }
         try {
-            ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, databaseConfig);
             getStage(event).close();
-            publish(new LoadDbTreeEvent());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             Alerts.showErrorAlert(e.getMessage());

@@ -1,5 +1,6 @@
 package io.devpl.toolkit.framework.mvc;
 
+import io.devpl.toolkit.framework.Alerts;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.*;
@@ -9,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.PostEvent;
 import org.greenrobot.eventbus.Subscriber;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
@@ -21,26 +23,40 @@ public abstract class AbstractViewController implements ViewController, EventTar
 
     protected final Log log = LogFactory.getLog(getClass());
 
-    // 全局事件总线
-    private static final EventBus bus = EventBus.builder()
-            .logNoSubscriberMessages(true)
-            .allowEmptySubscriber(true)  // 允许没有@Subscribe方法
-            .build();
+    private static final EventBus GLOBAL_EVENT_BUS = EventBus.builder()
+                                                             .eventInheritance(false)
+                                                             .allowEmptySubscriber(true)
+                                                             .logNoSubscriberMessages(false)
+                                                             .mainThreadSupport(new JavaFXMainThreadSupport())
+                                                             .build();
+
+    public AbstractViewController() {
+        GLOBAL_EVENT_BUS.register(this);
+    }
 
     /**
-     * 将自身注册进事件总线
-     * 如果没有@Subscribe修饰的方法，那么会报错
+     * 发布事件
+     * @param event 事件类型对象
      */
-    public final void registerThis() {
-        bus.register(this);
-    }
-
     public final void publish(Object event) {
-        bus.post(event);
+        try {
+            GLOBAL_EVENT_BUS.post(event);
+        } catch (Exception exception) {
+            Alerts.exception("发布事件异常", exception).showAndWait();
+        }
     }
 
-    public final void unregister() {
-        bus.unregister(this);
+    /**
+     * 发布事件
+     * @param eventName 事件名称
+     * @param event     事件类型对象
+     */
+    public final void publish(String eventName, Object event) {
+        try {
+            GLOBAL_EVENT_BUS.post(new PostEvent(eventName, event));
+        } catch (Exception exception) {
+            Alerts.exception("发布事件异常", exception).showAndWait();
+        }
     }
 
     /**
@@ -52,7 +68,7 @@ public abstract class AbstractViewController implements ViewController, EventTar
      * @return 当前事件源所在的舞台对象
      * @throws RuntimeException 如果事件源不是Node
      */
-    protected Stage getStage(Event event) {
+    protected final Stage getStage(Event event) {
         final Object source = event.getSource();
         if (source instanceof Node) {
             final Node node = (Node) source;
@@ -61,7 +77,7 @@ public abstract class AbstractViewController implements ViewController, EventTar
         throw new RuntimeException("event source is [" + source.getClass() + "] instead of a [Node]");
     }
 
-    public Stage getStage(Node node) {
+    public final Stage getStage(Node node) {
         final Scene scene = node.getScene();
         if (scene == null) {
             throw new RuntimeException("node [" + node + "] has not been bind to a scene!");
@@ -75,6 +91,7 @@ public abstract class AbstractViewController implements ViewController, EventTar
 
     @Override
     public EventDispatchChain buildEventDispatchChain(EventDispatchChain tail) {
+        // 直接在初始EventDispatchChain添加上自身的EventDispatcher
         return tail.append(getInternalEventDispatcher());
     }
 
@@ -100,10 +117,7 @@ public abstract class AbstractViewController implements ViewController, EventTar
     private void initializeInternalEventDispatcher() {
         if (internalEventDispatcher == null) {
             internalEventDispatcher = createInternalEventDispatcher();
-            eventDispatcher = new SimpleObjectProperty<>(
-                    AbstractViewController.this,
-                    "eventDispatcher",
-                    internalEventDispatcher);
+            eventDispatcher = new SimpleObjectProperty<>(AbstractViewController.this, "eventDispatcher", internalEventDispatcher);
         }
     }
 
@@ -126,16 +140,23 @@ public abstract class AbstractViewController implements ViewController, EventTar
      * @param eventHandler the handler to register, or null to unregister
      * @throws NullPointerException if the event type is null
      */
-    protected final <T extends Event> void addEventHandler(
-            final EventType<T> eventType,
-            final EventHandler<? super T> eventHandler) {
+    protected final <T extends Event> void addEventHandler(final EventType<T> eventType, final EventHandler<? super T> eventHandler) {
         getInternalEventDispatcher().addEventHandler(eventType, eventHandler);
     }
 
+    /**
+     * 触发事件
+     * @param event
+     */
     public final void fireEvent(Event event) {
         Event.fireEvent(this, event);
     }
 
+    /**
+     * 触发事件
+     * @param eventType
+     * @param <T>
+     */
     public final <T extends Event> void fireEvent(EventType<T> eventType) {
         fireEvent(new Event(this, this, eventType));
     }

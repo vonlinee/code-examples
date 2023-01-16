@@ -5,7 +5,7 @@ import net.jodah.typetools.TypeResolver;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * 基于事件回调接口的订阅
+ * 基于内部类接口或者Lambda形式的方法调用的订阅
  */
 public class CallbackSubscription<P, R> extends GenericSubscription {
 

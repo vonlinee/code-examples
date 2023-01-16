@@ -15,8 +15,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class ViewControllerEventDispatcher implements EventDispatcher {
 
-    private final Log log = LogFactory.getLog(getClass());
-
     private final ViewController controller;
 
     public ViewControllerEventDispatcher(ViewController viewController) {
@@ -44,7 +42,7 @@ public class ViewControllerEventDispatcher implements EventDispatcher {
     public Event dispatchEvent(Event event, EventDispatchChain tail) {
         CopyOnWriteArrayList<EventHandler<Event>> eventHandlers = eventHandlerMap.get(event.getEventType());
         if (eventHandlers == null || eventHandlers.isEmpty()) {
-            log.info("no match event will be fired!");
+            // 没有事件匹配
             return event;
         }
         for (EventHandler<Event> handler : eventHandlers) {

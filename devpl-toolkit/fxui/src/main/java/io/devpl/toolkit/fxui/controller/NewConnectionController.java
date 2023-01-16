@@ -4,8 +4,10 @@ import com.jcraft.jsch.Session;
 import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import io.devpl.toolkit.framework.mvc.FxmlView;
-import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
+import io.devpl.toolkit.fxui.common.JdbcDriver;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
+import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
+import io.devpl.toolkit.fxui.utils.Assert;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.concurrent.Task;
@@ -28,20 +30,33 @@ public class NewConnectionController extends AbstractViewController {
     @FXML
     public Tab tabSshConnection;
 
-    ConnectionInfo connectionInfo = new ConnectionInfo();
+    // 连接信息配置
+    private final ConnectionInfo connectionInfo = new ConnectionInfo();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        // 父FXML的initialize方法晚于子FXML的initialize方法执行
+        publish("init-binder", this.connectionInfo);
     }
 
-    private DatabaseInfo extractConfigForUI() {
-        return null;
-    }
-
+    /**
+     * 保存数据库连接
+     * @param event
+     */
     @FXML
     void saveConnection(ActionEvent event) {
+        String msg = Assert.target(connectionInfo)
+                           .hasText(ConnectionInfo::getUsername, "用户名不能为空")
+                           .hasText(ConnectionInfo::getPassword, "密码不能为空")
+                           .hasText(ConnectionInfo::getHost, "连接地址不能为空")
+                           .getErrorMessages();
+        if (StringUtils.hasText(msg)) {
+            Alerts.error(msg).show();
+            return;
+        }
+        publish("save-connection", connectionInfo);
 
+        getStage(event).close();
     }
 
     /**
@@ -49,28 +64,20 @@ public class NewConnectionController extends AbstractViewController {
      * @param actionEvent ActionEvent
      */
     @FXML
-    void testConnection(ActionEvent actionEvent) {
-        DatabaseInfo config = extractConfigForUI();
-        if (config == null) {
+    public void testConnection(ActionEvent actionEvent) {
+        String msg = Assert.target(connectionInfo)
+                           .hasText(ConnectionInfo::getUsername, "用户名不能为空")
+                           .hasText(ConnectionInfo::getPassword, "密码不能为空")
+                           .hasText(ConnectionInfo::getHost, "连接地址不能为空")
+                           .getErrorMessages();
+        if (StringUtils.hasText(msg)) {
+            Alerts.error(msg).show();
             return;
         }
-        if (StringUtils.isAnyEmpty(config.getName(), config.getHost(), config.getPort(), config.getUsername(), config.getEncoding(), config.getDbType(), config.getSchema())) {
-            Alerts.warn("密码以外其他字段必填").showAndWait();
-            return;
-        }
-        if (tabSshConnection.isSelected()) {
-            testSshConnection(config);
-        } else {
-            try {
-                DBUtils.getConnection(config);
-                Alerts.info("连接成功").showAndWait();
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                Alerts.warn("连接失败: " + e.getMessage()).showAndWait();
-            }
-        }
+        publish("TestConnection", connectionInfo);
     }
 
+    // 暂时不用SSH连接
     private void testSshConnection(DatabaseInfo config) {
         Session sshSession = DBUtils.getSSHSession(config);
         PictureProcessStateController pictureProcessState = new PictureProcessStateController();
@@ -80,7 +87,7 @@ public class NewConnectionController extends AbstractViewController {
             @Override
             protected Void call() throws Exception {
                 DBUtils.engagePortForwarding(sshSession, config);
-                DBUtils.getConnection(config);
+                // DBUtils.getConnection(config);
                 return null;
             }
         };
@@ -114,5 +121,19 @@ public class NewConnectionController extends AbstractViewController {
             }
         });
         new Thread(task).start();
+    }
+
+    /**
+     * 填充默认值
+     * @param actionEvent 事件
+     */
+    @FXML
+    public void fillDefaultConnectionInfo(ActionEvent actionEvent) {
+        connectionInfo.setDbType(JdbcDriver.MySQL5.name());
+        connectionInfo.setEncoding("utf8");
+        connectionInfo.setHost("127.0.0.1");
+        connectionInfo.setPort("3306");
+        connectionInfo.setUsername("root");
+        connectionInfo.setPassword("123456");
     }
 }

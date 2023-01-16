@@ -43,6 +43,12 @@ public final class Alerts {
         return INFO;
     }
 
+    public static Alert info(String title, Object data) {
+        INFO.setTitle(title);
+        INFO.setContentText(String.valueOf(data));
+        return INFO;
+    }
+
     public static Alert warn(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setContentText(message);

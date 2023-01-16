@@ -8,7 +8,7 @@ import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
-import io.devpl.toolkit.fxui.common.DBDriver;
+import io.devpl.toolkit.fxui.common.JdbcDriver;
 import io.devpl.sdk.util.ResourceUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.logging.Log;
@@ -33,7 +33,7 @@ public class DBUtils {
      */
     private static final int DB_CONNECTION_TIMEOUTS_SECONDS = 1;
 
-    private static final Map<DBDriver, Driver> drivers = new HashMap<>();
+    private static final Map<JdbcDriver, Driver> drivers = new HashMap<>();
 
     private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private static volatile boolean portForwaring = false;
@@ -97,9 +97,7 @@ public class DBUtils {
                     log.info("portForwarding Enabled, {}", assinged_port);
                 } catch (JSchException e) {
                     log.error("Connect Over SSH failed", e);
-                    if (e.getCause() != null && e.getCause()
-                                                 .getMessage()
-                                                 .equals("Address already in use: JVM_Bind")) {
+                    if (e.getCause() != null && e.getCause().getMessage().equals("Address already in use: JVM_Bind")) {
                         throw new RuntimeException("Address already in use: JVM_Bind");
                     }
                     throw new RuntimeException(e.getMessage());
@@ -116,8 +114,7 @@ public class DBUtils {
                     throw new RuntimeException("OverSSH 连接超时：超过5秒");
                 }
                 log.info("executorService isShutdown:{}", executorService.isShutdown());
-                Alerts.error("OverSSH 失败，请检查连接设置:" + e.getMessage())
-                      .showAndWait();
+                Alerts.error("OverSSH 失败，请检查连接设置:" + e.getMessage()).showAndWait();
             }
         }
     }
@@ -130,8 +127,25 @@ public class DBUtils {
         }
     }
 
+    public static Connection getConnection(JdbcDriver driver, String url, String username, String password) throws SQLException {
+        loadDbDriver(driver);
+        return DriverManager.getConnection(url, username, password);
+    }
+
+    /**
+     * 数据库驱动通过SPI自动加载，因此只需要提供url即可区分不同的数据库
+     * @param url      连接URL
+     * @param username 用户名
+     * @param password 密码
+     * @return 数据库连接
+     * @throws SQLException 连接失败
+     */
+    public static Connection getConnection(String url, String username, String password) throws SQLException {
+        return DriverManager.getConnection(url, username, password);
+    }
+
     public static Connection getConnection(DatabaseInfo config) throws SQLException {
-        DBDriver dbType = DBDriver.valueOf(config.getDbType());
+        JdbcDriver dbType = JdbcDriver.valueOf(config.getDbType());
         loadDbDriver(dbType);
         String url = getConnectionUrlWithSchema(config);
         Properties props = new Properties();
@@ -145,12 +159,15 @@ public class DBUtils {
         return connection;
     }
 
-    public static Connection getConnection(String url, Properties properties) {
-        try {
-            return DriverManager.getConnection(url, properties);
-        } catch (SQLException e) {
-            return null;
-        }
+    /**
+     * 获取连接
+     * @param url        全部连接URL去掉参数的部分
+     * @param properties 需要包含user和password两个key，其他JDBC连接属性可选
+     * @return Connection
+     * @throws SQLException 连接异常
+     */
+    public static Connection getConnection(String url, Properties properties) throws SQLException {
+        return DriverManager.getConnection(url, properties);
     }
 
     public static List<String> getTableNames(DatabaseInfo config, String filter) throws Exception {
@@ -160,16 +177,15 @@ public class DBUtils {
             List<String> tables = new ArrayList<>();
             DatabaseMetaData md = connection.getMetaData();
             ResultSet rs;
-            if (DBDriver.valueOf(config.getDbType()) == DBDriver.SQL_SERVER) {
+            if (JdbcDriver.valueOf(config.getDbType()) == JdbcDriver.SQL_SERVER) {
                 String sql = SQL.SqlServer.SELECT;
                 rs = connection.createStatement().executeQuery(sql);
                 while (rs.next()) {
                     tables.add(rs.getString("name"));
                 }
-            } else if (DBDriver.valueOf(config.getDbType()) == DBDriver.ORACLE) {
-                rs = md.getTables(null, config.getUsername()
-                                              .toUpperCase(), null, new String[]{"TABLE", "VIEW"});
-            } else if (DBDriver.valueOf(config.getDbType()) == DBDriver.SQLITE) {
+            } else if (JdbcDriver.valueOf(config.getDbType()) == JdbcDriver.ORACLE) {
+                rs = md.getTables(null, config.getUsername().toUpperCase(), null, new String[]{"TABLE", "VIEW"});
+            } else if (JdbcDriver.valueOf(config.getDbType()) == JdbcDriver.SQLITE) {
                 String sql = SQL.Sqllite.SELECT;
                 rs = connection.createStatement().executeQuery(sql);
                 while (rs.next()) {
@@ -183,8 +199,7 @@ public class DBUtils {
                 tables.add(rs.getString(3));
             }
             if (StringUtils.isNotBlank(filter)) {
-                tables.removeIf(x -> !x.contains(filter) && !(x.replaceAll("_", "")
-                                                               .contains(filter)));
+                tables.removeIf(x -> !x.contains(filter) && !(x.replaceAll("_", "").contains(filter)));
             }
             if (tables.size() > 1) {
                 Collections.sort(tables);
@@ -220,7 +235,7 @@ public class DBUtils {
     }
 
     public static String getConnectionUrlWithSchema(DatabaseInfo dbConfig) {
-        DBDriver dbType = DBDriver.valueOf(dbConfig.getDbType());
+        JdbcDriver dbType = JdbcDriver.valueOf(dbConfig.getDbType());
         String connectionUrl = String.format(dbType.getConnectionUrlPattern(), portForwaring ? "127.0.0.1" : dbConfig.getHost(), portForwaring ? dbConfig.getLport() : dbConfig.getPort(), dbConfig.getSchema(), dbConfig.getEncoding());
         log.info("getConnectionUrlWithSchema, connection url: {}", connectionUrl);
         return connectionUrl;
@@ -235,8 +250,7 @@ public class DBUtils {
             }
             final File[] jarFiles = FileUtils.listAllFiles(file);
             for (int i = 0; i < jarFiles.length; i++) {
-                if (jarFiles[i].isFile() && jarFiles[i].getAbsolutePath()
-                                                       .endsWith(".jar")) {
+                if (jarFiles[i].isFile() && jarFiles[i].getAbsolutePath().endsWith(".jar")) {
                     jarFilePathList.add(jarFiles[i].getAbsolutePath());
                 }
             }
@@ -249,9 +263,9 @@ public class DBUtils {
     /**
      * 加载数据库驱动
      * @param dbType 数据库类型
-     * @see DBDriver
+     * @see JdbcDriver
      */
-    private static void loadDbDriver(DBDriver dbType) {
+    private static void loadDbDriver(JdbcDriver dbType) {
         if (drivers.containsKey(dbType)) {
             return;
         }

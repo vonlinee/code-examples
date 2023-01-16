@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TreeItem?>
+<VBox fx:id="vboxRoot" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="io.devpl.toolkit.fxui.controller.DatabaseNavigationController">
+
+    <TextField fx:id="txfFilter"/>
+    <TreeView fx:id="trvDbConnection" showRoot="false">
+        <root>
+            <TreeItem></TreeItem>
+        </root>
+    </TreeView>
+</VBox>

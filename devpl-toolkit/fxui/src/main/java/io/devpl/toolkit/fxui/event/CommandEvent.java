@@ -30,6 +30,12 @@ public class CommandEvent extends Event {
         this.command = eventType.getName();
     }
 
+    public CommandEvent(EventType<? extends Event> eventType, String command, Object data) {
+        super(eventType);
+        this.command = command;
+        this.data = data;
+    }
+
     public CommandEvent(Object source, EventTarget target, EventType<? extends Event> eventType) {
         super(source, target, eventType);
     }
@@ -40,5 +46,10 @@ public class CommandEvent extends Event {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getTypedValue(Class<T> type) {
+        return (T) data;
     }
 }

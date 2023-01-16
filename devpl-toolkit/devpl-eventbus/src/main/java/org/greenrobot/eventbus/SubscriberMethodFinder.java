@@ -185,8 +185,8 @@ class SubscriberMethodFinder {
                         if (findState.checkAdd(method, eventType)) {
                             ThreadMode threadMode = subscribeAnnotation.threadMode();
 
-                            final SubscriberMethod subscriberMethod = new SubscriberMethod(method, eventType, threadMode,
-                                    subscribeAnnotation.priority(), subscribeAnnotation.sticky(), subscribeAnnotation.event(), method.getReturnType());
+                            SubscriberMethod subscriberMethod = new SubscriberMethod(method, eventType, threadMode,
+                                    subscribeAnnotation.priority(), subscribeAnnotation.sticky(), subscribeAnnotation.name(), method.getReturnType());
 
                             findState.subscriberMethods.add(subscriberMethod);
                         }
@@ -210,8 +210,8 @@ class SubscriberMethodFinder {
 
     static class FindState {
         final List<SubscriberMethod> subscriberMethods = new ArrayList<>();
-        final Map<Class, Object> anyMethodByEventType = new HashMap<>();
-        final Map<String, Class> subscriberClassByMethodKey = new HashMap<>();
+        final Map<Class<?>, Object> anyMethodByEventType = new HashMap<>();
+        final Map<String, Class<?>> subscriberClassByMethodKey = new HashMap<>();
         final StringBuilder methodKeyBuilder = new StringBuilder(128);
 
         Class<?> subscriberClass;
@@ -280,7 +280,7 @@ class SubscriberMethodFinder {
                 clazz = clazz.getSuperclass();
                 String clazzName = clazz.getName();
                 // Skip system classes, this degrades performance.
-                // Also we might avoid some ClassNotFoundException (see FAQ for background).
+                // Also, we might avoid some ClassNotFoundException (see FAQ for background).
                 if (clazzName.startsWith("java.") || clazzName.startsWith("javax.") ||
                         clazzName.startsWith("android.") || clazzName.startsWith("androidx.")) {
                     clazz = null;

@@ -27,7 +27,7 @@ public class MainUI extends JavaFXApplication {
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        final URL resource = Thread.currentThread().getContextClassLoader().getResource("static/fxml/main_view.fxml");
+        URL resource = Thread.currentThread().getContextClassLoader().getResource("static/fxml/main_view.fxml");
         loader.setLocation(resource);
         Parent root = loader.load();
 

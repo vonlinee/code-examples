@@ -22,8 +22,16 @@ import java.lang.reflect.InvocationTargetException;
  */
 public interface Subscription {
 
+    /**
+     * 修改当前订阅的有效状态
+     * @param active
+     */
     void setActive(boolean active);
 
+    /**
+     * 当前订阅是否有效
+     * @return
+     */
     boolean isActive();
 
     @Override
@@ -32,9 +40,24 @@ public interface Subscription {
     @Override
     boolean equals(Object obj);
 
+    /**
+     * 执行订阅者方法
+     * @param args
+     * @return
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
     Object invokeSubscriber(Object... args) throws InvocationTargetException, IllegalAccessException;
 
+    /**
+     * 获取当前订阅的线程模式
+     * @return
+     */
     ThreadMode getThredMode();
 
+    /**
+     * 获取优先级
+     * @return
+     */
     int getPriority();
 }

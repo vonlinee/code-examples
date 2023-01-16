@@ -7,7 +7,6 @@ import org.greenrobot.eventbus.Subscriber;
 
 public class EventBusTest {
 
-    @Subscriber
     static class SubscriberClass {
 
         @Subscribe
@@ -27,6 +26,8 @@ public class EventBusTest {
         final SubscriberClass obj = new SubscriberClass();
 
         bus.register(obj);
+
+        bus.post(10);
     }
 }
 

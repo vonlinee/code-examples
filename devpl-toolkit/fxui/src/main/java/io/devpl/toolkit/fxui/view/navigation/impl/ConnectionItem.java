@@ -64,7 +64,12 @@ public class ConnectionItem implements NavigationItem {
         properties.setProperty("user", connectionInfo.getUsername());
         properties.setProperty("password", connectionInfo.getPassword());
         String url = "jdbc:mysql://localhost:3306/lgdb_campus_intelligent_portrait?useUnicode=true&characterEncoding=UTF-8&useSSL=false&&serverTimezone=GMT%2B8";
-        Connection connection = DBUtils.getConnection(url, properties);
+        Connection connection = null;
+        try {
+            connection = DBUtils.getConnection(url, properties);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         if (connection == null) {
             System.out.println("连接失败");

@@ -43,7 +43,11 @@ public class ConnectionTreeItem extends TreeItem<String> {
         this.connectionInfo = connectionInfo;
     }
 
-    public void connect() {
+    /**
+     * 根据连接信息获取数据库，表信息，添加子元素
+     * @throws SQLException SQLException
+     */
+    public void connect() throws SQLException {
         Properties properties = new Properties();
         properties.setProperty("user", connectionInfo.getUsername());
         properties.setProperty("password", connectionInfo.getPassword());
@@ -54,7 +58,7 @@ public class ConnectionTreeItem extends TreeItem<String> {
             System.out.println("连接失败");
             return;
         }
-        setValue("jdbc:mysql://localhost:3306");
+        this.setValue("jdbc:mysql://localhost:3306");
         List<TableMetadata> tablesMetadata = DBUtils.getTablesMetadata(connection, null, null);
 
         final DatabaseTreeItem databaseTreeItem = new DatabaseTreeItem();
@@ -63,12 +67,10 @@ public class ConnectionTreeItem extends TreeItem<String> {
         databaseTreeItem.setGraphic(new FontIcon(FontAwesomeSolid.DATABASE));
 
         for (TableMetadata table : tablesMetadata) {
-
             TableTreeItem item = new TableTreeItem();
             item.setValue(table.getTableName());
             item.setGraphic(FontIcon.of(FontAwesomeSolid.TABLE));
             databaseTreeItem.getChildren().add(item);
-
             // 列
             List<ColumnMetadata> columns = DBUtils.getColumnsMetadata(connection, table.getTableName());
             for (ColumnMetadata column : columns) {

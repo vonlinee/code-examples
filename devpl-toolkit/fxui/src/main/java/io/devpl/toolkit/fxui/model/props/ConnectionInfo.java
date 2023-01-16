@@ -1,22 +1,26 @@
 package io.devpl.toolkit.fxui.model.props;
 
+import io.devpl.toolkit.framework.mvc.ViewModel;
 import io.devpl.toolkit.fxui.common.Constants;
-import io.devpl.toolkit.fxui.common.DBDriver;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import io.devpl.toolkit.fxui.common.JdbcDriver;
+import io.devpl.toolkit.fxui.utils.DBUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Properties;
+
 /**
- * 连接信息
+ * 数据库连接信息
  */
-public class ConnectionInfo {
+public class ConnectionInfo implements ViewModel {
 
     // 连接名称
     private final StringProperty name = new SimpleStringProperty();
-    private final StringProperty dbType = new SimpleStringProperty(DBDriver.MySQL5.name());
+    private final StringProperty dbType = new SimpleStringProperty(JdbcDriver.MySQL5.name());
     private final StringProperty host = new SimpleStringProperty("127.0.0.1");
-    private final IntegerProperty port = new SimpleIntegerProperty(3306);
+    private final StringProperty port = new SimpleStringProperty("3306");
     private final StringProperty schema = new SimpleStringProperty();
     private final StringProperty username = new SimpleStringProperty("root");
     private final StringProperty password = new SimpleStringProperty("123456");
@@ -58,15 +62,15 @@ public class ConnectionInfo {
         this.host.set(host);
     }
 
-    public int getPort() {
+    public String getPort() {
         return port.get();
     }
 
-    public IntegerProperty portProperty() {
+    public StringProperty portProperty() {
         return port;
     }
 
-    public void setPort(int port) {
+    public void setPort(String port) {
         this.port.set(port);
     }
 
@@ -116,5 +120,41 @@ public class ConnectionInfo {
 
     public void setEncoding(String encoding) {
         this.encoding.set(encoding);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ConnectionInfo{");
+        sb.append("name=").append(name.get());
+        sb.append(", dbType=").append(dbType.get());
+        sb.append(", host=").append(host.get());
+        sb.append(", port=").append(port.get());
+        sb.append(", schema=").append(schema.get());
+        sb.append(", username=").append(username.get());
+        sb.append(", password=").append(password.get());
+        sb.append(", encoding=").append(encoding.get());
+        sb.append('}');
+        return sb.toString();
+    }
+
+    public String getConnectionUrl() {
+        JdbcDriver driver = JdbcDriver.valueOf(dbType.get());
+        String databaseName = schema.get();
+        if (databaseName == null || databaseName.length() == 0) {
+            databaseName = "";
+        }
+        return String.format(driver.getConnectionUrlPattern(), host.get(), port.get(), databaseName);
+    }
+
+    public Connection getConnection() throws SQLException {
+        String connectionUrl = getConnectionUrl();
+        final Properties properties = new Properties();
+        properties.put("user", username.get());
+        properties.put("password", password.get());
+        properties.put("serverTimezone", "UTC");
+        properties.put("useUnicode", "true");
+        properties.put("useSSL", "false");
+        properties.put("characterEncoding", encoding.get());
+        return DBUtils.getConnection(connectionUrl, properties);
     }
 }

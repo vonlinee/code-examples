@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--stylesheets="@../../style.css"-->
+<!--stylesheets="@../../global_style.css"-->
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
@@ -23,16 +23,12 @@
                 </padding>
             </Label>
             <Button fx:id="entityEditor" text="实体类编辑" onAction="#showEntityEditorDialog"/>
+            <Button text="类编辑器" onAction="#showClassEditorDialogPane"/>
         </ToolBar>
     </top>
     <center>
         <SplitPane dividerPositions="0.25">
-            <VBox fx:id="vboxLeft">
-                <TextField fx:id="filterTreeBox" promptText="搜索" minHeight="30" maxHeight="30"/>
-                <TreeView fx:id="trvDbTreeList" showRoot="false">
-                    <TreeItem expanded="true"/>
-                </TreeView>
-            </VBox>
+            <fx:include source="database_navigation.fxml"/>
             <VBox>
                 <TitledPane text="全局配置">
                     <GridPane layoutX="5.0" layoutY="29.0">

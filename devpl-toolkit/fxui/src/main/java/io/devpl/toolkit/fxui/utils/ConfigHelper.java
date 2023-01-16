@@ -1,7 +1,7 @@
 package io.devpl.toolkit.fxui.utils;
 
 import io.devpl.sdk.util.ResourceUtils;
-import io.devpl.toolkit.fxui.common.DBDriver;
+import io.devpl.toolkit.fxui.common.JdbcDriver;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
 import org.mybatis.generator.logging.Log;
@@ -121,7 +121,7 @@ public class ConfigHelper {
      * @return
      */
     public static String findConnectorLibPath(String dbType) {
-        DBDriver type = DBDriver.valueOf(dbType);
+        JdbcDriver type = JdbcDriver.valueOf(dbType);
         final Path path = Paths.get("lib", type.getConnectorJarFile());
         final File file;
         try {

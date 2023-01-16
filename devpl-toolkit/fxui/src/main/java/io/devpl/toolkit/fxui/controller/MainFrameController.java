@@ -9,13 +9,12 @@ import io.devpl.toolkit.framework.utils.StageHelper;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.toolkit.fxui.common.ProgressDialog;
 import io.devpl.toolkit.fxui.event.CommandEvent;
-import io.devpl.toolkit.fxui.event.EventTypes;
-import io.devpl.toolkit.fxui.model.DatabaseInfo;
-import io.devpl.toolkit.fxui.model.DbTreeViewCellFactory;
 import io.devpl.toolkit.fxui.model.TableCodeGeneration;
 import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
-import io.devpl.toolkit.fxui.utils.*;
-import javafx.collections.ObservableList;
+import io.devpl.toolkit.fxui.utils.FileChooserDialog;
+import io.devpl.toolkit.fxui.utils.FileUtils;
+import io.devpl.toolkit.fxui.utils.Messages;
+import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -24,7 +23,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
 import java.net.URL;
@@ -40,11 +38,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MainFrameController extends AbstractViewController {
 
     @FXML
-    public VBox vboxLeft;
-    @FXML
     public Button entityEditor;
     @FXML
-    private Label connectionLabel; // toolbar buttons
+    private Label connectionLabel;
     @FXML
     private Label configsLabel;
     @FXML
@@ -64,17 +60,12 @@ public class MainFrameController extends AbstractViewController {
     @FXML
     private TextField projectFolderField;
     @FXML
-    private TreeView<String> trvDbTreeList; // 数据库表列表，只读
-    @FXML
-    public TextField filterTreeBox; // TODO 过滤数据库表
-    @FXML
     public TableView<TableCodeGeneration> tblvTableCustomization;
     @FXML
     public TableColumn<TableCodeGeneration, String> tblcDbName;
     @FXML
     public TableColumn<TableCodeGeneration, String> tblcTableName;
 
-    // Current selected databaseConfig
     private final MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
     // 通用配置项
     private final GenericConfiguration codeGenConfig = new GenericConfiguration();
@@ -83,7 +74,6 @@ public class MainFrameController extends AbstractViewController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        registerThis();
         bindCodeGenConfiguration(codeGenConfig);
         // 新建连接
         connectionLabel.setGraphic(JFX.loadImageView("static/icons/computer.png", 40));
@@ -91,32 +81,6 @@ public class MainFrameController extends AbstractViewController {
         // 生成配置管理
         configsLabel.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
         configsLabel.setOnMouseClicked(event -> StageHelper.show("生成配置", GeneratorConfigController.class));
-        trvDbTreeList.prefHeightProperty().bind(vboxLeft.heightProperty().subtract(filterTreeBox.getHeight()));
-        trvDbTreeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // 设置可以多选
-
-        // 设置单元格工厂 Callback<TreeView<T>, TreeCell<T>> value
-        trvDbTreeList.setCellFactory(new DbTreeViewCellFactory());
-
-        // 新增一行
-        trvDbTreeList.addEventHandler(CommandEvent.TABLES_SELECTED, event -> {
-            ObservableList<TreeItem<String>> selectedItems = trvDbTreeList.getSelectionModel().getSelectedItems();
-            for (TreeItem<String> selectedItem : selectedItems) {
-                String tableName = selectedItem.getValue();
-                if (tableConfigsToBeGenerated.containsKey(tableName)) {
-                    continue;
-                }
-                TableCodeGeneration tableConfig = new TableCodeGeneration();
-                tableConfig.setTableName(tableName);
-                tableConfig.setDatabaseInfo((DatabaseInfo) selectedItem.getParent().getGraphic().getUserData());
-                tableConfig.setDbName(selectedItem.getParent().getValue());
-                tableConfigsToBeGenerated.put(tableName, tableConfig);
-                tblvTableCustomization.getItems().add(tableConfig);
-            }
-            event.consume();
-        });
-        trvDbTreeList.addEventHandler(CommandEvent.OPEN_DB_CONNECTION, event -> {
-            StageHelper.show("编辑数据库连接", NewConnectionController.class);
-        });
 
         tblcDbName.setCellValueFactory(new PropertyValueFactory<>("dbName"));
         tblcDbName.setCellFactory(param -> {
@@ -153,29 +117,6 @@ public class MainFrameController extends AbstractViewController {
             row.setContextMenu(menu);
             return row;
         });
-
-        trvDbTreeList.addEventHandler(EventTypes.ACTION_SHOW_TABLES, event -> {
-            @SuppressWarnings("unchecked") final TreeView<String> sourceTableView = (TreeView<String>) event.getTarget();
-            TreeItem<String> rootTreeItem = sourceTableView.getRoot();
-            final ObservableList<TreeItem<String>> children = rootTreeItem.getChildren();
-            if (children.size() > 0) {
-                children.clear();
-            } else {
-                try {
-                    // 加载所有的数据库配置
-                    List<DatabaseInfo> dbConfigs = ConfigHelper.loadDatabaseConfig();
-                    for (DatabaseInfo dbConfig : dbConfigs) {
-                        TreeItem<String> treeItem = new TreeItem<>();
-                        treeItem.setValue(dbConfig.getName());
-                        treeItem.setGraphic(JFX.loadImageView("static/icons/computer.png", 16, dbConfig));
-                        rootTreeItem.getChildren().add(treeItem);
-                    }
-                } catch (Exception e) {
-                    Alerts.error(e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e)).showAndWait();
-                }
-            }
-        });
-        Event.fireEvent(trvDbTreeList, new Event(null, trvDbTreeList, EventTypes.ACTION_SHOW_TABLES));
     }
 
     /**
@@ -272,15 +213,8 @@ public class MainFrameController extends AbstractViewController {
         StageHelper.show("实体类编辑", PojoEditorController.class);
     }
 
-    // private void setTooltip() {
-    //     generateKeysField.setTooltip(new Tooltip("insert时可以返回主键ID"));
-    //     offsetLimitCheckBox.setTooltip(new Tooltip("是否要生成分页查询代码"));
-    //     commentCheckBox.setTooltip(new Tooltip("使用数据库的列注释作为实体类字段名的Java注释 "));
-    //     useActualColumnNamesCheckbox.setTooltip(new Tooltip("是否使用数据库实际的列名作为实体类域的名称"));
-    //     useTableNameAliasCheckbox.setTooltip(new Tooltip("在Mapper XML文件中表名使用别名，并且列全部使用as查询"));
-    //     overrideXML.setTooltip(new Tooltip("重新生成时把原XML文件覆盖，否则是追加"));
-    //     useDAOExtendStyle.setTooltip(new Tooltip("将通用接口方法放在公共接口中，DAO接口留空"));
-    //     forUpdateCheckBox.setTooltip(new Tooltip("在Select语句中增加for update后缀"));
-    //     JFX.setTooltip(useLombokPlugin, "实体类使用Lombok @Data简化代码");
-    // }
+    @FXML
+    public void showClassEditorDialogPane(ActionEvent actionEvent) {
+        StageHelper.show("类编辑", ClassDefinitionController.class);
+    }
 }

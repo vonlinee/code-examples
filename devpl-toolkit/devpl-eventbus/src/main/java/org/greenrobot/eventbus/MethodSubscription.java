@@ -2,6 +2,9 @@ package org.greenrobot.eventbus;
 
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * 方法订阅:通过反射进行调用
+ */
 class MethodSubscription extends GenericSubscription {
 
     final Object subscriber;

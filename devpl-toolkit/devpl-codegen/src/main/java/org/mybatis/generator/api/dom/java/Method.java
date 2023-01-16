@@ -22,10 +22,6 @@ import java.util.Optional;
 
 public class Method extends JavaElement {
 
-    public Method() {
-
-    }
-	
     private final List<String> bodyLines = new ArrayList<>();
 
     private boolean constructor;
@@ -49,6 +45,9 @@ public class Method extends JavaElement {
     private boolean isAbstract;
 
     private boolean isFinal;
+
+    public Method() {
+    }
 
     public Method(String name) {
         this.name = name;

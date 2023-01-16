@@ -9,8 +9,11 @@ https://blog.csdn.net/unixsymbian/article/details/82121462?spm=1001.2101.3001.66
 基于EventBus 3.3.1版本进行修改
 
 
+1.事件注册：类必须被@Subscriber修饰
+2.
 
+添加事件名称
+事件过滤机制:事件发布者能控制哪些事件订阅者接受事件
 
-
-
-
+事件总线是否可以添加返回值？
+https://github.com/greenrobot/EventBus/issues/482

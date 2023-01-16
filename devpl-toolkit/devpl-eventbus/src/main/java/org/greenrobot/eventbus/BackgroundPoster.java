@@ -21,14 +21,14 @@ import java.util.logging.Level;
  * Posts events in background.
  * @author Markus
  */
-final class BackgroundPoster implements Runnable, Poster {
+public final class BackgroundPoster implements Runnable, Poster {
 
     private final PendingPostQueue queue;
     private final EventBus eventBus;
 
     private volatile boolean executorRunning;
 
-    BackgroundPoster(EventBus eventBus) {
+    public BackgroundPoster(EventBus eventBus) {
         this.eventBus = eventBus;
         queue = new PendingPostQueue();
     }

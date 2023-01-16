@@ -5,20 +5,16 @@ import io.devpl.toolkit.framework.JFX;
 import io.devpl.toolkit.framework.mvc.AbstractViewController;
 import io.devpl.toolkit.framework.mvc.FxmlView;
 import io.devpl.toolkit.fxui.common.Constants;
-import io.devpl.toolkit.fxui.common.DBDriver;
-import io.devpl.toolkit.fxui.event.MessageEvent;
-import io.devpl.toolkit.fxui.model.DatabaseInfo;
-import io.devpl.toolkit.fxui.utils.ConfigHelper;
-import io.devpl.toolkit.fxui.utils.StringUtils;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import io.devpl.toolkit.fxui.common.JdbcDriver;
+import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.URL;
+import java.sql.Connection;
 import java.util.ResourceBundle;
 
 /**
@@ -28,8 +24,6 @@ import java.util.ResourceBundle;
 @FxmlView(location = "static/fxml/newConnection.fxml")
 public class DbConnectionController extends AbstractViewController {
 
-    @FXML
-    public GridPane grpRoot;
     @FXML
     protected TextField nameField; // 数据库名称
     @FXML
@@ -47,71 +41,53 @@ public class DbConnectionController extends AbstractViewController {
     @FXML
     protected ChoiceBox<String> dbTypeChoice;  // 数据库类型选择
 
-    protected boolean isUpdate = false;
-    protected Integer primayKey;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        dbTypeChoice.setItems(JFX.arrayOf(DBDriver.supportedDbNames()));
-        dbTypeChoice.setValue(DBDriver.DEFAULT_DRIVER.name());
+        dbTypeChoice.setItems(JFX.arrayOf(JdbcDriver.supportedDbNames()));
+        dbTypeChoice.setValue(JdbcDriver.DEFAULT_DRIVER.name());
         encodingChoice.setItems(JFX.arrayOf(Constants.SUPPORTED_ENCODING));
         encodingChoice.setValue(Constants.DEFAULT_ENCODING);
         hostField.setText(Constants.LOCALHOST);
         userNameField.setText(Constants.MYSQL_ROOT_USERNAME);
         portField.setText(String.valueOf(Constants.DEFAULT_MYSQL_SERVER_PORT));
-
-        grpRoot.addEventHandler(MessageEvent.ANY, event -> {
-            Object message = event.getMessage();
-            setConfig((DatabaseInfo) message);
-        });
     }
 
-    final void saveConnection(ActionEvent event) {
-        DatabaseInfo config = extractConfigForUI();
-        if (config == null) {
-            return;
-        }
-        try {
-            ConfigHelper.saveDatabaseConfig(this.isUpdate, primayKey, config);
-            JFX.getStage(event).close();
-            // 加载连接信息
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            Alerts.error(e.getMessage()).show();
+    /**
+     * 初始化数据绑定
+     * @param connectionInfo 事件
+     */
+    @Subscribe(name = "init-binder", threadMode = ThreadMode.BACKGROUND)
+    public void initBinder(ConnectionInfo connectionInfo) {
+        connectionInfo.nameProperty().bindBidirectional(nameField.textProperty());
+        connectionInfo.hostProperty().bindBidirectional(hostField.textProperty());
+        connectionInfo.portProperty().bindBidirectional(portField.textProperty());
+        connectionInfo.dbTypeProperty().bindBidirectional(dbTypeChoice.valueProperty());
+        connectionInfo.schemaProperty().bindBidirectional(schemaField.textProperty());
+        connectionInfo.usernameProperty().bindBidirectional(userNameField.textProperty());
+        connectionInfo.passwordProperty().bindBidirectional(passwordField.textProperty());
+        connectionInfo.encodingProperty().bindBidirectional(encodingChoice.valueProperty());
+    }
+
+    /**
+     * 测试连接
+     * @param connectionInfo 数据库连接信息
+     */
+    @Subscribe(name = "TestConnection")
+    public void testConnection(ConnectionInfo connectionInfo) {
+        try (Connection connection = connectionInfo.getConnection()) {
+            Alerts.info("连接成功", connection).show();
+        } catch (Exception exception) {
+            log.info("连接失败", exception);
+            Alerts.exception("连接失败", exception).show();
         }
     }
 
     /**
-     * 将界面上的数据提取到Model中
-     * @return
+     * 测试连接
+     * @param connectionInfo 数据库连接信息
      */
-    public DatabaseInfo extractConfigForUI() {
-        DatabaseInfo config = new DatabaseInfo();
-        config.setName(nameField.getText());
-        config.setDbType(dbTypeChoice.getValue());
-        config.setHost(hostField.getText());
-        config.setPort(portField.getText());
-        config.setUsername(userNameField.getText());
-        config.setPassword(passwordField.getText());
-        config.setSchema(schemaField.getText());
-        config.setEncoding(encodingChoice.getValue());
-        if (StringUtils.isAnyEmpty(config.getName(), config.getHost(), config.getPort(), config.getUsername(), config.getEncoding(), config.getDbType(), config.getSchema())) {
-            Alerts.warn("密码以外其他字段必填").showAndWait();
-            return null;
-        }
-        return config;
-    }
-
-    public void setConfig(DatabaseInfo config) {
-        isUpdate = true;
-        primayKey = config.getId(); // save id for update config
-        nameField.setText(config.getName());
-        hostField.setText(config.getHost());
-        portField.setText(config.getPort());
-        userNameField.setText(config.getUsername());
-        passwordField.setText(config.getPassword());
-        encodingChoice.setValue(config.getEncoding());
-        dbTypeChoice.setValue(config.getDbType());
-        schemaField.setText(config.getSchema());
+    @Subscribe(name = "save-connection", threadMode = ThreadMode.BACKGROUND)
+    public void saveConnection(ConnectionInfo connectionInfo) {
+        publish("add-new-connection", connectionInfo);
     }
 }

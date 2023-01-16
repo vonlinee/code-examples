@@ -1,7 +1,6 @@
 package io.devpl.toolkit.fxui.model;
 
 import io.devpl.toolkit.fxui.event.CommandEvent;
-import io.devpl.toolkit.fxui.event.LoadDbTreeEvent;
 import io.devpl.toolkit.framework.Alerts;
 import io.devpl.toolkit.framework.JFX;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
@@ -67,7 +66,7 @@ public class DbTreeViewCellFactory implements Callback<TreeView<String>, TreeCel
             try {
                 final DatabaseInfo userData = (DatabaseInfo) cell.getTreeItem().getGraphic().getUserData();
                 ConfigHelper.deleteDatabaseConfig(userData);
-                EventBus.getDefault().post(new LoadDbTreeEvent());
+                // TODO 加载数据库配置
             } catch (Exception e) {
                 Alerts.error("Delete connection failed! Reason: " + e.getMessage()).show();
             }
@@ -104,6 +103,11 @@ public class DbTreeViewCellFactory implements Callback<TreeView<String>, TreeCel
         }
     }
 
+    /**
+     * 是否鼠标左键双击
+     * @param event
+     * @return
+     */
     private boolean isPrimaryButtonDoubleClicked(MouseEvent event) {
         return event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2;
     }
