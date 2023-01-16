@@ -16,6 +16,7 @@
         <module>devpl-sdk-internal</module>
         <module>fxui</module>
         <module>devpl-eventbus</module>
+        <module>fxtras</module>
     </modules>
 
     <properties>

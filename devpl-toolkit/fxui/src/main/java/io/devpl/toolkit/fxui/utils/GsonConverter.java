@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import javafx.beans.value.ObservableValue;
+import org.hildan.fxgson.FxGson;
 
 import java.io.IOException;
 
@@ -18,7 +19,7 @@ public class GsonConverter implements JSONConverter {
         final GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls(); // 不忽略null值
         // builder.registerTypeAdapter(Property.class, null);
-        this.gson = builder.create();
+        this.gson = FxGson.addFxSupport(builder).create();
     }
 
     static class PropertyTypeAdapter<T> extends TypeAdapter<ObservableValue<T>> {

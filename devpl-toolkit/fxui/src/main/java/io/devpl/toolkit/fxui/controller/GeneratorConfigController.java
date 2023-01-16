@@ -1,8 +1,8 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.framework.mvc.AbstractViewController;
-import io.devpl.toolkit.framework.mvc.FxmlView;
+import io.devpl.fxtras.Alerts;
+import io.devpl.fxtras.mvc.FxmlView;
+import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import javafx.collections.FXCollections;
@@ -24,8 +24,8 @@ import java.util.ResourceBundle;
 /**
  * 管理GeneratorConfig的Controller
  */
-@FxmlView(location = "static/fxml/generatorConfigs.fxml")
-public class GeneratorConfigController extends AbstractViewController {
+@FxmlLocation(location = "static/fxml/generatorConfigs.fxml")
+public class GeneratorConfigController extends FxmlView {
 
     @FXML
     private TableView<GenericConfiguration> configTable;

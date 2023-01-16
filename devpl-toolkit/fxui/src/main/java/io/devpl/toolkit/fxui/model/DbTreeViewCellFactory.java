@@ -1,8 +1,8 @@
 package io.devpl.toolkit.fxui.model;
 
 import io.devpl.toolkit.fxui.event.CommandEvent;
-import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.framework.JFX;
+import io.devpl.fxtras.Alerts;
+import io.devpl.fxtras.JFX;
 import io.devpl.toolkit.fxui.utils.ConfigHelper;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import javafx.collections.ObservableList;
@@ -13,7 +13,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
-import org.greenrobot.eventbus.EventBus;
 
 import java.sql.SQLRecoverableException;
 import java.util.List;

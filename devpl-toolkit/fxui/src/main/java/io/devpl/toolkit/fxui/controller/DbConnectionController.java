@@ -1,14 +1,16 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.framework.JFX;
-import io.devpl.toolkit.framework.mvc.AbstractViewController;
-import io.devpl.toolkit.framework.mvc.FxmlView;
+import io.devpl.fxtras.Alerts;
+import io.devpl.fxtras.JFX;
+import io.devpl.fxtras.mvc.FxmlLocation;
+import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.toolkit.fxui.common.Constants;
 import io.devpl.toolkit.fxui.common.JdbcDriver;
 import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -21,9 +23,11 @@ import java.util.ResourceBundle;
  * 数据库连接控制器
  * 负责从界面的配置连接数据库
  */
-@FxmlView(location = "static/fxml/newConnection.fxml")
-public class DbConnectionController extends AbstractViewController {
+@FxmlLocation(location = "static/fxml/newConnection.fxml")
+public class DbConnectionController extends FxmlView {
 
+    @FXML
+    public CheckBox savePwdCheckBox;
     @FXML
     protected TextField nameField; // 数据库名称
     @FXML
@@ -35,7 +39,7 @@ public class DbConnectionController extends AbstractViewController {
     @FXML
     protected TextField passwordField; // 密码
     @FXML
-    protected TextField schemaField; // 数据库schema，MySQL中就是数据库名
+    protected ComboBox<String> schemaField; // 数据库schema，MySQL中就是数据库名
     @FXML
     protected ChoiceBox<String> encodingChoice; // 编码
     @FXML
@@ -62,7 +66,7 @@ public class DbConnectionController extends AbstractViewController {
         connectionInfo.hostProperty().bindBidirectional(hostField.textProperty());
         connectionInfo.portProperty().bindBidirectional(portField.textProperty());
         connectionInfo.dbTypeProperty().bindBidirectional(dbTypeChoice.valueProperty());
-        connectionInfo.schemaProperty().bindBidirectional(schemaField.textProperty());
+        connectionInfo.schemaProperty().bindBidirectional(schemaField.valueProperty());
         connectionInfo.usernameProperty().bindBidirectional(userNameField.textProperty());
         connectionInfo.passwordProperty().bindBidirectional(passwordField.textProperty());
         connectionInfo.encodingProperty().bindBidirectional(encodingChoice.valueProperty());
@@ -80,14 +84,5 @@ public class DbConnectionController extends AbstractViewController {
             log.info("连接失败", exception);
             Alerts.exception("连接失败", exception).show();
         }
-    }
-
-    /**
-     * 测试连接
-     * @param connectionInfo 数据库连接信息
-     */
-    @Subscribe(name = "save-connection", threadMode = ThreadMode.BACKGROUND)
-    public void saveConnection(ConnectionInfo connectionInfo) {
-        publish("add-new-connection", connectionInfo);
     }
 }

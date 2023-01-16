@@ -6,7 +6,7 @@ import com.jcraft.jsch.Session;
 import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
-import io.devpl.toolkit.framework.Alerts;
+import io.devpl.fxtras.Alerts;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.common.JdbcDriver;
 import io.devpl.sdk.util.ResourceUtils;
@@ -341,5 +341,16 @@ public class DBUtils {
             throw new RuntimeException(e);
         }
         return tmdList;
+    }
+
+    public static void closeQuitely(Connection connection) {
+        try {
+            if (connection == null) {
+                return;
+            }
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

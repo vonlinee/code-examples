@@ -1,9 +1,9 @@
 package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.Session;
-import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.framework.mvc.AbstractViewController;
-import io.devpl.toolkit.framework.mvc.FxmlView;
+import io.devpl.fxtras.Alerts;
+import io.devpl.fxtras.mvc.FxmlLocation;
+import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.toolkit.fxui.common.JdbcDriver;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
@@ -22,8 +22,8 @@ import java.util.ResourceBundle;
 /**
  * 新建数据库连接控制器
  */
-@FxmlView(location = "static/fxml/newConnection.fxml")
-public class NewConnectionController extends AbstractViewController {
+@FxmlLocation(location = "static/fxml/newConnection.fxml")
+public class NewConnectionController extends FxmlView {
 
     @FXML
     public Tab tabTcpIpConnection;
@@ -48,14 +48,12 @@ public class NewConnectionController extends AbstractViewController {
         String msg = Assert.target(connectionInfo)
                            .hasText(ConnectionInfo::getUsername, "用户名不能为空")
                            .hasText(ConnectionInfo::getPassword, "密码不能为空")
-                           .hasText(ConnectionInfo::getHost, "连接地址不能为空")
-                           .getErrorMessages();
+                           .hasText(ConnectionInfo::getHost, "连接地址不能为空").getErrorMessages();
         if (StringUtils.hasText(msg)) {
             Alerts.error(msg).show();
             return;
         }
-        publish("save-connection", connectionInfo);
-
+        publish("add-new-connection", connectionInfo);
         getStage(event).close();
     }
 
@@ -68,8 +66,7 @@ public class NewConnectionController extends AbstractViewController {
         String msg = Assert.target(connectionInfo)
                            .hasText(ConnectionInfo::getUsername, "用户名不能为空")
                            .hasText(ConnectionInfo::getPassword, "密码不能为空")
-                           .hasText(ConnectionInfo::getHost, "连接地址不能为空")
-                           .getErrorMessages();
+                           .hasText(ConnectionInfo::getHost, "连接地址不能为空").getErrorMessages();
         if (StringUtils.hasText(msg)) {
             Alerts.error(msg).show();
             return;
@@ -87,7 +84,6 @@ public class NewConnectionController extends AbstractViewController {
             @Override
             protected Void call() throws Exception {
                 DBUtils.engagePortForwarding(sshSession, config);
-                // DBUtils.getConnection(config);
                 return null;
             }
         };

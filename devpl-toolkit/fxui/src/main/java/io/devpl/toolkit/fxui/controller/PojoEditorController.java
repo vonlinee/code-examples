@@ -1,7 +1,7 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.framework.mvc.AbstractViewController;
-import io.devpl.toolkit.framework.mvc.FxmlView;
+import io.devpl.fxtras.mvc.FxmlView;
+import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import io.devpl.toolkit.test.Utils;
 import javafx.event.ActionEvent;
@@ -12,8 +12,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-@FxmlView(location = "static/fxml/pojo_editor.fxml")
-public class PojoEditorController extends AbstractViewController {
+@FxmlLocation(location = "static/fxml/pojo_editor.fxml")
+public class PojoEditorController extends FxmlView {
 
     @FXML
     public TextArea txaContent;

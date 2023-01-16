@@ -1,11 +1,11 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.framework.JFX;
-import io.devpl.toolkit.framework.mvc.AbstractViewController;
-import io.devpl.toolkit.framework.mvc.FxmlView;
-import io.devpl.toolkit.framework.mvc.ViewLoader;
-import io.devpl.toolkit.framework.utils.StageHelper;
+import io.devpl.fxtras.Alerts;
+import io.devpl.fxtras.JFX;
+import io.devpl.fxtras.mvc.FxmlView;
+import io.devpl.fxtras.mvc.FxmlLocation;
+import io.devpl.fxtras.mvc.ViewLoader;
+import io.devpl.fxtras.utils.StageHelper;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.toolkit.fxui.common.ProgressDialog;
 import io.devpl.toolkit.fxui.event.CommandEvent;
@@ -34,8 +34,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 主窗口控制器
  */
-@FxmlView(location = "static/fxml/MainUI.fxml")
-public class MainFrameController extends AbstractViewController {
+@FxmlLocation(location = "static/fxml/MainUI.fxml")
+public class MainFrameController extends FxmlView {
 
     @FXML
     public Button entityEditor;
@@ -79,7 +79,6 @@ public class MainFrameController extends AbstractViewController {
         connectionLabel.setGraphic(JFX.loadImageView("static/icons/computer.png", 40));
         connectionLabel.setOnMouseClicked(event -> StageHelper.show("新建连接", NewConnectionController.class));
         // 生成配置管理
-        configsLabel.setGraphic(JFX.loadImageView("static/icons/config-list.png", 40));
         configsLabel.setOnMouseClicked(event -> StageHelper.show("生成配置", GeneratorConfigController.class));
 
         tblcDbName.setCellValueFactory(new PropertyValueFactory<>("dbName"));

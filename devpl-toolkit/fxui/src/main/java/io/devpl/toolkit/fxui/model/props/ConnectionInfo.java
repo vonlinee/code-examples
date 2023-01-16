@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.model.props;
 
-import io.devpl.toolkit.framework.mvc.ViewModel;
+import io.devpl.fxtras.mvc.ViewModel;
 import io.devpl.toolkit.fxui.common.Constants;
 import io.devpl.toolkit.fxui.common.JdbcDriver;
 import io.devpl.toolkit.fxui.utils.DBUtils;
@@ -124,17 +124,15 @@ public class ConnectionInfo implements ViewModel {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ConnectionInfo{");
-        sb.append("name=").append(name.get());
-        sb.append(", dbType=").append(dbType.get());
-        sb.append(", host=").append(host.get());
-        sb.append(", port=").append(port.get());
-        sb.append(", schema=").append(schema.get());
-        sb.append(", username=").append(username.get());
-        sb.append(", password=").append(password.get());
-        sb.append(", encoding=").append(encoding.get());
-        sb.append('}');
-        return sb.toString();
+        return "ConnectionInfo{" + "name=" + name.get() +
+                ", dbType=" + dbType.get() +
+                ", host=" + host.get() +
+                ", port=" + port.get() +
+                ", schema=" + schema.get() +
+                ", username=" + username.get() +
+                ", password=" + password.get() +
+                ", encoding=" + encoding.get() +
+                '}';
     }
 
     public String getConnectionUrl() {

@@ -2,9 +2,9 @@ package io.devpl.toolkit.fxui.controller;
 
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.framework.mvc.AbstractViewController;
-import io.devpl.toolkit.framework.mvc.FxmlView;
+import io.devpl.fxtras.Alerts;
+import io.devpl.fxtras.mvc.FxmlView;
+import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.StringUtils;
@@ -20,11 +20,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
-@FxmlView(location = "static/fxml/sshBasedConnection.fxml")
-public class OverSshController extends AbstractViewController {
+@FxmlLocation(location = "static/fxml/sshBasedConnection.fxml")
+public class OverSshController extends FxmlView {
 
-    @FXML
-    public CheckBox savePwdCheckBox;
     @FXML
     public HBox pubkeyBox;
     @FXML
@@ -38,15 +36,9 @@ public class OverSshController extends AbstractViewController {
     @FXML
     public PasswordField sshPasswordField;
     @FXML
-    private TextField sshHostField;
-    @FXML
-    private TextField sshdPortField;
-    @FXML
     private TextField lportField;
     @FXML
     private TextField rportField;
-    @FXML
-    private Label note;
     @FXML
     private Label pubkeyBoxLabel;
     @FXML
@@ -93,8 +85,8 @@ public class OverSshController extends AbstractViewController {
         if (databaseConfig == null) {
             return;
         }
-        this.sshdPortField.setText(databaseConfig.getSshPort());
-        this.sshHostField.setText(databaseConfig.getSshHost());
+        // this.sshdPortField.setText(databaseConfig.getSshPort());
+        // this.sshHostField.setText(databaseConfig.getSshHost());
         this.lportField.setText(databaseConfig.getLport());
         this.rportField.setText(databaseConfig.getRport());
         this.sshUserField.setText(databaseConfig.getSshUser());
@@ -122,11 +114,11 @@ public class OverSshController extends AbstractViewController {
                 .equals("Password") && (StringUtils.isBlank(databaseConfig.getSshHost()) || StringUtils.isBlank(databaseConfig.getSshPort()) || StringUtils.isBlank(databaseConfig.getSshUser()) || StringUtils.isBlank(databaseConfig.getSshPassword())) || authTypeChoice
                 .getValue()
                 .equals("PubKey") && (StringUtils.isBlank(databaseConfig.getSshHost()) || StringUtils.isBlank(databaseConfig.getSshPort()) || StringUtils.isBlank(databaseConfig.getSshUser()) || StringUtils.isBlank(databaseConfig.getPrivateKey()))) {
-            note.setText("当前SSH配置输入不完整，OVER SSH不生效");
-            note.setTextFill(Paint.valueOf("#ff666f"));
+            // note.setText("当前SSH配置输入不完整，OVER SSH不生效");
+            // note.setTextFill(Paint.valueOf("#ff666f"));
         } else {
-            note.setText("当前SSH配置生效");
-            note.setTextFill(Paint.valueOf("#5da355"));
+            // note.setText("当前SSH配置生效");
+            // note.setTextFill(Paint.valueOf("#5da355"));
         }
     }
 
@@ -141,8 +133,8 @@ public class OverSshController extends AbstractViewController {
     public DatabaseInfo extractConfigFromUi() {
         String authType = authTypeChoice.getValue();
         DatabaseInfo config = new DatabaseInfo();
-        config.setSshHost(this.sshHostField.getText());
-        config.setSshPort(this.sshdPortField.getText());
+        // config.setSshHost(this.sshHostField.getText());
+        // config.setSshPort(this.sshdPortField.getText());
         config.setLport(this.lportField.getText());
         config.setRport(this.rportField.getText());
         config.setSshUser(this.sshUserField.getText());
@@ -206,8 +198,8 @@ public class OverSshController extends AbstractViewController {
     public void reset(ActionEvent actionEvent) {
         this.sshUserField.clear();
         this.sshPasswordField.clear();
-        this.sshdPortField.clear();
-        this.sshHostField.clear();
+        // this.sshdPortField.clear();
+        // this.sshHostField.clear();
         this.lportField.clear();
         this.rportField.clear();
         this.sshPubKeyField.clear();

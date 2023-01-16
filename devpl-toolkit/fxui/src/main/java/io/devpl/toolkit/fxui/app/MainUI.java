@@ -1,16 +1,11 @@
 package io.devpl.toolkit.fxui.app;
 
-import io.devpl.sdk.util.ResourceUtils;
-import io.devpl.toolkit.framework.mvc.ViewLoader;
-import io.devpl.toolkit.fxui.controller.MainFrameController;
-import io.devpl.toolkit.framework.JavaFXApplication;
+import io.devpl.fxtras.JavaFXApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.mybatis.generator.logging.Log;
-import org.mybatis.generator.logging.LogFactory;
 
 import java.net.URL;
 
@@ -20,8 +15,6 @@ import java.net.URL;
  */
 public class MainUI extends JavaFXApplication {
 
-    private final Log log = LogFactory.getLog(MainUI.class);
-
     private static final String MAIN_WINDOW_TITLE = "代码生成器";
 
     @Override
@@ -30,7 +23,6 @@ public class MainUI extends JavaFXApplication {
         URL resource = Thread.currentThread().getContextClassLoader().getResource("static/fxml/main_view.fxml");
         loader.setLocation(resource);
         Parent root = loader.load();
-
         // Parent root = ViewLoader.load(MainFrameController.class).getRoot();
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle(MAIN_WINDOW_TITLE);

@@ -11,7 +11,7 @@
     <TextField fx:id="txfFilter"/>
     <TreeView fx:id="trvDbConnection" showRoot="false">
         <root>
-            <TreeItem></TreeItem>
+            <TreeItem/>
         </root>
     </TreeView>
 </VBox>

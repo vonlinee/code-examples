@@ -1,10 +1,10 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.framework.mvc.FxmlView;
+import io.devpl.fxtras.mvc.FxmlLocation;
+import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.toolkit.fxui.common.Constants;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
-import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.framework.mvc.AbstractViewController;
+import io.devpl.fxtras.Alerts;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,8 +23,8 @@ import java.util.regex.Pattern;
 /**
  * 定制列配置控制器
  */
-@FxmlView(location = "static/fxml/tableColumnConfigs.fxml")
-public class TableColumnConfigsController extends AbstractViewController {
+@FxmlLocation(location = "static/fxml/tableColumnConfigs.fxml")
+public class TableColumnConfigsController extends FxmlView {
 
     @FXML
     private Label currentTableNameLabel;

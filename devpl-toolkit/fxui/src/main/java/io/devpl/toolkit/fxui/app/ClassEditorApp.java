@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.app;
 
-import io.devpl.toolkit.framework.mvc.ViewLoader;
+import io.devpl.fxtras.mvc.ViewLoader;
 import io.devpl.toolkit.fxui.controller.ClassDefinitionController;
 import javafx.application.Application;
 import javafx.scene.Scene;

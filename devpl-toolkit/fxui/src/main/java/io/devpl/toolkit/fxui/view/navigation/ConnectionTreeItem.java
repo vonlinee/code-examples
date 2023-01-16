@@ -4,6 +4,7 @@ import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
 import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
 import io.devpl.toolkit.fxui.utils.DBUtils;
+import io.devpl.toolkit.fxui.utils.Icon;
 import javafx.scene.control.TreeItem;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -53,9 +54,7 @@ public class ConnectionTreeItem extends TreeItem<String> {
         properties.setProperty("password", connectionInfo.getPassword());
         String url = "jdbc:mysql://localhost:3306/lgdb_campus_intelligent_portrait?useUnicode=true&characterEncoding=UTF-8&useSSL=false&&serverTimezone=GMT%2B8";
         Connection connection = DBUtils.getConnection(url, properties);
-
         if (connection == null) {
-            System.out.println("连接失败");
             return;
         }
         this.setValue("jdbc:mysql://localhost:3306");
@@ -69,7 +68,7 @@ public class ConnectionTreeItem extends TreeItem<String> {
         for (TableMetadata table : tablesMetadata) {
             TableTreeItem item = new TableTreeItem();
             item.setValue(table.getTableName());
-            item.setGraphic(FontIcon.of(FontAwesomeSolid.TABLE));
+            item.setGraphic(Icon.TABLE);
             databaseTreeItem.getChildren().add(item);
             // 列
             List<ColumnMetadata> columns = DBUtils.getColumnsMetadata(connection, table.getTableName());
@@ -80,7 +79,6 @@ public class ConnectionTreeItem extends TreeItem<String> {
                 item.getChildren().add(columnTreeItem);
             }
         }
-
         try {
             connection.close();
         } catch (SQLException e) {

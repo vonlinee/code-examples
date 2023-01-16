@@ -1,0 +1,20 @@
+package io.devpl.fxtras.mvc;
+
+import java.lang.annotation.*;
+
+/**
+ * 用于绑定FxmlView和FXML文件信息
+ */
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface FxmlLocation {
+
+    /**
+     * FXML路径
+     * @return FXML相对路径
+     */
+    String location() default "";
+
+    Class<? extends ViewModel> vm() default ViewModel.class;
+}

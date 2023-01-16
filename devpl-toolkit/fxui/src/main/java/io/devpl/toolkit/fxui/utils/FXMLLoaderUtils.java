@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.utils;
 
-import io.devpl.toolkit.framework.Alerts;
+import io.devpl.fxtras.Alerts;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 

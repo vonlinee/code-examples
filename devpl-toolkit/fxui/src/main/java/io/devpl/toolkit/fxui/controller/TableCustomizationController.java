@@ -1,11 +1,11 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.toolkit.framework.mvc.FxmlView;
-import io.devpl.toolkit.framework.mvc.ViewLoader;
-import io.devpl.toolkit.framework.utils.StageHelper;
+import io.devpl.fxtras.mvc.FxmlLocation;
+import io.devpl.fxtras.mvc.ViewLoader;
+import io.devpl.fxtras.utils.StageHelper;
 import io.devpl.toolkit.fxui.event.CommandEvent;
-import io.devpl.toolkit.framework.Alerts;
-import io.devpl.toolkit.framework.mvc.AbstractViewController;
+import io.devpl.fxtras.Alerts;
+import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.toolkit.fxui.model.TableCodeGeneration;
 import io.devpl.toolkit.fxui.model.TableCodeGenOption;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
@@ -31,8 +31,8 @@ import java.util.ResourceBundle;
 /**
  * 表定制化控制器
  */
-@FxmlView(location = "static/fxml/table_customization.fxml")
-public class TableCustomizationController extends AbstractViewController {
+@FxmlLocation(location = "static/fxml/table_customization.fxml")
+public class TableCustomizationController extends FxmlView {
 
     @FXML
     public BorderPane root;

@@ -43,7 +43,7 @@
     <CheckBox text="保存密码到本地" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
     <CheckBox fx:id="savePwdCheckBox" mnemonicParsing="false" text="Save password" visible="false"/>
     <Label text="编码" GridPane.rowIndex="6"/>
-    <TextField fx:id="schemaField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    <ComboBox fx:id="schemaField" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
     <ChoiceBox fx:id="encodingChoice" prefHeight="26.0" prefWidth="404.0" GridPane.columnIndex="1"
                GridPane.hgrow="ALWAYS" GridPane.rowIndex="6">
     </ChoiceBox>
