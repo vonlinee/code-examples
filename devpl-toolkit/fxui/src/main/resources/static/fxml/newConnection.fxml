@@ -27,7 +27,8 @@
             <Button styleClass="btn-success" HBox.hgrow="NEVER" mnemonicParsing="false" onAction="#testConnection"
                     text="测试连接" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="15" AnchorPane.bottomAnchor="15">
             </Button>
-            <Button styleClass="btn-success" minWidth="60" maxWidth="60" HBox.hgrow="NEVER" mnemonicParsing="false" onAction="#saveConnection"
+            <Button styleClass="btn-success" minWidth="60" maxWidth="60" HBox.hgrow="NEVER" mnemonicParsing="false"
+                    onAction="#saveConnection"
                     text="保存" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="15" AnchorPane.bottomAnchor="15">
             </Button>
         </AnchorPane>

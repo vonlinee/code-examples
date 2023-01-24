@@ -35,7 +35,7 @@ public class JavaParserUtils {
     }
 
     public static void main(String[] args) throws IOException {
-        try (XWPFDocument document = new XWPFDocument()){
+        try (XWPFDocument document = new XWPFDocument()) {
             document.write(new FileOutputStream("C:\\Users\\Von\\Desktop\\1.doc"));
         }
     }

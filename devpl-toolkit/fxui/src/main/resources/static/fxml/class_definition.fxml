@@ -7,8 +7,7 @@
             prefWidth="800.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.devpl.toolkit.fxui.controller.ClassDefinitionController">
     <top>
-        <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <Button mnemonicParsing="false" onAction="#add" text="新增"/>
+        <ToolBar prefHeight="40.0" BorderPane.alignment="CENTER">
             <Button mnemonicParsing="false" text="修改"/>
             <Button mnemonicParsing="false" text="删除"/>
             <Button mnemonicParsing="false" text="新增"/>
@@ -27,15 +26,30 @@
                 </VBox>
                 <Accordion fx:id="acdFieldMethodInfoRoot">
                     <panes>
-                        <TitledPane text="字段">
-                            <content>
-                                <VBox></VBox>
-                            </content>
+                        <TitledPane text="字段" fx:id="titpFieldList">
+                            <BorderPane>
+                                <top>
+                                    <ToolBar>
+                                        <Button text="新增" onAction="#addField"/>
+                                        <Button text="删除" onAction="#deleteField"/>
+                                        <Button text="导入" onAction="#openFieldImportDialog"/>
+                                        <Button text="导入查询SQL" onAction="#openFieldImportDialog"/>
+                                    </ToolBar>
+                                </top>
+                                <center>
+                                    <TableView fx:id="tbvFieldInfo" editable="true">
+                                        <columns>
+                                            <TableColumn fx:id="tblcFieldModifier" text="访问修饰符"/>
+                                            <TableColumn fx:id="tblcFieldDataType" text="数据类型"/>
+                                            <TableColumn fx:id="tblcFieldName" text="字段名"/>
+                                            <TableColumn fx:id="tblcFieldRemarks" text="字段注释"/>
+                                        </columns>
+                                    </TableView>
+                                </center>
+                            </BorderPane>
                         </TitledPane>
                         <TitledPane text="方法">
-                            <content>
-                                <VBox></VBox>
-                            </content>
+                            <VBox></VBox>
                         </TitledPane>
                     </panes>
                 </Accordion>

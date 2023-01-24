@@ -94,7 +94,8 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
         topLevelClass.addJavaDocLine("/**");
         topLevelClass.addJavaDocLine(" * " + introspectedTable.getRemarks());
         topLevelClass.addJavaDocLine(" * @author ");
-        final String nowTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
+        final String nowTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                .format(LocalDateTime.now());
         topLevelClass.addJavaDocLine(" * Created On " + nowTime);
         topLevelClass.addJavaDocLine(" */");
         if (isAnnotations) {
@@ -114,7 +115,8 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
     public void addFieldComment(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
         field.addJavaDocLine("/**");
         StringBuilder sb = new StringBuilder();
-        sb.append(" * ").append(introspectedColumn.getRemarks());
+        sb.append(" * ")
+                .append(introspectedColumn.getRemarks());
         field.addJavaDocLine(sb.toString());
         field.addJavaDocLine(" */");
         if (isAnnotations) {
@@ -130,11 +132,13 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
             if (!introspectedColumn.isNullable() && !isId) {
                 field.addAnnotation("@NotEmpty");
             }
-            Optional<GeneratedKey> generatedKey = introspectedTable.getTableConfiguration().getGeneratedKey();
+            Optional<GeneratedKey> generatedKey = introspectedTable.getTableConfiguration()
+                    .getGeneratedKey();
             if (generatedKey.isPresent()) {
                 GeneratedKey key = generatedKey.get();
                 if (introspectedColumn.isIdentity()) {
-                    if (key.getRuntimeSqlStatement().equals("JDBC")) {
+                    if (key.getRuntimeSqlStatement()
+                            .equals("JDBC")) {
                         field.addAnnotation("@GeneratedValue(generator = \"JDBC\")");
                     } else {
                         field.addAnnotation("@GeneratedValue(strategy = GenerationType.IDENTITY)");

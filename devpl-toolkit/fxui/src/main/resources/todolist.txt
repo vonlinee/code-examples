@@ -7,3 +7,7 @@
 
 
 1.国际化
+
+安装本地jar包
+mvn install:install-file -Dfile=./fxui/src/main/resources/lib/fxjson/fx-gson-4.1.0.jar -DgroupId=org.hildan.fxgson -DartifactId=fx-gson -Dversion=4.1.0 -Dpackaging=jar
+

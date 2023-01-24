@@ -1,25 +1,25 @@
 package io.devpl.toolkit.fxui.utils;
 
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
 import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
-import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
-import io.devpl.fxtras.Alerts;
-import io.devpl.toolkit.fxui.model.DatabaseInfo;
-import io.devpl.toolkit.fxui.common.JdbcDriver;
 import io.devpl.sdk.util.ResourceUtils;
-import org.apache.commons.lang3.StringUtils;
+import io.devpl.toolkit.core.DatabaseInfo;
+import io.devpl.toolkit.fxui.common.JDBCDriver;
+import io.devpl.toolkit.fxui.utils.ssh.JSchUtils;
+import org.apache.commons.dbutils.BasicRowProcessor;
+import org.apache.commons.dbutils.GenerousBeanProcessor;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.ArrayHandler;
+import org.apache.commons.dbutils.handlers.ArrayListHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
-import org.springframework.jdbc.core.*;
 
 import java.io.File;
 import java.sql.*;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 封装JDBC Template进行数据库操作
@@ -32,105 +32,8 @@ public class DBUtils {
      * 数据库连接超时时长
      */
     private static final int DB_CONNECTION_TIMEOUTS_SECONDS = 1;
-
-    private static final Map<JdbcDriver, Driver> drivers = new HashMap<>();
-
-    private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private static volatile boolean portForwaring = false;
-    private static final Map<Integer, Session> portForwardingSession = new ConcurrentHashMap<>();
-
-    private static final JSch jsch = new JSch();
-
-    private static final JdbcTemplate template = new JdbcTemplate();
-
-    static {
-        template.setDataSource(ConnectionManager.dataSource);
-        template.setQueryTimeout(3);
-        template.setIgnoreWarnings(false);
-    }
-
-    public static Session getSSHSession(DatabaseInfo databaseConfig) {
-        if (StringUtils.isBlank(databaseConfig.getSshHost()) || StringUtils.isBlank(databaseConfig.getSshPort()) || StringUtils.isBlank(databaseConfig.getSshUser()) || (StringUtils.isBlank(databaseConfig.getPrivateKey()) && StringUtils.isBlank(databaseConfig.getSshPassword()))) {
-            return null;
-        }
-        Session session = null;
-        try {
-            // Set StrictHostKeyChecking property to no to avoid UnknownHostKey issue
-            Properties config = new Properties();
-            config.put("StrictHostKeyChecking", "no");
-            Integer port = NumberUtils.decode(databaseConfig.getSshPort(), 22);
-            session = jsch.getSession(databaseConfig.getSshUser(), databaseConfig.getSshHost(), port);
-            if (StringUtils.isNotBlank(databaseConfig.getPrivateKey())) {
-                // 使用秘钥方式认证
-                jsch.addIdentity(databaseConfig.getPrivateKey(), StringUtils.defaultIfBlank(databaseConfig.getPrivateKeyPassword(), null));
-            } else {
-                session.setPassword(databaseConfig.getSshPassword());
-            }
-            session.setConfig(config);
-        } catch (JSchException e) {
-            // Ignore
-        }
-        return session;
-    }
-
-    public static void engagePortForwarding(Session sshSession, DatabaseInfo config) {
-        if (sshSession != null) {
-            AtomicInteger assinged_port = new AtomicInteger();
-            Future<?> result = executorService.submit(() -> {
-                try {
-                    Integer lport = NumberUtils.decode(config.getLport(), NumberUtils.parseInteger(config.getLport(), 3306));
-                    Integer rport = NumberUtils.decode(config.getRport(), NumberUtils.parseInteger(config.getRport(), 3306));
-                    Session session = portForwardingSession.get(lport);
-                    if (session != null && session.isConnected()) {
-                        String s = session.getPortForwardingL()[0];
-                        String[] split = StringUtils.split(s, ":");
-                        boolean portForwarding = String.format("%s:%s", split[0], split[1])
-                                                       .equals(lport + ":" + config.getHost());
-                        if (portForwarding) {
-                            return;
-                        }
-                    }
-                    sshSession.connect();
-                    assinged_port.set(sshSession.setPortForwardingL(lport, config.getHost(), rport));
-                    portForwardingSession.put(lport, sshSession);
-                    portForwaring = true;
-                    log.info("portForwarding Enabled, {}", assinged_port);
-                } catch (JSchException e) {
-                    log.error("Connect Over SSH failed", e);
-                    if (e.getCause() != null && e.getCause().getMessage().equals("Address already in use: JVM_Bind")) {
-                        throw new RuntimeException("Address already in use: JVM_Bind");
-                    }
-                    throw new RuntimeException(e.getMessage());
-                }
-            });
-            try {
-                result.get(5, TimeUnit.SECONDS);
-            } catch (Exception e) {
-                shutdownPortForwarding(sshSession);
-                if (e.getCause() instanceof RuntimeException) {
-                    throw (RuntimeException) e.getCause();
-                }
-                if (e instanceof TimeoutException) {
-                    throw new RuntimeException("OverSSH 连接超时：超过5秒");
-                }
-                log.info("executorService isShutdown:{}", executorService.isShutdown());
-                Alerts.error("OverSSH 失败，请检查连接设置:" + e.getMessage()).showAndWait();
-            }
-        }
-    }
-
-    public static void shutdownPortForwarding(Session session) {
-        portForwaring = false;
-        if (session != null && session.isConnected()) {
-            session.disconnect();
-            log.info("portForwarding turn OFF");
-        }
-    }
-
-    public static Connection getConnection(JdbcDriver driver, String url, String username, String password) throws SQLException {
-        loadDbDriver(driver);
-        return DriverManager.getConnection(url, username, password);
-    }
+    private static final Map<JDBCDriver, Driver> drivers = new HashMap<>();
+    private static final QueryRunner runner = new QueryRunner();
 
     /**
      * 数据库驱动通过SPI自动加载，因此只需要提供url即可区分不同的数据库
@@ -145,9 +48,9 @@ public class DBUtils {
     }
 
     public static Connection getConnection(DatabaseInfo config) throws SQLException {
-        JdbcDriver dbType = JdbcDriver.valueOf(config.getDbType());
+        JDBCDriver dbType = JDBCDriver.valueOf(config.getDbType());
         loadDbDriver(dbType);
-        String url = getConnectionUrlWithSchema(config);
+        String url = JSchUtils.getConnectionUrlWithSchema(config);
         Properties props = new Properties();
         props.setProperty("user", config.getUsername()); //$NON-NLS-1$
         props.setProperty("password", config.getPassword()); //$NON-NLS-1$
@@ -170,77 +73,6 @@ public class DBUtils {
         return DriverManager.getConnection(url, properties);
     }
 
-    public static List<String> getTableNames(DatabaseInfo config, String filter) throws Exception {
-        Session sshSession = getSSHSession(config);
-        engagePortForwarding(sshSession, config);
-        try (Connection connection = getConnection(config)) {
-            List<String> tables = new ArrayList<>();
-            DatabaseMetaData md = connection.getMetaData();
-            ResultSet rs;
-            if (JdbcDriver.valueOf(config.getDbType()) == JdbcDriver.SQL_SERVER) {
-                String sql = SQL.SqlServer.SELECT;
-                rs = connection.createStatement().executeQuery(sql);
-                while (rs.next()) {
-                    tables.add(rs.getString("name"));
-                }
-            } else if (JdbcDriver.valueOf(config.getDbType()) == JdbcDriver.ORACLE) {
-                rs = md.getTables(null, config.getUsername().toUpperCase(), null, new String[]{"TABLE", "VIEW"});
-            } else if (JdbcDriver.valueOf(config.getDbType()) == JdbcDriver.SQLITE) {
-                String sql = SQL.Sqllite.SELECT;
-                rs = connection.createStatement().executeQuery(sql);
-                while (rs.next()) {
-                    tables.add(rs.getString("name"));
-                }
-            } else {
-                // rs = md.getTables(null, config.getUsername().toUpperCase(), null, null);
-                rs = md.getTables(config.getSchema(), null, "%", new String[]{"TABLE", "VIEW"});// 针对 postgresql 的左侧数据表显示
-            }
-            while (rs.next()) {
-                tables.add(rs.getString(3));
-            }
-            if (StringUtils.isNotBlank(filter)) {
-                tables.removeIf(x -> !x.contains(filter) && !(x.replaceAll("_", "").contains(filter)));
-            }
-            if (tables.size() > 1) {
-                Collections.sort(tables);
-            }
-            return tables;
-        } finally {
-            shutdownPortForwarding(sshSession);
-        }
-    }
-
-    public static List<ColumnCustomConfiguration> getTableColumns(DatabaseInfo dbConfig, String tableName) throws Exception {
-        String url = getConnectionUrlWithSchema(dbConfig);
-        log.info("getTableColumns, connection url: {}", url);
-        Session sshSession = getSSHSession(dbConfig);
-        engagePortForwarding(sshSession, dbConfig);
-        Connection conn = getConnection(dbConfig);
-        try {
-            DatabaseMetaData md = conn.getMetaData();
-            ResultSet rs = md.getColumns(dbConfig.getSchema(), null, tableName, null);
-            List<ColumnCustomConfiguration> columns = new ArrayList<>();
-            while (rs.next()) {
-                ColumnCustomConfiguration columnVO = new ColumnCustomConfiguration();
-                String columnName = rs.getString("COLUMN_NAME");
-                columnVO.setColumnName(columnName);
-                columnVO.setJdbcType(rs.getString("TYPE_NAME"));
-                columns.add(columnVO);
-            }
-            return columns;
-        } finally {
-            conn.close();
-            shutdownPortForwarding(sshSession);
-        }
-    }
-
-    public static String getConnectionUrlWithSchema(DatabaseInfo dbConfig) {
-        JdbcDriver dbType = JdbcDriver.valueOf(dbConfig.getDbType());
-        String connectionUrl = String.format(dbType.getConnectionUrlPattern(), portForwaring ? "127.0.0.1" : dbConfig.getHost(), portForwaring ? dbConfig.getLport() : dbConfig.getPort(), dbConfig.getSchema(), dbConfig.getEncoding());
-        log.info("getConnectionUrlWithSchema, connection url: {}", connectionUrl);
-        return connectionUrl;
-    }
-
     public static List<String> getAllJDBCDriverJarPaths() {
         List<String> jarFilePathList = new ArrayList<>();
         try {
@@ -249,9 +81,9 @@ public class DBUtils {
                 return Collections.emptyList();
             }
             final File[] jarFiles = FileUtils.listAllFiles(file);
-            for (int i = 0; i < jarFiles.length; i++) {
-                if (jarFiles[i].isFile() && jarFiles[i].getAbsolutePath().endsWith(".jar")) {
-                    jarFilePathList.add(jarFiles[i].getAbsolutePath());
+            for (File jarFile : jarFiles) {
+                if (jarFile.isFile() && jarFile.getAbsolutePath().endsWith(".jar")) {
+                    jarFilePathList.add(jarFile.getAbsolutePath());
                 }
             }
         } catch (Exception e) {
@@ -263,21 +95,21 @@ public class DBUtils {
     /**
      * 加载数据库驱动
      * @param dbType 数据库类型
-     * @see JdbcDriver
+     * @see JDBCDriver
      */
-    private static void loadDbDriver(JdbcDriver dbType) {
+    private static void loadDbDriver(JDBCDriver dbType) {
         if (drivers.containsKey(dbType)) {
             return;
         }
         ClassLoader classloader = ResourceUtils.getClassLoader();
         try {
-            Class<?> clazz = Class.forName(dbType.getDriverClass(), true, classloader);
+            Class<?> clazz = Class.forName(dbType.getDriverClassName(), true, classloader);
             Driver driver = (Driver) clazz.getConstructor().newInstance();
             log.info("load driver class: {}", driver);
             drivers.putIfAbsent(dbType, driver);
         } catch (Exception e) {
             log.error("load driver error", e);
-            throw new RuntimeException("找不到" + dbType.getConnectorJarFile() + "驱动");
+            throw new RuntimeException("找不到驱动");
         }
     }
 
@@ -294,26 +126,25 @@ public class DBUtils {
         return getTablesMetadata(conn, null, types);
     }
 
+    /**
+     * 获取元数据
+     * @param conn
+     * @param tableNamePattern
+     * @return
+     */
     public static List<ColumnMetadata> getColumnsMetadata(Connection conn, String tableNamePattern) {
-        List<ColumnMetadata> cmdList;
         try {
             final DatabaseMetaData dbmd = conn.getMetaData();
             final String catalog = conn.getCatalog();
             final String schema = conn.getSchema();
-            cmdList = new ArrayList<>();
             try (ResultSet rs = dbmd.getColumns(catalog, schema, tableNamePattern, null)) {
-                DataClassRowMapper<ColumnMetadata> rowMapper = new DataClassRowMapper<>(ColumnMetadata.class);
-                int rowIndex = 0;
-                while (rs.next()) {
-                    cmdList.add(rowMapper.mapRow(rs, rowIndex++));
-                }
+                return BEAN_PROPERTY_ROW_PROCESSOR.toBeanList(rs, ColumnMetadata.class);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return Collections.emptyList();
         }
-        return cmdList;
     }
 
     public static List<TableMetadata> getTablesMetadata(Connection conn, String tableNamePattern, String[] types) {
@@ -329,18 +160,49 @@ public class DBUtils {
         return tmdList;
     }
 
+    public static ResultSet executeQuery(Connection connection, String sql) throws SQLException {
+        Statement stmt = connection.createStatement();
+        return stmt.executeQuery(sql);
+    }
+
+    public static <T> T query(Connection connection, String sql, ResultSetHandler<T> handler) throws SQLException {
+        return runner.query(connection, sql, handler);
+    }
+
+    public static List<Map<String, Object>> queryMapList(Connection connection, String sql) throws SQLException {
+        return runner.query(connection, sql, new MapListHandler());
+    }
+
+    public static Object[] queryArray(Connection connection, String sql) throws SQLException {
+        return runner.query(connection, sql, new ArrayHandler());
+    }
+
+    private static final BasicRowProcessor BEAN_PROPERTY_ROW_PROCESSOR
+            = new BasicRowProcessor(new GenerousBeanProcessor());
+
+    /**
+     * 查询JavaBean组成的List
+     * @param connection   数据库连接
+     * @param sql          SQL
+     * @param requiredType JavaBean类型
+     * @param <T>          JavaBean类型
+     * @return List<T>
+     * @throws SQLException if a database access error occurs
+     */
+    public static <T> List<T> queryBeanList(Connection connection, String sql, Class<T> requiredType) throws SQLException {
+        return runner.query(connection, sql, new BeanListHandler<>(requiredType, BEAN_PROPERTY_ROW_PROCESSOR));
+    }
+
+    public static List<Object[]> queryList(Connection connection, String sql) throws SQLException {
+        return runner.query(connection, sql, new ArrayListHandler());
+    }
+
     public static List<TableMetadata> getTablesMetadata(DatabaseMetaData dbmd, String catalog, String schemaPattern, String tableNamePattern, String[] types) {
-        List<TableMetadata> tmdList = new ArrayList<>();
         try (ResultSet rs = dbmd.getTables(catalog, schemaPattern, tableNamePattern, types)) {
-            final DataClassRowMapper<TableMetadata> rowMapper = new DataClassRowMapper<>(TableMetadata.class);
-            int rowIndex = 0;
-            while (rs.next()) {
-                tmdList.add(rowMapper.mapRow(rs, rowIndex++));
-            }
+            return BEAN_PROPERTY_ROW_PROCESSOR.toBeanList(rs, TableMetadata.class);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return new ArrayList<>();
         }
-        return tmdList;
     }
 
     public static void closeQuitely(Connection connection) {

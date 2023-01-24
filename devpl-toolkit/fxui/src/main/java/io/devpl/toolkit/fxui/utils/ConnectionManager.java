@@ -2,63 +2,47 @@ package io.devpl.toolkit.fxui.utils;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.io.File;
 import java.sql.Connection;
-import java.sql.DriverManager;
 
 /**
- * 数据库连接管理
+ * 数据库连接管理器
  */
 public class ConnectionManager {
-    private static final Logger log = LoggerFactory.getLogger(ConnectionManager.class);
-    private static final String DB_URL = "jdbc:sqlite:./config/sqlite3.db";
 
-    static final HikariDataSource dataSource;
+    public static HikariDataSource dataSource;
 
-    private static HikariConfig initHikariConfig() {
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/devpl");
-        config.setUsername("root");
-        config.setPassword("123456");
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        return config;
-    }
+    // static final String URL = "jdbc:h2:~/devpl";
+    static final String URL = "jdbc:mysql://localhost:3306/devpl?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8";
+    // static final String USERNAME = "sa";
+    static final String USERNAME = "root";
+    static final String PASSWORD = "123456";
 
-    private static boolean embedConnection;
-    public static JdbcTemplate template = new JdbcTemplate();
+    // static Server h2Server = null;
 
     static {
-        final HikariConfig config = initHikariConfig();
+        // try {
+        //     h2Server = new Server(new WebServer());
+        //     h2Server.start();
+        // } catch (SQLException e) {
+        //     log.error("failed to start h2 database server, cause:", e);
+        //     System.exit(0);
+        // }
+        // if (h2Server.isRunning(false)) {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(URL);
+        config.setUsername(USERNAME);
+        config.setPassword(PASSWORD);
         dataSource = new HikariDataSource(config);
-        template.setDataSource(dataSource);
-        try {
-            Class.forName("org.sqlite.JDBC");
-            embedConnection = true;
-        } catch (ClassNotFoundException e) {
-            log.error("cannot load driver [org.sqlite.JDBC]");
-        }
+        // }
     }
 
     public static Connection getConnection() throws Exception {
-        // Class.forName("org.sqlite.JDBC");
-        // File file = new File(DB_URL.substring("jdbc:sqlite:".length())).getAbsoluteFile();
-        // _LOG.info("database FilePath :{}", file.getAbsolutePath());
-        // return DriverManager.getConnection(DB_URL);
         return dataSource.getConnection();
     }
 
-    public static Connection getEmbedConnection() throws Exception {
-        if (embedConnection) {
-            throw new RuntimeException("failed to get embed db connection, cause the driver does not exist");
-        }
-        File file = new File(DB_URL.substring("jdbc:sqlite:".length())).getAbsoluteFile();
-        log.info("database FilePath :{}", file.getAbsolutePath());
-        return DriverManager.getConnection(DB_URL);
-    }
+    // public static void close() {
+    //     dataSource.close();
+    //     h2Server.shutdown();
+    // }
 }

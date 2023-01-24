@@ -33,7 +33,8 @@ public class TextFieldSample extends SampleApplication {
 
         StackPane stackPane = new StackPane();
         stackPane.setStyle("-fx-background-color: #3ae7e7");
-        stackPane.getChildren().add(textField);
+        stackPane.getChildren()
+                .add(textField);
 
         Label label = new Label();
         label.setContentDisplay(ContentDisplay.CENTER);
@@ -42,7 +43,8 @@ public class TextFieldSample extends SampleApplication {
         icon.setIconSize(27);
         label.setGraphic(icon);
 
-        stackPane.getChildren().add(label);
+        stackPane.getChildren()
+                .add(label);
 
         textField.setPrefHeight(200);
 
@@ -57,8 +59,10 @@ public class TextFieldSample extends SampleApplication {
         System.out.println(textField.getHeight());
 
         StackPane.setAlignment(label, Pos.CENTER_RIGHT);
-        flowPane.getChildren().add(stackPane);
-        flowPane.getChildren().add(new Button("Button"));
+        flowPane.getChildren()
+                .add(stackPane);
+        flowPane.getChildren()
+                .add(new Button("Button"));
 
         return flowPane;
     }

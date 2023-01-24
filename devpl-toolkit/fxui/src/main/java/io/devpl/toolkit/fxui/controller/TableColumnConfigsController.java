@@ -52,7 +52,7 @@ public class TableColumnConfigsController extends FxmlView {
             getStage(event).close(); // close window
         } catch (Exception e) {
             log.error("confirm throw exception.", e);
-            Alerts.showErrorAlert(e.getMessage());
+            Alerts.error(e.getMessage()).showAndWait();
         }
     }
 

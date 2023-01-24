@@ -38,7 +38,8 @@ public class ExcelUtils {
                             }
                         }
                         // 因为程序中将汉字编译成一个字符，因此我们在该列字符长度的基础上加上汉字个数计算列宽
-                        int length = (currentCell.getStringCellValue().length() + count) * 256;
+                        int length = (currentCell.getStringCellValue()
+                                .length() + count) * 256;
                         if (columnWidth < length) {
                             columnWidth = length;
                         }

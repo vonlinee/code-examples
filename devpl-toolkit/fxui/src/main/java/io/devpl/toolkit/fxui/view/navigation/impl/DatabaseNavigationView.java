@@ -28,7 +28,7 @@ public class DatabaseNavigationView extends TreeView<NavigationItem> {
                 @Override
                 public NavigationItem fromString(String string) {
                     TreeItem<NavigationItem> selectedItem = DatabaseNavigationView.this.getSelectionModel()
-                                                                                       .getSelectedItem();
+                            .getSelectedItem();
                     NavigationItem value = selectedItem.getValue();
                     value.setDispalyValue(string);
                     return value;

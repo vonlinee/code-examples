@@ -136,7 +136,8 @@ public final class ResourceUtils {
         } catch (MalformedURLException ex) {
             // no URL -> treat as file path
             try {
-                return new File(resourceLocation).toURI().toURL();
+                return new File(resourceLocation).toURI()
+                        .toURL();
             } catch (MalformedURLException ex2) {
                 throw new FileNotFoundException("Resource location [" + resourceLocation + "] is neither a URL not a well-formed file path");
             }
@@ -272,8 +273,7 @@ public final class ResourceUtils {
      * @since 4.1
      */
     public static boolean isJarFileURL(URL url) {
-        return (URL_PROTOCOL_FILE.equals(url.getProtocol()) && url
-                .getPath()
+        return (URL_PROTOCOL_FILE.equals(url.getProtocol()) && url.getPath()
                 .toLowerCase()
                 .endsWith(JAR_FILE_EXTENSION));
     }
@@ -356,7 +356,7 @@ public final class ResourceUtils {
      * @throws URISyntaxException if the location wasn't a valid URI
      */
     public static URI toURI(String location) throws URISyntaxException {
-        return new URI(org.springframework.util.StringUtils.replace(location, " ", "%20"));
+        return new URI(StringUtils.replace(location, " ", "%20"));
     }
 
     /**
@@ -366,7 +366,9 @@ public final class ResourceUtils {
      * @param con the URLConnection to set the flag on
      */
     public static void useCachesIfNecessary(URLConnection con) {
-        con.setUseCaches(con.getClass().getSimpleName().startsWith("JNLP"));
+        con.setUseCaches(con.getClass()
+                .getSimpleName()
+                .startsWith("JNLP"));
     }
 
     // AppClassLoader
@@ -387,7 +389,7 @@ public final class ResourceUtils {
     }
 
     /**
-     * 不跑异常，直接返回null
+     * 不抛异常，直接返回null
      * @param context context
      * @param spec    spec
      * @return URL
@@ -421,7 +423,8 @@ public final class ResourceUtils {
      * 运行时的类路径的根路径
      * 先获得本类的所在位置
      */
-    public static final String ROOT_CLASSPATH = Objects.requireNonNull(ResourceUtils.class.getResource("/")).getPath();
+    public static final String ROOT_CLASSPATH = Objects.requireNonNull(ResourceUtils.class.getResource("/"))
+            .getPath();
 
     public static URL getResource(String pathname) throws FileNotFoundException {
         if (StringUtils.isEmpty(pathname)) {
@@ -432,7 +435,8 @@ public final class ResourceUtils {
             throw new FileNotFoundException(file.getAbsolutePath() + " doesnot exists");
         }
         try {
-            return file.toURI().toURL();
+            return file.toURI()
+                    .toURL();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

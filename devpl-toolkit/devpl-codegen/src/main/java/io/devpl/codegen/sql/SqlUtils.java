@@ -1,4 +1,4 @@
-package io.devpl.toolkit.test;
+package io.devpl.codegen.sql;
 
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.ast.SQLExpr;
@@ -7,27 +7,26 @@ import com.alibaba.druid.sql.ast.statement.*;
 import com.alibaba.druid.sql.parser.SQLParserUtils;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
-import io.devpl.sdk.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.*;
 
-public class Utils {
+public class SqlUtils {
 
-    public static final String testSqlFile = "C:\\Users\\Von\\Desktop\\test.sql";
-
-    public static List<String> getSelectColumns(String sql) {
-        final SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(sql, DbType.mysql, true);
-        final List<SQLStatement> sqlStatements = parser.parseStatementList();
-        final SQLStatement sqlStatement = sqlStatements.get(0);
+    /**
+     * @param sql 查询SQL语句
+     * @return 返回格式：{tableName}{columnName}
+     */
+    public static Map<String, Set<String>> getSelectColumns(String sql) {
+        SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(sql, DbType.mysql, true);
+        List<SQLStatement> sqlStatements = parser.parseStatementList();
+        SQLStatement sqlStatement = sqlStatements.get(0);
         if (sqlStatement instanceof SQLSelectStatement) {
             return getSelectedColumns((SQLSelectStatement) sqlStatement);
         }
-        return Collections.emptyList();
+        return Collections.emptyMap();
     }
 
     public static ColumnMetadata getColumnMetadata(Connection conn, String tableName, String columnName) throws SQLException {
@@ -40,10 +39,11 @@ public class Utils {
      * @param sqlStatement SQLStatement
      * @return 查询的所有列
      */
-    public static List<String> getSelectedColumns(SQLSelectStatement sqlStatement) {
-        List<String> selectedColumnNames = new ArrayList<>();
+    public static Map<String, Set<String>> getSelectedColumns(SQLSelectStatement sqlStatement) {
         SQLSelect select = sqlStatement.getSelect();
         SQLSelectQuery query = select.getQuery();
+        Map<String, Set<String>> columnMap = new HashMap<>();
+
         if (query instanceof SQLSelectQueryBlock) {
             SQLSelectQueryBlock queryBlock = (SQLSelectQueryBlock) query;
             List<SQLSelectItem> selectList = queryBlock.getSelectList();
@@ -51,19 +51,29 @@ public class Utils {
             // 找到所有的别名和表明映射
             Map<String, String> tableNames = findAllTalbeNames(from);
             for (SQLSelectItem sqlSelectItem : selectList) {
-                final SQLExpr expr = sqlSelectItem.getExpr();
-                final String selectColumn = expr.toString();
+                SQLExpr expr = sqlSelectItem.getExpr();
+                String selectColumn = expr.toString();
                 String[] tableColumnNames = selectColumn.split("\\.");
                 if (tableColumnNames.length == 2) {
                     String tableAlias = tableColumnNames[0];
                     String tableName = tableNames.get(tableAlias);
-                    selectedColumnNames.add(tableName + "." + tableColumnNames[1]);
+                    fillColumnMap(columnMap, tableName, tableColumnNames[1]);
                 }
             }
         }
-        return selectedColumnNames;
+        return columnMap;
     }
 
+    private static void fillColumnMap(Map<String, Set<String>> map, String tableName, String columnName) {
+        Set<String> columns = map.computeIfAbsent(tableName, k -> new HashSet<>());
+        columns.add(columnName);
+    }
+
+    /**
+     * 解析SQL中所有表名和别名
+     * @param from 根SQL
+     * @return
+     */
     private static Map<String, String> findAllTalbeNames(SQLTableSource from) {
         Map<String, String> tableAliasMapping = new LinkedHashMap<>();
         // 存在表连接
@@ -104,5 +114,19 @@ public class Utils {
             tableAliasMapping.put(String.valueOf(alias), tableName);
         }
         return tableAliasMapping;
+    }
+
+    /**
+     * 使用反单引号进行包裹 '`'
+     * @return ``
+     */
+    public static String wrapWithBackquote(String columnName) {
+        if (!columnName.startsWith("`")) {
+            columnName = "`" + columnName;
+        }
+        if (!columnName.endsWith("`")) {
+            columnName = columnName + "`";
+        }
+        return columnName;
     }
 }

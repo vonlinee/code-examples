@@ -170,7 +170,9 @@ public class EventBus {
         // }
 
         List<SubscriberMethod> subscriberMethods = subscriberMethodFinder.findSubscriberMethods(subscriberClass);
-
+        if (subscriberMethods.isEmpty()) {
+            return;
+        }
         synchronized (this) {
             for (SubscriberMethod subscriberMethod : subscriberMethods) {
                 // 遍历，以订阅方法事件类型分类，将订阅方法包装对象存放到Map中
@@ -663,7 +665,7 @@ public class EventBus {
             if (logSubscriberExceptions) {
                 // Don't send another SubscriberExceptionEvent to avoid infinite event recursion, just log
                 logger.log(Level.SEVERE, "SubscriberExceptionEvent subscriber " + subscription.getSubscriber()
-                                                                                              .getClass() + " threw an exception", cause);
+                        .getClass() + " threw an exception", cause);
                 SubscriberExceptionEvent exEvent = (SubscriberExceptionEvent) event;
                 logger.log(Level.SEVERE, "Initial event " + exEvent.causingEvent + " caused exception in " + exEvent.causingSubscriber, exEvent.throwable);
             }
@@ -674,7 +676,7 @@ public class EventBus {
         }
         if (logSubscriberExceptions) {
             logger.log(Level.SEVERE, "Could not dispatch event: " + event.getClass() + " to subscribing class " + subscription.getSubscriber()
-                                                                                                                              .getClass(), cause);
+                    .getClass(), cause);
             return;
         }
         if (sendSubscriberExceptionEvent) {

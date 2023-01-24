@@ -10,12 +10,9 @@ public abstract class JavaFXApplication extends Application {
         this.onInit();
     }
 
-    protected void onInit() throws Exception {
-    }
+    protected void onInit() throws Exception {}
 
-    protected void onStop() {
-
-    }
+    protected void onStop() {}
 
     @Override
     public void stop() throws Exception {

@@ -4,8 +4,6 @@ import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
-import io.devpl.toolkit.fxui.utils.ConfigHelper;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -18,7 +16,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Callback;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -36,7 +33,8 @@ public class GeneratorConfigController extends FxmlView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        nameColumn.setCellValueFactory(param -> param.getValue().nameProperty());
+        nameColumn.setCellValueFactory(param -> param.getValue()
+                .nameProperty());
         // 自定义操作列
         opsColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         opsColumn.setCellFactory(new Callback<>() {
@@ -56,19 +54,17 @@ public class GeneratorConfigController extends FxmlView {
                             btn1.setOnAction(event -> {
                                 try {
                                     // 应用配置
-                                    GenericConfiguration generatorConfig = ConfigHelper.loadGeneratorConfig(item.toString());
                                     getStage(event).close();
                                 } catch (Exception e) {
-                                    Alerts.error(e.getMessage()).showAndWait();
+                                    Alerts.error(e.getMessage())
+                                            .showAndWait();
                                 }
                             });
                             btn2.setOnAction(event -> {
                                 try {
                                     // 删除配置
-                                    ConfigHelper.deleteGeneratorConfig(item.toString());
-                                    refreshTableView();
                                 } catch (Exception e) {
-                                    Alerts.showErrorAlert(e.getMessage());
+                                    Alerts.error(e.getMessage()).showAndWait();
                                 }
                             });
                             setGraphic(hBox);
@@ -80,15 +76,5 @@ public class GeneratorConfigController extends FxmlView {
                 return tableCell;
             }
         });
-        refreshTableView();
-    }
-
-    public void refreshTableView() {
-        try {
-            List<GenericConfiguration> configs = ConfigHelper.loadGeneratorConfigs();
-            configTable.setItems(FXCollections.observableList(configs));
-        } catch (Exception e) {
-            Alerts.error(e.getMessage()).show();
-        }
     }
 }

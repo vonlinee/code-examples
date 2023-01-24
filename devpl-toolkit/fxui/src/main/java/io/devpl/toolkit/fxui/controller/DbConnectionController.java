@@ -5,7 +5,7 @@ import io.devpl.fxtras.JFX;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.toolkit.fxui.common.Constants;
-import io.devpl.toolkit.fxui.common.JdbcDriver;
+import io.devpl.toolkit.fxui.common.JDBCDriver;
 import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -47,8 +47,8 @@ public class DbConnectionController extends FxmlView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        dbTypeChoice.setItems(JFX.arrayOf(JdbcDriver.supportedDbNames()));
-        dbTypeChoice.setValue(JdbcDriver.DEFAULT_DRIVER.name());
+        dbTypeChoice.setItems(JFX.arrayOf(JDBCDriver.supportedDbNames()));
+        dbTypeChoice.setValue(JDBCDriver.MYSQL5.name());
         encodingChoice.setItems(JFX.arrayOf(Constants.SUPPORTED_ENCODING));
         encodingChoice.setValue(Constants.DEFAULT_ENCODING);
         hostField.setText(Constants.LOCALHOST);

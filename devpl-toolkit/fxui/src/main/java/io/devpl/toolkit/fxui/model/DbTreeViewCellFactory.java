@@ -1,17 +1,16 @@
 package io.devpl.toolkit.fxui.model;
 
-import io.devpl.toolkit.fxui.event.CommandEvent;
 import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.JFX;
-import io.devpl.toolkit.fxui.utils.ConfigHelper;
-import io.devpl.toolkit.fxui.utils.DBUtils;
+import io.devpl.toolkit.core.DatabaseInfo;
+import io.devpl.toolkit.fxui.event.CommandEvent;
+import io.devpl.toolkit.fxui.utils.EventUtils;
+import io.devpl.toolkit.fxui.utils.ssh.JSchUtils;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
 import java.sql.SQLRecoverableException;
@@ -26,16 +25,18 @@ public class DbTreeViewCellFactory implements Callback<TreeView<String>, TreeCel
     public TreeCell<String> call(TreeView<String> treeView) {
         TreeCell<String> cell = new TextFieldTreeCell<>(); // 创建一个单元格
         cell.setOnMouseClicked(event -> {
-            if (!isPrimaryButtonDoubleClicked(event)) {
+            if (!EventUtils.isPrimaryButtonDoubleClicked(event)) {
                 event.consume();
                 return;
             }
             // 获取单元格
             TreeItem<String> treeItem = cell.getTreeItem();
-            int level = cell.getTreeView().getTreeItemLevel(treeItem);
+            int level = cell.getTreeView()
+                    .getTreeItemLevel(treeItem);
             if (level == 1) { // 层级为1，点击每个连接
                 addContexMenuIfRequired(cell);
-                if (treeItem.getChildren().isEmpty()) {
+                if (treeItem.getChildren()
+                        .isEmpty()) {
                     displayTables(treeItem);
                 }
                 // 有子节点则双击切换展开状态
@@ -53,24 +54,31 @@ public class DbTreeViewCellFactory implements Callback<TreeView<String>, TreeCel
         final ContextMenu contextMenu = new ContextMenu();
         final MenuItem menuItemCloseConnection = new MenuItem("关闭连接");
         menuItemCloseConnection.setOnAction(event -> {
-            cell.getTreeItem().getChildren().clear();
+            cell.getTreeItem()
+                    .getChildren()
+                    .clear();
         });
         final MenuItem menuItemEditConnection = new MenuItem("编辑连接");
         menuItemEditConnection.setOnAction(event -> {
-            DatabaseInfo selectedConfig = (DatabaseInfo) cell.getTreeItem().getGraphic().getUserData();
+            DatabaseInfo selectedConfig = (DatabaseInfo) cell.getTreeItem()
+                    .getGraphic()
+                    .getUserData();
             Event.fireEvent(cell.getTreeView(), new CommandEvent(CommandEvent.OPEN_DB_CONNECTION, selectedConfig));
         });
         final MenuItem menuItemDelConnection = new MenuItem("删除连接");
         menuItemDelConnection.setOnAction(event -> {
             try {
-                final DatabaseInfo userData = (DatabaseInfo) cell.getTreeItem().getGraphic().getUserData();
-                ConfigHelper.deleteDatabaseConfig(userData);
+                final DatabaseInfo userData = (DatabaseInfo) cell.getTreeItem()
+                        .getGraphic()
+                        .getUserData();
                 // TODO 加载数据库配置
             } catch (Exception e) {
-                Alerts.error("Delete connection failed! Reason: " + e.getMessage()).show();
+                Alerts.error("Delete connection failed! Reason: " + e.getMessage())
+                        .show();
             }
         });
-        contextMenu.getItems().addAll(menuItemCloseConnection, menuItemEditConnection, menuItemDelConnection);
+        contextMenu.getItems()
+                .addAll(menuItemCloseConnection, menuItemEditConnection, menuItemDelConnection);
         cell.setContextMenu(contextMenu);
     }
 
@@ -79,9 +87,10 @@ public class DbTreeViewCellFactory implements Callback<TreeView<String>, TreeCel
      * @param treeItem
      */
     private void displayTables(TreeItem<String> treeItem) {
-        DatabaseInfo dbConfig = (DatabaseInfo) treeItem.getGraphic().getUserData();
+        DatabaseInfo dbConfig = (DatabaseInfo) treeItem.getGraphic()
+                .getUserData();
         try {
-            List<String> tables = DBUtils.getTableNames(dbConfig, "");
+            List<String> tables = JSchUtils.getTableNames(dbConfig, "");
             if (tables.size() > 0) {
                 ObservableList<TreeItem<String>> children = treeItem.getChildren();
                 children.clear();
@@ -93,21 +102,15 @@ public class DbTreeViewCellFactory implements Callback<TreeView<String>, TreeCel
                     children.add(newTreeItem);
                 }
             }
-            final Object userData = treeItem.getGraphic().getUserData();
+            final Object userData = treeItem.getGraphic()
+                    .getUserData();
             treeItem.setGraphic(JFX.loadImageView("static/icons/computer.png", 16, userData));
         } catch (SQLRecoverableException e) {
-            Alerts.error("连接超时").show();
+            Alerts.error("连接超时")
+                    .show();
         } catch (Exception e) {
-            Alerts.error(e.getMessage()).show();
+            Alerts.error(e.getMessage())
+                    .show();
         }
-    }
-
-    /**
-     * 是否鼠标左键双击
-     * @param event
-     * @return
-     */
-    private boolean isPrimaryButtonDoubleClicked(MouseEvent event) {
-        return event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2;
     }
 }

@@ -5,5 +5,6 @@ package io.devpl.toolkit.fxui.utils;
  */
 public enum TableType {
 
-    TABLE, VIEW
+    TABLE,
+    VIEW
 }

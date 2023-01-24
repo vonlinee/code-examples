@@ -45,7 +45,8 @@ public class SSHUtils {
         clientSession.addPasswordIdentity(password);
         // 添加公钥文件
         // session.addPublicKeyIdentity(SecurityUtils.loadKeyPairIdentity("keyname", new FileInputStream("priKey.pem"), null));
-        if (!clientSession.auth().isSuccess()) {
+        if (!clientSession.auth()
+                .isSuccess()) {
             log.error("failed to connect: {}:{}, auth failed", host, port);
         }
         return clientSession;

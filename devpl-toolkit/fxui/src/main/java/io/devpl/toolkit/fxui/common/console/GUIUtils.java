@@ -1,10 +1,8 @@
 package io.devpl.toolkit.fxui.common.console;
 
-
 import javafx.application.Platform;
 
 import java.util.Objects;
-
 
 public final class GUIUtils {
 

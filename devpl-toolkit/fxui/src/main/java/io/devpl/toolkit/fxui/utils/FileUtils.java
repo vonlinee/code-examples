@@ -67,7 +67,8 @@ public class FileUtils {
     public static void show(File file) {
         try {
             // Desktop.getDesktop().browse(new File(projectFolder).toURI());
-            Desktop.getDesktop().open(file);
+            Desktop.getDesktop()
+                    .open(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,7 +76,8 @@ public class FileUtils {
 
     public static URL asURL(File file) {
         try {
-            return file.toURI().toURL();
+            return file.toURI()
+                    .toURL();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -199,7 +201,9 @@ public class FileUtils {
             throw new IOException("Cannot delete file: " + file, e);
         }
 
-        if (deleteCounters.getFileCounter().get() < 1 && deleteCounters.getDirectoryCounter().get() < 1) {
+        if (deleteCounters.getFileCounter()
+                .get() < 1 && deleteCounters.getDirectoryCounter()
+                .get() < 1) {
             // didn't find a file to delete.
             throw new FileNotFoundException("File does not exist: " + file);
         }

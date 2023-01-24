@@ -18,7 +18,7 @@ abstract class ViewBase implements View, EventTarget, SceneGraphAccessor {
 
     private static final EventBus GLOBAL_EVENT_BUS =
             EventBus.builder()
-                    .eventInheritance(false)
+                    .eventInheritance(true)
                     .allowEmptySubscriber(true)
                     .logNoSubscriberMessages(false)
                     .mainThreadSupport(new JavaFXMainThreadSupport())
@@ -53,6 +53,11 @@ abstract class ViewBase implements View, EventTarget, SceneGraphAccessor {
         }
     }
 
+    /**
+     * TODO 将EventHandler和EventBus进行结合
+     * @param tail the initial chain to build from
+     * @return
+     */
     @Override
     public EventDispatchChain buildEventDispatchChain(EventDispatchChain tail) {
         // 直接在初始EventDispatchChain添加上自身的EventDispatcher

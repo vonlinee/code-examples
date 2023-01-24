@@ -4,7 +4,6 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-
 /**
  * @author Yuhi Ishikura
  */

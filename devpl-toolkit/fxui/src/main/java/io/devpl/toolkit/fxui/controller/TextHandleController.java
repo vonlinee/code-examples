@@ -48,10 +48,15 @@ public class TextHandleController extends FxmlView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        sppTxtArea.prefWidthProperty().bind(bopRoot.widthProperty());
+        sppTxtArea.prefWidthProperty()
+                .bind(bopRoot.widthProperty());
         sppTxtArea.setDividerPositions(0.5);
-        ttaLeft.prefWidthProperty().bind(bopRoot.widthProperty().divide(2));
-        ttaRight.prefWidthProperty().bind(bopRoot.widthProperty().divide(2));
+        ttaLeft.prefWidthProperty()
+                .bind(bopRoot.widthProperty()
+                        .divide(2));
+        ttaRight.prefWidthProperty()
+                .bind(bopRoot.widthProperty()
+                        .divide(2));
         batchAddBtnTriggerEventHandler(flpBottomBtnGroup, event -> handleRuleMap.handle(event.getSource(), ttaLeft, ttaRight));
         registerTextHandler();
     }
@@ -104,9 +109,12 @@ public class TextHandleController extends FxmlView {
                 newCoordinates = coordinates;
             }
             sb.delete(0, sb.length());
-            sb.append("\n\t").append(XMLUtils.wrapWithTagName(newCoordinates[0], "groupId"));
-            sb.append("\n\t").append(XMLUtils.wrapWithTagName(newCoordinates[1], "artifactId"));
-            sb.append("\n\t").append(XMLUtils.wrapWithTagName(newCoordinates[2], "version"));
+            sb.append("\n\t")
+                    .append(XMLUtils.wrapWithTagName(newCoordinates[0], "groupId"));
+            sb.append("\n\t")
+                    .append(XMLUtils.wrapWithTagName(newCoordinates[1], "artifactId"));
+            sb.append("\n\t")
+                    .append(XMLUtils.wrapWithTagName(newCoordinates[2], "version"));
             sb.append("\n");
             return XMLUtils.wrapWithTagName(sb.toString(), "dependency");
             // ch.qos.logback:logback-classic:1.4.0

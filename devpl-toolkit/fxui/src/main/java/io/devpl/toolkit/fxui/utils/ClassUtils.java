@@ -1,12 +1,11 @@
 package io.devpl.toolkit.fxui.utils;
 
+import io.devpl.toolkit.fxui.app.MainUI;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public final class ClassUtils {
-
-    public ClassUtils() {
-    }
 
     // getConstructor 方法入参是可变长参数列表，对应类中构造方法的入参类型，这里使用无参构造。
     // newInstance 返回的是泛型 T，取决于 clazz 的类型 Class<T>。这里直接用 Object 接收了。
@@ -43,5 +42,16 @@ public final class ClassUtils {
             }
         }
         return true;
+    }
+
+    /**
+     * @param classSimpleName 类的全限定类名
+     * @return 类名
+     */
+    public static String getClassName(String classSimpleName) {
+        if (classSimpleName == null) return StringUtils.EMPTY_BLANK;
+        int index = classSimpleName.lastIndexOf(".");
+        if (index < 0) return StringUtils.EMPTY_BLANK;
+        return classSimpleName.substring(index + 1);
     }
 }

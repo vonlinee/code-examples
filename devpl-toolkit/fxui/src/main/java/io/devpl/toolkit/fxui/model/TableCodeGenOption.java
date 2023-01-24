@@ -271,25 +271,44 @@ public class TableCodeGenOption {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("TableOption{");
-        sb.append(", useExample=").append(useExample.get());
-        sb.append(", useMyBatisPlus=").append(useMyBatisPlus.get());
-        sb.append(", offsetLimit=").append(offsetLimit.get());
-        sb.append(", comment=").append(comment.get());
-        sb.append(", overrideXML=").append(overrideXML.get());
-        sb.append(", needToStringHashcodeEquals=").append(needToStringHashcodeEquals.get());
-        sb.append(", useLombokPlugin=").append(useLombokPlugin.get());
-        sb.append(", needForUpdate=").append(needForUpdate.get());
-        sb.append(", annotationDAO=").append(annotationDAO.get());
-        sb.append(", annotation=").append(annotation.get());
-        sb.append(", useActualColumnNames=").append(useActualColumnNames.get());
-        sb.append(", generateKeys=").append(generateKeys.get());
-        sb.append(", encoding=").append(encoding.get());
-        sb.append(", useTableNameAlias=").append(useTableNameAlias.get());
-        sb.append(", useDAOExtendStyle=").append(useDAOExtendStyle.get());
-        sb.append(", useSchemaPrefix=").append(useSchemaPrefix.get());
-        sb.append(", jsr310Support=").append(jsr310Support.get());
-        sb.append(", swaggerSupport=").append(swaggerSupport.get());
-        sb.append(", fullMVCSupport=").append(fullMVCSupport.get());
+        sb.append(", useExample=")
+                .append(useExample.get());
+        sb.append(", useMyBatisPlus=")
+                .append(useMyBatisPlus.get());
+        sb.append(", offsetLimit=")
+                .append(offsetLimit.get());
+        sb.append(", comment=")
+                .append(comment.get());
+        sb.append(", overrideXML=")
+                .append(overrideXML.get());
+        sb.append(", needToStringHashcodeEquals=")
+                .append(needToStringHashcodeEquals.get());
+        sb.append(", useLombokPlugin=")
+                .append(useLombokPlugin.get());
+        sb.append(", needForUpdate=")
+                .append(needForUpdate.get());
+        sb.append(", annotationDAO=")
+                .append(annotationDAO.get());
+        sb.append(", annotation=")
+                .append(annotation.get());
+        sb.append(", useActualColumnNames=")
+                .append(useActualColumnNames.get());
+        sb.append(", generateKeys=")
+                .append(generateKeys.get());
+        sb.append(", encoding=")
+                .append(encoding.get());
+        sb.append(", useTableNameAlias=")
+                .append(useTableNameAlias.get());
+        sb.append(", useDAOExtendStyle=")
+                .append(useDAOExtendStyle.get());
+        sb.append(", useSchemaPrefix=")
+                .append(useSchemaPrefix.get());
+        sb.append(", jsr310Support=")
+                .append(jsr310Support.get());
+        sb.append(", swaggerSupport=")
+                .append(swaggerSupport.get());
+        sb.append(", fullMVCSupport=")
+                .append(fullMVCSupport.get());
         sb.append('}');
         return sb.toString();
     }

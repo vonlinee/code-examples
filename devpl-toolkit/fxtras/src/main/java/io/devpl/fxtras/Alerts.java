@@ -31,11 +31,10 @@ public final class Alerts {
         NONE.setResizable(true);
         CONFIRM.setResizable(true);
 
-        final TextArea textArea = new TextArea();
+        TextArea textArea = new TextArea();
         EXCEPTION.getDialogPane().setContent(textArea);
         EXCEPTION.setResizable(true);
-        EXCEPTION.contentTextProperty()
-                 .bindBidirectional(textArea.textProperty());
+        EXCEPTION.contentTextProperty().bindBidirectional(textArea.textProperty());
     }
 
     public static Alert info(String message) {
@@ -96,12 +95,6 @@ public final class Alerts {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setContentText(message);
         return alert;
-    }
-
-    public static void showErrorAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText(message);
-        alert.show();
     }
 
     /**

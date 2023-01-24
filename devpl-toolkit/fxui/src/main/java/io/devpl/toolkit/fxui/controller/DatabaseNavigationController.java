@@ -3,15 +3,19 @@ package io.devpl.toolkit.fxui.controller;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
-import io.devpl.toolkit.fxui.utils.Icon;
+import io.devpl.toolkit.fxui.utils.EventUtils;
 import io.devpl.toolkit.fxui.view.navigation.ConnectionTreeItem;
+import io.devpl.toolkit.fxui.view.navigation.DatabaseTreeItem;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.layout.VBox;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -36,6 +40,16 @@ public class DatabaseNavigationController extends FxmlView {
         trvDbConnection.setCellFactory(param -> {
             TextFieldTreeCell<String> treeCell = new TextFieldTreeCell<>();
             treeCell.setGraphicTextGap(5);
+            treeCell.setOnMouseClicked(event -> {
+                if (!EventUtils.isPrimaryButtonDoubleClicked(event)) {
+                    event.consume();
+                    return;
+                }
+                TreeItem<String> item = param.getSelectionModel().getSelectedItem();
+                if (item instanceof DatabaseTreeItem) {
+
+                }
+            });
             return treeCell;
         });
     }
@@ -47,7 +61,7 @@ public class DatabaseNavigationController extends FxmlView {
     @Subscribe(name = "add-new-connection", threadMode = ThreadMode.BACKGROUND)
     public void addConnection(ConnectionInfo connectionInfo) throws SQLException {
         ConnectionTreeItem treeItem = new ConnectionTreeItem(connectionInfo);
-        treeItem.setGraphic(Icon.FOLDER);
+        treeItem.setGraphic(FontIcon.of(FontAwesomeRegular.FOLDER));
         treeItem.connect();
         trvDbConnection.getRoot().getChildren().add(treeItem);
     }

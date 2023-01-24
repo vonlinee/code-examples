@@ -128,10 +128,13 @@ public class LombokPlugin extends PluginAdapter {
         annotations.add(LombokAnnotation.DATA);
 
         for (Entry<Object, Object> entry : properties.entrySet()) {
-            boolean isEnable = Boolean.parseBoolean(entry.getValue().toString());
+            boolean isEnable = Boolean.parseBoolean(entry.getValue()
+                    .toString());
 
             if (isEnable) {
-                String paramName = entry.getKey().toString().trim();
+                String paramName = entry.getKey()
+                        .toString()
+                        .trim();
                 LombokAnnotation annotation = LombokAnnotation.getValueOf(paramName);
                 if (annotation != null) {
                     annotations.add(annotation);
@@ -156,7 +159,11 @@ public class LombokPlugin extends PluginAdapter {
     }
 
     private enum LombokAnnotation {
-        DATA("data", "@Data", "lombok.Data"), BUILDER("builder", "@Builder", "lombok.Builder"), ALL_ARGS_CONSTRUCTOR("allArgsConstructor", "@AllArgsConstructor", "lombok.AllArgsConstructor"), NO_ARGS_CONSTRUCTOR("noArgsConstructor", "@NoArgsConstructor", "lombok.NoArgsConstructor"), TO_STRING("toString", "@ToString", "lombok.ToString");
+        DATA("data", "@Data", "lombok.Data"),
+        BUILDER("builder", "@Builder", "lombok.Builder"),
+        ALL_ARGS_CONSTRUCTOR("allArgsConstructor", "@AllArgsConstructor", "lombok.AllArgsConstructor"),
+        NO_ARGS_CONSTRUCTOR("noArgsConstructor", "@NoArgsConstructor", "lombok.NoArgsConstructor"),
+        TO_STRING("toString", "@ToString", "lombok.ToString");
 
         private final String paramName;
         private final String name;

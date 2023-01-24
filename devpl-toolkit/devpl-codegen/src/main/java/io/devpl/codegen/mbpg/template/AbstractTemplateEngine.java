@@ -73,7 +73,7 @@ public abstract class AbstractTemplateEngine {
         String entityName = tableInfo.getEntityName();
         String entityPath = getPathInfo(OutputFile.entity);
         if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
-            final CodeGenConfiguration config = getConfigBuilder();
+            CodeGenConfiguration config = getConfigBuilder();
             TemplateConfig templateConfig = config.getTemplateConfig();
             boolean kotlin = config.getGlobalConfig().isKotlin();
             String entity = templateConfig.getEntity(kotlin);
@@ -106,8 +106,8 @@ public abstract class AbstractTemplateEngine {
             getTemplateFilePath(TemplateConfig::getMapper).ifPresent(mapper -> {
                 String mapperFile = String.format((mapperPath + File.separator + tableInfo.getMapperName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(mapperFile), objectMap, mapper, config.getStrategyConfig()
-                                                                          .mapper()
-                                                                          .isFileOverride());
+                        .mapper()
+                        .isFileOverride());
             });
         }
         // MpMapper.xml
@@ -115,9 +115,7 @@ public abstract class AbstractTemplateEngine {
         if (StringUtils.isNotBlank(tableInfo.getXmlName()) && StringUtils.isNotBlank(xmlPath)) {
             getTemplateFilePath(TemplateConfig::getXml).ifPresent(xml -> {
                 String xmlFile = String.format((xmlPath + File.separator + tableInfo.getXmlName() + ConstVal.XML_SUFFIX), entityName);
-                outputFile(new File(xmlFile), objectMap, xml, config.getStrategyConfig()
-                                                                    .mapper()
-                                                                    .isFileOverride());
+                outputFile(new File(xmlFile), objectMap, xml, config.getStrategyConfig().mapper().isFileOverride());
             });
         }
     }
@@ -139,8 +137,8 @@ public abstract class AbstractTemplateEngine {
             getTemplateFilePath(TemplateConfig::getService).ifPresent(service -> {
                 String serviceFile = String.format((servicePath + File.separator + tableInfo.getServiceName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(serviceFile), objectMap, service, config.getStrategyConfig()
-                                                                            .service()
-                                                                            .isFileOverride());
+                        .service()
+                        .isFileOverride());
             });
         }
         // MpServiceImpl.java
@@ -149,8 +147,8 @@ public abstract class AbstractTemplateEngine {
             getTemplateFilePath(TemplateConfig::getServiceImpl).ifPresent(serviceImpl -> {
                 String implFile = String.format((serviceImplPath + File.separator + tableInfo.getServiceImplName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(implFile), objectMap, serviceImpl, config.getStrategyConfig()
-                                                                             .service()
-                                                                             .isFileOverride());
+                        .service()
+                        .isFileOverride());
             });
         }
     }
@@ -169,8 +167,8 @@ public abstract class AbstractTemplateEngine {
                 String entityName = tableInfo.getEntityName();
                 String controllerFile = String.format((controllerPath + File.separator + tableInfo.getControllerName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(controllerFile), objectMap, controller, getConfigBuilder().getStrategyConfig()
-                                                                                              .controller()
-                                                                                              .isFileOverride());
+                        .controller()
+                        .isFileOverride());
             });
         }
     }

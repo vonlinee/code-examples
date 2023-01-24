@@ -147,7 +147,7 @@ public class SqlParserUtils {
             });
             // 暂时无法解析IS NOT NULL 和 IS NULL
             if (CollectionUtils.isEmpty(map) && (where.toUpperCase().contains("IS NOT NULL") || where.toUpperCase()
-                                                                                                     .contains("IS NULL"))) {
+                    .contains("IS NULL"))) {
                 map.put("leftExpression", where.substring(0, where.lastIndexOf("IS")));
                 map.put("operate", null);
                 map.put("rightExpression", where.substring(where.lastIndexOf("IS"), where.length()));
@@ -232,16 +232,7 @@ public class SqlParserUtils {
     }
 
     public static void main(String[] args) throws JSQLParserException {
-        String sql = "CREATE TABLE `party_build` (\n" +
-                "  `school_code` varchar(50) NOT NULL COMMENT '主键,学校代码',\n" +
-                "  `school_year` varchar(50) NOT NULL COMMENT '学年,如:2020-2021表示2020到2021学年',\n" +
-                "  `term` int(11) NOT NULL COMMENT '学期,如:1为上学期,2为下学期',\n" +
-                "  `sub_party_organization_count` int(11) NOT NULL COMMENT '下级党组织个数',\n" +
-                "  `party_member_num` int(11) NOT NULL COMMENT '党员人数',\n" +
-                "  `party_life_times` int(11) NOT NULL COMMENT '党组织生活次数',\n" +
-                "  `party_activity_times` int(11) NOT NULL COMMENT '党建活动次数',\n" +
-                "  PRIMARY KEY (`school_code`) USING BTREE\n" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='党建党风概况';";
+        String sql = "CREATE TABLE `party_build` (\n" + "  `school_code` varchar(50) NOT NULL COMMENT '主键,学校代码',\n" + "  `school_year` varchar(50) NOT NULL COMMENT '学年,如:2020-2021表示2020到2021学年',\n" + "  `term` int(11) NOT NULL COMMENT '学期,如:1为上学期,2为下学期',\n" + "  `sub_party_organization_count` int(11) NOT NULL COMMENT '下级党组织个数',\n" + "  `party_member_num` int(11) NOT NULL COMMENT '党员人数',\n" + "  `party_life_times` int(11) NOT NULL COMMENT '党组织生活次数',\n" + "  `party_activity_times` int(11) NOT NULL COMMENT '党建活动次数',\n" + "  PRIMARY KEY (`school_code`) USING BTREE\n" + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='党建党风概况';";
         Statement stmt = CCJSqlParserUtil.parse(sql);
         CreateTable createTable = (CreateTable) stmt;
 
@@ -253,7 +244,6 @@ public class SqlParserUtils {
             System.out.println(colDataType.getArrayData());
             System.out.println(colDataType.getArgumentsStringList());
             System.out.println(colDataType.getCharacterSet());
-
             System.out.println("\n");
         }
     }

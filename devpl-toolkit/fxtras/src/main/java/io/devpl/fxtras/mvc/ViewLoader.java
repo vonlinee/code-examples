@@ -9,7 +9,8 @@ import java.net.URL;
 
 public class ViewLoader {
 
-    private static final WeakValueHashMap<Class<?>, ViewLoader> loaderCache = new WeakValueHashMap<>();
+    private static final WeakValueHashMap<Class<?>, ViewLoader>
+            loaderCache = new WeakValueHashMap<>();
 
     private final Parent rootNode;
     private final Object viewController;
@@ -21,12 +22,12 @@ public class ViewLoader {
 
     public static ViewLoader load(Class<?> clazz) {
         if (!View.class.isAssignableFrom(clazz)) {
-            throw new IllegalArgumentException("cannot load class ViewController");
+            throw new IllegalArgumentException(String.format("cannot load class View [%s]", clazz));
         }
         ViewLoader loader = loaderCache.get(clazz);
         if (loader == null) {
             // 重新加载
-            final FxmlLocation fxmlViewAnnotation = clazz.getAnnotation(FxmlLocation.class);
+            FxmlLocation fxmlViewAnnotation = clazz.getAnnotation(FxmlLocation.class);
             if (fxmlViewAnnotation != null) {
                 String fxmlLocation = fxmlViewAnnotation.location();
                 if (fxmlLocation.isEmpty()) {

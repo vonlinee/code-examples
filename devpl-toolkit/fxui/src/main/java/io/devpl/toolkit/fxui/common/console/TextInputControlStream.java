@@ -261,7 +261,5 @@ public class TextInputControlStream {
         void clear() throws IOException {
             this.buf = null;
         }
-
     }
-
 }

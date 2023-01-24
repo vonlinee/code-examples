@@ -101,13 +101,17 @@ public class MainFrameController extends FxmlView {
             MenuItem deleteThisRowMenuItem = new MenuItem("删除");
             MenuItem customizeMenuItem = new MenuItem("定制列");
             deleteThisRowMenuItem.setOnAction(event -> {
-                TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
-                param.getItems().remove(item);
+                TableCodeGeneration item = param.getSelectionModel()
+                        .getSelectedItem();
+                param.getItems()
+                        .remove(item);
                 tableConfigsToBeGenerated.remove(item.getTableName()); // 移除该表
             });
             customizeMenuItem.setOnAction(event -> {
-                TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
-                Parent root = ViewLoader.load(TableCustomizationController.class).getRoot();
+                TableCodeGeneration item = param.getSelectionModel()
+                        .getSelectedItem();
+                Parent root = ViewLoader.load(TableCustomizationController.class)
+                        .getRoot();
                 Event.fireEvent(root, new CommandEvent(CommandEvent.COMMAND, item));
                 StageHelper.show("表生成定制", root);
                 event.consume();
@@ -125,7 +129,7 @@ public class MainFrameController extends FxmlView {
     @FXML
     public void chooseProjectFolder(ActionEvent event) {
         FileChooserDialog.showDirectoryDialog(getStage(event))
-                         .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
+                .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
     }
 
     @FXML
@@ -134,7 +138,8 @@ public class MainFrameController extends FxmlView {
             return;
         }
         if (StringUtils.hasNotText(codeGenConfig.getProjectFolder())) {
-            Alerts.error("项目根目录不能为空").show();
+            Alerts.error("项目根目录不能为空")
+                    .show();
             return;
         }
         if (!checkDirs(codeGenConfig)) {
@@ -150,10 +155,12 @@ public class MainFrameController extends FxmlView {
                 mbgGenerator.generate();
             } catch (Exception exception) {
                 alert.closeIfShowing();
-                Alerts.exception("生成失败", exception).showAndWait();
+                Alerts.exception("生成失败", exception)
+                        .showAndWait();
             }
         } catch (Exception e) {
-            Alerts.error(e.getMessage()).showAndWait();
+            Alerts.error(e.getMessage())
+                    .showAndWait();
         }
     }
 
@@ -162,14 +169,22 @@ public class MainFrameController extends FxmlView {
      * @param generatorConfig 代码生成配置
      */
     public void bindCodeGenConfiguration(GenericConfiguration generatorConfig) {
-        projectFolderField.textProperty().bindBidirectional(generatorConfig.projectFolderProperty());
-        modelTargetPackage.textProperty().bindBidirectional(generatorConfig.modelPackageProperty());
-        modelTargetProject.textProperty().bindBidirectional(generatorConfig.modelPackageTargetFolderProperty());
-        txfParentPackageName.textProperty().bindBidirectional(generatorConfig.parentPackageProperty());
-        txfMapperPackageName.textProperty().bindBidirectional(generatorConfig.daoPackageProperty());
-        daoTargetProject.textProperty().bindBidirectional(generatorConfig.daoTargetFolderProperty());
-        mapperTargetPackage.textProperty().bindBidirectional(generatorConfig.mappingXMLPackageProperty());
-        mappingTargetProject.textProperty().bindBidirectional(generatorConfig.mappingXMLTargetFolderProperty());
+        projectFolderField.textProperty()
+                .bindBidirectional(generatorConfig.projectFolderProperty());
+        modelTargetPackage.textProperty()
+                .bindBidirectional(generatorConfig.modelPackageProperty());
+        modelTargetProject.textProperty()
+                .bindBidirectional(generatorConfig.modelPackageTargetFolderProperty());
+        txfParentPackageName.textProperty()
+                .bindBidirectional(generatorConfig.parentPackageProperty());
+        txfMapperPackageName.textProperty()
+                .bindBidirectional(generatorConfig.daoPackageProperty());
+        daoTargetProject.textProperty()
+                .bindBidirectional(generatorConfig.daoTargetFolderProperty());
+        mapperTargetPackage.textProperty()
+                .bindBidirectional(generatorConfig.mappingXMLPackageProperty());
+        mappingTargetProject.textProperty()
+                .bindBidirectional(generatorConfig.mappingXMLTargetFolderProperty());
     }
 
     /**
@@ -185,11 +200,13 @@ public class MainFrameController extends FxmlView {
         StringBuilder sb = new StringBuilder();
         for (Path dir : targetDirs) {
             if (!Files.exists(dir)) {
-                sb.append(dir).append("\n");
+                sb.append(dir)
+                        .append("\n");
             }
         }
         if (sb.length() > 0) {
-            Optional<ButtonType> optional = Alerts.confirm("以下目录不存在, 是否创建?\n" + sb).showAndWait();
+            Optional<ButtonType> optional = Alerts.confirm("以下目录不存在, 是否创建?\n" + sb)
+                    .showAndWait();
             if (optional.isEmpty()) {
                 System.out.println(111);
             } else {
@@ -197,7 +214,8 @@ public class MainFrameController extends FxmlView {
                     try {
                         return FileUtils.forceMkdir(targetDirs);
                     } catch (Exception e) {
-                        Alerts.error(Messages.getString("PromptText.3")).show();
+                        Alerts.error(Messages.getString("PromptText.3"))
+                                .show();
                     }
                 } else {
                     return false;
@@ -208,12 +226,12 @@ public class MainFrameController extends FxmlView {
     }
 
     @FXML
-    public void showEntityEditorDialog(ActionEvent actionEvent) {
-        StageHelper.show("实体类编辑", PojoEditorController.class);
+    public void showClassEditorDialogPane(ActionEvent actionEvent) {
+        StageHelper.show("类编辑", ClassDefinitionController.class);
     }
 
     @FXML
-    public void showClassEditorDialogPane(ActionEvent actionEvent) {
-        StageHelper.show("类编辑", ClassDefinitionController.class);
+    public void showConnectinManagePane(ActionEvent actionEvent) {
+        StageHelper.show("连接管理", ConnectionManageController.class);
     }
 }

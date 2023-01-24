@@ -19,7 +19,8 @@ public class GsonConverter implements JSONConverter {
         final GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls(); // 不忽略null值
         // builder.registerTypeAdapter(Property.class, null);
-        this.gson = FxGson.addFxSupport(builder).create();
+        this.gson = FxGson.addFxSupport(builder)
+                .create();
     }
 
     static class PropertyTypeAdapter<T> extends TypeAdapter<ObservableValue<T>> {

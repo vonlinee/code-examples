@@ -34,7 +34,9 @@ public class Utils {
         }
         try {
             final File file = new File(resource.toURI());
-            return Path.of(file.getAbsolutePath().replace("\\", "/").replace("/target/classes", "/src/main/java"), clazz.getSimpleName() + ".java");
+            return Path.of(file.getAbsolutePath()
+                    .replace("\\", "/")
+                    .replace("/target/classes", "/src/main/java"), clazz.getSimpleName() + ".java");
         } catch (URISyntaxException e) {
             return null;
         }
@@ -42,12 +44,14 @@ public class Utils {
 
     public static File getDesktopDirectory() {
         String home = System.getProperty("user.home");
-        return Path.of(home, "Desktop").toFile();
+        return Path.of(home, "Desktop")
+                .toFile();
     }
 
     public static File getDesktopDirectoryFile(String filename) {
         String home = System.getProperty("user.home");
-        return Path.of(home, "Desktop", filename).toFile();
+        return Path.of(home, "Desktop", filename)
+                .toFile();
     }
 
     public static Path getDesktopDirectoryPath(String filename) {

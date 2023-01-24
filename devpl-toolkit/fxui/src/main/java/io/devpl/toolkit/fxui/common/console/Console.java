@@ -63,12 +63,12 @@ public class Console extends BorderPane {
         });
 
 //        input.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> { });
-//private final EventHandler<KeyEvent> keyReleasedHandler = new EventHandler<>() {
+// private final EventHandler<KeyEvent> keyReleasedHandler = new EventHandler<>() {
 //        handle(final KeyEvent keyEvent){
 //            //your code here
 //        }
 //    }
-//textField.setOnKeyReleased(keyReleasedHandler);
+// textField.setOnKeyReleased(keyReleasedHandler);
     }
 
     @Override
@@ -98,5 +98,4 @@ public class Console extends BorderPane {
     public void println() {
         runSafe(() -> output.appendText(System.lineSeparator()));
     }
-
 }

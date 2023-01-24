@@ -216,8 +216,8 @@ public class TableInfo {
         }
         this.fields.forEach(field -> {
             IColumnType columnType = field.getColumnType();
-            if (null != columnType && null != columnType.getPkg()) {
-                importPackages.add(columnType.getPkg());
+            if (null != columnType && null != columnType.getClassName()) {
+                importPackages.add(columnType.getClassName());
             }
             if (field.isKeyFlag()) {
                 // 主键

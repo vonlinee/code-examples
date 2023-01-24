@@ -23,8 +23,7 @@ public class Mocker {
     public static <T> T getObjDefault(Class<T> clazz) throws IllegalAccessException, InstantiationException {
         T instance = clazz.newInstance();
         Field[] fs = clazz.getDeclaredFields();
-        for (int i = 0; i < fs.length; i++) {
-            Field f = fs[i];
+        for (Field f : fs) {
             f.setAccessible(true); // 设置属性是访问权限
             if (Modifier.isStatic(f.getModifiers())) {
                 continue;

@@ -17,7 +17,8 @@ public class ProgressDialog extends Alert implements ProgressCallback {
 
     public ProgressDialog(AlertType alertType) {
         super(alertType);
-        this.contentTextProperty().bindBidirectional(progressText);
+        this.contentTextProperty()
+                .bindBidirectional(progressText);
         setResizable(true);
         setHeight(500.0);
         setWidth(800.0);

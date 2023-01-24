@@ -58,28 +58,32 @@ public class PictureProcessStateController {
         rotateTransition.setAutoReverse(true);
         VBox vBoxRect = new VBox();
         vBoxRect.setAlignment(Pos.TOP_CENTER);
-        vBoxRect.getChildren().add(rect);
+        vBoxRect.getChildren()
+                .add(rect);
         VBox.setMargin(rect, new Insets(125, 0, 0, 350));
         rotateTransition.play();
         text.setFont(Font.font(12));
         VBox vBoxLabel = new VBox();
-        vBoxLabel.getChildren().add(text);
+        vBoxLabel.getChildren()
+                .add(text);
         VBox.setMargin(text, new Insets(175, 0, 15, 40));
         button.setPrefSize(90, 40);
         HBox hBoxButton = new HBox();
         hBoxButton.setPrefSize(505, 170);
-        hBoxButton.getChildren().add(button);
+        hBoxButton.getChildren()
+                .add(button);
         hBoxButton.setAlignment(Pos.BOTTOM_RIGHT);
         hBoxButton.getStylesheets()
-                  .add(Thread.currentThread()
-                             .getContextClassLoader()
-                             .getResource("static/css/global_style.css")
-                             .toExternalForm());
+                .add(Thread.currentThread()
+                        .getContextClassLoader()
+                        .getResource("static/css/global_style.css")
+                        .toExternalForm());
         HBox.setMargin(button, new Insets(0, 15, 5, 0));
         button.setStyle("-fx-border-width: 0px;");
         button.setStyle("-fx-border-color: transparent;");
         button.setStyle("-fx-background-color: transparent;");
-        rootGroup.getChildren().addAll(dbImage, vBoxRect, vBoxLabel, hBoxButton);
+        rootGroup.getChildren()
+                .addAll(dbImage, vBoxRect, vBoxLabel, hBoxButton);
         dialogStage.show();
         button.setOnMouseClicked((event) -> dialogStage.close());
         rootGroup.setOnMousePressed((me) -> {
@@ -108,8 +112,10 @@ public class PictureProcessStateController {
     }
 
     private void showCloseButton() {
-        button.getStyleClass().add("btn");
-        button.getStyleClass().add("btn-default");
+        button.getStyleClass()
+                .add("btn");
+        button.getStyleClass()
+                .add("btn-default");
         button.setStyle("-fx-border-width: 1px;");
         button.setStyle("-fx-background-color: #fff;");
         button.setText("我知道了");

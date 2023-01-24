@@ -11,7 +11,7 @@
         <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
         <plugin type="org.mybatis.generator.plugins.MapperAnnotationPlugin"/>
-        
+
         <!--数据库连接配置-->
         <connectionFactory>
             <property name="driverClass" value="${jdbc.driverClassName}"/>

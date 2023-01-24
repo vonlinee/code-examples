@@ -1,5 +1,6 @@
 package io.devpl.toolkit.fxui.model;
 
+import io.devpl.toolkit.core.DatabaseInfo;
 import lombok.Data;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;

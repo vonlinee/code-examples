@@ -84,10 +84,12 @@ public final class XMLUtils {
         Map<String, Object> map = new HashMap<>();
         try {
             Document doc = reader.read(source);
-            Iterator<Element> iter = doc.getRootElement().elementIterator();
+            Iterator<Element> iter = doc.getRootElement()
+                    .elementIterator();
             while (iter.hasNext()) {
                 Element e = iter.next();
-                if (!e.elementIterator().hasNext()) {
+                if (!e.elementIterator()
+                        .hasNext()) {
                     map.put(e.getName(), e.getTextTrim());
                     continue;
                 }

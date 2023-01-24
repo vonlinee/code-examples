@@ -370,9 +370,7 @@ public class ColumnMetadata implements Serializable {
         sb.append(", scopeTable='").append(scopeTable).append('\'');
         sb.append(", sourceDataType='").append(sourceDataType).append('\'');
         sb.append(", isAutoincrement='").append(isAutoincrement).append('\'');
-        sb.append(", isGeneratedcolumn='")
-          .append(isGeneratedcolumn)
-          .append('\'');
+        sb.append(", isGeneratedcolumn='").append(isGeneratedcolumn).append('\'');
         sb.append('}');
         return sb.toString();
     }

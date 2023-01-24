@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-
-<?import javafx.scene.control.ScrollPane?>
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.devpl.toolkit.fxui.controller.ConnectionManageController">
 
     <top>
-        <HBox>
+        <ToolBar>
             <ChoiceBox prefHeight="23.0" prefWidth="480.0"/>
-            <Button mnemonicParsing="false" text="添加"/>
-            <Button mnemonicParsing="false" text="删除"/>
-            <Button mnemonicParsing="false" text="修改"/>
-        </HBox>
+            <Button mnemonicParsing="false" text="添加" onAction="#btnAddOne"/>
+            <Button mnemonicParsing="false" text="清空" onAction="#btnClearAll"/>
+            <Button mnemonicParsing="false" text="刷新" onAction="#btnRefresh"/>
+        </ToolBar>
     </top>
 
     <center>
         <!--数据源列表表格-->
-        <ScrollPane>
-
-        </ScrollPane>
+        <TableView fx:id="tblvConnectionList" editable="true">
+            <columns>
+                <TableColumn fx:id="tblcDbType" text="数据库类型"/>
+                <TableColumn fx:id="tblcProtocol" text="协议"/>
+                <TableColumn fx:id="tblcHostname" text="IP"/>
+                <TableColumn fx:id="tblcPort" minWidth="40" maxWidth="40" text="端口"/>
+                <TableColumn fx:id="tblcDatabaseName" text="数据库"/>
+            </columns>
+        </TableView>
     </center>
-
 </BorderPane>

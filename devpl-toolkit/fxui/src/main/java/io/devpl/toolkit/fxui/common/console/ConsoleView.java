@@ -17,7 +17,6 @@ import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
 /**
  * @author Yuhi Ishikura
  */
@@ -62,28 +61,26 @@ public class ConsoleView extends BorderPane {
         });
 
         final ContextMenu menu = new ContextMenu();
-        menu.getItems().add(createItem("Clear console", e -> {
-            try {
-                stream.clear();
-                this.textArea.clear();
-            } catch (IOException e1) {
-                throw new RuntimeException(e1);
-            }
-        }));
+        menu.getItems()
+                .add(createItem("Clear console", e -> {
+                    try {
+                        stream.clear();
+                        this.textArea.clear();
+                    } catch (IOException e1) {
+                        throw new RuntimeException(e1);
+                    }
+                }));
         this.textArea.setContextMenu(menu);
-
 
 //    setPrefWidth(600);
 //    setPrefHeight(400);
     }
-
 
     private MenuItem createItem(String name, EventHandler<ActionEvent> a) {
         final MenuItem menuItem = new MenuItem(name);
         menuItem.setOnAction(a);
         return menuItem;
     }
-
 
     public void setTitle(final String title) {
         Platform.runLater(() -> this.title.setText(title));
@@ -94,9 +91,8 @@ public class ConsoleView extends BorderPane {
 
     public void invokeMain(Runnable e) {
         exe.submit(e);
-//new Thread(e).start();
+// new Thread(e).start();
     }
 
     ;
-
 }

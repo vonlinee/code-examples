@@ -12,6 +12,5 @@ public class TestProperty {
         System.out.println(stringProperty.getName());
         System.out.println(stringProperty.getValueSafe());
         System.out.println(stringProperty.get());
-
     }
 }

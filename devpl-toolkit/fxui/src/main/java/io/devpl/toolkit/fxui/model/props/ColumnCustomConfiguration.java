@@ -11,7 +11,7 @@ import javafx.beans.property.StringProperty;
 public class ColumnCustomConfiguration {
 
     private final BooleanProperty checked = new SimpleBooleanProperty(true);
-    //列名称
+    // 列名称
     private final StringProperty columnName = new SimpleStringProperty();
     // Java类型
     private final StringProperty javaType = new SimpleStringProperty();

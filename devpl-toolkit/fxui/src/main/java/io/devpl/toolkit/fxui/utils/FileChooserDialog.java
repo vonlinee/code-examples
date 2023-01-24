@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public class FileChooserDialog {
 
-    DirectoryChooser directoryChooser = new DirectoryChooser();
-    FileChooser fileChooser = new FileChooser();
+    private final DirectoryChooser directoryChooser = new DirectoryChooser();
+    private final FileChooser fileChooser = new FileChooser();
 
     static FileChooserDialog instance = new FileChooserDialog();
 

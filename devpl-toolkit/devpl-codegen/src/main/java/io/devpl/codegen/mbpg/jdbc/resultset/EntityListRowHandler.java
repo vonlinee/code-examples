@@ -1,8 +1,5 @@
 package io.devpl.codegen.mbpg.jdbc.resultset;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,7 +11,7 @@ public class EntityListRowHandler implements ResultSetExtractor<List<Map<String,
     private final MapEntityRowMapper rowMapper = new MapEntityRowMapper();
 
     @Override
-    public List<Map<String, Object>> extractData(ResultSet rs) throws SQLException, DataAccessException {
+    public List<Map<String, Object>> extractData(ResultSet rs) throws SQLException {
         List<Map<String, Object>> rows = new ArrayList<>();
         int i = 0;
         while (rs.next()) {

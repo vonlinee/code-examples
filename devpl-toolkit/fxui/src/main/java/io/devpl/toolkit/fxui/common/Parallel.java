@@ -156,7 +156,7 @@ import java.util.concurrent.RecursiveTask;
  * The default chunk size is often sufficient, because the test for an excess
  * number of queued tasks prevents tasks from being split needlessly. This test
  * is especially useful when parallel loops are nested, as when looping over
- * elements of multi-dimensional arrays.
+ * elements of multidimensional arrays.
  * <p>
  * For example, an implementation of the method {@code sqrParallel} for 3D
  * arrays could simply call the 2D version listed above. Tasks will naturally

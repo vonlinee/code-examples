@@ -1,7 +1,6 @@
 package io.devpl.codegen.mbpg.jdbc.resultset;
 
 import io.devpl.codegen.utils.StringUtils;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.LinkedCaseInsensitiveMap;

@@ -1,7 +1,7 @@
 package io.devpl.toolkit.fxui.bridge;
 
 import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
-import io.devpl.toolkit.fxui.model.DatabaseInfo;
+import io.devpl.toolkit.core.DatabaseInfo;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import org.mybatis.generator.api.ProgressCallback;
 import org.mybatis.generator.config.*;
@@ -244,11 +244,14 @@ public class MyBatisCodeGenerator {
 
     private String getMappingXMLFilePath(GenericConfiguration generatorConfig) {
         StringBuilder sb = new StringBuilder();
-        sb.append(generatorConfig.getProjectFolder()).append("/");
-        sb.append(generatorConfig.getMappingXMLTargetFolder()).append("/");
+        sb.append(generatorConfig.getProjectFolder())
+                .append("/");
+        sb.append(generatorConfig.getMappingXMLTargetFolder())
+                .append("/");
         String mappingXMLPackage = generatorConfig.getMappingXMLPackage();
         if (StringUtils.isNotEmpty(mappingXMLPackage)) {
-            sb.append(mappingXMLPackage.replace(".", "/")).append("/");
+            sb.append(mappingXMLPackage.replace(".", "/"))
+                    .append("/");
         }
         return sb.toString();
     }

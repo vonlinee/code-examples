@@ -43,7 +43,8 @@ public interface NavigationItem {
         }
         for (NavigationItem item : children) {
             TreeItem<NavigationItem> newItem = new TreeItem<>(item);
-            parent.getChildren().add(newItem);
+            parent.getChildren()
+                    .add(newItem);
             item.attach(newItem);
         }
     }

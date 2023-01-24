@@ -67,10 +67,8 @@ public class Test {
                 final List<XWPFRun> runs = xwpfParagraph.getRuns();
                 for (int i1 = 0; i1 < runs.size(); i1++) {
                     final XWPFRun run = newParagraph.createRun();
-
                 }
             }
-
 
             // final XWPFTable table = doc.createTable();
             // final List<XWPFTableRow> rows = table.getRows();
@@ -100,7 +98,9 @@ public class Test {
         CTStyles styles = document.getStyle();
         CTStyle[] styleArray = styles.getStyleArray();
         for (CTStyle style : styleArray) {
-            if (style.getName().getVal().equals(styleName)) {
+            if (style.getName()
+                    .getVal()
+                    .equals(styleName)) {
                 return style.getStyleId();
             }
         }

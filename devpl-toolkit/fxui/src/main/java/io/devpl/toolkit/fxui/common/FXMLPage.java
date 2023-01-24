@@ -21,6 +21,8 @@ public enum FXMLPage {
     }
 
     public URL getLocation() {
-        return Thread.currentThread().getContextClassLoader().getResource(fxml);
+        return Thread.currentThread()
+                .getContextClassLoader()
+                .getResource(fxml);
     }
 }

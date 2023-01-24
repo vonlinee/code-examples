@@ -22,7 +22,8 @@ public class MyBatisPlusPlugin extends PluginAdapter {
 
     @Override
     public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        topLevelClass.addAnnotation("@TableName(value = \"" + introspectedTable.getTableConfiguration().getTableName() + "\")");
+        topLevelClass.addAnnotation("@TableName(value = \"" + introspectedTable.getTableConfiguration()
+                .getTableName() + "\")");
         return true;
     }
 
@@ -51,6 +52,8 @@ public class MyBatisPlusPlugin extends PluginAdapter {
      * @return 是否为主键
      */
     private boolean isPrimaryKey(IntrospectedColumn column) {
-        return column.getIntrospectedTable().getPrimaryKeyColumns().contains(column);
+        return column.getIntrospectedTable()
+                .getPrimaryKeyColumns()
+                .contains(column);
     }
 }

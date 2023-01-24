@@ -29,8 +29,8 @@
                     </ImageView>
                 </graphic>
             </Label>
-            <Button fx:id="entityEditor" text="实体类编辑" onAction="#showEntityEditorDialog"/>
             <Button text="类编辑器" onAction="#showClassEditorDialogPane"/>
+            <Button text="连接管理" onAction="#showConnectinManagePane"/>
         </ToolBar>
     </top>
     <center>

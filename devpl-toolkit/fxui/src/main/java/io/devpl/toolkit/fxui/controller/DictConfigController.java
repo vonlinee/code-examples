@@ -23,7 +23,7 @@ public class DictConfigController extends FxmlView {
     @FXML
     public TableView<SysDictData> dictConfigTable;
     @FXML
-    public TableColumn<SysDictData, String>  tbcName;
+    public TableColumn<SysDictData, String> tbcName;
     @FXML
     public TableColumn<SysDictData, String> tbcCode;
     @FXML
@@ -42,7 +42,8 @@ public class DictConfigController extends FxmlView {
         tbcEnabled.setCellValueFactory(param -> {
             ObjectProperty<CheckBox> isEnableProperty = new SimpleObjectProperty<>();
             final CheckBox checkBox = new CheckBox();
-            checkBox.setSelected(param.getValue().isEnabled());
+            checkBox.setSelected(param.getValue()
+                    .isEnabled());
             isEnableProperty.set(checkBox);
             return isEnableProperty;
         });

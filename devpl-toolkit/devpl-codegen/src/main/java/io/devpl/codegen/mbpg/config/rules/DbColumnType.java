@@ -74,11 +74,11 @@ public enum DbColumnType implements IColumnType {
     /**
      * 包路径
      */
-    private final String pkg;
+    private final String className;
 
     DbColumnType(final String type, final String pkg) {
         this.type = type;
-        this.pkg = pkg;
+        this.className = pkg;
     }
 
     @Override
@@ -87,7 +87,7 @@ public enum DbColumnType implements IColumnType {
     }
 
     @Override
-    public String getPkg() {
-        return pkg;
+    public String getClassName() {
+        return className;
     }
 }

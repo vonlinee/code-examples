@@ -1,9 +1,9 @@
 package io.devpl.toolkit.fxui.model.props;
 
 import io.devpl.fxtras.mvc.ViewModel;
-import io.devpl.toolkit.fxui.common.Constants;
-import io.devpl.toolkit.fxui.common.JdbcDriver;
+import io.devpl.toolkit.fxui.common.JDBCDriver;
 import io.devpl.toolkit.fxui.utils.DBUtils;
+import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -16,18 +16,26 @@ import java.util.Properties;
  */
 public class ConnectionInfo implements ViewModel {
 
-    // 连接名称
+    private final StringProperty id = new SimpleStringProperty();
+    /**
+     * 连接名称
+     */
     private final StringProperty name = new SimpleStringProperty();
-    private final StringProperty dbType = new SimpleStringProperty(JdbcDriver.MySQL5.name());
-    private final StringProperty host = new SimpleStringProperty("127.0.0.1");
-    private final StringProperty port = new SimpleStringProperty("3306");
+    private final StringProperty dbType = new SimpleStringProperty();
+    private final StringProperty host = new SimpleStringProperty();
+    private final StringProperty port = new SimpleStringProperty();
+    /**
+     * 数据库名称
+     */
     private final StringProperty schema = new SimpleStringProperty();
-    private final StringProperty username = new SimpleStringProperty("root");
-    private final StringProperty password = new SimpleStringProperty("123456");
-    private final StringProperty encoding = new SimpleStringProperty(Constants.DEFAULT_ENCODING);
+    private final StringProperty dbName = new SimpleStringProperty();
+    private final StringProperty username = new SimpleStringProperty();
+    private final StringProperty password = new SimpleStringProperty();
+    private final StringProperty encoding = new SimpleStringProperty();
 
     public String getName() {
-        return name.get();
+        final String connectionName = name.get();
+        return StringUtils.hasText(connectionName) ? connectionName : host.get() + ":" + port.get();
     }
 
     public StringProperty nameProperty() {
@@ -44,6 +52,18 @@ public class ConnectionInfo implements ViewModel {
 
     public StringProperty dbTypeProperty() {
         return dbType;
+    }
+
+    public String getId() {
+        return id.get();
+    }
+
+    public StringProperty idProperty() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id.set(id);
     }
 
     public void setDbType(String dbType) {
@@ -118,35 +138,63 @@ public class ConnectionInfo implements ViewModel {
         return encoding;
     }
 
+    public String getDbName() {
+        return dbName.get();
+    }
+
+    public StringProperty dbNameProperty() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName.set(dbName);
+    }
+
     public void setEncoding(String encoding) {
         this.encoding.set(encoding);
     }
 
     @Override
     public String toString() {
-        return "ConnectionInfo{" + "name=" + name.get() +
-                ", dbType=" + dbType.get() +
-                ", host=" + host.get() +
-                ", port=" + port.get() +
-                ", schema=" + schema.get() +
-                ", username=" + username.get() +
-                ", password=" + password.get() +
-                ", encoding=" + encoding.get() +
-                '}';
+        return "ConnectionInfo{" + "id=" + id.get() + ", dbName =" + dbName.get() + ", name=" + name.get() + ", dbType=" + dbType.get() + ", host=" + host.get() + ", port=" + port.get() + ", schema=" + schema.get() + ", username=" + username.get() + ", password=" + password.get() + ", encoding=" + encoding.get() + '}';
     }
 
     public String getConnectionUrl() {
-        JdbcDriver driver = JdbcDriver.valueOf(dbType.get());
+        JDBCDriver driver = JDBCDriver.valueOf(dbType.get());
         String databaseName = schema.get();
         if (databaseName == null || databaseName.length() == 0) {
             databaseName = "";
         }
-        return String.format(driver.getConnectionUrlPattern(), host.get(), port.get(), databaseName);
+        return driver.getConnectionUrl(host.get(), port.get(), databaseName, null);
     }
 
+    public String getConnectionUrl(String databaseName, Properties properties) {
+        JDBCDriver driver = JDBCDriver.valueOf(dbType.get());
+        return driver.getConnectionUrl(host.get(), port.get(), databaseName, properties);
+    }
+
+    public Connection getConnection(String databaseName, Properties properties) throws SQLException {
+        String connectionUrl = getConnectionUrl(databaseName, properties);
+        if (properties == null) {
+            properties = new Properties();
+            properties.put("user", username.get());
+            properties.put("password", password.get());
+            properties.put("serverTimezone", "UTC");
+            properties.put("useUnicode", "true");
+            properties.put("useSSL", "false");
+            properties.put("characterEncoding", encoding.get());
+        }
+        return DBUtils.getConnection(connectionUrl, properties);
+    }
+
+    /**
+     * 获取数据库连接
+     * @return 数据库连接实例
+     * @throws SQLException 获取连接失败
+     */
     public Connection getConnection() throws SQLException {
         String connectionUrl = getConnectionUrl();
-        final Properties properties = new Properties();
+        Properties properties = new Properties();
         properties.put("user", username.get());
         properties.put("password", password.get());
         properties.put("serverTimezone", "UTC");
