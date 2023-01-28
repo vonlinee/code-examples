@@ -5,10 +5,6 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import java.beans.BeanDescriptor;
-import java.beans.BeanInfo;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -19,7 +15,7 @@ import java.util.Objects;
  * 使用Cglib代理为普通的JavaBean添加数据绑定支持
  * @param <T>
  */
-public final class BindingSupport<T> implements MethodInterceptor {
+public final class Binder<T> implements MethodInterceptor {
 
     /**
      * 一定要是普通的JavaBean，属性不能是Property
@@ -28,13 +24,13 @@ public final class BindingSupport<T> implements MethodInterceptor {
     private Enhancer enhancer;
     private final Class<T> typeClass;
 
-    BindingSupport(Class<T> type) {
+    Binder(Class<T> type) {
         this.typeClass = type;
         init(typeClass);
     }
 
     @SuppressWarnings("unchecked")
-    public BindingSupport(T bean) {
+    public Binder(T bean) {
         this.typeClass = (Class<T>) bean.getClass();
         this.bean = Objects.requireNonNull(bean, "java bean cannot be null!");
         init(typeClass);
@@ -55,12 +51,12 @@ public final class BindingSupport<T> implements MethodInterceptor {
         this.enhancer.setCallback(this);
     }
 
-    public static <T> BindingSupport<T> support(Class<T> typeClass) {
-        return new BindingSupport<>(typeClass);
+    public static <T> Binder<T> of(Class<T> typeClass) {
+        return new Binder<>(typeClass);
     }
 
-    public static <T> BindingSupport<T> support(T bean) {
-        return new BindingSupport<>(bean);
+    public static <T> Binder<T> of(T bean) {
+        return new Binder<>(bean);
     }
 
     private final Map<String, Property<Object>> bindingsMap = new HashMap<>(10);
@@ -75,7 +71,7 @@ public final class BindingSupport<T> implements MethodInterceptor {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    public <V> BindingSupport<T> bindBidirectional(String filedName, Class<V> fieldType, Property<V> property) {
+    public <V> Binder<T> bindBidirectional(String filedName, Class<V> fieldType, Property<V> property) {
         bindingsMap.put(filedName, (Property<Object>) property);
         return bind(filedName, fieldType, property);
     }
@@ -88,7 +84,7 @@ public final class BindingSupport<T> implements MethodInterceptor {
      * @param <V>       字段值泛型
      * @return this
      */
-    public <V> BindingSupport<T> bind(String filedName, Class<V> fieldType, Property<V> property) {
+    public <V> Binder<T> bind(String filedName, Class<V> fieldType, Property<V> property) {
         if (setters.containsKey(filedName)) {
             return this; // 避免重复添加
         }

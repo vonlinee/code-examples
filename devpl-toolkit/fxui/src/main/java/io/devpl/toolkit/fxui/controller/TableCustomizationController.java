@@ -93,19 +93,17 @@ public class TableCustomizationController extends FxmlView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        accoConfig.setExpandedPane(accoConfig.getPanes()
-                .get(1));
-        accoConfig.expandedPaneProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    final ObservableList<TitledPane> panes = accoConfig.getPanes();
-                    int expanedCount = 0;
-                    for (TitledPane pane : panes) {
-                        if (pane.isExpanded()) expanedCount++;
-                    }
-                    if (expanedCount == 0) {
-                        accoConfig.setExpandedPane(panes.get(0));
-                    }
-                });
+        accoConfig.setExpandedPane(accoConfig.getPanes().get(1));
+        accoConfig.expandedPaneProperty().addListener((observable, oldValue, newValue) -> {
+            final ObservableList<TitledPane> panes = accoConfig.getPanes();
+            int expanedCount = 0;
+            for (TitledPane pane : panes) {
+                if (pane.isExpanded()) expanedCount++;
+            }
+            if (expanedCount == 0) {
+                accoConfig.setExpandedPane(panes.get(0));
+            }
+        });
 
         checkedColumn.setCellFactory(param -> {
             TableCell<ColumnCustomConfiguration, Boolean> cell = new CheckBoxTableCell<>(null);
@@ -130,36 +128,20 @@ public class TableCustomizationController extends FxmlView {
 
         // handle commit event to save the user input data
         jdbcTypeColumn.setOnEditCommit(event -> {
-            event.getTableView()
-                    .getItems()
-                    .get(event.getTablePosition()
-                            .getRow())
-                    .setJdbcType(event.getNewValue());
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setJdbcType(event.getNewValue());
         });
         javaTypeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         // handle commit event to save the user input data
         javaTypeColumn.setOnEditCommit(event -> {
-            event.getTableView()
-                    .getItems()
-                    .get(event.getTablePosition()
-                            .getRow())
-                    .setJavaType(event.getNewValue());
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setJavaType(event.getNewValue());
         });
         propertyNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         propertyNameColumn.setOnEditCommit(event -> {
-            event.getTableView()
-                    .getItems()
-                    .get(event.getTablePosition()
-                            .getRow())
-                    .setPropertyName(event.getNewValue());
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setPropertyName(event.getNewValue());
         });
         typeHandlerColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         typeHandlerColumn.setOnEditCommit(event -> {
-            event.getTableView()
-                    .getItems()
-                    .get(event.getTablePosition()
-                            .getRow())
-                    .setTypeHandler(event.getNewValue());
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setTypeHandler(event.getNewValue());
         });
         // 初始化数据
         root.addEventHandler(CommandEvent.COMMAND, event -> {
@@ -168,8 +150,7 @@ public class TableCustomizationController extends FxmlView {
             try {
                 tableColumns = JSchUtils.getTableColumns(tableInfo.getDatabaseInfo(), tableInfo.getTableName());
             } catch (Exception e) {
-                Alerts.exception("", e)
-                        .show();
+                Alerts.exception("", e).show();
             }
             assert tableColumns != null;
             labelCurrentTableName.setText(tableInfo.getTableName());
@@ -188,20 +169,13 @@ public class TableCustomizationController extends FxmlView {
      */
     public void initTableCodeGenerationOptionBindding(TableCodeGenOption option) {
         // TODO 只绑定一次，如果每次绑定的根节点没有变化，那么无需进行绑定
-        option.useExampleProperty()
-                .bind(chbUseExample.selectedProperty());
-        option.annotationDAOProperty()
-                .bind(chbAnnotationDao.selectedProperty());
-        option.commentProperty()
-                .bind(chbComment.selectedProperty());
-        option.overrideXMLProperty()
-                .bind(chbOverrideXML.selectedProperty());
-        option.jsr310SupportProperty()
-                .bind(chbJsr310Support.selectedProperty());
-        option.useSchemaPrefixProperty()
-                .bind(chbUseSchemaPrefix.selectedProperty());
-        option.useDAOExtendStyleProperty()
-                .bind(chbMapperExtend.selectedProperty());
+        option.useExampleProperty().bind(chbUseExample.selectedProperty());
+        option.annotationDAOProperty().bind(chbAnnotationDao.selectedProperty());
+        option.commentProperty().bind(chbComment.selectedProperty());
+        option.overrideXMLProperty().bind(chbOverrideXML.selectedProperty());
+        option.jsr310SupportProperty().bind(chbJsr310Support.selectedProperty());
+        option.useSchemaPrefixProperty().bind(chbUseSchemaPrefix.selectedProperty());
+        option.useDAOExtendStyleProperty().bind(chbMapperExtend.selectedProperty());
     }
 
     /**

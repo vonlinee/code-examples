@@ -1,4 +1,4 @@
-package io.devpl.toolkit.core;
+package io.devpl.toolkit.fxui.model;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import lombok.Data;
  * SSH连接信息
  */
 @Data
-public class SSHConnectionInfo {
+public class SSHConnectionConfiguration {
     private String lport;
     private String rport;
     private String sshPort;

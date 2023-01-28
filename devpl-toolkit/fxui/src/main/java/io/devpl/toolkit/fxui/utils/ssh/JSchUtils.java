@@ -5,7 +5,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import io.devpl.fxtras.Alerts;
 import io.devpl.toolkit.fxui.common.JDBCDriver;
-import io.devpl.toolkit.core.DatabaseInfo;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.NumberUtils;

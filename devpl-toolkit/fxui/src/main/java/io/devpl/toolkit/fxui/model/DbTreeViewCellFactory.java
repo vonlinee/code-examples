@@ -2,7 +2,6 @@ package io.devpl.toolkit.fxui.model;
 
 import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.JFX;
-import io.devpl.toolkit.core.DatabaseInfo;
 import io.devpl.toolkit.fxui.event.CommandEvent;
 import io.devpl.toolkit.fxui.utils.EventUtils;
 import io.devpl.toolkit.fxui.utils.ssh.JSchUtils;

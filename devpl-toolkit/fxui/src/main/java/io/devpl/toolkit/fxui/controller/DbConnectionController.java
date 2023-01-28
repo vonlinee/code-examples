@@ -1,12 +1,12 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.fxtras.Alerts;
-import io.devpl.fxtras.JFX;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.toolkit.fxui.common.Constants;
 import io.devpl.toolkit.fxui.common.JDBCDriver;
+import io.devpl.toolkit.fxui.event.FillDefaultValueEvent;
 import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -16,7 +16,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.URL;
-import java.sql.Connection;
 import java.util.ResourceBundle;
 
 /**
@@ -47,9 +46,9 @@ public class DbConnectionController extends FxmlView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        dbTypeChoice.setItems(JFX.arrayOf(JDBCDriver.supportedDbNames()));
+        dbTypeChoice.setItems(FXCollections.observableArrayList(JDBCDriver.supportedDbNames()));
         dbTypeChoice.setValue(JDBCDriver.MYSQL5.name());
-        encodingChoice.setItems(JFX.arrayOf(Constants.SUPPORTED_ENCODING));
+        encodingChoice.setItems(FXCollections.observableArrayList(Constants.SUPPORTED_ENCODING));
         encodingChoice.setValue(Constants.DEFAULT_ENCODING);
         hostField.setText(Constants.LOCALHOST);
         userNameField.setText(Constants.MYSQL_ROOT_USERNAME);
@@ -58,31 +57,40 @@ public class DbConnectionController extends FxmlView {
 
     /**
      * 初始化数据绑定
-     * @param connectionInfo 事件
+     * @param configuration 事件
      */
-    @Subscribe(name = "init-binder", threadMode = ThreadMode.BACKGROUND)
-    public void initBinder(ConnectionInfo connectionInfo) {
-        connectionInfo.nameProperty().bindBidirectional(nameField.textProperty());
-        connectionInfo.hostProperty().bindBidirectional(hostField.textProperty());
-        connectionInfo.portProperty().bindBidirectional(portField.textProperty());
-        connectionInfo.dbTypeProperty().bindBidirectional(dbTypeChoice.valueProperty());
-        connectionInfo.schemaProperty().bindBidirectional(schemaField.valueProperty());
-        connectionInfo.usernameProperty().bindBidirectional(userNameField.textProperty());
-        connectionInfo.passwordProperty().bindBidirectional(passwordField.textProperty());
-        connectionInfo.encodingProperty().bindBidirectional(encodingChoice.valueProperty());
+    @Subscribe(name = "Event-FillConnectionInfo", threadMode = ThreadMode.BACKGROUND)
+    public void initBinder(ConnectionInfo configuration) {
+        configuration.setPort(portField.getText());
+        configuration.setUsername(userNameField.getText());
+        configuration.setPassword(passwordField.getText());
+        configuration.setDbType(dbTypeChoice.getValue());
+        configuration.setHost(hostField.getText());
+        configuration.setDbName(schemaField.getValue());
+        configuration.setEncoding(encodingChoice.getValue());
+        // 数据监听
+        dbTypeChoice.valueProperty().addListener((observable, oldValue, newValue) -> configuration.setDbType(newValue));
+        encodingChoice.valueProperty()
+                .addListener((observable, oldValue, newValue) -> configuration.setEncoding(newValue));
+        hostField.textProperty().addListener((observable, oldValue, newValue) -> configuration.setHost(newValue));
+        userNameField.textProperty()
+                .addListener((observable, oldValue, newValue) -> configuration.setUsername(newValue));
+        passwordField.textProperty()
+                .addListener((observable, oldValue, newValue) -> configuration.setPassword(newValue));
+        portField.textProperty().addListener((observable, oldValue, newValue) -> configuration.setPort(newValue));
+        schemaField.valueProperty().addListener((observable, oldValue, newValue) -> configuration.setSchema(newValue));
     }
 
     /**
-     * 测试连接
-     * @param connectionInfo 数据库连接信息
+     * 填充默认值
+     * @param event 填充默认值
      */
-    @Subscribe(name = "TestConnection")
-    public void testConnection(ConnectionInfo connectionInfo) {
-        try (Connection connection = connectionInfo.getConnection()) {
-            Alerts.info("连接成功", connection).show();
-        } catch (Exception exception) {
-            log.info("连接失败", exception);
-            Alerts.exception("连接失败", exception).show();
-        }
+    @Subscribe
+    public void fillDefaultValue(FillDefaultValueEvent event) {
+        userNameField.setText("root");
+        portField.setText("3306");
+        passwordField.setText("123456");
+        dbTypeChoice.setValue(JDBCDriver.MYSQL5.name());
+        hostField.setText("127.0.0.1");
     }
 }

@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.view.navigation;
 
-import io.devpl.toolkit.core.DatabaseInfo;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import javafx.scene.control.TreeItem;
 
 public class DatabaseTreeItem extends TreeItem<String> {

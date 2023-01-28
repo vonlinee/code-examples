@@ -40,7 +40,7 @@
     <Label text="密码" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
     <PasswordField fx:id="passwordField" prefHeight="23.0" prefWidth="225.0" GridPane.columnIndex="1"
                    GridPane.rowIndex="4"/>
-    <CheckBox text="保存密码到本地" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+    <CheckBox text="保存密码到本地" GridPane.rowIndex="4" GridPane.columnIndex="2" GridPane.columnSpan="2"/>
     <CheckBox fx:id="savePwdCheckBox" mnemonicParsing="false" text="Save password" visible="false"/>
     <Label text="编码" GridPane.rowIndex="6"/>
     <ComboBox fx:id="schemaField" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="5"/>

@@ -29,8 +29,26 @@
                     </ImageView>
                 </graphic>
             </Label>
-            <Button text="类编辑器" onAction="#showClassEditorDialogPane"/>
-            <Button text="连接管理" onAction="#showConnectinManagePane"/>
+            <Label text="类编辑器" contentDisplay="TOP" onMouseClicked="#showClassEditorDialogPane">
+                <padding>
+                    <Insets right="10.0"/>
+                </padding>
+                <graphic>
+                    <ImageView fitWidth="40" fitHeight="40">
+                        <Image url="@/static/icons/config-list.png"/>
+                    </ImageView>
+                </graphic>
+            </Label>
+            <Label text="连接管理" contentDisplay="TOP" onMouseClicked="#showConnectinManagePane">
+                <padding>
+                    <Insets right="10.0"/>
+                </padding>
+                <graphic>
+                    <ImageView fitWidth="40" fitHeight="40">
+                        <Image url="@/static/icons/config-list.png"/>
+                    </ImageView>
+                </graphic>
+            </Label>
         </ToolBar>
     </top>
     <center>

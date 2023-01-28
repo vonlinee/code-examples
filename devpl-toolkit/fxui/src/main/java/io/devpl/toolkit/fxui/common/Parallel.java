@@ -245,8 +245,7 @@ public class Parallel {
             int initialCapacity = 16; // the default initial capacity
             float loadFactor = 0.5f; // huge numbers of threads are unlikely
             int concurrencyLevel = 2 * _pool.getParallelism();
-            _map = new ConcurrentHashMap<Thread, T>(initialCapacity,
-                    loadFactor, concurrencyLevel);
+            _map = new ConcurrentHashMap<Thread, T>(initialCapacity, loadFactor, concurrencyLevel);
         }
 
         /**
@@ -315,16 +314,14 @@ public class Parallel {
      * @param chunk the chunk size; must be positive.
      * @param body  the loop body.
      */
-    public static void loop(int begin, int end, int step, int chunk,
-                            LoopInt body) {
+    public static void loop(int begin, int end, int step, int chunk, LoopInt body) {
         checkArgs(begin, end, step, chunk);
         if (_serial || end <= begin + chunk * step) {
             for (int i = begin; i < end; i += step) {
                 body.compute(i);
             }
         } else {
-            LoopIntAction task = new LoopIntAction(begin, end, step, chunk,
-                    body);
+            LoopIntAction task = new LoopIntAction(begin, end, step, chunk, body);
             if (LoopIntAction.inForkJoinPool()) {
                 task.invoke();
             } else {
@@ -375,8 +372,7 @@ public class Parallel {
      * @param body  the loop body.
      * @return the computed value.
      */
-    public static <V> V reduce(int begin, int end, int step, int chunk,
-                               ReduceInt<V> body) {
+    public static <V> V reduce(int begin, int end, int step, int chunk, ReduceInt<V> body) {
         checkArgs(begin, end, step, chunk);
         if (_serial || end <= begin + chunk * step) {
             V v = body.compute(begin);
@@ -386,8 +382,7 @@ public class Parallel {
             }
             return v;
         } else {
-            ReduceIntTask<V> task = new ReduceIntTask<V>(begin, end, step,
-                    chunk, body);
+            ReduceIntTask<V> task = new ReduceIntTask<V>(begin, end, step, chunk, body);
             if (ReduceIntTask.inForkJoinPool()) {
                 return task.invoke();
             } else {
@@ -443,8 +438,7 @@ public class Parallel {
     }
 
     public static void argument(boolean condition, String message) {
-        if (!condition)
-            throw new IllegalArgumentException("required condition: " + message);
+        if (!condition) throw new IllegalArgumentException("required condition: " + message);
     }
 
     /**
@@ -458,8 +452,7 @@ public class Parallel {
     /**
      * Fork-join task for parallel loop.
      */
-    private static class LoopIntAction
-            extends RecursiveAction {
+    private static class LoopIntAction extends RecursiveAction {
         LoopIntAction(int begin, int end, int step, int chunk, LoopInt body) {
             assert begin < end : "begin < end";
             _begin = begin;
@@ -471,22 +464,17 @@ public class Parallel {
 
         @Override
         protected void compute() {
-            if (_end <= _begin + _chunk * _step
-                    || getSurplusQueuedTaskCount() > NSQT) {
+            if (_end <= _begin + _chunk * _step || getSurplusQueuedTaskCount() > NSQT) {
                 for (int i = _begin; i < _end; i += _step) {
                     _body.compute(i);
                 }
             } else {
                 int middle = middle(_begin, _end, _step);
-                LoopIntAction l = new LoopIntAction(_begin, middle, _step,
-                        _chunk, _body);
-                LoopIntAction r = (middle < _end) ? new LoopIntAction(middle,
-                        _end, _step, _chunk, _body) : null;
-                if (r != null)
-                    r.fork();
+                LoopIntAction l = new LoopIntAction(_begin, middle, _step, _chunk, _body);
+                LoopIntAction r = (middle < _end) ? new LoopIntAction(middle, _end, _step, _chunk, _body) : null;
+                if (r != null) r.fork();
                 l.compute();
-                if (r != null)
-                    r.join();
+                if (r != null) r.join();
             }
         }
 
@@ -497,8 +485,7 @@ public class Parallel {
     /**
      * Fork-join task for parallel reduce.
      */
-    private static class ReduceIntTask<V>
-            extends RecursiveTask<V> {
+    private static class ReduceIntTask<V> extends RecursiveTask<V> {
         ReduceIntTask(int begin, int end, int step, int chunk, ReduceInt<V> body) {
             assert begin < end : "begin < end";
             _begin = begin;
@@ -510,8 +497,7 @@ public class Parallel {
 
         @Override
         protected V compute() {
-            if (_end <= _begin + _chunk * _step
-                    || getSurplusQueuedTaskCount() > NSQT) {
+            if (_end <= _begin + _chunk * _step || getSurplusQueuedTaskCount() > NSQT) {
                 V v = _body.compute(_begin);
                 for (int i = _begin + _step; i < _end; i += _step) {
                     V vi = _body.compute(i);
@@ -520,15 +506,11 @@ public class Parallel {
                 return v;
             } else {
                 int middle = middle(_begin, _end, _step);
-                ReduceIntTask<V> l = new ReduceIntTask<V>(_begin, middle,
-                        _step, _chunk, _body);
-                ReduceIntTask<V> r = (middle < _end) ? new ReduceIntTask<V>(
-                        middle, _end, _step, _chunk, _body) : null;
-                if (r != null)
-                    r.fork();
+                ReduceIntTask<V> l = new ReduceIntTask<V>(_begin, middle, _step, _chunk, _body);
+                ReduceIntTask<V> r = (middle < _end) ? new ReduceIntTask<V>(middle, _end, _step, _chunk, _body) : null;
+                if (r != null) r.fork();
                 V v = l.compute();
-                if (r != null)
-                    v = _body.combine(v, r.join());
+                if (r != null) v = _body.combine(v, r.join());
                 return v;
             }
         }

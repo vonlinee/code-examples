@@ -3,17 +3,14 @@ package io.devpl.toolkit.fxui.utils;
 import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
 import io.devpl.sdk.util.ResourceUtils;
-import io.devpl.toolkit.core.DatabaseInfo;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.common.JDBCDriver;
 import io.devpl.toolkit.fxui.utils.ssh.JSchUtils;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.ArrayHandler;
-import org.apache.commons.dbutils.handlers.ArrayListHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.MapListHandler;
+import org.apache.commons.dbutils.handlers.*;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
 
@@ -163,6 +160,14 @@ public class DBUtils {
     public static ResultSet executeQuery(Connection connection, String sql) throws SQLException {
         Statement stmt = connection.createStatement();
         return stmt.executeQuery(sql);
+    }
+
+    public static int insert(Connection conn, String sql, Object... params) throws SQLException {
+        Map<String, Object> map = runner.insert(conn, sql, new MapHandler(), params);
+        if (map != null) {
+            return 1;
+        }
+        return 0;
     }
 
     public static <T> T query(Connection connection, String sql, ResultSetHandler<T> handler) throws SQLException {

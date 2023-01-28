@@ -9,7 +9,8 @@ import javafx.scene.control.TreeItem;
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.springframework.jdbc.core.SingleColumnRowMapper;
+import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.LogFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,22 +21,18 @@ public class ConnectionTreeItem extends TreeItem<String> {
 
     private final ConnectionInfo connectionInfo;
 
-    TreeItem<String> dbItems;
-    TreeItem<String> userItems;
-    TreeItem<String> adminUserItems;
-    TreeItem<String> systemInfoItems;
+    private static Log log = LogFactory.getLog(ConnectionTreeItem.class);
 
     public ConnectionTreeItem(ConnectionInfo connectionInfo) {
         this.connectionInfo = connectionInfo;
-        dbItems = new TreeItem<>("数据库");
-        dbItems.setGraphic(FontIcon.of(FontAwesomeSolid.FOLDER_OPEN));
-        userItems = new TreeItem<>("用户");
-        userItems.setGraphic(FontIcon.of(FontAwesomeSolid.FOLDER_OPEN));
-        adminUserItems = new TreeItem<>("管理员");
-        adminUserItems.setGraphic(FontIcon.of(FontAwesomeSolid.FOLDER_OPEN));
-        systemInfoItems = new TreeItem<>("系统信息");
-        systemInfoItems.setGraphic(FontIcon.of(FontAwesomeSolid.FOLDER_OPEN));
-        getChildren().addAll(List.of(dbItems, userItems, adminUserItems, systemInfoItems));
+    }
+
+    public void fillChildren() {
+        try {
+            connect();
+        } catch (Exception exception) {
+            log.error("连接失败", exception);
+        }
     }
 
     /**
@@ -44,7 +41,6 @@ public class ConnectionTreeItem extends TreeItem<String> {
      */
     public void connect() throws SQLException {
         Connection connection = connectionInfo.getConnection();
-        this.setValue(connectionInfo.getName());
         List<DatabaseTreeItem> databaseTreeItemList = new ArrayList<>();
         if (StringUtils.hasText(connectionInfo.getSchema())) {
             DatabaseTreeItem databaseTreeItem = new DatabaseTreeItem();
@@ -62,7 +58,7 @@ public class ConnectionTreeItem extends TreeItem<String> {
                 addTables(connectionInfo, databaseTreeItem);
             }
         }
-        dbItems.getChildren().addAll(databaseTreeItemList);
+        this.getChildren().addAll(databaseTreeItemList);
         try {
             connection.close();
         } catch (SQLException e) {

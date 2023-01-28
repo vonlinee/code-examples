@@ -1,4 +1,4 @@
-package io.devpl.toolkit.core;
+package io.devpl.toolkit.fxui.model;
 
 import lombok.Data;
 

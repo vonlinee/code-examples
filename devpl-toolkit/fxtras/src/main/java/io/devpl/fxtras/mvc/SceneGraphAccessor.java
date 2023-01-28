@@ -26,6 +26,11 @@ public interface SceneGraphAccessor {
         throw new RuntimeException("event source is [" + source.getClass() + "] instead of a [Node]");
     }
 
+    /**
+     * 从节点获取Stage
+     * @param node 节点，需要已被绑定到场景图中
+     * @return 返回节点所在Stage
+     */
     default Stage getStage(Node node) {
         final Scene scene = node.getScene();
         if (scene == null) {

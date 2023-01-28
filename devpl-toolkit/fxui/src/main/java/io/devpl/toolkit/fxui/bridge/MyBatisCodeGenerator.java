@@ -1,7 +1,7 @@
 package io.devpl.toolkit.fxui.bridge;
 
 import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
-import io.devpl.toolkit.core.DatabaseInfo;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import org.mybatis.generator.api.ProgressCallback;
 import org.mybatis.generator.config.*;

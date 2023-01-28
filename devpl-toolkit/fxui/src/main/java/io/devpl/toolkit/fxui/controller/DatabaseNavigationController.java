@@ -2,12 +2,13 @@ package io.devpl.toolkit.fxui.controller;
 
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.FxmlLocation;
+import io.devpl.toolkit.fxui.model.ConnectionRegistry;
 import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
 import io.devpl.toolkit.fxui.utils.EventUtils;
 import io.devpl.toolkit.fxui.view.navigation.ConnectionTreeItem;
-import io.devpl.toolkit.fxui.view.navigation.DatabaseTreeItem;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.TextFieldTreeCell;
@@ -18,7 +19,6 @@ import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
@@ -41,17 +41,21 @@ public class DatabaseNavigationController extends FxmlView {
             TextFieldTreeCell<String> treeCell = new TextFieldTreeCell<>();
             treeCell.setGraphicTextGap(5);
             treeCell.setOnMouseClicked(event -> {
-                if (!EventUtils.isPrimaryButtonDoubleClicked(event)) {
-                    event.consume();
-                    return;
-                }
-                TreeItem<String> item = param.getSelectionModel().getSelectedItem();
-                if (item instanceof DatabaseTreeItem) {
-
+                if (EventUtils.isPrimaryButtonDoubleClicked(event)) {
+                    @SuppressWarnings("unchecked")
+                    TreeCell<String> cell = (TreeCell<String>) event.getSource();
+                    TreeItem<String> treeItem = cell.getTreeItem();
+                    if (treeItem instanceof ConnectionTreeItem) {
+                        ConnectionTreeItem connectionTreeItem = (ConnectionTreeItem) treeItem;
+                        connectionTreeItem.fillChildren();
+                    }
                 }
             });
             return treeCell;
         });
+        for (ConnectionInfo connectionConfiguration : ConnectionRegistry.getConnectionConfigurations()) {
+            addConnection(connectionConfiguration);
+        }
     }
 
     /**
@@ -59,10 +63,10 @@ public class DatabaseNavigationController extends FxmlView {
      * @param connectionInfo 连接信息
      */
     @Subscribe(name = "add-new-connection", threadMode = ThreadMode.BACKGROUND)
-    public void addConnection(ConnectionInfo connectionInfo) throws SQLException {
+    public void addConnection(ConnectionInfo connectionInfo) {
         ConnectionTreeItem treeItem = new ConnectionTreeItem(connectionInfo);
         treeItem.setGraphic(FontIcon.of(FontAwesomeRegular.FOLDER));
-        treeItem.connect();
+        treeItem.setValue(connectionInfo.getName());
         trvDbConnection.getRoot().getChildren().add(treeItem);
     }
 }

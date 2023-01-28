@@ -60,6 +60,4 @@ public class FieldInfo {
     public void setRemarks(String remarks) {
         this.remarks.set(remarks);
     }
-
-
 }

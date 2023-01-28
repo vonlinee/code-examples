@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * 创建MVC三层的代码
- * 包含
+ * 创建MVC三层的代码, 包含
  * 1.控制器
  * 2.Service
  * 3.和DAO层Mapper

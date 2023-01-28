@@ -18,7 +18,7 @@ public class ConnectionItem implements NavigationItem {
     // 连接名称
     private String connectionName;
 
-    private ConnectionInfo connectionInfo = new ConnectionInfo();
+    private final ConnectionInfo connectionInfo = new ConnectionInfo();
 
     private List<DirectoryItem<? extends NavigationItem>> rawChildren;
     private ObservableList<DirectoryItem<? extends NavigationItem>> children;
