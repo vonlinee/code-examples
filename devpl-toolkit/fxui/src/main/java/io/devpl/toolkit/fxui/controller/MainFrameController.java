@@ -2,8 +2,8 @@ package io.devpl.toolkit.fxui.controller;
 
 import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.JFX;
-import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.FxmlLocation;
+import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.ViewLoader;
 import io.devpl.fxtras.utils.StageHelper;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
@@ -24,7 +24,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.net.URL;
 import java.nio.file.Files;
@@ -38,6 +41,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @FxmlLocation(location = "static/fxml/MainUI.fxml")
 public class MainFrameController extends FxmlView {
 
+    @FXML
+    public VBox vboxCodeGenConfigRoot; // 代码生成配置根容器
+    @FXML
+    public HBox hboxCodeGenOperationRoot; // 代码生成操作根容器
     @FXML
     private Label connectionLabel;
     @FXML
@@ -71,8 +78,12 @@ public class MainFrameController extends FxmlView {
     // 保存哪些表需要进行代码生成
     private final Map<String, TableCodeGeneration> tableConfigsToBeGenerated = new ConcurrentHashMap<>(10);
 
+    // 进度回调
+    ProgressDialog alert = new ProgressDialog(Alert.AlertType.INFORMATION);
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        mbgGenerator.setProgressCallback(alert);
         bindCodeGenConfiguration(codeGenConfig);
         // 新建连接
         connectionLabel.setGraphic(JFX.loadImageView("static/icons/computer.png", 40));
@@ -102,7 +113,7 @@ public class MainFrameController extends FxmlView {
             deleteThisRowMenuItem.setOnAction(event -> {
                 TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
                 param.getItems().remove(item);
-                tableConfigsToBeGenerated.remove(item.getTableName()); // 移除该表
+                tableConfigsToBeGenerated.remove(item.getUniqueKey()); // 移除该表
             });
             customizeMenuItem.setOnAction(event -> {
                 TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
@@ -137,22 +148,16 @@ public class MainFrameController extends FxmlView {
             return;
         }
         if (!checkDirs(codeGenConfig)) {
+            log.error("创建目录失败");
             return;
         }
         mbgGenerator.setGeneratorConfig(codeGenConfig);
-        // 进度回调
-        ProgressDialog alert = new ProgressDialog(Alert.AlertType.INFORMATION);
-        mbgGenerator.setProgressCallback(alert);
         alert.show();
         try {
-            try {
-                mbgGenerator.generate();
-            } catch (Exception exception) {
-                alert.closeIfShowing();
-                Alerts.exception("生成失败", exception).showAndWait();
-            }
-        } catch (Exception e) {
-            Alerts.error(e.getMessage()).showAndWait();
+            mbgGenerator.generate();
+        } catch (Exception exception) {
+            alert.closeIfShowing();
+            Alerts.exception("生成失败", exception).showAndWait();
         }
     }
 
@@ -188,20 +193,15 @@ public class MainFrameController extends FxmlView {
             }
         }
         if (sb.length() > 0) {
-            Optional<ButtonType> optional = Alerts.confirm("以下目录不存在, 是否创建?\n" + sb).showAndWait();
-            if (optional.isEmpty()) {
-                System.out.println(111);
-            } else {
-                if (ButtonType.OK == optional.get()) {
+            Alerts.confirm("以下目录不存在, 是否创建?\n" + sb).showAndWait().ifPresent(buttonType -> {
+                if (ButtonType.OK == buttonType) {
                     try {
-                        return FileUtils.forceMkdir(targetDirs);
+                        FileUtils.forceMkdir(targetDirs);
                     } catch (Exception e) {
                         Alerts.error(Messages.getString("PromptText.3")).show();
                     }
-                } else {
-                    return false;
                 }
-            }
+            });
         }
         return true;
     }
@@ -214,5 +214,29 @@ public class MainFrameController extends FxmlView {
     @FXML
     public void showConnectinManagePane(MouseEvent mouseEvent) {
         StageHelper.show("连接管理", ConnectionManageController.class);
+    }
+
+    /**
+     * 添加一个表到需要进行代码生成的表
+     * @param tableInfo
+     */
+    @Subscribe
+    public void addTable(TableCodeGeneration tableInfo) {
+        String key = tableInfo.getUniqueKey();
+        if (tableConfigsToBeGenerated.containsKey(key)) {
+            return;
+        }
+        tableConfigsToBeGenerated.put(key, tableInfo);
+        tblvTableCustomization.getItems().add(tableInfo);
+    }
+
+    @FXML
+    public void fillDefaultCodeGenConfig(ActionEvent actionEvent) {
+        projectFolderField.setText("D:/Temp/");
+        daoTargetProject.setText("src/main/java");
+        mapperTargetPackage.setText("mapping");
+        txfMapperPackageName.setText("mapper");
+        mappingTargetProject.setText("src/main/resources");
+        modelTargetPackage.setText("entity");
     }
 }

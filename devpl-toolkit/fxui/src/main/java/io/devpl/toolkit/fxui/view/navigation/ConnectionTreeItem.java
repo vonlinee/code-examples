@@ -1,29 +1,31 @@
 package io.devpl.toolkit.fxui.view.navigation;
 
-import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
-import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
-import io.devpl.toolkit.fxui.utils.DBUtils;
-import io.devpl.toolkit.fxui.utils.StringUtils;
-import javafx.scene.control.TreeItem;
-import org.apache.commons.dbutils.handlers.ColumnListHandler;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
+import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
+import io.devpl.toolkit.fxui.utils.DBUtils;
+import io.devpl.toolkit.fxui.utils.StringUtils;
+import javafx.scene.control.TreeItem;
 
 public class ConnectionTreeItem extends TreeItem<String> {
 
-    private final ConnectionInfo connectionInfo;
+    private final ConnectionConfig connectionInfo;
 
     private static Log log = LogFactory.getLog(ConnectionTreeItem.class);
 
-    public ConnectionTreeItem(ConnectionInfo connectionInfo) {
+    public ConnectionTreeItem(ConnectionConfig connectionInfo) {
         this.connectionInfo = connectionInfo;
     }
 
@@ -40,6 +42,9 @@ public class ConnectionTreeItem extends TreeItem<String> {
      * @throws SQLException SQLException
      */
     public void connect() throws SQLException {
+        if (!getChildren().isEmpty()) {
+            return;
+        }
         Connection connection = connectionInfo.getConnection();
         List<DatabaseTreeItem> databaseTreeItemList = new ArrayList<>();
         if (StringUtils.hasText(connectionInfo.getSchema())) {
@@ -49,7 +54,13 @@ public class ConnectionTreeItem extends TreeItem<String> {
             databaseTreeItemList.add(databaseTreeItem);
             addTables(connectionInfo, databaseTreeItem);
         } else {
-            List<String> results = DBUtils.query(connection, "show databases", new ColumnListHandler<>("Database"));
+        	// 获取所有表信息
+        	
+        	DatabaseMetaData dbmd = connection.getMetaData();
+        	ResultSet rs = dbmd.getCatalogs();
+        	
+        	List<String> results = DBUtils.extractOneColumn(String.class, rs);
+        	
             for (String result : results) {
                 DatabaseTreeItem databaseTreeItem = new DatabaseTreeItem();
                 databaseTreeItem.setDatabaseName(String.valueOf(result));
@@ -65,8 +76,14 @@ public class ConnectionTreeItem extends TreeItem<String> {
             throw new RuntimeException("关闭连接失败", e);
         }
     }
+    
+//    private List<DatabaseInfo> getDatabaseInfoList(Connection connection) {
+//    	DatabaseMetaData dbmd = connection.getMetaData();
+//    	
+//    }
+    
 
-    private void addTables(ConnectionInfo connectionInfo, DatabaseTreeItem databaseTreeItem) throws SQLException {
+    private void addTables(ConnectionConfig connectionInfo, DatabaseTreeItem databaseTreeItem) throws SQLException {
         Connection connection = connectionInfo.getConnection(databaseTreeItem.getValue(), null);
         // 加载所有的数据库表
         List<TableMetadata> tablesMetadata = DBUtils.getTablesMetadata(connection, null, null);
@@ -86,4 +103,8 @@ public class ConnectionTreeItem extends TreeItem<String> {
             }
         }
     }
+
+	public ConnectionConfig getConnectionInfo() {
+		return connectionInfo;
+	}
 }

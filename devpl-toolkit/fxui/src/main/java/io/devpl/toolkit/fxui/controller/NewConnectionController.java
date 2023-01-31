@@ -3,12 +3,11 @@ package io.devpl.toolkit.fxui.controller;
 import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.toolkit.fxui.common.JDBCDriver;
 import io.devpl.toolkit.fxui.dao.ConnectionConfigurationDao;
 import io.devpl.toolkit.fxui.event.Events;
 import io.devpl.toolkit.fxui.event.FillDefaultValueEvent;
 import io.devpl.toolkit.fxui.model.ConnectionRegistry;
-import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
+import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 import io.devpl.toolkit.fxui.utils.SingletonFactory;
 import io.devpl.toolkit.fxui.utils.Validator;
 import io.devpl.toolkit.fxui.utils.StringUtils;
@@ -20,6 +19,8 @@ import javafx.scene.control.Tab;
 
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -37,7 +38,7 @@ public class NewConnectionController extends FxmlView {
     /**
      * 与界面绑定的连接信息配置
      */
-    private final ConnectionInfo connConfig = new ConnectionInfo();
+    private final ConnectionConfig connConfig = new ConnectionConfig();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -51,9 +52,9 @@ public class NewConnectionController extends FxmlView {
     @FXML
     public void saveConnection(ActionEvent event) {
         String msg = Validator.target(connConfig)
-                .hasText(ConnectionInfo::getUsername, "用户名不能为空")
-                .hasText(ConnectionInfo::getPassword, "密码不能为空")
-                .hasText(ConnectionInfo::getHost, "连接地址不能为空")
+                .hasText(ConnectionConfig::getUsername, "用户名不能为空")
+                .hasText(ConnectionConfig::getPassword, "密码不能为空")
+                .hasText(ConnectionConfig::getHost, "连接地址不能为空")
                 .getErrorMessages();
         if (StringUtils.hasText(msg)) {
             Alerts.error(msg).show();
@@ -82,20 +83,37 @@ public class NewConnectionController extends FxmlView {
     @FXML
     public void testConnection(ActionEvent actionEvent) {
         String msg = Validator.target(connConfig)
-                .hasText(ConnectionInfo::getUsername, "用户名不能为空")
-                .hasText(ConnectionInfo::getPassword, "密码不能为空")
-                .hasText(ConnectionInfo::getHost, "连接地址不能为空")
+                .hasText(ConnectionConfig::getUsername, "用户名不能为空")
+                .hasText(ConnectionConfig::getPassword, "密码不能为空")
+                .hasText(ConnectionConfig::getHost, "连接地址不能为空")
                 .getErrorMessages();
         if (StringUtils.hasText(msg)) {
             Alerts.error(msg).show();
             return;
         }
         try (Connection connection = connConfig.getConnection()) {
-            Alerts.info("连接成功", connection).show();
+            Alerts.info("连接成功", getConnectionInfo(connection)).show();
         } catch (Exception exception) {
             log.info("连接失败", exception);
             Alerts.exception("连接失败", exception).show();
         }
+    }
+    
+    /**
+     * 获取数据库连接信息
+     * @param connection 数据库连接
+     * @return
+     */
+    private String getConnectionInfo(Connection connection) {
+    	StringBuilder sb = new StringBuilder();
+    	try {
+			DatabaseMetaData metaData = connection.getMetaData();
+			sb.append("DatabaseProductName:").append(metaData.getDatabaseProductName());
+			sb.append("DriverName:").append(metaData.getDriverName());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
     }
 
     /**

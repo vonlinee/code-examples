@@ -1,6 +1,5 @@
 package io.devpl.toolkit.fxui.model.props;
 
-import io.devpl.fxtras.mvc.ViewModel;
 import io.devpl.toolkit.fxui.common.JDBCDriver;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import lombok.Data;
@@ -13,7 +12,7 @@ import java.util.Properties;
  * 数据库连接配置
  */
 @Data
-public class ConnectionInfo implements ViewModel {
+public class ConnectionConfig {
 
     private String id;
     /**
@@ -33,19 +32,21 @@ public class ConnectionInfo implements ViewModel {
     private String password;
     private String encoding;
 
+    private Properties properties;
+
     public String getConnectionUrl() {
-        JDBCDriver driver = null;
-        try {
-            driver = JDBCDriver.valueOf(dbType);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
+        JDBCDriver driver = JDBCDriver.valueOfDriverName(dbType);
         String databaseName = schema;
-        if (databaseName == null || databaseName.length() == 0) {
+        if (databaseName == null) {
             databaseName = "";
         }
         assert driver != null;
         return driver.getConnectionUrl(host, port, databaseName, null);
+    }
+
+    public String getConnectionUrl(String databaseName) {
+        JDBCDriver driver = JDBCDriver.valueOf(dbType);
+        return driver.getConnectionUrl(host, port, databaseName, properties);
     }
 
     public String getConnectionUrl(String databaseName, Properties properties) {
@@ -64,6 +65,18 @@ public class ConnectionInfo implements ViewModel {
             properties.put("useSSL", "false");
             properties.put("characterEncoding", encoding);
         }
+        return DBUtils.getConnection(connectionUrl, properties);
+    }
+
+    public Connection getConnection(String databaseName) throws SQLException {
+        String connectionUrl = getConnectionUrl(databaseName);
+        Properties properties = new Properties();
+        properties.put("user", username);
+        properties.put("password", password);
+        properties.put("serverTimezone", "UTC");
+        properties.put("useUnicode", "true");
+        properties.put("useSSL", "false");
+        properties.put("characterEncoding", encoding);
         return DBUtils.getConnection(connectionUrl, properties);
     }
 

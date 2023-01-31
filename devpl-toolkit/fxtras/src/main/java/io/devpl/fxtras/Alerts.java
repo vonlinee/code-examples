@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * FX弹窗警告
@@ -113,5 +114,13 @@ public final class Alerts {
             return error(message).showAndWait();
         }
         return Optional.empty();
+    }
+
+    public static void run(Runnable action) {
+        try {
+            action.run();
+        } catch (Exception exception) {
+            exception(exception.getMessage(), exception);
+        }
     }
 }

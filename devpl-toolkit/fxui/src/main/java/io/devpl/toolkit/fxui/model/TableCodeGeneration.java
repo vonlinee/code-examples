@@ -1,10 +1,12 @@
 package io.devpl.toolkit.fxui.model;
 
-import lombok.Data;
+import java.util.List;
+
+import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
 
-import java.util.List;
+import lombok.Data;
 
 /**
  * 长驻内存：每个表对应一个单例
@@ -18,6 +20,11 @@ public class TableCodeGeneration {
     private String tableComment;
 
     /**
+     * 连接配置
+     */
+    private ConnectionConfig connectionInfo;
+
+    /**
      * 表生成选项
      */
     private TableCodeGenOption option = new TableCodeGenOption();
@@ -29,4 +36,12 @@ public class TableCodeGeneration {
 
     private List<IgnoredColumn> ignoredColumns;
     private List<ColumnOverride> columnOverrides;
+
+    /**
+     * 唯一标识符
+     * @return
+     */
+    public String getUniqueKey() {
+        return dbName + "." + tableName;
+    }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 目录展示项
  */
-public class DirectoryItem<T extends NavigationItem> implements NavigationItem {
+public class DirectoryItem<T extends TreeModel> extends TreeModelBase  {
 
     private String directoryName;
 
@@ -21,8 +21,10 @@ public class DirectoryItem<T extends NavigationItem> implements NavigationItem {
         this.children = FXCollections.observableList(rawChildren = new ArrayList<>());
     }
 
+    TreeModel parent;
+
     @Override
-    public String getDispalyValue() {
+    public String getDisplayValue() {
         return directoryName;
     }
 
@@ -41,7 +43,17 @@ public class DirectoryItem<T extends NavigationItem> implements NavigationItem {
         return children;
     }
 
-    public <K extends NavigationItem> void addChildItem(K item) {
+    @Override
+    public TreeModel getParent() {
+        return parent;
+    }
+
+    @Override
+    public <N extends TreeModel> void setParent(N parent) {
+        this.parent = parent;
+    }
+
+    public <K extends TreeModel> void addChildItem(K item) {
         rawChildren.add((T) item);
     }
 }

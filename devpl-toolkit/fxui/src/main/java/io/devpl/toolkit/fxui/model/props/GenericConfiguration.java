@@ -176,48 +176,32 @@ public class GenericConfiguration {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("GenericConfiguration{");
-        sb.append("name=")
-                .append(name);
-        sb.append(", connectorJarPath='")
-                .append(connectorJarPath)
-                .append('\'');
-        sb.append(", projectFolder=")
-                .append(projectFolder.get());
-        sb.append(", modelPackage=")
-                .append(modelPackage.get());
-        sb.append(", parentPackage=")
-                .append(parentPackage.get());
-        sb.append(", modelPackageTargetFolder=")
-                .append(modelPackageTargetFolder.get());
-        sb.append(", daoPackage=")
-                .append(daoPackage.get());
-        sb.append(", daoTargetFolder=")
-                .append(daoTargetFolder.get());
-        sb.append(", mappingXMLPackage=")
-                .append(mappingXMLPackage.get());
-        sb.append(", mappingXMLTargetFolder=")
-                .append(mappingXMLTargetFolder.get());
+        sb.append("name=").append(name);
+        sb.append(", connectorJarPath='").append(connectorJarPath).append('\'');
+        sb.append(", projectFolder=").append(projectFolder.get());
+        sb.append(", modelPackage=").append(modelPackage.get());
+        sb.append(", parentPackage=").append(parentPackage.get());
+        sb.append(", modelPackageTargetFolder=").append(modelPackageTargetFolder.get());
+        sb.append(", daoPackage=").append(daoPackage.get());
+        sb.append(", daoTargetFolder=").append(daoTargetFolder.get());
+        sb.append(", mappingXMLPackage=").append(mappingXMLPackage.get());
+        sb.append(", mappingXMLTargetFolder=").append(mappingXMLTargetFolder.get());
         sb.append('}');
         return sb.toString();
     }
 
     public Path getEntityTargetDirectory() {
-        return Path.of(getProjectFolder().replace(".", "/"), parentPackage.get()
-                .replace(".", "/"), modelPackage.get()
+        return Path.of(getProjectFolder().replace(".", "/"), parentPackage.get().replace(".", "/"), modelPackage.get()
                 .replace(".", "/"));
     }
 
     public Path getMapperTargetDirectory() {
-        return Path.of(projectFolder.get()
-                .replace(".", "/"), parentPackage.get()
-                .replace(".", "/"), daoPackage.get()
+        return Path.of(projectFolder.get().replace(".", "/"), parentPackage.get().replace(".", "/"), daoPackage.get()
                 .replace(".", "/"));
     }
 
     public Path getMappingXMLTargetDirectory() {
-        return Path.of(projectFolder.get()
-                .replace(".", "/"), parentPackage.get()
-                .replace(".", "/"), mappingXMLPackage.get()
-                .replace(".", "/"));
+        return Path.of(projectFolder.get().replace(".", "/"), parentPackage.get()
+                .replace(".", "/"), mappingXMLPackage.get().replace(".", "/"));
     }
 }

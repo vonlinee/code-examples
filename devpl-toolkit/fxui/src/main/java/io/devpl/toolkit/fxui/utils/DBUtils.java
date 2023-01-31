@@ -1,25 +1,42 @@
 package io.devpl.toolkit.fxui.utils;
 
-import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
-import io.devpl.sdk.util.ResourceUtils;
-import io.devpl.toolkit.fxui.model.DatabaseInfo;
-import io.devpl.toolkit.fxui.common.JDBCDriver;
-import io.devpl.toolkit.fxui.utils.ssh.JSchUtils;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.*;
+import org.apache.commons.dbutils.handlers.ArrayHandler;
+import org.apache.commons.dbutils.handlers.ArrayListHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ColumnListHandler;
+import org.apache.commons.dbutils.handlers.MapHandler;
+import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
 
-import java.io.File;
-import java.sql.*;
-import java.util.*;
+import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
+import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
+import io.devpl.sdk.util.ResourceUtils;
+import io.devpl.toolkit.fxui.common.JDBCDriver;
+import io.devpl.toolkit.fxui.model.DatabaseInfo;
+import io.devpl.toolkit.fxui.utils.ssh.JSchUtils;
 
 /**
- * 封装JDBC Template进行数据库操作
+ * 封装apache common-dbutils进行数据库操作
  */
 public class DBUtils {
 
@@ -144,6 +161,13 @@ public class DBUtils {
         }
     }
 
+    /**
+     * 连接时如果指定了数据库进行连接，则有数据，如果没有指定数据库进行连接，则无数据
+     * @param conn             数据库连接
+     * @param tableNamePattern 表名
+     * @param types            表类型
+     * @return
+     */
     public static List<TableMetadata> getTablesMetadata(Connection conn, String tableNamePattern, String[] types) {
         List<TableMetadata> tmdList;
         try {
@@ -182,8 +206,7 @@ public class DBUtils {
         return runner.query(connection, sql, new ArrayHandler());
     }
 
-    private static final BasicRowProcessor BEAN_PROPERTY_ROW_PROCESSOR
-            = new BasicRowProcessor(new GenerousBeanProcessor());
+    private static final BasicRowProcessor BEAN_PROPERTY_ROW_PROCESSOR = new BasicRowProcessor(new GenerousBeanProcessor());
 
     /**
      * 查询JavaBean组成的List
@@ -202,6 +225,33 @@ public class DBUtils {
         return runner.query(connection, sql, new ArrayListHandler());
     }
 
+    public static List<Map<String, Object>> toMapList(ResultSet resultSet) throws SQLException {
+        return new MapListHandler().handle(resultSet);
+    }
+
+    public static <T> List<T> extractOneColumn(String columnName, Class<T> type, ResultSet resultSet) throws SQLException {
+        ColumnListHandler<T> handler = new ColumnListHandler<>(columnName);
+        return handler.handle(resultSet);
+    }
+
+    public static <T> List<T> extractOneColumn(int columnIndex, Class<T> type, ResultSet resultSet) throws SQLException {
+        ColumnListHandler<T> handler = new ColumnListHandler<>(columnIndex);
+        return handler.handle(resultSet);
+    }
+
+    /**
+     * 默认取第1列
+     * @param <T>
+     * @param type
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
+    public static <T> List<T> extractOneColumn(Class<T> type, ResultSet resultSet) throws SQLException {
+        ColumnListHandler<T> handler = new ColumnListHandler<>(1);
+        return handler.handle(resultSet);
+    }
+
     public static List<TableMetadata> getTablesMetadata(DatabaseMetaData dbmd, String catalog, String schemaPattern, String tableNamePattern, String[] types) {
         try (ResultSet rs = dbmd.getTables(catalog, schemaPattern, tableNamePattern, types)) {
             return BEAN_PROPERTY_ROW_PROCESSOR.toBeanList(rs, TableMetadata.class);
@@ -218,6 +268,15 @@ public class DBUtils {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static List<String> getDatabaseNames(Connection connection) {
+        try {
+            DatabaseMetaData dbmd = connection.getMetaData();
+            return extractOneColumn(String.class, dbmd.getCatalogs());
+        } catch (SQLException e) {
+            return Collections.emptyList();
         }
     }
 }

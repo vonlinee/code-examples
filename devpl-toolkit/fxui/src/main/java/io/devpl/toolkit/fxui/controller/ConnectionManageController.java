@@ -3,15 +3,13 @@ package io.devpl.toolkit.fxui.controller;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.utils.StageHelper;
-import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
+import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -25,17 +23,17 @@ import java.util.ResourceBundle;
 public class ConnectionManageController extends FxmlView {
 
     @FXML
-    public TableColumn<ConnectionInfo, String> tblcDbType;
+    public TableColumn<ConnectionConfig, String> tblcDbType;
     @FXML
-    public TableColumn<ConnectionInfo, String> tblcProtocol;
+    public TableColumn<ConnectionConfig, String> tblcProtocol;
     @FXML
-    public TableColumn<ConnectionInfo, String> tblcHostname;
+    public TableColumn<ConnectionConfig, String> tblcHostname;
     @FXML
-    public TableColumn<ConnectionInfo, String> tblcPort;
+    public TableColumn<ConnectionConfig, String> tblcPort;
     @FXML
-    public TableColumn<ConnectionInfo, String> tblcDatabaseName;
+    public TableColumn<ConnectionConfig, String> tblcDatabaseName;
     @FXML
-    public TableView<ConnectionInfo> tblvConnectionList;
+    public TableView<ConnectionConfig> tblvConnectionList;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -62,7 +60,7 @@ public class ConnectionManageController extends FxmlView {
     }
 
     @Subscribe(name = "add-new-connection", threadMode = ThreadMode.BACKGROUND)
-    public void addNewConnectionInfo(ConnectionInfo connectionInfo) {
+    public void addNewConnectionInfo(ConnectionConfig connectionInfo) {
         tblvConnectionList.getItems().add(connectionInfo);
     }
 }

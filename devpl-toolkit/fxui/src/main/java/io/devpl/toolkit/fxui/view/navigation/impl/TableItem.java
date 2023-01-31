@@ -1,17 +1,19 @@
 package io.devpl.toolkit.fxui.view.navigation.impl;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableItem implements NavigationItem {
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+public class TableItem extends TreeModelBase {
 
     private String tableName;
 
     private final ObservableList<ColumnItem> children;
     private final List<ColumnItem> rawChildren;
+
+    DatabaseItem databaseItem;
 
     public TableItem() {
         rawChildren = new ArrayList<>();
@@ -19,7 +21,7 @@ public class TableItem implements NavigationItem {
     }
 
     @Override
-    public String getDispalyValue() {
+    public String getDisplayValue() {
         return tableName;
     }
 
@@ -38,11 +40,13 @@ public class TableItem implements NavigationItem {
         return rawChildren;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    @Override
+    public TreeModel getParent() {
+        return databaseItem;
     }
 
-    public void addColumn(ColumnItem columnItem) {
-        rawChildren.add(columnItem);
+    @Override
+    public <T extends TreeModel> void setParent(T parent) {
+
     }
 }

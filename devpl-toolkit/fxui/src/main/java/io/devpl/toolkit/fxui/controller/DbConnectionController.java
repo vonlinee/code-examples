@@ -5,7 +5,7 @@ import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.toolkit.fxui.common.Constants;
 import io.devpl.toolkit.fxui.common.JDBCDriver;
 import io.devpl.toolkit.fxui.event.FillDefaultValueEvent;
-import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
+import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -60,7 +60,7 @@ public class DbConnectionController extends FxmlView {
      * @param configuration 事件
      */
     @Subscribe(name = "Event-FillConnectionInfo", threadMode = ThreadMode.BACKGROUND)
-    public void initBinder(ConnectionInfo configuration) {
+    public void initBinder(ConnectionConfig configuration) {
         configuration.setPort(portField.getText());
         configuration.setUsername(userNameField.getText());
         configuration.setPassword(passwordField.getText());

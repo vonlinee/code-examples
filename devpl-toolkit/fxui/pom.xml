@@ -278,6 +278,12 @@
             <artifactId>fx-gson</artifactId>
             <version>4.1.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.kordamp.bootstrapfx</groupId>
+            <artifactId>bootstrapfx-core</artifactId>
+            <version>0.4.0</version>
+        </dependency>
     </dependencies>
     <build>
         <!--资源打包配置-->

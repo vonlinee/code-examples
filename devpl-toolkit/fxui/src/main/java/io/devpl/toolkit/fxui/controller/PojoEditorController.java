@@ -1,34 +1,38 @@
 package io.devpl.toolkit.fxui.controller;
 
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
+
 import io.devpl.codegen.mbpg.jdbc.dialect.mysql.InfoSchemaColumn;
-import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.sql.SqlUtils;
 import io.devpl.fxtras.Alerts;
-import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.FxmlLocation;
+import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.toolkit.fxui.model.FieldInfo;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
-import org.apache.commons.dbutils.BasicRowProcessor;
-import org.apache.commons.dbutils.GenerousBeanProcessor;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.MapListHandler;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import javafx.scene.control.TextField;
 
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.*;
-
+/**
+ * 实体类编辑控制器
+ */
 @FxmlLocation(location = "static/fxml/pojo_editor.fxml")
 public class PojoEditorController extends FxmlView {
 
     @FXML
     public TextArea txaContent;
+    @FXML
+    public TextField txfDbName;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -38,13 +42,17 @@ public class PojoEditorController extends FxmlView {
     @FXML
     public void parseColumns(ActionEvent actionEvent) {
         String text = txaContent.getText();
-        if (StringUtils.isBlank(text)) {
+        if (StringUtils.hasNotText(text)) {
             Alerts.warn("待解析SQL为空!").showAndWait();
             return;
         }
         try {
             Map<String, Set<String>> map = SqlUtils.getSelectColumns(text);
-            String dbName = "ruoyi";
+            String dbName = txfDbName.getText();
+            if (StringUtils.hasNotText(dbName)) {
+                Alerts.warn("数据库名称为空!").show();
+                return;
+            }
             List<InfoSchemaColumn> metadata = new ArrayList<>();
             map.forEach((tableName, columnNames) -> {
                 List<String> names = new ArrayList<>();

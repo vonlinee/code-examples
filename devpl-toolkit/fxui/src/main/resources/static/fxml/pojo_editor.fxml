@@ -5,15 +5,17 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="io.devpl.toolkit.fxui.controller.PojoEditorController">
 
     <top>
         <ToolBar>
-            <Button text="SQL"/>
             <Button text="解析字段" onAction="#parseColumns"/>
-            <Button text="转换实体类"/>
+            <Label text="数据库名称"/>
+            <TextField fx:id="txfDbName"/>
         </ToolBar>
     </top>
 

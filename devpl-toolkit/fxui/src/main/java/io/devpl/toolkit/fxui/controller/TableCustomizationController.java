@@ -1,5 +1,16 @@
 package io.devpl.toolkit.fxui.controller;
 
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import org.mybatis.generator.config.ColumnOverride;
+import org.mybatis.generator.config.IgnoredColumn;
+
 import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
@@ -10,26 +21,24 @@ import io.devpl.toolkit.fxui.model.TableCodeGenOption;
 import io.devpl.toolkit.fxui.model.TableCodeGeneration;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.toolkit.fxui.utils.CollectionUtils;
-import io.devpl.toolkit.fxui.utils.ssh.JSchUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
-import org.mybatis.generator.config.ColumnOverride;
-import org.mybatis.generator.config.IgnoredColumn;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
 
 /**
- * 表定制化控制器
+ * 表定制化控制器: 配置单个表的代码生成效果
  */
 @FxmlLocation(location = "static/fxml/table_customization.fxml")
 public class TableCustomizationController extends FxmlView {
@@ -94,30 +103,17 @@ public class TableCustomizationController extends FxmlView {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         accoConfig.setExpandedPane(accoConfig.getPanes().get(1));
-        accoConfig.expandedPaneProperty().addListener((observable, oldValue, newValue) -> {
-            final ObservableList<TitledPane> panes = accoConfig.getPanes();
-            int expanedCount = 0;
-            for (TitledPane pane : panes) {
-                if (pane.isExpanded()) expanedCount++;
-            }
-            if (expanedCount == 0) {
-                accoConfig.setExpandedPane(panes.get(0));
-            }
-        });
-
         checkedColumn.setCellFactory(param -> {
             TableCell<ColumnCustomConfiguration, Boolean> cell = new CheckBoxTableCell<>(null);
             cell.setTooltip(new Tooltip("如果不想生成某列请取消勾选对应的列"));
             return cell;
         });
 
-        checkedColumn.setCellValueFactory(new PropertyValueFactory<>("checked"));
-        columnNameColumn.setCellValueFactory(new PropertyValueFactory<>("columnName"));
-        jdbcTypeColumn.setCellValueFactory(new PropertyValueFactory<>("jdbcType"));
-        propertyNameColumn.setCellValueFactory(new PropertyValueFactory<>("propertyName"));
-        typeHandlerColumn.setCellValueFactory(new PropertyValueFactory<>("typeHandler"));
-
-        jdbcTypeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        checkedColumn.setCellValueFactory(param -> param.getValue().checkedProperty());
+        columnNameColumn.setCellValueFactory(param -> param.getValue().columnNameProperty());
+        jdbcTypeColumn.setCellValueFactory(param -> param.getValue().jdbcTypeProperty());
+        propertyNameColumn.setCellValueFactory(param -> param.getValue().propertyNameProperty());
+        typeHandlerColumn.setCellValueFactory(param -> param.getValue().typeHandleProperty());
 
         jdbcTypeColumn.setCellFactory(param -> {
             Tooltip tooltip = new Tooltip("如果要定制列的Java数据类型, 编辑Java Type和Property Name或者你自己的Type Handler, 注意要按Enter键保存，然后再点击确认方可生效。");
@@ -126,12 +122,10 @@ public class TableCustomizationController extends FxmlView {
             return cell;
         });
 
-        // handle commit event to save the user input data
         jdbcTypeColumn.setOnEditCommit(event -> {
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setJdbcType(event.getNewValue());
         });
         javaTypeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        // handle commit event to save the user input data
         javaTypeColumn.setOnEditCommit(event -> {
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setJavaType(event.getNewValue());
         });
@@ -146,15 +140,22 @@ public class TableCustomizationController extends FxmlView {
         // 初始化数据
         root.addEventHandler(CommandEvent.COMMAND, event -> {
             tableInfo = (TableCodeGeneration) event.getData();
-            List<ColumnCustomConfiguration> tableColumns = null;
-            try {
-                tableColumns = JSchUtils.getTableColumns(tableInfo.getDatabaseInfo(), tableInfo.getTableName());
+            // 获取数据库表的所有列信息
+            List<ColumnCustomConfiguration> columns = new ArrayList<>();
+            try (Connection conn = tableInfo.getConnectionInfo().getConnection()) {
+                DatabaseMetaData md = conn.getMetaData();
+                ResultSet rs = md.getColumns(tableInfo.getDbName(), null, tableInfo.getTableName(), null);
+                while (rs.next()) {
+                    ColumnCustomConfiguration columnVO = new ColumnCustomConfiguration();
+                    columnVO.setColumnName(rs.getString("COLUMN_NAME"));
+                    columnVO.setJdbcType(rs.getString("TYPE_NAME"));
+                    columns.add(columnVO);
+                }
             } catch (Exception e) {
                 Alerts.exception("", e).show();
             }
-            assert tableColumns != null;
             labelCurrentTableName.setText(tableInfo.getTableName());
-            columnListView.setItems(FXCollections.observableList(tableColumns));
+            columnListView.setItems(FXCollections.observableList(columns));
             // 每次都是重新加载FXML
             initTableCodeGenerationOptionBindding(tableInfo.getOption());
         });
@@ -207,7 +208,7 @@ public class TableCustomizationController extends FxmlView {
 
     @FXML
     public void configAction(ActionEvent event) {
-        final ViewLoader viewLoader = ViewLoader.load(TableColumnConfigsController.class);
+        ViewLoader viewLoader = ViewLoader.load(TableColumnConfigsController.class);
         StageHelper.show("定制列配置", viewLoader.getRoot());
         TableColumnConfigsController controller = viewLoader.getViewController();
         controller.setColumnListView(this.columnListView);

@@ -5,31 +5,27 @@ import io.devpl.fxtras.mvc.ViewLoader;
 import io.devpl.toolkit.fxui.controller.MainFrameController;
 import io.devpl.toolkit.fxui.dao.ConnectionConfigurationDao;
 import io.devpl.toolkit.fxui.model.ConnectionRegistry;
-import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
+import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.mybatis.generator.logging.Log;
-import org.mybatis.generator.logging.LogFactory;
 
 import java.util.List;
 
 /**
  * 这是本软件的主入口,要运行本软件请直接运行本类就可以了,不用传入任何参数
- * 本软件要求jkd版本大于1.8.0.40
+ * 本软件要求jdk版本大于1.8.0.40
  */
 public class MainUI extends JavaFXApplication {
 
     private static final String MAIN_WINDOW_TITLE = "代码生成器";
 
-    private final Log log = LogFactory.getLog(MainUI.class);
-
     @Override
     protected void onInit() throws Exception {
         ConnectionConfigurationDao dao = new ConnectionConfigurationDao();
-        List<ConnectionInfo> connConfigList = dao.selectList();
-        for (ConnectionInfo item : connConfigList) {
+        List<ConnectionConfig> connConfigList = dao.selectList();
+        for (ConnectionConfig item : connConfigList) {
             ConnectionRegistry.registerConnection(item);
         }
     }

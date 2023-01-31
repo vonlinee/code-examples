@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.dao;
 
-import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
+import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import io.devpl.toolkit.fxui.utils.StringUtils;
 
@@ -16,14 +16,14 @@ import java.util.UUID;
  */
 public class ConnectionConfigurationDao extends Repository {
 
-    public List<ConnectionInfo> selectList() {
+    public List<ConnectionConfig> selectList() {
         Connection conn = getConnection();
         try {
             String sql = "select * from connection_info";
             ResultSet rs = DBUtils.executeQuery(conn, sql);
-            List<ConnectionInfo> results = new ArrayList<>();
+            List<ConnectionConfig> results = new ArrayList<>();
             while (rs.next()) {
-                ConnectionInfo item = new ConnectionInfo();
+                ConnectionConfig item = new ConnectionConfig();
                 item.setId(rs.getString("id"));
                 item.setPort(rs.getString("port"));
                 item.setDbName(rs.getString("db_name"));
@@ -41,7 +41,7 @@ public class ConnectionConfigurationDao extends Repository {
         }
     }
 
-    public void save(ConnectionInfo config) {
+    public void save(ConnectionConfig config) {
         String sql = "INSERT INTO connection_info\n" +
                 "(id, name, host, port, db_type, db_name, username, password)\n" +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";

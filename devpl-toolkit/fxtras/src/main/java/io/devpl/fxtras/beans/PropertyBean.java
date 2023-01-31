@@ -10,27 +10,30 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * 使用Cglib代理为普通的JavaBean添加数据绑定支持
  * @param <T>
  */
-public final class Binder<T> implements MethodInterceptor {
+public final class PropertyBean<T> implements MethodInterceptor {
 
     /**
      * 一定要是普通的JavaBean，属性不能是Property
      */
-    private Object bean;
+    private T bean;
     private Enhancer enhancer;
     private final Class<T> typeClass;
 
-    Binder(Class<T> type) {
+    PropertyBean(Class<T> type) {
         this.typeClass = type;
         init(typeClass);
     }
 
     @SuppressWarnings("unchecked")
-    public Binder(T bean) {
+    PropertyBean(T bean) {
         this.typeClass = (Class<T>) bean.getClass();
         this.bean = Objects.requireNonNull(bean, "java bean cannot be null!");
         init(typeClass);
@@ -39,8 +42,7 @@ public final class Binder<T> implements MethodInterceptor {
     private void init(Class<T> typeClass) {
         if (bean == null) {
             try {
-                bean = typeClass.getConstructor()
-                        .newInstance();
+                bean = typeClass.getConstructor().newInstance();
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                      NoSuchMethodException e) {
                 throw new RuntimeException(e);
@@ -51,12 +53,12 @@ public final class Binder<T> implements MethodInterceptor {
         this.enhancer.setCallback(this);
     }
 
-    public static <T> Binder<T> of(Class<T> typeClass) {
-        return new Binder<>(typeClass);
+    public static <T> PropertyBean<T> of(Class<T> typeClass) {
+        return new PropertyBean<>(typeClass);
     }
 
-    public static <T> Binder<T> of(T bean) {
-        return new Binder<>(bean);
+    public static <T> PropertyBean<T> of(T bean) {
+        return new PropertyBean<>(bean);
     }
 
     private final Map<String, Property<Object>> bindingsMap = new HashMap<>(10);
@@ -71,7 +73,7 @@ public final class Binder<T> implements MethodInterceptor {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    public <V> Binder<T> bindBidirectional(String filedName, Class<V> fieldType, Property<V> property) {
+    public <V> PropertyBean<T> bindBidirectional(String filedName, Class<V> fieldType, Property<V> property) {
         bindingsMap.put(filedName, (Property<Object>) property);
         return bind(filedName, fieldType, property);
     }
@@ -84,7 +86,7 @@ public final class Binder<T> implements MethodInterceptor {
      * @param <V>       字段值泛型
      * @return this
      */
-    public <V> Binder<T> bind(String filedName, Class<V> fieldType, Property<V> property) {
+    public <V> PropertyBean<T> bind(String filedName, Class<V> fieldType, Property<V> property) {
         if (setters.containsKey(filedName)) {
             return this; // 避免重复添加
         }
@@ -95,8 +97,7 @@ public final class Binder<T> implements MethodInterceptor {
         setters.put(filedName, setterMethod);
         property.addListener((observable, oldValue, newValue) -> {
             try {
-                setters.get(filedName)
-                        .invoke(bean, newValue);
+                setters.get(filedName).invoke(bean, newValue);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 // throw new RuntimeException(e);
             }
@@ -132,5 +133,13 @@ public final class Binder<T> implements MethodInterceptor {
     @SuppressWarnings("unchecked")
     public T build() {
         return (T) enhancer.create();
+    }
+
+    public <V> void set(BiConsumer<T, V> column, V value) {
+        column.accept(bean, value);
+    }
+
+    public <V> V get(Function<T, V> column) {
+        return column.apply(this.bean);
     }
 }

@@ -1,37 +1,44 @@
 package io.devpl.toolkit.fxui.controller;
 
-import io.devpl.fxtras.mvc.FxmlView;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import org.fxmisc.richtext.CodeArea;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import com.squareup.javapoet.ClassName;
+
 import io.devpl.fxtras.mvc.FxmlLocation;
+import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.utils.StageHelper;
+import io.devpl.toolkit.fxui.model.ConnectionRegistry;
 import io.devpl.toolkit.fxui.model.FieldInfo;
+import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
+import io.devpl.toolkit.fxui.view.navigation.impl.ConnectionItem;
+import io.devpl.toolkit.fxui.view.navigation.impl.DatabaseNavigationView;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.Scene;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.scene.effect.BlendMode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
-import org.fxmisc.richtext.CodeArea;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-import org.mybatis.generator.api.dom.java.Field;
-import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
-import org.mybatis.generator.api.dom.java.JavaVisibility;
-import org.mybatis.generator.api.dom.java.TopLevelClass;
-import org.mybatis.generator.api.dom.java.render.TopLevelClassRenderer;
-
-import java.lang.reflect.Modifier;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
 
 /**
  * 类编辑器
@@ -54,13 +61,15 @@ public class ClassDefinitionController extends FxmlView {
     @FXML
     public TableColumn<FieldInfo, String> tblcFieldModifier;
     @FXML
-    public TableColumn<FieldInfo, String> tblcFieldDataType;
+    public TableColumn<FieldInfo, ClassName> tblcFieldDataType;
     @FXML
     public TableColumn<FieldInfo, String> tblcFieldName;
     @FXML
     public TableColumn<FieldInfo, String> tblcFieldRemarks;
     @FXML
     public TitledPane titpFieldList;
+    @FXML
+    public Button btnClassGenerate;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -77,10 +86,19 @@ public class ClassDefinitionController extends FxmlView {
             cell.setAlignment(Pos.CENTER);
             return cell;
         });
-        tblcFieldDataType.setCellValueFactory(param -> param.getValue().dataTypeProperty());
+        // tblcFieldDataType.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()));
         tblcFieldDataType.setCellFactory(param -> {
-            ChoiceBoxTableCell<FieldInfo, String> cell = new ChoiceBoxTableCell<>(new DefaultStringConverter());
-            cell.getItems().addAll("int", "String", "float");
+            ChoiceBoxTableCell<FieldInfo, ClassName> cell = new ChoiceBoxTableCell<>(new StringConverter<ClassName>() {
+                @Override
+                public String toString(ClassName object) {
+                    return null;
+                }
+
+                @Override
+                public ClassName fromString(String string) {
+                    return null;
+                }
+            });
             cell.setAlignment(Pos.CENTER);
             return cell;
         });
@@ -124,7 +142,6 @@ public class ClassDefinitionController extends FxmlView {
         }
         List<FieldInfo> items = tbvFieldInfo.getItems();
         for (int selectedIndex : selectedIndices) {
-            System.out.println(selectedIndex);
             items.remove(selectedIndex);
         }
     }
@@ -132,5 +149,34 @@ public class ClassDefinitionController extends FxmlView {
     @FXML
     public void openFieldImportDialog(ActionEvent actionEvent) {
         StageHelper.show("实体类编辑", PojoEditorController.class);
+    }
+    
+    @FXML
+    public void openColumnChooserDialog(ActionEvent actionEvent) {
+    	DatabaseNavigationView dbNavigationView = new DatabaseNavigationView();
+    	Scene scene = new Scene(dbNavigationView);
+    	
+    	Collection<ConnectionConfig> connectionInfos = ConnectionRegistry.getConnectionConfigurations();
+    	
+    	connectionInfos.forEach(item -> {
+    		ConnectionItem connItem = new ConnectionItem();
+    		connItem.setConnectionConfig(item);
+    		dbNavigationView.addConnections(Arrays.asList(connItem));
+    	});
+    	Stage stage = new Stage();
+    	stage.setScene(scene);
+    	stage.show();
+    }
+
+    @FXML
+    public void generateClassDefinition(MouseEvent mouseEvent) {
+        ObservableList<FieldInfo> items = tbvFieldInfo.getItems();
+
+        String packageName = "";
+
+        for (FieldInfo item : items) {
+            System.out.println(item.getDataType());
+        }
+
     }
 }

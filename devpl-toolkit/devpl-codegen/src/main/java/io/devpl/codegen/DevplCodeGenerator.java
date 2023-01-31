@@ -23,7 +23,7 @@ public class DevplCodeGenerator {
     // 配置从本地文件加载
     private static final String JDBC_CONFIG_FILE = "D:/Temp/devpl-jdbc.properties";
 
-    private static final String author = "someone";
+    private static final String author = "lg-wangliang";
     private static final String outputRootDir = "D:\\Temp";
     // 父包配置
     private static final String parentPackage = "";
@@ -32,7 +32,7 @@ public class DevplCodeGenerator {
 
     // 在此处填写要生成的表名
     private static void tableNamesToBeGenerated() {
-        tableNamesToBeGenerated.add("base_data_view");
+        tableNamesToBeGenerated.add("campus_milestone");
     }
 
     public static void main(String[] args) throws IOException {

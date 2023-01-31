@@ -157,8 +157,6 @@ public class JSchUtils {
     }
 
     public static List<ColumnCustomConfiguration> getTableColumns(DatabaseInfo dbConfig, String tableName) throws Exception {
-        String url = getConnectionUrlWithSchema(dbConfig);
-        log.info("getTableColumns, connection url: {}", url);
         Session sshSession = getSSHSession(dbConfig);
         engagePortForwarding(sshSession, dbConfig);
         Connection conn = DBUtils.getConnection(dbConfig);

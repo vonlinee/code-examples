@@ -1,47 +1,35 @@
 package io.devpl.toolkit.fxui.view.navigation.impl;
 
-import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
-import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
-import io.devpl.toolkit.fxui.utils.DBUtils;
+import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
-public class ConnectionItem implements NavigationItem {
+/**
+ * 连接信息单元格
+ */
+public class ConnectionItem extends TreeModelBase {
 
-    // 连接名称
-    private String connectionName;
+    private ConnectionConfig connectionConfig;
 
-    private final ConnectionInfo connectionInfo = new ConnectionInfo();
-
-    private List<DirectoryItem<? extends NavigationItem>> rawChildren;
-    private ObservableList<DirectoryItem<? extends NavigationItem>> children;
+    private final List<TreeModel> rawChildren;
+    private ObservableList<TreeModel> children;
 
     public ConnectionItem() {
         rawChildren = new ArrayList<>();
         children = FXCollections.observableList(rawChildren);
-        // 默认的目录
-        rawChildren.add(0, new DirectoryItem<DatabaseItem>("数据库"));
     }
 
     @Override
-    public String getDispalyValue() {
-        return connectionName;
+    public String getDisplayValue() {
+        return connectionConfig.getName();
     }
 
     @Override
     public void setDispalyValue(String dispalyValue) {
-        connectionName = dispalyValue;
-    }
 
-    public void setConnectionName(String connectionName) {
-        this.connectionName = connectionName;
     }
 
     @Override
@@ -50,53 +38,25 @@ public class ConnectionItem implements NavigationItem {
     }
 
     @Override
-    public List<DirectoryItem<? extends NavigationItem>> getChildren() {
+    public List<TreeModel> getChildren() {
         return rawChildren;
     }
 
-    public void addDatabase(DatabaseItem databaseItem) {
-        DirectoryItem<? extends NavigationItem> directoryItem = rawChildren.get(0);
-        directoryItem.addChildItem(databaseItem);
+    @Override
+    public TreeModel getParent() {
+        return null;
     }
 
-    public void connect() {
-        Properties properties = new Properties();
-        properties.setProperty("user", connectionInfo.getUsername());
-        properties.setProperty("password", connectionInfo.getPassword());
-        String url = "jdbc:mysql://localhost:3306/lgdb_campus_intelligent_portrait?useUnicode=true&characterEncoding=UTF-8&useSSL=false&&serverTimezone=GMT%2B8";
-        Connection connection = null;
-        try {
-            connection = DBUtils.getConnection(url, properties);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    public <T extends TreeModel> void setParent(T parent) {
 
-        if (connection == null) {
-            System.out.println("连接失败");
-            return;
-        }
-        setConnectionName("jdbc:mysql://localhost:3306");
-        List<TableMetadata> tablesMetadata = DBUtils.getTablesMetadata(connection, null, null);
-        DatabaseItem databaseItem = new DatabaseItem();
-        databaseItem.setDatabaseName("lgdb_campus_intelligent_portrait");
-        addDatabase(databaseItem);
-        for (TableMetadata table : tablesMetadata) {
-            final TableItem tableItem = new TableItem();
-            databaseItem.addTable(tableItem);
-            tableItem.setTableName(table.getTableName());
-            // 列
-            List<ColumnMetadata> columns = DBUtils.getColumnsMetadata(connection, table.getTableName());
-            for (ColumnMetadata column : columns) {
-                ColumnItem columnItem = new ColumnItem();
-                columnItem.setColumnName(column.getColumnName());
-                tableItem.addColumn(columnItem);
-            }
-        }
+    }
 
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("关闭连接失败", e);
-        }
+    public void setConnectionConfig(ConnectionConfig connectionInfo) {
+        this.connectionConfig = connectionInfo;
+    }
+
+    public ConnectionConfig getConnectionConfig() {
+        return connectionConfig;
     }
 }

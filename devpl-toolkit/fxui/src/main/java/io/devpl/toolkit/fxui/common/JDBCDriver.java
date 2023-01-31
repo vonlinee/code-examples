@@ -99,4 +99,16 @@ public enum JDBCDriver {
         }
         return names;
     }
+
+    public static JDBCDriver valueOfDriverName(String driverName) {
+        try {
+            return JDBCDriver.valueOf(driverName);
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+    public boolean nameEquals(String name) {
+        return this.name().equals(name);
+    }
 }

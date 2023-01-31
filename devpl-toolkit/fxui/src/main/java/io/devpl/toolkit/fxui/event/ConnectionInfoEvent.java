@@ -1,16 +1,16 @@
 package io.devpl.toolkit.fxui.event;
 
-import io.devpl.toolkit.fxui.model.props.ConnectionInfo;
+import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 
 public class ConnectionInfoEvent {
 
-    private final ConnectionInfo connectionInfo;
+    private final ConnectionConfig connectionInfo;
 
-    public ConnectionInfoEvent(ConnectionInfo connectionInfo) {
+    public ConnectionInfoEvent(ConnectionConfig connectionInfo) {
         this.connectionInfo = connectionInfo;
     }
 
-    public ConnectionInfo getConnectionInfo() {
+    public ConnectionConfig getConnectionInfo() {
         return connectionInfo;
     }
 }
