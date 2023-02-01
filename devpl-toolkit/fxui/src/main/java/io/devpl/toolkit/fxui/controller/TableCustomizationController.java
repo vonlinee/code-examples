@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import io.devpl.toolkit.fxui.model.ConnectionRegistry;
+import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
 
@@ -18,7 +20,7 @@ import io.devpl.fxtras.mvc.ViewLoader;
 import io.devpl.fxtras.utils.StageHelper;
 import io.devpl.toolkit.fxui.event.CommandEvent;
 import io.devpl.toolkit.fxui.model.TableCodeGenOption;
-import io.devpl.toolkit.fxui.model.TableCodeGeneration;
+import io.devpl.toolkit.fxui.model.TableCodeGenConfig;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.toolkit.fxui.utils.CollectionUtils;
 import javafx.collections.FXCollections;
@@ -98,8 +100,6 @@ public class TableCustomizationController extends FxmlView {
     @FXML
     private TableColumn<ColumnCustomConfiguration, String> typeHandlerColumn;
 
-    TableCodeGeneration tableInfo;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         accoConfig.setExpandedPane(accoConfig.getPanes().get(1));
@@ -139,12 +139,16 @@ public class TableCustomizationController extends FxmlView {
         });
         // 初始化数据
         root.addEventHandler(CommandEvent.COMMAND, event -> {
-            tableInfo = (TableCodeGeneration) event.getData();
+            TableCodeGenConfig tableInfo = (TableCodeGenConfig) event.getData();
             // 获取数据库表的所有列信息
             List<ColumnCustomConfiguration> columns = new ArrayList<>();
-            try (Connection conn = tableInfo.getConnectionInfo().getConnection()) {
+
+            String connectionName = tableInfo.getConnectionName();
+            ConnectionConfig connectionConfig = ConnectionRegistry.getConnectionConfiguration(connectionName);
+
+            try (Connection conn = connectionConfig.getConnection()) {
                 DatabaseMetaData md = conn.getMetaData();
-                ResultSet rs = md.getColumns(tableInfo.getDbName(), null, tableInfo.getTableName(), null);
+                ResultSet rs = md.getColumns(tableInfo.getDatabaseName(), null, tableInfo.getTableName(), null);
                 while (rs.next()) {
                     ColumnCustomConfiguration columnVO = new ColumnCustomConfiguration();
                     columnVO.setColumnName(rs.getString("COLUMN_NAME"));
@@ -158,9 +162,6 @@ public class TableCustomizationController extends FxmlView {
             columnListView.setItems(FXCollections.observableList(columns));
             // 每次都是重新加载FXML
             initTableCodeGenerationOptionBindding(tableInfo.getOption());
-        });
-        labelCurrentTableName.setOnMouseClicked(event1 -> {
-            System.out.println(tableInfo.getOption());
         });
     }
 

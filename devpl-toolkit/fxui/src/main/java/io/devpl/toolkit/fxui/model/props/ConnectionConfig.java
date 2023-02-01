@@ -10,15 +10,16 @@ import java.util.Properties;
 
 /**
  * 数据库连接配置
+ * 注意：连接配置不一定需要数据库，因此此处不存储数据库名称信息
  */
 @Data
 public class ConnectionConfig {
 
     private String id;
     /**
-     * 连接名称
+     * 连接名称: 唯一名称，可作为Map Key
      */
-    private String name;
+    private String connectionName;
     private String dbType;
     private JDBCDriver driverInfo;
     private String host;
@@ -97,11 +98,26 @@ public class ConnectionConfig {
         return DBUtils.getConnection(connectionUrl, properties);
     }
 
-    public void fillConnectionNameIfEmpty() {
-        String connectionName = name;
-        if (connectionName == null || connectionName.isEmpty()) {
-            connectionName = host + "_" + port;
-            name = connectionName;
+    public String getConnectionName() {
+        if (this.connectionName == null || connectionName.isEmpty()) {
+            this.connectionName = host + "_" + port;
         }
+        return this.connectionName;
+    }
+
+    private String uniqueKey;
+
+    public String getUniqueKey() {
+        if (uniqueKey == null) {
+            uniqueKey = connectionName;
+        }
+        return uniqueKey;
+    }
+
+    public JDBCDriver getDriverInfo() {
+        if (this.driverInfo == null) {
+            this.driverInfo = JDBCDriver.valueOfDriverName(dbType);
+        }
+        return driverInfo;
     }
 }

@@ -100,7 +100,12 @@ public class Context extends PropertyHolder {
         pluginConfigurations.add(pluginConfiguration);
     }
 
-    public <T extends Plugin> PluginConfiguration addPluginConfiguration(Class<T> pluginClass) {
+    /**
+     * 新增方法
+     * @param pluginClass 插件类
+     * @return PluginConfiguration
+     */
+    public PluginConfiguration addPluginConfiguration(Class<? extends Plugin> pluginClass) {
         final PluginConfiguration pluginConfiguration = new PluginConfiguration();
         pluginConfiguration.addProperty("type", pluginClass.getName());
         pluginConfiguration.setConfigurationType(pluginClass.getName());

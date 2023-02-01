@@ -27,7 +27,7 @@ public class ConnectionConfigurationDao extends Repository {
                 item.setId(rs.getString("id"));
                 item.setPort(rs.getString("port"));
                 item.setDbName(rs.getString("db_name"));
-                item.setName(rs.getString("name"));
+                item.setConnectionName(rs.getString("name"));
                 item.setHost(rs.getString("host"));
                 item.setDbType(rs.getString("db_type"));
                 item.setUsername(rs.getString("username"));
@@ -48,13 +48,13 @@ public class ConnectionConfigurationDao extends Repository {
         if (StringUtils.hasNotText(config.getId())) {
             config.setId(UUID.randomUUID().toString());
         }
-        if (StringUtils.hasNotText(config.getName())) {
+        if (StringUtils.hasNotText(config.getConnectionName())) {
             String connectionName = config.getHost() + "_" + config.getPort();
-            config.setName(connectionName);
+            config.setConnectionName(connectionName);
         }
         Connection conn = getConnection();
         try {
-            DBUtils.insert(conn, sql, config.getId(), config.getName(), config.getHost(), config.getPort(), config.getDbType(), config.getDbName(), config.getUsername(), config.getPassword());
+            DBUtils.insert(conn, sql, config.getId(), config.getConnectionName(), config.getHost(), config.getPort(), config.getDbType(), config.getDbName(), config.getUsername(), config.getPassword());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

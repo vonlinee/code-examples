@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConnectionRegistry {
 
     public static void registerConnection(ConnectionConfig config) {
-        registeredConnectionConfigMap.put(config.getName(), config);
+        registeredConnectionConfigMap.put(config.getConnectionName(), config);
     }
 
     /**

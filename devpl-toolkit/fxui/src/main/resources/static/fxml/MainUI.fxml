@@ -162,7 +162,8 @@
                     </columns>
                 </TableView>
                 <HBox fx:id="hboxCodeGenOperationRoot" maxHeight="60" minHeight="60">
-                    <Button text="生成" onAction="#generateCode" styleClass="btn-primary"/>
+                    <Button text="生成" onAction="#generateCode"/>
+                    <Button text="打开目录" onAction="#openTargetRootDirectory"/>
                 </HBox>
             </VBox>
         </SplitPane>

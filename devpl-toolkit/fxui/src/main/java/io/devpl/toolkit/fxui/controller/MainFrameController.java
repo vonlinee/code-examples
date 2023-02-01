@@ -9,7 +9,7 @@ import io.devpl.fxtras.utils.StageHelper;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.toolkit.fxui.common.ProgressDialog;
 import io.devpl.toolkit.fxui.event.CommandEvent;
-import io.devpl.toolkit.fxui.model.TableCodeGeneration;
+import io.devpl.toolkit.fxui.model.TableCodeGenConfig;
 import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
 import io.devpl.toolkit.fxui.utils.FileChooserDialog;
 import io.devpl.toolkit.fxui.utils.FileUtils;
@@ -29,6 +29,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -66,17 +67,26 @@ public class MainFrameController extends FxmlView {
     @FXML
     private TextField projectFolderField;
     @FXML
-    public TableView<TableCodeGeneration> tblvTableCustomization;
+    public TableView<TableCodeGenConfig> tblvTableCustomization;
     @FXML
-    public TableColumn<TableCodeGeneration, String> tblcDbName;
+    public TableColumn<TableCodeGenConfig, String> tblcDbName;
     @FXML
-    public TableColumn<TableCodeGeneration, String> tblcTableName;
+    public TableColumn<TableCodeGenConfig, String> tblcTableName;
 
     private final MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
-    // 通用配置项
+
+    /**
+     * 通用配置项
+     */
     private final GenericConfiguration codeGenConfig = new GenericConfiguration();
-    // 保存哪些表需要进行代码生成
-    private final Map<String, TableCodeGeneration> tableConfigsToBeGenerated = new ConcurrentHashMap<>(10);
+
+    /**
+     * 保存哪些表需要进行代码生成
+     * 存放的key:TableCodeGenConfig#getUniqueKey()
+     * @see io.devpl.toolkit.fxui.model.TableCodeGenConfig#getUniqueKey()
+     */
+    private final Map<String, TableCodeGenConfig> tableConfigsToBeGenerated
+            = new ConcurrentHashMap<>(10);
 
     // 进度回调
     ProgressDialog alert = new ProgressDialog(Alert.AlertType.INFORMATION);
@@ -91,32 +101,32 @@ public class MainFrameController extends FxmlView {
         // 生成配置管理
         configsLabel.setOnMouseClicked(event -> StageHelper.show("生成配置", GeneratorConfigController.class));
 
-        tblcDbName.setCellValueFactory(new PropertyValueFactory<>("dbName"));
+        tblcDbName.setCellValueFactory(new PropertyValueFactory<>("databaseName"));
         tblcDbName.setCellFactory(param -> {
-            TableCell<TableCodeGeneration, String> cell = new TextFieldTableCell<>();
+            TableCell<TableCodeGenConfig, String> cell = new TextFieldTableCell<>();
             cell.setAlignment(Pos.CENTER);
             cell.setTextAlignment(TextAlignment.CENTER);
             return cell;
         });
         tblcTableName.setCellValueFactory(new PropertyValueFactory<>("tableName"));
         tblcTableName.setCellFactory(param -> {
-            TableCell<TableCodeGeneration, String> cell = new TextFieldTableCell<>();
+            TableCell<TableCodeGenConfig, String> cell = new TextFieldTableCell<>();
             cell.setAlignment(Pos.CENTER);
             cell.setTextAlignment(TextAlignment.CENTER);
             return cell;
         });
         tblvTableCustomization.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tblvTableCustomization.setRowFactory(param -> {
-            TableRow<TableCodeGeneration> row = new TableRow<>();
+            TableRow<TableCodeGenConfig> row = new TableRow<>();
             MenuItem deleteThisRowMenuItem = new MenuItem("删除");
             MenuItem customizeMenuItem = new MenuItem("定制列");
             deleteThisRowMenuItem.setOnAction(event -> {
-                TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
+                TableCodeGenConfig item = param.getSelectionModel().getSelectedItem();
                 param.getItems().remove(item);
                 tableConfigsToBeGenerated.remove(item.getUniqueKey()); // 移除该表
             });
             customizeMenuItem.setOnAction(event -> {
-                TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
+                TableCodeGenConfig item = param.getSelectionModel().getSelectedItem();
                 Parent root = ViewLoader.load(TableCustomizationController.class).getRoot();
                 Event.fireEvent(root, new CommandEvent(CommandEvent.COMMAND, item));
                 StageHelper.show("表生成定制", root);
@@ -126,6 +136,9 @@ public class MainFrameController extends FxmlView {
             row.setContextMenu(menu);
             return row;
         });
+
+        // TODO 删除
+        fillDefaultCodeGenConfig(null);
     }
 
     /**
@@ -148,14 +161,14 @@ public class MainFrameController extends FxmlView {
             return;
         }
         if (!checkDirs(codeGenConfig)) {
-            log.error("创建目录失败");
             return;
         }
         mbgGenerator.setGeneratorConfig(codeGenConfig);
         alert.show();
         try {
-            mbgGenerator.generate();
+            mbgGenerator.generate(tableConfigsToBeGenerated.values());
         } catch (Exception exception) {
+            exception.printStackTrace();
             alert.closeIfShowing();
             Alerts.exception("生成失败", exception).showAndWait();
         }
@@ -221,7 +234,7 @@ public class MainFrameController extends FxmlView {
      * @param tableInfo
      */
     @Subscribe
-    public void addTable(TableCodeGeneration tableInfo) {
+    public void addTable(TableCodeGenConfig tableInfo) {
         String key = tableInfo.getUniqueKey();
         if (tableConfigsToBeGenerated.containsKey(key)) {
             return;
@@ -238,5 +251,14 @@ public class MainFrameController extends FxmlView {
         txfMapperPackageName.setText("mapper");
         mappingTargetProject.setText("src/main/resources");
         modelTargetPackage.setText("entity");
+    }
+
+    @FXML
+    public void openTargetRootDirectory(ActionEvent actionEvent) {
+        String directory = projectFolderField.getText();
+        if (StringUtils.hasNotText(directory)) {
+            return;
+        }
+        FileUtils.show(new File(directory));
     }
 }

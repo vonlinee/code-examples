@@ -60,8 +60,7 @@ public class NewConnectionController extends FxmlView {
             Alerts.error(msg).show();
             return;
         }
-        connConfig.fillConnectionNameIfEmpty();
-        if (ConnectionRegistry.contains(connConfig.getName())) {
+        if (ConnectionRegistry.contains(connConfig.getConnectionName())) {
             Optional<ButtonType> choice = Alerts.confirm("项目中已存在具有相同连接名称的连接信息，是否忽略?")
                     .showAndWait();
             choice.ifPresent(buttonType -> {

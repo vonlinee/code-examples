@@ -23,7 +23,7 @@ public class ConnectionTreeItem extends TreeItem<String> {
 
     private final ConnectionConfig connectionInfo;
 
-    private static Log log = LogFactory.getLog(ConnectionTreeItem.class);
+    private static final Log log = LogFactory.getLog(ConnectionTreeItem.class);
 
     public ConnectionTreeItem(ConnectionConfig connectionInfo) {
         this.connectionInfo = connectionInfo;
@@ -54,13 +54,13 @@ public class ConnectionTreeItem extends TreeItem<String> {
             databaseTreeItemList.add(databaseTreeItem);
             addTables(connectionInfo, databaseTreeItem);
         } else {
-        	// 获取所有表信息
-        	
-        	DatabaseMetaData dbmd = connection.getMetaData();
-        	ResultSet rs = dbmd.getCatalogs();
-        	
-        	List<String> results = DBUtils.extractOneColumn(String.class, rs);
-        	
+            // 获取所有表信息
+
+            DatabaseMetaData dbmd = connection.getMetaData();
+            ResultSet rs = dbmd.getCatalogs();
+
+            List<String> results = DBUtils.extractOneColumn(String.class, rs);
+
             for (String result : results) {
                 DatabaseTreeItem databaseTreeItem = new DatabaseTreeItem();
                 databaseTreeItem.setDatabaseName(String.valueOf(result));
@@ -76,12 +76,6 @@ public class ConnectionTreeItem extends TreeItem<String> {
             throw new RuntimeException("关闭连接失败", e);
         }
     }
-    
-//    private List<DatabaseInfo> getDatabaseInfoList(Connection connection) {
-//    	DatabaseMetaData dbmd = connection.getMetaData();
-//    	
-//    }
-    
 
     private void addTables(ConnectionConfig connectionInfo, DatabaseTreeItem databaseTreeItem) throws SQLException {
         Connection connection = connectionInfo.getConnection(databaseTreeItem.getValue(), null);
@@ -104,7 +98,7 @@ public class ConnectionTreeItem extends TreeItem<String> {
         }
     }
 
-	public ConnectionConfig getConnectionInfo() {
-		return connectionInfo;
-	}
+    public ConnectionConfig getConnectionConfig() {
+        return connectionInfo;
+    }
 }

@@ -24,7 +24,7 @@ public class ConnectionItem extends TreeModelBase {
 
     @Override
     public String getDisplayValue() {
-        return connectionConfig.getName();
+        return connectionConfig.getConnectionName();
     }
 
     @Override
