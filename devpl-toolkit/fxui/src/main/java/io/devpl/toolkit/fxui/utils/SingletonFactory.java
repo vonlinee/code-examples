@@ -13,7 +13,7 @@ public class SingletonFactory {
      * 创建可不被回收的单例模式,当没有对象引用，单例对象将被gc掉
      * @param className
      * @return
-     * @throws InstantiationException
+     * @throws InstantiationException 实例化对象失败
      * @throws IllegalAccessException
      */
     @SuppressWarnings("unchecked")

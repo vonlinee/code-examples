@@ -47,8 +47,6 @@ public class MainFrameController extends FxmlView {
     @FXML
     public HBox hboxCodeGenOperationRoot; // 代码生成操作根容器
     @FXML
-    private Label connectionLabel;
-    @FXML
     private Label configsLabel;
     @FXML
     public TextField txfParentPackageName;
@@ -95,9 +93,6 @@ public class MainFrameController extends FxmlView {
     public void initialize(URL location, ResourceBundle resources) {
         mbgGenerator.setProgressCallback(alert);
         bindCodeGenConfiguration(codeGenConfig);
-        // 新建连接
-        connectionLabel.setGraphic(JFX.loadImageView("static/icons/computer.png", 40));
-        connectionLabel.setOnMouseClicked(event -> StageHelper.show("新建连接", NewConnectionController.class));
         // 生成配置管理
         configsLabel.setOnMouseClicked(event -> StageHelper.show("生成配置", GeneratorConfigController.class));
 

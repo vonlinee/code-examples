@@ -11,3 +11,6 @@
 安装本地jar包
 mvn install:install-file -Dfile=./fxui/src/main/resources/lib/fxjson/fx-gson-4.1.0.jar -DgroupId=org.hildan.fxgson -DartifactId=fx-gson -Dversion=4.1.0 -Dpackaging=jar
 
+
+关于java：JavaFX：EventHandler和EventFilter有什么区别？
+https://www.codenong.com/25740103/

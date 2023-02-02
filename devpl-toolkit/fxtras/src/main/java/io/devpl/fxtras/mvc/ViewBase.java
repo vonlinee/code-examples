@@ -11,10 +11,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.PostEvent;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 abstract class ViewBase implements View, EventTarget, SceneGraphAccessor {
 
-    protected final Log log = LogFactory.getLog(getClass());
+    protected Logger log = LoggerFactory.getLogger(this.getClass());
 
     private static final EventBus GLOBAL_EVENT_BUS =
             EventBus.builder()

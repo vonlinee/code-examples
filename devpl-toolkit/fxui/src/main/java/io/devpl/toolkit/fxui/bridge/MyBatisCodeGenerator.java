@@ -91,19 +91,21 @@ public class MyBatisCodeGenerator {
         // 父包名
         context.addProperty(StringKey.PARENT_PACKAGE, generatorConfig.getParentPackage());
         // 文件编码
-        context.addProperty(ConfigKeyRegistry.CONTEXT_JAVA_FILE_ENCODING, StandardCharsets.UTF_8.name());
+        context.addProperty("javaFileEncoding", StandardCharsets.UTF_8.name());
 
         ConnectionConfig connectionConfig = ConnectionRegistry.getConnectionConfiguration(connectionName);
 
         for (TableCodeGenConfig tableCodeGenConfig : tableConfigOfOneConnection) {
             TableConfiguration tableConfig = prepareTableConfiguration(context, tableCodeGenConfig, connectionConfig);
 
-            // 一系列准备工作
-            preparePlugins(context, tableCodeGenConfig, connectionConfig);
+            // 确定哪些插件参与工作
+            preparePlugins(context, tableCodeGenConfig, connectionConfig.getDriverInfo());
+            // 初始化通用配置信息
             prepareCommonConfig(context, generatorConfig);
+            // 初始化JDBC连接配置信息
             prepareJdbcConnectionConfig(context, tableCodeGenConfig, connectionConfig.getDriverInfo(), connectionConfig);
+            // 初始化表生成选项配置
             prepareTableOption(tableCodeGenConfig.getOption());
-
             context.addTableConfiguration(tableConfig);
         }
         return context;
@@ -117,14 +119,16 @@ public class MyBatisCodeGenerator {
      * @return TableConfiguration对象
      */
     private TableConfiguration prepareTableConfiguration(Context context, TableCodeGenConfig tableCodeGenConfig, ConnectionConfig connectionConfig) {
-        String tableName = tableCodeGenConfig.getTableName();
-        String domainObjectName = StringUtils.underlineToCamel(tableName);
-        // 单表的配置选项
-        TableCodeGenOption option = tableCodeGenConfig.getOption();
         // TableTreeItem configuration
+        String tableName = tableCodeGenConfig.getTableName();
         TableConfiguration tableConfig = new TableConfiguration(context);
         tableConfig.setTableName(tableName);
-        tableConfig.setDomainObjectName(domainObjectName);
+        // Mapper名称
+        tableConfig.setMapperName(tableCodeGenConfig.getMapperName());
+        // 单表的配置选项
+        TableCodeGenOption option = tableCodeGenConfig.getOption();
+        // 实体类名称
+        tableConfig.setDomainObjectName(tableCodeGenConfig.getDomainObjectName());
         if (!option.isUseExample()) {
             tableConfig.setUpdateByExampleStatementEnabled(false);
             tableConfig.setCountByExampleStatementEnabled(false);
@@ -175,8 +179,7 @@ public class MyBatisCodeGenerator {
             }
             tableConfig.setGeneratedKey(new GeneratedKey(option.getGenerateKeys(), databaseType, true, null));
         }
-        // Mapper名称
-        tableConfig.setMapperName(tableName + "Mapper");
+
         // add ignore columns
         if (ignoredColumns != null) {
             ignoredColumns.forEach(tableConfig::addIgnoredColumn);
@@ -192,11 +195,11 @@ public class MyBatisCodeGenerator {
         }
         // Swagger支持
         if (option.isSwaggerSupport()) {
-            context.addPluginConfiguration(SwaggerSupportPlugin.class);
+            addPluginConfiguration(context, SwaggerSupportPlugin.class);
         }
         // MyBatis-Plus插件
         if (option.isUseMyBatisPlus()) {
-            context.addPluginConfiguration(MyBatisPlusPlugin.class);
+            addPluginConfiguration(context, MyBatisPlusPlugin.class);
         }
         return tableConfig;
     }
@@ -244,57 +247,56 @@ public class MyBatisCodeGenerator {
      * @param context
      * @param generation
      */
-    private void preparePlugins(Context context, TableCodeGenConfig generation, ConnectionConfig connectionConfig) {
+    private void preparePlugins(Context context, TableCodeGenConfig generation, JDBCDriver driverInfo) {
         TableCodeGenOption option = generation.getOption();
-        String dbType = connectionConfig.getDbType();
+
         // 实体添加序列化
-        context.addPluginConfiguration(SerializablePlugin.class);
+        addPluginConfiguration(context, SerializablePlugin.class);
         // Lombok 插件
         if (option.isUseLombokPlugin()) {
-            context.addPluginConfiguration(LombokPlugin.class);
+            addPluginConfiguration(context, LombokPlugin.class);
         }
         // toString, hashCode, equals插件
         else if (option.isNeedToStringHashcodeEquals()) {
-            context.addPluginConfiguration(ToStringPlugin.class);
-            context.addPluginConfiguration(EqualsHashCodePlugin.class);
+            addPluginConfiguration(context, ToStringPlugin.class);
+            addPluginConfiguration(context, EqualsHashCodePlugin.class);
         }
         // limit/offset插件
         if (option.isOffsetLimit()) {
-            if (JDBCDriver.MYSQL5.name().equals(dbType) || JDBCDriver.MYSQL8.name()
-                    .equals(dbType) || JDBCDriver.POSTGRE_SQL.name().equals(dbType)) {
-                context.addPluginConfiguration(MySQLLimitPlugin.class);
+            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.MYSQL8 == driverInfo || JDBCDriver.POSTGRE_SQL == driverInfo) {
+                addPluginConfiguration(context, MySQLLimitPlugin.class);
             }
         }
         // for JSR310
         if (option.isJsr310Support()) {
             JavaTypeResolverConfiguration javaTypeResolverConfiguration = new JavaTypeResolverConfiguration();
             javaTypeResolverConfiguration.setConfigurationType("io.devpl.codegen.mbg.plugins.JavaTypeResolverJsr310Impl");
+
             context.setJavaTypeResolverConfiguration(javaTypeResolverConfiguration);
         }
         // forUpdate 插件
         if (option.isNeedForUpdate()) {
-            if (JDBCDriver.MYSQL5.name().equals(dbType) || JDBCDriver.POSTGRE_SQL.name().equals(dbType)) {
-                context.addPluginConfiguration(MySQLForUpdatePlugin.class);
+            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.POSTGRE_SQL == driverInfo) {
+                addPluginConfiguration(context, MySQLForUpdatePlugin.class);
             }
         }
         // repository 插件
         if (option.isAnnotationDAO()) {
-            if (JDBCDriver.MYSQL5.name().equals(dbType) || JDBCDriver.MYSQL8.name()
-                    .equals(dbType) || JDBCDriver.POSTGRE_SQL.nameEquals(dbType)) {
-                context.addPluginConfiguration(RepositoryPlugin.class);
+            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.MYSQL8 == driverInfo || JDBCDriver.POSTGRE_SQL == driverInfo) {
+                addPluginConfiguration(context, RepositoryPlugin.class);
             }
         }
         if (option.isUseDAOExtendStyle()) {
-            if (JDBCDriver.MYSQL5.nameEquals(dbType) || JDBCDriver.MYSQL8.nameEquals(dbType) || JDBCDriver.POSTGRE_SQL.nameEquals(dbType)) {
-                PluginConfiguration pf = context.addPluginConfiguration(CommonDAOInterfacePlugin.class);
+            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.MYSQL8 == driverInfo || JDBCDriver.POSTGRE_SQL == driverInfo) {
+                PluginConfiguration pf = addPluginConfiguration(context, CommonDAOInterfacePlugin.class);
                 pf.addProperty(StringKey.USE_EXAMPLE, String.valueOf(option.isUseExample()));
             }
         }
         if (option.isSwaggerSupport()) {
-            context.addPluginConfiguration(SwaggerSupportPlugin.class);
+            addPluginConfiguration(context, SwaggerSupportPlugin.class);
         }
         if (option.isFullMVCSupport()) {
-            context.addPluginConfiguration(WebMVCSupportPlugin.class);
+            addPluginConfiguration(context, WebMVCSupportPlugin.class);
         }
     }
 
@@ -356,11 +358,12 @@ public class MyBatisCodeGenerator {
      * @param pluginClass 插件类
      * @return PluginConfiguration
      */
-    private void addPluginConfiguration(Context context, Class<? extends Plugin> pluginClass) {
-        final PluginConfiguration pluginConfiguration = new PluginConfiguration();
+    private PluginConfiguration addPluginConfiguration(Context context, Class<? extends Plugin> pluginClass) {
+        PluginConfiguration pluginConfiguration = new PluginConfiguration();
         pluginConfiguration.addProperty("type", pluginClass.getName());
         pluginConfiguration.setConfigurationType(pluginClass.getName());
         context.addPluginConfiguration(pluginConfiguration);
+        return pluginConfiguration;
     }
 
     public void setProgressCallback(ProgressCallback progressCallback) {

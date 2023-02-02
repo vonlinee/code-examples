@@ -108,7 +108,7 @@ public enum JDBCDriver {
         }
     }
 
-    public boolean nameEquals(String name) {
-        return this.name().equals(name);
+    public String getSubProtocol() {
+        return subProtocol;
     }
 }

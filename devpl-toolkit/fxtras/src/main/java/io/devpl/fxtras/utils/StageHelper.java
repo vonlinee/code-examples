@@ -10,10 +10,6 @@ import javafx.stage.Window;
 
 public class StageHelper {
 
-    public static void show(Parent rootNode) {
-        show(null, rootNode);
-    }
-
     public static void show(String title, Class<?> controllerClass) {
         show(title, ViewLoader.load(controllerClass).getRoot());
     }
@@ -29,7 +25,7 @@ public class StageHelper {
         Scene scene = rootNode.getScene();
         Stage stage;
         if (scene == null) {
-            stage = new Stage(StageStyle.DECORATED);
+            stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(rootNode));
             stage.setTitle(title);

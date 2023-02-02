@@ -4,6 +4,8 @@ import org.mybatis.generator.api.ShellCallback;
 import org.mybatis.generator.exception.ShellException;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +20,7 @@ import static org.mybatis.generator.internal.util.messages.Messages.getString;
  */
 public class InternalShellCallback implements ShellCallback {
 
-    private final Log log = LogFactory.getLog(InternalShellCallback.class);
+    protected Logger log = LoggerFactory.getLogger(InternalShellCallback.class);
 
     private final boolean overwrite;
 
@@ -39,18 +41,19 @@ public class InternalShellCallback implements ShellCallback {
 
         Path targetProjectPath = Path.of(targetProject).normalize();
 
-        if (!Files.isDirectory(targetProjectPath)) {
-            System.out.println("不是目录");
-            throw new ShellException(getString("Warning.9", targetProject)); //$NON-NLS-1$
-        }
-
         if (!Files.exists(targetProjectPath)) {
             try {
                 Files.createDirectories(targetProjectPath);
             } catch (IOException e) {
-                System.out.println("创建目录失败");
+                log.error("创建目录失败:{}", targetProjectPath, e);
                 throw new RuntimeException(e);
             }
+        }
+
+        // 如果目录实际不存在，那么Files.isDirectory返回false
+        if (!Files.isDirectory(targetProjectPath)) {
+            log.error("不是目录:{}", targetProjectPath);
+            throw new ShellException(getString("Warning.9", targetProject)); //$NON-NLS-1$
         }
 
         StringBuilder sb = new StringBuilder();

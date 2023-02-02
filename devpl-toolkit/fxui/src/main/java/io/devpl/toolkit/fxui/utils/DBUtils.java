@@ -119,7 +119,6 @@ public class DBUtils {
         try {
             Class<?> clazz = Class.forName(dbType.getDriverClassName(), true, classloader);
             Driver driver = (Driver) clazz.getConstructor().newInstance();
-            log.info("load driver class: {}", driver);
             drivers.putIfAbsent(dbType, driver);
         } catch (Exception e) {
             log.error("load driver error", e);

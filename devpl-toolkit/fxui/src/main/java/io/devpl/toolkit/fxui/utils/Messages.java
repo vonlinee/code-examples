@@ -18,8 +18,6 @@ public final class Messages {
 
     private static final Properties messages = new Properties();
 
-    private static final Log log = LogFactory.getLog(Messages.class);
-
     static {
         try (FileInputStream inputStream = new FileInputStream(ResourceUtils.getResourcesAsFile("message.properties", true));) {
             messages.load(inputStream);
@@ -31,7 +29,7 @@ public final class Messages {
     public static String getString(String id) {
         final Object text = messages.get(id);
         if (text == null) {
-            log.warn("消息ID不存在: {}", id);
+
         }
         return String.valueOf(text);
     }

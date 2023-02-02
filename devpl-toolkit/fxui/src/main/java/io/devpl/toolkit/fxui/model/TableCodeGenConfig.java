@@ -3,6 +3,7 @@ package io.devpl.toolkit.fxui.model;
 import java.util.List;
 
 import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
+import io.devpl.toolkit.fxui.utils.StringUtils;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
 
@@ -48,5 +49,17 @@ public class TableCodeGenConfig {
             uniqueKey = connectionName + "#" + databaseName + "#" + tableName;
         }
         return uniqueKey;
+    }
+
+    public String getMapperName() {
+        String tableNameCamel = StringUtils.underlineToCamel(tableName);
+        tableNameCamel = StringUtils.upperFirst(tableNameCamel);
+        return tableNameCamel + "Mapper";
+    }
+
+    public String getDomainObjectName() {
+        String tableNameCamel = StringUtils.underlineToCamel(tableName);
+        tableNameCamel = StringUtils.upperFirst(tableNameCamel);
+        return tableNameCamel;
     }
 }

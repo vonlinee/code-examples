@@ -6,6 +6,8 @@ import io.devpl.toolkit.fxui.common.Constants;
 import io.devpl.toolkit.fxui.common.JDBCDriver;
 import io.devpl.toolkit.fxui.event.FillDefaultValueEvent;
 import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -56,8 +58,9 @@ public class DbConnectionController extends FxmlView {
     }
 
     /**
-     * 初始化数据绑定
+     * 初始化连接配置数据绑定
      * @param configuration 事件
+     * @see ConnectionConfig
      */
     @Subscribe(name = "Event-FillConnectionInfo", threadMode = ThreadMode.BACKGROUND)
     public void initBinder(ConnectionConfig configuration) {
@@ -68,6 +71,8 @@ public class DbConnectionController extends FxmlView {
         configuration.setHost(hostField.getText());
         configuration.setDbName(schemaField.getValue());
         configuration.setEncoding(encodingChoice.getValue());
+        nameField.textProperty()
+                .addListener((observable, oldValue, newValue) -> configuration.setConnectionName(newValue));
         // 数据监听
         dbTypeChoice.valueProperty().addListener((observable, oldValue, newValue) -> configuration.setDbType(newValue));
         encodingChoice.valueProperty()

@@ -13,6 +13,8 @@ import io.devpl.toolkit.fxui.utils.SQL;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.logging.Log;
 import org.mybatis.generator.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -23,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class JSchUtils {
 
-    private static final Log log = LogFactory.getLog(JSchUtils.class);
+    static Logger log = LoggerFactory.getLogger(JSchUtils.class);
 
     private static final JSch jsch = new JSch();
 
@@ -59,7 +61,6 @@ public class JSchUtils {
         portForwaring = false;
         if (session != null && session.isConnected()) {
             session.disconnect();
-            log.info("portForwarding turn OFF");
         }
     }
 

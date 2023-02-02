@@ -7,10 +7,7 @@
 
     <top>
         <ToolBar>
-            <ChoiceBox prefHeight="23.0" prefWidth="480.0"/>
-            <Button mnemonicParsing="false" text="添加" onAction="#btnAddOne"/>
-            <Button mnemonicParsing="false" text="清空" onAction="#btnClearAll"/>
-            <Button mnemonicParsing="false" text="刷新" onAction="#btnRefresh"/>
+            <Button text="新建连接" onAction="#btnNewConnection"/>
         </ToolBar>
     </top>
 
@@ -18,6 +15,7 @@
         <!--数据源列表表格-->
         <TableView fx:id="tblvConnectionList" editable="true">
             <columns>
+                <TableColumn fx:id="tblcConnectionName" text="连接名称"/>
                 <TableColumn fx:id="tblcDbType" text="数据库类型"/>
                 <TableColumn fx:id="tblcProtocol" text="协议"/>
                 <TableColumn fx:id="tblcHostname" text="IP"/>

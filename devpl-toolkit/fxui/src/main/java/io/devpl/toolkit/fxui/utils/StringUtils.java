@@ -1,5 +1,6 @@
 package io.devpl.toolkit.fxui.utils;
 
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import org.apache.commons.lang3.ArrayUtils;
 
 import static org.apache.commons.lang3.StringUtils.isAnyBlank;
@@ -182,7 +183,7 @@ public final class StringUtils {
      * @return {@code true} if none of the CharSequences are empty or null or whitespace only
      * @since 3.2
      */
-    public static boolean isNoneBlank(final CharSequence... css) {
+    public static boolean isAllNotBlank(final CharSequence... css) {
         return !isAnyBlank(css);
     }
 
@@ -193,7 +194,7 @@ public final class StringUtils {
      */
     public static String underlineToCamel(String param) {
         if (isBlank(param)) {
-            return String.valueOf(param);
+            return StringPool.EMPTY;
         }
         String temp = param.toLowerCase();
         int len = temp.length();
@@ -209,5 +210,15 @@ public final class StringUtils {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * 首字母大写(进行字母的ascii编码前移，效率是最高的)
+     * @param fieldName 需要转化的字符串
+     */
+    public static String upperFirst(String fieldName) {
+        char[] chars = fieldName.toCharArray();
+        chars[0] = CharacterUtils.toUpperCase(chars[0]);
+        return String.valueOf(chars);
     }
 }

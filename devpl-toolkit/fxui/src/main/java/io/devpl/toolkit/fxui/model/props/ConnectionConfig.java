@@ -3,16 +3,20 @@ package io.devpl.toolkit.fxui.model.props;
 import io.devpl.toolkit.fxui.common.JDBCDriver;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
  * 数据库连接配置
  * 注意：连接配置不一定需要数据库，因此此处不存储数据库名称信息
  */
-@Data
+@Getter
+@Setter
 public class ConnectionConfig {
 
     private String id;
@@ -119,5 +123,13 @@ public class ConnectionConfig {
             this.driverInfo = JDBCDriver.valueOfDriverName(dbType);
         }
         return driverInfo;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ConnectionConfig) {
+            return Objects.equals(this.getConnectionName(), ((ConnectionConfig) obj).getConnectionName());
+        }
+        return false;
     }
 }

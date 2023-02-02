@@ -97,22 +97,22 @@ public class NewConnectionController extends FxmlView {
             Alerts.exception("连接失败", exception).show();
         }
     }
-    
+
     /**
      * 获取数据库连接信息
      * @param connection 数据库连接
      * @return
      */
     private String getConnectionInfo(Connection connection) {
-    	StringBuilder sb = new StringBuilder();
-    	try {
-			DatabaseMetaData metaData = connection.getMetaData();
-			sb.append("DatabaseProductName:").append(metaData.getDatabaseProductName());
-			sb.append("DriverName:").append(metaData.getDriverName());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            sb.append("DatabaseProductName:").append(metaData.getDatabaseProductName());
+            sb.append("DriverName:").append(metaData.getDriverName());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 
     /**
