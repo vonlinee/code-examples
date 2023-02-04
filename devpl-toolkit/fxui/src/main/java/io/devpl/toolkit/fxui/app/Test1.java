@@ -21,12 +21,11 @@ public class Test1 extends Application {
 
         BorderPane root = new BorderPane();
 
-        root.setStyle("-fx-background-color: #3ae7e7");
 
-        TextField textField1 = TextFields.createClearableTextField();
+        //TextField textField1 = TextFields.createClearableTextField();
 
         JFXTextField textField = new JFXTextField();
-        root.setCenter(textField1);
+        root.setCenter(textField);
         Scene scene = new Scene(root, 800, 400);
         primaryStage.setScene(scene);
         primaryStage.show();

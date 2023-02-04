@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 /**
  * 管理GeneratorConfig的Controller
  */
-@FxmlLocation(location = "static/fxml/generatorConfigs.fxml")
+@FxmlLocation(location = "static/fxml/generatorConfigs.fxml", title = "生成配置")
 public class GeneratorConfigController extends FxmlView {
 
     @FXML

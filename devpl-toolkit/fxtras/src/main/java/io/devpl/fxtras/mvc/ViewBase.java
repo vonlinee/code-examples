@@ -27,7 +27,11 @@ abstract class ViewBase implements View, EventTarget, SceneGraphAccessor {
                     .build();
 
     public ViewBase() {
-        GLOBAL_EVENT_BUS.register(this);
+        try {
+            GLOBAL_EVENT_BUS.register(this);
+        } catch (Exception exception) {
+            // ignore
+        }
     }
 
     /**

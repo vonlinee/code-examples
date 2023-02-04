@@ -42,7 +42,7 @@ import javafx.scene.layout.BorderPane;
 /**
  * 表定制化控制器: 配置单个表的代码生成效果
  */
-@FxmlLocation(location = "static/fxml/table_customization.fxml")
+@FxmlLocation(location = "static/fxml/table_customization.fxml", title = "表生成定制")
 public class TableCustomizationController extends FxmlView {
 
     @FXML

@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 /**
  * 新建数据库连接控制器
  */
-@FxmlLocation(location = "static/fxml/newConnection.fxml")
+@FxmlLocation(location = "static/fxml/newConnection.fxml", title = "新建数据库连接")
 public class NewConnectionController extends FxmlView {
 
     @FXML

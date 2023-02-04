@@ -31,11 +31,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * <a href="https://blog.csdn.net/m0_37989980/article/details/104521920">...</a>
  * MyBatisCodeGenerator
  */
 public class MyBatisCodeGenerator {
 
-    private static final Log log = LogFactory.getLog(MyBatisCodeGenerator.class);
     // 代码生成配置
     private GenericConfiguration generatorConfig;
     // 进度回调
@@ -44,6 +44,8 @@ public class MyBatisCodeGenerator {
     private List<IgnoredColumn> ignoredColumns;
     // 覆盖的列
     private List<ColumnOverride> columnOverrides;
+
+    private final PluginRegistry pluginRegistry = new PluginRegistry();
 
     public void setGeneratorConfig(GenericConfiguration generatorConfig) {
         this.generatorConfig = generatorConfig;
@@ -93,8 +95,12 @@ public class MyBatisCodeGenerator {
         // 文件编码
         context.addProperty("javaFileEncoding", StandardCharsets.UTF_8.name());
 
-        ConnectionConfig connectionConfig = ConnectionRegistry.getConnectionConfiguration(connectionName);
+        PluginConfiguration pluginRegistry = new PluginConfiguration();
+        pluginRegistry.setConfigurationType(PluginRegistry.class.getName());
+        pluginRegistry.addProperty("type", PluginRegistry.class.getName());
+        context.addPluginConfiguration(pluginRegistry);
 
+        ConnectionConfig connectionConfig = ConnectionRegistry.getConnectionConfiguration(connectionName);
         for (TableCodeGenConfig tableCodeGenConfig : tableConfigOfOneConnection) {
             TableConfiguration tableConfig = prepareTableConfiguration(context, tableCodeGenConfig, connectionConfig);
 
@@ -359,10 +365,12 @@ public class MyBatisCodeGenerator {
      * @return PluginConfiguration
      */
     private PluginConfiguration addPluginConfiguration(Context context, Class<? extends Plugin> pluginClass) {
-        PluginConfiguration pluginConfiguration = new PluginConfiguration();
-        pluginConfiguration.addProperty("type", pluginClass.getName());
-        pluginConfiguration.setConfigurationType(pluginClass.getName());
-        context.addPluginConfiguration(pluginConfiguration);
+        PluginConfiguration pluginConfiguration = null;
+        if (!pluginRegistry.contains(pluginClass)) {
+            pluginRegistry.registerPlugin(pluginClass);
+            pluginConfiguration = pluginRegistry.getPluginConfiguration(pluginClass);
+            context.addPluginConfiguration(pluginConfiguration);
+        }
         return pluginConfiguration;
     }
 

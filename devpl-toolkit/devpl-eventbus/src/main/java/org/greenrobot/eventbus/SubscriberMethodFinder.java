@@ -42,17 +42,14 @@ class SubscriberMethodFinder {
     private final boolean strictMethodVerification;
     private final boolean ignoreGeneratedIndex;
 
-    private final boolean allowEmptySubscriber;
-
     private static final int POOL_SIZE = 4;
     private static final FindState[] FIND_STATE_POOL = new FindState[POOL_SIZE];
 
     SubscriberMethodFinder(List<SubscriberInfoIndex> subscriberInfoIndexes, boolean strictMethodVerification,
-                           boolean ignoreGeneratedIndex, boolean allowEmptySubscriber) {
+                           boolean ignoreGeneratedIndex) {
         this.subscriberInfoIndexes = subscriberInfoIndexes;
         this.strictMethodVerification = strictMethodVerification;
         this.ignoreGeneratedIndex = ignoreGeneratedIndex;
-        this.allowEmptySubscriber = allowEmptySubscriber;
     }
 
     List<SubscriberMethod> findSubscriberMethods(Class<?> subscriberClass) {
@@ -68,15 +65,12 @@ class SubscriberMethodFinder {
             subscriberMethods = findUsingInfo(subscriberClass);
         }
         if (subscriberMethods.isEmpty()) {
-            if (!allowEmptySubscriber) {
-                throw new EventBusException("Subscriber " + subscriberClass
-                        + " and its super classes have no public methods with the @Subscribe annotation");
-            }
+            throw new EventBusException("Subscriber " + subscriberClass
+                    + " and its super classes have no public methods with the @Subscribe annotation");
         } else {
             METHOD_CACHE.put(subscriberClass, subscriberMethods);
             return subscriberMethods;
         }
-        return subscriberMethods;
     }
 
     private List<SubscriberMethod> findUsingInfo(Class<?> subscriberClass) {
@@ -288,5 +282,4 @@ class SubscriberMethodFinder {
             }
         }
     }
-
 }

@@ -83,8 +83,7 @@ public class MainFrameController extends FxmlView {
      * 存放的key:TableCodeGenConfig#getUniqueKey()
      * @see io.devpl.toolkit.fxui.model.TableCodeGenConfig#getUniqueKey()
      */
-    private final Map<String, TableCodeGenConfig> tableConfigsToBeGenerated
-            = new ConcurrentHashMap<>(10);
+    private final Map<String, TableCodeGenConfig> tableConfigsToBeGenerated = new ConcurrentHashMap<>(10);
 
     // 进度回调
     ProgressDialog alert = new ProgressDialog(Alert.AlertType.INFORMATION);
@@ -94,7 +93,7 @@ public class MainFrameController extends FxmlView {
         mbgGenerator.setProgressCallback(alert);
         bindCodeGenConfiguration(codeGenConfig);
         // 生成配置管理
-        configsLabel.setOnMouseClicked(event -> StageHelper.show("生成配置", GeneratorConfigController.class));
+        configsLabel.setOnMouseClicked(event -> StageHelper.show(GeneratorConfigController.class));
 
         tblcDbName.setCellValueFactory(new PropertyValueFactory<>("databaseName"));
         tblcDbName.setCellFactory(param -> {
@@ -121,10 +120,11 @@ public class MainFrameController extends FxmlView {
                 tableConfigsToBeGenerated.remove(item.getUniqueKey()); // 移除该表
             });
             customizeMenuItem.setOnAction(event -> {
+                // 表定制事件
                 TableCodeGenConfig item = param.getSelectionModel().getSelectedItem();
                 Parent root = ViewLoader.load(TableCustomizationController.class).getRoot();
                 Event.fireEvent(root, new CommandEvent(CommandEvent.COMMAND, item));
-                StageHelper.show("表生成定制", root);
+                StageHelper.show("", root);
                 event.consume();
             });
             ContextMenu menu = new ContextMenu(deleteThisRowMenuItem, customizeMenuItem);
@@ -216,12 +216,12 @@ public class MainFrameController extends FxmlView {
 
     @FXML
     public void showClassEditorDialogPane(MouseEvent mouseEvent) {
-        StageHelper.show("类编辑", ClassDefinitionController.class);
+        StageHelper.show(ClassDefinitionController.class);
     }
 
     @FXML
     public void showConnectinManagePane(MouseEvent mouseEvent) {
-        StageHelper.show("连接管理", ConnectionManageController.class);
+        StageHelper.show(ConnectionManageController.class);
     }
 
     /**

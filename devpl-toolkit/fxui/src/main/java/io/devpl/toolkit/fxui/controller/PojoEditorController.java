@@ -26,7 +26,7 @@ import javafx.scene.control.TextField;
 /**
  * 实体类编辑控制器
  */
-@FxmlLocation(location = "static/fxml/pojo_editor.fxml")
+@FxmlLocation(location = "static/fxml/pojo_editor.fxml", title = "实体类编辑")
 public class PojoEditorController extends FxmlView {
 
     @FXML
