@@ -1,0 +1,65 @@
+import java.text.SimpleDateFormat
+
+plugins {
+    id 'java'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'com.github.hierynomus.license' version '0.15.0'
+    id 'maven-publish'
+    id 'com.jfrog.bintray' version '1.8.4'
+}
+
+apply from: 'gradle/publishing.gradle'
+
+wrapper {
+    gradleVersion = '7.5.1'
+}
+
+sourceCompatibility = '11'
+targetCompatibility = '11'
+[compileJava, compileTestJava]*.options*.release = 11
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13', 'org.mockito:mockito-core:2.1.0'
+}
+
+jar {
+    manifest {
+        attributes('Automatic-Module-Name': 'eu.mihosoft.monacofx')
+    }
+
+    // // add velocity legacy to jar file
+    // from {
+    //     configurations.legacyVelocity.collect { it.isDirectory() ? it : zipTree(it) }
+    // }
+}
+
+javafx {
+    modules = ['javafx.controls', 'javafx.web']
+}
+
+license {
+    header = rootProject.file('config/HEADER')
+
+    strictCheck = true
+    ignoreFailures = false
+
+    mapping {
+        java = 'SLASHSTAR_STYLE'
+        groovy = 'SLASHSTAR_STYLE'
+        gradle = 'SLASHSTAR_STYLE'
+        fxml = 'XML_STYLE'
+        html = 'XML_STYLE'
+    }
+
+    ext.yearCurrent = new SimpleDateFormat("yyyy").format(new Date())
+    ext.years = ('2020'.equals(ext.yearCurrent) ? '' : '2020-') + ext.yearCurrent
+    ext.author1 = 'Michael Hoffer <info@michaelhoffer.de>'
+
+    includes(['**/*.java', '**/monaco-editor-*/index.html'])
+}

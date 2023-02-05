@@ -1,0 +1,21 @@
+// -----------------------------------------------------------------------------
+// publishing information
+// -----------------------------------------------------------------------------
+ext.publishingInfo.artifactId =  project.name.toLowerCase()
+ext.publishingInfo.groupId    =  'eu.mihosoft.monacofx'
+ext.publishingInfo.versionId  =  '0.0.8'
+
+ext.publishingInfo.developerName         = 'Michael Hoffer'
+ext.publishingInfo.developerAlias        = 'miho'
+ext.publishingInfo.developerEmail        = 'info@michaelhoffer.de'
+ext.publishingInfo.inceptionYear         = '2020'
+
+ext.publishingInfo.desc                  = 'Powerful editor node based on Monaco'
+ext.publishingInfo.license               = 'MIT'
+ext.publishingInfo.licenseUrl            = 'https://github.com/miho/MonacoFX/blob/master/LICENSE'
+ext.publishingInfo.labels                = ['editor', 'VRL', 'vscode', 'VRL-Studio', 'java', 'programming languages']
+ext.publishingInfo.websiteUrl            = 'https://github.com/miho/MonacoFX'
+ext.publishingInfo.issueTrackerUrl       = 'https://github.com/miho/MonacoFX/issues'
+ext.publishingInfo.vcsUrl                = 'https://github.com/miho/MonacoFX.git'
+
+ext.publishingInfo.pomName               =  ext.publishingInfo.artifactId

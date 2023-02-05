@@ -1,0 +1,142 @@
+plugins {
+    id 'java-library'
+    id 'application'
+    id 'maven-publish'
+    id 'com.jfrog.bintray' version '1.8.4'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+version 3.6
+group = 'net.christophermerrill'
+
+application {
+    mainClassName = 'net.christophermerrill.FancyFxTree.example.FancyTreeExample'
+}
+
+javafx {
+    version = "14.0.1"
+    modules = [ 'javafx.controls' ]
+}
+
+repositories
+    {
+    mavenLocal()
+    jcenter()
+    }
+
+dependencies
+    {
+    compile 'org.openjfx:javafx-controls:14.0.1'
+
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.5.1'
+    testCompile 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
+    testCompile 'net.christophermerrill:TestFxUtils:2.0'
+//    testCompile "org.testfx:openjfx-monocle:jdk-12.0.1+2" // For Java 12
+    }
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
+    }
+
+javadoc {
+    include 'net/christophermerrill/FancyFxTree/*'
+    options.addBooleanOption('html5', true)
+}
+
+task javadocJar(type: Jar) {
+    archiveClassifier.set('javadoc')
+    from javadoc
+    }
+
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+      tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+      }
+    }
+  }
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+    }
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+wrapper {
+    gradleVersion = '6.3'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            pom {
+                name = 'FancyFxTree' // pom.project.name must be same as bintray.pkg.name
+                description = 'An extension of JavaFX TreeView that makes it easy to implement a sophisticated tree with editing, drag-n-drop, dynamic updates without designing your data model around the TreeView expectations.'
+                url = 'https://github.com/ChrisLMerrill/FancyFxTree'
+                packaging = 'jar'
+                groupId = project.group
+                artifactId = 'FancyFxTree'
+                version = project.version
+                inceptionYear = '2017' // HARDCODED
+                licenses {
+                    license { // HARDCODED
+                        name = 'Apache-2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0'
+                        distribution = 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id = "ChrisLMerrill"
+                        name = "Chris Merrill"
+                        email = "osdev@christophermerrill.net"
+                    }
+                }
+                scm {
+                    connection = 'https://github.com/ChrisLMerrill/FancyFxTree.git'
+                    developerConnection = 'https://github.com/ChrisLMerrill'
+                    url = 'https://github.com/ChrisLMerrill/FancyFxTree'
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = BINTRAY_UPLOAD_USERNAME
+    key = BINTRAY_UPLOAD_APIKEY
+    publications = ['mavenJava']
+    pkg {
+        repo = 'maven'
+        name = 'FancyFxTree'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/ChrisLMerrill/FancyFxTree.git'
+        version {
+            name = project.version
+            released  = new Date()
+            gpg {
+                sign = true
+                passphrase = GPG_JARSIGN_PASSPHRASE
+            }
+            mavenCentralSync {
+                sync = true //[Default: true] Determines whether to sync the version to Maven Central.
+                user = MAVENCENTRAL_USERNAME
+                password = MAVENCENTRAL_PASSWORD
+                close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+            }
+        }
+    }
+
+}
