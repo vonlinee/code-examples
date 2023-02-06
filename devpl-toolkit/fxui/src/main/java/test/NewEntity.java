@@ -1,5 +1,7 @@
 package test;
 
+import com.sun.javafx.sg.prism.NGNode;
+import com.sun.javafx.sg.prism.NGText;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +20,7 @@ public class NewEntity {
     private String age;
 
     public Long getId() {
+        NGNode node = new NGText();
         return id;
     }
 
