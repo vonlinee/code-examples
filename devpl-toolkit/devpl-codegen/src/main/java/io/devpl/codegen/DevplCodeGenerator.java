@@ -4,9 +4,10 @@ import io.devpl.codegen.mbpg.FastAutoGenerator;
 import io.devpl.codegen.mbpg.config.OutputFile;
 import io.devpl.codegen.mbpg.config.rules.DateType;
 import io.devpl.codegen.mbpg.template.FreemarkerTemplateEngine;
-import io.devpl.sdk.util.PropertiesUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,10 +21,7 @@ import java.util.Properties;
  */
 public class DevplCodeGenerator {
 
-    // 配置从本地文件加载
-    private static final String JDBC_CONFIG_FILE = "D:/Temp/devpl-jdbc.properties";
-
-    private static final String author = "lg-wangliang";
+    private static final String author = "Author";
     private static final String outputRootDir = "D:\\Temp";
     // 父包配置
     private static final String parentPackage = "";
@@ -32,15 +30,24 @@ public class DevplCodeGenerator {
 
     // 在此处填写要生成的表名
     private static void tableNamesToBeGenerated() {
-        tableNamesToBeGenerated.add("campus_milestone");
+        tableNamesToBeGenerated.add("sys_post");
     }
 
     public static void main(String[] args) throws IOException {
         tableNamesToBeGenerated();
-        final Properties properties = PropertiesUtils.loadProperties(JDBC_CONFIG_FILE);
-        final String url = properties.getProperty("url");
-        final String username = properties.getProperty("username");
-        final String password = properties.getProperty("password");
+        URL resource = Thread.currentThread().getContextClassLoader().getResource("jdbc.properties");
+        if (resource == null) {
+            return;
+        }
+        Properties properties = new Properties();
+        try (InputStream inputStream = resource.openStream()) {
+            properties.load(inputStream);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        final String url = properties.getProperty("jdbc.url");
+        final String username = properties.getProperty("jdbc.username");
+        final String password = properties.getProperty("jdbc.password");
         FastAutoGenerator.create(url, username, password).globalConfig(builder -> {
                     builder.author(author) // 设置作者名 baomidou 默认值:作者
                             .fileOverride()

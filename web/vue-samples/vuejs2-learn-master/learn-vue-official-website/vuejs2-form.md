@@ -1,5 +1,3 @@
-
-
 # 1. v-model 特性
 
 v-model 并不关心表单控件初始化所生成的值。因为它会选择 Vue 实例数据来作为具体的值。
@@ -8,8 +6,8 @@ v-model 本质上不过是语法糖，它负责监听用户的输入事件以更
 
 严格模式下的Vuex，在属于 Vuex 的 state （状态）上使用 v-model时会比较棘手(就是 vuex 不爱 v-model)
 
-
 # 2. 文本 textbox
+
 ### VUEX
 
 ```js
@@ -51,6 +49,7 @@ v-model 本质上不过是语法糖，它负责监听用户的输入事件以更
 ```
 
 #### 修饰符 .lazy
+
 - 在默认情况下， v-model 在 input 事件中同步输入框的值与数据
 - 但你可以添加一个修饰符 lazy ，从而转变为在 change 事件中同步：
 
@@ -60,9 +59,10 @@ v-model 本质上不过是语法糖，它负责监听用户的输入事件以更
 ```
 
 #### 修饰符 .number
--    如果想自动将用户的输入值转为 Number 类型
--    （如果原值的转换结果为 NaN 则返回原值）
--    可以添加一个修饰符 number 给 v-model 来处理输入值：
+
+- 如果想自动将用户的输入值转为 Number 类型
+- （如果原值的转换结果为 NaN 则返回原值）
+- 可以添加一个修饰符 number 给 v-model 来处理输入值：
 
 ```js
     <input v-model.number="age" type="number">
@@ -78,10 +78,9 @@ v-model 本质上不过是语法糖，它负责监听用户的输入事件以更
     <input v-model.trim="msg">
 ```
 
-
 # 3. 多行文本 textarea
 
-    在文本区域插值( <textarea></textarea> ) 并不会生效，应用 v-model 来代替
+    在文本区域插值(`<textarea></textarea>` ) 并不会生效，应用 v-model 来代替
 
 ```js
     <span>Multiline message is:</span>
@@ -89,7 +88,6 @@ v-model 本质上不过是语法糖，它负责监听用户的输入事件以更
     <br>
     <textarea v-model="dom" placeholder="add multiple lines"></textarea>
 ```
-
 
 # 4. 单勾框 checkbox
 
@@ -109,8 +107,8 @@ v-model 本质上不过是语法糖，它负责监听用户的输入事件以更
     <input type="checkbox" v-model="toggle">
 ```
 
-
 # 5. 多勾框 checkbox
+
 ### data，要有 数组 []
 
 ```js
@@ -152,7 +150,6 @@ v-model 本质上不过是语法糖，它负责监听用户的输入事件以更
 
 ```
 
-
 # 6. 单选框 radio
 
 ```js
@@ -165,19 +162,14 @@ v-model 本质上不过是语法糖，它负责监听用户的输入事件以更
     <span>dom: {{ dom }}</span>
 ```
 
-
 特别：
 
 对于单选按钮，勾选框及选择列表选项
 
 - v-model 绑定的 value 通常是静态字符串（对于勾选框是逻辑值）：
-
 - 但是有时我们想绑定 value 到 Vue 实例的一个动态属性上
-
 - 这时可以用 v-bind 实现
-
 - v-bind:value="vue data value"
-
 - 并且这个属性的值可以不是字符串。
 
 ```
@@ -201,13 +193,10 @@ v-model 本质上不过是语法糖，它负责监听用户的输入事件以更
 
 特别：
 
-
 但是有时我们想绑定 value 到 Vue 实例的一个动态属性上
 
 - 这时可以用 v-bind 实现
-
 - v-bind:value="vue data value"
-
 - 并且这个属性的值可以不是字符串。
 
 ```js
@@ -217,7 +206,8 @@ v-model 本质上不过是语法糖，它负责监听用户的输入事件以更
     </select>
 ```
 
----------------------------
+---
+
 ```
     <select v-model="selected">
         <!-- 内联对象字面量 -->
@@ -228,9 +218,8 @@ v-model 本质上不过是语法糖，它负责监听用户的输入事件以更
     vm.selected.number // -> 123
 ```
 
-
-
 # 8. 多选列表 select
+
 ### data （绑定到一个数组）
 
 ```js
@@ -260,9 +249,10 @@ new Vue({
 # 9. 日期 plugins / vue-flatpickr
 
 ### https://github.com/jrainlau/vue-flatpickr
+
     npm install vue-flatpickr
 
-### .vue script    
+### .vue script
 
 ```js
     <script>
@@ -296,11 +286,12 @@ new Vue({
         <div class="row">
             <span>日期：</span>
             <Flatpickr  :flatpickr_message='flatpickr_message' :flatpickr_options='flatpickr_options' />
-        </div>    
+        </div>  
     </template>
 ```
 
 ### Data binding
+
 
 ```js
     The <Flatpickr /> tag could be use as a normal <input> tag
@@ -320,4 +311,4 @@ new Vue({
           this.msg = val
         }
       }
-```      
+```

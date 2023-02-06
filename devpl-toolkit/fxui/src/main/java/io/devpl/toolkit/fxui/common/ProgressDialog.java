@@ -2,11 +2,7 @@ package io.devpl.toolkit.fxui.common;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.TextArea;
 import org.mybatis.generator.api.ProgressCallback;
 
 /**

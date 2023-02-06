@@ -19,7 +19,11 @@ public class MainUI extends JavaFXApplication {
 
     @Override
     protected void onInit() throws Exception {
-        ConnectionRegistry.getRegisteredConnectionConfigMap();
+        try {
+            ConnectionRegistry.getRegisteredConnectionConfigMap();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
     @Override
