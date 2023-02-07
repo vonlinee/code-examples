@@ -6,21 +6,18 @@ import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.util.*;
 
-/**
- * Description：
- * @Author： leo.xiong
- * @CreateDate： 2020/11/12 10:51
- * @Email： leo.xiong@suyun360.com
- * @Since：
- */
 public class Utils {
 
     /**
      * 普通对象JSON初始化
-     * @param obj
-     * @return
+     *
+     * @param obj 对象
+     * @return 填充对象值
      */
-    private static Object initPropertyDefaultValue(Object obj) {
+    private static Object fillDefaultValue(Object obj) {
+        if (obj == null) {
+            return null;
+        }
         Field[] fields = obj.getClass().getDeclaredFields();
         Method[] methods = obj.getClass().getDeclaredMethods();
         Map<String, Method> methodNameMethodMap = new HashMap<>(methods.length);
@@ -77,12 +74,12 @@ public class Utils {
                     if (objValue == null) {
                         continue;
                     }
-                    Object childObj = initPropertyDefaultValue(objValue);
+                    Object childObj = fillDefaultValue(objValue);
                     assert collection != null;
                     collection.add(childObj);
                     method.invoke(obj, collection);
                 } else {
-                    method.invoke(obj, initPropertyDefaultValue(ClassUtils.instantiate(clazz)));
+                    method.invoke(obj, fillDefaultValue(ClassUtils.instantiate(clazz)));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -93,6 +90,7 @@ public class Utils {
 
     /**
      * 调用默认方法创建对象实例
+     *
      * @param clazz Class对象
      * @return 创建的对象实例
      */
@@ -117,6 +115,7 @@ public class Utils {
 
     /**
      * 判断是否是基础数据类型的包装类型
+     *
      * @param clz
      * @return
      */

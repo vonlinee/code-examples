@@ -24,6 +24,7 @@ import java.util.function.Function;
 
 /**
  * 模板引擎抽象类
+ *
  * @author hubin
  * @since 2018-01-10
  */
@@ -44,6 +45,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出自定义模板文件
+     *
      * @param customFiles 自定义模板文件列表
      * @param tableInfo   表信息
      * @param objectMap   渲染数据
@@ -65,6 +67,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出实体文件
+     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -93,6 +96,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出Mapper文件(含xml)
+     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -122,6 +126,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出service文件
+     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -155,6 +160,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出controller文件
+     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -175,6 +181,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出文件
+     *
      * @param file         文件
      * @param objectMap    渲染信息
      * @param templatePath 模板路径
@@ -199,6 +206,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 获取模板路径
+     *
      * @param function function
      * @return 模板路径
      * @since 3.5.0
@@ -215,6 +223,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 获取路径信息
+     *
      * @param outputFile 输出文件
      * @return 路径信息
      */
@@ -259,6 +268,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 将模板转化成为文件
+     *
      * @param objectMap    渲染对象 MAP 信息
      * @param templatePath 模板文件
      * @param outputFile   文件生成的目录
@@ -289,6 +299,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 渲染对象 MAP 信息
+     *
      * @param config    配置信息
      * @param tableInfo 表信息对象
      * @return ignore
@@ -302,10 +313,14 @@ public abstract class AbstractTemplateEngine {
         objectMap.putAll(mapperData);
         Map<String, Object> serviceData = strategyConfig.service().renderData(tableInfo);
         objectMap.putAll(serviceData);
+
+        // 实体类
         Map<String, Object> entityData = strategyConfig.entity().renderData(tableInfo);
         objectMap.putAll(entityData);
         objectMap.put("config", config);
+        // 包配置信息
         objectMap.put("package", config.getPackageConfig().getPackageInfo());
+
         GlobalConfig globalConfig = config.getGlobalConfig();
         objectMap.put("author", globalConfig.getAuthor());
         objectMap.put("kotlin", globalConfig.isKotlin());
@@ -330,6 +345,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 模板真实文件路径
+     *
      * @param filePath 文件路径
      * @return ignore
      */
@@ -338,6 +354,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 检查文件是否创建文件
+     *
      * @param file         文件
      * @param fileOverride 是否覆盖已有文件
      * @return 是否创建文件
