@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * @author Christopher L Merrill (see LICENSE.txt for license details)
  */
-public abstract class FancyTreeOperationHandler<T extends TreeItemObject> {
+public abstract class FancyTreeOperationHandler<T extends TreeModel> {
     public void selectionChanged(ObservableList<TreeItem<T>> selected_items) {
     }
 

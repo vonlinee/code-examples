@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<svg viewBox="0 0 1100 400" version="1.1" xmlns="http://www.w3.org/2000/svg">
+   <desc>
+      Filter example
+   </desc>
+   <g stroke="tomato" fill = "olive">
+      <rect x="10%" y = "10%" width = "40%" height = "40%"/>
+      <rect x="55%" y = "10%" width = "40%" height = "40%"/>
+      <rect x="10%" y = "55%" width = "40%" height = "40%"/>
+      <rect x="55%" y = "55%" width = "40%" height = "40%"/>
+   </g>
+</svg>

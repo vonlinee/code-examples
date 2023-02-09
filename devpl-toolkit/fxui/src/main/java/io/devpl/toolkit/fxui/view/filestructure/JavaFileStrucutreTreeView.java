@@ -15,7 +15,7 @@ public class JavaFileStrucutreTreeView extends TreeView<String> {
         setCellFactory(new JavaElementTreeCellFactory());
     }
 
-    public final void addClass(ClassItem classItem) {
+    public final void addClass(TopLevelClassItem classItem) {
         getRoot().getChildren().add(classItem);
     }
 }

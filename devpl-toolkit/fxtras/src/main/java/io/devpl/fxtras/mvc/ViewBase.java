@@ -9,11 +9,12 @@ import javafx.event.EventDispatcher;
 import javafx.event.EventTarget;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.PostEvent;
-import org.mybatis.generator.logging.Log;
-import org.mybatis.generator.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * View 基类
+ */
 abstract class ViewBase implements View, EventTarget, SceneGraphAccessor {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
@@ -36,6 +37,7 @@ abstract class ViewBase implements View, EventTarget, SceneGraphAccessor {
 
     /**
      * 发布事件
+     *
      * @param event 事件类型对象
      */
     public final void publish(Object event) {
@@ -48,6 +50,7 @@ abstract class ViewBase implements View, EventTarget, SceneGraphAccessor {
 
     /**
      * 发布事件
+     *
      * @param eventName 事件名称
      * @param event     事件类型对象
      */
@@ -61,8 +64,9 @@ abstract class ViewBase implements View, EventTarget, SceneGraphAccessor {
 
     /**
      * TODO 将EventHandler和EventBus进行结合
+     *
      * @param tail the initial chain to build from
-     * @return
+     * @return EventDispatchChain
      */
     @Override
     public EventDispatchChain buildEventDispatchChain(EventDispatchChain tail) {

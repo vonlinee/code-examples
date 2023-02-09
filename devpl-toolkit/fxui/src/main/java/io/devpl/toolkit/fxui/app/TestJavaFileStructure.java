@@ -1,17 +1,12 @@
 package io.devpl.toolkit.fxui.app;
 
-import io.devpl.toolkit.fxui.utils.ResourceLoader;
-import io.devpl.toolkit.fxui.view.filestructure.ClassItem;
-import io.devpl.toolkit.fxui.view.filestructure.FieldItem;
-import io.devpl.toolkit.fxui.view.filestructure.JavaFileStrucutreTreeView;
-import io.devpl.toolkit.fxui.view.filestructure.MethodItem;
+import io.devpl.toolkit.fxui.view.filestructure.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import org.girod.javafx.svgimage.SVGLoader;
 
 import java.net.MalformedURLException;
 
@@ -23,16 +18,17 @@ public class TestJavaFileStructure extends Application {
 
     @Override
     public void start(Stage primaryStage) throws MalformedURLException {
-
         BorderPane root = new BorderPane();
         JavaFileStrucutreTreeView jfsTreeView = new JavaFileStrucutreTreeView();
-        Button btnAdd = new Button("add");
+        Button btnAdd = new Button("导入");
+        Button btn1 = new Button("B1");
 
-        btnAdd.setGraphic(SVGLoader.load(ResourceLoader.load("static/icon/field.svg")));
 
-        ToolBar toolBar = new ToolBar(btnAdd);
+
+        ToolBar toolBar = new ToolBar(btnAdd, btn1);
         btnAdd.setOnAction(event -> {
-            ClassItem classItem = new ClassItem();
+
+            TopLevelClassItem classItem = new TopLevelClassItem();
             classItem.setValue("Student");
 
             MethodItem methodItem = new MethodItem();

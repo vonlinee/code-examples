@@ -1,45 +1,39 @@
 package io.devpl.toolkit.fxui.view.filestructure;
 
-import io.devpl.toolkit.fxui.utils.ResourceLoader;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.HBox;
 import org.girod.javafx.svgimage.SVGImage;
-import org.girod.javafx.svgimage.SVGLoader;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class JavaElementItem extends TreeItem<String> {
 
-    private static final Map<JavaVisibility, SVGImage> visibilitySVGImageMap = new HashMap<>();
-
-    static {
-        visibilitySVGImageMap.put(JavaVisibility.PUBLIC, SVGLoader.load(ResourceLoader.load("static/icon/c_public.svg")));
-        visibilitySVGImageMap.put(JavaVisibility.PRIVATE, SVGLoader.load(ResourceLoader.load("static/icon/c_private.svg")));
-        visibilitySVGImageMap.put(JavaVisibility.PROTECTED, SVGLoader.load(ResourceLoader.load("static/icon/c_protected.svg")));
-        visibilitySVGImageMap.put(JavaVisibility.PACKAGE_VISIABLE, SVGLoader.load(ResourceLoader.load("static/icon/c_plocal.svg")));
-    }
-
     /**
-     * 可见性
+     * 可见性：默认私有
      */
-    private final ObjectProperty<JavaVisibility> visibility = new SimpleObjectProperty<>();
+    private final ObjectProperty<JavaVisibility> visibility = new SimpleObjectProperty<>(JavaVisibility.PRIVATE);
 
     JavaElementItem(SVGImage typeIcon) {
         HBox graphicContainer = new HBox();
         graphicContainer.setSpacing(4.0);
         graphicContainer.setAlignment(Pos.CENTER);
-        graphicContainer.getChildren().addAll(typeIcon, visibilitySVGImageMap.get(JavaVisibility.PUBLIC));
-        setGraphic(graphicContainer);
+        graphicContainer.getChildren().addAll(typeIcon, visibility.get().getIconNode());
+        this.setGraphic(graphicContainer);
+
+        // 更换可见性对应的图标
         visibility.addListener(new ChangeListener<JavaVisibility>() {
             @Override
             public void changed(ObservableValue<? extends JavaVisibility> observable, JavaVisibility oldValue, JavaVisibility newValue) {
-
+                ObservableList<Node> children = graphicContainer.getChildren();
+                // 更换图标
+                if (children.size() == 2) {
+                    children.set(1, newValue.getIconNode());
+                }
             }
         });
     }

@@ -11,9 +11,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import treeview.FancyTreeView;
-
-import java.net.URL;
+import treeview.FXTreeView;
 
 /**
  * @author Christopher L Merrill (see LICENSE.txt for license details)
@@ -39,7 +37,7 @@ public class FancyTreeExample extends Application {
         root.setTop(button_bar);
 
         _model_root = ExampleDataNodeBuilder.create(new int[]{4, 1, 3, 2});
-        _tree = new FancyTreeView(new ExampleOperationHandler(_model_root) {
+        _tree = new FXTreeView(new ExampleOperationHandler(_model_root) {
             @Override
             public void selectionChanged(ObservableList<TreeItem<ExampleTreeNodeFacade>> selected_items) {
                 super.selectionChanged(selected_items);
@@ -143,7 +141,7 @@ public class FancyTreeExample extends Application {
 
     private ExampleDataNode _model_root;
     private Button _add_node_button;
-    private FancyTreeView<ExampleTreeNodeFacade> _tree;
+    private FXTreeView<ExampleTreeNodeFacade> _tree;
     private Label _status;
 
     private final static String STYLE1 = "customstyle1";

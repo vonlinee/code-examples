@@ -17,32 +17,28 @@ import java.util.Map;
 /**
  * @author Christopher L Merrill (see LICENSE.txt for license details)
  */
-public class FancyTreeCell extends TreeCell<TreeItemObject> {
+public class FancyTreeCell extends TreeCell<TreeModel> {
     FancyTreeCell(FancyTreeOperationHandler handler, boolean enable_dnd) {
         addStyle(CELL_STYLE_NAME);
         _handler = handler;
 
-        if (enable_dnd)
-            setupDragAndDrop();
+        if (enable_dnd) setupDragAndDrop();
     }
 
     private void setupDragAndDrop() {
-        setOnDragEntered(e ->
-        {
+        setOnDragEntered(e -> {
             resetCursorPosition();
             e.consume();
         });
 
         setOnDragDone(Event::consume);
 
-        setOnDragDetected(e ->
-        {
-            FancyTreeView tree = (FancyTreeView) getTreeView();
+        setOnDragDetected(e -> {
+            FXTreeView tree = (FXTreeView) getTreeView();
 
             FancyTreeOperationHandler.StartDragInfo result = _handler.startDrag(tree.getSelectionPaths(), tree.getSelectionModel()
                     .getSelectedItems());
-            if (result == null)
-                return;
+            if (result == null) return;
 
             ClipboardContent content = new ClipboardContent();
             Map<DataFormat, Object> content_map = result._content;
@@ -55,15 +51,13 @@ public class FancyTreeCell extends TreeCell<TreeItemObject> {
             e.consume();
         });
 
-        setOnDragDropped(e ->
-        {
+        setOnDragDropped(e -> {
             boolean completed = _handler.finishDrag(e.getTransferMode(), e.getDragboard(), getItem(), _drop_location);
             e.setDropCompleted(completed);
             e.consume();
         });
 
-        setOnDragOver(e ->
-        {
+        setOnDragOver(e -> {
             removeStyle(DROP_BEFORE_STYLE_NAME);
             removeStyle(DROP_ON_STYLE_NAME);
             removeStyle(DROP_AFTER_STYLE_NAME);
@@ -88,8 +82,7 @@ public class FancyTreeCell extends TreeCell<TreeItemObject> {
             e.consume();
         });
 
-        setOnDragExited(event ->
-        {
+        setOnDragExited(event -> {
             removeStyle(DROP_BEFORE_STYLE_NAME);
             removeStyle(DROP_ON_STYLE_NAME);
             removeStyle(DROP_AFTER_STYLE_NAME);
@@ -98,21 +91,19 @@ public class FancyTreeCell extends TreeCell<TreeItemObject> {
     }
 
     @Override
-    protected void updateItem(TreeItemObject item, boolean empty) {
+    protected void updateItem(TreeModel item, boolean empty) {
         super.updateItem(item, empty);
         if (empty) {
             setText(null);
             setGraphic(null);
             clearStyles();
         } else {
-            if (isEditing())
-                cancelEdit();
-            else
-                updateCellUI(item);
+            if (isEditing()) cancelEdit();
+            else updateCellUI(item);
         }
     }
 
-    private void updateCellUI(TreeItemObject item) {
+    private void updateCellUI(TreeModel item) {
         if (item == null) {
             setText(null);
             setGraphic(null);
@@ -130,21 +121,17 @@ public class FancyTreeCell extends TreeCell<TreeItemObject> {
         pseudoClassStateChanged(EDITING_CLASS, isEditing());
     }
 
-    private void updateStyles(TreeItemObject item) {
+    private void updateStyles(TreeModel item) {
         final ObservableList<String> applied_styles = getStyleClass();
         final List<String> on_demand_styles = new ArrayList(item.getStyles());
         final List<String> styles_to_remove = new ArrayList();
         for (String style : applied_styles) {
-            if (!DEFAULT_STYLES.contains(style)
-                    && !DRAG_STYLES.contains(style)) {
-                if (!on_demand_styles.remove(style))
-                    styles_to_remove.add(style);
+            if (!DEFAULT_STYLES.contains(style) && !DRAG_STYLES.contains(style)) {
+                if (!on_demand_styles.remove(style)) styles_to_remove.add(style);
             }
         }
-        if (styles_to_remove.size() > 0)
-            applied_styles.removeAll(styles_to_remove);
-        if (on_demand_styles.size() > 0)
-            applied_styles.addAll(on_demand_styles);
+        if (styles_to_remove.size() > 0) applied_styles.removeAll(styles_to_remove);
+        if (on_demand_styles.size() > 0) applied_styles.addAll(on_demand_styles);
     }
 
     private void clearStyles() {
@@ -156,8 +143,7 @@ public class FancyTreeCell extends TreeCell<TreeItemObject> {
     }
 
     private void addStyle(String new_style) {
-        if (!getStyleClass().contains(new_style))
-            getStyleClass().add(new_style);
+        if (!getStyleClass().contains(new_style)) getStyleClass().add(new_style);
     }
 
     private void removeStyle(String remove_style) {
@@ -166,8 +152,7 @@ public class FancyTreeCell extends TreeCell<TreeItemObject> {
 
     // for hover-to-expand feature
     private void updateCursorPositionAndHoverTime(DragEvent e) {
-        if (e.getSceneX() == _cursor_x && e.getSceneY() == _cursor_y)
-            return;
+        if (e.getSceneX() == _cursor_x && e.getSceneY() == _cursor_y) return;
 
         _cursor_x = (int) e.getSceneX();
         _cursor_y = (int) e.getSceneY();
@@ -188,12 +173,10 @@ public class FancyTreeCell extends TreeCell<TreeItemObject> {
 
     @Override
     public void startEdit() {
-        if (!isEditable() || !getTreeView().isEditable())
-            return;
+        if (!isEditable() || !getTreeView().isEditable()) return;
 
-        TreeItem<TreeItemObject> item = getTreeItem();
-        if (item == null)
-            return;
+        TreeItem<TreeModel> item = getTreeItem();
+        if (item == null) return;
 
         final FancyTreeCellEditor editor = getCellEditor();
         editor.getNode().requestFocus();
@@ -215,12 +198,11 @@ public class FancyTreeCell extends TreeCell<TreeItemObject> {
         }
         super.cancelEdit();
         updateCellUI(getItem());
-        if (getItem() != null)
-            getItem().editFinished();
+        if (getItem() != null) getItem().editFinished();
     }
 
     @Override
-    public void commitEdit(TreeItemObject facade) {
+    public void commitEdit(TreeModel facade) {
         super.commitEdit(facade);
         updateCellUI(getItem());
         facade.editFinished();
@@ -230,8 +212,7 @@ public class FancyTreeCell extends TreeCell<TreeItemObject> {
     private FancyTreeCellEditor getCellEditor() {
         if (_editor == null) {
             _editor = getItem().getCustomEditorUI();
-            if (_editor == null)
-                _editor = new TextCellEditor();
+            if (_editor == null) _editor = new TextCellEditor();
             _editor.setCell(this);
         }
         return _editor;
@@ -249,7 +230,7 @@ public class FancyTreeCell extends TreeCell<TreeItemObject> {
     private int _cursor_x;
     private int _cursor_y;
     private long _cursor_hover_since;
-    private long _hover_expand_duration = FancyTreeView.DEFAULT_HOVER_EXPAND_DURATION;
+    private long _hover_expand_duration = FXTreeView.DEFAULT_HOVER_EXPAND_DURATION;
     private FancyTreeCellEditor _editor;
 
     //
@@ -310,20 +291,14 @@ public class FancyTreeCell extends TreeCell<TreeItemObject> {
             if (_info._drop_locations.contains(FancyTreeOperationHandler.DropLocation.AFTER))
                 _allowed_locations.add(FancyTreeOperationHandler.DropLocation.AFTER);
 
-            if (_allowed_locations.size() == 1)
-                _drop_location = _allowed_locations.get(0);
+            if (_allowed_locations.size() == 1) _drop_location = _allowed_locations.get(0);
             else if (_allowed_locations.size() == 2) {
-                if (_mouse_y < (_cell_height * 0.5d))
-                    _drop_location = _allowed_locations.get(0);
-                else
-                    _drop_location = _allowed_locations.get(1);
+                if (_mouse_y < (_cell_height * 0.5d)) _drop_location = _allowed_locations.get(0);
+                else _drop_location = _allowed_locations.get(1);
             } else if (_allowed_locations.size() == 3) {
-                if (_mouse_y < (_cell_height * 0.25d))
-                    _drop_location = _allowed_locations.get(0);
-                else if (_mouse_y > (_cell_height * 0.75d))
-                    _drop_location = _allowed_locations.get(2);
-                else
-                    _drop_location = _allowed_locations.get(1);
+                if (_mouse_y < (_cell_height * 0.25d)) _drop_location = _allowed_locations.get(0);
+                else if (_mouse_y > (_cell_height * 0.75d)) _drop_location = _allowed_locations.get(2);
+                else _drop_location = _allowed_locations.get(1);
             }
         }
 

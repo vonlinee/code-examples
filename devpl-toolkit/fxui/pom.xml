@@ -11,12 +11,11 @@
     <artifactId>fxui</artifactId>
 
     <properties>
-        <javafx.version>17.0.2</javafx.version>
+        <javafx.version>11.0.2</javafx.version>
     </properties>
 
     <dependencies>
 
-        <!-- Java 11请关闭下面注释 -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -32,7 +31,6 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>mysql</groupId>
@@ -323,15 +321,33 @@
             <version>0.4.0</version>
         </dependency>
 
-
-        <!-- https://mvnrepository.com/artifact/com.github.hervegirod/fxsvgimage -->
         <dependency>
             <groupId>com.github.hervegirod</groupId>
             <artifactId>fxsvgimage</artifactId>
-            <version>0.6.1</version>
+            <version>1.1</version>
         </dependency>
-
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>nexus-aliyun</id>
+            <!-- mirrorOf 标签如果设置为 *，就说明整个工程只能使用settings.xml中配置的地址，项目自身配置的仓库无效 -->
+            <!-- <mirrorOf>*</mirrorOf> -->
+            <name>Nexus aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>aliyunmaven</id>
+            <name>阿里云公共仓库</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </repository>
+        <!--此仓库仅用于引入com.github.hervegirod:fxsvgimage:1.1依赖-->
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <build>
         <!--资源打包配置-->
         <resources>
@@ -365,16 +381,5 @@
                 <filtering>false</filtering>
             </resource>
         </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 </project>

@@ -9,7 +9,7 @@ import javafx.scene.control.TreeItem;
  */
 public class FancyTreeItemFacade {
     @SuppressWarnings("WeakerAccess")  // part of the public API
-    public FancyTreeItemFacade(TreeItem<TreeItemObject> item) {
+    public FancyTreeItemFacade(TreeItem<TreeModel> item) {
         _item = item;
     }
 
@@ -20,15 +20,15 @@ public class FancyTreeItemFacade {
         _item.setValue(_item.getValue().copyAndDestroy());
     }
 
-    public void addChild(TreeItemObject child, int index) {
+    public void addChild(TreeModel child, int index) {
         FancyTreeItemBuilder.addChild(_item, child, index);
     }
 
-    public void removeChild(int index, TreeItemObject child) {
+    public void removeChild(int index, TreeModel child) {
         try {
-            TreeItemObject node = _item.getChildren().get(index).getValue();
+            TreeModel node = _item.getChildren().get(index).getValue();
             if (child == null || node.getModelNode().equals(child.getModelNode())) {
-                TreeItem<TreeItemObject> remove_item = _item.getChildren().remove(index);
+                TreeItem<TreeModel> remove_item = _item.getChildren().remove(index);
                 remove_item.getValue().destroy();
             } else
                 throw new IllegalArgumentException(String.format("The indexed sub-item (%d) didn't match the node selected for removal: %s", index, child.getModelNode()
@@ -42,6 +42,6 @@ public class FancyTreeItemFacade {
         }
     }
 
-    private final TreeItem<TreeItemObject> _item;
+    private final TreeItem<TreeModel> _item;
 }
 

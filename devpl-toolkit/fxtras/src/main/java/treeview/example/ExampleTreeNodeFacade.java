@@ -3,7 +3,7 @@ package treeview.example;
 import javafx.scene.Node;
 import treeview.FancyTreeCellEditor;
 import treeview.FancyTreeItemFacade;
-import treeview.TreeItemObject;
+import treeview.TreeModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,21 +15,21 @@ import java.util.stream.Collectors;
  * and render your data in the tree.
  * @author Christopher L Merrill (see LICENSE.txt for license details)
  */
-public class ExampleTreeNodeFacade implements TreeItemObject<ExampleDataNode> {
+public class ExampleTreeNodeFacade implements TreeModel<ExampleDataNode> {
     public ExampleTreeNodeFacade(ExampleDataNode model) {
         _model = model;
         _model.addChangeListener(_listener);
         _children.addAll(_model.getChildren().stream().map(ExampleTreeNodeFacade::new).collect(Collectors.toList()));
     }
 
-    private ExampleTreeNodeFacade(ExampleDataNode model, FancyTreeItemFacade facade, List<TreeItemObject<ExampleDataNode>> children) {
+    private ExampleTreeNodeFacade(ExampleDataNode model, FancyTreeItemFacade facade, List<TreeModel<ExampleDataNode>> children) {
         _model = model;
         _item_facade = facade;
         _children = children;
     }
 
     @Override
-    public List<TreeItemObject<ExampleDataNode>> getChildren() {
+    public List<TreeModel<ExampleDataNode>> getChildren() {
         return _children;
     }
 
@@ -84,7 +84,7 @@ public class ExampleTreeNodeFacade implements TreeItemObject<ExampleDataNode> {
     }
 
     @Override
-    public TreeItemObject<ExampleDataNode> copyAndDestroy() {
+    public TreeModel<ExampleDataNode> copyAndDestroy() {
         synchronized (_model) {
             ExampleTreeNodeFacade copy = new ExampleTreeNodeFacade(_model, _item_facade, _children);
             _model.replaceChangeListener(_listener, copy._listener);
@@ -133,7 +133,7 @@ public class ExampleTreeNodeFacade implements TreeItemObject<ExampleDataNode> {
 
     private ExampleDataNode _model;
     private FancyTreeItemFacade _item_facade;
-    private List<TreeItemObject<ExampleDataNode>> _children = new ArrayList<>();
+    private List<TreeModel<ExampleDataNode>> _children = new ArrayList<>();
     private boolean _is_editing = false;
 }
 

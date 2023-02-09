@@ -37,9 +37,10 @@ public class DevplCodeGenerator {
 
     public static void main(String[] args) throws IOException {
         tableNamesToBeGenerated();
-
         URL resource = Thread.currentThread().getContextClassLoader().getResource("jdbc.properties");
-        assert resource != null;
+        if (resource == null) {
+            throw new RuntimeException("数据库连接配置文件[resources/jdbc.properties]不存在");
+        }
         Properties properties = new Properties();
         try (InputStream inputStream = resource.openStream()) {
             properties.load(inputStream);
@@ -50,19 +51,20 @@ public class DevplCodeGenerator {
         String username = properties.getProperty("jdbc.username");
         String password = properties.getProperty("jdbc.password");
         FastAutoGenerator.create(url, username, password).globalConfig(builder -> {
-                    builder.author(author) // 设置作者名 baomidou 默认值:作者
-                            .fileOverride()
-                            // .enableSwagger() // 开启 swagger 模式
-                            // .enableSpringdoc()  // 开启 springdoc 模式  @Schema注解
-                            .dateType(DateType.TIME_PACK)  // 时间策略
-                            .commentDate("yyyy-MM-dd HH:mm:ss") // 注释日期 默认值: yyyy-MM-dd
-                            .outputDir(outputRootDir); // 指定输出根目录 默认值: windows:D:// linux or mac : /tmp
+                    builder.author(author); // 设置作者名 baomidou 默认值:作者
+                    builder.fileOverride();
+                    // .enableSwagger() // 开启 swagger 模式
+                    // .enableSpringdoc()  // 开启 springdoc 模式  @Schema注解
+                    builder.dateType(DateType.TIME_PACK);  // 时间策略
+                    builder.commentDate("yyyy-MM-dd HH:mm:ss");// 注释日期 默认值: yyyy-MM-dd
+                    builder.outputDir(outputRootDir); // 指定输出根目录 默认值: windows:D:// linux or mac : /tmp
                 }).packageConfig(builder -> {
                     // 包配置(PackageConfig)
                     builder.parent(parentPackage); // 设置父包名
                     builder.moduleName(""); // 设置父包模块名
-                    // .entity("") // Entity 包名
-                    // .service("") // Service 包名
+                    builder.entity("");  // Entity 包名
+                    builder.service("");  // Service 包名
+
                     Map<OutputFile, String> pathInfoMap = new HashMap<>();
                     pathInfoMap.put(OutputFile.parent, outputRootDir);
                     pathInfoMap.put(OutputFile.xml, outputRootDir + "/mapping");
