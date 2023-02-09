@@ -10,14 +10,7 @@ import io.devpl.codegen.mbpg.template.FreemarkerTemplateEngine;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-<<<<<<< HEAD
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-=======
 import java.util.*;
->>>>>>> 3e77cbfbee4d2f393dfd6a99e63e7250fe7002f6
 
 /**
  * 基于模板的代码生成
@@ -27,14 +20,10 @@ import java.util.*;
  */
 public class DevplCodeGenerator {
 
-<<<<<<< HEAD
     private static final String author = "Author";
-=======
-    private static final String author = "";
     /**
      * 输出根目录
      */
->>>>>>> 3e77cbfbee4d2f393dfd6a99e63e7250fe7002f6
     private static final String outputRootDir = "D:\\Temp";
     // 父包配置
     private static final String parentPackage = "";
@@ -43,22 +32,14 @@ public class DevplCodeGenerator {
 
     // 在此处填写要生成的表名
     private static void tableNamesToBeGenerated() {
-<<<<<<< HEAD
-        tableNamesToBeGenerated.add("sys_post");
-=======
         tableNamesToBeGenerated.add("party_build");
->>>>>>> 3e77cbfbee4d2f393dfd6a99e63e7250fe7002f6
     }
 
     public static void main(String[] args) throws IOException {
         tableNamesToBeGenerated();
         URL resource = Thread.currentThread().getContextClassLoader().getResource("jdbc.properties");
         if (resource == null) {
-<<<<<<< HEAD
-            return;
-=======
             throw new RuntimeException("数据库连接配置文件[resources/jdbc.properties]不存在");
->>>>>>> 3e77cbfbee4d2f393dfd6a99e63e7250fe7002f6
         }
         Properties properties = new Properties();
         try (InputStream inputStream = resource.openStream()) {
@@ -66,15 +47,9 @@ public class DevplCodeGenerator {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-<<<<<<< HEAD
-        final String url = properties.getProperty("jdbc.url");
-        final String username = properties.getProperty("jdbc.username");
-        final String password = properties.getProperty("jdbc.password");
-=======
         String url = properties.getProperty("jdbc.url");
         String username = properties.getProperty("jdbc.username");
         String password = properties.getProperty("jdbc.password");
->>>>>>> 3e77cbfbee4d2f393dfd6a99e63e7250fe7002f6
         FastAutoGenerator.create(url, username, password).globalConfig(builder -> {
                     builder.author(author); // 设置作者名 baomidou 默认值:作者
                     builder.fileOverride();

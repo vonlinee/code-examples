@@ -5,21 +5,12 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.util.StringConverter;
+import javafx.util.converter.DefaultStringConverter;
 
 public class JavaElementTreeCell extends TextFieldTreeCell<String> {
 
     public JavaElementTreeCell() {
-        super(new StringConverter<>() {
-            @Override
-            public String toString(String object) {
-                return object;
-            }
-
-            @Override
-            public String fromString(String string) {
-                return string;
-            }
-        });
+        super(new DefaultStringConverter());
     }
 
     // 类对应的菜单
@@ -36,13 +27,14 @@ public class JavaElementTreeCell extends TextFieldTreeCell<String> {
     @Override
     public void updateSelected(boolean selected) {
         super.updateSelected(selected);
-
         // 更新菜单
         TreeItem<String> item = getTreeView().getSelectionModel().getSelectedItem();
         if (item instanceof TopLevelClassItem) {
             setContextMenu(classContextMenu);
         } else if (item instanceof MethodItem) {
             setContextMenu(methodContextMenu);
+        } else if (item instanceof FieldItem) {
+            setContextMenu(null);
         }
     }
 

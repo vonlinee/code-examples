@@ -15,7 +15,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -31,7 +30,6 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
         </dependency>
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -42,13 +40,6 @@
             <artifactId>jfoenix</artifactId>
             <version>9.0.10</version>
         </dependency>
-        <!--Javax注解API-->
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>1.3.2</version>
-        </dependency>
-
         <!--JavaFX 框架-->
         <dependency>
             <groupId>com.gitee.Biubiuyuyu</groupId>
@@ -59,11 +50,6 @@
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <version>3.5.10</version>
-        </dependency>
-        <dependency>
-            <groupId>org.controlsfx</groupId>
-            <artifactId>controlsfx</artifactId>
-            <version>8.40.12</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis.generator</groupId>
@@ -92,12 +78,6 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.8.11.2</version>
         </dependency>
-        <!--apache commons-beanutils-->
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>1.9.4</version>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -109,23 +89,11 @@
             <artifactId>jsch</artifactId>
             <version>0.1.54</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.14.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.14.1</version>
-        </dependency>
         <dependency>
             <groupId>io.devpl</groupId>
             <artifactId>fxtras</artifactId>
             <version>1.0</version>
         </dependency>
-
         <!-- Java Parser是基于JavaCC做为Java语言词法解析的工具，支持Java语言生成AST，在AST基础上进行类型推断分析，支持修改AST从而生成新的Java文件内容，支持从Java
             1.0到14所有的版本的AST解析 -->
         <!-- https://mvnrepository.com/artifact/com.github.javaparser/javaparser-core -->
@@ -151,7 +119,6 @@
             <artifactId>commons-dbutils</artifactId>
             <version>1.7</version>
         </dependency>
-
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-materialdesign2-pack</artifactId>
@@ -205,31 +172,11 @@
             <artifactId>richtextfx</artifactId>
             <version>0.11.0</version>
         </dependency>
-
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>
             <version>2.2</version>
         </dependency>
-        <!-- 在 java11 发布时，oracle官方就宣布移除了以下两个特性：-->
-        <!-- Remove JAXB (Java Architecture for XML Binding)-->
-        <!-- Remove JAX-WS (Java API for XML Web Services)-->
-        <!--        <dependency>-->
-        <!--            <groupId>javax.xml.bind</groupId>-->
-        <!--            <artifactId>jaxb-api</artifactId>-->
-        <!--            <version>2.3.1</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.glassfish.jaxb</groupId>-->
-        <!--            <artifactId>jaxb-runtime</artifactId>-->
-        <!--            <version>2.3.1</version>-->
-        <!--        </dependency>-->
-        <!--        &lt;!&ndash; jax-ws&ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>com.sun.xml.ws</groupId>-->
-        <!--            <artifactId>rt</artifactId>-->
-        <!--            <version>2.3.3</version>-->
-        <!--        </dependency>-->
         <!--使用Dom4j进行XML处理-->
         <dependency>
             <groupId>org.dom4j</groupId>
@@ -248,25 +195,12 @@
             <artifactId>ikonli-javafx</artifactId>
             <version>12.3.1</version>
         </dependency>
-
         <!--JavaFX 图标库-->
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-fontawesome5-pack</artifactId>
             <version>12.3.1</version>
         </dependency>
-        <!--JavaFX Bootstrap支持-->
-        <dependency>
-            <groupId>org.kordamp.bootstrapfx</groupId>
-            <artifactId>bootstrapfx-core</artifactId>
-            <version>0.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dlsc.formsfx</groupId>
-            <artifactId>formsfx-core</artifactId>
-            <version>11.5.0</version>
-        </dependency>
-
         <dependency>
             <groupId>io.devpl</groupId>
             <artifactId>devpl-eventbus</artifactId>
@@ -314,13 +248,6 @@
             <artifactId>fx-gson</artifactId>
             <version>4.1.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.kordamp.bootstrapfx</groupId>
-            <artifactId>bootstrapfx-core</artifactId>
-            <version>0.4.0</version>
-        </dependency>
-
         <dependency>
             <groupId>com.github.hervegirod</groupId>
             <artifactId>fxsvgimage</artifactId>
@@ -334,12 +261,7 @@
             <!-- mirrorOf 标签如果设置为 *，就说明整个工程只能使用settings.xml中配置的地址，项目自身配置的仓库无效 -->
             <!-- <mirrorOf>*</mirrorOf> -->
             <name>Nexus aliyun</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-        </repository>
-        <repository>
-            <id>aliyunmaven</id>
-            <name>阿里云公共仓库</name>
-            <url>https://maven.aliyun.com/repository/public</url>
+            <url>https://maven.aliyun.com/nexus/content/groups/public</url>
         </repository>
         <!--此仓库仅用于引入com.github.hervegirod:fxsvgimage:1.1依赖-->
         <repository>

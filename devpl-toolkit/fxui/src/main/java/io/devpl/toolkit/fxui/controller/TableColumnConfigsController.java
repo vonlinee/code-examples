@@ -5,13 +5,13 @@ import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.toolkit.fxui.common.Constants;
 import io.devpl.toolkit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.fxtras.Alerts;
+import io.devpl.toolkit.fxui.utils.CollectionUtils;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
 
