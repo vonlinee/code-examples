@@ -22,7 +22,7 @@
                 </padding>
                 <graphic>
                     <ImageView fitWidth="40" fitHeight="40">
-                        <Image url="@/static/icons/computer.png"/>
+                        <Image url="@/static/icon/computer.png"/>
                     </ImageView>
                 </graphic>
             </Label>
@@ -32,7 +32,7 @@
                 </padding>
                 <graphic>
                     <ImageView fitWidth="40" fitHeight="40">
-                        <Image url="@/static/icons/config-list.png"/>
+                        <Image url="@/static/icon/config-list.png"/>
                     </ImageView>
                 </graphic>
             </Label>
@@ -42,7 +42,7 @@
                 </padding>
                 <graphic>
                     <ImageView fitWidth="40" fitHeight="40">
-                        <Image url="@/static/icons/config-list.png"/>
+                        <Image url="@/static/icon/config-list.png"/>
                     </ImageView>
                 </graphic>
             </Label>

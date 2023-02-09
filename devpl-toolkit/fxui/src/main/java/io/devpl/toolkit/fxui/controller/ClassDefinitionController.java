@@ -43,7 +43,7 @@ import javafx.util.converter.DefaultStringConverter;
 /**
  * 类编辑器
  */
-@FxmlLocation(location = "static/fxml/class_definition.fxml")
+@FxmlLocation(location = "static/fxml/class_definition.fxml", title = "类编辑")
 public class ClassDefinitionController extends FxmlView {
 
     @FXML
@@ -148,7 +148,7 @@ public class ClassDefinitionController extends FxmlView {
 
     @FXML
     public void openFieldImportDialog(ActionEvent actionEvent) {
-        StageHelper.show("实体类编辑", PojoEditorController.class);
+        StageHelper.show(PojoEditorController.class);
     }
     
     @FXML

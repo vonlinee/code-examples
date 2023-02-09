@@ -16,5 +16,11 @@ public @interface FxmlLocation {
      */
     String location() default "";
 
+    /**
+     * 绑定到某个Stage时的标题
+     * @return 标题
+     */
+    String title() default "";
+
     Class<? extends ViewModel> vm() default ViewModel.class;
 }

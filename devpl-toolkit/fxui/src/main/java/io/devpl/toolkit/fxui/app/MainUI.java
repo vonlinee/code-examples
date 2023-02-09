@@ -31,7 +31,7 @@ public class MainUI extends JavaFXApplication {
         Parent root = ViewLoader.load(MainFrameController.class).getRoot();
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle(MAIN_WINDOW_TITLE);
-        primaryStage.getIcons().add(new Image("static/icons/mybatis-logo.png"));
+        primaryStage.getIcons().add(new Image("static/icon/mybatis-logo.png"));
         primaryStage.show();
     }
 }

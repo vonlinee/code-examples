@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.app;
 
-import javafx.application.Application;
+import io.devpl.fxtras.utils.StageHelper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -10,8 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignA;
 
@@ -28,6 +26,8 @@ public class TextFieldSample extends SampleApplication {
 //		textField.setBackground(background);
         Border border = new Border(new BorderStroke(Paint.valueOf("#0ff"), BorderStrokeStyle.SOLID, new CornerRadii(0), new BorderWidths(0)));
         textField.setBorder(border);
+
+
 
 //		textField.setOpacity(0.0);
 

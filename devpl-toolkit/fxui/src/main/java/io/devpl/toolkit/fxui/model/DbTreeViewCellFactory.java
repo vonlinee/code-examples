@@ -95,7 +95,7 @@ public class DbTreeViewCellFactory implements Callback<TreeView<String>, TreeCel
                 children.clear();
                 for (String tableName : tables) {
                     TreeItem<String> newTreeItem = new TreeItem<>();
-                    ImageView imageView = JFX.loadImageView("static/icons/table.png", 16);
+                    ImageView imageView = JFX.loadImageView("static/icon/table.png", 16);
                     newTreeItem.setGraphic(imageView);
                     newTreeItem.setValue(tableName);
                     children.add(newTreeItem);
@@ -103,7 +103,7 @@ public class DbTreeViewCellFactory implements Callback<TreeView<String>, TreeCel
             }
             final Object userData = treeItem.getGraphic()
                     .getUserData();
-            treeItem.setGraphic(JFX.loadImageView("static/icons/computer.png", 16, userData));
+            treeItem.setGraphic(JFX.loadImageView("static/icon/computer.png", 16, userData));
         } catch (SQLRecoverableException e) {
             Alerts.error("连接超时")
                     .show();

@@ -125,7 +125,7 @@ public class EventBus {
         backgroundPoster = new BackgroundPoster(this);
         asyncPoster = new AsyncPoster(this);
         indexCount = builder.subscriberInfoIndexes != null ? builder.subscriberInfoIndexes.size() : 0;
-        subscriberMethodFinder = new SubscriberMethodFinder(builder.subscriberInfoIndexes, builder.strictMethodVerification, builder.ignoreGeneratedIndex, builder.allowEmptySubscriber);
+        subscriberMethodFinder = new SubscriberMethodFinder(builder.subscriberInfoIndexes, builder.strictMethodVerification, builder.ignoreGeneratedIndex);
         logSubscriberExceptions = builder.logSubscriberExceptions;
         logNoSubscriberMessages = builder.logNoSubscriberMessages;
         sendSubscriberExceptionEvent = builder.sendSubscriberExceptionEvent;
@@ -170,9 +170,7 @@ public class EventBus {
         // }
 
         List<SubscriberMethod> subscriberMethods = subscriberMethodFinder.findSubscriberMethods(subscriberClass);
-        if (subscriberMethods.isEmpty()) {
-            return;
-        }
+
         synchronized (this) {
             for (SubscriberMethod subscriberMethod : subscriberMethods) {
                 // 遍历，以订阅方法事件类型分类，将订阅方法包装对象存放到Map中

@@ -12,8 +12,13 @@ public final class ClassUtils {
     private ClassUtils() {
     }
 
-    // getConstructor 方法入参是可变长参数列表，对应类中构造方法的入参类型，这里使用无参构造。
-    // newInstance 返回的是泛型 T，取决于 clazz 的类型 Class<T>。这里直接用 Object 接收了。
+    /**
+     * getConstructor 方法入参是可变长参数列表，对应类中构造方法的入参类型，这里使用无参构造。
+     * newInstance 返回的是泛型 T，取决于 clazz 的类型 Class<T>。这里直接用 Object 接收了。
+     * 调用默认方法创建对象实例
+     * @param clazz Class对象
+     * @return 创建的对象实例
+     */
     public static <T> T instantiate(Class<T> clazz) throws RuntimeException {
         try {
             final Constructor<T> constructor = clazz.getConstructor();
@@ -41,6 +46,11 @@ public final class ClassUtils {
         return false;
     }
 
+    /**
+     * 获取类的包名
+     * @param qualifiedClassName 全限定类名
+     * @return
+     */
     public static String getPackageName(String qualifiedClassName) {
         if (qualifiedClassName == null || qualifiedClassName.length() == 0) {
             return qualifiedClassName;

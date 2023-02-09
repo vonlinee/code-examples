@@ -24,6 +24,7 @@ import java.util.function.Function;
 
 /**
  * 模板引擎抽象类
+ *
  * @author hubin
  * @since 2018-01-10
  */
@@ -44,6 +45,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出自定义模板文件
+     *
      * @param customFiles 自定义模板文件列表
      * @param tableInfo   表信息
      * @param objectMap   渲染数据
@@ -65,6 +67,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出实体文件
+     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -73,7 +76,7 @@ public abstract class AbstractTemplateEngine {
         String entityName = tableInfo.getEntityName();
         String entityPath = getPathInfo(OutputFile.entity);
         if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
-            CodeGenConfiguration config = getConfigBuilder();
+            CodeGenConfiguration config = getCodeGenConfiguration();
             TemplateConfig templateConfig = config.getTemplateConfig();
             boolean kotlin = config.getGlobalConfig().isKotlin();
             String entity = templateConfig.getEntity(kotlin);
@@ -93,13 +96,14 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出Mapper文件(含xml)
+     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
      */
     protected void outputMapper(@NotNull TableInfo tableInfo, @NotNull Map<String, Object> objectMap) {
         // MpMapper.java
-        final CodeGenConfiguration config = getConfigBuilder();
+        final CodeGenConfiguration config = getCodeGenConfiguration();
         String entityName = tableInfo.getEntityName();
         String mapperPath = getPathInfo(OutputFile.mapper);
         if (StringUtils.hasText(tableInfo.getMapperName()) && StringUtils.isNotBlank(mapperPath)) {
@@ -122,6 +126,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出service文件
+     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -129,7 +134,7 @@ public abstract class AbstractTemplateEngine {
     protected void outputService(@NotNull TableInfo tableInfo, @NotNull Map<String, Object> objectMap) {
         // IMpService.java
 
-        final CodeGenConfiguration config = getConfigBuilder();
+        final CodeGenConfiguration config = getCodeGenConfiguration();
 
         String entityName = tableInfo.getEntityName();
         String servicePath = getPathInfo(OutputFile.service);
@@ -155,6 +160,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出controller文件
+     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -166,7 +172,7 @@ public abstract class AbstractTemplateEngine {
             getTemplateFilePath(TemplateConfig::getController).ifPresent(controller -> {
                 String entityName = tableInfo.getEntityName();
                 String controllerFile = String.format((controllerPath + File.separator + tableInfo.getControllerName() + suffixJavaOrKt()), entityName);
-                outputFile(new File(controllerFile), objectMap, controller, getConfigBuilder().getStrategyConfig()
+                outputFile(new File(controllerFile), objectMap, controller, getCodeGenConfiguration().getStrategyConfig()
                         .controller()
                         .isFileOverride());
             });
@@ -175,6 +181,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 输出文件
+     *
      * @param file         文件
      * @param objectMap    渲染信息
      * @param templatePath 模板路径
@@ -199,13 +206,14 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 获取模板路径
+     *
      * @param function function
      * @return 模板路径
      * @since 3.5.0
      */
     @NotNull
     protected Optional<String> getTemplateFilePath(@NotNull Function<TemplateConfig, String> function) {
-        TemplateConfig templateConfig = getConfigBuilder().getTemplateConfig();
+        TemplateConfig templateConfig = getCodeGenConfiguration().getTemplateConfig();
         String filePath = function.apply(templateConfig);
         if (io.devpl.sdk.util.StringUtils.isNotBlank(filePath)) {
             return Optional.of(templateFilePath(filePath));
@@ -215,12 +223,13 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 获取路径信息
+     *
      * @param outputFile 输出文件
      * @return 路径信息
      */
     @Nullable
     protected String getPathInfo(@NotNull OutputFile outputFile) {
-        return getConfigBuilder().getPathInfo().get(outputFile);
+        return getCodeGenConfiguration().getPathInfo().get(outputFile);
     }
 
     /**
@@ -229,7 +238,7 @@ public abstract class AbstractTemplateEngine {
     @NotNull
     public AbstractTemplateEngine batchOutput() {
         try {
-            CodeGenConfiguration config = this.getConfigBuilder();
+            CodeGenConfiguration config = this.getCodeGenConfiguration();
             List<TableInfo> tableInfoList = config.getTableInfoList();
             for (TableInfo tableInfo : tableInfoList) {
                 Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
@@ -259,6 +268,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 将模板转化成为文件
+     *
      * @param objectMap    渲染对象 MAP 信息
      * @param templatePath 模板文件
      * @param outputFile   文件生成的目录
@@ -275,10 +285,10 @@ public abstract class AbstractTemplateEngine {
      * 打开输出目录
      */
     public void open() {
-        String outDir = getConfigBuilder().getGlobalConfig().getOutputDir();
+        String outDir = getCodeGenConfiguration().getGlobalConfig().getOutputDir();
         if (StringUtils.isBlank(outDir) || !new File(outDir).exists()) {
             LOGGER.error("未找到输出目录 {}", outDir);
-        } else if (getConfigBuilder().getGlobalConfig().isOpenOutputDir()) {
+        } else if (getCodeGenConfiguration().getGlobalConfig().isOpenOutputDir()) {
             try {
                 RuntimeUtils.openDirectory(outDir);
             } catch (IOException e) {
@@ -289,6 +299,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 渲染对象 MAP 信息
+     *
      * @param config    配置信息
      * @param tableInfo 表信息对象
      * @return ignore
@@ -302,10 +313,14 @@ public abstract class AbstractTemplateEngine {
         objectMap.putAll(mapperData);
         Map<String, Object> serviceData = strategyConfig.service().renderData(tableInfo);
         objectMap.putAll(serviceData);
+
+        // 实体类
         Map<String, Object> entityData = strategyConfig.entity().renderData(tableInfo);
         objectMap.putAll(entityData);
         objectMap.put("config", config);
+        // 包配置信息
         objectMap.put("package", config.getPackageConfig().getPackageInfo());
+
         GlobalConfig globalConfig = config.getGlobalConfig();
         objectMap.put("author", globalConfig.getAuthor());
         objectMap.put("kotlin", globalConfig.isKotlin());
@@ -330,6 +345,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 模板真实文件路径
+     *
      * @param filePath 文件路径
      * @return ignore
      */
@@ -338,6 +354,7 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 检查文件是否创建文件
+     *
      * @param file         文件
      * @param fileOverride 是否覆盖已有文件
      * @return 是否创建文件
@@ -354,11 +371,11 @@ public abstract class AbstractTemplateEngine {
      * 文件后缀
      */
     protected String suffixJavaOrKt() {
-        return getConfigBuilder().getGlobalConfig().isKotlin() ? ConstVal.KT_SUFFIX : ConstVal.JAVA_SUFFIX;
+        return getCodeGenConfiguration().getGlobalConfig().isKotlin() ? ConstVal.KT_SUFFIX : ConstVal.JAVA_SUFFIX;
     }
 
     @NotNull
-    public CodeGenConfiguration getConfigBuilder() {
+    public CodeGenConfiguration getCodeGenConfiguration() {
         return configBuilder;
     }
 

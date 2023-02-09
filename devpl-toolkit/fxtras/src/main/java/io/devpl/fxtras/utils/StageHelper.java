@@ -10,8 +10,8 @@ import javafx.stage.Window;
 
 public class StageHelper {
 
-    public static void show(String title, Class<?> controllerClass) {
-        show(title, ViewLoader.load(controllerClass).getRoot());
+    public static void show(Class<?> controllerClass) {
+        show("", ViewLoader.load(controllerClass).getRoot());
     }
 
     /**

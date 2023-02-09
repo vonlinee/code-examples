@@ -27,9 +27,9 @@ public class ViewLoader {
         ViewLoader loader = loaderCache.get(clazz);
         if (loader == null) {
             // 重新加载
-            FxmlLocation fxmlViewAnnotation = clazz.getAnnotation(FxmlLocation.class);
-            if (fxmlViewAnnotation != null) {
-                String fxmlLocation = fxmlViewAnnotation.location();
+            FxmlLocation fxmlInfo = clazz.getAnnotation(FxmlLocation.class);
+            if (fxmlInfo != null) {
+                String fxmlLocation = fxmlInfo.location();
                 if (fxmlLocation.isEmpty()) {
                     String packageName = clazz.getPackageName();
                     fxmlLocation = packageName.replace(".", "/") + "/" + clazz.getSimpleName() + ".fxml";

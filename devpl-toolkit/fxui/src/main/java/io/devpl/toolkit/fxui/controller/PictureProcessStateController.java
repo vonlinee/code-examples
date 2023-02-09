@@ -23,7 +23,7 @@ import javafx.util.Duration;
 import static javafx.scene.paint.Color.DARKSEAGREEN;
 
 public class PictureProcessStateController {
-    private final ImageView dbImage = new ImageView("static/icons/SSH_tunnel.png");
+    private final ImageView dbImage = new ImageView("static/icon/SSH_tunnel.png");
     private final Rectangle rect = new Rectangle(20, 20, 30, 30);
     private final RotateTransition rotateTransition = new RotateTransition();
     private final Text text = new Text("");
@@ -99,7 +99,7 @@ public class PictureProcessStateController {
     public void playFailState(String message, boolean showButton) {
         rect.setFill(Color.ORANGERED);
         rotateTransition.stop();
-        dbImage.setImage(new Image("static/icons/SSH_tunnel_disconnected.png"));
+        dbImage.setImage(new Image("static/icon/SSH_tunnel_disconnected.png"));
         rotateTransition.setDuration(Duration.seconds(3));
         rotateTransition.play();
         text.setText(message);
@@ -124,7 +124,7 @@ public class PictureProcessStateController {
     public void playSuccessState(String message, boolean showButton) {
         rect.setFill(DARKSEAGREEN);
         rotateTransition.stop();
-        dbImage.setImage(new Image("static/icons/SSH_tunnel.png"));
+        dbImage.setImage(new Image("static/icon/SSH_tunnel.png"));
         rotateTransition.setDuration(Duration.seconds(0.8));
         rotateTransition.play();
         text.setText(message);

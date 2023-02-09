@@ -1,0 +1,7 @@
+@import url("base.css");
+@import url("editor-highlight.css");
+@import url("editor-dart.css");
+
+.root {
+    -fx-font-size: 1em;
+}
