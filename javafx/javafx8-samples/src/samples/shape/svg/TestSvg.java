@@ -87,7 +87,11 @@ public class TestSvg extends Application {
 
         btn.setGraphic(path8);
 
+        Button btn1 = new Button("Button2");
+        btn1.setGraphic(path8);
+
         root.getChildren().add(btn);
+        root.getChildren().add(btn1);
 
 
         URL svgFile = ResourceLoader.load(this.getClass(), "javaDocFolder.svg");
