@@ -2,8 +2,10 @@ package io.devpl.toolkit.fxui.view.filestructure;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 /**
  * Java元素详情面板
@@ -16,11 +18,11 @@ public class JavaElementDetailPane extends BorderPane {
     }
 
     private Node initTop() {
-        ToolBar topToolBar = new ToolBar();
-        topToolBar.getItems().add(new Button("Button 1"));
-        topToolBar.getItems().add(new Button());
-        topToolBar.getItems().add(new Button());
-        return topToolBar;
+        HBox hBox = new HBox();
+
+        Label label = new Label();
+
+        return hBox;
     }
 
     /**

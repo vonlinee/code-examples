@@ -17,7 +17,7 @@ public enum JavaVisibility {
     /**
      * 对应展示的图标
      */
-    private String iconUrl;
+    private final String iconUrl;
 
     JavaVisibility(String iconUrl) {
         this.iconUrl = iconUrl;
