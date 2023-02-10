@@ -25,8 +25,8 @@ public class Sample extends Application {
 
     /**
      * 创建根节点
-     * @return
-     * @throws Exception
+     * @return Parent
+     * @throws Exception Exception
      */
     public Parent createRoot() throws Exception {
         AnchorPane root = new AnchorPane();

@@ -1,4 +1,4 @@
-﻿package code.example.mybatis.crud.mapper;
+package code.example.mybatis.crud.mapper;
 
 public interface BatchMapper {
 

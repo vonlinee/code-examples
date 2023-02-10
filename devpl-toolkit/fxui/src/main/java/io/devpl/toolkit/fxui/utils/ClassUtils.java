@@ -1,9 +1,10 @@
 package io.devpl.toolkit.fxui.utils;
 
-import io.devpl.toolkit.fxui.app.MainUI;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class ClassUtils {
 
@@ -23,6 +24,7 @@ public final class ClassUtils {
 
     /**
      * 两个数组是否相等
+     *
      * @param a1, a2
      * @return 数组是否相等
      */
@@ -53,5 +55,12 @@ public final class ClassUtils {
         int index = classSimpleName.lastIndexOf(".");
         if (index < 0) return StringUtils.EMPTY_BLANK;
         return classSimpleName.substring(index + 1);
+    }
+
+    public static <T> T cast(Class<T> type, Object obj) {
+        if (type.isInstance(obj)) {
+            return type.cast(obj);
+        }
+        return null;
     }
 }

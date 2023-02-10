@@ -1,5 +1,8 @@
 package io.devpl.toolkit.fxui.view;
 
+/**
+ * 图标路径
+ */
 public interface IconKey {
 
     String JAVA_TOP_CLASS = "static/icon/class.svg";

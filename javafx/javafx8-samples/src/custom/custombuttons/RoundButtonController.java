@@ -1,4 +1,4 @@
-package custombuttons;
+package custom.custombuttons;
 
 import com.jfoenix.controls.JFXButton;
 import java.net.URL;

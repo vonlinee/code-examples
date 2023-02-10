@@ -1,7 +1,7 @@
 package code.example.mybatis.crud;
 
+import code.example.mybatis.crud.mapper.TClassMapper;
 import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -10,6 +10,8 @@ import sun.misc.Unsafe;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class CRUDTest {
 
@@ -25,22 +27,28 @@ public class CRUDTest {
     }
 
     public CRUDTest() {
-        //1.指定MyBatis主配置文件位置
+        // 1.指定MyBatis主配置文件位置
         String resource = "mybatis-config.xml";
-        //2.加载配置文件
+        // 2.加载配置文件
         InputStream inputStream = null;
         try {
             inputStream = Resources.getResourceAsStream(resource);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //3.创建SqlSessionFactory会话工厂
+        // 3.创建SqlSessionFactory会话工厂
         this.factory = new SqlSessionFactoryBuilder().build(inputStream);
     }
 
     public static void main(String[] args) throws IOException {
         try (SqlSession session = openSession()) {
-            Configuration config = session.getConfiguration();
+
+            TClassMapper mapper = session.getMapper(TClassMapper.class);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("class_id", UUID.randomUUID().toString());
+            final int i = mapper.insertOne(map);
+            System.out.println(i);
+            session.commit();
         }
     }
 
@@ -53,7 +61,7 @@ public class CRUDTest {
             Field logger = cls.getDeclaredField("logger");
             u.putObjectVolatile(cls, u.staticFieldOffset(logger), null);
         } catch (Exception e) {
-            //ignore ，肯定会抛异常
+            // ignore ，肯定会抛异常
         }
     }
 }

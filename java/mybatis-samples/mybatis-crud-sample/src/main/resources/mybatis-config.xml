@@ -50,11 +50,11 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="mappers/TStudentMapper.xml"/>
-        <mapper resource="mappers/TCourseMapper.xml"/>
-        <mapper resource="mappers/TScoreMapper.xml"/>
-        <mapper resource="mappers/TDepartmentMapper.xml"/>
-        <mapper resource="mappers/TTeacherMapper.xml"/>
-        <mapper resource="mappers/TClassMapper.xml"/>
+        <mapper resource="mappers/StudentMapper.xml"/>
+        <mapper resource="mappers/CourseMapper.xml"/>
+        <mapper resource="mappers/ScoreMapper.xml"/>
+        <mapper resource="mappers/DepartmentMapper.xml"/>
+        <mapper resource="mappers/TeacherMapper.xml"/>
+        <mapper resource="mappers/ClassMapper.xml"/>
     </mappers>
 </configuration>

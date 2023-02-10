@@ -4,6 +4,7 @@ import io.devpl.toolkit.fxui.view.filestructure.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -23,8 +24,6 @@ public class TestJavaFileStructure extends Application {
         Button btnAdd = new Button("导入");
         Button btn1 = new Button("B1");
 
-
-
         ToolBar toolBar = new ToolBar(btnAdd, btn1);
         btnAdd.setOnAction(event -> {
 
@@ -43,8 +42,16 @@ public class TestJavaFileStructure extends Application {
         });
 
         root.setTop(toolBar);
+        root.setLeft(jfsTreeView);
 
-        root.setCenter(jfsTreeView);
+        JavaElementDetailPane detailPane = new JavaElementDetailPane();
+
+        root.setCenter(detailPane);
+
+        detailPane.addEventFilter(FileStructureEvent.CELL_UPDATED, event -> {
+            System.out.println(1111);
+        });
+
         Scene scene = new Scene(root, 800, 400);
         primaryStage.setScene(scene);
         primaryStage.show();

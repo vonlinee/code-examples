@@ -14,4 +14,9 @@
         from `t_class`
         where `CLASS_ID` = #{classId,jdbcType=VARCHAR}
     </delete>
+
+
+    <insert id="insertOne" parameterType="map">
+        insert into t_class (CLASS_ID, CLASS_NAME) values (#{class_id}, #{class_name})
+    </insert>
 </mapper>

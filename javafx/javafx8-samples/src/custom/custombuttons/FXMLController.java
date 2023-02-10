@@ -1,4 +1,4 @@
-package custombuttons;
+package custom.custombuttons;
 
 import java.net.URL;
 import java.util.ResourceBundle;

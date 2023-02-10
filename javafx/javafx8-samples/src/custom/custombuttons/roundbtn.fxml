@@ -3,7 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="718.0" prefWidth="781.0" stylesheets="@myCss.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="custombuttons.RoundButtonController">
+<AnchorPane id="AnchorPane" prefHeight="718.0" prefWidth="781.0" stylesheets="@myCss.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="custom.custombuttons.RoundButtonController">
    <children>
       <JFXButton fx:id="btn1" layoutX="84.0" layoutY="51.0" prefHeight="262.0" prefWidth="288.0" styleClass="simple-heart" />
       <JFXButton fx:id="btn2" layoutX="416.0" layoutY="51.0" prefHeight="262.0" prefWidth="288.0" styleClass="another-simple-heart" />
