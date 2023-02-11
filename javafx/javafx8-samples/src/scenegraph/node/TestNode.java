@@ -17,6 +17,9 @@ public class TestNode extends Application {
         Scene scene = new Scene(createRoot(), initialWidth, initialHeight);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
+
     }
 
     /**

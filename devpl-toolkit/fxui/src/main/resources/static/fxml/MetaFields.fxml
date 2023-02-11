@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="io.devpl.toolkit.fxui.controller.MetaFieldManageController">
+    <top>
+        <ToolBar>
+            <Button fx:id="btnImport" onAction="#showFieldImportPane"/>
+        </ToolBar>
+    </top>
+    <left>
+        <TableView fx:id="tbvMetaFields" prefHeight="400.0" prefWidth="317.0" BorderPane.alignment="CENTER">
+            <columns>
+                <TableColumn fx:id="tblcFieldName" prefWidth="75.0" text="名称"/>
+                <TableColumn fx:id="tblcFieldDescription" prefWidth="75.0" text="描述信息"/>
+                <TableColumn fx:id="tblcOperations" prefWidth="75.0" text="操作"/>
+            </columns>
+        </TableView>
+    </left>
+</BorderPane>
