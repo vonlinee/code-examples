@@ -1,17 +1,6 @@
 package io.devpl.toolkit.fxui.controller;
 
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import org.fxmisc.richtext.CodeArea;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import com.squareup.javapoet.ClassName;
-
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.utils.StageHelper;
@@ -25,13 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.Button;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
@@ -39,6 +22,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
+import org.fxmisc.richtext.CodeArea;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * 类编辑器
@@ -148,24 +140,24 @@ public class ClassDefinitionController extends FxmlView {
 
     @FXML
     public void openFieldImportDialog(ActionEvent actionEvent) {
-        StageHelper.show(PojoEditorController.class);
+        StageHelper.show(MetaFieldManageController.class);
     }
-    
+
     @FXML
     public void openColumnChooserDialog(ActionEvent actionEvent) {
-    	DatabaseNavigationView dbNavigationView = new DatabaseNavigationView();
-    	Scene scene = new Scene(dbNavigationView);
-    	
-    	Collection<ConnectionConfig> connectionInfos = ConnectionRegistry.getConnectionConfigurations();
-    	
-    	connectionInfos.forEach(item -> {
-    		ConnectionItem connItem = new ConnectionItem();
-    		connItem.setConnectionConfig(item);
-    		dbNavigationView.addConnections(Arrays.asList(connItem));
-    	});
-    	Stage stage = new Stage();
-    	stage.setScene(scene);
-    	stage.show();
+        DatabaseNavigationView dbNavigationView = new DatabaseNavigationView();
+        Scene scene = new Scene(dbNavigationView);
+
+        Collection<ConnectionConfig> connectionInfos = ConnectionRegistry.getConnectionConfigurations();
+
+        connectionInfos.forEach(item -> {
+            ConnectionItem connItem = new ConnectionItem();
+            connItem.setConnectionConfig(item);
+            dbNavigationView.addConnections(Arrays.asList(connItem));
+        });
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
@@ -177,6 +169,5 @@ public class ClassDefinitionController extends FxmlView {
         for (FieldInfo item : items) {
             System.out.println(item.getDataType());
         }
-
     }
 }

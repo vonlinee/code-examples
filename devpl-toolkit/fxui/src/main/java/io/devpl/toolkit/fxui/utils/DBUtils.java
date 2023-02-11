@@ -1,39 +1,22 @@
 package io.devpl.toolkit.fxui.utils;
 
-import java.io.File;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.apache.commons.dbutils.BasicRowProcessor;
-import org.apache.commons.dbutils.GenerousBeanProcessor;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.ArrayHandler;
-import org.apache.commons.dbutils.handlers.ArrayListHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ColumnListHandler;
-import org.apache.commons.dbutils.handlers.MapHandler;
-import org.apache.commons.dbutils.handlers.MapListHandler;
-import org.mybatis.generator.logging.Log;
-import org.mybatis.generator.logging.LogFactory;
-
 import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
 import io.devpl.sdk.util.ResourceUtils;
 import io.devpl.toolkit.fxui.common.JDBCDriver;
 import io.devpl.toolkit.fxui.model.DatabaseInfo;
 import io.devpl.toolkit.fxui.utils.ssh.JSchUtils;
+import org.apache.commons.dbutils.BasicRowProcessor;
+import org.apache.commons.dbutils.GenerousBeanProcessor;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.*;
+import org.mybatis.generator.logging.Log;
+import org.mybatis.generator.logging.LogFactory;
+
+import java.io.File;
+import java.sql.*;
+import java.util.*;
 
 /**
  * 封装apache common-dbutils进行数据库操作
@@ -51,6 +34,7 @@ public class DBUtils {
 
     /**
      * 数据库驱动通过SPI自动加载，因此只需要提供url即可区分不同的数据库
+     *
      * @param url      连接URL
      * @param username 用户名
      * @param password 密码
@@ -78,6 +62,7 @@ public class DBUtils {
 
     /**
      * 获取连接
+     *
      * @param url        全部连接URL去掉参数的部分
      * @param properties 需要包含user和password两个key，其他JDBC连接属性可选
      * @return Connection
@@ -108,6 +93,7 @@ public class DBUtils {
 
     /**
      * 加载数据库驱动
+     *
      * @param dbType 数据库类型
      * @see JDBCDriver
      */
@@ -128,6 +114,7 @@ public class DBUtils {
 
     /**
      * 获取元数据
+     *
      * @param conn 连接
      * @return 元数据
      */
@@ -141,6 +128,7 @@ public class DBUtils {
 
     /**
      * 获取元数据
+     *
      * @param conn
      * @param tableNamePattern
      * @return
@@ -162,6 +150,7 @@ public class DBUtils {
 
     /**
      * 连接时如果指定了数据库进行连接，则有数据，如果没有指定数据库进行连接，则无数据
+     *
      * @param conn             数据库连接
      * @param tableNamePattern 表名
      * @param types            表类型
@@ -209,6 +198,7 @@ public class DBUtils {
 
     /**
      * 查询JavaBean组成的List
+     *
      * @param connection   数据库连接
      * @param sql          SQL
      * @param requiredType JavaBean类型
@@ -240,11 +230,12 @@ public class DBUtils {
 
     /**
      * 默认取第1列
-     * @param <T>
-     * @param type
-     * @param resultSet
-     * @return
-     * @throws SQLException
+     *
+     * @param <T>       数据类型
+     * @param type      数据类型
+     * @param resultSet ResultSet
+     * @return 一列作为List
+     * @throws SQLException SQLException
      */
     public static <T> List<T> extractOneColumn(Class<T> type, ResultSet resultSet) throws SQLException {
         ColumnListHandler<T> handler = new ColumnListHandler<>(1);

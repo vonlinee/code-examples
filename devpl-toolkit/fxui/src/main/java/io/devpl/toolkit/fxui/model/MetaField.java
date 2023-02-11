@@ -9,6 +9,12 @@ import lombok.Data;
 public class MetaField {
 
     /**
+     * 是否选中，非数据库字段
+     */
+    private boolean selected;
+
+
+    /**
      * 主键ID
      */
     private String fieldId;
@@ -17,6 +23,11 @@ public class MetaField {
      * 字段名称
      */
     private String fieldName;
+
+    /**
+     * 字段值
+     */
+    private String fieldValue;
 
     /**
      * 字段含义

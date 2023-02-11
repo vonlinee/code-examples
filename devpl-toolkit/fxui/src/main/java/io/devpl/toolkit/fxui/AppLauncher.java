@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui;
 
-import io.devpl.toolkit.fxui.app.UnitTestApplication;
+import io.devpl.toolkit.fxui.app.MainUI;
 import javafx.application.Application;
 
 /**
@@ -9,6 +9,6 @@ import javafx.application.Application;
 public class AppLauncher {
 
     public static void main(String[] args) {
-        Application.launch(UnitTestApplication.class);
+        Application.launch(MainUI.class);
     }
 }

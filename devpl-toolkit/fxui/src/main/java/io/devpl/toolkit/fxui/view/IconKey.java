@@ -10,7 +10,6 @@ public interface IconKey {
     String JAVA_FIELD = "static/icon/field.svg";
     String JAVA_ABSTRACT_CLASS = "javaAbstractClass";
     String JAVA_ABSTRACT_METHOD = "javaAbstractMethod";
-
     String JAVA_PROTECTED = "static/icon/c_protected.svg";
     String JAVA_PRIVATE = "static/icon/c_private.svg";
     String JAVA_PUBLIC = "static/icon/c_public.svg";

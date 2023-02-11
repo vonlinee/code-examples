@@ -3,14 +3,13 @@ package io.devpl.toolkit.fxui.controller;
 import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.toolkit.fxui.dao.ConnectionConfigurationDao;
 import io.devpl.toolkit.fxui.event.Events;
 import io.devpl.toolkit.fxui.event.FillDefaultValueEvent;
+import io.devpl.toolkit.fxui.utils.AppConfig;
 import io.devpl.toolkit.fxui.model.ConnectionRegistry;
 import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
-import io.devpl.toolkit.fxui.utils.SingletonFactory;
-import io.devpl.toolkit.fxui.utils.Validator;
 import io.devpl.toolkit.fxui.utils.StringUtils;
+import io.devpl.toolkit.fxui.utils.Validator;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,6 +46,7 @@ public class NewConnectionController extends FxmlView {
 
     /**
      * 保存数据库连接信息
+     *
      * @param event 事件
      */
     @FXML
@@ -72,11 +72,13 @@ public class NewConnectionController extends FxmlView {
         }
         publish(Events.ADD_NEW_CONNECTION, connConfig);
         getStage(event).close();
-        Platform.runLater(() -> SingletonFactory.getWeakInstance(ConnectionConfigurationDao.class).save(connConfig));
+
+        Platform.runLater(() -> AppConfig.saveConnectionConfig(connConfig));
     }
 
     /**
      * 测试数据库连接
+     *
      * @param actionEvent ActionEvent
      */
     @FXML
@@ -100,8 +102,9 @@ public class NewConnectionController extends FxmlView {
 
     /**
      * 获取数据库连接信息
+     *
      * @param connection 数据库连接
-     * @return
+     * @return 数据库连接结果
      */
     private String getConnectionInfo(Connection connection) {
         StringBuilder sb = new StringBuilder();
@@ -117,6 +120,7 @@ public class NewConnectionController extends FxmlView {
 
     /**
      * 填充默认值
+     *
      * @param actionEvent 事件
      */
     @FXML

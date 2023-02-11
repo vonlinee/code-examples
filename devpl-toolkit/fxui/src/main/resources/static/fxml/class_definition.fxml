@@ -11,7 +11,8 @@
             <Button mnemonicParsing="false" text="修改"/>
             <Button mnemonicParsing="false" text="删除"/>
             <Button mnemonicParsing="false" text="新增"/>
-            <Button mnemonicParsing="false" text="生成类" fx:id="btnClassGenerate" onMouseClicked="#generateClassDefinition"/>
+            <Button mnemonicParsing="false" text="生成类" fx:id="btnClassGenerate"
+                    onMouseClicked="#generateClassDefinition"/>
         </ToolBar>
     </top>
 
@@ -33,7 +34,7 @@
                                     <ToolBar>
                                         <Button text="新增" onAction="#addField"/>
                                         <Button text="删除" onAction="#deleteField"/>
-                                        <Button text="导入查询SQL" onAction="#openFieldImportDialog"/>
+                                        <Button text="添加字段" onAction="#openFieldImportDialog"/>
                                         <Button text="数据库元数据" onAction="#openColumnChooserDialog"/>
                                     </ToolBar>
                                 </top>
@@ -49,13 +50,9 @@
                                 </center>
                             </BorderPane>
                         </TitledPane>
-                        <TitledPane text="方法">
-                            <VBox></VBox>
-                        </TitledPane>
                     </panes>
                 </Accordion>
             </VBox>
-            <CodeArea fx:id="codePreview"/>
         </SplitPane>
     </center>
 </BorderPane>

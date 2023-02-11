@@ -2,20 +2,9 @@ package io.devpl.toolkit.fxui.utils.json;
 
 public class JSONUtils {
 
-    private static final JSONConverter converter;
+    static final JSONConverter gson = new GsonConverter();
 
-    static {
-        converter = new GsonConverter();
-    }
-
-    public static String toString(Object obj) {
-        if (obj == null) {
-            return "";
-        }
-        return converter.toJSONString(obj);
-    }
-
-    public static <T> T toObject(String jsonStr, Class<T> requiredType) {
-        return converter.toObject(jsonStr, requiredType);
+    public static <T> T toObject(String json, Class<T> type) {
+        return gson.toObject(json, type);
     }
 }

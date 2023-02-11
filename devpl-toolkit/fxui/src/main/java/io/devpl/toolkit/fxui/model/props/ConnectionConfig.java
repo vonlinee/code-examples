@@ -3,8 +3,6 @@ package io.devpl.toolkit.fxui.model.props;
 import io.devpl.toolkit.fxui.common.JDBCDriver;
 import io.devpl.toolkit.fxui.utils.DBUtils;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,8 +13,7 @@ import java.util.Properties;
  * 数据库连接配置
  * 注意：连接配置不一定需要数据库，因此此处不存储数据库名称信息
  */
-@Getter
-@Setter
+@Data
 public class ConnectionConfig {
 
     private String id;
@@ -87,6 +84,7 @@ public class ConnectionConfig {
 
     /**
      * 获取数据库连接
+     *
      * @return 数据库连接实例
      * @throws SQLException 获取连接失败
      */
@@ -102,6 +100,11 @@ public class ConnectionConfig {
         return DBUtils.getConnection(connectionUrl, properties);
     }
 
+    /**
+     * 获取连接名称
+     *
+     * @return 连接名称，如果原本为空，则填充默认值：host_port，不取数据库名
+     */
     public String getConnectionName() {
         if (this.connectionName == null || connectionName.isEmpty()) {
             this.connectionName = host + "_" + port;

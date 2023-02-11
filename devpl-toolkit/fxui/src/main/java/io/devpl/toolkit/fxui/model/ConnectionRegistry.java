@@ -1,6 +1,6 @@
 package io.devpl.toolkit.fxui.model;
 
-import io.devpl.toolkit.fxui.dao.ConnectionConfigurationDao;
+import io.devpl.toolkit.fxui.utils.AppConfig;
 import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 
 import java.lang.ref.WeakReference;
@@ -20,19 +20,11 @@ public class ConnectionRegistry {
     static WeakReference<Map<String, ConnectionConfig>> connConfigRef;
 
     static {
-        ConnectionConfigurationDao dao = new ConnectionConfigurationDao();
-        List<ConnectionConfig> connConfigList = dao.selectList();
-        Map<String, ConnectionConfig> registeredConnectionConfigMap = new ConcurrentHashMap<>();
-        for (ConnectionConfig item : connConfigList) {
-            System.out.println(item.getConnectionName());
-            registeredConnectionConfigMap.put(item.getConnectionName(), item);
-        }
-        connConfigRef = new WeakReference<>(registeredConnectionConfigMap);
+        loadFromDatabase();
     }
 
     private static void loadFromDatabase() {
-        ConnectionConfigurationDao dao = new ConnectionConfigurationDao();
-        List<ConnectionConfig> connConfigList = dao.selectList();
+        List<ConnectionConfig> connConfigList = AppConfig.listConnectionInfo();
         Map<String, ConnectionConfig> registeredConnectionConfigMap = new ConcurrentHashMap<>();
         for (ConnectionConfig item : connConfigList) {
             registeredConnectionConfigMap.put(item.getConnectionName(), item);
