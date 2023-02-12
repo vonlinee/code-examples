@@ -125,7 +125,6 @@ public class MetaFieldManageController extends FxmlView {
         tblcFieldDescription.setCellValueFactory(new PropertyValueFactory<>("fieldDescription"));
         tblcFieldValue.setCellValueFactory(new PropertyValueFactory<>("fieldValue"));
         tblcSelected.setCellValueFactory(new PropertyValueFactory<>("selected"));
-
         tbvMetaFields.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tblcOperations.setCellFactory(param -> {
             Node closeIcon = IconMap.winodwCloase();

@@ -1,5 +1,9 @@
 package io.devpl.toolkit.fxui.view.filestructure;
 
+import io.devpl.fxtras.utils.StageHelper;
+import io.devpl.toolkit.fxui.controller.MetaFieldManageController;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
@@ -14,14 +18,28 @@ public class JavaElementTreeCell extends TextFieldTreeCell<String> {
 
     public JavaElementTreeCell() {
         super(new DefaultStringConverter());
-        this.setOnMouseClicked(event -> {
-            JavaElementTreeCell sourceTreeCell = (JavaElementTreeCell) event.getSource();
-            // 更新选中的内容面板
-            BorderPane parent = (BorderPane) sourceTreeCell.getTreeView().getParent();
-            // 详情面板
-            JavaElementDetailPane detailPane = (JavaElementDetailPane) parent.getCenter();
-            detailPane.updateDetailInfo((JavaElementItem) sourceTreeCell.getTreeItem());
+        // 初始化单元格的菜单项
+        this.treeItemProperty().addListener(new ChangeListener<TreeItem<String>>() {
+            @Override
+            public void changed(ObservableValue<? extends TreeItem<String>> observable, TreeItem<String> oldValue, TreeItem<String> newValue) {
+                initializeTreeItemContextMenuIfNeeded(newValue);
+            }
         });
+    }
+
+    private void initializeTreeItemContextMenuIfNeeded(TreeItem<String> treeItem) {
+        ContextMenu contextMenu = getContextMenu();
+        if (contextMenu != null) {
+            return;
+        }
+        if (treeItem instanceof TopLevelClassItem) {
+            contextMenu = initClassContextMenu();
+        } else if (treeItem instanceof MethodItem) {
+            contextMenu = initMethodContextMenu((MethodItem) treeItem);
+        } else if (treeItem instanceof FieldItem) {
+            contextMenu = initFieldContextMenu((FieldItem) treeItem);
+        }
+        setContextMenu(contextMenu);
     }
 
     /**
@@ -33,65 +51,75 @@ public class JavaElementTreeCell extends TextFieldTreeCell<String> {
     @Override
     public void updateSelected(boolean selected) {
         super.updateSelected(selected);
-        if (selected && !isEmpty()) {
-            initTreeCellContextMenuIfNeeded();
-        }
     }
 
-    /**
-     * 初始化单元格的菜单项
-     */
-    private void initTreeCellContextMenuIfNeeded() {
-        TreeItem<String> treeItem = getTreeView().getSelectionModel().getSelectedItem();
-        if (treeItem instanceof TopLevelClassItem) {
-            initClassContextMenu((TopLevelClassItem) treeItem);
-        } else if (treeItem instanceof MethodItem) {
-            initMethodContextMenu((MethodItem) treeItem);
-        } else if (treeItem instanceof FieldItem) {
-            initFieldContextMenu((FieldItem) treeItem);
-        }
+    private ContextMenu initClassContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem addMethodMenu = new MenuItem("添加方法");
+        addMethodMenu.setOnAction(event -> {
+            MethodItem methodItem = new MethodItem();
+            methodItem.setValue("New Method");
+            TreeItem<String> selectedItem = getTreeView().getSelectionModel().getSelectedItem();
+            selectedItem.getChildren().add(methodItem);
+        });
+        MenuItem addFieldMenu = new MenuItem("添加字段");
+        addFieldMenu.setOnAction(event -> {
+            FieldItem fieldItem = new FieldItem();
+            fieldItem.setValue("New Field");
+            TreeItem<String> selectedItem = getTreeView().getSelectionModel().getSelectedItem();
+            selectedItem.getChildren().add(fieldItem);
+        });
+        MenuItem chooseFieldMenu = new MenuItem("选择字段");
+        chooseFieldMenu.setOnAction(event -> {
+            StageHelper.show(MetaFieldManageController.class);
+        });
+        MenuItem deleteThisItem = new MenuItem("删除");
+        deleteThisItem.setOnAction(event -> {
+            TreeItem<String> selectedItem = getTreeView().getSelectionModel().getSelectedItem();
+            TreeItem<String> parent = selectedItem.getParent();
+            if (parent != null) {
+                parent.getChildren().remove(selectedItem);
+            }
+        });
+        contextMenu.getItems().addAll(addMethodMenu, addFieldMenu, chooseFieldMenu, deleteThisItem);
+        setContextMenu(contextMenu);
+        return contextMenu;
     }
 
-    private void initClassContextMenu(TopLevelClassItem classItem) {
-        ContextMenu contextMenu = getContextMenu();
-        if (contextMenu == null) {
-            contextMenu = new ContextMenu();
-            MenuItem addMethodMenu = new MenuItem("添加方法");
-            MenuItem addFieldMenu = new MenuItem("添加字段");
-            addMethodMenu.setOnAction(event -> {
-                MethodItem methodItem = new MethodItem();
-                methodItem.setValue("New Method");
-                classItem.getChildren().add(methodItem);
-            });
-            addFieldMenu.setOnAction(event -> {
-                FieldItem fieldItem = new FieldItem();
-                fieldItem.setValue("New Field");
-                classItem.getChildren().add(fieldItem);
-            });
-            contextMenu.getItems().add(addMethodMenu);
-            contextMenu.getItems().add(addFieldMenu);
-            setContextMenu(contextMenu);
-        }
+    private ContextMenu initMethodContextMenu(MethodItem methodItem) {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem editMenu = new MenuItem("编辑");
+        MenuItem deleteThisItem = new MenuItem("删除");
+        deleteThisItem.setOnAction(event -> {
+            TreeItem<String> selectedItem = getTreeView().getSelectionModel().getSelectedItem();
+            TreeItem<String> parent = selectedItem.getParent();
+            if (parent != null) {
+                parent.getChildren().remove(selectedItem);
+            }
+        });
+
+        contextMenu.getItems().add(editMenu);
+        contextMenu.getItems().add(deleteThisItem);
+        setContextMenu(contextMenu);
+        return contextMenu;
     }
 
-    private void initMethodContextMenu(MethodItem methodItem) {
-        ContextMenu contextMenu = getContextMenu();
-        if (contextMenu == null) {
-            contextMenu = new ContextMenu();
-            MenuItem editMenu = new MenuItem("编辑");
-            contextMenu.getItems().add(editMenu);
-            setContextMenu(contextMenu);
-        }
-    }
+    private ContextMenu initFieldContextMenu(FieldItem fieldItem) {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem editMenu = new MenuItem("编辑");
+        MenuItem deleteThisItem = new MenuItem("删除");
+        deleteThisItem.setOnAction(event -> {
+            TreeItem<String> selectedItem = getTreeView().getSelectionModel().getSelectedItem();
+            TreeItem<String> parent = selectedItem.getParent();
+            if (parent != null) {
+                parent.getChildren().remove(selectedItem);
+            }
+        });
 
-    private void initFieldContextMenu(FieldItem fieldItem) {
-        ContextMenu contextMenu = getContextMenu();
-        if (contextMenu == null) {
-            contextMenu = new ContextMenu();
-            MenuItem editMenu = new MenuItem("编辑");
-            contextMenu.getItems().add(editMenu);
-            setContextMenu(contextMenu);
-        }
+        contextMenu.getItems().add(editMenu);
+        contextMenu.getItems().add(deleteThisItem);
+        setContextMenu(contextMenu);
+        return contextMenu;
     }
 
     /**

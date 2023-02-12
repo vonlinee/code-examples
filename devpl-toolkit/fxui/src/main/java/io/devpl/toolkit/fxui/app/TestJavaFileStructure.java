@@ -4,12 +4,10 @@ import io.devpl.toolkit.fxui.view.filestructure.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-import java.net.MalformedURLException;
 
 public class TestJavaFileStructure extends Application {
 
@@ -18,15 +16,12 @@ public class TestJavaFileStructure extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws MalformedURLException {
+    public void start(Stage primaryStage) {
         BorderPane root = new BorderPane();
         JavaFileStrucutreTreeView jfsTreeView = new JavaFileStrucutreTreeView();
+
         Button btnAdd = new Button("导入");
-        Button btn1 = new Button("B1");
-
-        ToolBar toolBar = new ToolBar(btnAdd, btn1);
         btnAdd.setOnAction(event -> {
-
             TopLevelClassItem classItem = new TopLevelClassItem();
             classItem.setValue("Student");
 
@@ -40,17 +35,15 @@ public class TestJavaFileStructure extends Application {
 
             jfsTreeView.addClass(classItem);
         });
+        root.setTop(new ToolBar(btnAdd));
 
-        root.setTop(toolBar);
-        root.setLeft(jfsTreeView);
+        SplitPane splitPane = new SplitPane();
+        splitPane.getItems().add(jfsTreeView);
+        root.setCenter(splitPane);
 
         JavaElementDetailPane detailPane = new JavaElementDetailPane();
-
-        root.setCenter(detailPane);
-
-        detailPane.addEventFilter(FileStructureEvent.CELL_UPDATED, event -> {
-            System.out.println(1111);
-        });
+        detailPane.setStyle("-fx-background-color: red");
+        splitPane.getItems().add(detailPane);
 
         Scene scene = new Scene(root, 800, 400);
         primaryStage.setScene(scene);

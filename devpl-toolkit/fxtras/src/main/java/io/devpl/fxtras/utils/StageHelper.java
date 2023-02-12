@@ -39,7 +39,6 @@ public class StageHelper {
             }
         }
         if (stage.isShowing()) {
-            System.out.println("正在展示中");
             return;
         }
         stage.show();

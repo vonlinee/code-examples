@@ -1,37 +1,41 @@
 package io.devpl.toolkit.fxui.controller;
 
+import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
 import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.ViewLoader;
 import io.devpl.fxtras.utils.StageHelper;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
-import io.devpl.toolkit.fxui.common.ProgressDialog;
 import io.devpl.toolkit.fxui.event.CommandEvent;
+import io.devpl.toolkit.fxui.model.ConnectionRegistry;
 import io.devpl.toolkit.fxui.model.TableCodeGenConfig;
+import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
-import io.devpl.toolkit.fxui.utils.FileChooserDialog;
-import io.devpl.toolkit.fxui.utils.FileUtils;
-import io.devpl.toolkit.fxui.utils.Messages;
-import io.devpl.toolkit.fxui.utils.StringUtils;
+import io.devpl.toolkit.fxui.utils.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Callback;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,33 +45,31 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 主窗口控制器
  */
-@FxmlLocation(location = "static/fxml/MainUI.fxml")
-public class MainFrameController extends FxmlView {
+@FxmlLocation(location = "static/fxml/MyBatisCodeGenerationView.fxml")
+public class MyBatisCodeGenerationView extends FxmlView {
 
-    @FXML
-    public VBox vboxCodeGenConfigRoot; // 代码生成配置根容器
     @FXML
     public HBox hboxCodeGenOperationRoot; // 代码生成操作根容器
     @FXML
-    private Label configsLabel;
-    @FXML
     public TextField txfParentPackageName;
     @FXML
-    private TextField modelTargetPackage;
+    public TextField modelTargetPackage;
     @FXML
-    private TextField mapperTargetPackage;
+    public TextField mapperTargetPackage;
     @FXML
-    private TextField txfMapperPackageName;  // DAO接口包名
+    public TextField txfMapperPackageName;  // DAO接口包名
     @FXML
-    private TextField modelTargetProject; // 实体类存放目录
+    public TextField modelTargetProject; // 实体类存放目录
     @FXML
-    private TextField mappingTargetProject;
+    public TextField mappingTargetProject;
     @FXML
-    private TextField daoTargetProject;
+    public TextField daoTargetProject;
     @FXML
-    private TextField projectFolderField;
+    public TextField projectFolderField;
     @FXML
     public TableView<TableCodeGenConfig> tblvTableCustomization;
+    @FXML
+    public TableColumn<TableCodeGenConfig, String> tblcSelected;
     @FXML
     public TableColumn<TableCodeGenConfig, String> tblcDbName;
     @FXML
@@ -83,20 +85,68 @@ public class MainFrameController extends FxmlView {
     /**
      * 保存哪些表需要进行代码生成
      * 存放的key:TableCodeGenConfig#getUniqueKey()
+     *
      * @see io.devpl.toolkit.fxui.model.TableCodeGenConfig#getUniqueKey()
      */
     private final Map<String, TableCodeGenConfig> tableConfigsToBeGenerated = new ConcurrentHashMap<>(10);
 
+    @FXML
+    public ComboBox<String> cboxConnection;
+    @FXML
+    public ComboBox<String> cboxDatabase;
+
     // 进度回调
-    ProgressDialog alert = new ProgressDialog(Alert.AlertType.INFORMATION);
+    // ProgressDialog alert = new ProgressDialog(Alert.AlertType.INFORMATION);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        mbgGenerator.setProgressCallback(alert);
-        bindCodeGenConfiguration(codeGenConfig);
-        // 生成配置管理
-        configsLabel.setOnMouseClicked(event -> StageHelper.show(GeneratorConfigController.class));
 
+        cboxConnection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                ConnectionConfig cf = ConnectionRegistry.getConnectionConfiguration(newValue);
+                try (Connection connection = cf.getConnection()) {
+                    List<String> databaseNames = DBUtils.getDatabaseNames(connection);
+                    cboxDatabase.getItems().addAll(databaseNames);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        cboxDatabase.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                String selectedItem = cboxConnection.getSelectionModel().getSelectedItem();
+                ConnectionConfig cf = ConnectionRegistry.getConnectionConfiguration(selectedItem);
+                try (Connection connection = cf.getConnection(newValue)) {
+                    List<TableMetadata> tablesMetadata = DBUtils.getTablesMetadata(connection);
+                    for (TableMetadata tablesMetadatum : tablesMetadata) {
+                        TableCodeGenConfig tcgf = new TableCodeGenConfig();
+                        tcgf.setDatabaseName(newValue);
+                        tcgf.setTableName(tablesMetadatum.getTableName());
+                        tblvTableCustomization.getItems().add(tcgf);
+                    }
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        });
+
+        tblvTableCustomization.setSortPolicy(new Callback<TableView<TableCodeGenConfig>, Boolean>() {
+            @Override
+            public Boolean call(TableView<TableCodeGenConfig> param) {
+                return null;
+            }
+        });
+
+        cboxConnection.getItems().addAll(ConnectionRegistry.getRegisteredConnectionConfigMap().keySet());
+        if (!cboxConnection.getItems().isEmpty()) {
+            cboxConnection.getSelectionModel().select(0);
+        }
+
+        // mbgGenerator.setProgressCallback(alert);
+        bindCodeGenConfiguration(codeGenConfig);
         tblcDbName.setCellValueFactory(new PropertyValueFactory<>("databaseName"));
         tblcDbName.setCellFactory(param -> {
             TableCell<TableCodeGenConfig, String> cell = new TextFieldTableCell<>();
@@ -111,6 +161,9 @@ public class MainFrameController extends FxmlView {
             cell.setTextAlignment(TextAlignment.CENTER);
             return cell;
         });
+
+        tblcSelected.setCellFactory(ChoiceBoxTableCell.forTableColumn());
+
         tblvTableCustomization.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tblvTableCustomization.setRowFactory(param -> {
             TableRow<TableCodeGenConfig> row = new TableRow<>();
@@ -140,6 +193,7 @@ public class MainFrameController extends FxmlView {
 
     /**
      * 选择项目文件夹
+     *
      * @param event 事件
      */
     @FXML
@@ -161,18 +215,19 @@ public class MainFrameController extends FxmlView {
             return;
         }
         mbgGenerator.setGeneratorConfig(codeGenConfig);
-        alert.show();
+        // alert.show();
         try {
             mbgGenerator.generate(tableConfigsToBeGenerated.values());
         } catch (Exception exception) {
             exception.printStackTrace();
-            alert.closeIfShowing();
+            // alert.closeIfShowing();
             Alerts.exception("生成失败", exception).showAndWait();
         }
     }
 
     /**
      * 绑定数据
+     *
      * @param generatorConfig 代码生成配置
      */
     public void bindCodeGenConfiguration(GenericConfiguration generatorConfig) {
@@ -188,6 +243,7 @@ public class MainFrameController extends FxmlView {
 
     /**
      * 检查并创建不存在的文件夹
+     *
      * @return 是否创建成功
      */
     private boolean checkDirs(GenericConfiguration config) {
@@ -228,6 +284,7 @@ public class MainFrameController extends FxmlView {
 
     /**
      * 添加一个表到需要进行代码生成的表
+     *
      * @param tableInfo
      */
     @Subscribe
