@@ -1,7 +1,9 @@
 package beans;
 
+import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.property.StringPropertyBase;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -31,5 +33,7 @@ public class TestBinding {
 		System.out.println(bean);
 		
 		nameProperty.set("zs");
+
+
 	}
 }

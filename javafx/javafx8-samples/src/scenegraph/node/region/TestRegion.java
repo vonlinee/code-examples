@@ -2,34 +2,40 @@ package scenegraph.node.region;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class TestRegion extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        AnchorPane anchorPane = new AnchorPane();
+        Region region = new Region();
+        region.setPrefWidth(200.0);
+        region.setPrefHeight(200.0);
 
-        HBox region = new HBox();
-        region.setStyle("-fx-background-color: #66d366");
+        VBox vBox = new VBox();
+        vBox.getContentBias();
+        region.setShape(new Circle(200.0, 200.0, 20));
 
-        region.setPadding(new Insets(5));
-
-        HBox childRegion = new HBox();
-        childRegion.setPrefSize(50.0, 50.0);
-        childRegion.setStyle("-fx-background-color: #d9a2a2");
-
-        region.getChildren().add(childRegion);
-
-        region.setPadding(new Insets(50));
-
-        Scene scene = new Scene(region, 400.0, 400.0);
+        BackgroundFill bgFill = new BackgroundFill(Color.GREEN, new CornerRadii(50), new Insets(50));
+        BackgroundFill bgFill1 = new BackgroundFill(Color.BLUE, new CornerRadii(0), new Insets(0));
+        Background bg = new Background(bgFill1, bgFill);
+        region.setBackground(bg);
+        AnchorPane.setLeftAnchor(region, 50.0);
+        AnchorPane.setTopAnchor(region, 60.0);
+        anchorPane.getChildren().add(region);
+        Scene scene = new Scene(anchorPane, 400.0, 400.0);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        region.setOnMouseClicked(event -> {
+            final double layoutX = region.getLayoutX();
+            System.out.println(layoutX);
+            region.setLayoutX( + 10);
+        });
     }
 }
