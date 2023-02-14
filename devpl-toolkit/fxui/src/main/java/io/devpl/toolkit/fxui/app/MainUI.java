@@ -2,13 +2,11 @@ package io.devpl.toolkit.fxui.app;
 
 import io.devpl.fxtras.JavaFXApplication;
 import io.devpl.fxtras.mvc.ViewLoader;
-import io.devpl.toolkit.fxui.controller.MyBatisCodeGenerationView;
+import io.devpl.toolkit.fxui.controller.mbg.MyBatisCodeGenerationView;
 import io.devpl.toolkit.fxui.model.ConnectionRegistry;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.springframework.beans.propertyeditors.ClassEditor;
 
 /**
  * 这是本软件的主入口,要运行本软件请直接运行本类就可以了,不用传入任何参数

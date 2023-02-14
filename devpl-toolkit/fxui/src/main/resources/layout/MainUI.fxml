@@ -7,9 +7,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <BorderPane
-        stylesheets="@../../static/css/global_style.css"
+        stylesheets="@../static/css/global_style.css"
         prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11"
-        xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.toolkit.fxui.controller.MyBatisCodeGenerationView">
+        xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.toolkit.fxui.controller.mbg.MyBatisCodeGenerationView">
     <top>
         <ToolBar BorderPane.alignment="CENTER">
             <Label contentDisplay="TOP" text="数据库连接管理"

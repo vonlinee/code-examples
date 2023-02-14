@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
-@FxmlLocation(location = "static/fxml/sshBasedConnection.fxml")
+@FxmlLocation(location = "layout/sshBasedConnection.fxml")
 public class OverSshController extends FxmlView {
 
     @FXML

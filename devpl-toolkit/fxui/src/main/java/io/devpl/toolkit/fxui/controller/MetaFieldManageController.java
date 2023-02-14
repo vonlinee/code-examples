@@ -20,10 +20,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.util.Callback;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -33,7 +31,7 @@ import java.util.*;
 /**
  * 字段元信息管理
  */
-@FxmlLocation(location = "static/fxml/MetaFields.fxml", title = "字段元信息管理")
+@FxmlLocation(location = "layout/MetaFields.fxml", title = "字段元信息管理")
 public class MetaFieldManageController extends FxmlView {
 
     @FXML

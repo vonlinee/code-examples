@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="io.devpl.toolkit.fxui.controller.mbg.MyBatisCodeGenerationView">
+    <top>
+
+    </top>
+
+    <center>
+        <VBox>
+            <HBox>
+                <ComboBox fx:id="cboxConnection"/>
+                <ComboBox fx:id="cboxDatabase"/>
+            </HBox>
+            <TableView fx:id="tblvTableCustomization">
+                <columns>
+                    <TableColumn fx:id="tblcSelected" text="状态" minWidth="50.0" maxWidth="50.0"/>
+                    <TableColumn fx:id="tblcDbName" editable="false" text="数据库名称"/>
+                    <TableColumn fx:id="tblcTableName" editable="false" text="表名称"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox fx:id="hboxCodeGenOperationRoot" maxHeight="60" minHeight="60">
+            <Button text="生成" onAction="#generateCode"/>
+            <Button text="打开目录" onAction="#openTargetRootDirectory"/>
+        </HBox>
+    </bottom>
+</BorderPane>

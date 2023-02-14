@@ -35,7 +35,7 @@ import java.util.ResourceBundle;
 /**
  * 类编辑器
  */
-@FxmlLocation(location = "static/fxml/class_definition.fxml", title = "类编辑")
+@FxmlLocation(location = "layout/class_definition.fxml", title = "类编辑")
 public class ClassDefinitionController extends FxmlView {
 
     @FXML

@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 填充对象默认值
+ */
 public class Mocker {
 
     private static final String PROJECT_BASE_PACKAGE = "自己项目的包名";

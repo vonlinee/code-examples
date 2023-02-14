@@ -1,10 +1,9 @@
 package io.devpl.toolkit.fxui.app;
 
-import io.devpl.fxtras.mvc.ViewLoader;
-import io.devpl.toolkit.fxui.controller.ClassDefinitionController;
-import io.devpl.toolkit.fxui.controller.MetaFieldManageController;
+import io.devpl.fxtras.controls.TaggedRegion;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 /**
@@ -13,8 +12,18 @@ import javafx.stage.Stage;
 public class UnitTestApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Scene scene = new Scene(ViewLoader.load(MetaFieldManageController.class)
-                .getRoot());
+
+        // final Parent root = ViewLoader.load(MetaFieldManageController.class)
+        //         .getRoot();
+
+        TaggedRegion region = new TaggedRegion("Response");
+
+
+        Button btn = new Button("Button");
+
+        region.setContent(btn);
+
+        Scene scene = new Scene(region, 400.0, 400.0);
 
         primaryStage.setScene(scene);
         primaryStage.show();

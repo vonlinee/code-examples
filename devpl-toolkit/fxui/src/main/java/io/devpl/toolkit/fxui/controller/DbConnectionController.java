@@ -6,8 +6,6 @@ import io.devpl.toolkit.fxui.common.Constants;
 import io.devpl.toolkit.fxui.common.JDBCDriver;
 import io.devpl.toolkit.fxui.event.FillDefaultValueEvent;
 import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -24,7 +22,7 @@ import java.util.ResourceBundle;
  * 数据库连接控制器
  * 负责从界面的配置连接数据库
  */
-@FxmlLocation(location = "static/fxml/newConnection.fxml")
+@FxmlLocation(location = "layout/newConnection.fxml")
 public class DbConnectionController extends FxmlView {
 
     @FXML

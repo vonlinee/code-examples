@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 /**
  * 数据库导航控制器
  */
-@FxmlLocation(location = "static/fxml/database_navigation.fxml")
+@FxmlLocation(location = "layout/database_navigation.fxml")
 public class DatabaseNavigationController extends FxmlView {
 
     @FXML

@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 /**
  * 定制列配置控制器
  */
-@FxmlLocation(location = "static/fxml/tableColumnConfigs.fxml")
+@FxmlLocation(location = "layout/tableColumnConfigs.fxml")
 public class TableColumnConfigsController extends FxmlView {
 
     @FXML

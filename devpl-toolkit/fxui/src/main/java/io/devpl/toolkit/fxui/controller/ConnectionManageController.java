@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 /**
  * 数据库连接信息管理控制器
  */
-@FxmlLocation(location = "static/fxml/connection_manage.fxml", title = "数据库连接管理")
+@FxmlLocation(location = "layout/connection_manage.fxml", title = "数据库连接管理")
 public class ConnectionManageController extends FxmlView {
 
     @FXML

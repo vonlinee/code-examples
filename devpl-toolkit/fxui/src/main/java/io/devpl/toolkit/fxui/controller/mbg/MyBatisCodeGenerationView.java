@@ -1,4 +1,4 @@
-package io.devpl.toolkit.fxui.controller;
+package io.devpl.toolkit.fxui.controller.mbg;
 
 import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
 import io.devpl.fxtras.Alerts;
@@ -7,6 +7,9 @@ import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.ViewLoader;
 import io.devpl.fxtras.utils.StageHelper;
 import io.devpl.toolkit.fxui.bridge.MyBatisCodeGenerator;
+import io.devpl.toolkit.fxui.controller.ClassDefinitionController;
+import io.devpl.toolkit.fxui.controller.ConnectionManageController;
+import io.devpl.toolkit.fxui.controller.TableCustomizationController;
 import io.devpl.toolkit.fxui.event.CommandEvent;
 import io.devpl.toolkit.fxui.model.ConnectionRegistry;
 import io.devpl.toolkit.fxui.model.TableCodeGenConfig;
@@ -43,9 +46,9 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 主窗口控制器
+ * MyBatis Code Generation
  */
-@FxmlLocation(location = "static/fxml/MyBatisCodeGenerationView.fxml")
+@FxmlLocation(location = "layout/mbg/MyBatisCodeGenerationView.fxml")
 public class MyBatisCodeGenerationView extends FxmlView {
 
     @FXML
@@ -100,7 +103,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         cboxConnection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
