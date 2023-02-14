@@ -13,6 +13,7 @@
 
     <center>
         <VBox>
+            <fx:include source="MBGConfigurationView.fxml"/>
             <HBox>
                 <ComboBox fx:id="cboxConnection"/>
                 <ComboBox fx:id="cboxDatabase"/>

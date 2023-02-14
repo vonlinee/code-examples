@@ -7,4 +7,7 @@ import javafx.scene.control.TreeTableView;
  */
 public class JsonTreeView extends TreeTableView<String> {
 
+    public JsonTreeView() {
+
+    }
 }

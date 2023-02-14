@@ -3,31 +3,33 @@ package use;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.expr.MemberValuePair;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
-import com.squareup.javapoet.*;
 import io.devpl.codegen.mbpg.util.FastJsonUtils;
-import org.apache.ibatis.javassist.bytecode.annotation.MemberValue;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 
 /**
  * https://houbb.github.io/2020/05/29/java-ast-06-comments
+ *
  * @author wangliang
  * Created On 2022-12-29 10:11:33
  */
@@ -111,7 +113,19 @@ public class JavaParserUtils {
         System.out.println(toString(cu));
     }
 
+    public static List<FieldsData> getFieldsDataList(String filePath) {
+        try (FileInputStream in = new FileInputStream(filePath)) {
+            ParseResult<CompilationUnit> cu = JAVA_PARSER_INSTANCE.parse(in);
+            System.out.println(cu);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
-        json2ObjectSchema("    {\n" + "      \"level\": 6,\n" + "      \"SchoolLevel\": 1,\n" + "      \"Count\": 1,\n" + "      \"SchoolID\": \"S-3333\",\n" + "      \"ID\": \"75571f30-3592-11ed-8e54-1a4610000015\",\n" + "      \"UpdateTime\": \"2022/9/16 15:37:39\"\n" + "    }", "aaa", "Main");
+
+        getFieldsDataList("D:\\Work\\Code\\campus-potrait-ws\\src\\main\\java\\com\\lancoo\\campusportrait\\domain\\vo\\TeacherDataViewVO.java");
+
     }
 }

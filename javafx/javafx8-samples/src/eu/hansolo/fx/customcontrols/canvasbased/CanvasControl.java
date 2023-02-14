@@ -129,12 +129,12 @@
          };
          this.innerShadow     = new InnerShadow(BlurType.TWO_PASS_BOX, Color.rgb(0, 0, 0, 0.65), 20, 0.0, 0, 0);
          this.dropShadow      = new DropShadow(BlurType.TWO_PASS_BOX, Color.rgb(0, 0, 0, 0.25), 5, 0.0, 0, 0);
-         this.backgroundColor = new ObjectPropertyBase<>(DEFAULT_BACKGROUND_COLOR) {
+         this.backgroundColor = new ObjectPropertyBase<Color>(DEFAULT_BACKGROUND_COLOR) {
              @Override protected void invalidated() { redraw(); }
              @Override public Object getBean() { return CanvasControl.this; }
              @Override public String getName() { return "backgroundColorTop"; }
          };
-         this.foregroundColor = new ObjectPropertyBase<>(DEFAULT_FOREGROUND_COLOR) {
+         this.foregroundColor = new ObjectPropertyBase<Color>(DEFAULT_FOREGROUND_COLOR) {
              @Override protected void invalidated() { redraw(); }
              @Override public Object getBean() { return CanvasControl.this; }
              @Override public String getName() { return "foregroundColor"; }

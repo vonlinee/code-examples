@@ -15,7 +15,10 @@ import io.devpl.toolkit.fxui.model.ConnectionRegistry;
 import io.devpl.toolkit.fxui.model.TableCodeGenConfig;
 import io.devpl.toolkit.fxui.model.props.ConnectionConfig;
 import io.devpl.toolkit.fxui.model.props.GenericConfiguration;
-import io.devpl.toolkit.fxui.utils.*;
+import io.devpl.toolkit.fxui.utils.DBUtils;
+import io.devpl.toolkit.fxui.utils.FileUtils;
+import io.devpl.toolkit.fxui.utils.Messages;
+import io.devpl.toolkit.fxui.utils.StringUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -30,7 +33,6 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.TextAlignment;
-import javafx.util.Callback;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
@@ -54,22 +56,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
     @FXML
     public HBox hboxCodeGenOperationRoot; // 代码生成操作根容器
     @FXML
-    public TextField txfParentPackageName;
-    @FXML
-    public TextField modelTargetPackage;
-    @FXML
-    public TextField mapperTargetPackage;
-    @FXML
-    public TextField txfMapperPackageName;  // DAO接口包名
-    @FXML
-    public TextField modelTargetProject; // 实体类存放目录
-    @FXML
-    public TextField mappingTargetProject;
-    @FXML
-    public TextField daoTargetProject;
-    @FXML
-    public TextField projectFolderField;
-    @FXML
     public TableView<TableCodeGenConfig> tblvTableCustomization;
     @FXML
     public TableColumn<TableCodeGenConfig, String> tblcSelected;
@@ -79,11 +65,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
     public TableColumn<TableCodeGenConfig, String> tblcTableName;
 
     private final MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
-
-    /**
-     * 通用配置项
-     */
-    private final GenericConfiguration codeGenConfig = new GenericConfiguration();
 
     /**
      * 保存哪些表需要进行代码生成
@@ -135,20 +116,13 @@ public class MyBatisCodeGenerationView extends FxmlView {
             }
         });
 
-        tblvTableCustomization.setSortPolicy(new Callback<TableView<TableCodeGenConfig>, Boolean>() {
-            @Override
-            public Boolean call(TableView<TableCodeGenConfig> param) {
-                return null;
-            }
-        });
-
         cboxConnection.getItems().addAll(ConnectionRegistry.getRegisteredConnectionConfigMap().keySet());
         if (!cboxConnection.getItems().isEmpty()) {
             cboxConnection.getSelectionModel().select(0);
         }
 
         // mbgGenerator.setProgressCallback(alert);
-        bindCodeGenConfiguration(codeGenConfig);
+
         tblcDbName.setCellValueFactory(new PropertyValueFactory<>("databaseName"));
         tblcDbName.setCellFactory(param -> {
             TableCell<TableCodeGenConfig, String> cell = new TextFieldTableCell<>();
@@ -188,20 +162,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
             row.setContextMenu(menu);
             return row;
         });
-
-        // TODO 删除
-        fillDefaultCodeGenConfig(null);
-    }
-
-    /**
-     * 选择项目文件夹
-     *
-     * @param event 事件
-     */
-    @FXML
-    public void chooseProjectFolder(ActionEvent event) {
-        FileChooserDialog.showDirectoryDialog(getStage(event))
-                .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
     }
 
     @FXML
@@ -209,14 +169,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
         if (tableConfigsToBeGenerated.isEmpty()) {
             return;
         }
-        if (StringUtils.hasNotText(codeGenConfig.getProjectFolder())) {
-            Alerts.error("项目根目录不能为空").show();
-            return;
-        }
-        if (!checkDirs(codeGenConfig)) {
-            return;
-        }
-        mbgGenerator.setGeneratorConfig(codeGenConfig);
+        mbgGenerator.setGeneratorConfig(null);
         // alert.show();
         try {
             mbgGenerator.generate(tableConfigsToBeGenerated.values());
@@ -225,22 +178,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
             // alert.closeIfShowing();
             Alerts.exception("生成失败", exception).showAndWait();
         }
-    }
-
-    /**
-     * 绑定数据
-     *
-     * @param generatorConfig 代码生成配置
-     */
-    public void bindCodeGenConfiguration(GenericConfiguration generatorConfig) {
-        projectFolderField.textProperty().bindBidirectional(generatorConfig.projectFolderProperty());
-        modelTargetPackage.textProperty().bindBidirectional(generatorConfig.modelPackageProperty());
-        modelTargetProject.textProperty().bindBidirectional(generatorConfig.modelPackageTargetFolderProperty());
-        txfParentPackageName.textProperty().bindBidirectional(generatorConfig.parentPackageProperty());
-        txfMapperPackageName.textProperty().bindBidirectional(generatorConfig.daoPackageProperty());
-        daoTargetProject.textProperty().bindBidirectional(generatorConfig.daoTargetFolderProperty());
-        mapperTargetPackage.textProperty().bindBidirectional(generatorConfig.mappingXMLPackageProperty());
-        mappingTargetProject.textProperty().bindBidirectional(generatorConfig.mappingXMLTargetFolderProperty());
     }
 
     /**
@@ -300,21 +237,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
     }
 
     @FXML
-    public void fillDefaultCodeGenConfig(ActionEvent actionEvent) {
-        projectFolderField.setText("D:/Temp/");
-        daoTargetProject.setText("src/main/java");
-        mapperTargetPackage.setText("mapping");
-        txfMapperPackageName.setText("mapper");
-        mappingTargetProject.setText("src/main/resources");
-        modelTargetPackage.setText("entity");
-    }
-
-    @FXML
     public void openTargetRootDirectory(ActionEvent actionEvent) {
-        String directory = projectFolderField.getText();
-        if (StringUtils.hasNotText(directory)) {
-            return;
-        }
-        FileUtils.show(new File(directory));
+
     }
 }

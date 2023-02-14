@@ -19,59 +19,7 @@
         <Accordion fx:id="accoConfig">
             <panes>
                 <TitledPane text="选项配置">
-                    <GridPane>
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="ALWAYS"/>
-                            <ColumnConstraints hgrow="ALWAYS"/>
-                            <ColumnConstraints hgrow="ALWAYS"/>
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER"/>
-                        </rowConstraints>
-                        <children>
-                            <CheckBox fx:id="chbUseExample" minWidth="100.0" mnemonicParsing="false"
-                                      text="使用Example"/>
-                            <CheckBox fx:id="chbOffsetLimit" disable="true" minWidth="100.0"
-                                      mnemonicParsing="false" selected="true"
-                                      text="分页插件(暂时只支持MySQL和PostgreSQL)" GridPane.columnIndex="1"/>
-                            <CheckBox fx:id="chbComment" mnemonicParsing="false" selected="true"
-                                      text="生成实体域注释(来自表注释)" GridPane.rowIndex="1"/>
-                            <CheckBox fx:id="chbOverrideXML" mnemonicParsing="false" selected="true" text="覆盖原XML"
-                                      GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                            <CheckBox fx:id="chbUseLombokPlugin" mnemonicParsing="false" text="LombokPlugin"
-                                      GridPane.rowIndex="2"/>
-                            <CheckBox fx:id="chbNeedToStringHashcodeEquals" mnemonicParsing="false" selected="true"
-                                      text="生成toString/hashCode/equals方法" GridPane.columnIndex="1"
-                                      GridPane.rowIndex="2"/>
-                            <CheckBox fx:id="chbUseSchemaPrefix" mnemonicParsing="false" text="使用Schema前缀"
-                                      GridPane.rowIndex="3"/>
-                            <CheckBox fx:id="chbForUpdate" mnemonicParsing="false" text="select 增加ForUpdate"
-                                      GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-                            <CheckBox fx:id="chbAnnotationDao" mnemonicParsing="false"
-                                      text="DAO使用 @Repository 注解" GridPane.rowIndex="4"/>
-                            <CheckBox fx:id="chbMapperExtend" mnemonicParsing="false" prefHeight="17.0"
-                                      prefWidth="145.0" text="DAO方法抽出到公共父接口" GridPane.columnIndex="2"
-                                      GridPane.rowIndex="4"/>
-                            <CheckBox fx:id="chbJsr310Support" mnemonicParsing="false" prefHeight="16.0"
-                                      prefWidth="252.0" text="JSR310: Date and Time API" GridPane.columnIndex="2"
-                                      GridPane.rowIndex="2"/>
-                            <CheckBox fx:id="annotationCheckBox" mnemonicParsing="false" text="生成JPA注解"
-                                      GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-                            <CheckBox fx:id="useActualColumnNamesCheckbox" mnemonicParsing="false"
-                                      text="使用实际的列名" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
-                            <CheckBox fx:id="useTableNameAliasCheckbox" mnemonicParsing="false"
-                                      text="启用as别名查询" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-                            <CheckBox fx:id="addMapperAnnotationChcekBox" text="添加@Mapper注解"
-                                      GridPane.rowIndex="5"/>
-                            <CheckBox fx:id="chbEnableSwagger" text="开启Swagger注解" GridPane.columnIndex="1"
-                                      GridPane.rowIndex="4"/>
-                        </children>
-                    </GridPane>
+
                 </TitledPane>
                 <TitledPane fx:id="titpColumnConfig" text="列自定义配置" graphicTextGap="200">
                     <TableView fx:id="columnListView" editable="true">
