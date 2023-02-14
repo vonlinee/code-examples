@@ -8,12 +8,12 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="io.devpl.toolkit.fxui.controller.mbg.MyBatisCodeGenerationView">
     <top>
-
+        <fx:include source="MBGConfigurationView.fxml"/>
     </top>
 
     <center>
         <VBox>
-            <fx:include source="MBGConfigurationView.fxml"/>
+
             <HBox>
                 <ComboBox fx:id="cboxConnection"/>
                 <ComboBox fx:id="cboxDatabase"/>

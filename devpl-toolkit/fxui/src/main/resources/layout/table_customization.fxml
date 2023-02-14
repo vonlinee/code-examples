@@ -18,9 +18,6 @@
     <center>
         <Accordion fx:id="accoConfig">
             <panes>
-                <TitledPane text="选项配置">
-
-                </TitledPane>
                 <TitledPane fx:id="titpColumnConfig" text="列自定义配置" graphicTextGap="200">
                     <TableView fx:id="columnListView" editable="true">
                         <columns>

@@ -4,39 +4,30 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane prefHeight="290.0" prefWidth="622.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+<GridPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="io.devpl.toolkit.fxui.controller.mbg.MBGConfigurationView">
 
     <columnConstraints>
         <ColumnConstraints halignment="RIGHT" hgrow="NEVER"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="688.0"/>
+        <ColumnConstraints hgrow="ALWAYS"/>
         <ColumnConstraints halignment="LEFT" hgrow="NEVER"/>
         <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES"/>
-        <ColumnConstraints halignment="RIGHT" hgrow="NEVER"/>
+        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
-        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
-        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
-        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
-        <RowConstraints maxHeight="30.0" minHeight="0.0" prefHeight="0.0" vgrow="ALWAYS"/>
-        <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="90.0" valignment="CENTER" vgrow="NEVER"/>
-        <RowConstraints valignment="CENTER" vgrow="NEVER"/>
-        <RowConstraints/>
-        <RowConstraints/>
-        <RowConstraints/>
-        <RowConstraints/>
-        <RowConstraints/>
-        <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0"/>
-        <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="NEVER"/>
     </rowConstraints>
     <Label text="项目根目录" GridPane.rowIndex="0"/>
-    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
-        <TextField fx:id="projectFolderField" prefHeight="23.0" prefWidth="202.0"/>
+    <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <TextField fx:id="projectFolderField"/>
         <Button mnemonicParsing="false" onAction="#chooseProjectFolder" text="选择"/>
     </HBox>
     <Label text="父包名" GridPane.rowIndex="1"/>
-    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+    <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <TextField fx:id="txfParentPackageName">
         </TextField>
     </HBox>
@@ -66,18 +57,12 @@
 
     <GridPane GridPane.columnSpan="4" GridPane.rowIndex="5">
         <columnConstraints>
-            <ColumnConstraints hgrow="NEVER"/>
-            <ColumnConstraints hgrow="NEVER"/>
+            <ColumnConstraints/>
+            <ColumnConstraints/>
             <ColumnConstraints/>
             <ColumnConstraints/>
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
             <RowConstraints/>
             <RowConstraints/>
             <RowConstraints/>
@@ -101,9 +86,9 @@
                   GridPane.rowIndex="5"/>
         <CheckBox fx:id="chbAnnotationDao" mnemonicParsing="false" text="DAO使用 @Repository 注解"
                   GridPane.columnIndex="2" GridPane.rowIndex="9"/>
-        <CheckBox fx:id="chbMapperExtend" mnemonicParsing="false" prefHeight="17.0" prefWidth="145.0"
+        <CheckBox fx:id="chbMapperExtend" mnemonicParsing="false"
                   text="DAO方法抽出到公共父接口" GridPane.rowIndex="9"/>
-        <CheckBox fx:id="chbJsr310Support" mnemonicParsing="false" prefHeight="16.0" prefWidth="252.0"
+        <CheckBox fx:id="chbJsr310Support" mnemonicParsing="false"
                   text="JSR310: Date and Time API" GridPane.columnIndex="3" GridPane.rowIndex="9"/>
         <CheckBox fx:id="annotationCheckBox" mnemonicParsing="false" text="生成JPA注解" GridPane.columnIndex="3"
                   GridPane.rowIndex="5"/>
@@ -111,7 +96,7 @@
                   GridPane.columnIndex="3" GridPane.rowIndex="3"/>
         <CheckBox fx:id="useTableNameAliasCheckbox" mnemonicParsing="false" text="启用as别名查询"
                   GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-        <CheckBox fx:id="addMapperAnnotationChcekBox" prefHeight="31.0" prefWidth="103.0" text="添加@Mapper注解"
+        <CheckBox fx:id="addMapperAnnotationChcekBox" text="添加@Mapper注解"
                   GridPane.rowIndex="3"/>
         <CheckBox fx:id="chbEnableSwagger" text="开启Swagger注解" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
     </GridPane>
