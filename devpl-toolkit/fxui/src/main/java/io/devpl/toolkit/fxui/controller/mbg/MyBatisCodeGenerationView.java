@@ -64,7 +64,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
     @FXML
     public TableColumn<TableCodeGenConfig, String> tblcTableName;
 
-    private final MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
+    private  MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
 
     /**
      * 保存哪些表需要进行代码生成

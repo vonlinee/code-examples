@@ -13,7 +13,6 @@
 
     <center>
         <VBox>
-
             <HBox>
                 <ComboBox fx:id="cboxConnection"/>
                 <ComboBox fx:id="cboxDatabase"/>
