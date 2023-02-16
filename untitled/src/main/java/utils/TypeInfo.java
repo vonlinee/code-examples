@@ -1,11 +1,11 @@
 package utils;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import lombok.Data;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -14,29 +14,17 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Data
 public class TypeInfo {
 
-    /**
-     * 类型名称
-     */
-    public static Map<String, List<TypeInfo>> types = new HashMap<>();
+    // 简单类名
+    private String simpleName;
 
-    public static TypeInfo register(TypeDeclaration<?> typeDeclaration) {
-        TypeInfo typeInfo = TypeInfo.of(typeDeclaration);
-        List<TypeInfo> typeInfoList = types.get(typeInfo.getSimpleName());
-        if (typeInfoList == null) {
-            typeInfoList = new CopyOnWriteArrayList<>();
-            typeInfoList.add(typeInfo);
-        }
-        return typeInfo;
-    }
+    // 所在文件的路径
+    private String path;
 
-    public static List<TypeInfo> get(String simpleName) {
-        return types.get(simpleName);
-    }
+    // 全类名
+    private String fullName;
 
-    private String simpleName; // 简单类名
-    private String path; // 所在文件的路径
-    private String fullName; // 全类名
-    private int level; // 是否是顶级类型
+    // 是否是顶级类型
+    private int level;
 
     public static TypeInfo of(TypeDeclaration<?> typeDeclaration) {
         TypeInfo typeInfo = new TypeInfo();

@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="io.devpl.toolkit.fxui.controller.ConnectionManageController">
+            fx:controller="io.devpl.tookit.fxui.controller.ConnectionManageController">
 
     <top>
         <ToolBar>

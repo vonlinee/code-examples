@@ -7,7 +7,7 @@
 <?import java.lang.String?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="205.0"
             prefWidth="538.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="io.devpl.toolkit.fxui.controller.TableColumnConfigsController">
+            fx:controller="io.devpl.tookit.fxui.controller.TableColumnConfigsController">
     <VBox prefHeight="64.0" prefWidth="538.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0"
           AnchorPane.topAnchor="5.0">
         <GridPane alignment="TOP_RIGHT" vgap="5.0">

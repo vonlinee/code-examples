@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 <GridPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="io.devpl.toolkit.fxui.controller.OverSshController"
+          fx:controller="io.devpl.tookit.fxui.controller.OverSshController"
           alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT">
     <columnConstraints>
         <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="340.0" minWidth="19.0" prefWidth="194.0"/>

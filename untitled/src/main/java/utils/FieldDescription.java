@@ -6,6 +6,7 @@ import lombok.Data;
 public class FieldDescription {
 
     private String name;
+
     private String comment;
 
     /**

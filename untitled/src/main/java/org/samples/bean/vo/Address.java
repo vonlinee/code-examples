@@ -3,6 +3,7 @@ package org.samples.bean.vo;
 public class Address {
 
     private String value;
+
     private int id;
 
     public String getValue() {

@@ -1,7 +1,7 @@
 package sample.java;
 
 import io.devpl.fxtras.beans.Model;
-import io.devpl.toolkit.fxui.utils.mock.Mocker;
+import io.devpl.tookit.utils.mock.Mocker;
 
 public class TestMocker {
 

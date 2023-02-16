@@ -1,8 +1,7 @@
 import com.squareup.javapoet.*;
 import org.junit.Test;
 import org.samples.bean.Student;
-import utils.GithubJavaParser;
-
+import utils.JavaParserUtils;
 import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
@@ -16,19 +15,24 @@ public class Main {
         return new File(new File("src/main/java"), path);
     }
 
+    @Test
+    public void test6() throws IOException {
+    }
 
     @Test
     public void test2() throws IOException {
         final File file = newFile("org/samples/bean/Student.java");
-
-        GithubJavaParser.parseFile(file);
+        JavaParserUtils.parseFile(file);
     }
 
+    /**
+     * 解析整个项目根路径
+     *
+     * @throws IOException
+     */
     @Test
     public void test4() throws IOException {
-        final File file = newFile("org/samples/bean/Student.java");
-
-        GithubJavaParser.parseProject("C:\\Users\\vonline\\Desktop\\untitled");
+        JavaParserUtils.parseProject("D:\\Develop\\Code\\code-samples\\untitled\\src\\main\\java");
     }
 
     @Test
@@ -36,15 +40,9 @@ public class Main {
         ClassName className = ClassName.get("org.utils", "Main");
         TypeName typeName = TypeName.get(String.class);
         ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(className, typeName);
-
         FieldSpec fieldSpec = FieldSpec.builder(parameterizedTypeName, "nameList", Modifier.PRIVATE).build();
-
-        final TypeSpec type = TypeSpec.classBuilder("Main")
-                .addField(fieldSpec)
-                .build();
-
+        final TypeSpec type = TypeSpec.classBuilder("Main").addField(fieldSpec).build();
         final JavaFile javaFile = JavaFile.builder("aaaa.bbb.ccc", type).build();
-
         javaFile.writeTo(System.out);
     }
 

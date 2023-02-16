@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="io.devpl.toolkit.fxui.controller.mbg.MyBatisCodeGenerationView">
+            fx:controller="io.devpl.tookit.fxui.controller.mbg.MyBatisCodeGenerationView">
     <top>
         <fx:include source="MBGConfigurationView.fxml"/>
     </top>
@@ -27,7 +27,7 @@
         </VBox>
     </center>
     <bottom>
-        <HBox fx:id="hboxCodeGenOperationRoot" maxHeight="60" minHeight="60">
+        <HBox maxHeight="60" minHeight="60">
             <Button text="生成" onAction="#generateCode"/>
             <Button text="打开目录" onAction="#openTargetRootDirectory"/>
         </HBox>

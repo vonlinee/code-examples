@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <GridPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="io.devpl.toolkit.fxui.controller.mbg.MBGConfigurationView">
+          fx:controller="io.devpl.tookit.fxui.controller.mbg.MBGConfigurationView">
 
     <columnConstraints>
         <ColumnConstraints halignment="RIGHT" hgrow="NEVER"/>

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <BorderPane
         fx:id="bopRoot"
-        fx:controller="io.devpl.toolkit.fxui.controller.TextHandleController"
+        fx:controller="io.devpl.tookit.fxui.controller.TextHandleController"
         maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
         prefWidth="600.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
     <center>
