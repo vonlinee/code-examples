@@ -18,4 +18,5 @@ public interface IconKey {
     String DB_MYSQL = "static/icon/mysql.svg";
     String DB_OBJECT = "static/icon/db_db_object.svg";
     String DB_TABLE = "static/icon/table.svg";
+    String DB_COLUMN = "static/icon/dataColumn.svg";
 }

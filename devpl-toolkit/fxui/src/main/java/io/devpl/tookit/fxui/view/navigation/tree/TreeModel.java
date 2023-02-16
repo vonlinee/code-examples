@@ -81,7 +81,7 @@ public interface TreeModel {
             return;
         }
         for (TreeModel item : children) {
-            TreeItem<TreeModel> newItem = new TreeItem<>(item);
+            TreeItem<TreeModel> newItem = item.getTreeItem();
             parent.getChildren().add(newItem);
             item.setTreeItem(newItem);
             item.attach(newItem);

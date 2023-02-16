@@ -4,6 +4,9 @@ import io.devpl.tookit.fxui.view.navigation.tree.TreeModel;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 
+/**
+ * @see TreeItem
+ */
 public abstract class TreeModelBase implements TreeModel {
 
     private TreeItem<TreeModel> treeItem = newTreeItem();

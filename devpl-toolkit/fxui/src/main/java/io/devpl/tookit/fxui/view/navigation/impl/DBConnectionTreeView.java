@@ -22,9 +22,9 @@ import java.util.List;
 /**
  * 数据库导航视图
  */
-public class DatabaseNavigationView extends TreeView<TreeModel> {
+public class DBConnectionTreeView extends TreeView<TreeModel> {
 
-    public DatabaseNavigationView() {
+    public DBConnectionTreeView() {
         setRoot(new TreeItem<>());
         setShowRoot(false);
         setEditable(false);  // 禁用双击编辑操作，通过菜单的方式进行编辑
@@ -37,8 +37,7 @@ public class DatabaseNavigationView extends TreeView<TreeModel> {
 
                 @Override
                 public TreeModel fromString(String string) {
-                    TreeItem<TreeModel> selectedItem = DatabaseNavigationView.this.getSelectionModel()
-                            .getSelectedItem();
+                    TreeItem<TreeModel> selectedItem = DBConnectionTreeView.this.getSelectionModel().getSelectedItem();
                     TreeModel value = selectedItem.getValue();
                     value.setDispalyValue(string);
                     return value;
@@ -74,6 +73,7 @@ public class DatabaseNavigationView extends TreeView<TreeModel> {
                             for (TableMetadata tableMetadata : tablesMetadata) {
                                 TableItem tableItem = new TableItem();
                                 tableItem.setDispalyValue(tableMetadata.getTableName());
+                                tableItem.setGraphic(IconMap.loadSVG(IconKey.DB_TABLE));
                                 databaseItem.getChildren().add(tableItem);
                             }
                         } catch (SQLException e) {
@@ -90,6 +90,7 @@ public class DatabaseNavigationView extends TreeView<TreeModel> {
                             for (ColumnMetadata column : columns) {
                                 ColumnItem columnItem = new ColumnItem();
                                 columnItem.setColumnName(column.getColumnName());
+                                columnItem.setGraphic(IconMap.loadSVG(IconKey.DB_COLUMN));
                                 tableItem.getChildren().add(columnItem);
                             }
                         } catch (SQLException exception) {
