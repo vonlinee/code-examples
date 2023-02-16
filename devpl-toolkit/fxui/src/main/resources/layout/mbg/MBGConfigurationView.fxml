@@ -54,13 +54,12 @@
     <TextField fx:id="mappingTargetProject" text="src/main/resources" GridPane.columnIndex="3" GridPane.rowIndex="4">
     </TextField>
 
-
     <GridPane GridPane.columnSpan="4" GridPane.rowIndex="5">
         <columnConstraints>
-            <ColumnConstraints/>
-            <ColumnConstraints/>
-            <ColumnConstraints/>
-            <ColumnConstraints/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
         </columnConstraints>
         <rowConstraints>
             <RowConstraints/>
