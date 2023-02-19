@@ -1,58 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import org.fxmisc.richtext.CodeArea?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-            prefWidth="800.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane fx:id="bopRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.devpl.tookit.fxui.controller.ClassDefinitionController">
     <top>
         <ToolBar prefHeight="40.0" BorderPane.alignment="CENTER">
             <Button mnemonicParsing="false" text="修改"/>
             <Button mnemonicParsing="false" text="删除"/>
             <Button mnemonicParsing="false" text="新增"/>
-            <Button mnemonicParsing="false" text="生成类" fx:id="btnClassGenerate"
-                    onMouseClicked="#generateClassDefinition"/>
         </ToolBar>
     </top>
 
     <center>
-        <SplitPane>
-            <VBox fx:id="vboxInputRoot">
-                <VBox fx:id="vboxClassBasicInfoRoot" spacing="5">
-                    <Label text="基本信息"/>
-                    <HBox alignment="CENTER_LEFT" spacing="5">
-                        <Label text="类名"/>
-                        <TextField fx:id="txfClassName"/>
-                    </HBox>
-                </VBox>
-                <Accordion fx:id="acdFieldMethodInfoRoot">
-                    <panes>
-                        <TitledPane text="字段" fx:id="titpFieldList">
-                            <BorderPane>
-                                <top>
-                                    <ToolBar>
-                                        <Button text="新增" onAction="#addField"/>
-                                        <Button text="删除" onAction="#deleteField"/>
-                                        <Button text="添加字段" onAction="#openFieldImportDialog"/>
-                                        <Button text="数据库元数据" onAction="#openColumnChooserDialog"/>
-                                    </ToolBar>
-                                </top>
-                                <center>
-                                    <TableView fx:id="tbvFieldInfo" editable="true">
-                                        <columns>
-                                            <TableColumn fx:id="tblcFieldModifier" text="访问修饰符"/>
-                                            <TableColumn fx:id="tblcFieldDataType" text="数据类型"/>
-                                            <TableColumn fx:id="tblcFieldName" text="字段名"/>
-                                            <TableColumn fx:id="tblcFieldRemarks" text="字段注释"/>
-                                        </columns>
-                                    </TableView>
-                                </center>
-                            </BorderPane>
-                        </TitledPane>
-                    </panes>
-                </Accordion>
-            </VBox>
-        </SplitPane>
+
     </center>
 </BorderPane>

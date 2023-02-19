@@ -17,6 +17,7 @@
         <module>fxui</module>
         <module>devpl-eventbus</module>
         <module>fxtras</module>
+        <module>json-parser</module>
     </modules>
 
     <properties>

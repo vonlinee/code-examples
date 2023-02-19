@@ -5,7 +5,7 @@ import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.tookit.fxui.common.Constants;
 import io.devpl.tookit.fxui.common.JDBCDriver;
 import io.devpl.tookit.fxui.event.FillDefaultValueEvent;
-import io.devpl.tookit.fxui.model.props.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ConnectionInfo;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;

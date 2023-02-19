@@ -6,8 +6,8 @@ import io.devpl.tookit.fxui.common.StringKey;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import io.devpl.tookit.fxui.model.TableCodeGeneration;
 import io.devpl.tookit.fxui.model.TableCodeGenOption;
-import io.devpl.tookit.fxui.model.props.ConnectionInfo;
-import io.devpl.tookit.fxui.model.props.GenericConfiguration;
+import io.devpl.tookit.fxui.model.ConnectionInfo;
+import io.devpl.tookit.fxui.model.props.CodeGenConfiguration;
 import io.devpl.tookit.mbg.plugins.*;
 import io.devpl.tookit.utils.StringUtils;
 import org.mybatis.generator.api.MyBatisGenerator;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class MyBatisCodeGenerator {
 
     // 代码生成配置
-    private GenericConfiguration generatorConfig;
+    private CodeGenConfiguration generatorConfig;
     // 进度回调
     private ProgressCallback progressCallback;
     // 忽略的列
@@ -44,7 +44,7 @@ public class MyBatisCodeGenerator {
 
     private final PluginRegistry pluginRegistry = new PluginRegistry();
 
-    public void setGeneratorConfig(GenericConfiguration generatorConfig) {
+    public void setGeneratorConfig(CodeGenConfiguration generatorConfig) {
         this.generatorConfig = generatorConfig;
     }
 
@@ -326,7 +326,7 @@ public class MyBatisCodeGenerator {
      * @param context
      * @param generatorConfig
      */
-    private void prepareCommonConfig(Context context, GenericConfiguration generatorConfig) {
+    private void prepareCommonConfig(Context context, CodeGenConfiguration generatorConfig) {
         // java model
         JavaModelGeneratorConfiguration modelConfig = new JavaModelGeneratorConfiguration();
         modelConfig.setTargetPackage(generatorConfig.getModelPackage());
@@ -345,7 +345,7 @@ public class MyBatisCodeGenerator {
         context.setJavaClientGeneratorConfiguration(daoConfig);
     }
 
-    private String getMappingXMLFilePath(GenericConfiguration generatorConfig) {
+    private String getMappingXMLFilePath(CodeGenConfiguration generatorConfig) {
         StringBuilder sb = new StringBuilder();
         sb.append(generatorConfig.getProjectFolder()).append("/");
         sb.append(generatorConfig.getMappingXMLTargetFolder()).append("/");

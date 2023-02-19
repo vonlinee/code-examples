@@ -1,5 +1,27 @@
 package io.devpl.tookit.fxui.controller;
 
+import io.devpl.fxtras.Alerts;
+import io.devpl.fxtras.mvc.FxmlLocation;
+import io.devpl.fxtras.mvc.FxmlView;
+import io.devpl.fxtras.mvc.ViewLoader;
+import io.devpl.fxtras.utils.StageHelper;
+import io.devpl.tookit.fxui.model.ConnectionRegistry;
+import io.devpl.tookit.fxui.model.TableCodeGeneration;
+import io.devpl.tookit.fxui.model.props.ColumnCustomConfiguration;
+import io.devpl.tookit.fxui.model.ConnectionInfo;
+import io.devpl.tookit.utils.CollectionUtils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.BorderPane;
+import org.greenrobot.eventbus.Subscribe;
+import org.mybatis.generator.config.ColumnOverride;
+import org.mybatis.generator.config.IgnoredColumn;
+
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -7,37 +29,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import io.devpl.tookit.fxui.model.ConnectionRegistry;
-import io.devpl.tookit.fxui.model.props.ConnectionInfo;
-import org.mybatis.generator.config.ColumnOverride;
-import org.mybatis.generator.config.IgnoredColumn;
-
-import io.devpl.fxtras.Alerts;
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.fxtras.mvc.ViewLoader;
-import io.devpl.fxtras.utils.StageHelper;
-import io.devpl.tookit.fxui.event.CommandEvent;
-import io.devpl.tookit.fxui.model.TableCodeGenOption;
-import io.devpl.tookit.fxui.model.TableCodeGeneration;
-import io.devpl.tookit.fxui.model.props.ColumnCustomConfiguration;
-import io.devpl.tookit.utils.CollectionUtils;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TitledPane;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.BorderPane;
 
 /**
  * 表定制化控制器: 配置单个表的代码生成效果
@@ -53,38 +44,6 @@ public class TableCustomizationController extends FxmlView {
     public Accordion accoConfig;
     @FXML
     public TitledPane titpColumnConfig;
-    @FXML
-    public CheckBox chbUseExample;
-    @FXML
-    public CheckBox chbOffsetLimit;
-    @FXML
-    public CheckBox chbComment;
-    @FXML
-    public CheckBox chbOverrideXML;
-    @FXML
-    public CheckBox chbUseLombokPlugin;
-    @FXML
-    public CheckBox chbNeedToStringHashcodeEquals;
-    @FXML
-    public CheckBox chbUseSchemaPrefix;
-    @FXML
-    public CheckBox chbAnnotationDao;
-    @FXML
-    public CheckBox chbForUpdate;
-    @FXML
-    public CheckBox chbMapperExtend;
-    @FXML
-    public CheckBox chbJsr310Support;
-    @FXML
-    public CheckBox annotationCheckBox;
-    @FXML
-    public CheckBox useActualColumnNamesCheckbox;
-    @FXML
-    public CheckBox useTableNameAliasCheckbox;
-    @FXML
-    public CheckBox addMapperAnnotationChcekBox;
-    @FXML
-    public CheckBox chbEnableSwagger;
     @FXML
     private TableView<ColumnCustomConfiguration> columnListView;
     @FXML
@@ -102,7 +61,6 @@ public class TableCustomizationController extends FxmlView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        accoConfig.setExpandedPane(accoConfig.getPanes().get(1));
         checkedColumn.setCellFactory(param -> {
             TableCell<ColumnCustomConfiguration, Boolean> cell = new CheckBoxTableCell<>(null);
             cell.setTooltip(new Tooltip("如果不想生成某列请取消勾选对应的列"));
@@ -137,47 +95,35 @@ public class TableCustomizationController extends FxmlView {
         typeHandlerColumn.setOnEditCommit(event -> {
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setTypeHandler(event.getNewValue());
         });
-        // 初始化数据
-        root.addEventHandler(CommandEvent.COMMAND, event -> {
-            TableCodeGeneration tableInfo = (TableCodeGeneration) event.getData();
-            // 获取数据库表的所有列信息
-            List<ColumnCustomConfiguration> columns = new ArrayList<>();
-
-            String connectionName = tableInfo.getConnectionName();
-            ConnectionInfo connectionConfig = ConnectionRegistry.getConnectionConfiguration(connectionName);
-
-            try (Connection conn = connectionConfig.getConnection()) {
-                DatabaseMetaData md = conn.getMetaData();
-                ResultSet rs = md.getColumns(tableInfo.getDatabaseName(), null, tableInfo.getTableName(), null);
-                while (rs.next()) {
-                    ColumnCustomConfiguration columnVO = new ColumnCustomConfiguration();
-                    columnVO.setColumnName(rs.getString("COLUMN_NAME"));
-                    columnVO.setJdbcType(rs.getString("TYPE_NAME"));
-                    columns.add(columnVO);
-                }
-            } catch (Exception e) {
-                Alerts.exception("", e).show();
-            }
-            labelCurrentTableName.setText(tableInfo.getTableName());
-            columnListView.setItems(FXCollections.observableList(columns));
-            // 每次都是重新加载FXML
-            initTableCodeGenerationOptionBindding(tableInfo.getOption());
-        });
     }
 
     /**
-     * 初始化表生成选项数据绑定
-     * @param option 表生成选项
+     * 定制表配置
+     *
+     * @param tableInfo 表生成信息
      */
-    public void initTableCodeGenerationOptionBindding(TableCodeGenOption option) {
-        // TODO 只绑定一次，如果每次绑定的根节点没有变化，那么无需进行绑定
-        option.useExampleProperty().bind(chbUseExample.selectedProperty());
-        option.annotationDAOProperty().bind(chbAnnotationDao.selectedProperty());
-        option.commentProperty().bind(chbComment.selectedProperty());
-        option.overrideXMLProperty().bind(chbOverrideXML.selectedProperty());
-        option.jsr310SupportProperty().bind(chbJsr310Support.selectedProperty());
-        option.useSchemaPrefixProperty().bind(chbUseSchemaPrefix.selectedProperty());
-        option.useDAOExtendStyleProperty().bind(chbMapperExtend.selectedProperty());
+    @Subscribe(name = "CustomizeTable")
+    public void customize(TableCodeGeneration tableInfo) {
+        // 获取数据库表的所有列信息
+        List<ColumnCustomConfiguration> columns = new ArrayList<>();
+
+        String connectionName = tableInfo.getConnectionName();
+        ConnectionInfo connectionConfig = ConnectionRegistry.getConnectionConfiguration(connectionName);
+
+        try (Connection conn = connectionConfig.getConnection()) {
+            DatabaseMetaData md = conn.getMetaData();
+            ResultSet rs = md.getColumns(tableInfo.getDatabaseName(), null, tableInfo.getTableName(), null);
+            while (rs.next()) {
+                ColumnCustomConfiguration columnVO = new ColumnCustomConfiguration();
+                columnVO.setColumnName(rs.getString("COLUMN_NAME"));
+                columnVO.setJdbcType(rs.getString("TYPE_NAME"));
+                columns.add(columnVO);
+            }
+        } catch (Exception e) {
+            Alerts.exception("", e).show();
+        }
+        labelCurrentTableName.setText(tableInfo.getTableName());
+        columnListView.setItems(FXCollections.observableList(columns));
     }
 
     /**

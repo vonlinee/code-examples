@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import io.devpl.tookit.fxui.view.navigation.impl.DBTreeView?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 <BorderPane
         stylesheets="@../static/css/global_style.css"
         prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11"
-        xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.tookit.fxui.controller.mbg.MyBatisCodeGenerationView">
+        xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.devpl.tookit.fxui.controller.MainView">
     <top>
         <ToolBar BorderPane.alignment="CENTER">
             <Label contentDisplay="TOP" text="数据库连接管理"
@@ -26,21 +28,22 @@
                     </ImageView>
                 </graphic>
             </Label>
-            <Label text="类编辑器" contentDisplay="TOP" onMouseClicked="#showClassEditorDialogPane">
-                <padding>
-                    <Insets right="10.0"/>
-                </padding>
-                <graphic>
-                    <ImageView fitWidth="40" fitHeight="40">
-                        <Image url="@/static/icon/config-list.png"/>
-                    </ImageView>
-                </graphic>
-            </Label>
         </ToolBar>
     </top>
     <center>
         <SplitPane dividerPositions="0.25">
-
+            <VBox fx:id="vboxLeft">
+                <TextField fx:id="txfFilter"/>
+                <DBTreeView fx:id="trvDbNavigation"/>
+            </VBox>
+            <TabPane fx:id="tabpContainer">
+                <Tab fx:id="tabMbg" closable="false" text="代码生成">
+                    <fx:include source="mbg/MyBatisCodeGenerationView.fxml"/>
+                </Tab>
+                <Tab closable="false" text="类编辑">
+                    <fx:include source="../layout/class_definition.fxml"/>
+                </Tab>
+            </TabPane>
         </SplitPane>
     </center>
 </BorderPane>

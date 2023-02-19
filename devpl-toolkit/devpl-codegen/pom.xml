@@ -18,6 +18,12 @@
     </properties>
 
     <dependencies>
+        <!--对Java字符串进行转换为驼峰格式-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.9</version>
+        </dependency>
         <!--Druid数据库连接池，SQL解析器-->
         <dependency>
             <groupId>com.alibaba</groupId>

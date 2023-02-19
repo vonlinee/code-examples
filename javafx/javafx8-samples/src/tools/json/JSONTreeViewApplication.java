@@ -15,6 +15,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * JSON 数据可视化
+ */
 public class JSONTreeViewApplication extends Application {
 
     Gson gson = new Gson();

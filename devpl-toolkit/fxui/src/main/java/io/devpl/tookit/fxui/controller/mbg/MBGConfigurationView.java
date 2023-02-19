@@ -2,8 +2,8 @@ package io.devpl.tookit.fxui.controller.mbg;
 
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.tookit.fxui.model.props.GenericConfiguration;
-import io.devpl.tookit.utils.FileChooserDialog;
+import io.devpl.tookit.fxui.model.props.CodeGenConfiguration;
+import io.devpl.tookit.utils.fx.FileChooserDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -37,7 +37,7 @@ public class MBGConfigurationView extends FxmlView {
     /**
      * 通用配置项
      */
-    private final GenericConfiguration codeGenConfig = new GenericConfiguration();
+    private final CodeGenConfiguration codeGenConfig = new CodeGenConfiguration();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -59,7 +59,7 @@ public class MBGConfigurationView extends FxmlView {
      *
      * @param generatorConfig 代码生成配置
      */
-    public void bindCodeGenConfiguration(GenericConfiguration generatorConfig) {
+    public void bindCodeGenConfiguration(CodeGenConfiguration generatorConfig) {
         projectFolderField.textProperty().bindBidirectional(generatorConfig.projectFolderProperty());
         modelTargetPackage.textProperty().bindBidirectional(generatorConfig.modelPackageProperty());
         modelTargetProject.textProperty().bindBidirectional(generatorConfig.modelPackageTargetFolderProperty());

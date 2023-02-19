@@ -9,8 +9,7 @@ bracket(x) ::= "[<x>]"   // surround parameter with square brackets
 
 show_user(user) ::= "<user>"
 
-
-
+st2() ::= ""
 
 
 

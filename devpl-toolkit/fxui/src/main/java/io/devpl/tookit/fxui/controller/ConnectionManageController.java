@@ -4,7 +4,7 @@ import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.utils.StageHelper;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
-import io.devpl.tookit.fxui.model.props.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ConnectionInfo;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

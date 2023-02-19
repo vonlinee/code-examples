@@ -42,7 +42,6 @@ public class TestJavaFileStructure extends Application {
         root.setCenter(splitPane);
 
         JavaElementDetailPane detailPane = new JavaElementDetailPane();
-        detailPane.setStyle("-fx-background-color: red");
         splitPane.getItems().add(detailPane);
 
         Scene scene = new Scene(root, 800, 400);

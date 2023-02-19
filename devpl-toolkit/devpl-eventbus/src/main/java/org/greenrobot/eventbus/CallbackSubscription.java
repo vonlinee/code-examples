@@ -1,7 +1,5 @@
 package org.greenrobot.eventbus;
 
-import net.jodah.typetools.TypeResolver;
-
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -21,8 +19,12 @@ public class CallbackSubscription<P, R> extends GenericSubscription {
         resolveType(this.eventCallback = callback);
     }
 
+    /**
+     * 解析lambda表达式的类型
+     * @param callback
+     */
     private void resolveType(EventCallback<P, R> callback) {
-        Class<?>[] types = TypeResolver.resolveRawArguments(EventCallback.class, callback.getClass());
+        Class<?>[] types = null;
         if (types == null) {
             throw new RuntimeException("unexpected exception: the type of EventCallback is null");
         }

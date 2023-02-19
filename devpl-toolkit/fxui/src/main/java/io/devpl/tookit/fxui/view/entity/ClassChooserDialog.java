@@ -6,5 +6,4 @@ import java.io.File;
 
 public class ClassChooserDialog extends Dialog<File> {
 
-
 }

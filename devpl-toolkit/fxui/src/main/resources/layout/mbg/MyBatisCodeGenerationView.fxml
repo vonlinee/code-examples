@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="io.devpl.tookit.fxui.controller.mbg.MyBatisCodeGenerationView">
-    <top>
-        <fx:include source="MBGConfigurationView.fxml"/>
-    </top>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      spacing="5"
+      fx:controller="io.devpl.tookit.fxui.controller.mbg.MyBatisCodeGenerationView">
 
-    <center>
-        <VBox>
-            <HBox>
-                <ComboBox fx:id="cboxConnection"/>
-                <ComboBox fx:id="cboxDatabase"/>
-            </HBox>
-            <TableView fx:id="tblvTableCustomization">
-                <columns>
-                    <TableColumn fx:id="tblcSelected" text="状态" minWidth="50.0" maxWidth="50.0"/>
-                    <TableColumn fx:id="tblcDbName" editable="false" text="数据库名称"/>
-                    <TableColumn fx:id="tblcTableName" editable="false" text="表名称"/>
-                </columns>
-            </TableView>
-        </VBox>
-    </center>
-    <bottom>
-        <HBox maxHeight="60" minHeight="60">
-            <Button text="生成" onAction="#generateCode"/>
-            <Button text="打开目录" onAction="#openTargetRootDirectory"/>
-        </HBox>
-    </bottom>
-</BorderPane>
+    <fx:include source="MBGConfigurationView.fxml"/>
+
+    <HBox>
+        <VBox.margin>
+            <Insets topRightBottomLeft="10"/>
+        </VBox.margin>
+        <ComboBox fx:id="cboxConnection" editable="true"/>
+        <ComboBox fx:id="cboxDatabase" editable="true"/>
+    </HBox>
+    <SplitPane>
+        <TableView fx:id="tblvTableCustomization">
+            <columns>
+                <TableColumn fx:id="tblcTableName" editable="false" text="表名称"/>
+                <TableColumn fx:id="tblcTableComment" editable="false" text="表注释"/>
+            </columns>
+        </TableView>
+        <TableView fx:id="tblvTableSelected">
+            <columns>
+                <TableColumn fx:id="tblcSelectedTableName" editable="false" text="表名称"/>
+                <TableColumn fx:id="tblcSelectedTableComment" editable="false" text="表注释"/>
+            </columns>
+        </TableView>
+    </SplitPane>
+    <AnchorPane>
+        <Button text="生成"></Button>
+    </AnchorPane>
+</VBox>

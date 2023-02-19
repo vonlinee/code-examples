@@ -1,5 +1,7 @@
 package io.devpl.codegen.utils;
 
+import org.apache.commons.text.CaseUtils;
+
 public class StringUtils {
 
     /**
@@ -9,6 +11,7 @@ public class StringUtils {
 
     /**
      * 判断字符串中是否全是空白字符
+     *
      * @param cs 需要判断的字符串
      * @return 如果字符串序列是 null 或者全是空白，返回 true
      */
@@ -26,6 +29,7 @@ public class StringUtils {
 
     /**
      * 字符串下划线转驼峰格式
+     *
      * @param param 需要转换的字符串
      * @return 转换好的字符串
      */

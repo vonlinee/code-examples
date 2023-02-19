@@ -7,29 +7,25 @@ import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.ViewLoader;
 import io.devpl.fxtras.utils.StageHelper;
 import io.devpl.tookit.fxui.bridge.MyBatisCodeGenerator;
-import io.devpl.tookit.fxui.controller.ClassDefinitionController;
-import io.devpl.tookit.fxui.controller.ConnectionManageController;
 import io.devpl.tookit.fxui.controller.TableCustomizationController;
-import io.devpl.tookit.fxui.event.CommandEvent;
+import io.devpl.tookit.fxui.event.Events;
+import io.devpl.tookit.fxui.model.ConnectionInfo;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import io.devpl.tookit.fxui.model.TableCodeGeneration;
-import io.devpl.tookit.fxui.model.props.ConnectionInfo;
-import io.devpl.tookit.fxui.model.props.GenericConfiguration;
+import io.devpl.tookit.fxui.model.props.CodeGenConfiguration;
 import io.devpl.tookit.utils.DBUtils;
 import io.devpl.tookit.utils.FileUtils;
 import io.devpl.tookit.utils.Messages;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextAlignment;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -53,13 +49,11 @@ public class MyBatisCodeGenerationView extends FxmlView {
     @FXML
     public TableView<TableCodeGeneration> tblvTableCustomization;
     @FXML
-    public TableColumn<TableCodeGeneration, String> tblcSelected;
-    @FXML
-    public TableColumn<TableCodeGeneration, String> tblcDbName;
-    @FXML
     public TableColumn<TableCodeGeneration, String> tblcTableName;
+    @FXML
+    public TableColumn<TableCodeGeneration, String> tblcTableComment;
 
-    private MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
+    private final MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
 
     /**
      * 保存哪些表需要进行代码生成
@@ -73,6 +67,13 @@ public class MyBatisCodeGenerationView extends FxmlView {
     public ComboBox<String> cboxConnection;
     @FXML
     public ComboBox<String> cboxDatabase;
+    // 选中的表
+    @FXML
+    public TableView<TableCodeGeneration> tblvTableSelected;
+    @FXML
+    public TableColumn<TableCodeGeneration, String> tblcSelectedTableName;
+    @FXML
+    public TableColumn<TableCodeGeneration, String> tblcSelectedTableComment;
 
     // 进度回调
     // ProgressDialog alert = new ProgressDialog(Alert.AlertType.INFORMATION);
@@ -91,23 +92,24 @@ public class MyBatisCodeGenerationView extends FxmlView {
                 }
             }
         });
-
-        cboxDatabase.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                String selectedItem = cboxConnection.getSelectionModel().getSelectedItem();
-                ConnectionInfo cf = ConnectionRegistry.getConnectionConfiguration(selectedItem);
-                try (Connection connection = cf.getConnection(newValue)) {
-                    List<TableMetadata> tablesMetadata = DBUtils.getTablesMetadata(connection);
-                    for (TableMetadata tablesMetadatum : tablesMetadata) {
-                        TableCodeGeneration tcgf = new TableCodeGeneration();
-                        tcgf.setDatabaseName(newValue);
-                        tcgf.setTableName(tablesMetadatum.getTableName());
-                        tblvTableCustomization.getItems().add(tcgf);
-                    }
-                } catch (Exception exception) {
-                    exception.printStackTrace();
+        cboxDatabase.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            String selectedItem = cboxConnection.getSelectionModel().getSelectedItem();
+            ConnectionInfo cf = ConnectionRegistry.getConnectionConfiguration(selectedItem);
+            final ObservableList<TableCodeGeneration> items = tblvTableCustomization.getItems();
+            if (items.size() > 0) {
+                items.clear();
+            }
+            try (Connection connection = cf.getConnection(newValue)) {
+                List<TableMetadata> tablesMetadata = DBUtils.getTablesMetadata(connection);
+                for (TableMetadata tablesMetadatum : tablesMetadata) {
+                    TableCodeGeneration tcgf = new TableCodeGeneration();
+                    tcgf.setConnectionName(selectedItem);
+                    tcgf.setDatabaseName(newValue);
+                    tcgf.setTableName(tablesMetadatum.getTableName());
+                    items.add(tcgf);
                 }
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         });
 
@@ -116,15 +118,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
             cboxConnection.getSelectionModel().select(0);
         }
 
-        // mbgGenerator.setProgressCallback(alert);
-
-        tblcDbName.setCellValueFactory(new PropertyValueFactory<>("databaseName"));
-        tblcDbName.setCellFactory(param -> {
-            TableCell<TableCodeGeneration, String> cell = new TextFieldTableCell<>();
-            cell.setAlignment(Pos.CENTER);
-            cell.setTextAlignment(TextAlignment.CENTER);
-            return cell;
-        });
         tblcTableName.setCellValueFactory(new PropertyValueFactory<>("tableName"));
         tblcTableName.setCellFactory(param -> {
             TableCell<TableCodeGeneration, String> cell = new TextFieldTableCell<>();
@@ -132,14 +125,20 @@ public class MyBatisCodeGenerationView extends FxmlView {
             cell.setTextAlignment(TextAlignment.CENTER);
             return cell;
         });
-
-        tblcSelected.setCellFactory(ChoiceBoxTableCell.forTableColumn());
+        tblcSelectedTableName.setCellValueFactory(new PropertyValueFactory<>("tableName"));
+        tblcSelectedTableName.setCellFactory(param -> {
+            TableCell<TableCodeGeneration, String> cell = new TextFieldTableCell<>();
+            cell.setAlignment(Pos.CENTER);
+            cell.setTextAlignment(TextAlignment.CENTER);
+            return cell;
+        });
 
         tblvTableCustomization.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tblvTableCustomization.setRowFactory(param -> {
+        tblvTableSelected.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tblvTableSelected.setRowFactory(param -> {
             TableRow<TableCodeGeneration> row = new TableRow<>();
             MenuItem deleteThisRowMenuItem = new MenuItem("删除");
-            MenuItem customizeMenuItem = new MenuItem("定制列");
+            MenuItem customizeMenuItem = new MenuItem("定制");
             deleteThisRowMenuItem.setOnAction(event -> {
                 TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
                 param.getItems().remove(item);
@@ -149,12 +148,28 @@ public class MyBatisCodeGenerationView extends FxmlView {
                 // 表定制事件
                 TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
                 Parent root = ViewLoader.load(TableCustomizationController.class).getRoot();
-                Event.fireEvent(root, new CommandEvent(CommandEvent.COMMAND, item));
-                StageHelper.show("", root);
+
+                this.publish("CustomizeTable", item);
+                StageHelper.show("表生成定制", root);
                 event.consume();
             });
             ContextMenu menu = new ContextMenu(deleteThisRowMenuItem, customizeMenuItem);
             row.setContextMenu(menu);
+            return row;
+        });
+
+        tblvTableCustomization.setRowFactory(param -> {
+            TableRow<TableCodeGeneration> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (Events.isPrimaryButtonDoubleClicked(event)) {
+                    final TableCodeGeneration tableItem = row.getItem();
+                    final String uniqueKey = tableItem.getUniqueKey();
+                    if (!tableConfigsToBeGenerated.containsKey(uniqueKey)) {
+                        tableConfigsToBeGenerated.put(uniqueKey, tableItem);
+                        tblvTableSelected.getItems().add(tableItem);
+                    }
+                }
+            });
             return row;
         });
     }
@@ -180,7 +195,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
      *
      * @return 是否创建成功
      */
-    private boolean checkDirs(GenericConfiguration config) {
+    private boolean checkDirs(CodeGenConfiguration config) {
         List<Path> targetDirs = new ArrayList<>();
         targetDirs.add(Path.of(config.getProjectFolder()));
         targetDirs.add(config.getEntityTargetDirectory());
@@ -206,16 +221,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
         return true;
     }
 
-    @FXML
-    public void showClassEditorDialogPane(MouseEvent mouseEvent) {
-        StageHelper.show(ClassDefinitionController.class);
-    }
-
-    @FXML
-    public void showConnectinManagePane(MouseEvent mouseEvent) {
-        StageHelper.show(ConnectionManageController.class);
-    }
-
     /**
      * 添加一个表到需要进行代码生成的表
      *
@@ -234,5 +239,10 @@ public class MyBatisCodeGenerationView extends FxmlView {
     @FXML
     public void openTargetRootDirectory(ActionEvent actionEvent) {
 
+    }
+
+    @FXML
+    public void openMBGConfigPane(ActionEvent actionEvent) {
+        StageHelper.show(MBGConfigurationView.class);
     }
 }

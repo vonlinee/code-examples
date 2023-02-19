@@ -2,10 +2,15 @@
 
 <!--MyBatis Generator 配置-->
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <GridPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="io.devpl.tookit.fxui.controller.mbg.MBGConfigurationView">
+
+    <VBox.margin>
+        <Insets topRightBottomLeft="10"/>
+    </VBox.margin>
 
     <columnConstraints>
         <ColumnConstraints halignment="RIGHT" hgrow="NEVER"/>

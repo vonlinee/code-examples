@@ -48,6 +48,7 @@ public class JavaParserUtils {
         JAVA_PARSER_INSTANCE = new JavaParser(parserConfig);
     }
 
+    // 打印配置
     static PrinterConfiguration printerConfiguration;
 
     static {
@@ -127,5 +128,6 @@ public class JavaParserUtils {
 
         getFieldsDataList("D:\\Work\\Code\\campus-potrait-ws\\src\\main\\java\\com\\lancoo\\campusportrait\\domain\\vo\\TeacherDataViewVO.java");
 
+        final ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration();
     }
 }

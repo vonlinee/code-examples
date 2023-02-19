@@ -2,10 +2,8 @@ package io.devpl.tookit.fxui.app;
 
 import io.devpl.fxtras.JavaFXApplication;
 import io.devpl.fxtras.mvc.ViewLoader;
-import io.devpl.tookit.fxui.controller.mbg.MyBatisCodeGenerationView;
+import io.devpl.tookit.fxui.controller.MainView;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
-import io.devpl.tookit.fxui.model.props.ConnectionInfo;
-import io.devpl.tookit.fxui.view.navigation.impl.DBConnectionTreeView;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -27,16 +25,8 @@ public class MainUI extends JavaFXApplication {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        DBConnectionTreeView view = new DBConnectionTreeView();
-
-        for (ConnectionInfo connectionInfo : ConnectionRegistry.getConnectionConfigurations()) {
-            view.addConnection(connectionInfo);
-        }
-
-
-        Parent root = ViewLoader.load(MyBatisCodeGenerationView.class).getRoot();
-        primaryStage.setScene(new Scene(view));
+        Parent root = ViewLoader.load(MainView.class).getRoot();
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 }

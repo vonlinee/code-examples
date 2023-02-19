@@ -1,7 +1,6 @@
 package io.devpl.tookit.fxui.model;
 
 import io.devpl.tookit.utils.AppConfig;
-import io.devpl.tookit.fxui.model.props.ConnectionInfo;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;

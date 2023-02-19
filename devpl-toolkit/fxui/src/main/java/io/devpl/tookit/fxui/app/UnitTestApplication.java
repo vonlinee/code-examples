@@ -1,7 +1,10 @@
 package io.devpl.tookit.fxui.app;
 
 import io.devpl.fxtras.controls.TaggedRegion;
+import io.devpl.fxtras.mvc.ViewLoader;
+import io.devpl.tookit.fxui.controller.Json;
 import javafx.application.Application;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -18,12 +21,13 @@ public class UnitTestApplication extends Application {
 
         TaggedRegion region = new TaggedRegion("Response");
 
-
         Button btn = new Button("Button");
 
         region.setContent(btn);
 
-        Scene scene = new Scene(region, 400.0, 400.0);
+        final Parent root = ViewLoader.load(Json.class).getRoot();
+
+        Scene scene = new Scene(region);
 
         primaryStage.setScene(scene);
         primaryStage.show();

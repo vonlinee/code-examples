@@ -3,6 +3,7 @@ package io.devpl.tookit.fxui.view;
 import javafx.scene.Node;
 import org.girod.javafx.svgimage.SVGImage;
 import org.girod.javafx.svgimage.SVGLoader;
+import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignW;
 
@@ -18,6 +19,10 @@ public class IconMap {
     public static SVGImage loadSVG(String key) {
         URL resource = Thread.currentThread().getContextClassLoader().getResource(key);
         return SVGLoader.load(resource);
+    }
+
+    public static FontIcon fontIcon(Ikon ikon) {
+        return FontIcon.of(ikon);
     }
 
     public static Node winodwCloase() {

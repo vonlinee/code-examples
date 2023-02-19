@@ -26,14 +26,11 @@ public class JavaElementItem extends TreeItem<String> {
         this.setGraphic(graphicContainer);
 
         // 更换可见性对应的图标
-        visibility.addListener(new ChangeListener<JavaVisibility>() {
-            @Override
-            public void changed(ObservableValue<? extends JavaVisibility> observable, JavaVisibility oldValue, JavaVisibility newValue) {
-                ObservableList<Node> children = graphicContainer.getChildren();
-                // 更换图标
-                if (children.size() == 2) {
-                    children.set(1, newValue.getIconNode());
-                }
+        visibility.addListener((observable, oldValue, newValue) -> {
+            ObservableList<Node> children = graphicContainer.getChildren();
+            // 更换图标
+            if (children.size() == 2) {
+                children.set(1, newValue.getIconNode());
             }
         });
     }

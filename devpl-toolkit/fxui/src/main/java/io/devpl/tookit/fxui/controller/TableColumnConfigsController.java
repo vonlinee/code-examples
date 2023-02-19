@@ -1,10 +1,10 @@
 package io.devpl.tookit.fxui.controller;
 
+import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.tookit.fxui.common.Constants;
 import io.devpl.tookit.fxui.model.props.ColumnCustomConfiguration;
-import io.devpl.fxtras.Alerts;
 import io.devpl.tookit.utils.CollectionUtils;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

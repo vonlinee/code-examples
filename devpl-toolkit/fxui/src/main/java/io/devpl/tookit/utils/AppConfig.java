@@ -1,6 +1,6 @@
 package io.devpl.tookit.utils;
 
-import io.devpl.tookit.fxui.model.props.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ConnectionInfo;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

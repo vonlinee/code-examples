@@ -7,7 +7,7 @@ import io.devpl.tookit.fxui.event.Events;
 import io.devpl.tookit.fxui.event.FillDefaultValueEvent;
 import io.devpl.tookit.utils.AppConfig;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
-import io.devpl.tookit.fxui.model.props.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ConnectionInfo;
 import io.devpl.tookit.utils.StringUtils;
 import io.devpl.tookit.utils.Validator;
 import javafx.application.Platform;

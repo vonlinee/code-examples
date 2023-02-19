@@ -261,6 +261,12 @@ public class DBUtils {
         }
     }
 
+    /**
+     * 获取连接的所有数据库名
+     *
+     * @param connection 数据库连接对象
+     * @return
+     */
     public static List<String> getDatabaseNames(Connection connection) {
         try {
             DatabaseMetaData dbmd = connection.getMetaData();

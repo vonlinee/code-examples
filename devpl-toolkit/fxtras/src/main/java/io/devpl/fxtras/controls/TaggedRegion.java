@@ -2,36 +2,39 @@ package io.devpl.fxtras.controls;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
-import javafx.scene.control.Control;
-import javafx.scene.control.Skin;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
+import javafx.scene.text.Text;
 
 /**
  * @see javafx.scene.control.ScrollPane
+ * @see javafx.scene.layout.AnchorPane
  */
-public class TaggedRegion extends Control {
+public class TaggedRegion extends Region {
+
+    /**
+     * 标签文本
+     */
+    Text tagNode;
 
     public TaggedRegion(String text) {
-        textProperty().set(text);
+        tagNode = new Text();
+        tagNode.setText(text);
+        getChildren().add(tagNode);
     }
 
-    private StringProperty text;
-
-    public String getText() {
-        return text.get();
+    public final String getText() {
+        return tagNode.getText();
     }
 
-    public StringProperty textProperty() {
-        if (text == null) {
-            text = new SimpleStringProperty(this, "text");
-        }
-        return text;
+    public final StringProperty textProperty() {
+        return tagNode.textProperty();
     }
 
-    public void setText(String text) {
-        this.text.set(text);
+    public final void setText(String text) {
+        tagNode.setText(text);
     }
 
     /**
@@ -54,13 +57,19 @@ public class TaggedRegion extends Control {
         return content;
     }
 
+    /**
+     * 绝对布局
+     *
+     * @see AnchorPane#layoutChildren()
+     */
     @Override
     protected void layoutChildren() {
-        super.layoutChildren();
+
+        tagNode.resizeRelocate(0, 0, 200, 200);
     }
 
     @Override
-    protected Skin<?> createDefaultSkin() {
-        return new TaggedRegionSkin(this);
+    public void resize(double width, double height) {
+        super.resize(width, height);
     }
 }
