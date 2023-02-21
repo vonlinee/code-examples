@@ -23,6 +23,10 @@ import java.util.stream.Collectors;
  */
 public class FileChooserDialog extends Dialog<ButtonType> {
 
+	
+	
+	
+	
     private final TreeView<File> fileTreeView;
     private final ComboBox<String> currentSelectedPath;
 
@@ -100,7 +104,9 @@ public class FileChooserDialog extends Dialog<ButtonType> {
         });
 
         CompletableFuture.runAsync(() -> {
-            fillRecursivly(root, new File("D:\\"));
+        	if (this.getInitialDirectory() != null) {
+        		fillRecursivly(root, this.getInitialDirectory());
+			}
         });
     }
 

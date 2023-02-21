@@ -32,7 +32,11 @@ public class ImportInfo {
         return importInfo;
     }
 
-    /**
+    private Map<String, String> getImportedIdentifierMap() {
+		return importedIdentifierMap;
+	}
+
+	/**
      * 是否导入了该类型
      *
      * @param typeName SimpleName

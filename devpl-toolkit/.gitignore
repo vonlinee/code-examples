@@ -46,3 +46,7 @@ archive.zip
 .factorypath
 .springBeans
 **/transaction-logs*/
+
+
+/logs
+*.log

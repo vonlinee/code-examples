@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonReader;
 import de.marhali.json5.Json5;
+import io.devpl.tookit.utils.fx.FileChooserDialog;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -38,6 +39,10 @@ public class JSONTreeViewApplication extends Application {
 
         Button btn = new Button("选择文件");
         btn.setOnAction(event -> {
+        	
+        	FileChooserDialog fcd = new FileChooserDialog();
+        	
+        	
             FileChooser fileChooser = new FileChooser();
             fileChooser.setInitialDirectory(new File("C:\\Users\\Von\\Desktop\\"));
             fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("json", ".json"));
