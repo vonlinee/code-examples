@@ -1,6 +1,6 @@
 package io.devpl.tookit.fxui;
 
-import io.devpl.tookit.fxui.app.TestJavaFileStructure;
+import io.devpl.tookit.fxui.app.UnitTestApplication;
 import javafx.application.Application;
 
 /**
@@ -9,6 +9,6 @@ import javafx.application.Application;
 public class FXLauncher {
 
     public static void main(String[] args) {
-        Application.launch(TestJavaFileStructure.class);
+        Application.launch(UnitTestApplication.class);
     }
 }

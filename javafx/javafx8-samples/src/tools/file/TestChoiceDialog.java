@@ -1,10 +1,9 @@
-package scenegraph;
+package tools.file;
 
 import javafx.application.Application;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.stage.Stage;
-import tools.file.FileChooserDialog;
 
 import java.io.File;
 import java.util.Arrays;

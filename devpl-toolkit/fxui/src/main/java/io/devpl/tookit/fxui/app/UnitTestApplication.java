@@ -22,12 +22,11 @@ public class UnitTestApplication extends Application {
         TaggedRegion region = new TaggedRegion("Response");
 
         Button btn = new Button("Button");
-
         region.setContent(btn);
 
         final Parent root = ViewLoader.load(Json.class).getRoot();
 
-        Scene scene = new Scene(region);
+        Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
         primaryStage.show();

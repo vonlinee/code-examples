@@ -1,4 +1,4 @@
-package tools.json;
+package io.devpl.tookit.fxui.view.json;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -23,7 +23,6 @@ public class JSONTreeView extends TreeTableView<JSONNode> {
             row.setOnMouseClicked(event -> {
                 @SuppressWarnings("unchecked") TreeTableRow<JSONNode> clickedRow = (TreeTableRow<JSONNode>) event.getSource();
                 TreeItem<JSONNode> treeItem = clickedRow.getTreeItem();
-
             });
             return row;
         });

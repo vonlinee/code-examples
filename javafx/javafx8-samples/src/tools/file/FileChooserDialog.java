@@ -16,6 +16,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
+ * 文件选择弹窗
+ *
  * @see javafx.scene.control.ChoiceDialog
  * @see javafx.stage.FileChooser
  */
