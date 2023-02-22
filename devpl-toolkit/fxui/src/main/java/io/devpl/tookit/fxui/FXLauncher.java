@@ -10,7 +10,7 @@ import javafx.application.Application;
 public class FXLauncher {
 
     public static void main(String[] args) {
-//        Application.launch(UnitTestApplication.class);
-    	Application.launch(JSONTreeViewApplication.class);
+        Application.launch(UnitTestApplication.class);
+//    	Application.launch(JSONTreeViewApplication.class);
     }
 }

@@ -11,9 +11,9 @@ import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.tookit.fxui.model.FieldInfo;
 import io.devpl.tookit.fxui.model.MetaField;
+import io.devpl.tookit.fxui.view.IconMap;
 import io.devpl.tookit.utils.DBUtils;
 import io.devpl.tookit.utils.StringUtils;
-import io.devpl.tookit.fxui.view.IconMap;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,8 +30,9 @@ import java.util.*;
 
 /**
  * 字段元信息管理
+ * 没有数据类型，只有字段名和字段值
  */
-@FxmlLocation(location = "layout/MetaFields.fxml", title = "字段元信息管理")
+@FxmlLocation(location = "layout/MetaFields.fxml", title = "字段管理")
 public class MetaFieldManageController extends FxmlView {
 
     @FXML
