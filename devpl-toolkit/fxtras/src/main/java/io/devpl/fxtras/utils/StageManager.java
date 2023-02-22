@@ -5,10 +5,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
-public class StageHelper {
+public class StageManager {
 
     public static void show(Class<?> controllerClass) {
         show("", ViewLoader.load(controllerClass).getRoot());

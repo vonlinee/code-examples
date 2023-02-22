@@ -2,6 +2,9 @@ package io.devpl.fxtras;
 
 import javafx.application.Application;
 
+/**
+ * 资源目录
+ */
 public abstract class JavaFXApplication extends Application {
 
     @Override

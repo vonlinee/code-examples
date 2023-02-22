@@ -14,7 +14,7 @@ import java.net.URL;
  * Ikonli提供的图标
  * 本地SVG图标
  */
-public class IconMap {
+public final class IconMap {
 
     public static SVGImage loadSVG(String key) {
         URL resource = Thread.currentThread().getContextClassLoader().getResource(key);

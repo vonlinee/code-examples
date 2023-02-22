@@ -5,14 +5,14 @@ import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.ViewLoader;
-import io.devpl.fxtras.utils.StageHelper;
+import io.devpl.fxtras.utils.StageManager;
 import io.devpl.tookit.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.tookit.fxui.controller.TableCustomizationController;
 import io.devpl.tookit.fxui.event.Events;
 import io.devpl.tookit.fxui.model.ConnectionInfo;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import io.devpl.tookit.fxui.model.TableCodeGeneration;
-import io.devpl.tookit.fxui.model.props.CodeGenConfiguration;
+import io.devpl.tookit.fxui.model.CodeGenConfiguration;
 import io.devpl.tookit.utils.DBUtils;
 import io.devpl.tookit.utils.FileUtils;
 import io.devpl.tookit.utils.Messages;
@@ -150,7 +150,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
                 Parent root = ViewLoader.load(TableCustomizationController.class).getRoot();
 
                 this.publish("CustomizeTable", item);
-                StageHelper.show("表生成定制", root);
+                StageManager.show("表生成定制", root);
                 event.consume();
             });
             ContextMenu menu = new ContextMenu(deleteThisRowMenuItem, customizeMenuItem);
@@ -198,9 +198,9 @@ public class MyBatisCodeGenerationView extends FxmlView {
     private boolean checkDirs(CodeGenConfiguration config) {
         List<Path> targetDirs = new ArrayList<>();
         targetDirs.add(Path.of(config.getProjectFolder()));
-        targetDirs.add(config.getEntityTargetDirectory());
-        targetDirs.add(config.getMappingXMLTargetDirectory());
-        targetDirs.add(config.getMapperTargetDirectory());
+        // targetDirs.add(config.getEntityTargetDirectory());
+        // targetDirs.add(config.getMappingXMLTargetDirectory());
+        // targetDirs.add(config.getMapperTargetDirectory());
         StringBuilder sb = new StringBuilder();
         for (Path dir : targetDirs) {
             if (!Files.exists(dir)) {
@@ -243,6 +243,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
 
     @FXML
     public void openMBGConfigPane(ActionEvent actionEvent) {
-        StageHelper.show(MBGConfigurationView.class);
+        StageManager.show(MBGConfigurationView.class);
     }
 }

@@ -1,6 +1,6 @@
 package io.devpl.tookit.fxui.view.filestructure;
 
-import io.devpl.fxtras.utils.StageHelper;
+import io.devpl.fxtras.utils.StageManager;
 import io.devpl.tookit.fxui.controller.MetaFieldManageController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -70,7 +70,7 @@ public class JavaElementTreeCell extends TextFieldTreeCell<String> {
         });
         MenuItem chooseFieldMenu = new MenuItem("选择字段");
         chooseFieldMenu.setOnAction(event -> {
-            StageHelper.show(MetaFieldManageController.class);
+            StageManager.show(MetaFieldManageController.class);
         });
         MenuItem deleteThisItem = new MenuItem("删除");
         deleteThisItem.setOnAction(event -> {

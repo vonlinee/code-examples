@@ -22,7 +22,7 @@ public class TestChoiceDialog extends Application {
     public void start(Stage primaryStage) {
 
         FileChooserDialog fileChooserDialog = new FileChooserDialog();
-
+        fileChooserDialog.setInitialDirectory(new File(new File("").getAbsolutePath()));
         final List<String> choices = Arrays.asList("1", "2", "3");
 
         final ChoiceDialog<String> dialog = new ChoiceDialog<>("2", choices);

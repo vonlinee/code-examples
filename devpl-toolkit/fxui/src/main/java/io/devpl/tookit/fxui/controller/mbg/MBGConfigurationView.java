@@ -1,11 +1,14 @@
 package io.devpl.tookit.fxui.controller.mbg;
 
+import io.devpl.fxtras.beans.ValueUpdateListener;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.tookit.fxui.model.props.CodeGenConfiguration;
+import io.devpl.tookit.fxui.model.CodeGenConfiguration;
 import io.devpl.tookit.utils.fx.FileChooserDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
@@ -38,10 +41,17 @@ public class MBGConfigurationView extends FxmlView {
      * 通用配置项
      */
     private final CodeGenConfiguration codeGenConfig = new CodeGenConfiguration();
+    public Button btnSaveConfig;
+
+    public Button btnLoadConfig;
+    @FXML
+    public ChoiceBox<String> cboxProjectLayout;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         bindCodeGenConfiguration(codeGenConfig);
+
+        cboxProjectLayout.setConverter();
     }
 
     @FXML
@@ -60,14 +70,21 @@ public class MBGConfigurationView extends FxmlView {
      * @param generatorConfig 代码生成配置
      */
     public void bindCodeGenConfiguration(CodeGenConfiguration generatorConfig) {
-        projectFolderField.textProperty().bindBidirectional(generatorConfig.projectFolderProperty());
-        modelTargetPackage.textProperty().bindBidirectional(generatorConfig.modelPackageProperty());
-        modelTargetProject.textProperty().bindBidirectional(generatorConfig.modelPackageTargetFolderProperty());
-        txfParentPackageName.textProperty().bindBidirectional(generatorConfig.parentPackageProperty());
-        txfMapperPackageName.textProperty().bindBidirectional(generatorConfig.daoPackageProperty());
-        daoTargetProject.textProperty().bindBidirectional(generatorConfig.daoTargetFolderProperty());
-        mapperTargetPackage.textProperty().bindBidirectional(generatorConfig.mappingXMLPackageProperty());
-        mappingTargetProject.textProperty().bindBidirectional(generatorConfig.mappingXMLTargetFolderProperty());
+        ValueUpdateListener.bind(projectFolderField.textProperty(), generatorConfig, CodeGenConfiguration::setProjectFolder);
+        modelTargetPackage.textProperty()
+                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setModelPackage));
+        modelTargetProject.textProperty()
+                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setModelPackageTargetFolder));
+        txfParentPackageName.textProperty()
+                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setParentPackage));
+        txfMapperPackageName.textProperty()
+                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setDaoPackage));
+        daoTargetProject.textProperty()
+                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setDaoTargetFolder));
+        mapperTargetPackage.textProperty()
+                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setMappingXMLPackage));
+        mappingTargetProject.textProperty()
+                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setMappingXMLTargetFolder));
     }
 
     /**
@@ -81,5 +98,8 @@ public class MBGConfigurationView extends FxmlView {
                 .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
     }
 
-
+    @FXML
+    public void saveCodeGenConfig(ActionEvent actionEvent) {
+        System.out.println(codeGenConfig);
+    }
 }

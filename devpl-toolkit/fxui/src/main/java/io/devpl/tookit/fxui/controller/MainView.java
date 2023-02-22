@@ -2,7 +2,7 @@ package io.devpl.tookit.fxui.controller;
 
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.fxtras.utils.StageHelper;
+import io.devpl.fxtras.utils.StageManager;
 import io.devpl.tookit.fxui.model.ConnectionInfo;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import io.devpl.tookit.fxui.view.navigation.impl.DBTreeView;
@@ -18,6 +18,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * 主视图
+ */
 @FxmlLocation(location = "layout/MainUI.fxml")
 public class MainView extends FxmlView {
 
@@ -38,11 +41,13 @@ public class MainView extends FxmlView {
 
         ConnectionRegistry.getConnectionConfigurations()
                 .forEach(connectionInfo -> trvDbNavigation.addConnection(connectionInfo));
+
+
     }
 
     @FXML
     public void showConnectinManagePane(MouseEvent mouseEvent) {
-        StageHelper.show(ConnectionManageController.class);
+        StageManager.show(ConnectionManageController.class);
     }
 
     /**

@@ -4,7 +4,7 @@ import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.ViewLoader;
-import io.devpl.fxtras.utils.StageHelper;
+import io.devpl.fxtras.utils.StageManager;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import io.devpl.tookit.fxui.model.TableCodeGeneration;
 import io.devpl.tookit.fxui.model.props.ColumnCustomConfiguration;
@@ -156,7 +156,7 @@ public class TableCustomizationController extends FxmlView {
     @FXML
     public void configAction(ActionEvent event) {
         ViewLoader viewLoader = ViewLoader.load(TableColumnConfigsController.class);
-        StageHelper.show("定制列配置", viewLoader.getRoot());
+        StageManager.show("定制列配置", viewLoader.getRoot());
         TableColumnConfigsController controller = viewLoader.getViewController();
         controller.setColumnListView(this.columnListView);
         // controller.setTableName(this.tableName);

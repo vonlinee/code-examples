@@ -43,7 +43,12 @@ public class ConnectionRegistry {
         return getRegisteredConnectionConfigMap().values();
     }
 
-    public static Map<String, ConnectionInfo> getRegisteredConnectionConfigMap() {
+    /**
+     * 同步方法
+     *
+     * @return key为连接名，value为对应的连接信息
+     */
+    public static synchronized Map<String, ConnectionInfo> getRegisteredConnectionConfigMap() {
         Map<String, ConnectionInfo> map = connConfigRef.get();
         if (map == null) {
             loadFromDatabase();

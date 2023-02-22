@@ -7,7 +7,7 @@ import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import io.devpl.tookit.fxui.model.TableCodeGeneration;
 import io.devpl.tookit.fxui.model.TableCodeGenOption;
 import io.devpl.tookit.fxui.model.ConnectionInfo;
-import io.devpl.tookit.fxui.model.props.CodeGenConfiguration;
+import io.devpl.tookit.fxui.model.CodeGenConfiguration;
 import io.devpl.tookit.mbg.plugins.*;
 import io.devpl.tookit.utils.StringUtils;
 import org.mybatis.generator.api.MyBatisGenerator;

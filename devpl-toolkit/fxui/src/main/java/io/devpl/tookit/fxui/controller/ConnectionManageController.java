@@ -2,9 +2,9 @@ package io.devpl.tookit.fxui.controller;
 
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.fxtras.utils.StageHelper;
-import io.devpl.tookit.fxui.model.ConnectionRegistry;
+import io.devpl.fxtras.utils.StageManager;
 import io.devpl.tookit.fxui.model.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -63,7 +63,7 @@ public class ConnectionManageController extends FxmlView {
 
     @FXML
     public void btnNewConnection(ActionEvent actionEvent) {
-        StageHelper.show(NewConnectionController.class);
+        StageManager.show(NewConnectionController.class);
     }
 
     @Subscribe(name = "add-new-connection", threadMode = ThreadMode.BACKGROUND)

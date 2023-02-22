@@ -41,8 +41,6 @@ public class JSONTreeViewApplication extends Application {
         btn.setOnAction(event -> {
         	
         	FileChooserDialog fcd = new FileChooserDialog();
-        	
-        	
             FileChooser fileChooser = new FileChooser();
             fileChooser.setInitialDirectory(new File("C:\\Users\\Von\\Desktop\\"));
             fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("json", ".json"));
@@ -59,7 +57,6 @@ public class JSONTreeViewApplication extends Application {
         toolBar.getItems().add(btn);
 
         primaryStage.setScene(new Scene(root, 300, 250));
-
         primaryStage.show();
     }
 }

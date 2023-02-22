@@ -11,11 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * 使用Cglib代理为普通的JavaBean添加数据绑定支持
+ * 使用Cglib代理为普通的JavaBean添加双向数据绑定支持
+ *
  * @param <T>
  */
 public final class PropertyBean<T> implements MethodInterceptor {
@@ -66,6 +66,7 @@ public final class PropertyBean<T> implements MethodInterceptor {
 
     /**
      * 双向绑定：字段的值随Property的变化而变化
+     *
      * @param filedName 字段名称
      * @param fieldType 字段值类型
      * @param property  属性对象
@@ -80,6 +81,7 @@ public final class PropertyBean<T> implements MethodInterceptor {
 
     /**
      * 单向绑定：字段的值随Property的变化而变化
+     *
      * @param filedName 字段名称
      * @param fieldType 字段值类型
      * @param property  属性对象
