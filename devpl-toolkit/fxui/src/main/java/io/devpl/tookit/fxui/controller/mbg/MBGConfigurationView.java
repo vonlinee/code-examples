@@ -1,10 +1,14 @@
 package io.devpl.tookit.fxui.controller.mbg;
 
+import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.beans.ValueUpdateListener;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.tookit.fxui.model.CodeGenConfiguration;
+import io.devpl.tookit.utils.Validator;
 import io.devpl.tookit.utils.fx.FileChooserDialog;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -31,7 +35,7 @@ public class MBGConfigurationView extends FxmlView {
     @FXML
     public TextField modelTargetProject; // 实体类存放目录
     @FXML
-    public TextField mappingTargetProject;
+    public TextField mappingTargetProject; // 映射XML文件包名存放目录
     @FXML
     public TextField daoTargetProject;
     @FXML
@@ -41,15 +45,41 @@ public class MBGConfigurationView extends FxmlView {
      * 通用配置项
      */
     private final CodeGenConfiguration codeGenConfig = new CodeGenConfiguration();
-    public Button btnSaveConfig;
 
+    @FXML
+    public Button btnSaveConfig;
+    @FXML
     public Button btnLoadConfig;
     @FXML
-    public ChoiceBox<String> cboxProjectLayout;
+    public ChoiceBox<String> chobProjectLayout;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         bindCodeGenConfiguration(codeGenConfig);
+
+        chobProjectLayout.getItems().addAll("MAVEN");
+
+        chobProjectLayout.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if ("MAVEN".equals(newValue)) {
+                    modelTargetProject.setText("src/main/java");
+                    daoTargetProject.setText("src/main/java");
+                    mappingTargetProject.setText("src/main/resources");
+                }
+            }
+        });
+    }
+
+    private void validateConfig(CodeGenConfiguration codeGenConfig) {
+        final String errorMessages = Validator.target(codeGenConfig)
+                .hasText(CodeGenConfiguration::getDaoPackage, "Mapper接口包名为空")
+                .hasText(CodeGenConfiguration::getParentPackage, "父包名为空")
+                .hasText(CodeGenConfiguration::getMappingXMLPackage, "映射XML文件包名为空")
+                .getErrorMessages();
+        Alerts.error(errorMessages).showAndWait().ifPresent(btn -> {
+
+        });
     }
 
     /**
@@ -81,6 +111,7 @@ public class MBGConfigurationView extends FxmlView {
 
     @FXML
     public void saveCodeGenConfig(ActionEvent actionEvent) {
-        System.out.println(codeGenConfig);
+
+        validateConfig(this.codeGenConfig);
     }
 }

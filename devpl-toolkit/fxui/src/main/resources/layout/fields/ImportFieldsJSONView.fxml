@@ -5,16 +5,15 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import org.fxmisc.richtext.CodeArea?>
-<?import java.lang.String?>
 <BorderPane xmlns="http://javafx.com/javafx"
             fx:controller="io.devpl.tookit.fxui.controller.fields.JsonImportView"
             xmlns:fx="http://javafx.com/fxml">
 
     <top>
         <ToolBar>
-            <Button text="选择文件"/>
-            <ChoiceBox fx:id="chbJsonSpec">
-            </ChoiceBox>
+            <Button text="选择文件" onAction="#chooseJsonFile"/>
+            <ChoiceBox fx:id="chbJsonSpec"/>
+            <Button text="Tree" onAction="#showJsonTree"/>
         </ToolBar>
     </top>
 

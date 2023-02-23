@@ -7,7 +7,6 @@ import javafx.scene.control.TextArea;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * FX弹窗警告
@@ -22,7 +21,6 @@ public final class Alerts {
     private static final Alert ERROR = new Alert(Alert.AlertType.ERROR);
     private static final Alert NONE = new Alert(Alert.AlertType.NONE);
     private static final Alert CONFIRM = new Alert(Alert.AlertType.CONFIRMATION);
-
     private static final Alert EXCEPTION = new Alert(Alert.AlertType.ERROR);
 
     static {
@@ -76,6 +74,7 @@ public final class Alerts {
 
     /**
      * 创建Alert对象
+     *
      * @param alertType   Alert.AlertType
      * @param contentText 文本
      * @param width       宽度
@@ -101,6 +100,7 @@ public final class Alerts {
     /**
      * build both OK and Cancel buttons for the user to click on to dismiss the
      * dialog.
+     *
      * @param message
      */
     public static Alert confirmation(String message) {

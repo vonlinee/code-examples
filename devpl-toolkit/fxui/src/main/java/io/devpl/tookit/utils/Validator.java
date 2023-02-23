@@ -20,13 +20,6 @@ public class Validator<T> {
         return new Validator<>(target);
     }
 
-    public Validator<T> hasText(Function<T, String> column, String message) {
-        if (!StringUtils.hasText(column.apply(bean))) {
-            errerMessages.add(message);
-        }
-        return this;
-    }
-
     public Validator<T> assertTrue(boolean expression, String message) {
         if (!expression) {
             errerMessages.add(message);
@@ -36,6 +29,13 @@ public class Validator<T> {
 
     public <V> Validator<T> assertTrue(Function<T, V> column, Predicate<V> condition, String message) {
         if (!condition.test(column.apply(bean))) {
+            errerMessages.add(message);
+        }
+        return this;
+    }
+
+    public <V> Validator<T> hasText(Function<T, String> column, String message) {
+        if (!StringUtils.hasText(column.apply(bean))) {
             errerMessages.add(message);
         }
         return this;

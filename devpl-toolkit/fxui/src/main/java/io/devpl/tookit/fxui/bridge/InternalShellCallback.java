@@ -60,7 +60,6 @@ public class InternalShellCallback implements ShellCallback {
             sb.append(st.nextToken());
             sb.append(File.separatorChar);
         }
-
         File directory = new File(project, sb.toString());
         if (!directory.isDirectory()) {
             boolean rc = directory.mkdirs();

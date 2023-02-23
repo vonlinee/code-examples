@@ -9,9 +9,9 @@
       fx:controller="io.devpl.tookit.fxui.controller.mbg.MBGConfigurationView">
 
     <ToolBar>
-        <Button fx:id="btnSaveConfig" onAction="#saveCodeGenConfig"/>
-        <Button fx:id="btnLoadConfig" text="Load"/>
-        <ChoiceBox fx:id="cboxProjectLayout"/>
+        <Button fx:id="btnSaveConfig" text="保存配置" onAction="#saveCodeGenConfig"/>
+        <Button fx:id="btnLoadConfig" text="加载配置"/>
+        <ChoiceBox fx:id="chobProjectLayout"/>
     </ToolBar>
 
     <GridPane>

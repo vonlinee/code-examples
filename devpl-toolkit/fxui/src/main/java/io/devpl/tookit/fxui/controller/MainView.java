@@ -41,8 +41,6 @@ public class MainView extends FxmlView {
 
         ConnectionRegistry.getConnectionConfigurations()
                 .forEach(connectionInfo -> trvDbNavigation.addConnection(connectionInfo));
-
-
     }
 
     @FXML

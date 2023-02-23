@@ -4,10 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableRow;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.control.*;
 
 import java.util.Map;
 
@@ -18,10 +15,12 @@ public class JSONTreeView extends TreeTableView<JSONNode> {
 
     public JSONTreeView() {
         initialize();
+        getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setRowFactory(param -> {
             TreeTableRow<JSONNode> row = new TreeTableRow<>();
             row.setOnMouseClicked(event -> {
-                @SuppressWarnings("unchecked") TreeTableRow<JSONNode> clickedRow = (TreeTableRow<JSONNode>) event.getSource();
+                @SuppressWarnings("unchecked")
+                TreeTableRow<JSONNode> clickedRow = (TreeTableRow<JSONNode>) event.getSource();
                 TreeItem<JSONNode> treeItem = clickedRow.getTreeItem();
             });
             return row;
@@ -33,7 +32,6 @@ public class JSONTreeView extends TreeTableView<JSONNode> {
         TreeItem<JSONNode> root = new TreeItem<>();
         setRoot(root);
         setShowRoot(false);
-
         // 第一列
         TreeTableColumn<JSONNode, String> keyColumn = new TreeTableColumn<>("Key");
         keyColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getKey()));

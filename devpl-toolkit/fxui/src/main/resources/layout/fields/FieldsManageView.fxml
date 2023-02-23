@@ -13,11 +13,16 @@
 
     <BorderPane>
         <top>
-            <ToolBar>
-                <Button text="新增" onAction="#addNewField"/>
-                <Button text="删除" onAction="#deleteSelectedFields"/>
-                <Button text="保存到数据库" onAction="#saveToDatabase"/>
-            </ToolBar>
+            <VBox>
+                <ToolBar>
+                    <Button text="新增" onAction="#addNewField"/>
+                    <Button text="删除" onAction="#deleteSelectedFields"/>
+                    <Button text="保存到数据库" onAction="#saveToDatabase"/>
+                </ToolBar>
+                <HBox>
+                    <CheckBox fx:id="chbAllowDuplicateFieldName" text="允许重复字段名"/>
+                </HBox>
+            </VBox>
         </top>
         <center>
             <VBox>
@@ -64,7 +69,7 @@
                            AnchorPane.topAnchor="10" AnchorPane.bottomAnchor="10">
                     <buttons>
                         <Button mnemonicParsing="false" text="取消"/>
-                        <Button mnemonicParsing="false" text="确认" onAction="#parseFieldsFromInput"/>
+                        <Button mnemonicParsing="false" text="确认" onAction="#parse"/>
                     </buttons>
                 </ButtonBar>
                 <ChoiceBox layoutX="78.0" layoutY="13.0" prefWidth="150.0"/>

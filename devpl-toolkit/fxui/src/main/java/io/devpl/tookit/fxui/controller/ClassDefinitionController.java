@@ -3,7 +3,6 @@ package io.devpl.tookit.fxui.controller;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.ViewLoader;
-import io.devpl.fxtras.utils.StageManager;
 import io.devpl.tookit.fxui.view.filestructure.FieldItem;
 import io.devpl.tookit.fxui.view.filestructure.JavaFileStrucutreTreeView;
 import io.devpl.tookit.fxui.view.filestructure.MethodItem;
@@ -54,5 +53,4 @@ public class ClassDefinitionController extends FxmlView {
         classItem.addField(fieldItem);
         jfsTreeView.addClass(classItem);
     }
-
 }

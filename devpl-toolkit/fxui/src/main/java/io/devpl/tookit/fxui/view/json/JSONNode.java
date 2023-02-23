@@ -1,18 +1,30 @@
 package io.devpl.tookit.fxui.view.json;
 
 import com.google.gson.JsonElement;
+import org.jetbrains.annotations.Nullable;
 
+/**
+ * TreeTableView的每行数据
+ */
 public class JSONNode {
 
+    /**
+     * key字段
+     */
     private String key;
 
     /**
      * 界面上展示的值：Value列
      */
     private String value;
+
+    /**
+     * 对应的JSON元素
+     */
+    @Nullable
     private JsonElement element;
 
-    public JSONNode(String key, JsonElement element) {
+    public JSONNode(String key, @Nullable JsonElement element) {
         this.key = key;
         this.element = element;
         if (element == null) {
