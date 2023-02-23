@@ -1,8 +1,6 @@
 package io.devpl.tookit.fxui;
 
-import io.devpl.tookit.fxui.app.MainUI;
 import io.devpl.tookit.fxui.app.UnitTestApplication;
-import io.devpl.tookit.fxui.view.json.JSONTreeViewApplication;
 import javafx.application.Application;
 
 /**
@@ -11,7 +9,7 @@ import javafx.application.Application;
 public class FXLauncher {
 
     public static void main(String[] args) {
-       // Application.launch(UnitTestApplication.class);
-    	Application.launch(MainUI.class);
+        Application.launch(UnitTestApplication.class);
+        // Application.launch(MainUI.class);
     }
 }

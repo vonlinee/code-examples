@@ -9,12 +9,13 @@
         dividerPositions="0.3"
         prefHeight="600.0" prefWidth="960.0"
         xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="io.devpl.tookit.fxui.controller.MetaFieldManageController">
+        fx:controller="io.devpl.tookit.fxui.controller.fields.FieldsManageView">
 
     <BorderPane>
         <top>
             <ToolBar>
                 <Button text="新增" onAction="#addNewField"/>
+                <Button text="删除" onAction="#deleteSelectedFields"/>
                 <Button text="保存到数据库" onAction="#saveToDatabase"/>
             </ToolBar>
         </top>
@@ -26,18 +27,16 @@
                 </HBox>
                 <TableView fx:id="tbvMetaFields" prefHeight="400.0" prefWidth="317.0" BorderPane.alignment="CENTER">
                     <columns>
-                        <TableColumn fx:id="tblcSelected" prefWidth="75.0" text="是否选中"/>
                         <TableColumn fx:id="tblcFieldName" prefWidth="75.0" text="名称"/>
                         <TableColumn fx:id="tblcFieldValue" prefWidth="75.0" text="值"/>
                         <TableColumn fx:id="tblcFieldDescription" prefWidth="75.0" text="描述信息"/>
                         <TableColumn fx:id="tblcOperations" prefWidth="75.0" text="操作"/>
                     </columns>
                 </TableView>
-                <Pagination maxPageIndicatorCount="50"></Pagination>
             </VBox>
         </center>
         <bottom>
-            <Button text="确定"></Button>
+            <Button text="确定"/>
         </bottom>
     </BorderPane>
     <BorderPane>

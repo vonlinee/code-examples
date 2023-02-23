@@ -6,13 +6,15 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.SimpleName;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
+import io.devpl.fxtras.utils.StageManager;
+import io.devpl.tookit.fxui.controller.fields.FieldsManageView;
 import io.devpl.tookit.fxui.view.filestructure.FieldType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
@@ -48,13 +50,10 @@ public class ClassView extends FxmlView {
                 return new SimpleStringProperty(getFieldName(param.getValue()));
             }
         });
-        tblcFieldName.setCellFactory(new Callback<TableColumn<FieldDeclaration, String>, TableCell<FieldDeclaration, String>>() {
-            @Override
-            public TableCell<FieldDeclaration, String> call(TableColumn<FieldDeclaration, String> param) {
-                TextFieldTableCell<FieldDeclaration, String> tableCell = new TextFieldTableCell<>(new DefaultStringConverter());
-                tableCell.setAlignment(Pos.CENTER);
-                return tableCell;
-            }
+        tblcFieldName.setCellFactory(param -> {
+            TextFieldTableCell<FieldDeclaration, String> tableCell = new TextFieldTableCell<>(new DefaultStringConverter());
+            tableCell.setAlignment(Pos.CENTER);
+            return tableCell;
         });
         tblcFieldName.setEditable(true);
         tblcFieldType.setCellValueFactory(param -> new SimpleStringProperty(getFieldType(param.getValue())));
@@ -97,5 +96,10 @@ public class ClassView extends FxmlView {
             return first.get().toString();
         }
         return FieldType.STRING.name();
+    }
+
+    @FXML
+    public void showMetaFieldsManagerView(ActionEvent actionEvent) {
+        StageManager.show(FieldsManageView.class);
     }
 }

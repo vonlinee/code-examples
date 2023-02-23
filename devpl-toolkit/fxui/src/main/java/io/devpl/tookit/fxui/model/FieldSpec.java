@@ -3,16 +3,15 @@ package io.devpl.tookit.fxui.model;
 import lombok.Data;
 
 /**
- * 元字段信息
+ * 字段信息
  */
 @Data
-public class MetaField {
+public class FieldSpec {
 
     /**
      * 是否选中，非数据库字段
      */
     private boolean selected;
-
 
     /**
      * 主键ID

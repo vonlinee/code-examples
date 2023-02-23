@@ -50,18 +50,6 @@ public class MBGConfigurationView extends FxmlView {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         bindCodeGenConfiguration(codeGenConfig);
-
-        cboxProjectLayout.setConverter();
-    }
-
-    @FXML
-    public void fillDefaultCodeGenConfig(ActionEvent actionEvent) {
-        projectFolderField.setText("D:/Temp/");
-        daoTargetProject.setText("src/main/java");
-        mapperTargetPackage.setText("mapping");
-        txfMapperPackageName.setText("mapper");
-        mappingTargetProject.setText("src/main/resources");
-        modelTargetPackage.setText("entity");
     }
 
     /**
@@ -71,20 +59,13 @@ public class MBGConfigurationView extends FxmlView {
      */
     public void bindCodeGenConfiguration(CodeGenConfiguration generatorConfig) {
         ValueUpdateListener.bind(projectFolderField.textProperty(), generatorConfig, CodeGenConfiguration::setProjectFolder);
-        modelTargetPackage.textProperty()
-                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setModelPackage));
-        modelTargetProject.textProperty()
-                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setModelPackageTargetFolder));
-        txfParentPackageName.textProperty()
-                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setParentPackage));
-        txfMapperPackageName.textProperty()
-                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setDaoPackage));
-        daoTargetProject.textProperty()
-                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setDaoTargetFolder));
-        mapperTargetPackage.textProperty()
-                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setMappingXMLPackage));
-        mappingTargetProject.textProperty()
-                .addListener(new ValueUpdateListener<>(generatorConfig, CodeGenConfiguration::setMappingXMLTargetFolder));
+        ValueUpdateListener.bind(modelTargetPackage.textProperty(), generatorConfig, CodeGenConfiguration::setModelPackage);
+        ValueUpdateListener.bind(modelTargetProject.textProperty(), generatorConfig, CodeGenConfiguration::setModelPackageTargetFolder);
+        ValueUpdateListener.bind(txfParentPackageName.textProperty(), generatorConfig, CodeGenConfiguration::setParentPackage);
+        ValueUpdateListener.bind(txfMapperPackageName.textProperty(), generatorConfig, CodeGenConfiguration::setDaoPackage);
+        ValueUpdateListener.bind(daoTargetProject.textProperty(), generatorConfig, CodeGenConfiguration::setDaoTargetFolder);
+        ValueUpdateListener.bind(mapperTargetPackage.textProperty(), generatorConfig, CodeGenConfiguration::setMappingXMLPackage);
+        ValueUpdateListener.bind(mappingTargetProject.textProperty(), generatorConfig, CodeGenConfiguration::setMappingXMLTargetFolder);
     }
 
     /**

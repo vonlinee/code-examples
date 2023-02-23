@@ -2,7 +2,7 @@ package io.devpl.tookit.fxui.app;
 
 import io.devpl.fxtras.controls.TaggedRegion;
 import io.devpl.fxtras.mvc.ViewLoader;
-import io.devpl.tookit.fxui.controller.MetaFieldManageController;
+import io.devpl.tookit.fxui.controller.fields.FieldsManageView;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,7 +25,7 @@ public class UnitTestApplication extends Application {
         region.setContent(btn);
 
         // final Parent root = ViewLoader.load(Json.class).getRoot();
-        final Parent root = ViewLoader.load(MetaFieldManageController.class).getRoot();
+        final Parent root = ViewLoader.load(FieldsManageView.class).getRoot();
 
         Scene scene = new Scene(root);
 
