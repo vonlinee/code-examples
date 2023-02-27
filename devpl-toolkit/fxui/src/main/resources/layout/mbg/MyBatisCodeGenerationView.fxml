@@ -34,6 +34,6 @@
         </TableView>
     </SplitPane>
     <AnchorPane>
-        <Button text="生成"></Button>
+        <Button text="生成" onAction="#generateCode"/>
     </AnchorPane>
 </VBox>

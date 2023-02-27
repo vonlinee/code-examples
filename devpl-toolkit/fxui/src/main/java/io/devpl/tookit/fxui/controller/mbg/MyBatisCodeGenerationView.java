@@ -11,8 +11,8 @@ import io.devpl.tookit.fxui.controller.TableCustomizationController;
 import io.devpl.tookit.fxui.event.Events;
 import io.devpl.tookit.fxui.model.ConnectionInfo;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
+import io.devpl.tookit.fxui.model.ProjectConfiguration;
 import io.devpl.tookit.fxui.model.TableCodeGeneration;
-import io.devpl.tookit.fxui.model.CodeGenConfiguration;
 import io.devpl.tookit.utils.DBUtils;
 import io.devpl.tookit.utils.FileUtils;
 import io.devpl.tookit.utils.Messages;
@@ -52,8 +52,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
     public TableColumn<TableCodeGeneration, String> tblcTableName;
     @FXML
     public TableColumn<TableCodeGeneration, String> tblcTableComment;
-
-    private final MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
 
     /**
      * 保存哪些表需要进行代码生成
@@ -177,15 +175,20 @@ public class MyBatisCodeGenerationView extends FxmlView {
     @FXML
     public void generateCode(ActionEvent actionEvent) {
         if (tableConfigsToBeGenerated.isEmpty()) {
+            Alerts.error("选择的数据表为空").show();
             return;
         }
-        mbgGenerator.setGeneratorConfig(null);
-        // alert.show();
+        publish("PrepareGeneration", tableConfigsToBeGenerated);
+    }
+
+    @Subscribe(name = "DoGeneration")
+    void generate(ProjectConfiguration projectConfig) {
+        MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
+        mbgGenerator.setGeneratorConfig(projectConfig);
         try {
             mbgGenerator.generate(tableConfigsToBeGenerated.values());
         } catch (Exception exception) {
             exception.printStackTrace();
-            // alert.closeIfShowing();
             Alerts.exception("生成失败", exception).showAndWait();
         }
     }
@@ -195,9 +198,9 @@ public class MyBatisCodeGenerationView extends FxmlView {
      *
      * @return 是否创建成功
      */
-    private boolean checkDirs(CodeGenConfiguration config) {
+    private boolean checkDirs(ProjectConfiguration config) {
         List<Path> targetDirs = new ArrayList<>();
-        targetDirs.add(Path.of(config.getProjectFolder()));
+        targetDirs.add(Path.of(config.getProjectRootFolder()));
         // targetDirs.add(config.getEntityTargetDirectory());
         // targetDirs.add(config.getMappingXMLTargetDirectory());
         // targetDirs.add(config.getMapperTargetDirectory());

@@ -1,6 +1,8 @@
 package io.devpl.tookit.fxui.model;
 
 import io.devpl.tookit.utils.AppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
@@ -12,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * 数据库连接信息注册中心
  */
 public class ConnectionRegistry {
+
+    static final Logger logger = LoggerFactory.getLogger(ConnectionRegistry.class);
 
     /**
      * 保存已注册的连接配置
@@ -51,6 +55,7 @@ public class ConnectionRegistry {
     public static synchronized Map<String, ConnectionInfo> getRegisteredConnectionConfigMap() {
         Map<String, ConnectionInfo> map = connConfigRef.get();
         if (map == null) {
+            logger.info("reload ConnectionInfo from database");
             loadFromDatabase();
         }
         return connConfigRef.get();

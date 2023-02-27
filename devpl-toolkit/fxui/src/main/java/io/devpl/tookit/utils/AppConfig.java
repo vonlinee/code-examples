@@ -1,6 +1,8 @@
 package io.devpl.tookit.utils;
 
 import io.devpl.tookit.fxui.model.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ProjectConfiguration;
+import io.devpl.tookit.utils.json.JSONUtils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -60,6 +62,30 @@ public class AppConfig {
         }
         try (Connection conn = getConnection()) {
             DBUtils.insert(conn, sql, config.getId(), config.getConnectionName(), config.getHost(), config.getPort(), config.getDbType(), config.getDbName(), config.getUsername(), config.getPassword());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static List<ProjectConfiguration> listProjectConfigurations() {
+        try (Connection conn = getConnection()) {
+            String sql = "select * from generator_config";
+            ResultSet rs = DBUtils.executeQuery(conn, sql);
+            List<ProjectConfiguration> results = new ArrayList<>();
+            while (rs.next()) {
+                ProjectConfiguration item = JSONUtils.toObject(rs.getString("value"), ProjectConfiguration.class);
+                results.add(item);
+            }
+            return results;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void saveProjectConfiguration(ProjectConfiguration projectConfiguration) {
+        try (Connection conn = getConnection()) {
+            String sql = "insert into generator_config values(?, ?)";
+            DBUtils.insert(conn, sql, projectConfiguration.getName(), JSONUtils.toJSONString(projectConfiguration));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

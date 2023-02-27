@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 /**
  * 主视图
  */
-@FxmlLocation(location = "layout/MainUI.fxml")
+@FxmlLocation(location = "layout/MainView.fxml")
 public class MainView extends FxmlView {
 
     @FXML

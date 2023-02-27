@@ -10,7 +10,7 @@
 
     <ToolBar>
         <Button fx:id="btnSaveConfig" text="保存配置" onAction="#saveCodeGenConfig"/>
-        <Button fx:id="btnLoadConfig" text="加载配置"/>
+        <Button fx:id="btnLoadConfig" text="加载配置" onAction="#openProjectConfiguration"/>
         <ChoiceBox fx:id="chobProjectLayout"/>
     </ToolBar>
 

@@ -7,7 +7,7 @@ import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import io.devpl.tookit.fxui.model.TableCodeGeneration;
 import io.devpl.tookit.fxui.model.TableCodeGenOption;
 import io.devpl.tookit.fxui.model.ConnectionInfo;
-import io.devpl.tookit.fxui.model.CodeGenConfiguration;
+import io.devpl.tookit.fxui.model.ProjectConfiguration;
 import io.devpl.tookit.mbg.plugins.*;
 import io.devpl.tookit.utils.StringUtils;
 import org.mybatis.generator.api.MyBatisGenerator;
@@ -19,6 +19,8 @@ import org.mybatis.generator.exception.InvalidConfigurationException;
 import org.mybatis.generator.plugins.EqualsHashCodePlugin;
 import org.mybatis.generator.plugins.SerializablePlugin;
 import org.mybatis.generator.plugins.ToStringPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,8 +35,10 @@ import java.util.stream.Collectors;
  */
 public class MyBatisCodeGenerator {
 
+    private final Logger logger = LoggerFactory.getLogger(MyBatisCodeGenerator.class);
+
     // 代码生成配置
-    private CodeGenConfiguration generatorConfig;
+    private ProjectConfiguration generatorConfig;
     // 进度回调
     private ProgressCallback progressCallback;
     // 忽略的列
@@ -44,7 +48,7 @@ public class MyBatisCodeGenerator {
 
     private final PluginRegistry pluginRegistry = new PluginRegistry();
 
-    public void setGeneratorConfig(CodeGenConfiguration generatorConfig) {
+    public void setGeneratorConfig(ProjectConfiguration generatorConfig) {
         this.generatorConfig = generatorConfig;
     }
 
@@ -326,30 +330,30 @@ public class MyBatisCodeGenerator {
      * @param context
      * @param generatorConfig
      */
-    private void prepareCommonConfig(Context context, CodeGenConfiguration generatorConfig) {
+    private void prepareCommonConfig(Context context, ProjectConfiguration generatorConfig) {
         // java model
         JavaModelGeneratorConfiguration modelConfig = new JavaModelGeneratorConfiguration();
-        modelConfig.setTargetPackage(generatorConfig.getModelPackage());
-        modelConfig.setTargetProject(generatorConfig.getProjectFolder() + "/" + generatorConfig.getModelPackageTargetFolder());
+        modelConfig.setTargetPackage(generatorConfig.getEntityPackageName());
+        modelConfig.setTargetProject(generatorConfig.getProjectRootFolder() + "/" + generatorConfig.getEntityPackageFolder());
         // Mapper configuration
         SqlMapGeneratorConfiguration mapperConfig = new SqlMapGeneratorConfiguration();
-        mapperConfig.setTargetPackage(generatorConfig.getMappingXMLPackage());
-        mapperConfig.setTargetProject(generatorConfig.getProjectFolder() + "/" + generatorConfig.getMappingXMLTargetFolder());
+        mapperConfig.setTargetPackage(generatorConfig.getMapperXmlPackage());
+        mapperConfig.setTargetProject(generatorConfig.getProjectRootFolder() + "/" + generatorConfig.getMapperXmlFolder());
         // DAO
         JavaClientGeneratorConfiguration daoConfig = new JavaClientGeneratorConfiguration();
         daoConfig.setConfigurationType(Constants.CONFIGURATION_TYPE_XML_MAPPER);
-        daoConfig.setTargetPackage(generatorConfig.getDaoPackage());
-        daoConfig.setTargetProject(generatorConfig.getProjectFolder() + "/" + generatorConfig.getDaoTargetFolder());
+        daoConfig.setTargetPackage(generatorConfig.getMapperPackageName());
+        daoConfig.setTargetProject(generatorConfig.getProjectRootFolder() + "/" + generatorConfig.getMapperFolder());
         context.setJavaModelGeneratorConfiguration(modelConfig);
         context.setSqlMapGeneratorConfiguration(mapperConfig);
         context.setJavaClientGeneratorConfiguration(daoConfig);
     }
 
-    private String getMappingXMLFilePath(CodeGenConfiguration generatorConfig) {
+    private String getMappingXMLFilePath(ProjectConfiguration generatorConfig) {
         StringBuilder sb = new StringBuilder();
-        sb.append(generatorConfig.getProjectFolder()).append("/");
-        sb.append(generatorConfig.getMappingXMLTargetFolder()).append("/");
-        String mappingXMLPackage = generatorConfig.getMappingXMLPackage();
+        sb.append(generatorConfig.getProjectRootFolder()).append("/");
+        sb.append(generatorConfig.getMapperXmlFolder()).append("/");
+        String mappingXMLPackage = generatorConfig.getMapperXmlPackage();
         if (StringUtils.isNotEmpty(mappingXMLPackage)) {
             sb.append(mappingXMLPackage.replace(".", "/")).append("/");
         }

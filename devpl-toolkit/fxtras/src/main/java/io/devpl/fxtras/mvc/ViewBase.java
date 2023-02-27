@@ -19,19 +19,19 @@ abstract class ViewBase implements View, EventTarget, SceneGraphAccessor {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private static final EventBus GLOBAL_EVENT_BUS =
-            EventBus.builder()
-                    .eventInheritance(true)
-                    .allowEmptySubscriber(true)
-                    .logNoSubscriberMessages(false)
-                    .mainThreadSupport(new JavaFXMainThreadSupport())
-                    .build();
+    private static final EventBus GLOBAL_EVENT_BUS = EventBus.builder()
+            .eventInheritance(true)
+            .allowEmptySubscriber(true)   // 是否允许空@Subsciber进行注册
+            .logNoSubscriberMessages(true) // 没有订阅者时记录日志
+            .mainThreadSupport(new JavaFXMainThreadSupport())
+            .build();
 
     public ViewBase() {
         try {
             GLOBAL_EVENT_BUS.register(this);
         } catch (Exception exception) {
             // ignore
+            log.error("failed to register Subscriber[{}]", this, exception);
         }
     }
 

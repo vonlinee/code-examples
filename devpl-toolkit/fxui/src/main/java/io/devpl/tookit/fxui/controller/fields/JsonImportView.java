@@ -10,6 +10,7 @@ import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.tookit.fxui.model.FieldSpec;
 import io.devpl.tookit.fxui.view.json.JSONTreeView;
+import io.devpl.tookit.utils.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -107,7 +108,11 @@ public class JsonImportView extends FxmlView {
 
     @FXML
     public void showJsonTree(ActionEvent actionEvent) {
-        JsonElement jsonElement = gson.fromJson(content.getText(), JsonElement.class);
+        String text = content.getText();
+        if (StringUtils.hasNotText(text)) {
+            return;
+        }
+        JsonElement jsonElement = gson.fromJson(text, JsonElement.class);
         jsonTreeView.addRootJson(jsonElement);
         final Stage stage = new Stage();
         stage.setScene(new Scene(jsonTreeView, 600, 600));
