@@ -3,19 +3,23 @@ package io.devpl.tookit.fxui.controller;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.utils.StageManager;
+import io.devpl.tookit.fxui.event.DeleteConnEvent;
 import io.devpl.tookit.fxui.model.ConnectionInfo;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import io.devpl.tookit.fxui.view.navigation.impl.DBTreeView;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 /**
@@ -56,5 +60,24 @@ public class MainView extends FxmlView {
     @Subscribe(name = "add-new-connection", threadMode = ThreadMode.BACKGROUND)
     public void addConnection(ConnectionInfo connectionInfo) {
         trvDbNavigation.addConnection(connectionInfo);
+    }
+
+    /**
+     * 删除数据库连接
+     *
+     * @param event
+     */
+    @Subscribe
+    public void removeConnection(DeleteConnEvent event) {
+        ObservableList<TreeItem<String>> children = trvDbNavigation.getRoot().getChildren();
+        Iterator<TreeItem<String>> iterator = children.iterator();
+        for (String connectionName : event.getConnectionNames()) {
+            while (iterator.hasNext()) {
+                TreeItem<String> next = iterator.next();
+                if (next.getValue().equals(connectionName)) {
+                    iterator.remove();
+                }
+            }
+        }
     }
 }

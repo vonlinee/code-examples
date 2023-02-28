@@ -6,3 +6,5 @@ https://github.com/hervegirod/fxsvgimage
 JDK 11
 Maven 3.8.1
 
+使用模板生成，可以自定义模板
+

@@ -44,15 +44,6 @@
                 <Tab closable="false" text="类编辑">
                     <fx:include source="../layout/class_definition.fxml"/>
                 </Tab>
-                <Tab>
-                    <content>
-                        <VBox>
-
-                        </VBox>
-                        <CodeArea></CodeArea>
-
-                    </content>
-                </Tab>
             </TabPane>
         </SplitPane>
     </center>

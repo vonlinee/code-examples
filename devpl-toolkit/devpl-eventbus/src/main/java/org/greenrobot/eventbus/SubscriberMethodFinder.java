@@ -38,18 +38,24 @@ class SubscriberMethodFinder {
     private static final int MODIFIERS_IGNORE = Modifier.ABSTRACT | Modifier.STATIC | BRIDGE | SYNTHETIC;
     private static final Map<Class<?>, List<SubscriberMethod>> METHOD_CACHE = new ConcurrentHashMap<>();
 
-    private List<SubscriberInfoIndex> subscriberInfoIndexes;
+    private final List<SubscriberInfoIndex> subscriberInfoIndexes;
     private final boolean strictMethodVerification;
     private final boolean ignoreGeneratedIndex;
+
+    /**
+     * when a Object has no @Subscriber
+     */
+    private final boolean allowEmptySubscriber;
 
     private static final int POOL_SIZE = 4;
     private static final FindState[] FIND_STATE_POOL = new FindState[POOL_SIZE];
 
     SubscriberMethodFinder(List<SubscriberInfoIndex> subscriberInfoIndexes, boolean strictMethodVerification,
-                           boolean ignoreGeneratedIndex) {
+                           boolean allowEmptySubscriber, boolean ignoreGeneratedIndex) {
         this.subscriberInfoIndexes = subscriberInfoIndexes;
         this.strictMethodVerification = strictMethodVerification;
         this.ignoreGeneratedIndex = ignoreGeneratedIndex;
+        this.allowEmptySubscriber = allowEmptySubscriber;
     }
 
     List<SubscriberMethod> findSubscriberMethods(Class<?> subscriberClass) {
@@ -64,7 +70,7 @@ class SubscriberMethodFinder {
         } else {
             subscriberMethods = findUsingInfo(subscriberClass);
         }
-        if (subscriberMethods.isEmpty()) {
+        if (subscriberMethods.isEmpty() && !allowEmptySubscriber) {
             throw new EventBusException("Subscriber " + subscriberClass
                     + " and its super classes have no public methods with the @Subscribe annotation");
         } else {

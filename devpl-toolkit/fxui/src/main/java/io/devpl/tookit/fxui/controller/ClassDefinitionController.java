@@ -36,7 +36,7 @@ public class ClassDefinitionController extends FxmlView {
         jfsTreeView = new JavaFileStrucutreTreeView();
         detailPane = new ScrollPane();
 
-        final ViewLoader load = ViewLoader.load(ClassView.class);
+        ViewLoader load = ViewLoader.load(ClassView.class);
 
         sppCenter.getItems().addAll(jfsTreeView, load.getRoot());
     }

@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.fxmisc.richtext.CodeArea;
 
 /**
  * 测试单个界面
@@ -23,7 +24,7 @@ public class UnitTestApplication extends Application {
 //        region.setContent(btn);
 
         // final Parent root = ViewLoader.load(Json.class).getRoot();
-        final Parent root = ViewLoader.load(FieldsManageView.class).getRoot();
+        final Parent root = new CodeArea();
 
         Scene scene = new Scene(root);
 

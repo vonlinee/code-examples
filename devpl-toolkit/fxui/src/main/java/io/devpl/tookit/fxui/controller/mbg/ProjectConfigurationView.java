@@ -1,9 +1,7 @@
 package io.devpl.tookit.fxui.controller.mbg;
 
-import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.tookit.fxui.bridge.MyBatisCodeGenerator;
 import io.devpl.tookit.fxui.model.ProjectConfiguration;
 import io.devpl.tookit.utils.AppConfig;
 import io.devpl.tookit.utils.json.JSONUtils;
@@ -15,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.net.URL;
 import java.util.ResourceBundle;

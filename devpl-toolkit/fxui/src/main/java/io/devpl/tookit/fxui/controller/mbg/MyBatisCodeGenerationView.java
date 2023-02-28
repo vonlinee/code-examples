@@ -2,6 +2,7 @@ package io.devpl.tookit.fxui.controller.mbg;
 
 import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
 import io.devpl.fxtras.Alerts;
+import io.devpl.fxtras.beans.ValueUpdateListener;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.mvc.ViewLoader;
@@ -13,9 +14,8 @@ import io.devpl.tookit.fxui.model.ConnectionInfo;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import io.devpl.tookit.fxui.model.ProjectConfiguration;
 import io.devpl.tookit.fxui.model.TableCodeGeneration;
-import io.devpl.tookit.utils.DBUtils;
-import io.devpl.tookit.utils.FileUtils;
-import io.devpl.tookit.utils.Messages;
+import io.devpl.tookit.utils.*;
+import io.devpl.tookit.utils.fx.FileChooserDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -29,15 +29,13 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.TextAlignment;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -52,7 +50,75 @@ public class MyBatisCodeGenerationView extends FxmlView {
     public TableColumn<TableCodeGeneration, String> tblcTableName;
     @FXML
     public TableColumn<TableCodeGeneration, String> tblcTableComment;
+    @FXML
+    public ComboBox<String> cboxConnection;
+    @FXML
+    public ComboBox<String> cboxDatabase;
+    @FXML
+    public TableView<TableCodeGeneration> tblvTableSelected; // 选中的表
+    @FXML
+    public TableColumn<TableCodeGeneration, String> tblcSelectedTableName;
+    @FXML
+    public TableColumn<TableCodeGeneration, String> tblcSelectedTableComment;
+    @FXML
+    public TextField txfParentPackageName;
+    @FXML
+    public TextField modelTargetPackage;
+    @FXML
+    public TextField mapperTargetPackage;
+    @FXML
+    public TextField txfMapperPackageName;  // DAO接口包名
+    @FXML
+    public TextField modelTargetProject; // 实体类存放目录
+    @FXML
+    public TextField mappingTargetProject; // 映射XML文件包名存放目录
+    @FXML
+    public TextField daoTargetProject;
+    @FXML
+    public TextField projectFolderField;
+    @FXML
+    public Button btnSaveConfig;
+    @FXML
+    public Button btnLoadConfig;
+    @FXML
+    public ChoiceBox<String> chobProjectLayout;
+    @FXML
+    public CheckBox chbUseExample;
+    @FXML
+    public CheckBox chbOffsetLimit;
+    @FXML
+    public CheckBox chbComment;
+    @FXML
+    public CheckBox chbOverrideXML;
+    @FXML
+    public CheckBox chbUseLombokPlugin;
+    @FXML
+    public CheckBox chbNeedToStringHashcodeEquals;
+    @FXML
+    public CheckBox chbUseSchemaPrefix;
+    @FXML
+    public CheckBox chbForUpdate;
+    @FXML
+    public CheckBox chbAnnotationDao;
+    @FXML
+    public CheckBox chbJsr310Support;
+    @FXML
+    public CheckBox useActualColumnNamesCheckbox;
+    @FXML
+    public CheckBox annotationCheckBox;
+    @FXML
+    public CheckBox chbMapperExtend;
+    @FXML
+    public CheckBox useTableNameAliasCheckbox;
+    @FXML
+    public CheckBox addMapperAnnotationChcekBox;
+    @FXML
+    public CheckBox chbEnableSwagger;
 
+    /**
+     * 项目配置项
+     */
+    private final ProjectConfiguration projectConfig = new ProjectConfiguration();
     /**
      * 保存哪些表需要进行代码生成
      * 存放的key:TableCodeGenConfig#getUniqueKey()
@@ -61,23 +127,9 @@ public class MyBatisCodeGenerationView extends FxmlView {
      */
     private final Map<String, TableCodeGeneration> tableConfigsToBeGenerated = new ConcurrentHashMap<>(10);
 
-    @FXML
-    public ComboBox<String> cboxConnection;
-    @FXML
-    public ComboBox<String> cboxDatabase;
-    // 选中的表
-    @FXML
-    public TableView<TableCodeGeneration> tblvTableSelected;
-    @FXML
-    public TableColumn<TableCodeGeneration, String> tblcSelectedTableName;
-    @FXML
-    public TableColumn<TableCodeGeneration, String> tblcSelectedTableComment;
-
-    // 进度回调
-    // ProgressDialog alert = new ProgressDialog(Alert.AlertType.INFORMATION);
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        btnLoadConfig.setOnAction(event -> StageManager.show(ProjectConfigurationView.class));
         cboxConnection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -170,6 +222,25 @@ public class MyBatisCodeGenerationView extends FxmlView {
             });
             return row;
         });
+
+        ValueUpdateListener.bind(projectFolderField.textProperty(), projectConfig, ProjectConfiguration::setProjectRootFolder);
+        ValueUpdateListener.bind(modelTargetPackage.textProperty(), projectConfig, ProjectConfiguration::setEntityPackageName);
+        ValueUpdateListener.bind(modelTargetProject.textProperty(), projectConfig, ProjectConfiguration::setEntityPackageFolder);
+        ValueUpdateListener.bind(txfParentPackageName.textProperty(), projectConfig, ProjectConfiguration::setParentPackage);
+        ValueUpdateListener.bind(txfMapperPackageName.textProperty(), projectConfig, ProjectConfiguration::setMapperPackageName);
+        ValueUpdateListener.bind(daoTargetProject.textProperty(), projectConfig, ProjectConfiguration::setMapperFolder);
+        ValueUpdateListener.bind(mapperTargetPackage.textProperty(), projectConfig, ProjectConfiguration::setMapperXmlPackage);
+        ValueUpdateListener.bind(mappingTargetProject.textProperty(), projectConfig, ProjectConfiguration::setMapperXmlFolder);
+
+        chobProjectLayout.getItems().addAll("MAVEN");
+        chobProjectLayout.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if ("MAVEN".equals(newValue)) {
+                modelTargetProject.setText("src/main/java");
+                daoTargetProject.setText("src/main/java");
+                mappingTargetProject.setText("src/main/resources");
+            }
+        });
+        chobProjectLayout.getSelectionModel().selectFirst();
     }
 
     @FXML
@@ -178,11 +249,10 @@ public class MyBatisCodeGenerationView extends FxmlView {
             Alerts.error("选择的数据表为空").show();
             return;
         }
-        publish("PrepareGeneration", tableConfigsToBeGenerated);
+        generate(this.projectConfig);
     }
 
-    @Subscribe(name = "DoGeneration")
-    void generate(ProjectConfiguration projectConfig) {
+    public void generate(ProjectConfiguration projectConfig) {
         MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
         mbgGenerator.setGeneratorConfig(projectConfig);
         try {
@@ -190,6 +260,8 @@ public class MyBatisCodeGenerationView extends FxmlView {
         } catch (Exception exception) {
             exception.printStackTrace();
             Alerts.exception("生成失败", exception).showAndWait();
+        } finally {
+            FileUtils.show(new File(projectConfig.getProjectRootFolder()));
         }
     }
 
@@ -239,13 +311,70 @@ public class MyBatisCodeGenerationView extends FxmlView {
         tblvTableCustomization.getItems().add(tableInfo);
     }
 
-    @FXML
-    public void openTargetRootDirectory(ActionEvent actionEvent) {
-
+    /**
+     * 校验配置项
+     *
+     * @param projectConfig 项目配置
+     */
+    private String validateConfig(ProjectConfiguration projectConfig) {
+        return Validator.target(projectConfig)
+                .hasText(ProjectConfiguration::getProjectRootFolder, "项目根目录为空")
+                .hasText(ProjectConfiguration::getMapperPackageName, "Mapper接口包名为空")
+                .hasText(ProjectConfiguration::getEntityPackageName, "实体类包名为空")
+                .hasText(ProjectConfiguration::getEntityPackageFolder, "实体类所在目录为空")
+                .hasText(ProjectConfiguration::getMapperXmlPackage, "映射XML文件包名为空")
+                .getErrorMessages();
     }
 
+    /**
+     * 选择项目文件夹
+     *
+     * @param event 事件
+     */
     @FXML
-    public void openMBGConfigPane(ActionEvent actionEvent) {
-        StageManager.show(MBGConfigurationView.class);
+    public void chooseProjectFolder(ActionEvent event) {
+        FileChooserDialog.showDirectoryDialog(getStage(event))
+                .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
+    }
+
+    /**
+     * 保存配置
+     *
+     * @param actionEvent 事件
+     */
+    @FXML
+    public void saveCodeGenConfig(ActionEvent actionEvent) {
+        String errMsgs = validateConfig(this.projectConfig);
+        if (StringUtils.hasText(errMsgs)) {
+            Alerts.error(errMsgs).show();
+            return;
+        }
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("保存代码生成配置");
+        dialog.setContentText("输入配置名称:");
+        Optional<String> resultOptional = dialog.showAndWait();
+        if (resultOptional.isPresent()) {
+            this.projectConfig.setName(resultOptional.get());
+        } else {
+            Alerts.error("配置名称不能为空");
+        }
+        AppConfig.saveProjectConfiguration(this.projectConfig);
+    }
+
+    /**
+     * 加载配置信息，填充到界面上
+     *
+     * @param projectConfig 配置信息
+     */
+    @Subscribe(name = "LoadConfig")
+    public void loadConfig(ProjectConfiguration projectConfig) {
+        projectFolderField.setText(projectConfig.getProjectRootFolder());
+        modelTargetPackage.setText(projectConfig.getEntityPackageName());
+        modelTargetProject.setText(projectConfig.getEntityPackageFolder());
+        txfParentPackageName.setText(projectConfig.getParentPackage());
+        txfMapperPackageName.setText(projectConfig.getMapperPackageName());
+        daoTargetProject.setText(projectConfig.getMapperFolder());
+        mapperTargetPackage.setText(projectConfig.getMapperXmlPackage());
+        mappingTargetProject.setText(projectConfig.getMapperXmlFolder());
     }
 }

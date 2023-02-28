@@ -8,6 +8,7 @@
     <top>
         <ToolBar>
             <Button text="新建连接" onAction="#btnNewConnection"/>
+            <Button text="删除连接" onAction="#deleteConnection"/>
         </ToolBar>
     </top>
 

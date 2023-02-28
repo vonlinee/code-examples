@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 /**
@@ -46,6 +47,27 @@ public class AppConfig {
                 results.add(item);
             }
             return results;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 根据ID删除连接信息
+     *
+     * @param connectionInfos
+     * @return
+     */
+    public static int deleteConnectionById(List<ConnectionInfo> connectionInfos) {
+        String sql = "DELETE FROM connection_info WHERE id IN ";
+        StringJoiner stringJoiner = new StringJoiner(",", "(", ")");
+        for (ConnectionInfo connectionInfo : connectionInfos) {
+            stringJoiner.add("'" + connectionInfo.getId() + "'");
+        }
+        sql += stringJoiner;
+        try (Connection conn = getConnection()) {
+            System.out.println(sql);
+            return DBUtils.delete(conn, sql);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

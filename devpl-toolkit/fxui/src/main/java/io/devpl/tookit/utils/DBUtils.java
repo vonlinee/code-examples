@@ -194,6 +194,18 @@ public class DBUtils {
         return runner.query(connection, sql, new ArrayHandler());
     }
 
+    /**
+     * 删除操作
+     *
+     * @param connection 连接
+     * @param sql
+     * @return
+     * @throws SQLException
+     */
+    public static int delete(Connection connection, String sql) throws SQLException {
+        return runner.update(connection, sql);
+    }
+
     private static final BasicRowProcessor BEAN_PROPERTY_ROW_PROCESSOR = new BasicRowProcessor(new GenerousBeanProcessor());
 
     /**

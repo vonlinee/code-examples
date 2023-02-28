@@ -1,11 +1,15 @@
 package io.devpl.tookit.fxui.controller;
 
+import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.fxtras.utils.StageManager;
+import io.devpl.tookit.fxui.event.DeleteConnEvent;
 import io.devpl.tookit.fxui.model.ConnectionInfo;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
+import io.devpl.tookit.utils.AppConfig;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -18,7 +22,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * 数据库连接信息管理控制器
@@ -73,5 +80,22 @@ public class ConnectionManageController extends FxmlView {
 
     public void fillConnectionInfo() {
         tblvConnectionList.getItems().addAll(ConnectionRegistry.getConnectionConfigurations());
+    }
+
+    @FXML
+    public void deleteConnection(ActionEvent actionEvent) {
+        ObservableList<ConnectionInfo> selectedItems = tblvConnectionList.getSelectionModel().getSelectedItems();
+        List<ConnectionInfo> list = new ArrayList<>(selectedItems);
+        try {
+            if (AppConfig.deleteConnectionById(list) == list.size()) {
+                tblvConnectionList.getItems().removeAll(list);
+            }
+        } catch (Exception exception) {
+            Alerts.exception("删除连接失败", exception).show();
+            return;
+        }
+        DeleteConnEvent event = new DeleteConnEvent();
+        event.setConnectionNames(list.stream().map(ConnectionInfo::getConnectionName).collect(Collectors.toList()));
+        publish(event);
     }
 }
