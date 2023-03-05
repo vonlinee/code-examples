@@ -13,7 +13,7 @@ import java.util.LinkedList;
 public class CodeEditor {
 
     public CodeEditor() {
-        ListView<String> listView = new ListView<String>();
+        ListView<String> listView = new ListView<>();
         // github上开源项目richtextfx的一个组件
         CodeArea codeArea = new CodeArea();
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));

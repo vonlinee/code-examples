@@ -32,7 +32,7 @@ public class DevplCodeGenerator {
 
     // 在此处填写要生成的表名
     private static void tableNamesToBeGenerated() {
-        tableNamesToBeGenerated.add("portrait_cmp_item_custom");
+        tableNamesToBeGenerated.add("evaluation_compare_item_display");
     }
 
     public static void main(String[] args) throws IOException {

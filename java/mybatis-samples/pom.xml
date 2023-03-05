@@ -28,6 +28,8 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <mybatis.version>3.4.6</mybatis.version>
+        <lombok.version>1.18.22</lombok.version>
         <mysql.driver.version>5.1.49</mysql.driver.version>
         <druid.version>1.2.8</druid.version>
     </properties>
@@ -68,7 +70,7 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
-                <version>1.7.6</version>
+                <version>1.7.36</version>
             </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>

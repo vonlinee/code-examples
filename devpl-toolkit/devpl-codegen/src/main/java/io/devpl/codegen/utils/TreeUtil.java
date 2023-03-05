@@ -7,11 +7,6 @@ import java.util.function.*;
 
 /**
  * 树形数据工具类
- *
- * @author sunyf
- * @package com.example.demo.utility
- * @description 树形数据工具类
- * @date 2022-08-16 13:54:41
  */
 public class TreeUtil<T, R> {
 
@@ -466,8 +461,6 @@ public class TreeUtil<T, R> {
             }
             return this.nodeData != null && this.nodeData.equals(node);
         }
-
     }
-
 }
 

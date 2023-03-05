@@ -3,6 +3,8 @@ package org.samples.bean;
 import org.samples.bean.vo.Address;
 import org.samples.bean.vo.Response;
 
+import java.time.LocalDateTime;
+
 /**
  * 注释信息
  */
@@ -19,6 +21,8 @@ public class Student {
     public Student(Response<Address> response) {
         this.response = response;
     }
+
+    private LocalDateTime startDate;
 
     /**
      * 地址
