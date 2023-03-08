@@ -14,10 +14,9 @@ import java.io.*;
  */
 public class DecoratorPattern {
 
-	static void print(Coffee c) throws FileNotFoundException {
+	static void print(Coffee c) {
 		System.out.println("花费了: " + c.getCost());
 		System.out.println("配料: " + c.getIngredients());
-
 
 
 	}

@@ -5,6 +5,7 @@ import io.devpl.codegen.sql.SqlUtils;
 import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
+import io.devpl.tookit.editor.CodeEditor;
 import io.devpl.tookit.fxui.model.FieldInfo;
 import io.devpl.tookit.utils.DBUtils;
 import io.devpl.tookit.utils.StringUtils;
@@ -29,7 +30,7 @@ public class SQLImportView extends FxmlView {
     public ChoiceBox<String> chbJsonSpec;
 
     @FXML
-    public CodeArea txaContent;
+    public CodeEditor txaContent;
     @FXML
     public TextField txfDbName;
 

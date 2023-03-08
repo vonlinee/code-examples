@@ -15,6 +15,7 @@ public class StageManager {
 
     /**
      * 通过节点获取场景图，如果节点未被绑定到场景图上，创建一个新的场景图以及舞台
+     *
      * @param rootNode 节点
      */
     public static void show(String title, Parent rootNode) {

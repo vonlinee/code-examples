@@ -8,6 +8,7 @@ import com.google.gson.stream.JsonReader;
 import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
+import io.devpl.tookit.editor.CodeEditor;
 import io.devpl.tookit.fxui.model.FieldSpec;
 import io.devpl.tookit.fxui.view.json.JSONTreeView;
 import io.devpl.tookit.utils.StringUtils;
@@ -17,23 +18,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.fxmisc.richtext.CodeArea;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @FxmlLocation(location = "layout/fields/ImportFieldsJSONView.fxml")
 public class JsonImportView extends FxmlView {
 
     @FXML
-    public CodeArea content;
+    public CodeEditor content;
     @FXML
     public ChoiceBox<String> chbJsonSpec;
 
@@ -114,8 +111,16 @@ public class JsonImportView extends FxmlView {
         }
         JsonElement jsonElement = gson.fromJson(text, JsonElement.class);
         jsonTreeView.addRootJson(jsonElement);
-        final Stage stage = new Stage();
-        stage.setScene(new Scene(jsonTreeView, 600, 600));
+
+        Scene scene;
+        if ((scene = jsonTreeView.getScene()) == null) {
+            scene = new Scene(jsonTreeView, 600, 600);
+        }
+        Stage stage;
+        if (Objects.isNull(stage = (Stage) scene.getWindow())) {
+            stage = new Stage();
+            stage.setScene(scene);
+        }
         stage.show();
     }
 

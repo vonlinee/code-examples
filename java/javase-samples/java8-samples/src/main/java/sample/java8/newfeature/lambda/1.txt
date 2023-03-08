@@ -1,0 +1,15 @@
+package sample.java8.newfeature.lambda;
+
+import java.lang.invoke.LambdaForm.Hidden;
+import java.util.function.Predicate;
+
+// $FF: synthetic class
+final class TestLambda$$Lambda$1 implements Predicate {
+    private TestLambda$$Lambda$1() {
+    }
+
+    @Hidden
+    public boolean test(Object var1) {
+        return TestLambda.lambda$main$0((String)var1);
+    }
+}

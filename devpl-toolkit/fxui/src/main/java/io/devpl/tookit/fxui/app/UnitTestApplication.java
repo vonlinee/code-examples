@@ -1,7 +1,5 @@
 package io.devpl.tookit.fxui.app;
 
-import io.devpl.fxtras.mvc.ViewLoader;
-import io.devpl.tookit.fxui.controller.fields.FieldsManageView;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,7 +13,7 @@ public class UnitTestApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        // final Parent root = ViewLoader.load(MetaFieldManageController.class)
+        // Parent root = ViewLoader.load(MetaFieldManageController.class)
         //         .getRoot();
 
 //        TaggedRegion region = new TaggedRegion("Response");

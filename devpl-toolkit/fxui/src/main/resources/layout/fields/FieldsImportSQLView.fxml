@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
-<?import org.fxmisc.richtext.CodeArea?>
+<?import io.devpl.tookit.editor.CodeEditor?>
 <BorderPane xmlns="http://javafx.com/javafx"
             fx:controller="io.devpl.tookit.fxui.controller.fields.SQLImportView"
             xmlns:fx="http://javafx.com/fxml">
@@ -15,13 +15,13 @@
             <Button text="选择文件"/>
             <ChoiceBox fx:id="chbJsonSpec">
             </ChoiceBox>
-            <TextField fx:id="txfDbName"></TextField>
+            <TextField fx:id="txfDbName"/>
         </ToolBar>
     </top>
 
     <center>
-        <CodeArea fx:id="txaContent">
+        <CodeEditor fx:id="txaContent">
 
-        </CodeArea>
+        </CodeEditor>
     </center>
 </BorderPane>
