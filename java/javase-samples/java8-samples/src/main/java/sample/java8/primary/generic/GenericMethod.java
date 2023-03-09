@@ -11,8 +11,7 @@ public class GenericMethod {
 
     public <T> void underLimit(List<T> myList, T limit) {
         for (T e : myList) {
-            if (e.hashCode() > limit.hashCode())
-                System.out.println(e);
+            if (e.hashCode() > limit.hashCode()) System.out.println(e);
         }
     }
 
@@ -24,7 +23,5 @@ public class GenericMethod {
         GenericMethod method = new GenericMethod();
 
         Map<?, ?> map = method.get();
-
-
     }
 }
