@@ -72,7 +72,7 @@ vuex 是什么，怎么搭，以及 要有用什么角度来理解这个插件
 
 ## 观念讲解 ： vuex，action ，mutations 做什么用的？(2) mutation
 
-> 更改 Vuex 的 store 中的 state 的唯一方法是提交 mutation。
+> 更改 Vuex 的 index 中的 state 的唯一方法是提交 mutation。
 
 > mutation，会与插件 devtools 协作，当 mutation 有变化时, 就做 state 的纪录，来协助开发者 debug，所以这里的函数要求同步，以便插件来调试。
 
@@ -167,7 +167,7 @@ export default new Vuex.Store({
 <template>
   <div id="app">
     <!--file : /my-project/src/vuex-demo/v02_counter.vue -->
-    <h1>点击: {{ $store.state.count }} 次数,此為 {{ evenOrOdd }} <br></h1>
+    <h1>点击: {{ $index.state.count }} 次数,此為 {{ evenOrOdd }} <br></h1>
     <button class="btn"  @click="increment">+</button>
     <button class="btn"  @click="decrement">-</button><br>
     <button class="btn"  @click="incrementIfOdd">业务设计：当 奇数时，才增加</button><br>

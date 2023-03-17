@@ -12,15 +12,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Employee {
-
-    @NotNull
     private String name;
-
-    @Min(value = 0, message = "年龄不能为负数！")
     private int age;
-
-    @Min(value = 0, message = "薪酬不能为负数！")
     private float salary;
-
     private LocalDate birthday;
 }

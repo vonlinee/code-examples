@@ -4,7 +4,7 @@ import store from './store'
 import App from './components/App.vue'
 
 new Vue({
-  store, // inject store to all children
+  store, // inject index to all children
   el: '#app',
   render: h => h(App)
 })

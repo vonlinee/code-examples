@@ -18,17 +18,17 @@ v-model 本质上不过是语法糖，它负责监听用户的输入事件以更
         ...mapState({
             message:  {
                 get () {
-                    return this.$store.state.obj.message
+                    return this.$index.state.obj.message
                 },
                 set (value) {
-                    this.$store.commit('updateMessage', value)
+                    this.$index.commit('updateMessage', value)
                 }
             }
         })
     },
     methods: {
       updateMessage (e) {
-        this.$store.commit('updateMessage', e.target.value)
+        this.$index.commit('updateMessage', e.target.value)
       }
     }
     在这里使用 mutation handler(变更句柄):

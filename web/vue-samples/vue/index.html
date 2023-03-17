@@ -7,22 +7,25 @@
 </head>
 <body>
 
-    <div id="root">
-        <button @click="sayHello">sayHello</button>
-    </div>
+<div id="root">
+    <button @click="sayHello">sayHello</button>
+</div>
 
-    <script>
-        new Vue({
-            el: '#root',
-            data: function() {
-                return {}
-            },
-            methods: {
-                sayHello: function(event) {
-                    console.log("Hello");
-                }
+<script>
+    let str = 'abc'
+    let arr = [...str, ...str]
+
+    new Vue({
+        el: '#root',
+        data: function () {
+            return {}
+        },
+        methods: {
+            sayHello: function (event) {
+                console.log("Hello");
             }
-        })
-    </script>
+        }
+    })
+</script>
 </body>
 </html>

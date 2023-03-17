@@ -19,7 +19,6 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,24 +43,28 @@ public class HttpbinController {
         template.setInterceptors(Collections.singletonList(new LoggingRequestInterceptor()));
         // 要加上完整地址
         String addr = "http://localhost:" + serverInfo.getPort();
-        Result<List<Employee>> forObject = template.getForObject(addr + "/api/employee/list", Result.class);
+        // Result<List<Employee>> forObject = template.getForObject(addr + "/api/employee/list", Result.class);
+        //
+        // assert forObject != null;
+        // List<Employee> data = forObject.getData();
+        //
+        // // 泛型不正确
+        // ResponseEntity<Result<List>> list = template.exchange(addr + "/api/employee/list", HttpMethod.GET, new HttpEntity<>(null), makerParameterizedTypeReference(List.class));
+        //
+        // // 泛型正确
+        // ResponseEntity<Result<List<Employee>>> entity = template.exchange(addr + "/api/employee/list", HttpMethod.GET, new HttpEntity<>(null), new ParameterizedTypeReference<Result<List<Employee>>>() {
+        //
+        // });
+        //
+        // //System.out.println(entity);
+        //
+        // Employee result = client.getForObject(addr + "/api/employee/one", Employee.class);
+        //
+        // System.out.println(result);
 
-        assert forObject != null;
-        List<Employee> data = forObject.getData();
+        List<Employee> employees = client.getForList(addr + "/api/employee/list", Employee.class);
 
-        // 泛型不正确
-        ResponseEntity<Result<List>> list = template.exchange(addr + "/api/employee/list", HttpMethod.GET, new HttpEntity<>(null), makerParameterizedTypeReference(List.class));
-
-        // 泛型正确
-        ResponseEntity<Result<List<Employee>>> entity = template.exchange(addr + "/api/employee/list", HttpMethod.GET, new HttpEntity<>(null), new ParameterizedTypeReference<Result<List<Employee>>>() {
-
-        });
-
-        //System.out.println(entity);
-
-        Employee result = client.getFotObject(addr + "/api/employee/one", Employee.class);
-
-        System.out.println(result);
+        System.out.println(employees);
     }
 
     public <T> void get(String url, Class<T> type) {
