@@ -1,0 +1,24 @@
+decl(type, name, value) ::= "<type> <name><init(value)>;"
+// 初始化模板
+init(v) ::= "<if(v)> = <v><endif>"
+
+t1()::="<name>"
+
+test(name) ::= "<name:bracket()>" // apply bracket template to each name
+bracket(x) ::= "[<x>]"   // surround parameter with square brackets
+
+show_user(user) ::= "<user>"
+
+st2() ::= ""
+
+
+
+
+
+
+
+
+
+
+
+
