@@ -19,7 +19,6 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,8 +48,7 @@ public class HttpbinController {
         assert forObject != null;
         List<Employee> data = forObject.getData();
 
-        // 泛型不正确
-        ResponseEntity<Result<List>> list = template.exchange(addr + "/api/employee/list", HttpMethod.GET, new HttpEntity<>(null), makerParameterizedTypeReference(List.class));
+        Employee employee = get(addr + "/api/employee/one", Employee.class);
 
         // 泛型正确
         ResponseEntity<Result<List<Employee>>> entity = template.exchange(addr + "/api/employee/list", HttpMethod.GET, new HttpEntity<>(null), new ParameterizedTypeReference<Result<List<Employee>>>() {
@@ -59,13 +57,18 @@ public class HttpbinController {
 
         //System.out.println(entity);
 
-        Employee result = client.getFotObject(addr + "/api/employee/one", Employee.class);
+        Employee result = client.getForObject(addr + "/api/employee/one", Employee.class);
 
+        List<Employee> list = client.getForList(addr + "/api/employee/list", Employee.class);
         System.out.println(result);
     }
 
-    public <T> void get(String url, Class<T> type) {
+    public <T> T get(String url, Class<T> type) {
+        // 泛型不正确
+        ResponseEntity<Result<T>> responseEntity = template.exchange(url, HttpMethod.GET, new HttpEntity<>(null), makerParameterizedTypeReference(type));
+
         // template.exchange(url, HttpMethod.GET, new HttpEntity<>(null), new MyParameterizedType(Result.class, new Type[]{type}, Result.class));
+        return responseEntity.getBody().getData();
     }
 
     private <T> ParameterizedTypeReference<Result<T>> makerParameterizedTypeReference(Class<T> clazz) {

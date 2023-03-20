@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
 
-    Logger log = LoggerFactory.getLogger(CustomRequestCallback.class);
+    Logger log = LoggerFactory.getLogger(LoggingRequestInterceptor.class);
 
     /**
      * @param request   the request, containing method, URI, and headers

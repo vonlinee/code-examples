@@ -1,11 +1,15 @@
 package org.example.test;
 
-import org.springframework.web.client.RestClientException;
+import org.example.controller.APIException;
+
+import java.util.List;
 
 /**
  * @see org.springframework.web.client.RestOperations
  */
 public interface HttpClient {
 
-    <T> T getFotObject(String url, Class<T> type) throws RestClientException;
+    <T> T getForObject(String url, Class<T> type) throws APIException;
+
+    <T> List<T> getForList(String url, Class<T> type) throws APIException;
 }
