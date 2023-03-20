@@ -1,6 +1,6 @@
 const pkg = require("./package");
 const path = require("path");
-
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const distDirectory = "../main/resources/public"
 
 const contextPath = process.env.NODE_ENV === "production" ? "" : "";
@@ -90,14 +90,20 @@ module.exports = {
             }, plugins: [["component", {
                 libraryName: "element-ui", styleLibraryName: "theme-chalk",
             }]]
-        }, extend(config, {isDev, isClient}) {
+        },
+        extend(config, {isDev, isClient}) {
             //source map设置
             if (isDev) {
                 config.devtool = "cheap-module-eval-source-map";
             } else {
                 config.devtool = "cheap-module-source-map";
             }
-        }
+        },
+        plugins: [
+            new MonacoWebpackPlugin({
+                languages: ['javascript', 'css', 'html']
+            })
+        ]
     },
     // 开发服务器代理设置
     proxy: {

@@ -3,9 +3,15 @@ package io.devpl.toolkit;
 import io.devpl.toolkit.codegen.DefaultNameConverter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class DevplMain8068 {
+
+    @Bean
+    public GeneratorConfig generatorConfig() {
+        return MybatisPlusToolsApplication.generatorConfig;
+    }
 
     public static void main(String[] args) {
         MybatisPlusToolsApplication.generatorConfig = GeneratorConfig.builder()
@@ -20,7 +26,9 @@ public class DevplMain8068 {
                 .basePackage("com.xxx.example")
                 .port(8068)
                 .build();
+
         try {
+            // new SpringApplicationBuilder().sources(MybatisPlusToolsApplication.class).run(args);
             SpringApplication.run(DevplMain8068.class, args);
             System.out.println("http://localhost:8068/");
         } catch (Throwable exception) {

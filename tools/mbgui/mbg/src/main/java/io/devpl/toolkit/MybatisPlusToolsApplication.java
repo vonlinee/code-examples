@@ -1,5 +1,6 @@
 package io.devpl.toolkit;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.*;
@@ -14,9 +15,10 @@ import org.springframework.context.annotation.Import;
  * 不使用@SpringBootApplication和@EnableAutoConfiguration
  * 注解，避免启动时被宿主系统的自动配置所干扰，直接注入需要的配置类
  */
-@SpringBootConfiguration
+//@SpringBootConfiguration
 @Import({DispatcherServletAutoConfiguration.class, ServletWebServerFactoryAutoConfiguration.class, HttpEncodingAutoConfiguration.class, HttpMessageConvertersAutoConfiguration.class, MultipartAutoConfiguration.class, ErrorMvcAutoConfiguration.class, WebMvcAutoConfiguration.class})
 @ComponentScan("io.devpl.toolkit")
+@MapperScan(basePackages = "io.devpl.toolkit.mapper")
 public class MybatisPlusToolsApplication {
 
     public static GeneratorConfig generatorConfig;
