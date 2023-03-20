@@ -37,10 +37,10 @@ npm install vuex-router-sync@next
 
 ``` js
 import { sync } from 'vuex-router-sync'
-import store from './vuex/store' // vuex store instance
+import index from './vuex/index' // vuex index instance
 import router from './router' // vue-router instance
 
-sync(store, router) // done.
+sync(index, router) // done.
 
 // bootstrap your app...
 

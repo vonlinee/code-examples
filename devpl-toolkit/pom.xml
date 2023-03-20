@@ -18,6 +18,7 @@
         <module>devpl-eventbus</module>
         <module>fxtras</module>
         <module>json-parser</module>
+        <module>mbg</module>
     </modules>
 
     <properties>

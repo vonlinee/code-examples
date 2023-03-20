@@ -4439,7 +4439,7 @@ function updateDOMProps (oldVnode, vnode) {
     }
     cur = props[key]
     if (key === 'value') {
-      // store value as _value as well since
+      // index value as _value as well since
       // non-string values will be stringified
       elm._value = cur
       // avoid resetting cursor position when value is the same

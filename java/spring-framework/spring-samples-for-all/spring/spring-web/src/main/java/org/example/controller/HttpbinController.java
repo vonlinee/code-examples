@@ -43,11 +43,28 @@ public class HttpbinController {
         template.setInterceptors(Collections.singletonList(new LoggingRequestInterceptor()));
         // 要加上完整地址
         String addr = "http://localhost:" + serverInfo.getPort();
-        Result<List<Employee>> forObject = template.getForObject(addr + "/api/employee/list", Result.class);
+        // Result<List<Employee>> forObject = template.getForObject(addr + "/api/employee/list", Result.class);
+        //
+        // assert forObject != null;
+        // List<Employee> data = forObject.getData();
+        //
+        // // 泛型不正确
+        // ResponseEntity<Result<List>> list = template.exchange(addr + "/api/employee/list", HttpMethod.GET, new HttpEntity<>(null), makerParameterizedTypeReference(List.class));
+        //
+        // // 泛型正确
+        // ResponseEntity<Result<List<Employee>>> entity = template.exchange(addr + "/api/employee/list", HttpMethod.GET, new HttpEntity<>(null), new ParameterizedTypeReference<Result<List<Employee>>>() {
+        //
+        // });
+        //
+        // //System.out.println(entity);
+        //
+        // Employee result = client.getForObject(addr + "/api/employee/one", Employee.class);
+        //
+        // System.out.println(result);
 
-        assert forObject != null;
-        List<Employee> data = forObject.getData();
+        List<Employee> employees = client.getForList(addr + "/api/employee/list", Employee.class);
 
+<<<<<<< HEAD
         Employee employee = get(addr + "/api/employee/one", Employee.class);
 
         // 泛型正确
@@ -61,6 +78,9 @@ public class HttpbinController {
 
         List<Employee> list = client.getForList(addr + "/api/employee/list", Employee.class);
         System.out.println(result);
+=======
+        System.out.println(employees);
+>>>>>>> e8fc4946246422a6bfa56b5335dbdab7e026f947
     }
 
     public <T> T get(String url, Class<T> type) {

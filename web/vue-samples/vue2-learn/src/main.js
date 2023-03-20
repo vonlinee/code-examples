@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 
 import {createStore} from 'vuex'
-// 创建一个新的 store 实例
+// 创建一个新的 index 实例
 const store = createStore({
     state() {
         return {
