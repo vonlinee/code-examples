@@ -4,11 +4,9 @@ import io.devpl.toolkit.common.Result;
 import io.devpl.toolkit.common.ResultGenerator;
 import io.devpl.toolkit.dto.TableInfo;
 import io.devpl.toolkit.dto.vo.ConnectionNameVO;
+import io.devpl.toolkit.entity.ConnectionConfig;
 import io.devpl.toolkit.service.ConnectionConfigService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -19,6 +17,12 @@ public class DatabaseController {
 
     @Resource
     private ConnectionConfigService connConfigService;
+
+    @PostMapping("/conn/save")
+    public Result addNewConnectionInfo(ConnectionConfig config) {
+        boolean save = connConfigService.save(config);
+        return ResultGenerator.genSuccessResult(save);
+    }
 
     /**
      * 查询数据库所有的表

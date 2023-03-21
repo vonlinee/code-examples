@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {store} from '../store'
 // ElementUI 的弹出提示框
-import {Message} from "element-ui"
+import {Loading, Message} from "element-ui"
 
 export default ({app}) => {
     // app即为Vue根组件对象

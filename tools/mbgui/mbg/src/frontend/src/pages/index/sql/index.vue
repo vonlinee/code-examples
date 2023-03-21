@@ -6,8 +6,7 @@
         <div style="margin-buttom:10px;">请输入待转换的SQL语句：</div>
         <el-alert title="Tip：" type="info" style="margin:10px;" show-icon :closable="false">
           支持在SQL中嵌入Mybatis的动态参数，系统会自动识别参数，并生成对应的条件控制语句
-          <a
-              href="javascript:"
+          <a href="javascript:"
               @click="showDynamicParamsDemo = true"
           >查看示例</a>
         </el-alert>
