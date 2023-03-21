@@ -19,7 +19,7 @@
 <script>
 import axios from "axios";
 import _ from "lodash";
-import HelpTip from "@/components/HelpTip";
+import HelpTip from "../components/HelpTip.vue";
 
 export default {
   props: ["userConfig"],

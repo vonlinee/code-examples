@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @ControllerAdvice
-public class WebControllerAdvice {
+public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
@@ -36,5 +36,4 @@ public class WebControllerAdvice {
         }
         return result;
     }
-
 }

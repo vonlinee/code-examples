@@ -1,6 +1,5 @@
-const pkg = require("./package");
+// const pkg = require("./package");
 const path = require("path");
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const distDirectory = "../main/resources/public"
 
 const contextPath = process.env.NODE_ENV === "production" ? "" : "";
@@ -68,7 +67,7 @@ module.exports = {
      ** Plugins to load before mounting the App
      */
     plugins: [
-        "@/plugins/element-ui", "@/plugins/axios", "@/plugins/components"],
+        "@/plugins/element-ui.js", "@/plugins/axios.js", "@/plugins/components.js"],
     generate: {
         /*
          ** 指定编译后文件的输出目录
@@ -99,11 +98,7 @@ module.exports = {
                 config.devtool = "cheap-module-source-map";
             }
         },
-        plugins: [
-            new MonacoWebpackPlugin({
-                languages: ['javascript', 'css', 'html']
-            })
-        ]
+        plugins: []
     },
     // 开发服务器代理设置
     proxy: {

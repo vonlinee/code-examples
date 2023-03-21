@@ -1,5 +1,4 @@
 import axios from 'axios'
-import Vue from 'vue'
 import {store} from '../store'
 // ElementUI 的弹出提示框
 import {Message} from "element-ui"
@@ -43,7 +42,6 @@ export default ({app}) => {
                 Message.error("您没有权限访问该功能");
                 return Promise.reject(result.code);
             default:
-                Vue.prototype.$loading().close();
                 Message.error(result.message);
                 return Promise.reject(result.code);
         }
