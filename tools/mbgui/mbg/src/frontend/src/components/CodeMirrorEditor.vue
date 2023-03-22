@@ -3,53 +3,38 @@
   </div>
 </template>
 <script>
-// 全局引入vue-codemirror
-import VueCodeMirror from 'vue-codemirror';
 
-// 引入主题 可以从 codemirror/theme/ 下引入多个
-import 'codemirror/theme/idea.css'
-// 引入语言模式 可以从 codemirror/mode/ 下引入多个
-import 'codemirror/mode/sql/sql.js';
+import 'codemirror/theme/3024-day.css'
+import 'codemirror/mode/javascript/javascript.js'
 
-export default {
-  name: "CodeMirrorEditor",
-  data() {
-    return {
-      editor: null,
-    }
-  },
-  methods: {
-    createCodeMirrorInstance() {
-      return VueCodeMirror.CodeMirror(document.getElementById('container'), {
-        mode: "text/x-sql",
-        indentWithTabs: true,
-        smartIndent: true,
-        lineNumbers: true,
-        matchBrackets: true,
-        autofocus: true,
-        line: true, // 显示函数
-        theme: 'idea', // 主题
-        lineWrapping: true, // 软换行
-        tabSize: 4, // tab宽度
-        styleActiveLine: true
-      })
-    }
-  },
-  mounted() {
-    this.editor = this.createCodeMirrorInstance()
-    console.log("editor ", this.editor)
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import {codemirror} from 'vue-codemirror'
+
+@Component({
+  name: 'Demo',
+  components: {
+    codemirror
+  }
+})
+
+export default class Demo extends Vue {
+  cmOptions = {
+    mode: 'application/json', // 模式
+    theme: '3024-day', // 主题
+    indentUnit: 4, // 缩进多少个空格
+    tabSize: 4, // 制表符宽度
+    lineNumbers: true, // 是否显示行号
+    lineWrapping: true, // 是否默认换行
+    firstLineNumber: 3, // 在哪个数字开始计数行。默认值为1
+    readOnly: false, // 禁止用户编辑编辑器内容
+    line: true,
+    smartIndent: true // 智能缩进
   }
 }
+
 </script>
 
 <style scoped>
-#container {
-  width: 500px;
-  height: 700px;
-}
 
-#textarea {
-  font-size: 28px;
-  line-height: 150%;
-}
 </style>

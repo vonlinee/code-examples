@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class JsonUtil {
 
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     public static String obj2json(Object obj) {
         try {
@@ -59,6 +59,4 @@ public class JsonUtil {
         }
         return json2obj(content, clazzType);
     }
-
-
 }

@@ -35,5 +35,7 @@ const api = {
         return post("/api/db/conn/save", connInfo)
     }
 }
+// 挂载到Vue全局实例上
+Vue.prototype.$api = api
 
 export default api

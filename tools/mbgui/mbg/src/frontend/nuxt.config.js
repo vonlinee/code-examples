@@ -67,7 +67,12 @@ module.exports = {
      ** Plugins to load before mounting the App
      */
     plugins: [
-        "@/plugins/element-ui.js", "@/plugins/axios.js", "@/plugins/components.js"],
+        "@/plugins/element-ui.js",
+        "@/plugins/axios.js",
+        "@/plugins/components.js",
+        "@/plugins/api.js",
+        "@/plugins/request.js"
+    ],
     generate: {
         /*
          ** 指定编译后文件的输出目录

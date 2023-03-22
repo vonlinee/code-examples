@@ -1,6 +1,5 @@
 DROP TABLE IF EXISTS `connection_config`;
-CREATE TABLE `connection_config`
-(
+CREATE TABLE `connection_config` (
     `id`       varchar(36) NOT NULL COMMENT '主键ID',
     `name`     varchar(255) DEFAULT NULL COMMENT '连接名称',
     `host`     varchar(255) DEFAULT NULL COMMENT '主机地址，IP地址',
@@ -10,6 +9,7 @@ CREATE TABLE `connection_config`
     `username` varchar(255) DEFAULT NULL COMMENT '用户名',
     `password` varchar(255) DEFAULT NULL COMMENT '密码',
     `encoding` varchar(255) DEFAULT NULL COMMENT '连接编码',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `unk_conn_name` (`name`),
+    UNIQUE KEY `unk_ip_port` (`host`, `port`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;

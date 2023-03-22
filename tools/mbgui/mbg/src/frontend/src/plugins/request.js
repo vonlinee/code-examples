@@ -1,4 +1,4 @@
-import axios from "./axios.js";
+import axios from "axios";
 import QS from "qs";
 
 /**
@@ -25,12 +25,12 @@ export function get(url, params) {
  */
 export function post(url, params) {
     return new Promise((resolve, reject) => {
-        console.log(url)
         axios.post(url, QS.stringify(params))
             .then(res => {
                 resolve(res.data);
-            }).catch(err => {
-            reject(err.data)
-        })
+            })
+            .catch(err => {
+                reject(err.data)
+            })
     });
 }

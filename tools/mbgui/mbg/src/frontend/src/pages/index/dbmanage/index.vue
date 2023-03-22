@@ -115,8 +115,6 @@
 <script>
 import axios from "axios";
 
-import api from '@/plugins/api.js'
-
 export default {
   data() {
     return {
@@ -193,8 +191,8 @@ export default {
 
     },
     testConnection() {
-      // this.$api.saveConnectionInfo(this.connInfo)
-      api.saveConnectionInfo(this.connInfo)
+      let result = this.$api.saveConnectionInfo(this.connInfo);
+      console.log(result)
     },
     openImportProjectView() {
       this.showSavedProjectsDialog = true;

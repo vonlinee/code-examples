@@ -1,14 +1,16 @@
 <template>
   <div>
-    <CodeMirrorEditor></CodeMirrorEditor>
+    <Editor></Editor>
   </div>
 </template>
 <script>
 import CodeMirrorEditor from "@/components/CodeMirrorEditor";
 
+import Editor from '@/components/Editor.vue'
+
 export default {
   components: {
-    CodeMirrorEditor
+    Editor
   },
   data() {
     return {};
