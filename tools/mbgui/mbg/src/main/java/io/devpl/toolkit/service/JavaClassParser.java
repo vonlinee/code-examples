@@ -2,19 +2,19 @@ package io.devpl.toolkit.service;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
-import io.devpl.toolkit.ProjectPathResolver;
-import io.devpl.toolkit.dto.DtoFieldInfo;
-import io.devpl.toolkit.dto.JavaClassMethodInfo;
-import io.devpl.toolkit.utils.PathUtil;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.Parameter;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.devpl.toolkit.dto.DtoFieldInfo;
+import io.devpl.toolkit.dto.JavaClassMethodInfo;
+import io.devpl.toolkit.utils.PathUtils;
+import io.devpl.toolkit.utils.ProjectPathResolver;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.FileInputStream;
 
 import static io.devpl.toolkit.dto.Constant.DOT_JAVA;
@@ -22,9 +22,9 @@ import static io.devpl.toolkit.dto.Constant.DOT_JAVA;
 @Service
 public class JavaClassParser {
 
-    private JavaParser jp = new JavaParser();
+    private final JavaParser jp = new JavaParser();
 
-    @Autowired
+    @Resource
     private ProjectPathResolver pathResolver;
 
     public void addMethod2Interface(JavaClassMethodInfo methodInfo) throws Exception {
@@ -35,7 +35,7 @@ public class JavaClassParser {
         for (String importJavaType : methodInfo.getImportJavaTypes()) {
             cu.addImport(importJavaType);
         }
-        String className = PathUtil.getShortNameFromFullRef(methodInfo.getClassRef());
+        String className = PathUtils.getShortNameFromFullRef(methodInfo.getClassRef());
         ClassOrInterfaceDeclaration clazz = cu.getInterfaceByName(className).get();
         NodeList<Parameter> params = new NodeList();
         for (DtoFieldInfo field : methodInfo.getParams()) {
@@ -50,8 +50,7 @@ public class JavaClassParser {
         clazz.addMethod(methodInfo.getMethodName())
                 .setParameters(params)
                 .setBody(null)
-                .setType(PathUtil.getShortNameFromFullRef(methodInfo.getReturnType()));
+                .setType(PathUtils.getShortNameFromFullRef(methodInfo.getReturnType()));
         FileUtil.writeFromStream(IoUtil.toStream(cu.toString(), "utf-8"), sourcePath);
     }
-
 }

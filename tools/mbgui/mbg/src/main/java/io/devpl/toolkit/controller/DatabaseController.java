@@ -1,13 +1,12 @@
 package io.devpl.toolkit.controller;
 
 import io.devpl.toolkit.common.Result;
-import io.devpl.toolkit.common.ResultGenerator;
+import io.devpl.toolkit.common.Results;
 import io.devpl.toolkit.dto.TableInfo;
 import io.devpl.toolkit.dto.vo.ConnectionNameVO;
 import io.devpl.toolkit.entity.ConnectionConfig;
 import io.devpl.toolkit.service.ConnectionConfigService;
 import io.devpl.toolkit.utils.StringUtils;
-import org.springframework.dao.DataAccessException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,17 +27,11 @@ public class DatabaseController {
      * @return 是否成功
      */
     @PostMapping("/conn/save")
-    public Result addNewConnectionInfo(@Validated ConnectionConfig config) {
+    public boolean addNewConnectionInfo(@Validated ConnectionConfig config) {
         if (!StringUtils.hasText(config.getName())) {
             config.setName(StringUtils.concat("-", config.getHost(), config.getPort(), config.getDbType()));
         }
-        try {
-            boolean save = connConfigService.save(config);
-            return ResultGenerator.genSuccessResult(save);
-        } catch (DataAccessException exception) {
-            exception.printStackTrace();
-            return ResultGenerator.genSuccessResult(exception.getMessage());
-        }
+        return connConfigService.save(config);
     }
 
     /**
@@ -47,9 +40,9 @@ public class DatabaseController {
      * @return 数据库所有的表
      */
     @GetMapping("/tables")
-    public Result getAllTables(@RequestParam("connName") String connName, @RequestParam("dbName") String dbName) {
+    public Result<List<TableInfo>> getAllTables(@RequestParam("connName") String connName, @RequestParam("dbName") String dbName) {
         List<TableInfo> tables = connConfigService.getAllTables(connName, dbName);
-        return ResultGenerator.genSuccessResult(tables);
+        return Results.of(tables);
     }
 
     /**
@@ -60,7 +53,7 @@ public class DatabaseController {
     @GetMapping("/conn/info/names")
     public Result getAllConnectionNames() {
         final List<ConnectionNameVO> allConnectionNames = connConfigService.getAllConnectionNames();
-        return ResultGenerator.genSuccessResult(allConnectionNames);
+        return Results.of(allConnectionNames);
     }
 
     /**
@@ -71,6 +64,6 @@ public class DatabaseController {
     @GetMapping("/conn/dbnames")
     public Result getAllConnectionNames(@RequestParam("connectionName") String connectionName) {
         List<String> dbNames = connConfigService.getAllDbNamesByConnectionName(connectionName);
-        return ResultGenerator.genSuccessResult(dbNames);
+        return Results.of(dbNames);
     }
 }

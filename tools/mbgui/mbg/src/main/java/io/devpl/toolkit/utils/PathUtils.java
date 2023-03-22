@@ -4,12 +4,12 @@ import com.google.common.base.Strings;
 
 import java.io.File;
 
-public class PathUtil {
+public class PathUtils {
 
     public static String joinPath(String... paths) {
         StringBuilder tmp = new StringBuilder();
         for (String path : paths) {
-            if (!Strings.isNullOrEmpty(path)) {
+            if (StringUtils.hasText(path)) {
                 tmp.append(path);
                 tmp.append(File.separator);
             }
@@ -32,10 +32,9 @@ public class PathUtil {
         if (Strings.isNullOrEmpty(ref)) {
             return "";
         }
-        if (ref.indexOf(".") == -1) {
+        if (!ref.contains(".")) {
             return ref;
         }
-        return ref.substring(ref.lastIndexOf(".")+1, ref.length());
+        return ref.substring(ref.lastIndexOf(".") + 1);
     }
-
 }

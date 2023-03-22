@@ -26,7 +26,7 @@ export default class Demo extends Vue {
     tabSize: 4, // 制表符宽度
     lineNumbers: true, // 是否显示行号
     lineWrapping: true, // 是否默认换行
-    firstLineNumber: 3, // 在哪个数字开始计数行。默认值为1
+    firstLineNumber: 1, // 在哪个数字开始计数行。默认值为1
     readOnly: false, // 禁止用户编辑编辑器内容
     line: true,
     smartIndent: true // 智能缩进

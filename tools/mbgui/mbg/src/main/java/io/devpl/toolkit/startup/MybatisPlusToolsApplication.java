@@ -1,7 +1,7 @@
-package io.devpl.toolkit;
+package io.devpl.toolkit.startup;
 
+import io.devpl.toolkit.config.props.GeneratorConfig;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.*;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;

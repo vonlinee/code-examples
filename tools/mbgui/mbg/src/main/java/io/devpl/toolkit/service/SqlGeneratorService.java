@@ -6,14 +6,14 @@ import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
-import io.devpl.toolkit.GeneratorConfig;
-import io.devpl.toolkit.ProjectPathResolver;
+import io.devpl.toolkit.config.props.GeneratorConfig;
+import io.devpl.toolkit.utils.ProjectPathResolver;
 import io.devpl.toolkit.common.ServiceException;
 import io.devpl.toolkit.dto.*;
 import io.devpl.toolkit.mbp.BeetlTemplateEngine;
 import io.devpl.toolkit.sqlparser.ConditionExpr;
 import io.devpl.toolkit.sqlparser.DynamicParamSqlEnhancer;
-import io.devpl.toolkit.utils.PathUtil;
+import io.devpl.toolkit.utils.PathUtils;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Name;
@@ -215,7 +215,7 @@ public class SqlGeneratorService {
         if (!Strings.isNullOrEmpty(config.getFullPackage())) {
             imports.add("java.util.List");
             imports.add(config.getFullPackage());
-            returnType = "List<" + PathUtil.getShortNameFromFullRef(config.getFullPackage()) + ">";
+            returnType = "List<" + PathUtils.getShortNameFromFullRef(config.getFullPackage()) + ">";
         } else {
             imports.add("java.util.List");
             imports.add("java.util.Map");
@@ -226,7 +226,7 @@ public class SqlGeneratorService {
             imports.add("com.baomidou.mybatisplus.extension.plugins.pagination.Page");
             returnType = returnType.replaceFirst("List", "Page");
             DtoFieldInfo param = new DtoFieldInfo();
-            param.setShortJavaType(PathUtil.getShortNameFromFullRef(returnType));
+            param.setShortJavaType(PathUtils.getShortNameFromFullRef(returnType));
             param.setPropertyName("pageParam");
             methodParams.add(param);
         }
@@ -240,7 +240,7 @@ public class SqlGeneratorService {
                 methodParams.add(param);
             } else if ("bean".equals(config.getDaoMethodParamType())) {
                 DtoFieldInfo param = new DtoFieldInfo();
-                param.setShortJavaType(PathUtil.getShortNameFromFullRef(config.getDaoMethodParamDto()));
+                param.setShortJavaType(PathUtils.getShortNameFromFullRef(config.getDaoMethodParamDto()));
                 param.setPropertyName("params");
                 param.addImportJavaType(config.getDaoMethodParamDto());
                 methodParams.add(param);
@@ -279,7 +279,7 @@ public class SqlGeneratorService {
         for (ConditionExpr expr : conditionExprs) {
             for (String paramName : expr.getParamNames()) {
                 DtoFieldInfo field = new DtoFieldInfo();
-                field.setPropertyName(PathUtil.getShortNameFromFullRef(paramName));
+                field.setPropertyName(PathUtils.getShortNameFromFullRef(paramName));
                 boolean isDate = paramName.toLowerCase().endsWith("date")
                         || paramName.toLowerCase().endsWith("time");
                 if (expr.getOperator().toUpperCase().equals("IN")) {

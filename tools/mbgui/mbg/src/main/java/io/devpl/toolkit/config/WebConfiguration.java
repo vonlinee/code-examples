@@ -1,4 +1,4 @@
-package io.devpl.toolkit.configurer;
+package io.devpl.toolkit.config;
 
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.ErrorPageRegistrar;
@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * Spring MVC 配置
  */
 @Configuration
-public class WebConfigurer implements WebMvcConfigurer {
+public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {

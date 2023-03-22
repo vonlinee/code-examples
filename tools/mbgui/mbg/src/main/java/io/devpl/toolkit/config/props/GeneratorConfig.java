@@ -1,4 +1,4 @@
-package io.devpl.toolkit;
+package io.devpl.toolkit.config.props;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;

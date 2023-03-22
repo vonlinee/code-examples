@@ -30,7 +30,7 @@ public class OutputFileInfoService {
     public void saveOutputFileInfo(OutputFileInfo saveFileInfo) throws IOException {
         UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         List<OutputFileInfo> fileInfos = userConfig.getOutputFiles();
-        //替换原来的配置
+        // 替换原来的配置
         if (saveFileInfo.isBuiltIn()) {
             Collections.replaceAll(fileInfos, saveFileInfo, saveFileInfo);
         } else if (fileInfos.contains(saveFileInfo)) {
@@ -87,5 +87,4 @@ public class OutputFileInfoService {
         }
         return null;
     }
-
 }

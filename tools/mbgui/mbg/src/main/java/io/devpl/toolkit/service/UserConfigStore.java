@@ -2,54 +2,53 @@ package io.devpl.toolkit.service;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
-import io.devpl.toolkit.GeneratorConfig;
-import io.devpl.toolkit.ProjectPathResolver;
+import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 import io.devpl.toolkit.common.ServiceException;
+import io.devpl.toolkit.config.props.GeneratorConfig;
 import io.devpl.toolkit.dto.OutputFileInfo;
 import io.devpl.toolkit.dto.UserConfig;
 import io.devpl.toolkit.utils.JsonUtil;
-import io.devpl.toolkit.utils.PathUtil;
+import io.devpl.toolkit.utils.PathUtils;
+import io.devpl.toolkit.utils.ProjectPathResolver;
 import io.devpl.toolkit.utils.TemplateUtil;
-import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import static io.devpl.toolkit.dto.Constant.*;
 
-@Component
 @Slf4j
+@Component
 public class UserConfigStore {
 
     private String storeDir;
 
     private String userConfigPath;
 
-    @Autowired
+    @Resource
     private ProjectPathResolver pathResolver;
-
-    @Autowired
+    @Resource
     private GeneratorConfig generatorConfig;
 
     @PostConstruct
     public void init() {
-        this.storeDir = PathUtil.joinPath(System.getProperty("user.home"), CONFIG_HOME, generatorConfig.getBasePackage());
+        this.storeDir = PathUtils.joinPath(System.getProperty("user.home"), CONFIG_HOME, generatorConfig.getBasePackage());
         this.userConfigPath = this.storeDir + File.separator + "user-config.json";
     }
 
     public String getTemplateStoreDir() {
-        return PathUtil.joinPath(this.storeDir, TEMPLATE_STORE_DIR);
+        return PathUtils.joinPath(this.storeDir, TEMPLATE_STORE_DIR);
     }
 
     public UserConfig getDefaultUserConfig() {
@@ -65,7 +64,7 @@ public class UserConfigStore {
         if (!FileUtil.exist(this.userConfigPath)) {
             return null;
         }
-        String userConfigStr = FileUtil.readString(userConfigPath, Charset.forName("utf-8"));
+        String userConfigStr = FileUtil.readString(userConfigPath, StandardCharsets.UTF_8);
         try {
             return JsonUtil.json2obj(userConfigStr, UserConfig.class);
         } catch (Exception e) {
@@ -85,7 +84,7 @@ public class UserConfigStore {
         }
         Files.createParentDirs(userConfigFile);
         userConfigFile.createNewFile();
-        FileUtil.writeFromStream(new ByteArrayInputStream(configStr.getBytes(Charset.forName("utf-8"))), userConfigFile);
+        FileUtil.writeFromStream(new ByteArrayInputStream(configStr.getBytes(StandardCharsets.UTF_8)), userConfigFile);
     }
 
     public String uploadTemplate(MultipartFile file) {
@@ -93,7 +92,7 @@ public class UserConfigStore {
         assert fileName != null;
         String fileSuffix = fileName.substring(file.getOriginalFilename().lastIndexOf(".") + 1);
         String saveFileName = fileName.substring(0, fileName.lastIndexOf(fileSuffix)) + DateUtil.format(new Date(), "yyyyMMddHHmmss");
-        String savePath = PathUtil.joinPath(getTemplateStoreDir(), saveFileName);
+        String savePath = PathUtils.joinPath(getTemplateStoreDir(), saveFileName);
         log.info("模板上传路径为：{}", savePath);
         File saveFile = new File(savePath);
         try {
@@ -105,14 +104,11 @@ public class UserConfigStore {
     }
 
     public boolean checkUserConfigExisted() {
-        if (!FileUtil.exist(this.storeDir)) {
-            return false;
-        }
-        return true;
+        return FileUtil.exist(this.storeDir);
     }
 
     public void importProjectConfig(String sourcePkg) throws IOException {
-        String configHomePath = PathUtil.joinPath(System.getProperty("user.home"), CONFIG_HOME);
+        String configHomePath = PathUtils.joinPath(System.getProperty("user.home"), CONFIG_HOME);
         if (!FileUtil.exist(configHomePath)) {
             throw new ServiceException("配置主目录不存在：" + configHomePath);
         }
@@ -129,7 +125,7 @@ public class UserConfigStore {
         if (!flag) {
             throw new ServiceException("未找到待导入的源项目配置");
         }
-        String sourceProjectConfigPath = PathUtil.joinPath(System.getProperty("user.home"), CONFIG_HOME, sourcePkg);
+        String sourceProjectConfigPath = PathUtils.joinPath(System.getProperty("user.home"), CONFIG_HOME, sourcePkg);
         String targetProjectConfigPath = this.storeDir;
         UserConfig currentUserConfig = new UserConfig();
         currentUserConfig.setOutputFiles(getBuiltInFileInfo());
@@ -138,7 +134,7 @@ public class UserConfigStore {
     }
 
     public List<String> getAllSavedProject() {
-        String configHomePath = PathUtil.joinPath(System.getProperty("user.home"), CONFIG_HOME);
+        String configHomePath = PathUtils.joinPath(System.getProperty("user.home"), CONFIG_HOME);
         if (!FileUtil.exist(configHomePath)) {
             return Collections.emptyList();
         }
@@ -157,42 +153,42 @@ public class UserConfigStore {
      */
     private List<OutputFileInfo> getBuiltInFileInfo() {
         List<OutputFileInfo> builtInFiles = Lists.newArrayList();
-        //Entity
+        // Entity
         OutputFileInfo entityFile = new OutputFileInfo();
         entityFile.setBuiltIn(true);
         entityFile.setFileType(FILE_TYPE_ENTITY);
         entityFile.setOutputLocation(pathResolver.resolveEntityPackage());
         entityFile.setTemplateName(TemplateUtil.fileType2TemplateName(entityFile.getFileType()));
         builtInFiles.add(entityFile);
-        //Mapper xml
+        // Mapper xml
         OutputFileInfo mapperXmlFile = new OutputFileInfo();
         mapperXmlFile.setBuiltIn(true);
         mapperXmlFile.setFileType(FILE_TYPE_MAPPER_XML);
         mapperXmlFile.setOutputLocation(pathResolver.resolveMapperXmlPackage());
         mapperXmlFile.setTemplateName(TemplateUtil.fileType2TemplateName(mapperXmlFile.getFileType()));
         builtInFiles.add(mapperXmlFile);
-        //Mapper
+        // Mapper
         OutputFileInfo mapperFile = new OutputFileInfo();
         mapperFile.setBuiltIn(true);
         mapperFile.setFileType(FILE_TYPE_MAPPER);
         mapperFile.setOutputLocation(pathResolver.resolveMapperPackage());
         mapperFile.setTemplateName(TemplateUtil.fileType2TemplateName(mapperFile.getFileType()));
         builtInFiles.add(mapperFile);
-        //Service
+        // Service
         OutputFileInfo serviceFile = new OutputFileInfo();
         serviceFile.setBuiltIn(true);
         serviceFile.setFileType(FILE_TYPE_SERVICE);
         serviceFile.setOutputLocation(pathResolver.resolveServicePackage());
         serviceFile.setTemplateName(TemplateUtil.fileType2TemplateName(serviceFile.getFileType()));
         builtInFiles.add(serviceFile);
-        //Service Impl
+        // Service Impl
         OutputFileInfo serviceImplFile = new OutputFileInfo();
         serviceImplFile.setBuiltIn(true);
         serviceImplFile.setFileType(FILE_TYPE_SERVICEIMPL);
         serviceImplFile.setOutputLocation(pathResolver.resolveServiceImplPackage());
         serviceImplFile.setTemplateName(TemplateUtil.fileType2TemplateName(serviceImplFile.getFileType()));
         builtInFiles.add(serviceImplFile);
-        //Controller
+        // Controller
         OutputFileInfo controllerFile = new OutputFileInfo();
         controllerFile.setBuiltIn(true);
         controllerFile.setFileType(FILE_TYPE_CONTROLLER);
@@ -201,5 +197,4 @@ public class UserConfigStore {
         builtInFiles.add(controllerFile);
         return builtInFiles;
     }
-
 }

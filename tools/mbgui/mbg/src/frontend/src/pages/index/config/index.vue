@@ -10,21 +10,21 @@
           <el-table-column prop="fileType" label="输出文件类型"></el-table-column>
           <el-table-column width="500" prop="outputLocation" label="输出路径"></el-table-column>
           <el-table-column label="文件模板">
-            <template slot-scope="scope">
-              <a href="javascript:;" @click="download(scope.row.fileType, scope.row.templateName)">
+            <template v-slot="scope">
+              <a href="javascript:" @click="download(scope.row.fileType, scope.row.templateName)">
                 <i class="fa fa-paperclip"></i>
                 {{ scope.row.templateName }}
               </a>
             </template>
           </el-table-column>
           <el-table-column label="是否内置" width="80">
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <span v-if="scope.row.builtIn" style="color:red;">是</span>
               <span v-else>否</span>
             </template>
           </el-table-column>
           <el-table-column label="操作">
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <el-button
                   size="mini"
                   type="info"
@@ -72,9 +72,8 @@
                 ></help-tip>
               </el-form-item>
               <el-form-item label="文件模板" prop="templateName">
-                <a
-                    href="javascript:;"
-                    @click="download(form.fileType, form.templateName)"
+                <a href="javascript:;"
+                   @click="download(form.fileType, form.templateName)"
                 >{{ form.templateName }}</a>
                 <el-upload
                     ref="upload"
@@ -86,7 +85,7 @@
                     :on-success="onUploadSuccess"
                     :before-upload="beforeTemplateUpload"
                 >
-                  <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                  <el-button v-slot="trigger" size="small" type="primary">选取文件</el-button>
                   <div slot="tip" class="el-upload__tip">仅支持.btl文件</div>
                 </el-upload>
               </el-form-item>
@@ -96,16 +95,16 @@
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="策略配置" name="strategy" v-if="form.builtIn">
-            <entity-strategy-form v-if="form.fileType=='Entity'" :user-config="userConfig"></entity-strategy-form>
-            <mapper-xml-strategy-form v-if="form.fileType=='Mapper.xml'"
+            <entity-strategy-form v-if="form.fileType==='Entity'" :user-config="userConfig"></entity-strategy-form>
+            <mapper-xml-strategy-form v-if="form.fileType==='Mapper.xml'"
                                       :user-config="userConfig"></mapper-xml-strategy-form>
-            <mapper-strategy-form v-if="form.fileType=='Mapper.java'" :user-config="userConfig"></mapper-strategy-form>
-            <service-strategy-form v-if="form.fileType=='Service'" :user-config="userConfig"></service-strategy-form>
+            <mapper-strategy-form v-if="form.fileType==='Mapper.java'" :user-config="userConfig"></mapper-strategy-form>
+            <service-strategy-form v-if="form.fileType==='Service'" :user-config="userConfig"></service-strategy-form>
             <service-impl-strategy-form
-                v-if="form.fileType=='ServiceImpl'"
+                v-if="form.fileType==='ServiceImpl'"
                 :user-config="userConfig"
             ></service-impl-strategy-form>
-            <controller-strategy-form v-if="form.fileType=='Controller'"
+            <controller-strategy-form v-if="form.fileType==='Controller'"
                                       :user-config="userConfig"></controller-strategy-form>
           </el-tab-pane>
         </el-tabs>
@@ -168,7 +167,10 @@ export default {
           {required: true, message: "请上传文件模板", trigger: "change"},
         ],
       },
-      userConfig: {},
+      userConfig: {
+        outputFiles: undefined,
+        builtIn: true,
+      },
       showEditForm: false,
       searchKey: "",
       tables: [],
@@ -240,13 +242,14 @@ export default {
         if (valid) {
           this.form.outputLocation =
               this.form.outputLocationPrefix + ":" + this.form.outputLocationPkg;
-          axios.post("/api/output-file-info/save", this.form).then((res) => {
+          this.$api.saveOutputFileInfo(this.form).then((res) => {
+            console.log(res)
             this.$message.success("信息保存成功");
             this.clearForm();
             this.activeName = "base";
             this.showEditForm = false;
             this.getFileInfos();
-          });
+          })
         } else {
           return false;
         }
@@ -266,16 +269,14 @@ export default {
       });
     },
     download(fileType, templateName) {
-      axios
-          .get("/api/template/download", {
-            params: {
-              fileType: fileType,
-            },
-            responseType: "blob",
-          })
-          .then((response) => {
-            FileSaver.saveAs(response, templateName);
-          });
+      axios.get("/api/template/download", {
+        params: {
+          fileType: fileType,
+        },
+        responseType: "blob",
+      }).then((response) => {
+        FileSaver.saveAs(response, templateName);
+      });
     },
     onUploadSuccess(res, file, fileList) {
       if (res.code === 200) {

@@ -1,5 +1,6 @@
 package io.devpl.toolkit.utils;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
 /**
@@ -8,6 +9,10 @@ import javax.annotation.Nullable;
 public final class StringUtils {
 
     private StringUtils() {
+    }
+
+    public static boolean isNullOrEmpty(@CheckForNull String string) {
+        return string == null || string.isEmpty();
     }
 
     public static boolean hasText(@Nullable String string) {

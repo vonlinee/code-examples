@@ -1,4 +1,4 @@
-package io.devpl.toolkit;
+package io.devpl.toolkit.codegen;
 
 /**
  * 

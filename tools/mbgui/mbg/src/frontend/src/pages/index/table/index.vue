@@ -280,8 +280,7 @@ export default {
         params.genSetting = this.genSetting;
         params.tables = this.choosedTables;
         let aLoading = Loading.service();
-        axios
-            .post("/api/mbp-generator/gen-code", params)
+        this.$api.startCodeGeneration(params)
             .then((res) => {
               this.$message({
                 message: "业务代码已生成",

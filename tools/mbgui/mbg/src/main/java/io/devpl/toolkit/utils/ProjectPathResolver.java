@@ -1,8 +1,6 @@
-package io.devpl.toolkit;
+package io.devpl.toolkit.utils;
 
 import io.devpl.toolkit.common.ServiceException;
-import io.devpl.toolkit.utils.OSUtil;
-import io.devpl.toolkit.utils.PathUtil;
 import com.google.common.base.Strings;
 import io.devpl.toolkit.dto.Constant;
 import lombok.Getter;
@@ -117,23 +115,23 @@ public class ProjectPathResolver {
     }
 
     public String resolveEntityPackage() {
-        return PathUtil.joinPackage(basePackage, "entity");
+        return PathUtils.joinPackage(basePackage, "entity");
     }
 
     public String resolveControllerPackage() {
-        return PathUtil.joinPackage(basePackage, "controller");
+        return PathUtils.joinPackage(basePackage, "controller");
     }
 
     public String resolveServicePackage() {
-        return PathUtil.joinPackage(basePackage, "service");
+        return PathUtils.joinPackage(basePackage, "service");
     }
 
     public String resolveServiceImplPackage() {
-        return PathUtil.joinPackage(basePackage, "service", "impl");
+        return PathUtils.joinPackage(basePackage, "service", "impl");
     }
 
     public String resolveMapperPackage() {
-        return PathUtil.joinPackage(basePackage, "mapper");
+        return PathUtils.joinPackage(basePackage, "mapper");
     }
 
     public String resolveMapperXmlPackage() {

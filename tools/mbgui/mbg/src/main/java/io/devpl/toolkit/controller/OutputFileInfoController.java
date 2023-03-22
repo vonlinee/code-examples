@@ -1,86 +1,82 @@
 package io.devpl.toolkit.controller;
 
-import io.devpl.toolkit.ProjectPathResolver;
 import io.devpl.toolkit.common.Result;
-import io.devpl.toolkit.common.ResultGenerator;
+import io.devpl.toolkit.common.Results;
 import io.devpl.toolkit.dto.OutputFileInfo;
 import io.devpl.toolkit.service.OutputFileInfoService;
 import io.devpl.toolkit.service.UserConfigStore;
 import io.devpl.toolkit.strategy.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.devpl.toolkit.utils.ProjectPathResolver;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/output-file-info")
 public class OutputFileInfoController {
 
-    @Autowired
     private OutputFileInfoService outputFileInfoService;
-
-    @Autowired
     private UserConfigStore userConfigStore;
-
-    @Autowired
     private ProjectPathResolver projectPathResolver;
 
     @GetMapping("/user-config")
-    public Result getUserConfig() {
-        return ResultGenerator.genSuccessResult(userConfigStore.getDefaultUserConfig());
+    public Result<?> getUserConfig() {
+        return Results.of(userConfigStore.getDefaultUserConfig());
     }
 
     @GetMapping("/project-root-path")
-    public Result getRootPath() {
-        return ResultGenerator.genSuccessResult(projectPathResolver.getBaseProjectPath());
+    public Result<?> getRootPath() {
+        return Results.of(projectPathResolver.getBaseProjectPath());
     }
 
     @PostMapping("/delete")
-    public Result deleteOutputInfos(@RequestBody OutputFileInfo outputFileInfo) throws IOException {
+    public Result<?> deleteOutputInfos(@RequestBody OutputFileInfo outputFileInfo) throws IOException {
         outputFileInfoService.deleteOutputFileInfo(outputFileInfo);
-        return ResultGenerator.genSuccessResult();
+        return Results.of();
     }
 
     @PostMapping("/save")
-    public Result saveOutputInfos(@RequestBody OutputFileInfo outputFileInfo) throws IOException {
+    public Result<Void> saveOutputInfos(@RequestBody OutputFileInfo outputFileInfo) throws IOException {
         outputFileInfoService.saveOutputFileInfo(outputFileInfo);
-        return ResultGenerator.genSuccessResult();
+        return Results.of();
     }
 
     @PostMapping("/save-entity-strategy")
-    public Result saveEntityStrategy(@RequestBody EntityStrategy entityStrategy) throws IOException {
+    public Result<Void> saveEntityStrategy(@RequestBody EntityStrategy entityStrategy) throws IOException {
         outputFileInfoService.saveEntityStrategy(entityStrategy);
-        return ResultGenerator.genSuccessResult();
+        return Results.of();
     }
 
     @PostMapping("/save-mapper-strategy")
-    public Result saveMapperStrategy(@RequestBody MapperStrategy mapperStrategy) throws IOException {
+    public Result<Void> saveMapperStrategy(@RequestBody MapperStrategy mapperStrategy) throws IOException {
         outputFileInfoService.saveMapperStrategy(mapperStrategy);
-        return ResultGenerator.genSuccessResult();
+        return Results.of();
     }
 
     @PostMapping("/save-mapper-xml-strategy")
-    public Result saveMapperXmlStrategy(@RequestBody MapperXmlStrategy mapperXmlStrategy) throws IOException {
+    public Result<Void> saveMapperXmlStrategy(@RequestBody MapperXmlStrategy mapperXmlStrategy) throws IOException {
         outputFileInfoService.saveMapperXmlStrategy(mapperXmlStrategy);
-        return ResultGenerator.genSuccessResult();
+        return Results.of();
     }
 
     @PostMapping("/save-controller-strategy")
-    public Result saveControllerStrategy(@RequestBody ControllerStrategy controllerStrategy) throws IOException {
+    public Result<Void> saveControllerStrategy(@RequestBody ControllerStrategy controllerStrategy) throws IOException {
         outputFileInfoService.saveControllerStrategy(controllerStrategy);
-        return ResultGenerator.genSuccessResult();
+        return Results.of();
     }
 
     @PostMapping("/save-service-strategy")
-    public Result saveServiceStrategy(@RequestBody ServiceStrategy serviceStrategy) throws IOException {
+    public Result<Void> saveServiceStrategy(@RequestBody ServiceStrategy serviceStrategy) throws IOException {
         outputFileInfoService.saveServiceStrategy(serviceStrategy);
-        return ResultGenerator.genSuccessResult();
+        return Results.of();
     }
 
     @PostMapping("/save-service-impl-strategy")
-    public Result saveServiceImplStrategy(@RequestBody ServiceImplStrategy ServiceImplStrategy) throws IOException {
+    public Result<Void> saveServiceImplStrategy(@RequestBody ServiceImplStrategy ServiceImplStrategy) throws IOException {
         outputFileInfoService.saveServiceImplStrategy(ServiceImplStrategy);
-        return ResultGenerator.genSuccessResult();
+        return Results.of();
     }
 
     /**
@@ -89,8 +85,8 @@ public class OutputFileInfoController {
      * @return
      */
     @GetMapping("/check-if-new-project")
-    public Result checkIfNewProject() {
-        return ResultGenerator.genSuccessResult(!userConfigStore.checkUserConfigExisted());
+    public Result<Boolean> checkIfNewProject() {
+        return Results.of(!userConfigStore.checkUserConfigExisted());
     }
 
     /**
@@ -100,7 +96,7 @@ public class OutputFileInfoController {
      */
     @GetMapping("/all-saved-project")
     public Result getAllSavedProject() {
-        return ResultGenerator.genSuccessResult(userConfigStore.getAllSavedProject());
+        return Results.of(userConfigStore.getAllSavedProject());
     }
 
     /**
@@ -111,8 +107,6 @@ public class OutputFileInfoController {
     @PostMapping("/import-project-config/{sourceProjectPkg}")
     public Result importProjectConfig(@PathVariable("sourceProjectPkg") String sourceProjectPkg) throws IOException {
         userConfigStore.importProjectConfig(sourceProjectPkg);
-        return ResultGenerator.genSuccessResult();
+        return Results.of();
     }
-
-
 }

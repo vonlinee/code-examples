@@ -2,10 +2,12 @@ package io.devpl.toolkit.common;
 
 import io.devpl.toolkit.utils.JsonUtil;
 
+import java.io.Serializable;
+
 /**
  * 统一API响应结果封装
  */
-public class Result {
+public class Result<T> implements Serializable {
 
     /**
      * 响应码，200为成功，其它为错误
@@ -20,9 +22,9 @@ public class Result {
     /**
      * 响应的具体对象
      */
-    private Object data;
+    private T data;
 
-    public Result setCode(ResultCode resultCode) {
+    public Result<T> setCode(ResultCode resultCode) {
         this.code = resultCode.code;
         return this;
     }
@@ -31,7 +33,7 @@ public class Result {
         return code;
     }
 
-    public Result setCode(int code) {
+    public Result<T> setCode(int code) {
         this.code = code;
         return this;
     }
@@ -40,16 +42,16 @@ public class Result {
         return message;
     }
 
-    public Result setMessage(String message) {
+    public Result<T> setMessage(String message) {
         this.message = message;
         return this;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public Result setData(Object data) {
+    public Result<T> setData(T data) {
         this.data = data;
         return this;
     }

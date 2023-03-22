@@ -33,6 +33,16 @@ const api = {
     },
     saveConnectionInfo(connInfo) {
         return post("/api/db/conn/save", connInfo)
+    },
+    saveOutputFileInfo(val) {
+        return post("/api/output-file-info/save", val)
+    },
+    downloadTemplate() {
+
+    },
+    startCodeGeneration(param) {
+        debugger;
+        return post("/api/mbpg/codegen", param)
     }
 }
 // 挂载到Vue全局实例上

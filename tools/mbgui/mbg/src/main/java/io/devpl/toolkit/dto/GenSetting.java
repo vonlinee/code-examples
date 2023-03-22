@@ -40,5 +40,4 @@ public class GenSetting {
      * 目标项目根目录
      */
     private String rootPath;
-
 }

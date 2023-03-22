@@ -1,8 +1,8 @@
 package io.devpl.toolkit.controller;
 
-import io.devpl.toolkit.GeneratorConfig;
+import io.devpl.toolkit.config.props.GeneratorConfig;
 import io.devpl.toolkit.common.Result;
-import io.devpl.toolkit.common.ResultGenerator;
+import io.devpl.toolkit.common.Results;
 import io.devpl.toolkit.dto.GenDtoFromSqlReq;
 import io.devpl.toolkit.service.SqlGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +20,14 @@ public class SqlGeneratorController {
 
     @GetMapping("/basepackage")
     public Result getBasepackage() {
-        return ResultGenerator.genSuccessResult(generatorConfig.getBasePackage());
+        return Results.of(generatorConfig.getBasePackage());
     }
 
 
     @PostMapping("/gen-mapper-method")
     public Result genMapperMethodFromSQL(@RequestBody GenDtoFromSqlReq params) throws Exception {
         sqlGeneratorService.genMapperMethod(params);
-        return ResultGenerator.genSuccessResult();
+        return Results.of();
     }
 
 

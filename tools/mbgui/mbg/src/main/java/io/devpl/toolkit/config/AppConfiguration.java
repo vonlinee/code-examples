@@ -1,7 +1,9 @@
-package io.devpl.toolkit;
+package io.devpl.toolkit.config;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
+import io.devpl.toolkit.utils.ProjectPathResolver;
+import io.devpl.toolkit.config.props.GeneratorConfig;
 import io.devpl.toolkit.mbp.BeetlTemplateEngine;
 import io.devpl.toolkit.service.UserConfigStore;
 import io.devpl.toolkit.sqlparser.DynamicParamSqlEnhancer;
@@ -11,13 +13,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @Configuration
-public class ApplicationConfigure {
+public class AppConfiguration {
 
     @Bean
     public ProjectPathResolver projectPathResolver(GeneratorConfig config) {
         return new ProjectPathResolver(config.getBasePackage());
     }
-
 
     /**
      * 这里的DataSourceConfig仅用于获取tablesql，查询数据库元数据，和代码生成无关

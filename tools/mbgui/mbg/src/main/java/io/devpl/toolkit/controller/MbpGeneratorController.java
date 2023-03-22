@@ -1,26 +1,27 @@
 package io.devpl.toolkit.controller;
 
 import io.devpl.toolkit.common.Result;
-import io.devpl.toolkit.common.ResultGenerator;
-import io.devpl.toolkit.dto.MpgGenCodeDto;
+import io.devpl.toolkit.common.Results;
+import io.devpl.toolkit.dto.CodeGenParam;
 import io.devpl.toolkit.mbp.MbpGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+
 @RestController
-@RequestMapping("/api/mbp-generator")
+@RequestMapping("/api/mbpg")
 public class MbpGeneratorController {
 
-    @Autowired
+    @Resource
     private MbpGenerator mbpGenerator;
 
-    @PostMapping("/gen-code")
-    public Result genCode(@RequestBody MpgGenCodeDto dto) {
-        mbpGenerator.genCodeBatch(dto.getGenSetting(), dto.getTables());
-        return ResultGenerator.genSuccessResult();
+    @PostMapping(value = "/codegen")
+    public Result<?> genCode(@RequestBody CodeGenParam param) {
+        mbpGenerator.checkGenSetting(param.getGenSetting());
+        mbpGenerator.doGenerate(param.getGenSetting(), param.getTables());
+        return Results.of();
     }
-
 }

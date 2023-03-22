@@ -10,84 +10,67 @@ import com.baomidou.mybatisplus.generator.config.builder.*;
 import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.fill.Column;
-import io.devpl.toolkit.GeneratorConfig;
-import io.devpl.toolkit.ProjectPathResolver;
+import com.google.common.collect.Maps;
 import io.devpl.toolkit.common.ServiceException;
+import io.devpl.toolkit.config.props.GeneratorConfig;
 import io.devpl.toolkit.dto.Constant;
 import io.devpl.toolkit.dto.GenSetting;
 import io.devpl.toolkit.dto.OutputFileInfo;
 import io.devpl.toolkit.dto.UserConfig;
 import io.devpl.toolkit.service.UserConfigStore;
-import io.devpl.toolkit.utils.PathUtil;
-import com.google.common.collect.Maps;
 import io.devpl.toolkit.strategy.*;
+import io.devpl.toolkit.utils.PathUtils;
+import io.devpl.toolkit.utils.ProjectPathResolver;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.*;
 
-@Component
 @Slf4j
+@Component
 @AllArgsConstructor
 public class MbpGenerator {
 
-    @Autowired
     private DataSourceConfig ds;
-
-    @Autowired
     private GeneratorConfig generatorConfig;
-
-    @Autowired
     private UserConfigStore userConfigStore;
-
-    @Autowired
     private ProjectPathResolver projectPathResolver;
-
-    @Autowired
     private BeetlTemplateEngine beetlTemplateEngine;
 
     /**
      * 根据所选择的配置生成CRUD代码
      */
-    public void genCodeBatch(GenSetting genSetting, List<String> tables) {
-        checkGenSetting(genSetting);
+    public void doGenerate(GenSetting genSetting, List<String> tables) {
         projectPathResolver.refreshBaseProjectPath(genSetting.getRootPath());
-        //生成策略配置
+        // 生成策略配置
         UserConfig userConfig = userConfigStore.getDefaultUserConfig();
-        FastAutoGenerator
-                .create(ds.getUrl(), ds.getUsername(), ds.getPassword())
-                .dataSourceConfig(
-                        builder -> {
-                            builder.schema(generatorConfig.getSchemaName());
-                            builder.typeConvert(generatorConfig.getTypeConvert());
-                        }
-                ).globalConfig(builder -> {
-                    builder.dateType(generatorConfig.getDateType());
-                    //指定所有生成文件的根目录
-                    builder.outputDir(projectPathResolver.getSourcePath());
-                    builder.author(genSetting.getAuthor());
-                    if (userConfig.getEntityStrategy().isSwagger2()) {
-                        builder.enableSwagger();
-                    }
-                }).templateEngine(beetlTemplateEngine).packageConfig(builder -> {
-                    configPackage(builder, genSetting.getModuleName(), userConfig);
-                }).templateConfig(builder -> {
-                    configTemplate(builder, genSetting.getChoosedOutputFiles(), userConfig);
-                }).injectionConfig(builder -> {
-                    configInjection(builder, userConfig, genSetting);
-                }).strategyConfig(builder -> {
-                    builder.addInclude(String.join(",", tables))
-                            .disableSqlFilter()
-                            .enableSkipView();
-                    configEntity(builder.entityBuilder(), userConfig.getEntityStrategy(), genSetting.isOverride());
-                    configMapper(builder.mapperBuilder(), userConfig.getMapperStrategy(), userConfig.getMapperXmlStrategy(), genSetting.isOverride());
-                    configService(builder.serviceBuilder(), userConfig.getServiceStrategy(), userConfig.getServiceImplStrategy());
-                    configController(builder.controllerBuilder(), userConfig.getControllerStrategy());
-                }).execute();
+        FastAutoGenerator.create(ds.getUrl(), ds.getUsername(), ds.getPassword()).dataSourceConfig(builder -> {
+            builder.schema(generatorConfig.getSchemaName());
+            builder.typeConvert(generatorConfig.getTypeConvert());
+        }).globalConfig(builder -> {
+            builder.dateType(generatorConfig.getDateType());
+            // 指定所有生成文件的根目录
+            builder.outputDir(projectPathResolver.getSourcePath());
+            builder.author(genSetting.getAuthor());
+            if (userConfig.getEntityStrategy().isSwagger2()) {
+                builder.enableSwagger();
+            }
+        }).templateEngine(beetlTemplateEngine).packageConfig(builder -> {
+            configPackage(builder, genSetting.getModuleName(), userConfig);
+        }).templateConfig(builder -> {
+            configTemplate(builder, genSetting.getChoosedOutputFiles(), userConfig);
+        }).injectionConfig(builder -> {
+            configInjection(builder, userConfig, genSetting);
+        }).strategyConfig(builder -> {
+            builder.addInclude(String.join(",", tables)).disableSqlFilter().enableSkipView();
+            configEntity(builder.entityBuilder(), userConfig.getEntityStrategy(), genSetting.isOverride());
+            configMapper(builder.mapperBuilder(), userConfig.getMapperStrategy(), userConfig.getMapperXmlStrategy(), genSetting.isOverride());
+            configService(builder.serviceBuilder(), userConfig.getServiceStrategy(), userConfig.getServiceImplStrategy());
+            configController(builder.controllerBuilder(), userConfig.getControllerStrategy());
+        }).execute();
     }
 
     private void configPackage(PackageConfig.Builder builder, String moduleName, UserConfig userConfig) {
@@ -95,13 +78,13 @@ public class MbpGenerator {
         if (!StrUtil.isEmpty(moduleName)) {
             mapperXmlOutputPath = mapperXmlOutputPath + File.separator + moduleName;
         }
-        //这里的模块名处理方式和原版的MPG不同，是将模块名放在包名最后
-        String entityPkg = PathUtil.joinPackage(userConfig.getEntityInfo().getOutputPackage(), moduleName);
-        String mapperPkg = PathUtil.joinPackage(userConfig.getMapperInfo().getOutputPackage(), moduleName);
-        String servicePkg = PathUtil.joinPackage(userConfig.getServiceInfo().getOutputPackage(), moduleName);
-        String serviceImplPkg = PathUtil.joinPackage(userConfig.getServiceImplInfo().getOutputPackage(), moduleName);
-        String controllerPkg = PathUtil.joinPackage(userConfig.getControllerInfo().getOutputPackage(), moduleName);
-        //子包名已经包含了完整路径
+        // 这里的模块名处理方式和原版的MPG不同，是将模块名放在包名最后
+        String entityPkg = PathUtils.joinPackage(userConfig.getEntityInfo().getOutputPackage(), moduleName);
+        String mapperPkg = PathUtils.joinPackage(userConfig.getMapperInfo().getOutputPackage(), moduleName);
+        String servicePkg = PathUtils.joinPackage(userConfig.getServiceInfo().getOutputPackage(), moduleName);
+        String serviceImplPkg = PathUtils.joinPackage(userConfig.getServiceImplInfo().getOutputPackage(), moduleName);
+        String controllerPkg = PathUtils.joinPackage(userConfig.getControllerInfo().getOutputPackage(), moduleName);
+        // 子包名已经包含了完整路径
         builder.parent("")
                 .moduleName("")
                 .entity(entityPkg)
@@ -139,9 +122,9 @@ public class MbpGenerator {
         }
     }
 
-    //自定义模板参数配置
+    // 自定义模板参数配置
     private void configInjection(InjectionConfig.Builder builder, UserConfig userConfig, GenSetting genSetting) {
-        //自定义参数
+        // 自定义参数
         builder.beforeOutputFile((tableInfo, objectMap) -> {
             TemplateVaribleInjecter varibleInjecter = generatorConfig.getTemplateVaribleInjecter();
             Map<String, Object> vars = null;
@@ -151,7 +134,7 @@ public class MbpGenerator {
             if (vars == null) {
                 vars = Maps.newHashMap();
             }
-            //用于控制controller中对应API是否展示的自定义参数
+            // 用于控制controller中对应API是否展示的自定义参数
             Map<String, Object> controllerMethodsVar = Maps.newHashMap();
             for (String method : genSetting.getChoosedControllerMethods()) {
                 controllerMethodsVar.put(method, true);
@@ -165,12 +148,12 @@ public class MbpGenerator {
             }
             objectMap.putAll(vars);
         });
-        //自定义文件生成
+        // 自定义文件生成
         for (OutputFileInfo outputFileInfo : userConfig.getOutputFiles()) {
-            if (!outputFileInfo.isBuiltIn()
-                    && genSetting.getChoosedOutputFiles().contains(outputFileInfo.getFileType())) {
+            if (!outputFileInfo.isBuiltIn() && genSetting.getChoosedOutputFiles()
+                    .contains(outputFileInfo.getFileType())) {
                 CustomFile.Builder fileBuilder = new CustomFile.Builder();
-                //注意这里传入的是fileType,配合自定义的TemplateEngine.outputCustomFile生成自定义文件
+                // 注意这里传入的是fileType,配合自定义的TemplateEngine.outputCustomFile生成自定义文件
                 fileBuilder.fileName(outputFileInfo.getFileType());
                 fileBuilder.templatePath(outputFileInfo.getTemplatePath());
                 fileBuilder.packageName(outputFileInfo.getOutputPackage());
@@ -182,8 +165,7 @@ public class MbpGenerator {
         }
     }
 
-
-    private void checkGenSetting(GenSetting genSetting) {
+    public void checkGenSetting(GenSetting genSetting) {
         if (StrUtil.isEmpty(genSetting.getRootPath())) {
             throw new ServiceException("目标项目根目录不能为空");
         }
@@ -248,8 +230,7 @@ public class MbpGenerator {
         if (entityStrategy.getSuperEntityColumns() != null) {
             entityBuilder.addSuperEntityColumns(entityStrategy.getSuperEntityColumns());
         }
-        if (entityStrategy.getTableFills() != null
-                && !entityStrategy.getTableFills().isEmpty()) {
+        if (entityStrategy.getTableFills() != null && !entityStrategy.getTableFills().isEmpty()) {
             List<IFill> tableFills = new ArrayList<>();
             for (String tableFillStr : entityStrategy.getTableFills()) {
                 if (!StrUtil.isEmpty(tableFillStr)) {
@@ -274,7 +255,7 @@ public class MbpGenerator {
         }
         if (mapperXmlStrategy.isBaseResultMap()) {
             mapperBuilder.enableBaseResultMap();
-            //TODO:enableBaseColumnList，cache目前没有页面配置
+            // TODO:enableBaseColumnList，cache目前没有页面配置
             mapperBuilder.enableBaseColumnList();
         }
         mapperBuilder.convertMapperFileName(nameConverter::mapperNameConvert);
@@ -316,7 +297,6 @@ public class MbpGenerator {
         controllerBuilder.convertFileName(nameConverter::controllerNameConvert);
     }
 
-
     private OutputFileInfo findFileConfigByType(String fileType, UserConfig userConfig) {
         for (OutputFileInfo outputFileInfo : userConfig.getOutputFiles()) {
             if (fileType.equals(outputFileInfo.getFileType())) {
@@ -327,11 +307,11 @@ public class MbpGenerator {
     }
 
     private String getOutputPathByFileType(String fileType, UserConfig userConfig) {
-        return projectPathResolver.convertPackageToPath(Objects.requireNonNull(findFileConfigByType(fileType, userConfig)).getOutputLocation());
+        return projectPathResolver.convertPackageToPath(Objects.requireNonNull(findFileConfigByType(fileType, userConfig))
+                .getOutputLocation());
     }
 
     private String findTemplatePath(String fileType, UserConfig userConfig) {
         return Objects.requireNonNull(findFileConfigByType(fileType, userConfig)).getAvailableTemplatePath();
     }
-
 }

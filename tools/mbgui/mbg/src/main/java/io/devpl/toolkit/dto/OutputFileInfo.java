@@ -41,18 +41,19 @@ public class OutputFileInfo {
         if (!Strings.isNullOrEmpty(templatePath)) {
             return templatePath;
         }
-        if (fileType.equals(FILE_TYPE_ENTITY)) {
-            return RESOURCE_PREFIX_CLASSPATH + "codetpls/entity.java.btl";
-        } else if (fileType.equals(FILE_TYPE_MAPPER)) {
-            return RESOURCE_PREFIX_CLASSPATH + "codetpls/mapper.java.btl";
-        } else if (fileType.equals(FILE_TYPE_MAPPER_XML)) {
-            return RESOURCE_PREFIX_CLASSPATH + "codetpls/mapper.xml.btl";
-        } else if (fileType.equals(FILE_TYPE_SERVICE)) {
-            return RESOURCE_PREFIX_CLASSPATH + "codetpls/service.java.btl";
-        } else if (fileType.equals(FILE_TYPE_SERVICEIMPL)) {
-            return RESOURCE_PREFIX_CLASSPATH + "codetpls/serviceImpl.java.btl";
-        } else if (fileType.equals(FILE_TYPE_CONTROLLER)) {
-            return RESOURCE_PREFIX_CLASSPATH + "codetpls/controller.java.btl";
+        switch (fileType) {
+            case FILE_TYPE_ENTITY:
+                return RESOURCE_PREFIX_CLASSPATH + "codetpls/entity.java.btl";
+            case FILE_TYPE_MAPPER:
+                return RESOURCE_PREFIX_CLASSPATH + "codetpls/mapper.java.btl";
+            case FILE_TYPE_MAPPER_XML:
+                return RESOURCE_PREFIX_CLASSPATH + "codetpls/mapper.xml.btl";
+            case FILE_TYPE_SERVICE:
+                return RESOURCE_PREFIX_CLASSPATH + "codetpls/service.java.btl";
+            case FILE_TYPE_SERVICEIMPL:
+                return RESOURCE_PREFIX_CLASSPATH + "codetpls/serviceImpl.java.btl";
+            case FILE_TYPE_CONTROLLER:
+                return RESOURCE_PREFIX_CLASSPATH + "codetpls/controller.java.btl";
         }
         return "";
     }

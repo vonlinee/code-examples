@@ -1,8 +1,5 @@
-package io.devpl.toolkit.configurer;
+package io.devpl.toolkit.common;
 
-import io.devpl.toolkit.common.Result;
-import io.devpl.toolkit.common.ResultCode;
-import io.devpl.toolkit.common.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,9 +17,16 @@ import javax.servlet.http.HttpServletRequest;
 public class GlobalExceptionHandler {
 
     @ResponseBody
+    @ExceptionHandler(value = Throwable.class)
+    public Result<?> globalException(HttpServletRequest request, Throwable throwable) {
+        log.error("请求异常", throwable);
+        return new Result<>();
+    }
+
+    @ResponseBody
     @ExceptionHandler(value = Exception.class)
-    public Result exceptionHandler(HttpServletRequest request, Exception e) {
-        Result result = new Result();
+    public Result<?> exceptionHandler(HttpServletRequest request, Exception e) {
+        Result<?> result = new Result<>();
         log.info("未捕获的异常：" + e.getMessage(), e);
         if (e instanceof ServiceException) {
             result.setCode(ResultCode.FAIL).setMessage(e.getMessage());

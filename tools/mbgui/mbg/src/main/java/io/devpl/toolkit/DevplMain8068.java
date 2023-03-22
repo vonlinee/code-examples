@@ -1,6 +1,9 @@
 package io.devpl.toolkit;
 
 import io.devpl.toolkit.codegen.DefaultNameConverter;
+import io.devpl.toolkit.codegen.JdbcConstant;
+import io.devpl.toolkit.config.props.GeneratorConfig;
+import io.devpl.toolkit.startup.MybatisPlusToolsApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

@@ -1,8 +1,8 @@
 package io.devpl.toolkit.controller;
 
-import io.devpl.toolkit.ProjectPathResolver;
+import io.devpl.toolkit.utils.ProjectPathResolver;
 import io.devpl.toolkit.common.Result;
-import io.devpl.toolkit.common.ResultGenerator;
+import io.devpl.toolkit.common.Results;
 import io.devpl.toolkit.service.AutoCompleteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +24,7 @@ public class AutoCompleteController {
     @GetMapping("/mapperxml")
     public Result getAllMapperXmlNames(String mapperLocationPrefix, String searchKey) {
         Set<String> hits = autoCompleteService.searchXmlMapperName(mapperLocationPrefix, searchKey);
-        return ResultGenerator.genSuccessResult(hits);
+        return Results.of(hits);
     }
 
 }

@@ -1,7 +1,7 @@
 package io.devpl.toolkit.service;
 
 import cn.hutool.core.io.FileUtil;
-import io.devpl.toolkit.ProjectPathResolver;
+import io.devpl.toolkit.utils.ProjectPathResolver;
 import io.devpl.toolkit.common.ServiceException;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
