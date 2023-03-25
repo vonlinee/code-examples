@@ -3,32 +3,33 @@ package io.devpl.toolkit.controller;
 import io.devpl.toolkit.common.Result;
 import io.devpl.toolkit.common.Results;
 import io.devpl.toolkit.dto.OutputFileInfo;
+import io.devpl.toolkit.service.CodeGenConfigService;
 import io.devpl.toolkit.service.OutputFileInfoService;
-import io.devpl.toolkit.service.UserConfigStore;
 import io.devpl.toolkit.strategy.*;
-import io.devpl.toolkit.utils.ProjectPathResolver;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+/**
+ * 输出文件信息
+ */
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/output-file-info")
 public class OutputFileInfoController {
 
     private OutputFileInfoService outputFileInfoService;
-    private UserConfigStore userConfigStore;
-    private ProjectPathResolver projectPathResolver;
+    private CodeGenConfigService userConfigStore;
 
+    /**
+     * 获取配置信息
+     *
+     * @return 配置信息
+     */
     @GetMapping("/user-config")
     public Result<?> getUserConfig() {
         return Results.of(userConfigStore.getDefaultUserConfig());
-    }
-
-    @GetMapping("/project-root-path")
-    public Result<?> getRootPath() {
-        return Results.of(projectPathResolver.getBaseProjectPath());
     }
 
     @PostMapping("/delete")
@@ -37,6 +38,13 @@ public class OutputFileInfoController {
         return Results.of();
     }
 
+    /**
+     * 保存输出文件信息
+     *
+     * @param outputFileInfo
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/save")
     public Result<Void> saveOutputInfos(@RequestBody OutputFileInfo outputFileInfo) throws IOException {
         outputFileInfoService.saveOutputFileInfo(outputFileInfo);
@@ -80,32 +88,22 @@ public class OutputFileInfoController {
     }
 
     /**
-     * 查看当前项目是否存在配置文件
-     *
-     * @return
-     */
-    @GetMapping("/check-if-new-project")
-    public Result<Boolean> checkIfNewProject() {
-        return Results.of(!userConfigStore.checkUserConfigExisted());
-    }
-
-    /**
      * 获取本机所有已保存配置的项目列表
      *
-     * @return
+     * @return 项目列表
      */
     @GetMapping("/all-saved-project")
-    public Result getAllSavedProject() {
+    public Result<?> getAllSavedProject() {
         return Results.of(userConfigStore.getAllSavedProject());
     }
 
     /**
      * 为当前项目导入其它项目的配置文件
      *
-     * @return
+     * @return 导入结果
      */
     @PostMapping("/import-project-config/{sourceProjectPkg}")
-    public Result importProjectConfig(@PathVariable("sourceProjectPkg") String sourceProjectPkg) throws IOException {
+    public Result<?> importProjectConfig(@PathVariable("sourceProjectPkg") String sourceProjectPkg) throws IOException {
         userConfigStore.importProjectConfig(sourceProjectPkg);
         return Results.of();
     }

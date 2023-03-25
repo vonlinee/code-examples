@@ -6,7 +6,7 @@ import java.io.File;
 
 public class PathUtils {
 
-    public static String joinPath(String... paths) {
+    public static String join(String... paths) {
         StringBuilder tmp = new StringBuilder();
         for (String path : paths) {
             if (StringUtils.hasText(path)) {

@@ -2,7 +2,7 @@ package io.devpl.toolkit.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.devpl.toolkit.dto.vo.ConnectionNameVO;
-import io.devpl.toolkit.entity.ConnectionConfig;
+import io.devpl.toolkit.entity.JdbcConnInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -17,10 +17,10 @@ import java.util.List;
  * @since 2023-03-16
  */
 @Mapper
-public interface ConnectionConfigMapper extends BaseMapper<ConnectionConfig> {
+public interface ConnectionConfigMapper extends BaseMapper<JdbcConnInfo> {
 
     List<ConnectionNameVO> selectAllConnectionNames();
 
     @Select(value = "SELECT * FROM connection_config WHERE `name` = #{connectionName}")
-    ConnectionConfig selectByConnectionName(String connectionName);
+    JdbcConnInfo selectByConnectionName(String connectionName);
 }

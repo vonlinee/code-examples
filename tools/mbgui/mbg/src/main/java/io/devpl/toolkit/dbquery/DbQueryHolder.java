@@ -3,17 +3,16 @@ package io.devpl.toolkit.dbquery;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.IDbQuery;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.baomidou.mybatisplus.generator.config.querys.DbQueryRegistry;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Optional;
 
-@Component
+// @Component
 public class DbQueryHolder {
-
-    @Autowired
-    private DataSourceConfig dataSourceConfig;
 
     private final Map<DbType, IDbQuery> dbQueryMap = new EnumMap<>(DbType.class);
 
@@ -29,7 +28,12 @@ public class DbQueryHolder {
         if (dbQuery != null) {
             return dbQuery;
         }
-        return dataSourceConfig.getDbQuery();
-    }
 
+        DbQueryRegistry dbQueryRegistry = new DbQueryRegistry();
+        // 默认 MYSQL
+        dbQuery = Optional.ofNullable(dbQueryRegistry.getDbQuery(dbType))
+                .orElseGet(() -> dbQueryRegistry.getDbQuery(DbType.MYSQL));
+
+        return dbQuery;
+    }
 }

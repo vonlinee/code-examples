@@ -65,6 +65,11 @@ public final class Editor {
         return engine;
     }
 
+    /**
+     * 注册语言支持
+     *
+     * @param l
+     */
     private void registerLanguageJS(LanguageSupport l) {
         String registerScript = "require(['vs/editor/editor.main'], function() {\n";
         String registerLang = "monaco.languages.register({ id: '" + l.getName() + "' })\n";
@@ -75,7 +80,7 @@ public final class Editor {
             registerScript += registerMonarch;
         }
         if (l.getFoldingProvider() != null) {
-            window.setMember(("foldingProvider_" + l.getName()), new JFunction((args) -> l.getFoldingProvider()
+            window.setMember(("foldingProvider_" + l.getName()), new JSFunction((args) -> l.getFoldingProvider()
                     .computeFoldings(this)));
             String registerFoldingProvider = "monaco.languages.registerFoldingRangeProvider('mylang', {\n" + "         provideFoldingRanges: function(model, context, token) {\n" + "     return foldingProvider_" + l.getName() + ".apply([model,context,token]);\n" + "}\n" + "});\n";
             registerScript += registerFoldingProvider;

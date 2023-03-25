@@ -6,7 +6,7 @@ public class Constant {
 
     public final static String DOT_XML = ".xml";
 
-    public final static String CONFIG_HOME = ".mybatis-plus-generator-ui";
+    public final static String CONFIG_HOME = ".mbg-config";
 
     public final static String TEMPLATE_STORE_DIR = "template";
 
@@ -29,5 +29,4 @@ public class Constant {
     public final static String FILE_TYPE_SERVICE = "Service";
 
     public final static String FILE_TYPE_SERVICEIMPL = "ServiceImpl";
-
 }

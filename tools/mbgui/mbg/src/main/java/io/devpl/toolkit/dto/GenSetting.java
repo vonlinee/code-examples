@@ -3,7 +3,6 @@ package io.devpl.toolkit.dto;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 定义生成代码时每次可能发生变化的一些配置项目
@@ -32,6 +31,11 @@ public class GenSetting {
     private String moduleName;
 
     /**
+     * 基础包名，一般是公司域名反过来 + 项目名称
+     */
+    private String basePackageName;
+
+    /**
      * 临时模板参数，由用户自行输入的临时参数，用于控制生成文件的可选部分
      */
     private List<String> choosedControllerMethods;
@@ -40,4 +44,7 @@ public class GenSetting {
      * 目标项目根目录
      */
     private String rootPath;
+
+    private String connectionName;
+    private String databaseName;
 }

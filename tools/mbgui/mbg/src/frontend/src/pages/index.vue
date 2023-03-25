@@ -2,28 +2,11 @@
   <div class="wrapper">
     <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
       <div class="container">
-        <a href="javascript:;" class="navbar-brand">
-          <span class="brand-text font-weight-light">Devpl</span>
-        </a>
+        <span class="brand-text font-weight-light">Devpl</span>
         <div class="collapse navbar-collapse order-3" id="navbarCollapse">
-          <!-- Left navbar links -->
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
-              <a id="tableMenuDropdown"
-                 href="#"
-                 data-toggle="dropdown"
-                 aria-haspopup="true"
-                 aria-expanded="false"
-                 class="nav-link dropdown-toggle"
-              >Table代码生成</a>
-              <ul aria-labelledby="tableMenuDropdown" class="dropdown-menu border-0 shadow">
-                <li>
-                  <router-link to="/table" class="dropdown-item">Table查询</router-link>
-                </li>
-                <li>
-                  <router-link to="/config" class="dropdown-item">输出配置</router-link>
-                </li>
-              </ul>
+              <router-link to="/table" class="nav-link">Table代码生成</router-link>
             </li>
             <li class="nav-item">
               <router-link to="/sql" class="nav-link">SQL代码生成</router-link>
@@ -60,7 +43,7 @@ export default {
     viewKey() {
       return this.$route.name !== undefined
           ? this.$route.name + +new Date()
-          : this.$route + +new Date();
+          : this.$route + new Date();
     }
   },
   data() {

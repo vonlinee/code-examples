@@ -7,20 +7,19 @@ import com.google.common.collect.Lists;
 import io.devpl.toolkit.dbquery.DbQueryHolder;
 import io.devpl.toolkit.dto.TableInfo;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@Service
+// @Service 弃用
+@Deprecated(since = "弃用")
 public class DatabaseService {
 
     @Resource
     private JdbcTemplate jdbcTemplate;
 
-    @Resource
     private DataSourceConfig dataSourceConfig;
 
     @Resource

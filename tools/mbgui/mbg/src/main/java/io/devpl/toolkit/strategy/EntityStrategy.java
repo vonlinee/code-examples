@@ -26,6 +26,7 @@ public class EntityStrategy {
      * 实体是否生成 serialVersionUID
      */
     private boolean entitySerialVersionUID = true;
+
     /**
      * 【实体】是否生成字段常量（默认 false）<br>
      * -----------------------------------<br>
@@ -44,11 +45,13 @@ public class EntityStrategy {
      * public User setName(String name) { this.name = name; return this; }
      */
     private boolean entityBuilderModel = false;
+
     /**
      * 【实体】是否为lombok模型（默认 false）<br>
      * <a href="https://projectlombok.org/">document</a>
      */
     private boolean entityLombokModel = false;
+
     /**
      * Boolean类型字段是否移除is前缀（默认 false）<br>
      * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx

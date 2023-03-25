@@ -27,15 +27,18 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import netscape.javascript.JSObject;
 
+import java.util.Arrays;
+
 public final class ViewController {
 
     private final Editor editor;
     private JSObject window;
 
-    //private final ObjectProperty<Position> cursorPositionProperty = new SimpleObjectProperty<>();
+    // private final ObjectProperty<Position> cursorPositionProperty = new SimpleObjectProperty<>();
     private final IntegerProperty scrollPositionProperty = new SimpleIntegerProperty();
 
-    private JFunction scrollChangeListener;
+    private JSFunction scrollChangeListener;
+    private JSFunction contentChangeListener;
 
     public ViewController(Editor editor) {
         this.editor = editor;
@@ -43,14 +46,14 @@ public final class ViewController {
 
     void setEditor(JSObject window, JSObject editor) {
         this.window = window;
-         // initial scroll
+        // initial scroll
         editor.call("setScrollPosition", getScrollPosition());
         // scroll changes -> js
         scrollPositionProperty().addListener((ov) -> {
             editor.call("setScrollPosition", getScrollPosition());
         });
-         // scroll changes <- js
-        scrollChangeListener = new JFunction( args -> {
+        // scroll changes <- js
+        scrollChangeListener = new JSFunction(args -> {
             int pos = (int) editor.call("getScrollTop");
             setScrollPosition(pos);
             return null;
@@ -67,8 +70,8 @@ public final class ViewController {
     }
 
     public void setScrollPosition(int posIdx) {
-        //editor.setScrollPosition({scrollTop: 0});
-        //editor.getEngine().executeScript("editorView.setScrollPosition({scrollTop: " + posIdx + "});");
+        // editor.setScrollPosition({scrollTop: 0});
+        // editor.getEngine().executeScript("editorView.setScrollPosition({scrollTop: " + posIdx + "});");
         scrollPositionProperty().set(posIdx);
     }
 

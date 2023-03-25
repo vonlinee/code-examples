@@ -4,7 +4,7 @@ import io.devpl.toolkit.common.Result;
 import io.devpl.toolkit.common.Results;
 import io.devpl.toolkit.dto.TableInfo;
 import io.devpl.toolkit.dto.vo.ConnectionNameVO;
-import io.devpl.toolkit.entity.ConnectionConfig;
+import io.devpl.toolkit.entity.JdbcConnInfo;
 import io.devpl.toolkit.service.ConnectionConfigService;
 import io.devpl.toolkit.utils.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -27,9 +27,9 @@ public class DatabaseController {
      * @return 是否成功
      */
     @PostMapping("/conn/save")
-    public boolean addNewConnectionInfo(@Validated ConnectionConfig config) {
+    public boolean addNewConnectionInfo(@Validated JdbcConnInfo config) {
         if (!StringUtils.hasText(config.getName())) {
-            config.setName(StringUtils.concat("-", config.getHost(), config.getPort(), config.getDbType()));
+            config.setName(StringUtils.join("-", false, config.getHost(), config.getPort(), config.getDbType()));
         }
         return connConfigService.save(config);
     }
@@ -51,7 +51,7 @@ public class DatabaseController {
      * @return 获取所有连接名称
      */
     @GetMapping("/conn/info/names")
-    public Result getAllConnectionNames() {
+    public Result<List<ConnectionNameVO>> getAllConnectionNames() {
         final List<ConnectionNameVO> allConnectionNames = connConfigService.getAllConnectionNames();
         return Results.of(allConnectionNames);
     }
@@ -62,7 +62,7 @@ public class DatabaseController {
      * @return 获取连接下所有数据库名称
      */
     @GetMapping("/conn/dbnames")
-    public Result getAllConnectionNames(@RequestParam("connectionName") String connectionName) {
+    public Result<List<String>> getAllConnectionNames(@RequestParam("connectionName") String connectionName) {
         List<String> dbNames = connConfigService.getAllDbNamesByConnectionName(connectionName);
         return Results.of(dbNames);
     }

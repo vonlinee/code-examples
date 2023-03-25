@@ -51,6 +51,15 @@ public enum JDBCDriver {
         return appendConnectionUrlParams(getConnectionUrlPrefix(hostname, port, databaseName), props);
     }
 
+    /**
+     * 拼接完整的连接地址
+     *
+     * @param hostname     ip
+     * @param port         端口
+     * @param databaseName 数据库名
+     * @param props        连接属性
+     * @return 数据库连接地址
+     */
     public String getConnectionUrl(String hostname, String port, String databaseName, Properties props) {
         databaseName = databaseName == null ? "" : databaseName;
         return appendConnectionUrlParams(getConnectionUrlPrefix(hostname, Integer.parseInt(port), databaseName), props);

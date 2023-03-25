@@ -4,6 +4,9 @@ const distDirectory = "../main/resources/public"
 
 const contextPath = process.env.NODE_ENV === "production" ? "" : "";
 
+// https://github.com/microsoft/monaco-editor/tree/main/webpack-plugin
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+
 const bindQuery2Props = (route) => {
     return _.assign({}, route.query, route.params);
 };
@@ -22,7 +25,7 @@ module.exports = {
     env: {
         contextPath: contextPath //资源引用路径前缀
     },
-    mode: "spa",
+    mode: "spa", // ssr: true,
     srcDir: "src/",
     head: {
         script: [{
@@ -48,38 +51,25 @@ module.exports = {
                 x: 0, y: 0
             };
         }
-    },
-    /*
+    }, /*
      ** Customize the progress-bar color
      */
     loading: {
         color: "#fff"
-    },
-    /*
+    }, /*
      ** Global CSS
      */
     css: [//"@/assets/css/global.css",
-        "@/static/libs/bootstrap/css/bootstrap.min.css",
-        "@/static/libs/font-awesome/css/font-awesome.min.css",
-        "@/static/libs/adminlte/AdminLTE.min.css"
-    ],
-    /*
+        "@/static/libs/bootstrap/css/bootstrap.min.css", "@/static/libs/font-awesome/css/font-awesome.min.css", "@/static/libs/adminlte/AdminLTE.min.css"], /*
      ** Plugins to load before mounting the App
      */
-    plugins: [
-        "@/plugins/element-ui.js",
-        "@/plugins/axios.js",
-        "@/plugins/components.js",
-        "@/plugins/api.js",
-        "@/plugins/request.js"
-    ],
+    plugins: ["@/plugins/element-ui.js", "@/plugins/axios.js", "@/plugins/components.js", "@/plugins/api.js", "@/plugins/request.js"],
     generate: {
         /*
          ** 指定编译后文件的输出目录
          */
         dir: path.resolve(distDirectory)
-    },
-    /*
+    }, /*
      ** Build configuration
      */
     build: {
@@ -92,20 +82,20 @@ module.exports = {
                     targets
                 }]];
             }, plugins: [["component", {
-                libraryName: "element-ui", styleLibraryName: "theme-chalk",
-            }]]
-        },
-        extend(config, {isDev, isClient}) {
+                libraryName: "element-ui", styleLibraryName: "theme-chalk"
+            }], ["@babel/plugin-proposal-decorators", {
+                // "legacy": true, 两个配置只能用一个
+                "version": "legacy"
+            }], ["@babel/plugin-proposal-private-methods", {"loose": true}], ["@babel/plugin-proposal-private-property-in-object", {"loose": true}], ["@babel/plugin-proposal-class-properties", {"loose": true}]]
+        }, extend(config, {isDev, isClient}) {
             //source map设置
             if (isDev) {
                 config.devtool = "cheap-module-eval-source-map";
             } else {
                 config.devtool = "cheap-module-source-map";
             }
-        },
-        plugins: []
-    },
-    // 开发服务器代理设置
+        }, plugins: [new MonacoWebpackPlugin()]
+    }, // 开发服务器代理设置
     proxy: {
         "/api": {
             target: "http://localhost:8068/", changeOrigin: true

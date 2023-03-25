@@ -2,9 +2,6 @@ package io.devpl.toolkit.codegen;
 
 import io.devpl.toolkit.mbp.NameConverter;
 
-/**
- * @since created on 2022年8月5日
- */
 public class DefaultNameConverter implements NameConverter {
     /**
      * 自定义Service类文件的名称规则

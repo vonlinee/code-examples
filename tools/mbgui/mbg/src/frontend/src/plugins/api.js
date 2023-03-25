@@ -1,5 +1,5 @@
 import qs from 'qs'; // 根据需求是否导入qs模块
-import {get, post} from './request.js'
+import {get, post, postJson} from './request.js'
 import Vue from 'vue'
 
 const api = {
@@ -35,14 +35,28 @@ const api = {
         return post("/api/db/conn/save", connInfo)
     },
     saveOutputFileInfo(val) {
-        return post("/api/output-file-info/save", val)
+        return postJson("/api/output-file-info/save", val)
     },
     downloadTemplate() {
 
     },
     startCodeGeneration(param) {
-        debugger;
-        return post("/api/mbpg/codegen", param)
+        return postJson("/api/mbpg/codegen", param)
+    },
+    getDatabaseNames(param) {
+        return get("/api/db/conn/dbnames", {connectionName: param})
+    },
+    getConnectionNames() {
+        return get("/api/db/conn/info/names", null)
+    },
+    getDatabaseTables(connName, dbName) {
+        return get("/api/db/tables", {
+            connName: connName,
+            dbName: dbName
+        })
+    },
+    getUserConfig() {
+        return get("/api/output-file-info/user-config")
     }
 }
 // 挂载到Vue全局实例上

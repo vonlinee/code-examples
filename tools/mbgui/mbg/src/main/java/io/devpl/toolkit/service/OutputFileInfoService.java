@@ -1,25 +1,25 @@
 package io.devpl.toolkit.service;
 
-import io.devpl.toolkit.common.ServiceException;
+import io.devpl.toolkit.common.BusinessException;
 import io.devpl.toolkit.dto.OutputFileInfo;
 import io.devpl.toolkit.dto.UserConfig;
 import io.devpl.toolkit.strategy.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.devpl.toolkit.utils.CollectionUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 @Service
 public class OutputFileInfoService {
 
-    @Autowired
-    private UserConfigStore userConfigStore;
+    @Resource
+    private CodeGenConfigService userConfigStore;
 
     public void deleteOutputFileInfo(OutputFileInfo fileInfo) throws IOException {
         if (fileInfo.isBuiltIn()) {
-            throw new ServiceException("内置文件配置信息不能删除");
+            throw new BusinessException("内置文件配置信息不能删除");
         }
         UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         List<OutputFileInfo> fileInfos = userConfig.getOutputFiles();
@@ -32,9 +32,9 @@ public class OutputFileInfoService {
         List<OutputFileInfo> fileInfos = userConfig.getOutputFiles();
         // 替换原来的配置
         if (saveFileInfo.isBuiltIn()) {
-            Collections.replaceAll(fileInfos, saveFileInfo, saveFileInfo);
+            CollectionUtils.replaceAll(fileInfos, saveFileInfo, saveFileInfo);
         } else if (fileInfos.contains(saveFileInfo)) {
-            Collections.replaceAll(fileInfos, saveFileInfo, saveFileInfo);
+            CollectionUtils.replaceAll(fileInfos, saveFileInfo, saveFileInfo);
         } else {
             fileInfos.add(saveFileInfo);
         }

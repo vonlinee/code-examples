@@ -1,6 +1,6 @@
 package io.devpl.toolkit.service;
 
-import io.devpl.toolkit.common.ServiceException;
+import io.devpl.toolkit.common.BusinessException;
 import io.devpl.toolkit.dto.ElementPosition;
 import io.devpl.toolkit.dto.MapperElement;
 import com.google.common.base.Strings;
@@ -37,7 +37,7 @@ public class MapperXmlParser {
     public String addElementInMapper(String mapperPath, MapperElement... elements) throws IOException, DocumentException {
         File mapperFile = new File(mapperPath);
         if (!mapperFile.exists()) {
-            throw new ServiceException("XML文件不存在：" + mapperPath);
+            throw new BusinessException("XML文件不存在：" + mapperPath);
         }
         Document doc = reader.read(new FileInputStream(mapperFile));
         List<Node> mapperNodes = doc.getRootElement().content();

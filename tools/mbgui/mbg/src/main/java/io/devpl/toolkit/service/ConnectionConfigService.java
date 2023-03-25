@@ -3,7 +3,7 @@ package io.devpl.toolkit.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.devpl.toolkit.dto.TableInfo;
 import io.devpl.toolkit.dto.vo.ConnectionNameVO;
-import io.devpl.toolkit.entity.ConnectionConfig;
+import io.devpl.toolkit.entity.JdbcConnInfo;
 
 import java.util.List;
 
@@ -15,8 +15,13 @@ import java.util.List;
  * @author 111
  * @since 2023-03-16
  */
-public interface ConnectionConfigService extends IService<ConnectionConfig> {
+public interface ConnectionConfigService extends IService<JdbcConnInfo> {
 
+    /**
+     * 查询所有连接名称
+     *
+     * @return
+     */
     List<ConnectionNameVO> getAllConnectionNames();
 
     /**

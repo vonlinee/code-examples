@@ -64,8 +64,8 @@ public class SystemClipboardWrapper {
 				event.consume();
 			} else {
 				Platform.runLater(() -> {
-					var clipboardContent = new ClipboardContent();
-					clipboardContent.putString(String.valueOf(obj));
+					ClipboardContent clipboardContent = new ClipboardContent();
+					clipboardContent.putString(selectedText);
 					Clipboard.getSystemClipboard().setContent(clipboardContent);
 				});
 			}

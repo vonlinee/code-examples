@@ -40,7 +40,7 @@ public class Document {
     private final StringProperty languageProperty = new SimpleStringProperty();
     private final IntegerProperty numberOfLinesProperty = new SimpleIntegerProperty();
 
-    private JFunction jsfListener;
+    private JSFunction documentUpdateListener;
 
     void setEditor(WebEngine engine, JSObject window, JSObject editor) {
         this.engine = engine;
@@ -52,18 +52,18 @@ public class Document {
 
         // text changes -> js
         textProperty.addListener((ov) -> {
-            if(!updatingText) editor.call("setValue", getText());
+            if (!updatingText) editor.call("setValue", getText());
         });
 
         // keep a global reference because it's garbage collected otherwise
-        jsfListener = new JFunction( args -> {
+        documentUpdateListener = new JSFunction(args -> {
             String text = (String) editor.call("getValue");
-            if(text!=null) {
+            if (text != null) {
                 try {
                     updatingText = true;
                     textProperty().set(text);
-                }finally {
-                    updatingText=false;
+                } finally {
+                    updatingText = false;
                 }
                 numberOfLinesProperty.setValue(text.split("\\R").length);
             }
@@ -71,8 +71,7 @@ public class Document {
         });
 
         // text changes <- js
-        window.setMember("contentChangeListener", jsfListener);
-
+        window.setMember("contentChangeListener", documentUpdateListener);
     }
 
     public StringProperty textProperty() {
@@ -80,14 +79,14 @@ public class Document {
     }
 
     public void setText(String text) {
-        if(editor==null) {
+        if (editor == null) {
             textProperty.set(text);
         } else {
             try {
                 updatingText = true;
                 textProperty().set(text);
-            }finally {
-                updatingText=false;
+            } finally {
+                updatingText = false;
             }
             editor.call("setValue", text);
         }
@@ -115,6 +114,7 @@ public class Document {
 
     /**
      * used to update the text in the editor without losing the document history
+     *
      * @param text the text in editor is replaced byt this text
      */
     public void updateText(String text) {

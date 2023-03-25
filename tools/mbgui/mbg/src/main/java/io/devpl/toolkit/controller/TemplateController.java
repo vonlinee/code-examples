@@ -3,11 +3,11 @@ package io.devpl.toolkit.controller;
 import com.google.common.base.Strings;
 import io.devpl.toolkit.common.Result;
 import io.devpl.toolkit.common.Results;
-import io.devpl.toolkit.common.ServiceException;
+import io.devpl.toolkit.common.BusinessException;
 import io.devpl.toolkit.dto.OutputFileInfo;
 import io.devpl.toolkit.dto.UserConfig;
-import io.devpl.toolkit.service.OutputFileInfoService;
-import io.devpl.toolkit.service.UserConfigStore;
+import io.devpl.toolkit.service.CodeGenConfigService;
+import io.devpl.toolkit.utils.StringUtils;
 import io.devpl.toolkit.utils.TemplateUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,14 +21,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
-@RequestMapping("/api/template")
 @Slf4j
 @AllArgsConstructor
+@RestController
+@RequestMapping("/api/template")
 public class TemplateController {
 
-    private UserConfigStore userConfigStore;
-    private OutputFileInfoService outputFileInfoService;
+    private CodeGenConfigService userConfigStore;
 
     @GetMapping("/download")
     public void download(HttpServletResponse res, @RequestParam String fileType) throws IOException {
@@ -46,7 +45,7 @@ public class TemplateController {
         for (OutputFileInfo fileInfo : fileInfos) {
             if (fileType.equals(fileInfo.getFileType())) {
                 if (fileInfo.isBuiltIn()
-                        && Strings.isNullOrEmpty(fileInfo.getTemplatePath())) {
+                        && StringUtils.isNullOrEmpty(fileInfo.getTemplatePath())) {
                     InputStream tplIn = TemplateUtil.getBuiltInTemplate(fileType);
                     download(res, tplIn);
                 } else {
@@ -58,7 +57,7 @@ public class TemplateController {
                     if (tplFile.exists()) {
                         download(res, Files.newInputStream(tplFile.toPath()));
                     } else {
-                        throw new ServiceException("未找到模板文件：" + fileInfo.getTemplatePath());
+                        throw new BusinessException("未找到模板文件：" + fileInfo.getTemplatePath());
                     }
                 }
                 break;

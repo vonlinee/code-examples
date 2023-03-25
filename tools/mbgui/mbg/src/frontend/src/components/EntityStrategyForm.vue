@@ -48,42 +48,73 @@
         >
       </div>
     </el-form-item>
-    <el-form-item label="标识乐观锁的字段名">
-      <el-input v-model="form.versionFieldName"></el-input>
-    </el-form-item>
-    <el-form-item label="标识逻辑删除的字段名">
-      <el-input v-model="form.logicDeleteFieldName"></el-input>
-    </el-form-item>
-    <el-form-item label="是否生成serialVersionUID" placeholder>
-      <el-switch v-model="form.entitySerialVersionUID"></el-switch>
-    </el-form-item>
-    <el-form-item label="是否生成字段名常量" placeholder>
-      <el-switch v-model="form.entityColumnConstant"></el-switch>
-      <help-tip
-        content="为每个字段生成一个静态常量，如：public static final String ID = 'test_id'"
-      ></help-tip>
-    </el-form-item>
-    <el-form-item label="是否启用ActiveRecord模式" placeholder>
-      <el-switch v-model="form.activeRecord"></el-switch>
-    </el-form-item>
-    <el-form-item label="是否启用构建者模式" placeholder>
-      <el-switch v-model="form.entityBuilderModel"></el-switch>
-    </el-form-item>
-    <el-form-item label=" 是否启用Lombok注解" placeholder>
-      <el-switch v-model="form.entityLombokModel"></el-switch>
-    </el-form-item>
-    <el-form-item label="是否移除字段的is前缀" placeholder>
-      <el-switch v-model="form.entityBooleanColumnRemoveIsPrefix"></el-switch>
-      <help-tip
-        content="比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx"
-      ></help-tip>
-    </el-form-item>
-    <el-form-item label="是否强制生成字段名注解" placeholder>
-      <el-switch v-model="form.entityTableFieldAnnotationEnable"></el-switch>
-    </el-form-item>
-    <el-form-item label="是否生成swagger2注解" placeholder>
-      <el-switch v-model="form.swagger2"></el-switch>
-    </el-form-item>
+    <el-row>
+      <el-col :span="12">
+        <el-form-item label="标识乐观锁的字段名">
+          <el-input v-model="form.versionFieldName"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="标识逻辑删除的字段名">
+          <el-input v-model="form.logicDeleteFieldName"></el-input>
+        </el-form-item>
+      </el-col>
+    </el-row>
+
+    <el-row>
+      <el-col :span="12">
+        <el-form-item label="是否生成serialVersionUID" placeholder>
+          <el-switch v-model="form.entitySerialVersionUID"></el-switch>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="是否生成字段名常量" placeholder>
+          <el-switch v-model="form.entityColumnConstant"></el-switch>
+          <help-tip
+              content="为每个字段生成一个静态常量，如：public static final String ID = 'test_id'"
+          ></help-tip>
+        </el-form-item>
+      </el-col>
+    </el-row>
+
+    <el-row>
+      <el-col :span="12">
+        <el-form-item label="是否启用ActiveRecord模式" placeholder>
+          <el-switch v-model="form.activeRecord"></el-switch>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="是否启用构建者模式" placeholder>
+          <el-switch v-model="form.entityBuilderModel"></el-switch>
+        </el-form-item>
+      </el-col>
+    </el-row>
+
+    <el-row>
+      <el-col :span="6">
+        <el-form-item label=" 是否启用Lombok注解" placeholder>
+          <el-switch v-model="form.entityLombokModel"></el-switch>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="是否移除字段的is前缀" placeholder>
+          <el-switch v-model="form.entityBooleanColumnRemoveIsPrefix"></el-switch>
+          <help-tip
+              content="比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx"
+          ></help-tip>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="是否强制生成字段名注解" placeholder>
+          <el-switch v-model="form.entityTableFieldAnnotationEnable"></el-switch>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="是否生成swagger2注解" placeholder>
+          <el-switch v-model="form.swagger2"></el-switch>
+        </el-form-item>
+      </el-col>
+    </el-row>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">保存</el-button>
     </el-form-item>

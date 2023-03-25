@@ -3,13 +3,21 @@ package io.devpl.toolkit.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Strings;
+import io.devpl.toolkit.utils.StringUtils;
 import lombok.Data;
 
 import static io.devpl.toolkit.dto.Constant.*;
 
-@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OutputFileInfo {
+
+    public OutputFileInfo() {
+        this(true);
+    }
+
+    public OutputFileInfo(boolean builtIn) {
+        this.builtIn = builtIn;
+    }
 
     private String fileType;
 
@@ -22,10 +30,13 @@ public class OutputFileInfo {
 
     private String templatePath;
 
+    /**
+     * 是否是系统内置的文件信息
+     */
     private boolean builtIn;
 
     public String getOutputPackage() {
-        if (Strings.isNullOrEmpty(outputLocation)) {
+        if (StringUtils.isNullOrEmpty(outputLocation)) {
             return "";
         }
         if (outputLocation.startsWith(PACKAGE_RESOURCES_PREFIX)) {
@@ -58,6 +69,46 @@ public class OutputFileInfo {
         return "";
     }
 
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public String getOutputLocation() {
+        return outputLocation;
+    }
+
+    public void setOutputLocation(String outputLocation) {
+        this.outputLocation = outputLocation;
+    }
+
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
+    }
+
+    public String getTemplatePath() {
+        return templatePath;
+    }
+
+    public void setTemplatePath(String templatePath) {
+        this.templatePath = templatePath;
+    }
+
+    public boolean isBuiltIn() {
+        return builtIn;
+    }
+
+    public void setBuiltIn(boolean builtIn) {
+        this.builtIn = builtIn;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof OutputFileInfo) {
@@ -69,5 +120,4 @@ public class OutputFileInfo {
         }
         return false;
     }
-
 }

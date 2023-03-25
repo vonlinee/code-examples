@@ -6,8 +6,5 @@ import java.util.Map;
 
 public interface TemplateVaribleInjecter {
 
-
     Map<String, Object> getCustomTemplateVaribles(TableInfo tableInfo);
-
-
 }

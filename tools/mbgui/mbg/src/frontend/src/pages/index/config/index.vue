@@ -60,7 +60,7 @@
                   <el-select
                       v-model="form.outputLocationPrefix"
                       style="width:110px;"
-                      slot="prepend"
+                      v-slot="prepend"
                       placeholder="请选择源码目录"
                   >
                     <el-option label="java" value="java"></el-option>
@@ -72,22 +72,30 @@
                 ></help-tip>
               </el-form-item>
               <el-form-item label="文件模板" prop="templateName">
-                <a href="javascript:;"
-                   @click="download(form.fileType, form.templateName)"
-                >{{ form.templateName }}</a>
-                <el-upload
-                    ref="upload"
-                    :show-file-list="false"
-                    :limit="1"
-                    :data="uploadParams"
-                    :file-list="uplaodFileList"
-                    action="/api/template/upload"
-                    :on-success="onUploadSuccess"
-                    :before-upload="beforeTemplateUpload"
-                >
-                  <el-button v-slot="trigger" size="small" type="primary">选取文件</el-button>
-                  <div slot="tip" class="el-upload__tip">仅支持.btl文件</div>
-                </el-upload>
+
+                <el-row>
+                  <el-col :span="8">
+                    <a href="javascript:;"
+                       @click="download(form.fileType, form.templateName)"
+                    >{{ form.templateName }}</a>
+                  </el-col>
+                  <el-col :span="16">
+                    <el-upload
+                        ref="upload"
+                        :show-file-list="false"
+                        :limit="1"
+                        :data="uploadParams"
+                        :file-list="uplaodFileList"
+                        action="/api/template/upload"
+                        :on-success="onUploadSuccess"
+                        :before-upload="beforeTemplateUpload"
+                    >
+                    <el-button size="small" type="primary">选取文件</el-button>
+                      <div slot="tip" class="el-upload__tip">仅支持.btl文件</div>
+                    </el-upload>
+                  </el-col>
+                </el-row>
+
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="onSubmit">保存</el-button>

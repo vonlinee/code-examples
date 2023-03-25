@@ -28,14 +28,14 @@ public class GlobalExceptionHandler {
     public Result<?> exceptionHandler(HttpServletRequest request, Exception e) {
         Result<?> result = new Result<>();
         log.info("未捕获的异常：" + e.getMessage(), e);
-        if (e instanceof ServiceException) {
+        if (e instanceof BusinessException) {
             result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
         } else if (e instanceof NoHandlerFoundException) {
             result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + request.getRequestURI() + "] 不存在");
         } else if (e instanceof ServletException) {
             result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
         } else {
-            result.setCode(ResultCode.INTERNAL_SERVER_ERROR).setMessage("系统发生内部错误，请联系管理员");
+            result.setCode(ResultCode.INTERNAL_SERVER_ERROR).setMessage(e.getMessage());
             log.error("系统发生内部错误，请查看控制台日志了解详情", e);
         }
         return result;

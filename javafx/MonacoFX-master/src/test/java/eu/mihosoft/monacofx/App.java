@@ -2,6 +2,10 @@ package eu.mihosoft.monacofx;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -16,7 +20,22 @@ public class App extends Application {
 
         // create a new monaco editor node
         MonacoFX monacoFX = new MonacoFX();
-        StackPane root = new StackPane(monacoFX);
+
+        BorderPane root = new BorderPane();
+
+        StackPane stackPane = new StackPane(monacoFX);
+        root.setCenter(stackPane);
+
+        Button btn1 = new Button("B1");
+        ToolBar toolBar = new ToolBar(btn1);
+        root.setTop(toolBar);
+
+        btn1.setOnAction(event -> {
+            String text = monacoFX.getEditor().getDocument().getText();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText(text);
+            alert.showAndWait();
+        });
 
         // set initial text
         monacoFX.getEditor().getDocument().setText(
@@ -29,7 +48,7 @@ public class App extends Application {
 
         // use a predefined language like 'c'
         monacoFX.getEditor().setCurrentLanguage("c");
-        monacoFX.getEditor().setCurrentTheme("vs-dark");
+        monacoFX.getEditor().setCurrentTheme("vs");
 
         // the usual scene & stage setup
         Scene scene = new Scene(root, 800,600);

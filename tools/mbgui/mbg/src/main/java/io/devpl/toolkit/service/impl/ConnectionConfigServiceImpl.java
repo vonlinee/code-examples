@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.devpl.toolkit.codegen.JDBCDriver;
 import io.devpl.toolkit.dto.TableInfo;
 import io.devpl.toolkit.dto.vo.ConnectionNameVO;
-import io.devpl.toolkit.entity.ConnectionConfig;
+import io.devpl.toolkit.entity.JdbcConnInfo;
 import io.devpl.toolkit.mapper.ConnectionConfigMapper;
 import io.devpl.toolkit.service.ConnectionConfigService;
 import io.devpl.toolkit.utils.DBUtils;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * @since 2023-03-16
  */
 @Service
-public class ConnectionConfigServiceImpl extends ServiceImpl<ConnectionConfigMapper, ConnectionConfig> implements ConnectionConfigService {
+public class ConnectionConfigServiceImpl extends ServiceImpl<ConnectionConfigMapper, JdbcConnInfo> implements ConnectionConfigService {
 
     @Resource
     ConnectionConfigMapper connConfigMapper;
@@ -40,9 +40,16 @@ public class ConnectionConfigServiceImpl extends ServiceImpl<ConnectionConfigMap
     @Override
     public List<String> getAllDbNamesByConnectionName(String connectionName) {
 
-        ConnectionConfig connectionConfig = connConfigMapper.selectByConnectionName(connectionName);
-
-        JDBCDriver driver = JDBCDriver.valueOfName(connectionConfig.getDbType());
+        JdbcConnInfo connectionConfig = connConfigMapper.selectByConnectionName(connectionName);
+        if (connectionConfig == null) {
+            throw new RuntimeException("不存在连接：" + connectionName);
+        }
+        JDBCDriver driver;
+        try {
+            driver = JDBCDriver.valueOfName(connectionConfig.getDbType());
+        } catch (NullPointerException exception) {
+            throw new RuntimeException("不支持数据库类型" + connectionConfig.getDbType());
+        }
 
         String host = connectionConfig.getHost();
         String port = connectionConfig.getPort();
@@ -66,7 +73,7 @@ public class ConnectionConfigServiceImpl extends ServiceImpl<ConnectionConfigMap
 
     @Override
     public List<TableInfo> getAllTables(String connectionName, String dbName) {
-        ConnectionConfig connectionConfig = connConfigMapper.selectByConnectionName(connectionName);
+        JdbcConnInfo connectionConfig = connConfigMapper.selectByConnectionName(connectionName);
         JDBCDriver driver = JDBCDriver.valueOfName(connectionConfig.getDbType());
 
         String host = connectionConfig.getHost();

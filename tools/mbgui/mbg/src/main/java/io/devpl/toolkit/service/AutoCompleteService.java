@@ -1,43 +1,39 @@
 package io.devpl.toolkit.service;
 
 import cn.hutool.core.io.FileUtil;
-import io.devpl.toolkit.utils.ProjectPathResolver;
-import io.devpl.toolkit.common.ServiceException;
-import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.devpl.toolkit.utils.ProjectPathResolver;
+import io.devpl.toolkit.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Set;
 
-import static io.devpl.toolkit.dto.Constant.*;
+import static io.devpl.toolkit.dto.Constant.DOT_XML;
 
+/**
+ * 自动提示
+ */
 @Service
 public class AutoCompleteService {
 
-    @Autowired
-    private ProjectPathResolver projectPathResolver;
+    private final ProjectPathResolver projectPathResolver = new ProjectPathResolver("com.example");
 
     public Set<String> searchXmlMapperName(String mapperLocationPrefix, String searchKey) {
         String mapperRootPath = "";
-        if (PACKAGE_RESOURCES_PREFIX.startsWith(mapperLocationPrefix)) {
-            mapperRootPath = projectPathResolver.getResourcePath();
-        } else if (PACKAGE_JAVA_PREFIX.startsWith(mapperLocationPrefix)) {
-            mapperRootPath = projectPathResolver.getSourcePath();
-        } else {
-            throw new ServiceException("无法识别的源码前缀：" + mapperLocationPrefix);
-        }
         Set<String> hitNames = Sets.newHashSet();
         doSearch(new File(mapperRootPath), DOT_XML, searchKey, hitNames);
         return hitNames;
     }
 
     private void doSearch(File rootDir, String searchKey, String suffix, Set<String> hitNames) {
-        if (!FileUtil.exist(rootDir)) {
+        Path path = rootDir.toPath();
+        if (!Files.exists(path)) {
             return;
         }
-        if (!FileUtil.isDirectory(rootDir)) {
+        if (!Files.isDirectory(path)) {
             return;
         }
         File[] files = FileUtil.ls(rootDir.getAbsolutePath());
@@ -57,9 +53,9 @@ public class AutoCompleteService {
         if (!name.endsWith(suffix)) {
             return false;
         }
-        if (Strings.isNullOrEmpty(name)) {
+        if (StringUtils.isNullOrEmpty(name)) {
             return true;
         }
-        return name.toLowerCase().indexOf(searchKey.toLowerCase()) != -1;
+        return StringUtils.containsIgnoreCase(name, searchKey);
     }
 }

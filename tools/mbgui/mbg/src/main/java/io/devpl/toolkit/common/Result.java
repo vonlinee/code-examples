@@ -1,6 +1,6 @@
 package io.devpl.toolkit.common;
 
-import io.devpl.toolkit.utils.JsonUtil;
+import io.devpl.toolkit.utils.JSONUtils;
 
 import java.io.Serializable;
 
@@ -58,6 +58,6 @@ public class Result<T> implements Serializable {
 
     @Override
     public String toString() {
-        return JsonUtil.obj2json(this);
+        return JSONUtils.toJSONString(this);
     }
 }

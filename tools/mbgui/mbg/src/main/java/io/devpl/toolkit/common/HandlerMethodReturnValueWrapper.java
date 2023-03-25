@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
 /**
  * 封装Controller层的返回值，可能会损耗一定的性能
  */
-@RestControllerAdvice
+// @RestControllerAdvice
 public class HandlerMethodReturnValueWrapper implements ResponseBodyAdvice<Object> {
 
     private final Logger log = LoggerFactory.getLogger(HandlerMethodReturnValueWrapper.class);

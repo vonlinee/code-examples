@@ -2,6 +2,7 @@ package io.devpl.toolkit.mbp;
 
 import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Strings;
+import io.devpl.toolkit.utils.StringUtils;
 
 /**
  * 自定义各类名称转换的规则
@@ -18,7 +19,7 @@ public interface NameConverter {
         if (Strings.isNullOrEmpty(tableName)) {
             return "";
         }
-        tableName = tableName.substring(tableName.indexOf(StrUtil.UNDERLINE) + 1, tableName.length());
+        tableName = tableName.substring(tableName.indexOf("_") + 1);
         return StrUtil.upperFirst(StrUtil.toCamelCase(tableName.toLowerCase()));
     }
 
@@ -29,11 +30,11 @@ public interface NameConverter {
      * @return 转换的后属性名称
      */
     default String propertyNameConvert(String fieldName) {
-        if (Strings.isNullOrEmpty(fieldName)) {
+        if (StringUtils.isNullOrEmpty(fieldName)) {
             return "";
         }
         if (fieldName.contains("_")) {
-            return StrUtil.toCamelCase(fieldName.toLowerCase());
+            return StringUtils.toCamelCase(fieldName);
         }
         return fieldName;
     }

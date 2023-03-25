@@ -32,7 +32,9 @@ public class DevplCodeGenerator {
 
     // 在此处填写要生成的表名
     private static void tableNamesToBeGenerated() {
-        tableNamesToBeGenerated.add("info_app_use_history");
+        tableNamesToBeGenerated.add("user_group");
+        tableNamesToBeGenerated.add("group_user");
+        tableNamesToBeGenerated.add("group_role");
     }
 
     public static void main(String[] args) throws IOException {

@@ -1,19 +1,14 @@
 package io.devpl.toolkit.service;
 
 import cn.hutool.core.date.DateUtil;
-import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
+import com.baomidou.mybatisplus.generator.config.ITypeConvert;
+import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
+import com.baomidou.mybatisplus.generator.config.converts.TypeConverts;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
-import io.devpl.toolkit.config.props.GeneratorConfig;
-import io.devpl.toolkit.utils.ProjectPathResolver;
-import io.devpl.toolkit.common.ServiceException;
-import io.devpl.toolkit.dto.*;
-import io.devpl.toolkit.mbp.BeetlTemplateEngine;
-import io.devpl.toolkit.sqlparser.ConditionExpr;
-import io.devpl.toolkit.sqlparser.DynamicParamSqlEnhancer;
-import io.devpl.toolkit.utils.PathUtils;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Name;
@@ -23,63 +18,59 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import io.devpl.toolkit.common.BusinessException;
+import io.devpl.toolkit.dto.*;
+import io.devpl.toolkit.mbp.BeetlTemplateEngine;
+import io.devpl.toolkit.sqlparser.ConditionExpr;
+import io.devpl.toolkit.sqlparser.DynamicParamSqlEnhancer;
+import io.devpl.toolkit.utils.PathUtils;
+import io.devpl.toolkit.utils.ProjectPathResolver;
+import io.devpl.toolkit.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.DocumentException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.jdbc.support.rowset.SqlRowSetMetaData;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static io.devpl.toolkit.dto.Constant.DOT_JAVA;
 import static io.devpl.toolkit.dto.Constant.DOT_XML;
 
-
-@Service
 @Slf4j
+@Service
 public class SqlGeneratorService {
 
     final Base64.Decoder decoder = Base64.getDecoder();
 
-    @Autowired
+    @Resource
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private GeneratorConfig generatorConfig;
-
-    @Autowired
     private BeetlTemplateEngine beetlTemplateEngine;
-
-    @Autowired
-    private ProjectPathResolver projectPathResolver;
-
-    @Autowired
-    private DataSourceConfig dataSourceConfig;
-
-    @Autowired
+    private final ProjectPathResolver projectPathResolver = new ProjectPathResolver("com.example");
+    @Resource
     private MapperXmlParser mapperXmlParser;
-
-    @Autowired
-    private DynamicParamSqlEnhancer dynamicParamSqlEnhancer;
-
-    @Autowired
+    @Resource
     private JavaClassParser javaClassParser;
 
-    private List<String> rangeOperators = Lists.newArrayList("BETWEEN", "<", "<=", ">", ">=");
+    private final DynamicParamSqlEnhancer dynamicParamSqlEnhancer = new DynamicParamSqlEnhancer(DbType.MYSQL);
+
+    private final List<String> rangeOperators = Lists.newArrayList("BETWEEN", "<", "<=", ">", ">=");
 
     public void genMapperMethod(GenDtoFromSqlReq params) throws Exception {
         if (Strings.isNullOrEmpty(params.getSql())) {
-            throw new ServiceException("数据源SQL不能为空");
+            throw new BusinessException("数据源SQL不能为空");
         }
-        String decodedSql = new String(decoder.decode(params.getSql()), "UTF-8");
+        String decodedSql = new String(decoder.decode(params.getSql()), StandardCharsets.UTF_8);
         if (!decodedSql.trim().toLowerCase().startsWith("select")) {
-            throw new ServiceException("只能通过查询语句生成DTO对象，请检查SQL");
+            throw new BusinessException("只能通过查询语句生成DTO对象，请检查SQL");
         }
-        if (!Strings.isNullOrEmpty(params.getConfig().getFullPackage())) {
+        if (!StringUtils.isNullOrEmpty(params.getConfig().getFullPackage())) {
             try {
                 Class.forName(params.getConfig().getFullPackage());
             } catch (Throwable t) {
@@ -90,10 +81,11 @@ public class SqlGeneratorService {
             genDtoFileFromSQL(decodedSql, params.getConfig());
         }
         String namespace = genMapperElementsFromSql(decodedSql, params.getConfig());
-        //在Dao中插入与Mapper节点对应的方法
+        // 在Dao中插入与Mapper节点对应的方法
         if (params.getConfig().getEnableCreateDaoMethod()) {
             if ("bean".equals(params.getConfig().getDaoMethodParamType())) {
-                genParamDtoFromSql(decodedSql, params.getConfig().getDaoMethodParamDto(), params.getConfig().isEnableLombok());
+                genParamDtoFromSql(decodedSql, params.getConfig().getDaoMethodParamDto(), params.getConfig()
+                        .isEnableLombok());
             }
             addDaoMethod(namespace, decodedSql, params.getConfig());
         }
@@ -101,29 +93,36 @@ public class SqlGeneratorService {
 
     public void genDtoFileFromSQL(String sql, GenDtoConfig config) throws Exception {
         sql = dynamicParamSqlEnhancer.clearIllegalStatements(sql);
-        SqlRowSet rowSet = null;
+        SqlRowSet rowSet;
         try {
             rowSet = jdbcTemplate.queryForRowSet(sql);
         } catch (Exception e) {
             log.error("执行SQL发生错误", e);
-            throw new ServiceException("执行SQL发生错误：" + e.getMessage());
+            throw new BusinessException("执行SQL发生错误：" + e.getMessage());
         }
         SqlRowSetMetaData metaData = rowSet.getMetaData();
         int columnCount = metaData.getColumnCount();
         List<DtoFieldInfo> fields = Lists.newArrayList();
         GlobalConfig.Builder gb = new GlobalConfig.Builder();
-        GlobalConfig gc = gb.dateType(generatorConfig.getDateType()).build();
+        GlobalConfig gc = gb.dateType(DateType.ONLY_DATE).build();
         for (int i = 1; i <= columnCount; i++) {
             DtoFieldInfo resultField = new DtoFieldInfo();
             resultField.setColumnName(metaData.getColumnLabel(i));
-            //将数据库类型转换为java类型
+            // 将数据库类型转换为java类型
             String colType = metaData.getColumnTypeName(i);
-            IColumnType columnType = dataSourceConfig.getTypeConvert().processTypeConvert(gc, metaData.getColumnTypeName(i));
+
+            DbType dbType = DbType.MYSQL;
+            // 默认 MYSQL
+            ITypeConvert typeConvert = TypeConverts.getTypeConvert(dbType);
+            if (null == typeConvert) {
+                typeConvert = MySqlTypeConvert.INSTANCE;
+            }
+            IColumnType columnType = typeConvert.processTypeConvert(gc, metaData.getColumnTypeName(i));
             resultField.setShortJavaType(columnType.getType());
             if (!Strings.isNullOrEmpty(columnType.getPkg())) {
                 config.getImportPackages().add(columnType.getPkg());
             }
-            resultField.setPropertyName(generatorConfig.getAvailableNameConverter().propertyNameConvert(resultField.getColumnName()));
+            resultField.setPropertyName(StringUtils.toCamelCase(resultField.getColumnName()));
             fields.add(resultField);
         }
         config.setFields(fields);
@@ -138,7 +137,7 @@ public class SqlGeneratorService {
 
     public String genMapperElementsFromSql(String sql, GenDtoConfig config) throws IOException, DocumentException {
         List<MapperElement> elements = Lists.newArrayList();
-        //如果DTO是自动生成的，那么同时也生成结果映射集
+        // 如果DTO是自动生成的，那么同时也生成结果映射集
         if (config.getResultMap() != null) {
             elements.add(createResultMapElement(config));
         }
@@ -153,16 +152,17 @@ public class SqlGeneratorService {
         Map<String, Object> tplParams = Maps.newHashMap();
         tplParams.put("config", config);
         String resultMapStr = beetlTemplateEngine.write2String(tplParams, "classpath:codetpls/resultMap.btl");
-        MapperElement resultMapEle = MapperElement.builder().id(config.getDtoName() + "Map")
+        return MapperElement.builder()
+                .id(config.getDtoName() + "Map")
                 .comment("Author:" + config.getAuthor() + "，Date:" + DateUtil.format(new Date(), "yyyy-MM-dd") + "，" + config.getMapperElementId() + "的结果映射配置，由mybatis-plus-generator-ui自动生成")
                 .content(resultMapStr)
-                .location(ElementPosition.FIRST).build();
-        return resultMapEle;
+                .location(ElementPosition.FIRST)
+                .build();
     }
 
     public MapperElement createMapperMethodElement(String sql, GenDtoConfig config) {
         Map<String, Object> tplParams = Maps.newHashMap();
-        String dbType = dataSourceConfig.getDbType().getDb();
+        // String dbType = dataSourceConfig.getDbType().getDb();
         tplParams.put("config", config);
         tplParams.put("elementType", "select");
         if (config.isEnableParseDynamicParams()) {
@@ -170,11 +170,12 @@ public class SqlGeneratorService {
         }
         tplParams.put("sql", sql);
         String methodEleStr = beetlTemplateEngine.write2String(tplParams, "classpath:codetpls/mapperMethods.btl");
-        MapperElement methodEle = MapperElement.builder().id(config.getMapperElementId())
+        return MapperElement.builder()
+                .id(config.getMapperElementId())
                 .comment("Author:" + config.getAuthor() + "，Date:" + DateUtil.format(new Date(), "yyyy-MM-dd") + ",由mybatis-plus-generator-ui自动生成")
                 .content(methodEleStr)
-                .location(ElementPosition.LAST).build();
-        return methodEle;
+                .location(ElementPosition.LAST)
+                .build();
     }
 
     public void genParamDtoFromSql(String sql, String paramDtoRef, boolean enableLombok) throws Exception {
@@ -221,7 +222,7 @@ public class SqlGeneratorService {
             imports.add("java.util.Map");
             returnType = "List<Map<String,Object>>";
         }
-        //如果启用分页查询，则修改相关的参数和返回值
+        // 如果启用分页查询，则修改相关的参数和返回值
         if (config.isEnablePageQuery()) {
             imports.add("com.baomidou.mybatisplus.extension.plugins.pagination.Page");
             returnType = returnType.replaceFirst("List", "Page");
@@ -265,10 +266,10 @@ public class SqlGeneratorService {
                 .methodName(config.getMapperMethod())
                 .returnType(returnType)
                 .importJavaTypes(imports)
-                .params(methodParams).build();
+                .params(methodParams)
+                .build();
         javaClassParser.addMethod2Interface(methodInfo);
     }
-
 
     private List<DtoFieldInfo> parseParamFieldsFromSql(String sql) {
         List<ConditionExpr> conditionExprs = dynamicParamSqlEnhancer.parseSqlDynamicConditions(sql);
@@ -280,12 +281,11 @@ public class SqlGeneratorService {
             for (String paramName : expr.getParamNames()) {
                 DtoFieldInfo field = new DtoFieldInfo();
                 field.setPropertyName(PathUtils.getShortNameFromFullRef(paramName));
-                boolean isDate = paramName.toLowerCase().endsWith("date")
-                        || paramName.toLowerCase().endsWith("time");
+                boolean isDate = paramName.toLowerCase().endsWith("date") || paramName.toLowerCase().endsWith("time");
                 if (expr.getOperator().toUpperCase().equals("IN")) {
                     DbColumnType cType = DbColumnType.STRING;
                     if (isDate) {
-                        cType = getRightDateType(generatorConfig.getDateType());
+                        cType = getRightDateType(DateType.ONLY_DATE);
                         field.addImportJavaType(cType.getPkg());
                     }
                     field.setShortJavaType("List<" + cType.getType() + ">");
@@ -293,7 +293,7 @@ public class SqlGeneratorService {
                 } else if (rangeOperators.contains(expr.getOperator().toUpperCase())) {
                     DbColumnType cType = DbColumnType.LONG;
                     if (isDate) {
-                        cType = getRightDateType(generatorConfig.getDateType());
+                        cType = getRightDateType(DateType.ONLY_DATE);
                         field.addImportJavaType(cType.getPkg());
                     }
                     field.setShortJavaType(cType.getType());
@@ -305,7 +305,6 @@ public class SqlGeneratorService {
         }
         return fields;
     }
-
 
     private void genDtoFromConfig(GenDtoConfig config) throws Exception {
         Map<String, Object> tplParams = Maps.newHashMap();
@@ -320,7 +319,6 @@ public class SqlGeneratorService {
         log.info("DTO已成功生成，输出位置为:" + outputPath);
     }
 
-
     private DbColumnType getRightDateType(DateType dateType) {
         switch (dateType) {
             case ONLY_DATE:
@@ -333,6 +331,4 @@ public class SqlGeneratorService {
                 return null;
         }
     }
-
-
 }

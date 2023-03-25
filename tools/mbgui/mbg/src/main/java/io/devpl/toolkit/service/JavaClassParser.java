@@ -24,7 +24,6 @@ public class JavaClassParser {
 
     private final JavaParser jp = new JavaParser();
 
-    @Resource
     private ProjectPathResolver pathResolver;
 
     public void addMethod2Interface(JavaClassMethodInfo methodInfo) throws Exception {

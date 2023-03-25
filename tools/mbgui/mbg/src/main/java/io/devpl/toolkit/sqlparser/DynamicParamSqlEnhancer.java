@@ -2,8 +2,8 @@ package io.devpl.toolkit.sqlparser;
 
 import cn.hutool.core.util.ReUtil;
 import com.baomidou.mybatisplus.annotation.DbType;
-import io.devpl.toolkit.common.ServiceException;
 import com.google.common.base.Strings;
+import io.devpl.toolkit.common.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.parser.CCJSqlParser;
 import net.sf.jsqlparser.statement.Statement;
@@ -12,10 +12,13 @@ import net.sf.jsqlparser.statement.select.Select;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * 动态SQL增强
+ */
 @Slf4j
 public class DynamicParamSqlEnhancer {
 
-    private DbType dbType;
+    private final DbType dbType;
 
     public DynamicParamSqlEnhancer(DbType dbType) {
         this.dbType = dbType;
@@ -29,7 +32,7 @@ public class DynamicParamSqlEnhancer {
      */
     public List<ConditionExpr> parseSqlDynamicConditions(String sql) {
         if (Strings.isNullOrEmpty(sql)) {
-            throw new ServiceException("sql不能为空");
+            throw new BusinessException("sql不能为空");
         }
         try {
             CCJSqlParser ccjSqlParser = new CCJSqlParser(sql);
@@ -40,11 +43,11 @@ public class DynamicParamSqlEnhancer {
                 select.getSelectBody().accept(parser);
                 return parser.getParsedConditions();
             } else {
-                throw new ServiceException("只能处理SQL查询语句");
+                throw new BusinessException("只能处理SQL查询语句");
             }
         } catch (Exception e) {
             log.error("解析SQL条件发生错误", e);
-            throw new ServiceException("解析SQL条件发生错误,请检查SQL语法");
+            throw new BusinessException("解析SQL条件发生错误,请检查SQL语法");
         }
     }
 
@@ -133,5 +136,4 @@ public class DynamicParamSqlEnhancer {
         }
         return "concat('%'," + colExpr + ",'%')";
     }
-
 }

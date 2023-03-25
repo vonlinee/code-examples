@@ -1,3 +1,6 @@
+JDK11
+
+
 下面简要介绍一下各个目录的作用：
 
 `.nuxt/` ：用于存放 Nuxt.js 的核心库文件。例如，你可以在这个目录下找到 `server.js` 文件，描述了 Nuxt.js 进行服务端渲染的逻辑（参见下一段 “Nuxt.js 的渲染流程”）， `router.js` 文件包含一张自动生成的路由表。
@@ -320,3 +323,43 @@ https://www.cnblogs.com/DarkCrow/p/17010850.html
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+npm install monaco-editor-webpack-plugin@6.0.0
+
+
+
+
+
+[javascript - Error: Rule can only have one resource source (provided resource and test + include + exclude) - Stack Overflow](https://stackoverflow.com/questions/64373393/error-rule-can-only-have-one-resource-source-provided-resource-and-test-incl)
+
+
+
+nuxtjs自带webpack

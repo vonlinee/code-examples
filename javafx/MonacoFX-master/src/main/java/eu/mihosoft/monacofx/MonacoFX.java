@@ -32,6 +32,7 @@ import javafx.concurrent.Worker;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
@@ -54,6 +55,13 @@ public class MonacoFX extends Parent {
         engine = view.getEngine();
         String url = Objects.requireNonNull(getClass().getResource(EDITOR_HTML_RESOURCE_LOCATION)).toExternalForm();
 
+        engine.setOnAlert(event -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("JS Alert");
+            alert.setContentText(event.getData());
+            alert.showAndWait();
+        });
+
         engine.load(url);
 
         editor = new Editor(engine);
@@ -61,13 +69,16 @@ public class MonacoFX extends Parent {
         systemClipboardWrapper = new SystemClipboardWrapper();
         ClipboardBridge clipboardBridge = new ClipboardBridge(getEditor().getDocument(), systemClipboardWrapper);
         engine.getLoadWorker().stateProperty().addListener((o, old, state) -> {
+            // Worker初始化完毕
             if (state == Worker.State.SUCCEEDED) {
-
+                // 注入脚本对象
                 JSObject window = (JSObject) engine.executeScript("window");
                 window.setMember("clipboardBridge", clipboardBridge);
 
                 AtomicBoolean jsDone = new AtomicBoolean(false);
                 AtomicInteger attempts = new AtomicInteger();
+
+                // 类似于浏览器加载js并执行js的过程，异步加载JS
 
                 Thread thread = new Thread(() -> {
                     while (!jsDone.get()) {
@@ -95,6 +106,7 @@ public class MonacoFX extends Parent {
         });
 
         addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            // 执行脚本
             Object obj = engine.executeScript("editorView.getModel().getValueInRange(editorView.getSelection())");
             systemClipboardWrapper.handleCopyCutKeyEvent(event, obj);
         });

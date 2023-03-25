@@ -4,9 +4,7 @@
   </el-tooltip>
 </template>
 <script>
-import axios from "axios";
-import _ from "lodash";
 export default {
   props: ["content"]
-};
+}
 </script>
