@@ -1,6 +1,7 @@
 <template>
-  <div id="editor-container" style="width: 100%; height: 800px">
-
+  <div>
+    <!--一定要嵌套在DIV里面-->
+    <div id="editor-container"></div>
   </div>
 </template>
 
@@ -8,26 +9,41 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 export default {
-  name: "MonacoEditor",
-  data: function () {
+  name: 'MonacoEditor',
+  data: function() {
     return {
-      editor: null
-    }
+      editor: null,
+    };
   },
-  methods: {
-    initMonacoEditor() {
-      return monaco.editor.create(document.getElementById('editor-container'), {
-        value: `const foo = () => 0;`,
-        language: 'freemarker2',
-        theme: 'vs'
-      })
-    }
+  props: {
+    'lang': {
+      type: String,
+      require: false,
+      default() {
+        return 'plain';
+      },
+    },
+    'initialWidth': {
+      type: String,
+      default() {
+        return '500px';
+      },
+    },
+    'initialHeight': {
+      type: String,
+    },
   },
   mounted() {
-    console.log("mounted")
-    this.editor = this.initMonacoEditor()
-  }
-}
+    let editorContainer = document.getElementById('editor-container');
+    editorContainer.style.width = this.initialWidth;
+    editorContainer.style.height = this.initialHeight;
+    monaco.editor.create(document.getElementById('editor-container'), {
+      language: this.lang,
+      theme: 'vs',
+      value: 'select * from user',
+    });
+  },
+};
 </script>
 
 <style scoped>

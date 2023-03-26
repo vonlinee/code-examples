@@ -1,20 +1,44 @@
 <template>
   <div>
-    <Editor></Editor>
+    <el-button type="text" @click="flag = true">点击打开 Dialog</el-button>
+
+    <el-dialog
+        title="提示"
+        :visible.sync="dialogVisible"
+        width="30%"
+        :before-close="handleClose">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+    </span>
+    </el-dialog>
+
+    <el-dialog title="提示"
+               :visible.sync="flag">
+      <monaco-editor lang="java"></monaco-editor>
+    </el-dialog>
   </div>
 </template>
 <script>
-import CodeMirrorEditor from "@/components/CodeMirrorEditor";
-
-import Editor from '@/components/Editor.vue'
+import MonacoEditor from '../../../components/editor/MonacoEditor.vue';
 
 export default {
   components: {
-    Editor
+    MonacoEditor,
   },
   data() {
-    return {};
+    return {
+      dialogVisible: false,
+      flag: false,
+    };
   },
-  methods: {},
+  methods: {
+    handleClose(done) {
+      this.$confirm('确认关闭？').then(_ => {
+        done();
+      }).catch(_ => {});
+    },
+  },
 };
 </script>

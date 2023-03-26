@@ -363,3 +363,9 @@ npm install monaco-editor-webpack-plugin@6.0.0
 
 
 nuxtjs自带webpack
+
+
+
+实现webide
+
+[vue-codemirror + Java Compiler实现Java Web IDE - Ygria - 博客园 (cnblogs.com)](https://www.cnblogs.com/ygria/p/12943701.html)
