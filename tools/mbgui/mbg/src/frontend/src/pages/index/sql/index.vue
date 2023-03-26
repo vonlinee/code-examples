@@ -7,7 +7,7 @@
         <el-alert title="Tip：" type="info" style="margin:10px;" show-icon :closable="false">
           支持在SQL中嵌入Mybatis的动态参数，系统会自动识别参数，并生成对应的条件控制语句
           <a href="javascript:"
-              @click="showDynamicParamsDemo = true"
+             @click="showDynamicParamsDemo = true"
           >查看示例</a>
         </el-alert>
         <codemirror v-model="sqlCode" :options="cmOptions"/>
@@ -31,14 +31,14 @@
   </div>
 </template>
 <script>
-import {codemirror} from "vue-codemirror";
-import "codemirror/mode/sql/sql.js";
-import "codemirror/lib/codemirror.css";
-import "codemirror/theme/solarized.css";
-import HelpTip from "../../../../src/components/HelpTip.vue";
-import {Base64} from "js-base64";
-import DtoStrategyForm from "@/components/DtoStrategyForm";
-import DynamicSqlDemo from "@/components/DynamicSqlDemo";
+import {codemirror} from 'vue-codemirror';
+import 'codemirror/mode/sql/sql.js';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/solarized.css';
+import HelpTip from '../../../../src/components/HelpTip.vue';
+import {Base64} from 'js-base64';
+import DtoStrategyForm from '@/components/DtoStrategyForm';
+import DynamicSqlDemo from '@/components/DynamicSqlDemo';
 
 export default {
   components: {
@@ -51,22 +51,22 @@ export default {
     return {
       showDynamicParamsDemo: false,
       showDtoConfig: false,
-      sqlCode: "",
-      encodedSQL: "",
+      sqlCode: '',
+      encodedSQL: '',
       cmOptions: {
         tabSize: 4,
         styleActiveLine: true,
         lineNumbers: true,
         line: true,
-        mode: "text/x-mysql",
-        theme: "solarized light",
+        mode: 'text/x-mysql',
+        theme: 'solarized light',
       },
     };
   },
   methods: {
     genDtoFile() {
       if (!this.sqlCode) {
-        this.$message.error("请先输入SQL语句");
+        this.$message.error('请先输入SQL语句');
         return;
       }
       this.encodedSQL = Base64.encodeURI(this.sqlCode);
