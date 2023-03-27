@@ -19,7 +19,8 @@ import 'codemirror/theme/3024-day.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript.js';
 
-import {codemirror} from 'vue-codemirror';
+import {codemirror} from 'vue-codemirror'
+
 // 引入语言模式 可以从 codemirror/mode/ 下引入多个
 import 'codemirror/mode/sql/sql.js';
 import 'codemirror/mode/yaml/yaml.js';
@@ -29,16 +30,21 @@ import 'codemirror/theme/material.css';
 
 import 'codemirror/addon/selection/active-line'; //光标行背景高亮，配置里面也需要styleActiveLine设置为true
 import 'codemirror/keymap/sublime'; //sublime编辑器效果
-import '@/assets/js/freemarker.js';
 
 export default {
-  name: 'CMEditor',
+  name: 'CodeMirrorEditor',
   components: {
     codemirror,
   },
+  props: {
+    'mode': {
+      type: String,
+      default: 'javascript',
+    },
+  },
   data() {
     return {
-      code: 'select a from table1 where b = 1',
+      code: 'select a from t where b = 1',
       cmOptions: {
         mode: 'freemarker', // 语言及语法模式
         // 主题
@@ -61,9 +67,11 @@ export default {
   methods: {
     inputChange(content) {
       this.$nextTick(() => {
-        console.log('code:' + this.code);
-        console.log('content:' + content);
+        this.code = content; // 更新文本
       });
+    },
+    getContent() {
+      return this.code;
     },
   },
 };

@@ -38,18 +38,18 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
 
     private final NameConverter nameConverter;
 
+    ClasspathResourceLoader classpathResourceLoader = new ClasspathResourceLoader(this.getClass().getClassLoader());
+
     public BeetlTemplateEngine(NameConverter nameConverter, String templateStoreDir) {
         this.templateStoreDir = templateStoreDir;
         this.nameConverter = nameConverter;
         try {
             log.info("模板根目录为：" + templateStoreDir);
-            ClasspathResourceLoader classpathResourceLoader = new ClasspathResourceLoader(this.getClass().getClassLoader());
             FileResourceLoader fileResourceLoader = new FileResourceLoader(templateStoreDir);
             CompositeResourceLoader loader = new CompositeResourceLoader();
             loader.addResourceLoader(new StartsWithMatcher("classpath:").withoutPrefix(), classpathResourceLoader);
             loader.addResourceLoader(new StartsWithMatcher("file:").withoutPrefix(), fileResourceLoader);
-            Configuration cfg = Configuration.defaultConfiguration();
-            groupTemplate = new GroupTemplate(loader, cfg);
+            groupTemplate = new GroupTemplate(loader, new Configuration());
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
@@ -107,6 +107,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
                 filePath = filePath + File.separator + file.getPackageName();
                 filePath = filePath.replaceAll("\\.", "\\" + File.separator);
             }
+            log.info("entityName {}", entityName);
             String fileName = filePath + File.separator + nameConverter.customFileNameConvert(file.getFileName(), entityName);
             outputFile(new File(fileName), objectMap, file.getTemplatePath(), file.isFileOverride());
         });

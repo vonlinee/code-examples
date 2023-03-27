@@ -36,7 +36,7 @@ import java.util.*;
 
 /**
  * MyBatis-Plus Generator 3.5.3.1
- * https://baomidou.com/pages/981406/
+ * <a href="https://baomidou.com/pages/981406/">...</a>
  */
 @Slf4j
 @Component

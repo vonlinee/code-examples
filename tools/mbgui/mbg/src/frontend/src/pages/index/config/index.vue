@@ -40,10 +40,13 @@
                   v-if="!scope.row.builtIn"
                   @click="deleteFileInfo(scope.row)"
               ></el-button>
+              <el-button @click="openFilePreviewDialog">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
+
+      <!-- 新增模板配置 -->
       <el-dialog :visible.sync="showEditForm" width="70%" top="5vh">
         <el-tabs v-model="activeName">
           <el-tab-pane label="基本配置" name="base">
@@ -85,12 +88,12 @@
                         :show-file-list="false"
                         :limit="1"
                         :data="uploadParams"
-                        :file-list="uplaodFileList"
+                        :file-list="uploadFileList"
                         action="/api/template/upload"
                         :on-success="onUploadSuccess"
                         :before-upload="beforeTemplateUpload"
                     >
-                    <el-button size="small" type="primary">选取文件</el-button>
+                      <el-button size="small" type="primary">选取文件</el-button>
                       <div slot="tip" class="el-upload__tip">仅支持.btl文件</div>
                     </el-upload>
                   </el-col>
@@ -115,6 +118,9 @@
             <controller-strategy-form v-if="form.fileType==='Controller'"
                                       :user-config="userConfig"></controller-strategy-form>
           </el-tab-pane>
+          <el-tab-pane label="内容" name="content">
+            <code-mirror-editor></code-mirror-editor>
+          </el-tab-pane>
         </el-tabs>
       </el-dialog>
     </div>
@@ -131,6 +137,8 @@ import ServiceImplStrategyForm from "@/components/ServiceImplStrategyForm";
 import ControllerStrategyForm from "@/components/ControllerStrategyForm";
 import HelpTip from "@/components/HelpTip";
 
+import CodeMirrorEditor from "../../../components/editor/CodeMirrorEditor.vue";
+
 export default {
   props: [],
   components: {
@@ -141,12 +149,13 @@ export default {
     ServiceImplStrategyForm,
     ControllerStrategyForm,
     HelpTip,
+    CodeMirrorEditor
   },
   data() {
     return {
       activeName: "base",
       isUpdate: false,
-      uplaodFileList: [],
+      uploadFileList: [],
       uploadParams: {
         fileType: "",
       },
@@ -202,7 +211,7 @@ export default {
           this.form.outputLocationPkg = this.form.outputLocation;
         }
       }
-      //mapper.xml文件默认根目录为resources，其它默认为java
+      // mapper.xml文件默认根目录为resources，其它默认为java
       if (!this.form.outputLocationPrefix) {
         if (this.form.fileType === "Mapper.xml") {
           this.form.outputLocationPrefix = "resources";
@@ -233,13 +242,13 @@ export default {
     },
     beforeTemplateUpload(file) {
       let tempArray = file.name.split(".");
-      let fileType = tempArray[tempArray.length - 1];
-      const isLt2M = file.size / 1024 / 1024 < 2;
+      let fileType = tempArray[tempArray.length - 1]; // 文件后缀
+      console.log(fileType)
       if (fileType !== "btl") {
         this.$message.error("请选择正确的模板文件格式");
         return false;
       }
-      if (!isLt2M) {
+      if (file.size / 1024 / 1024 > 2) {
         this.$message.error("模板文件不能超过 2MB!");
         return false;
       }
@@ -284,6 +293,14 @@ export default {
         responseType: "blob",
       }).then((response) => {
         FileSaver.saveAs(response, templateName);
+
+        const reader = new FileReader()
+        reader.onload = function () {
+          self.txtPre = reader.result//获取的数据data
+          self.dialogvisibleview = true
+          console.log('reader.result', reader.result)
+        }
+        reader.readAsText(this.response);
       });
     },
     onUploadSuccess(res, file, fileList) {

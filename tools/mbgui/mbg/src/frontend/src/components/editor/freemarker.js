@@ -5,7 +5,7 @@
  * Github: https://github.com/sanluan/codemirror-freemarker
  */
 
-import VueCodeMirror from 'vue-codemirror';
+import VueCodeMirror from './codemirror.js';
 
 /**
  * VueCodeMirror为对象，包含3个成员

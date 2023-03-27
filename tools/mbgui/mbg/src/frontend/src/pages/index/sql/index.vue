@@ -4,7 +4,7 @@
     <div class="content">
       <div class="container">
         <div style="margin-buttom:10px;">请输入待转换的SQL语句：</div>
-        <el-alert title="Tip：" type="info" style="margin:10px;" show-icon :closable="false">
+        <el-alert title="Tip:" type="info" style="margin:10px;" show-icon :closable="false">
           支持在SQL中嵌入Mybatis的动态参数，系统会自动识别参数，并生成对应的条件控制语句
           <a href="javascript:"
              @click="showDynamicParamsDemo = true"
@@ -37,8 +37,8 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/solarized.css';
 import HelpTip from '../../../../src/components/HelpTip.vue';
 import {Base64} from 'js-base64';
-import DtoStrategyForm from '@/components/DtoStrategyForm';
-import DynamicSqlDemo from '@/components/DynamicSqlDemo';
+import DtoStrategyForm from '~/components/DtoStrategyForm';
+import DynamicSqlDemo from '~/components/DynamicSqlDemo';
 
 export default {
   components: {

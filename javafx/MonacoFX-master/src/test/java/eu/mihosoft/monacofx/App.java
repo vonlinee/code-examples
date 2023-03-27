@@ -21,6 +21,8 @@ public class App extends Application {
         // create a new monaco editor node
         MonacoFX monacoFX = new MonacoFX();
 
+
+
         BorderPane root = new BorderPane();
 
         StackPane stackPane = new StackPane(monacoFX);

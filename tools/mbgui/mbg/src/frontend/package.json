@@ -28,7 +28,8 @@
     "vue-class-component": "^7.2.6",
     "vue-codemirror": "^4.0.6",
     "vue-property-decorator": "^8.3.0",
-    "vuex": "3.6.0"
+    "vuex": "3.6.0",
+    "codemirror": "5.65.12"
   },
   "devDependencies": {
     "@nuxt/types": "^0.6.4",

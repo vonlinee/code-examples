@@ -3,3 +3,5 @@ https://blog.csdn.net/weixin_42160499/article/details/109814702
 
 
 https://blog.csdn.net/weixin_43314519/article/details/109298055
+
+如果要升级版本的话，应该和electron的方法差不多

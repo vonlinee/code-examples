@@ -30,6 +30,10 @@ import static io.devpl.toolkit.dto.Constant.*;
 @Component
 public class CodeGenConfigService {
 
+    public final static String CONFIG_HOME = ".mbg-config";
+
+    private final String templateDirectory = "template/";
+
     /**
      * 存储目录
      */
@@ -39,12 +43,12 @@ public class CodeGenConfigService {
 
     @PostConstruct
     public void init() {
-        this.storeDir = StringUtils.join(File.separator, false, CONFIG_HOME, "basePackage");
+        this.storeDir = StringUtils.join(File.separator, false, CONFIG_HOME);
         this.userConfigPath = this.storeDir + File.separator + "user-config.json";
     }
 
     public String getTemplateStoreDir() {
-        return PathUtils.join(this.storeDir, TEMPLATE_STORE_DIR);
+        return PathUtils.join(this.storeDir, "template");
     }
 
     public UserConfig getDefaultUserConfig() {
@@ -94,14 +98,19 @@ public class CodeGenConfigService {
         assert fileName != null;
         String fileSuffix = fileName.substring(file.getOriginalFilename().lastIndexOf(".") + 1);
         String saveFileName = fileName.substring(0, fileName.lastIndexOf(fileSuffix)) + DateTimeUtils.nowDateTime();
+
+        PathUtils.join(this.storeDir, "template");
         String savePath = PathUtils.join(getTemplateStoreDir(), saveFileName);
         log.info("模板上传路径为：{}", savePath);
         try {
-            Files.copy(file.getInputStream(), Path.of(savePath));
+            Path path = Path.of(savePath);
+            if (FileUtils.createFile(path)) {
+                Files.copy(file.getInputStream(), path);
+            }
         } catch (IOException e) {
             throw new BusinessException("上传模板文件失败", e);
         }
-        return RESOURCE_PREFIX_FILE + savePath;
+        return "file:" + savePath;
     }
 
     public void importProjectConfig(String sourcePkg) throws IOException {

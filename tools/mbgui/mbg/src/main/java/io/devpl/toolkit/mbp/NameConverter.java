@@ -3,6 +3,7 @@ package io.devpl.toolkit.mbp;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Strings;
 import io.devpl.toolkit.utils.StringUtils;
+import io.devpl.toolkit.utils.Utils;
 
 /**
  * 自定义各类名称转换的规则
@@ -16,11 +17,11 @@ public interface NameConverter {
      * @return 转换后的实体类名称
      */
     default String entityNameConvert(String tableName) {
-        if (Strings.isNullOrEmpty(tableName)) {
+        if (StringUtils.isNullOrEmpty(tableName)) {
             return "";
         }
         tableName = tableName.substring(tableName.indexOf("_") + 1);
-        return StrUtil.upperFirst(StrUtil.toCamelCase(tableName.toLowerCase()));
+        return StrUtil.upperFirst(Utils.toCamelCase(tableName.toLowerCase()));
     }
 
     /**

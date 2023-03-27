@@ -1,9 +1,8 @@
 package io.devpl.toolkit.controller;
 
-import com.google.common.base.Strings;
+import io.devpl.toolkit.common.BusinessException;
 import io.devpl.toolkit.common.Result;
 import io.devpl.toolkit.common.Results;
-import io.devpl.toolkit.common.BusinessException;
 import io.devpl.toolkit.dto.OutputFileInfo;
 import io.devpl.toolkit.dto.UserConfig;
 import io.devpl.toolkit.service.CodeGenConfigService;
@@ -11,6 +10,7 @@ import io.devpl.toolkit.utils.StringUtils;
 import io.devpl.toolkit.utils.TemplateUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,9 +29,16 @@ public class TemplateController {
 
     private CodeGenConfigService userConfigStore;
 
+    /**
+     * 下载模板
+     *
+     * @param res
+     * @param fileType
+     * @throws IOException
+     */
     @GetMapping("/download")
     public void download(HttpServletResponse res, @RequestParam String fileType) throws IOException {
-        if (Strings.isNullOrEmpty(fileType)) {
+        if (StringUtils.isNullOrEmpty(fileType)) {
             log.error("fileType不能为空");
             return;
         }
@@ -66,7 +73,7 @@ public class TemplateController {
     }
 
     /**
-     * 模板上传
+     * 模板文件上传
      *
      * @param file     模板文件
      * @param fileType 模板文件类型
@@ -81,7 +88,13 @@ public class TemplateController {
         return Results.of(params);
     }
 
-    private void download(HttpServletResponse res, InputStream tplIn) throws UnsupportedEncodingException {
+    /**
+     * 下载文件
+     *
+     * @param res   HttpServletResponse
+     * @param tplIn
+     */
+    private void download(HttpServletResponse res, InputStream tplIn) {
         if (tplIn != null) {
             res.setCharacterEncoding("utf-8");
             res.setContentType("multipart/form-data;charset=UTF-8");

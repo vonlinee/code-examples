@@ -83,4 +83,24 @@ public final class StringUtils {
     public static String toCamelCase(String str) {
         return StrUtil.toCamelCase(str.toLowerCase());
     }
+
+    /**
+     * 大写首字母<br>
+     * 例如：str = name, return Name
+     *
+     * @param str 字符串
+     * @return 字符串
+     */
+    public static String upperFirst(String str) {
+        if (null == str) {
+            return null;
+        }
+        if (str.length() > 0) {
+            char firstChar = str.charAt(0);
+            if (Character.isLowerCase(firstChar)) {
+                return Character.toUpperCase(firstChar) + str.substring(1);
+            }
+        }
+        return str;
+    }
 }

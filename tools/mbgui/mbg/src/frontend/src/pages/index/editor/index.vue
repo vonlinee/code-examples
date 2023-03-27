@@ -16,16 +16,17 @@
 
     <el-dialog title="提示"
                :visible.sync="flag">
-      <monaco-editor lang="java"></monaco-editor>
+      <code-mirror-editor></code-mirror-editor>
     </el-dialog>
   </div>
 </template>
 <script>
-import MonacoEditor from '../../../components/editor/MonacoEditor.vue';
+
+import CodeMirrorEditor from '~/components/editor/CodeMirrorEditor.vue';
 
 export default {
   components: {
-    MonacoEditor,
+    CodeMirrorEditor,
   },
   data() {
     return {

@@ -6,10 +6,6 @@ public class Constant {
 
     public final static String DOT_XML = ".xml";
 
-    public final static String CONFIG_HOME = ".mbg-config";
-
-    public final static String TEMPLATE_STORE_DIR = "template";
-
     public final static String RESOURCE_PREFIX_CLASSPATH = "classpath:";
 
     public final static String RESOURCE_PREFIX_FILE = "file:";
