@@ -1,12 +1,16 @@
-<template>
-  <div class="hello">
-      C1
-  </div>
-</template>
 
 <script lang="ts">
 export default {
-  name: 'MyComponent1'
+  name: 'MyComponent1',
+  render(createElement) {
+    console.log("11111111", this);
+    
+    return createElement('h1', {}, '111')
+  },
+  mounted() {
+    
+    
+  }
 }
 </script>
 

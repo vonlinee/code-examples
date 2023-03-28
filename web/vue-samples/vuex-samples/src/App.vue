@@ -1,8 +1,14 @@
 <template>
-  <div id="app">
+  <div id="app" style="display: inline-block">
     <LoginView id="c1" ref="myRef"></LoginView>
     <VuexTest id="c2"></VuexTest>
     <button @click="showRefNode">showRefNode</button>
+
+    <h1>1111111111111111</h1>
+    <h1>1111111111111111</h1>
+    <h1>1111111111111111</h1>
+
+    <MyComponent1></MyComponent1>
   </div>
 </template>
 
@@ -10,9 +16,11 @@
 import LoginView from "@/components/LoginView.vue";
 import VuexTest from "@/components/VuexTest.vue";
 
+import MyComponent1 from "@/components/MyComponent1.vue";
+
 export default {
   name: 'App',
-  components: {VuexTest, LoginView},
+  components: {VuexTest, LoginView, MyComponent1},
   methods: {
     showRefNode() {
       let node = this.$refs.myRef;

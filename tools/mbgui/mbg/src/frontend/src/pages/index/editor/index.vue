@@ -2,13 +2,11 @@
   <div>
     <el-button type="text" @click="flag = true">点击打开 Dialog</el-button>
 
-    <div>
-      <code-mirror-editor mode="javascript" style="display: inline-block"></code-mirror-editor>
-      <code-mirror-editor mode="json" style="display: inline-block"></code-mirror-editor>
+    <div id="editor1">
+      <monaco-editor pid="editor1"></monaco-editor>
     </div>
-
-    <div style="display: inline-block">
-      <monaco-editor></monaco-editor>
+    <div id="editor2">
+      <monaco-editor pid="editor2"></monaco-editor>
     </div>
 
     <el-dialog
@@ -24,7 +22,9 @@
     </el-dialog>
 
     <el-dialog title="提示" :visible.sync="flag">
-      <code-mirror-editor mode="sql" style="display: inline-block"></code-mirror-editor>
+      <div id="editor3" style="background-color: red">
+        <monaco-editor pid="editor3"></monaco-editor>
+      </div>
     </el-dialog>
   </div>
 </template>

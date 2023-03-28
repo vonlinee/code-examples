@@ -10,6 +10,7 @@ export default {
   name: 'MonacoEditor',
   components: {},
   props: {
+    pid: {type: String},
     // 编辑器支持的文本格式,自行在百度上搜索
     languages: {
       type: String,
@@ -75,32 +76,25 @@ export default {
   },
   mounted() {
     // 组件挂载完毕时初始化编辑器
-    // this.initEditor();
+    let div = document.getElementById(this.pid);
+
+    const self = this;
+    // 初始化编辑器，确保dom已经渲染
+    this.editor = monaco.editor.create(div, {
+      value: self.codeValue || self.codes, // 编辑器初始显示内容
+      language: self.languages, // 支持的语言
+      theme: 'vs-light', // 主题
+      selectOnLineNumbers: true, //显示行号
+      editorOptions: self.editorOptions,
+    });
+    // self.$emit("onMounted", self.editor); //编辑器创建完成回调
+    self.editor.onDidChangeModelContent(function (event) {
+      //编辑器内容changge事件
+      self.codesCopy = self.editor.getValue();
+      self.$emit('onContentChange', self.editor.getValue(), event);
+    });
   },
-  methods: {
-    initEditor() {
-
-      let div = document.getElementById('monaco-editor');
-
-      console.log(div.parent)
-
-      const self = this;
-      // 初始化编辑器，确保dom已经渲染
-      this.editor = monaco.editor.create(div, {
-        value: self.codeValue || self.codes, // 编辑器初始显示内容
-        language: self.languages, // 支持的语言
-        theme: 'vs-light', // 主题
-        selectOnLineNumbers: true, //显示行号
-        editorOptions: self.editorOptions,
-      });
-      // self.$emit("onMounted", self.editor); //编辑器创建完成回调
-      self.editor.onDidChangeModelContent(function (event) {
-        //编辑器内容changge事件
-        self.codesCopy = self.editor.getValue();
-        self.$emit('onContentChange', self.editor.getValue(), event);
-      });
-    },
-  },
+  methods: {},
 };
 </script>
 
