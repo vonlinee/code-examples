@@ -40,7 +40,7 @@
                   v-if="!scope.row.builtIn"
                   @click="deleteFileInfo(scope.row)"
               ></el-button>
-              <el-button @click="openFilePreviewDialog">查看</el-button>
+              <el-button @click="openFilePreviewDialog()">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -313,6 +313,9 @@ export default {
         this.$message.error("模板文件上传失败");
       }
     },
+    openFilePreviewDialog() {
+      console.log(this)
+    }
   },
 };
 </script>

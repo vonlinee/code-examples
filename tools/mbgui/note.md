@@ -1,5 +1,9 @@
 JDK11
 
+idea下载源码文档时提示Sources not found ，手动下载源码
+mvn dependency:resolve -Dclassifier=sources
+
+
 
 下面简要介绍一下各个目录的作用：
 
@@ -369,3 +373,54 @@ nuxtjs自带webpack
 实现webide
 
 [vue-codemirror + Java Compiler实现Java Web IDE - Ygria - 博客园 (cnblogs.com)](https://www.cnblogs.com/ygria/p/12943701.html)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[Java Parser应用介绍 - 腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/news/740798)
+
+
+
+
+
+
+
+ParserConfiguration
+
+
+
+教程
+
+[(5条消息) vue下使用Monaco Editor_element already has context attribute_极致而简的博客-CSDN博客](https://blog.csdn.net/qq_30849965/article/details/109028974)
+

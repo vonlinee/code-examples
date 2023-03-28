@@ -37,12 +37,16 @@ public enum SqlType {
         this.length = length;
     }
 
+    /**
+     * 形式：int(11)，varchar(10), decimal(5, 2)等等
+     * @return
+     */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(this.jdbcType);
+        StringBuilder sb = new StringBuilder(String.valueOf(this.jdbcType));
         if (this.length != null) {
             int len = this.length.length;
-            sb.append("(");
+            sb.append(this.name()).append("(");
             if (len == 1) {
                 sb.append(this.length[0]);
             } else if (len == 2) {
@@ -50,6 +54,7 @@ public enum SqlType {
             } else {
                 throw new IllegalStateException("长度只有2个");
             }
+            sb.append(")");
         }
         return sb.toString();
     }

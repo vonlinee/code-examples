@@ -1,5 +1,6 @@
 package io.devpl.toolkit.utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,5 +109,19 @@ public class FileUtils {
      */
     public static File[] listFiles(String directory, boolean recursive) {
         return new File[0];
+    }
+
+    /**
+     * 获取文件扩展名
+     *
+     * @param filename 文件名
+     * @return 文件扩展名
+     */
+    public static String getExtension(@NotNull String filename) {
+        int index = filename.lastIndexOf(".");
+        if (index > 0) {
+            return filename.substring(index + 1);
+        }
+        return "";
     }
 }

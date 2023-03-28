@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -77,4 +79,8 @@ public class JdbcConnInfo implements Serializable {
      */
     @TableField(value = "encoding")
     private String encoding;
+
+    private java.time.LocalDateTime createTime;
+
+    private List<String> names;
 }

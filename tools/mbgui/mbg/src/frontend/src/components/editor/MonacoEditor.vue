@@ -1,8 +1,6 @@
 <!--https://juejin.cn/post/7062245776902062116-->
 <template>
-  <div id="monaco-editor-box">
-    <div id="monaco-editor" ref="monacoEditor"/>
-  </div>
+  <div id="monaco-editor" ref="monacoEditor"/>
 </template>
 
 <script>
@@ -24,7 +22,7 @@ export default {
     },
     editorOptions: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           selectOnLineNumbers: true,
           roundedSelection: false,
@@ -42,7 +40,7 @@ export default {
     },
     lang: {
       type: String,
-      default: function() {
+      default: function () {
         return '';
       },
     },
@@ -54,8 +52,17 @@ export default {
       codeValue: null, //保存后的文本
     };
   },
+  render(createElement, context) {
+    return createElement('div', {
+      style: {
+        width: "400px",
+        height: "300px",
+        backgroundColor: "red"
+      }
+    })
+  },
   watch: {
-    codes: function(newValue) {
+    codes: function (newValue) {
       console.debug('Code editor: content change');
       if (this.editor) {
         if (newValue !== this.editor.getValue()) {
@@ -68,13 +75,18 @@ export default {
   },
   mounted() {
     // 组件挂载完毕时初始化编辑器
-    this.initEditor();
+    // this.initEditor();
   },
   methods: {
     initEditor() {
+
+      let div = document.getElementById('monaco-editor');
+
+      console.log(div.parent)
+
       const self = this;
       // 初始化编辑器，确保dom已经渲染
-      this.editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+      this.editor = monaco.editor.create(div, {
         value: self.codeValue || self.codes, // 编辑器初始显示内容
         language: self.languages, // 支持的语言
         theme: 'vs-light', // 主题
@@ -82,7 +94,7 @@ export default {
         editorOptions: self.editorOptions,
       });
       // self.$emit("onMounted", self.editor); //编辑器创建完成回调
-      self.editor.onDidChangeModelContent(function(event) {
+      self.editor.onDidChangeModelContent(function (event) {
         //编辑器内容changge事件
         self.codesCopy = self.editor.getValue();
         self.$emit('onContentChange', self.editor.getValue(), event);
@@ -94,8 +106,9 @@ export default {
 
 <style scoped>
 #monaco-editor {
-  width: 100%;
+  width: 200px;
   height: 600px;
+  display: inline-block;
 }
 </style>
 

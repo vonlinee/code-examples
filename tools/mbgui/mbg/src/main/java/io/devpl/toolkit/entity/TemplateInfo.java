@@ -1,5 +1,8 @@
 package io.devpl.toolkit.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,20 +16,30 @@ public class TemplateInfo implements Serializable {
     /**
      * 模板ID
      */
-    private String tmplId;
+    @TableId(value = "template_id", type = IdType.ASSIGN_UUID)
+    private String templateId;
 
     /**
      * 模板名称
      */
-    private String tmplName;
+    @TableField(value = "template_name")
+    private String templateName;
 
     /**
      * 模板所在路径
      */
-    private String tmplPath;
+    @TableField(value = "template_path")
+    private String templatePath;
 
     /**
      * 是否内置，内置模板不可更改
      */
+    @TableField(value = "builtin")
     private boolean builtin;
+
+    /**
+     * 备注信息
+     */
+    @TableField(value = "remark")
+    private String remark;
 }
