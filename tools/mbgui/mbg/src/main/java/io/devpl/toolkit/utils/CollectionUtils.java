@@ -71,10 +71,10 @@ public abstract class CollectionUtils {
         return list;
     }
 
-    public static <T> void replaceAll(List<T> list, T oldVal, T newVal) {
+    public static <T> boolean replaceAll(List<T> list, T oldVal, T newVal) {
         if (isNullOrEmpty(list)) {
-            return;
+            return false;
         }
-        boolean result = Collections.replaceAll(list, oldVal, newVal);
+        return Collections.replaceAll(list, oldVal, newVal);
     }
 }
