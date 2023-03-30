@@ -147,7 +147,6 @@ public abstract class AbstractTemplateEngine {
         if (StringUtils.isNotBlank(tableInfo.getServiceImplName()) && StringUtils.isNotBlank(serviceImplPath)) {
             getTemplateFilePath(TemplateConfig::getServiceImpl).ifPresent(serviceImpl -> {
                 String implFile = String.format((serviceImplPath + File.separator + tableInfo.getServiceImplName() + suffixJavaOrKt()), entityName);
-
                 File file = new File(implFile);
                 boolean override = getConfigBuilder().getStrategyConfig().service().isFileOverride();
                 if (isCreate(file, override)) {

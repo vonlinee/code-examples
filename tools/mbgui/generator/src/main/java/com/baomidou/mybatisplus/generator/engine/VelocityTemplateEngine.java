@@ -24,6 +24,7 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.jetbrains.annotations.NotNull;
 import use.TemplateVariableAnalyzer;
+import use.VelocityTemplateAnalyzer;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -41,7 +42,7 @@ import java.util.Properties;
 public class VelocityTemplateEngine extends AbstractTemplateEngine {
     private VelocityEngine velocityEngine;
 
-    private TemplateVariableAnalyzer<Template> variableAnalyzer;
+    private final TemplateVariableAnalyzer<Template> variableAnalyzer = new VelocityTemplateAnalyzer();
 
     {
         try {
@@ -66,7 +67,6 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         return this;
     }
 
-
     @Override
     public void merge(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception {
         Template template = velocityEngine.getTemplate(templatePath, ConstVal.UTF8);
@@ -76,7 +76,6 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
             template.merge(new VelocityContext(objectMap), writer);
         }
         LOGGER.debug("模板:" + templatePath + ";  文件:" + outputFile);
-
         variableAnalyzer.analyze(template);
     }
 

@@ -1,8 +1,7 @@
 package use;
 
 import org.apache.velocity.Template;
-import org.apache.velocity.runtime.parser.node.Node;
-import org.apache.velocity.runtime.parser.node.SimpleNode;
+import org.apache.velocity.runtime.parser.node.*;
 
 public class VelocityTemplateAnalyzer implements TemplateVariableAnalyzer<Template> {
 
@@ -26,12 +25,41 @@ public class VelocityTemplateAnalyzer implements TemplateVariableAnalyzer<Templa
         }
     }
 
+    /**
+     * 递归遍历AST树
+     * 深度优先
+     *
+     * @param parent AST点
+     */
     public static void recursive(Node parent) {
         int numOfChildren = parent.jjtGetNumChildren();
         if (numOfChildren > 0) {
             for (int i = 0; i < numOfChildren; i++) {
                 Node node = parent.jjtGetChild(i);
-                System.out.println(node.getClass());
+                if (node instanceof ASTText) {
+                    ASTText astText = (ASTText) node;
+                    recursive(astText);
+                } else if (node instanceof ASTReference) {
+                    ASTReference astReference = (ASTReference) node;
+                    System.out.println("RootString => " + astReference.getRootString());
+                    recursive(astReference);
+                } else if (node instanceof ASTDirective) {
+                    ASTDirective astDirective = (ASTDirective) node;
+                    System.out.println("指令" + astDirective.getDirectiveName());
+                    recursive(astDirective);
+                } else if (node instanceof ASTIfStatement) {
+                    ASTIfStatement astIfStatement = (ASTIfStatement) node;
+                    recursive(astIfStatement);
+                } else if (node instanceof ASTComment) {
+                    ASTComment astComment = (ASTComment) node;
+                    recursive(astComment);
+                } else if (node instanceof ASTBlock) {
+                    ASTBlock astBlock = (ASTBlock) node;
+                    recursive(astBlock);
+                } else if (node instanceof ASTDivNode) {
+                    ASTDivNode astDivNode = (ASTDivNode) node;
+                    recursive(astDivNode);
+                }
             }
         }
     }

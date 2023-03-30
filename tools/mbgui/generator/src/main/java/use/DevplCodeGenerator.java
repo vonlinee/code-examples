@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.generator.config.TemplateType;
 import com.baomidou.mybatisplus.generator.config.builder.Entity;
 import com.baomidou.mybatisplus.generator.config.builder.Mapper;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
-import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
 
 import java.io.IOException;
@@ -91,6 +90,13 @@ public class DevplCodeGenerator {
                     builder.addTablePrefix("");
                     builder.addTableSuffix("");
                     builder.addInclude(tableNamesToBeGenerated); // 设置需要生成的表名
+
+                    // Controller
+                    builder.controllerBuilder().enableFileOverride();
+
+                    // Service策略配置
+                    builder.serviceBuilder().enableFileOverride();
+
                     // Entity策略配置
                     Entity.Builder entityBuilder = builder.entityBuilder();
                     entityBuilder.enableFileOverride();  // 文件覆盖
@@ -101,6 +107,7 @@ public class DevplCodeGenerator {
                     // Mapper配置
                     Mapper.Builder mapperBuilder = entityBuilder.mapperBuilder();
                     mapperBuilder.enableBaseResultMap();
+                    mapperBuilder.enableFileOverride();
                     mapperBuilder.enableBaseResultMap(); // 生成默认的ResultMap标签
                 }).templateConfig(templateConfig -> {
                     // 禁用模板
