@@ -119,7 +119,7 @@ public class TemplateConfig {
      * @since 3.3.2
      */
     public TemplateConfig disable(@NotNull TemplateType... templateTypes) {
-        if (templateTypes != null && templateTypes.length > 0) {
+        if (templateTypes != null) {
             for (TemplateType templateType : templateTypes) {
                 switch (templateType) {
                     case ENTITY:

@@ -46,7 +46,7 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
 
 
     @Override
-    public void writer(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception {
+    public void merge(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception {
         Template template = configuration.getTemplate(templatePath);
         try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile)) {
             template.process(objectMap, new OutputStreamWriter(fileOutputStream, ConstVal.UTF8));

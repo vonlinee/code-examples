@@ -119,7 +119,7 @@ public abstract class AbstractTemplateEngine {
         String xmlPath = getPathInfo(OutputFile.xml);
         if (StringUtils.isNotBlank(tableInfo.getXmlName()) && StringUtils.isNotBlank(xmlPath)) {
             getTemplateFilePath(TemplateConfig::getXml).ifPresent(xml -> {
-                String xmlFile = String.format((xmlPath + File.separator + tableInfo.getXmlName() + ConstVal.XML_SUFFIX), entityName);
+                String xmlFile = String.format((xmlPath + File.separator + tableInfo.getXmlName() + ".xml"), entityName);
                 outputFile(new File(xmlFile), objectMap, xml, getConfigBuilder().getStrategyConfig().mapper().isFileOverride());
             });
         }
@@ -147,7 +147,12 @@ public abstract class AbstractTemplateEngine {
         if (StringUtils.isNotBlank(tableInfo.getServiceImplName()) && StringUtils.isNotBlank(serviceImplPath)) {
             getTemplateFilePath(TemplateConfig::getServiceImpl).ifPresent(serviceImpl -> {
                 String implFile = String.format((serviceImplPath + File.separator + tableInfo.getServiceImplName() + suffixJavaOrKt()), entityName);
-                outputFile(new File(implFile), objectMap, serviceImpl, getConfigBuilder().getStrategyConfig().service().isFileOverride());
+
+                File file = new File(implFile);
+                boolean override = getConfigBuilder().getStrategyConfig().service().isFileOverride();
+                if (isCreate(file, override)) {
+                    outputFile(file, objectMap, serviceImpl, override);
+                }
             });
         }
     }
@@ -189,7 +194,7 @@ public abstract class AbstractTemplateEngine {
                     File parentFile = file.getParentFile();
                     FileUtils.forceMkdir(parentFile);
                 }
-                writer(objectMap, templatePath, file);
+                merge(objectMap, templatePath, file);
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
@@ -264,12 +269,7 @@ public abstract class AbstractTemplateEngine {
      * @throws Exception 异常
      * @since 3.5.0
      */
-//    public void writer(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception {
-//        this.writer(objectMap, templatePath, outputFile.getPath());
-//        logger.debug("模板:" + templatePath + ";  文件:" + outputFile);
-//    }
-    @NotNull
-    public abstract void writer(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception;
+    public abstract void merge(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception;
 
     /**
      * 打开输出目录
@@ -346,18 +346,19 @@ public abstract class AbstractTemplateEngine {
      * @return 是否创建文件
      * @since 3.5.2
      */
-    protected boolean isCreate(@NotNull File file, boolean fileOverride) {
-        if (file.exists() && !fileOverride) {
+    protected synchronized boolean isCreate(@NotNull File file, boolean fileOverride) {
+        boolean isFileExisted = file.exists();
+        if (isFileExisted && !fileOverride) {
             LOGGER.warn("文件[{}]已存在，且未开启文件覆盖配置，需要开启配置可到策略配置中设置！！！", file.getName());
         }
-        return !file.exists() || fileOverride;
+        return !isFileExisted || fileOverride;
     }
 
     /**
      * 文件后缀
      */
     protected String suffixJavaOrKt() {
-        return getConfigBuilder().getGlobalConfig().isKotlin() ? ConstVal.KT_SUFFIX : ConstVal.JAVA_SUFFIX;
+        return getConfigBuilder().getGlobalConfig().isKotlin() ? ".kt" : ".java";
     }
 
     @NotNull

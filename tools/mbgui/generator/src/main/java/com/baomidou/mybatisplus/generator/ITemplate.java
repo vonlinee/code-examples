@@ -30,5 +30,4 @@ public interface ITemplate {
 
     @NotNull
     Map<String, Object> renderData(@NotNull TableInfo tableInfo);
-
 }

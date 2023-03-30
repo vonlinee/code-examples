@@ -41,10 +41,6 @@ public interface ConstVal {
     String UTF8 = StandardCharsets.UTF_8.name();
     String UNDERLINE = "_";
 
-    String JAVA_SUFFIX = StringPool.DOT_JAVA;
-    String KT_SUFFIX = ".kt";
-    String XML_SUFFIX = ".xml";
-
     /**
      * 实体模板路径
      */

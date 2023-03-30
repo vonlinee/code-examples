@@ -2,6 +2,7 @@ package use;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.TemplateType;
 import com.baomidou.mybatisplus.generator.config.builder.Entity;
 import com.baomidou.mybatisplus.generator.config.builder.Mapper;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
@@ -83,6 +84,7 @@ public class DevplCodeGenerator {
                             System.out.println(entry.getKey() + " " + entry.getValue());
                         });
                     });
+
                 }).strategyConfig(builder -> {
                     builder.enableSkipView(); // 开启大写命名
                     // builder.enableSchema(); // 启用 schema
@@ -100,6 +102,12 @@ public class DevplCodeGenerator {
                     Mapper.Builder mapperBuilder = entityBuilder.mapperBuilder();
                     mapperBuilder.enableBaseResultMap();
                     mapperBuilder.enableBaseResultMap(); // 生成默认的ResultMap标签
+                }).templateConfig(templateConfig -> {
+                    // 禁用模板
+                    templateConfig.disable(TemplateType.ENTITY);
+                    templateConfig.disable(TemplateType.CONTROLLER);
+                    templateConfig.disable(TemplateType.MAPPER);
+                    templateConfig.disable(TemplateType.SERVICE);
                 }).templateEngine(new VelocityTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
                 .execute();
     }
