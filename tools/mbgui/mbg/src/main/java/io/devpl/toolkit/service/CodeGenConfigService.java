@@ -97,10 +97,10 @@ public class CodeGenConfigService {
         String fileName = file.getOriginalFilename();
         assert fileName != null;
         String fileSuffix = fileName.substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+        // 保存文件名
         String saveFileName = fileName.substring(0, fileName.lastIndexOf(fileSuffix)) + DateTimeUtils.nowDateTime();
-
-        PathUtils.join(this.storeDir, "template");
-        String savePath = PathUtils.join(getTemplateStoreDir(), saveFileName);
+        // 模板文件存放目录
+        String savePath = PathUtils.join(this.storeDir, "template", saveFileName);
         log.info("模板上传路径为：{}", savePath);
         try {
             Path path = Path.of(savePath);

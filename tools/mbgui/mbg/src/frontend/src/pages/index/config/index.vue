@@ -78,7 +78,7 @@
 
                 <el-row>
                   <el-col :span="8">
-                    <a href="javascript:;"
+                    <a href="javascript:"
                        @click="download(form.fileType, form.templateName)"
                     >{{ form.templateName }}</a>
                   </el-col>

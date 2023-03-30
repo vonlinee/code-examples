@@ -1,0 +1,12 @@
+
+
+class(name, members, sup="Object") ::= "class <name> extends <sup> { <members> }"
+
+method(methodName, returnValue) ::= <<
+    <methodName>
+    <returnValue>
+    <returnValue>
+
+     <class()>
+>>
+

@@ -11,6 +11,7 @@
 
     <modules>
         <module>mbg</module>
+        <module>generator</module>
     </modules>
 
     <description>mybatis-plus code generator with UI</description>

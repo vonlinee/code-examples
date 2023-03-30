@@ -31,3 +31,5 @@ target
 *.lock
 node_modules
 src/main/resources/generator-ui/*
+
+**/*/jdbc.properties

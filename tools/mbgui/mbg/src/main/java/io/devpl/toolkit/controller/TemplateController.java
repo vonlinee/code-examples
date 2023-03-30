@@ -76,11 +76,10 @@ public class TemplateController {
      * 模板文件上传
      *
      * @param file     模板文件
-     * @param fileType 模板文件类型
      * @return 结果
      */
     @PostMapping("/upload")
-    public Result<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("fileType") String fileType) {
+    public Result<?> upload(@RequestParam("file") MultipartFile file) {
         Map<String, Object> params = new HashMap<>();
         String storePath = userConfigStore.uploadTemplate(file);
         params.put("templatePath", storePath);

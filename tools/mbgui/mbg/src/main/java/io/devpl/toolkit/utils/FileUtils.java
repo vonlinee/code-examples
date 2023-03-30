@@ -65,7 +65,7 @@ public class FileUtils {
 
     /**
      * @param path 路径，指向一个文件，而不是目录
-     * @return
+     * @return 是否创建成功
      */
     public static boolean createFile(Path path) {
         if (!Files.exists(path) && createDirectoriesQuitely(path.getParent())) {
