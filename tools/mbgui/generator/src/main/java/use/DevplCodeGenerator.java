@@ -15,7 +15,6 @@ import java.util.*;
 
 /**
  * 基于模板的代码生成
- * 整合mybatis generator和mybatis-plus generator
  * mybatis-plus generator 3.5.2版本
  * 官方文档：<a href="https://github.com/baomidou/generator">...</a>
  */
@@ -27,15 +26,13 @@ public class DevplCodeGenerator {
      */
     private static final String outputRootDir = "D:\\Temp";
     // 父包配置
-    private static final String parentPackage = "";
+    private static final String parentPackage = "org.exmaple.test";
     // 要生成的表名列表
     private static final List<String> tableNamesToBeGenerated = new ArrayList<>();
 
     // 在此处填写要生成的表名
     private static void tableNamesToBeGenerated() {
-        tableNamesToBeGenerated.add("user_group");
-        tableNamesToBeGenerated.add("group_user");
-        tableNamesToBeGenerated.add("group_role");
+        tableNamesToBeGenerated.add("user");
     }
 
     public static void main(String[] args) throws IOException {
@@ -53,6 +50,7 @@ public class DevplCodeGenerator {
         String url = properties.getProperty("jdbc.url");
         String username = properties.getProperty("jdbc.username");
         String password = properties.getProperty("jdbc.password");
+        System.out.println(url);
         FastAutoGenerator.create(url, username, password).globalConfig(builder -> {
                     builder.author(author); // 设置作者名 baomidou 默认值:作者
                     builder.fileOverride();
@@ -76,12 +74,17 @@ public class DevplCodeGenerator {
                     pathInfoMap.put(OutputFile.serviceImpl, outputRootDir + "/service/impl");
                     builder.pathInfo(pathInfoMap); // 设置mapperXml生成路径
                 }).injectionConfig(builder -> {
-                    builder.beforeOutputFile((tableInfo, stringObjectMap) -> {
+                    // 每个表生成之前都会调用beforeOutputFile方法
+                    // 参数1:tableInfo，表信息
+                    // 参数2:所有的模板参数
+                    builder.beforeOutputFile((tableInfo, objectMap) -> {
                         System.out.println(tableInfo);
-                        System.out.println(stringObjectMap);
+                        objectMap.entrySet().forEach(entry -> {
+                            System.out.println(entry.getKey() + " " + entry.getValue());
+                        });
                     });
                 }).strategyConfig(builder -> {
-                    // builder.enableSkipView(); // 开启大写命名
+                    builder.enableSkipView(); // 开启大写命名
                     // builder.enableSchema(); // 启用 schema
                     builder.addTablePrefix("");
                     builder.addTableSuffix("");
