@@ -1,7 +1,6 @@
 package io.devpl.toolkit.mbp;
 
 import cn.hutool.core.util.StrUtil;
-import com.google.common.base.Strings;
 import io.devpl.toolkit.utils.StringUtils;
 import io.devpl.toolkit.utils.Utils;
 
@@ -17,7 +16,7 @@ public interface NameConverter {
      * @return 转换后的实体类名称
      */
     default String entityNameConvert(String tableName) {
-        if (StringUtils.isNullOrEmpty(tableName)) {
+        if (StringUtils.hasLength(tableName)) {
             return "";
         }
         tableName = tableName.substring(tableName.indexOf("_") + 1);
@@ -31,7 +30,7 @@ public interface NameConverter {
      * @return 转换的后属性名称
      */
     default String propertyNameConvert(String fieldName) {
-        if (StringUtils.isNullOrEmpty(fieldName)) {
+        if (StringUtils.hasLength(fieldName)) {
             return "";
         }
         if (fieldName.contains("_")) {

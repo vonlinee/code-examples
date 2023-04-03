@@ -1,4 +1,3 @@
-import 'codemirror/lib/codemirror.css'
 // require active-line.js
 import 'codemirror/addon/selection/active-line.js'
 // styleSelectedText
@@ -47,3 +46,5 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/monokai.css'
 import 'codemirror/theme/material.css';
 import 'codemirror/theme/base16-light.css'
+//光标行背景高亮，配置里面也需要styleActiveLine设置为true
+import 'codemirror/addon/selection/active-line';

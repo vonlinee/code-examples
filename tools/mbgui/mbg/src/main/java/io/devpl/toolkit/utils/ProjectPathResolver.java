@@ -66,7 +66,7 @@ public class ProjectPathResolver {
      * 将文件输出的包名转换为绝对路径
      */
     public String convertPackageToPath(String packageName) {
-        if (StringUtils.isNullOrEmpty(packageName)) {
+        if (StringUtils.hasLength(packageName)) {
             throw new BusinessException("包名为空");
         }
         boolean isResourceFile = false;

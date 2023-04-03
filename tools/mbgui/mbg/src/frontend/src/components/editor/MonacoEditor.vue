@@ -4,25 +4,11 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.main';
 
 export default {
     name: 'MonacoEditor',
-    components: {},
     props: {
-        // Monaco Editor 绑定的容器ID
-        container: {
-            type: String,
-            require: true
-        },
-        // 编辑器支持的文本格式,自行在百度上搜索
-        languages: {
-            type: String,
-            default: 'json',
-        },
-        width: {type: String, default: "500px"},
-        height: {type: String, default: "500px"},
-        // 名称
-        name: {
-            type: String,
-            default: 'test',
-        },
+        container: {type: String, require: true},   // Monaco Editor 绑定的容器ID
+        languages: {type: String, default: 'json'},
+        width: {type: String, require: false},
+        height: {type: String, require: false},
         editorOptions: {
             type: Object,
             default: function () {
@@ -56,15 +42,12 @@ export default {
         };
     },
     render(createElement) {
-        // console.log("render ==============================")
         return createElement('div', {
             attrs: {
                 id: this.container
             },
             style: {
-                width: this.width,
-                height: this.height,
-                backgroundColor: "gray"
+                // backgroundColor: "gray"
             }
         })
     },

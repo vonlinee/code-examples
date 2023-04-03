@@ -14,12 +14,14 @@ import java.util.Set;
 @RequestMapping("/api/ac")
 public class AutoCompleteController {
 
-    @Resource
-    private AutoCompleteService autoCompleteService;
-
+    /**
+     * 获取MyBatis XML映射文件名称
+     * @param mapperLocationPrefix
+     * @param searchKey
+     * @return
+     */
     @GetMapping("/mapperxml")
     public Result<?> getAllMapperXmlNames(String mapperLocationPrefix, String searchKey) {
-        Set<String> hits = autoCompleteService.searchXmlMapperName(mapperLocationPrefix, searchKey);
-        return Results.of(hits);
+        return Results.of(Set.of("mapping"));
     }
 }

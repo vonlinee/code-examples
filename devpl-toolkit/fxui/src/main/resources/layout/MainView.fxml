@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.devpl.tookit.fxui.view.navigation.impl.DBTreeView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
 <BorderPane
         stylesheets="@../static/css/global_style.css"
         prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11"
@@ -15,7 +13,7 @@
     <top>
         <ToolBar BorderPane.alignment="CENTER">
             <Label contentDisplay="TOP" text="数据库连接管理"
-                   onMouseClicked="#showConnectinManagePane">
+                   onMouseClicked="#showConnectionManagePane">
                 <cursor>
                     <Cursor fx:constant="HAND"/>
                 </cursor>
@@ -31,13 +29,15 @@
         </ToolBar>
     </top>
     <center>
-
             <TabPane fx:id="tabpContainer">
                 <Tab fx:id="tabMbg" closable="false" text="代码生成">
                     <fx:include source="mbg/MyBatisCodeGenerationView.fxml"/>
                 </Tab>
                 <Tab closable="false" text="类编辑">
                     <fx:include source="../layout/class_definition.fxml"/>
+                </Tab>
+                <Tab closable="false" text="模板管理">
+                    <fx:include source="../layout/template/template_manage.fxml"/>
                 </Tab>
             </TabPane>
     </center>

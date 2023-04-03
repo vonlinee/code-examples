@@ -21,7 +21,7 @@ public class DbQueryHolder {
     }
 
     /**
-     * 先查找本地是否有自定义的query实现，没有的话再去找mp内置的dbquery
+     * 先查找本地是否有自定义的query实现，没有的话再去找mp内置的DbQuery实现
      */
     public IDbQuery getDbQuery(DbType dbType) {
         IDbQuery dbQuery = dbQueryMap.get(dbType);

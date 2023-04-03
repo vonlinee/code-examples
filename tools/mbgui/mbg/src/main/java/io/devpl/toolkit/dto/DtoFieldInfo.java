@@ -3,11 +3,10 @@ package io.devpl.toolkit.dto;
 import cn.hutool.core.util.StrUtil;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
+import io.devpl.toolkit.utils.StringUtils;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -40,9 +39,8 @@ public class DtoFieldInfo {
     }
 
     public void addImportJavaType(String type) {
-        if (!Strings.isNullOrEmpty(type)) {
+        if (!StringUtils.hasLength(type)) {
             importJavaTypes.add(type);
         }
     }
-
 }

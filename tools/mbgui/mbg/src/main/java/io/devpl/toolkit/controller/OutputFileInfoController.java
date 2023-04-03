@@ -41,7 +41,7 @@ public class OutputFileInfoController {
     /**
      * 保存输出文件信息
      *
-     * @param outputFileInfo
+     * @param outputFileInfo 输出文件信息
      * @return
      * @throws IOException
      */
@@ -51,6 +51,12 @@ public class OutputFileInfoController {
         return Results.of();
     }
 
+    /**
+     * 保存实体策略
+     *
+     * @param entityStrategy 实体策略
+     * @throws IOException
+     */
     @PostMapping("/save-entity-strategy")
     public Result<Void> saveEntityStrategy(@RequestBody EntityStrategy entityStrategy) throws IOException {
         outputFileInfoService.saveEntityStrategy(entityStrategy);
@@ -63,6 +69,13 @@ public class OutputFileInfoController {
         return Results.of();
     }
 
+    /**
+     * 保存策略 XML文件生成策略
+     *
+     * @param mapperXmlStrategy
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/save-mapper-xml-strategy")
     public Result<Void> saveMapperXmlStrategy(@RequestBody MapperXmlStrategy mapperXmlStrategy) throws IOException {
         outputFileInfoService.saveMapperXmlStrategy(mapperXmlStrategy);

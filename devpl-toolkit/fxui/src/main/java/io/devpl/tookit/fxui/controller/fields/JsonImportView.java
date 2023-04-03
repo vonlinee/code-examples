@@ -11,6 +11,7 @@ import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.tookit.editor.CodeEditor;
 import io.devpl.tookit.fxui.model.FieldSpec;
 import io.devpl.tookit.fxui.view.json.JSONTreeView;
+import io.devpl.tookit.utils.FileUtils;
 import io.devpl.tookit.utils.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,6 +25,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.*;
 
 @FxmlLocation(location = "layout/fields/ImportFieldsJSONView.fxml")
@@ -124,24 +126,21 @@ public class JsonImportView extends FxmlView {
         stage.show();
     }
 
+    FileChooser fileChooser = new FileChooser();
+
     /**
      * 选择JSON文件
      *
-     * @param actionEvent
+     * @param actionEvent 事件
      */
     @FXML
     public void chooseJsonFile(ActionEvent actionEvent) {
-        FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + File.separator + "Desktop"));
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("json", ".json"));
         File file = fileChooser.showOpenDialog(getStage(actionEvent));
         if (file != null) {
-            try (JsonReader reader = gson.newJsonReader(new FileReader(file))) {
-                JsonElement element = gson.fromJson(reader, JsonElement.class);
-                jsonTreeView.addRootJson(element);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            content.clear();
+            content.appendText(FileUtils.readToString(file));
         }
     }
 }

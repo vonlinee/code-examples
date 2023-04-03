@@ -1,71 +1,45 @@
-<!--封装VueCodeMirror编辑器 官方文档：https://codemirror.net/5/doc/manual.html#config  -->
 <template>
-  <div>
-    <codemirror
-        id="cm-container"
-        ref="cm"
-        v-model="code"
-        :options="cmOptions"
-        @input="inputChange"
-    ></codemirror>
-  </div>
+    <codemirror class="code" v-model="code" :options="cmOptions"></codemirror>
 </template>
+
 <script>
-
-import "./settings"
 import {codemirror} from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/keymap/sublime' //sublime编辑器效果
+import "codemirror/theme/eclipse.css"// 配置里面也需要theme设置相应的主题
+import "codemirror/mode/vue/vue.js" // 配置里面也需要mode设置为vue
+import 'codemirror/addon/selection/active-line' //光标行背景高亮，配置里面也需要styleActiveLine设置为true
 
-import 'codemirror/addon/selection/active-line'; //光标行背景高亮，配置里面也需要styleActiveLine设置为true
+// 引入自动刷新  https://blog.csdn.net/yanmuchen/article/details/121930754
+import 'codemirror/addon/display/autorefresh'
 
 export default {
-  name: 'CodeMirrorEditor',
-  components: {
-    codemirror,
-  },
-  props: {
-    'mode': {
-      type: String,
-      default: 'javascript',
+    name: "CodeMirrorEditor",
+    components: {
+        codemirror
     },
-  },
-  data() {
-    return {
-      code: 'select a from t where b = 1',
-      cmOptions: {
-        mode: this.mode, // 语言及语法模式
-        theme: 'eclipse', // 主题
-        line: true, // 显示函数
-        indentUnit: 4, // 缩进多少个空格
-        tabSize: 4, // 制表符宽度
-        lineNumbers: true, // 是否显示行号
-        lineWrapping: true, // 是否默认换行
-        firstLineNumber: 1, // 在哪个数字开始计数行。默认值为1
-        readOnly: false, // 禁止用户编辑编辑器内容
-        smartIndent: true // 智能缩进
-      },
-    };
-  },
-  methods: {
-    inputChange(content) {
-      this.$nextTick(() => {
-        this.code = content; // 更新文本
-      });
-    },
-    getContent() {
-      return this.code;
-    },
-  },
-  mounted() {
-
-  }
-};
+    data() {
+        return {
+            // 代码
+            code: "",
+            cmOptions: {
+                tabSize: 4,// tab的空格个数
+                theme: 'eclipse',//主题样式
+                lineNumbers: true,//是否显示行数
+                lineWrapping: true, //是否自动换行
+                styleActiveLine: true,//line选择是是否加亮
+                matchBrackets: true,//括号匹配
+                mode: "vue", //实现javascript代码高亮
+                readOnly: false//只读
+            }
+        }
+    }
+}
 </script>
 
-<style scoped>
-.CodeMirror * {
-  font-family: cursive;
-  font-size: 11px;
-  width: 500px;
-  height: 500px;
+<style lang="scss">
+
+.CodeMirror {
+  height: 100%;
 }
 </style>

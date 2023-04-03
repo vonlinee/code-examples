@@ -77,5 +77,4 @@ public class EntityStrategy {
      * 开启 swagger2 支持
      */
     private boolean swagger2 = false;
-
 }

@@ -37,9 +37,6 @@ const api = {
     saveOutputFileInfo(val) {
         return postJson("/api/output-file-info/save", val)
     },
-    downloadTemplate() {
-
-    },
     startCodeGeneration(param) {
         return postJson("/api/mbpg/codegen", param)
     },
@@ -57,6 +54,15 @@ const api = {
     },
     getUserConfig() {
         return get("/api/output-file-info/user-config")
+    },
+    getFileInfoList() {
+        return get("/api/output-file-info/user-config")
+    },
+    deleteFileInfo() {
+        return post("/api/output-file-info/delete", fileInfo)
+    },
+    downloadTemplate(param) {
+        return get("/api/template/download", param)
     }
 }
 // 挂载到Vue全局实例上

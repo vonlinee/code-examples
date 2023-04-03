@@ -130,16 +130,13 @@ public class MyBatisCodeGenerationView extends FxmlView {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         btnLoadConfig.setOnAction(event -> StageManager.show(ProjectConfigurationView.class));
-        cboxConnection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                ConnectionInfo cf = ConnectionRegistry.getConnectionConfiguration(newValue);
-                try (Connection connection = cf.getConnection()) {
-                    List<String> databaseNames = DBUtils.getDatabaseNames(connection);
-                    cboxDatabase.getItems().addAll(databaseNames);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+        cboxConnection.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            ConnectionInfo cf = ConnectionRegistry.getConnectionConfiguration(newValue);
+            try (Connection connection = cf.getConnection()) {
+                List<String> databaseNames = DBUtils.getDatabaseNames(connection);
+                cboxDatabase.getItems().addAll(databaseNames);
+            } catch (SQLException e) {
+                log.error("连接失败{} ", newValue);
             }
         });
         cboxDatabase.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {

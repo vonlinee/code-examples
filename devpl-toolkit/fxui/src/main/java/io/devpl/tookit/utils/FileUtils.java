@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class FileUtils {
     /**
      * Converts an array of file extensions to suffixes for use
      * with IOFileFilters.
+     *
      * @param extensions an array of extensions. Format: {"java", "xml"}
      * @return an array of suffixes. Format: {".java", ".xml"}
      */
@@ -95,6 +97,7 @@ public class FileUtils {
      * not a directory then an IOException is thrown.
      * If the directory cannot be created (or the file already exists but is not a directory)
      * then an IOException is thrown.
+     *
      * @param directory directory to create, must not be {@code null}.
      * @throws IOException       if the directory was not created along with all its parent directories.
      * @throws IOException       if the given file object is not a directory.
@@ -127,6 +130,7 @@ public class FileUtils {
 
     /**
      * Calls {@link File#mkdirs()} and throws an exception on failure.
+     *
      * @param directory the receiver for {@code mkdirs()}, may be null.
      * @return the given file, may be null.
      * @throws IOException       if the directory was not created along with all its parent directories.
@@ -143,6 +147,7 @@ public class FileUtils {
 
     /**
      * 删除目录
+     *
      * @param file
      */
     public static void delete(File file) {
@@ -151,6 +156,7 @@ public class FileUtils {
 
     /**
      * Cleans a directory without deleting it.
+     *
      * @param directory directory to clean
      * @throws NullPointerException     if the given {@code File} is {@code null}.
      * @throws IllegalArgumentException if directory does not exist or is not a directory.
@@ -184,6 +190,7 @@ public class FileUtils {
      * <li>The directory does not have to be empty.</li>
      * <li>You get an exception when a file or directory cannot be deleted.</li>
      * </ul>
+     *
      * @param file file or directory to delete, must not be {@code null}.
      * @throws NullPointerException  if the file is {@code null}.
      * @throws FileNotFoundException if the file was not found.
@@ -218,6 +225,7 @@ public class FileUtils {
 
     /**
      * Requires that the given {@code File} exists and is a directory.
+     *
      * @param directory The {@code File} to check.
      * @param name      The parameter name to use in the exception message in case of null input.
      * @return the given directory.
@@ -232,6 +240,7 @@ public class FileUtils {
 
     /**
      * Requires that the given {@code File} exists and throws an {@link IllegalArgumentException} if it doesn't.
+     *
      * @param file          The {@code File} to check.
      * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
      * @return the given file.
@@ -248,6 +257,7 @@ public class FileUtils {
 
     /**
      * Requires that the given {@code File} is a directory.
+     *
      * @param directory The {@code File} to check.
      * @param name      The parameter name to use in the exception message in case of null input or if the file is not a directory.
      * @return the given directory.
@@ -260,5 +270,13 @@ public class FileUtils {
             throw new IllegalArgumentException("Parameter '" + name + "' is not a directory: '" + directory + "'");
         }
         return directory;
+    }
+
+    public static String readToString(File file) {
+        try {
+            return Files.readString(file.toPath());
+        } catch (IOException e) {
+            return "";
+        }
     }
 }

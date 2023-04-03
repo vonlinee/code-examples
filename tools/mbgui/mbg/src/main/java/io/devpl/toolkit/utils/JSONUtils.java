@@ -50,7 +50,7 @@ public class JSONUtils {
     }
 
     public static String extractContent(String content, String path) throws JsonProcessingException {
-        if (!StringUtils.isNullOrEmpty(path)) {
+        if (!StringUtils.hasLength(path)) {
             JsonNode node = mapper.readTree(content);
             String[] pathes = path.split("\\.");
             for (String p : pathes) {

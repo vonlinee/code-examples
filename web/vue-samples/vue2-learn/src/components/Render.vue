@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-
+  <div></div>
 </template>
 
 <script>
@@ -8,13 +8,14 @@
 //例如：import 《组件名称》 from '《组件路径》';
 export default {
   //import引入的组件需要注入到对象中才能使用
+  name: 'RenderComp',
   components: {},
   data() {
     //这里存放数据
     return {};
   },
   render(createElement) {
-    createElement('h1', {}, 'Hello ')
+    return createElement('h1', {}, 'Hello ')
   }
 };
 </script>

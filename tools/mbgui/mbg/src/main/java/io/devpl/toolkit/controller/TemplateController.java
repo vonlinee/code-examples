@@ -10,17 +10,22 @@ import io.devpl.toolkit.utils.StringUtils;
 import io.devpl.toolkit.utils.TemplateUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 模板管理控制器
+ */
 @Slf4j
 @AllArgsConstructor
 @RestController
@@ -32,18 +37,19 @@ public class TemplateController {
     /**
      * 下载模板
      *
-     * @param res
-     * @param fileType
+     * @param res      HttpServletResponse
+     * @param fileType 文件类型
      * @throws IOException
      */
     @GetMapping("/download")
     public void download(HttpServletResponse res, @RequestParam String fileType) throws IOException {
-        if (StringUtils.isNullOrEmpty(fileType)) {
+        if (!StringUtils.hasLength(fileType)) {
             log.error("fileType不能为空");
             return;
         }
         UserConfig userConfig = userConfigStore.getUserConfigFromFile();
         if (userConfig == null) {
+            // 获取配置失败
             InputStream tplIn = TemplateUtil.getBuiltInTemplate(fileType);
             download(res, tplIn);
             return;
@@ -51,8 +57,7 @@ public class TemplateController {
         List<OutputFileInfo> fileInfos = userConfig.getOutputFiles();
         for (OutputFileInfo fileInfo : fileInfos) {
             if (fileType.equals(fileInfo.getFileType())) {
-                if (fileInfo.isBuiltIn()
-                        && StringUtils.isNullOrEmpty(fileInfo.getTemplatePath())) {
+                if (fileInfo.isBuiltin() && StringUtils.hasLength(fileInfo.getTemplatePath())) {
                     InputStream tplIn = TemplateUtil.getBuiltInTemplate(fileType);
                     download(res, tplIn);
                 } else {
@@ -75,7 +80,7 @@ public class TemplateController {
     /**
      * 模板文件上传
      *
-     * @param file     模板文件
+     * @param file 模板文件
      * @return 结果
      */
     @PostMapping("/upload")
@@ -91,7 +96,7 @@ public class TemplateController {
      * 下载文件
      *
      * @param res   HttpServletResponse
-     * @param tplIn
+     * @param tplIn 模板输入流
      */
     private void download(HttpServletResponse res, InputStream tplIn) {
         if (tplIn != null) {

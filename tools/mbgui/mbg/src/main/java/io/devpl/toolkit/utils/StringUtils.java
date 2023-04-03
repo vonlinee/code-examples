@@ -16,11 +16,17 @@ public final class StringUtils {
     private StringUtils() {
     }
 
-    public static boolean isNullOrEmpty(@CheckForNull String string) {
-        return string == null || string.isEmpty();
+    /**
+     * 字符串是否有长度，不为null且长度大于0
+     *
+     * @param string 字符串
+     * @return 是否有长度
+     */
+    public static boolean hasLength(String string) {
+        return string != null && !string.isEmpty();
     }
 
-    public static boolean hasText(@Nullable String string) {
+    public static boolean hasText(String string) {
         return org.springframework.util.StringUtils.hasText(string);
     }
 

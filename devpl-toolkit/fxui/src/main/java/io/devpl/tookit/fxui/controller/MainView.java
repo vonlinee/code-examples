@@ -28,10 +28,6 @@ import java.util.ResourceBundle;
 public class MainView extends FxmlView {
 
     @FXML
-    public TextField txfFilter;
-    @FXML
-    public DBTreeView trvDbNavigation;
-    @FXML
     public Tab tabMbg;
     @FXML
     public TabPane tabpContainer;
@@ -43,7 +39,7 @@ public class MainView extends FxmlView {
     }
 
     @FXML
-    public void showConnectinManagePane(MouseEvent mouseEvent) {
+    public void showConnectionManagePane(MouseEvent mouseEvent) {
         StageManager.show(ConnectionManageController.class);
     }
 

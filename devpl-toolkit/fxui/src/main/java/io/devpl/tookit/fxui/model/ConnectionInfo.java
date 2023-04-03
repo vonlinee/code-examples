@@ -47,12 +47,14 @@ public class ConnectionInfo {
     }
 
     public String getConnectionUrl(String databaseName) {
-        JDBCDriver driver = JDBCDriver.valueOf(dbType);
+        JDBCDriver driver = JDBCDriver.valueOfDriverName(dbType);
+        assert driver != null;
         return driver.getConnectionUrl(host, port, databaseName, properties);
     }
 
     public String getConnectionUrl(String databaseName, Properties properties) {
-        JDBCDriver driver = JDBCDriver.valueOf(dbType);
+        JDBCDriver driver = JDBCDriver.valueOfDriverName(dbType);
+        assert driver != null;
         return driver.getConnectionUrl(host, port, databaseName, properties);
     }
 

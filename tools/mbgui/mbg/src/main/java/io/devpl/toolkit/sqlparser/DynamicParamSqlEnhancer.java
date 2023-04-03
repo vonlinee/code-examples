@@ -30,7 +30,7 @@ public class DynamicParamSqlEnhancer {
      * @param sql
      * @return
      */
-    public List<ConditionExpr> parseSqlDynamicConditions(String sql) {
+    public List<ConditionExpression> parseSqlDynamicConditions(String sql) {
         if (Strings.isNullOrEmpty(sql)) {
             throw new BusinessException("sql不能为空");
         }
@@ -55,8 +55,8 @@ public class DynamicParamSqlEnhancer {
      * 将SQL中标记的动态条件替换为Mybatis动态SQL
      */
     public String enhanceDynamicConditions(String sql) {
-        List<ConditionExpr> conditions = parseSqlDynamicConditions(sql);
-        for (ConditionExpr condition : conditions) {
+        List<ConditionExpression> conditions = parseSqlDynamicConditions(sql);
+        for (ConditionExpression condition : conditions) {
             Pattern pattern = Pattern.compile(condition.getFindPattern(), Pattern.CASE_INSENSITIVE);
             sql = ReUtil.replaceAll(sql, pattern, toDynamicSql(condition));
         }
@@ -67,8 +67,8 @@ public class DynamicParamSqlEnhancer {
      * 去掉SQL中不符合语法的动态条件
      */
     public String clearIllegalStatements(String sql) {
-        List<ConditionExpr> conditions = parseSqlDynamicConditions(sql);
-        for (ConditionExpr condition : conditions) {
+        List<ConditionExpression> conditions = parseSqlDynamicConditions(sql);
+        for (ConditionExpression condition : conditions) {
             if ("in".equalsIgnoreCase(condition.getOperator())) {
                 Pattern pattern = Pattern.compile(condition.getFindPattern(), Pattern.CASE_INSENSITIVE);
                 String replaceStr = " " + condition.getLogicOperator() + " " + condition.getLeftExpr() + " in ('')";
@@ -78,7 +78,7 @@ public class DynamicParamSqlEnhancer {
         return sql;
     }
 
-    public String toDynamicSql(ConditionExpr condition) {
+    public String toDynamicSql(ConditionExpression condition) {
         StringBuilder tmp = new StringBuilder();
         if (Strings.isNullOrEmpty(condition.getLogicOperator())) {
             tmp.append(" 1=1 ");

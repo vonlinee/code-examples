@@ -57,7 +57,7 @@ public class MBPGBridge {
      */
     public void doGenerate(GenSetting genSetting, List<String> tables) {
         projectPathResolver.refreshBaseProjectPath(genSetting.getRootPath());
-        BeetlTemplateEngine beetlTemplateEngine = new BeetlTemplateEngine(nameConverter, userConfigStore.getTemplateStoreDir());
+        BeetlTemplateEngine beetlTemplateEngine = new BeetlTemplateEngine(userConfigStore.getTemplateStoreDir());
         JdbcConnInfo connInfo = connConfigService.getOne(new LambdaQueryWrapper<JdbcConnInfo>().eq(JdbcConnInfo::getName, genSetting.getConnectionName()));
         if (connInfo == null) {
             throw new RuntimeException("连接不存在");
@@ -227,7 +227,7 @@ public class MBPGBridge {
         });
         // 自定义文件生成
         for (OutputFileInfo outputFileInfo : userConfig.getOutputFiles()) {
-            if (!outputFileInfo.isBuiltIn() && genSetting.getChoosedOutputFiles()
+            if (!outputFileInfo.isBuiltin() && genSetting.getChoosedOutputFiles()
                     .contains(outputFileInfo.getFileType())) {
                 CustomFile.Builder fileBuilder = new CustomFile.Builder();
                 // 注意这里传入的是fileType,配合自定义的TemplateEngine.outputCustomFile生成自定义文件

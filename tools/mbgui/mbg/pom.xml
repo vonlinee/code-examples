@@ -26,7 +26,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.9</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -92,18 +92,8 @@
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-            <version>${mybatis-plus.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-annotation</artifactId>
             <version>${mybatis-plus.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -148,11 +138,6 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.30</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
         <dependency>
             <groupId>org.jetbrains</groupId>
@@ -164,6 +149,17 @@
             <artifactId>ST4</artifactId>
             <version>4.3.4</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.devpl</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.2.16</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -174,6 +170,9 @@
                     <include>**/*.json</include>
                     <include>**/*.stg</include>
                     <include>**/*.vm</include>
+                    <include>**/*.properties</include>
+                    <!--mybatis xml-->
+                    <include>**/*.xml</include>
                 </includes>
             </resource>
         </resources>

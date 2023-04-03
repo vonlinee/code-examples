@@ -3,3 +3,4 @@
 2.Ace
 3.Monaco
 
+暂时先使用codemirror

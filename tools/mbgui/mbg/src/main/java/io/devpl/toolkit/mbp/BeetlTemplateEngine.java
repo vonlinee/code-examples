@@ -14,6 +14,7 @@ import org.beetl.core.resource.ClasspathResourceLoader;
 import org.beetl.core.resource.CompositeResourceLoader;
 import org.beetl.core.resource.FileResourceLoader;
 import org.beetl.core.resource.StartsWithMatcher;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.io.ByteArrayOutputStream;
@@ -36,13 +37,10 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
 
     private final String templateStoreDir;
 
-    private final NameConverter nameConverter;
-
     ClasspathResourceLoader classpathResourceLoader = new ClasspathResourceLoader(this.getClass().getClassLoader());
 
-    public BeetlTemplateEngine(NameConverter nameConverter, String templateStoreDir) {
+    public BeetlTemplateEngine(String templateStoreDir) {
         this.templateStoreDir = templateStoreDir;
-        this.nameConverter = nameConverter;
         try {
             log.info("模板根目录为：" + templateStoreDir);
             FileResourceLoader fileResourceLoader = new FileResourceLoader(templateStoreDir);
@@ -56,7 +54,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public void writer(@Nonnull Map<String, Object> objectMap, String templatePath, @Nonnull File outputFile) throws Exception {
+    public void merge(@Nonnull Map<String, Object> objectMap, String templatePath, @Nonnull File outputFile) throws Exception {
         if (templatePath.startsWith("file:")) {
             templatePath = templatePath.replace(templateStoreDir, "");
         }
@@ -108,7 +106,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
                 filePath = filePath.replaceAll("\\.", "\\" + File.separator);
             }
             log.info("entityName {}", entityName);
-            String fileName = filePath + File.separator + nameConverter.customFileNameConvert(file.getFileName(), entityName);
+            String fileName = filePath + File.separator + file.getFileName();
             outputFile(new File(fileName), objectMap, file.getTemplatePath(), file.isFileOverride());
         });
     }

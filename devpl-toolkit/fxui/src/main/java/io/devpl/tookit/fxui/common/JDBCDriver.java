@@ -102,7 +102,7 @@ public enum JDBCDriver {
 
     public static JDBCDriver valueOfDriverName(String driverName) {
         try {
-            return JDBCDriver.valueOf(driverName);
+            return JDBCDriver.valueOf(driverName.toUpperCase());
         } catch (Exception exception) {
             return null;
         }

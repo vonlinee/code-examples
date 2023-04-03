@@ -79,8 +79,4 @@ public class JdbcConnInfo implements Serializable {
      */
     @TableField(value = "encoding")
     private String encoding;
-
-    private java.time.LocalDateTime createTime;
-
-    private List<String> names;
 }

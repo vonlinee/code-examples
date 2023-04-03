@@ -35,7 +35,7 @@ import {codemirror} from 'vue-codemirror';
 import 'codemirror/mode/sql/sql.js';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/solarized.css';
-import HelpTip from '../../../../src/components/HelpTip.vue';
+import HelpTip from '@/components/HelpTip.vue';
 import {Base64} from 'js-base64';
 import DtoStrategyForm from '~/components/DtoStrategyForm';
 import DynamicSqlDemo from '~/components/DynamicSqlDemo';

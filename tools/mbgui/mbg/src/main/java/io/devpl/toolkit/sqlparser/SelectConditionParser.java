@@ -14,7 +14,7 @@ public class SelectConditionParser implements SelectVisitor, FromItemVisitor {
 
     private WhereParser whereConditionParser = new WhereParser();
 
-    public List<ConditionExpr> getParsedConditions() {
+    public List<ConditionExpression> getParsedConditions() {
         return whereConditionParser.getConditions();
     }
 

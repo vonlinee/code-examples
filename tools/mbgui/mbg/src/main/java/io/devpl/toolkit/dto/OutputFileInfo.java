@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Strings;
 import io.devpl.toolkit.utils.StringUtils;
-import lombok.Data;
 
 import static io.devpl.toolkit.dto.Constant.*;
 
@@ -16,7 +15,7 @@ public class OutputFileInfo {
     }
 
     public OutputFileInfo(boolean builtIn) {
-        this.builtIn = builtIn;
+        this.builtin = builtIn;
     }
 
     private String fileType;
@@ -33,10 +32,10 @@ public class OutputFileInfo {
     /**
      * 是否是系统内置的文件信息
      */
-    private boolean builtIn;
+    private boolean builtin;
 
     public String getOutputPackage() {
-        if (StringUtils.isNullOrEmpty(outputLocation)) {
+        if (StringUtils.hasLength(outputLocation)) {
             return "";
         }
         if (outputLocation.startsWith(PACKAGE_RESOURCES_PREFIX)) {
@@ -101,12 +100,12 @@ public class OutputFileInfo {
         this.templatePath = templatePath;
     }
 
-    public boolean isBuiltIn() {
-        return builtIn;
+    public boolean isBuiltin() {
+        return builtin;
     }
 
-    public void setBuiltIn(boolean builtIn) {
-        this.builtIn = builtIn;
+    public void setBuiltin(boolean builtin) {
+        this.builtin = builtin;
     }
 
     @Override

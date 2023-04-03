@@ -1,6 +1,6 @@
 import cn.hutool.core.util.ReUtil;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import io.devpl.toolkit.sqlparser.ConditionExpr;
+import io.devpl.toolkit.sqlparser.ConditionExpression;
 import io.devpl.toolkit.sqlparser.DynamicParamSqlEnhancer;
 import com.google.common.collect.Lists;
 import org.assertj.core.api.Assertions;
@@ -51,7 +51,7 @@ public class TestSqlParser {
                 "        AND creator =    '#{creator}'\n" +
                 "        AND confirm_time BETWEEN '#{startTime}' AND  '#{endTime}'";
         System.out.println(sql);
-        List<ConditionExpr> conditions = enhancer.parseSqlDynamicConditions(sql);
+        List<ConditionExpression> conditions = enhancer.parseSqlDynamicConditions(sql);
         Assertions.assertThat(conditions.size()).isEqualTo(5);
         List<String> dParams = Lists.newArrayList();
         conditions.forEach((condition) -> {
@@ -70,7 +70,7 @@ public class TestSqlParser {
         DataSourceConfig dsc = new DataSourceConfig.Builder("jdbc:mysql://localhost:3306/test", "", "")
                 .build();
         DynamicParamSqlEnhancer enhancer = new DynamicParamSqlEnhancer(dsc.getDbType());
-        List<ConditionExpr> conditions = enhancer.parseSqlDynamicConditions(sql);
+        List<ConditionExpression> conditions = enhancer.parseSqlDynamicConditions(sql);
         conditions.forEach((condition) -> {
             String dynamicSql = enhancer.toDynamicSql(condition).trim();
             System.out.println(dynamicSql);

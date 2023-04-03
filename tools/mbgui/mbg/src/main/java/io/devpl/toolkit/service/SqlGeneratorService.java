@@ -21,8 +21,9 @@ import com.google.common.collect.Sets;
 import io.devpl.toolkit.common.BusinessException;
 import io.devpl.toolkit.dto.*;
 import io.devpl.toolkit.mbp.BeetlTemplateEngine;
-import io.devpl.toolkit.sqlparser.ConditionExpr;
+import io.devpl.toolkit.sqlparser.ConditionExpression;
 import io.devpl.toolkit.sqlparser.DynamicParamSqlEnhancer;
+import io.devpl.toolkit.utils.FileUtils;
 import io.devpl.toolkit.utils.PathUtils;
 import io.devpl.toolkit.utils.ProjectPathResolver;
 import io.devpl.toolkit.utils.StringUtils;
@@ -36,22 +37,23 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static io.devpl.toolkit.dto.Constant.DOT_JAVA;
 import static io.devpl.toolkit.dto.Constant.DOT_XML;
 
+/**
+ * SQL代码生成
+ */
 @Slf4j
 @Service
 public class SqlGeneratorService {
 
-    final Base64.Decoder decoder = Base64.getDecoder();
-
     @Resource
     private JdbcTemplate jdbcTemplate;
 
-    private BeetlTemplateEngine beetlTemplateEngine;
+    private final BeetlTemplateEngine beetlTemplateEngine = new BeetlTemplateEngine("");
+
     private final ProjectPathResolver projectPathResolver = new ProjectPathResolver("com.example");
     @Resource
     private MapperXmlParser mapperXmlParser;
@@ -62,36 +64,22 @@ public class SqlGeneratorService {
 
     private final List<String> rangeOperators = Lists.newArrayList("BETWEEN", "<", "<=", ">", ">=");
 
-    public void genMapperMethod(GenDtoFromSqlReq params) throws Exception {
-        if (Strings.isNullOrEmpty(params.getSql())) {
-            throw new BusinessException("数据源SQL不能为空");
+    public void genMapperMethod(String sql, GenConfigDTO config) throws Exception {
+        if (config.isAutoCreatedResultDto()) {
+            genDtoFileFromSQL(sql, config);
         }
-        String decodedSql = new String(decoder.decode(params.getSql()), StandardCharsets.UTF_8);
-        if (!decodedSql.trim().toLowerCase().startsWith("select")) {
-            throw new BusinessException("只能通过查询语句生成DTO对象，请检查SQL");
-        }
-        if (!StringUtils.isNullOrEmpty(params.getConfig().getFullPackage())) {
-            try {
-                Class.forName(params.getConfig().getFullPackage());
-            } catch (Throwable t) {
-                params.getConfig().setAutoCreatedResultDto(true);
-            }
-        }
-        if (params.getConfig().isAutoCreatedResultDto()) {
-            genDtoFileFromSQL(decodedSql, params.getConfig());
-        }
-        String namespace = genMapperElementsFromSql(decodedSql, params.getConfig());
+        String namespace = genMapperElementsFromSql(sql, config);
         // 在Dao中插入与Mapper节点对应的方法
-        if (params.getConfig().getEnableCreateDaoMethod()) {
-            if ("bean".equals(params.getConfig().getDaoMethodParamType())) {
-                genParamDtoFromSql(decodedSql, params.getConfig().getDaoMethodParamDto(), params.getConfig()
+        if (config.getEnableCreateDaoMethod()) {
+            if ("bean".equals(config.getDaoMethodParamType())) {
+                genParamDtoFromSql(sql, config.getDaoMethodParamDto(), config
                         .isEnableLombok());
             }
-            addDaoMethod(namespace, decodedSql, params.getConfig());
+            addDaoMethod(namespace, sql, config);
         }
     }
 
-    public void genDtoFileFromSQL(String sql, GenDtoConfig config) throws Exception {
+    public void genDtoFileFromSQL(String sql, GenConfigDTO config) throws Exception {
         sql = dynamicParamSqlEnhancer.clearIllegalStatements(sql);
         SqlRowSet rowSet;
         try {
@@ -119,8 +107,8 @@ public class SqlGeneratorService {
             }
             IColumnType columnType = typeConvert.processTypeConvert(gc, metaData.getColumnTypeName(i));
             resultField.setShortJavaType(columnType.getType());
-            if (!Strings.isNullOrEmpty(columnType.getPkg())) {
-                config.getImportPackages().add(columnType.getPkg());
+            if (!Strings.isNullOrEmpty(columnType.getQualifiedTypeName())) {
+                config.getImportPackages().add(columnType.getQualifiedTypeName());
             }
             resultField.setPropertyName(StringUtils.toCamelCase(resultField.getColumnName()));
             fields.add(resultField);
@@ -135,8 +123,29 @@ public class SqlGeneratorService {
         genDtoFromConfig(config);
     }
 
-    public String genMapperElementsFromSql(String sql, GenDtoConfig config) throws IOException, DocumentException {
-        List<MapperElement> elements = Lists.newArrayList();
+
+    public static void main(String[] args) throws DocumentException, IOException {
+        SqlGeneratorService ser = new SqlGeneratorService();
+
+        String sql = "SELECT \n" +
+                "    *\n" +
+                "FROM\n" +
+                "    t_order t\n" +
+                "        LEFT JOIN\n" +
+                "    t_order_good t1 ON t.id = t1.order_id\n" +
+                "WHERE\n" +
+                "    t.order_code = '#{orderCode}'\n" +
+                "        AND t.city LIKE '#{city}'\n" +
+                "        AND t.customer_id IN '#{customerIds}'\n" +
+                "        AND t.creator = '#{creator}'\n" +
+                "        AND t.confirm_time BETWEEN '#{startTime}' AND '#{endTime}'";
+
+        GenConfigDTO genConfigDTO = new GenConfigDTO();
+        ser.genMapperElementsFromSql(sql, genConfigDTO);
+    }
+
+    public String genMapperElementsFromSql(String sql, GenConfigDTO config) throws IOException, DocumentException {
+        List<MapperElement> elements = new ArrayList<>();
         // 如果DTO是自动生成的，那么同时也生成结果映射集
         if (config.getResultMap() != null) {
             elements.add(createResultMapElement(config));
@@ -148,19 +157,25 @@ public class SqlGeneratorService {
         return namespace;
     }
 
-    public MapperElement createResultMapElement(GenDtoConfig config) {
-        Map<String, Object> tplParams = Maps.newHashMap();
+    /**
+     * 生成ResultMap元素
+     *
+     * @param config
+     * @return
+     */
+    public MapperElement createResultMapElement(GenConfigDTO config) {
+        Map<String, Object> tplParams = new HashMap<>();
         tplParams.put("config", config);
         String resultMapStr = beetlTemplateEngine.write2String(tplParams, "classpath:codetpls/resultMap.btl");
         return MapperElement.builder()
                 .id(config.getDtoName() + "Map")
-                .comment("Author:" + config.getAuthor() + "，Date:" + DateUtil.format(new Date(), "yyyy-MM-dd") + "，" + config.getMapperElementId() + "的结果映射配置，由mybatis-plus-generator-ui自动生成")
+                .comment(config.getMapperElementId())
                 .content(resultMapStr)
                 .location(ElementPosition.FIRST)
                 .build();
     }
 
-    public MapperElement createMapperMethodElement(String sql, GenDtoConfig config) {
+    public MapperElement createMapperMethodElement(String sql, GenConfigDTO config) {
         Map<String, Object> tplParams = Maps.newHashMap();
         // String dbType = dataSourceConfig.getDbType().getDb();
         tplParams.put("config", config);
@@ -179,13 +194,13 @@ public class SqlGeneratorService {
     }
 
     public void genParamDtoFromSql(String sql, String paramDtoRef, boolean enableLombok) throws Exception {
-        List<ConditionExpr> conditionExprs = dynamicParamSqlEnhancer.parseSqlDynamicConditions(sql);
+        List<ConditionExpression> conditionExprs = dynamicParamSqlEnhancer.parseSqlDynamicConditions(sql);
         if (conditionExprs.isEmpty()) {
             log.info("未检测到SQL的动态参数，忽略参数DTO的生成");
             return;
         }
         List<DtoFieldInfo> fields = parseParamFieldsFromSql(sql);
-        GenDtoConfig config = new GenDtoConfig();
+        GenConfigDTO config = new GenConfigDTO();
         config.setEnableLombok(enableLombok);
         for (DtoFieldInfo fi : fields) {
             config.getImportPackages().addAll(fi.getImportJavaTypes());
@@ -208,7 +223,7 @@ public class SqlGeneratorService {
      * @param sql         查询SQL语句
      * @param config      配置参数
      */
-    public void addDaoMethod(String daoClassRef, String sql, GenDtoConfig config) throws Exception {
+    public void addDaoMethod(String daoClassRef, String sql, GenConfigDTO config) throws Exception {
         Set<String> imports = Sets.newHashSet();
         List<DtoFieldInfo> methodParams = Lists.newArrayList();
 
@@ -247,7 +262,7 @@ public class SqlGeneratorService {
                 methodParams.add(param);
             } else {
                 for (DtoFieldInfo fieldInfo : sqlConditions) {
-                    NodeList<AnnotationExpr> annotations = new NodeList();
+                    NodeList<AnnotationExpr> annotations = new NodeList<>();
                     AnnotationExpr paramAnno = new SingleMemberAnnotationExpr(new Name("Param"), new StringLiteralExpr(fieldInfo.getPropertyName()));
                     annotations.add(paramAnno);
                     fieldInfo.setAnnotations(annotations);
@@ -272,21 +287,21 @@ public class SqlGeneratorService {
     }
 
     private List<DtoFieldInfo> parseParamFieldsFromSql(String sql) {
-        List<ConditionExpr> conditionExprs = dynamicParamSqlEnhancer.parseSqlDynamicConditions(sql);
+        List<ConditionExpression> conditionExprs = dynamicParamSqlEnhancer.parseSqlDynamicConditions(sql);
         if (conditionExprs.isEmpty()) {
-            return Lists.newArrayList();
+            return Collections.emptyList();
         }
-        List<DtoFieldInfo> fields = Lists.newArrayList();
-        for (ConditionExpr expr : conditionExprs) {
+        List<DtoFieldInfo> fields = new ArrayList<>();
+        for (ConditionExpression expr : conditionExprs) {
             for (String paramName : expr.getParamNames()) {
                 DtoFieldInfo field = new DtoFieldInfo();
                 field.setPropertyName(PathUtils.getShortNameFromFullRef(paramName));
                 boolean isDate = paramName.toLowerCase().endsWith("date") || paramName.toLowerCase().endsWith("time");
-                if (expr.getOperator().toUpperCase().equals("IN")) {
+                if (expr.getOperator().equalsIgnoreCase("IN")) {
                     DbColumnType cType = DbColumnType.STRING;
                     if (isDate) {
                         cType = getRightDateType(DateType.ONLY_DATE);
-                        field.addImportJavaType(cType.getPkg());
+                        field.addImportJavaType(cType.getQualifiedTypeName());
                     }
                     field.setShortJavaType("List<" + cType.getType() + ">");
                     field.addImportJavaType("java.util.List");
@@ -294,7 +309,7 @@ public class SqlGeneratorService {
                     DbColumnType cType = DbColumnType.LONG;
                     if (isDate) {
                         cType = getRightDateType(DateType.ONLY_DATE);
-                        field.addImportJavaType(cType.getPkg());
+                        field.addImportJavaType(cType.getQualifiedTypeName());
                     }
                     field.setShortJavaType(cType.getType());
                 } else {
@@ -306,16 +321,12 @@ public class SqlGeneratorService {
         return fields;
     }
 
-    private void genDtoFromConfig(GenDtoConfig config) throws Exception {
+    private void genDtoFromConfig(GenConfigDTO config) throws Exception {
         Map<String, Object> tplParams = Maps.newHashMap();
         tplParams.put("config", config);
         String outputPath = projectPathResolver.convertPackageToPath(config.getFullPackage()) + DOT_JAVA;
-        File file = new File(outputPath);
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-        }
-        beetlTemplateEngine.writer(tplParams, "classpath:codetpls/dto.btl", new File(outputPath));
+        FileUtils.createIfNotExistsQuitely(outputPath);
+        beetlTemplateEngine.merge(tplParams, "classpath:codetpls/dto.btl", new File(outputPath));
         log.info("DTO已成功生成，输出位置为:" + outputPath);
     }
 

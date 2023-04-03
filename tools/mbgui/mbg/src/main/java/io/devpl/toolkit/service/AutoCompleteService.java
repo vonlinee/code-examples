@@ -53,7 +53,7 @@ public class AutoCompleteService {
         if (!name.endsWith(suffix)) {
             return false;
         }
-        if (StringUtils.isNullOrEmpty(name)) {
+        if (StringUtils.hasLength(name)) {
             return true;
         }
         return StringUtils.containsIgnoreCase(name, searchKey);

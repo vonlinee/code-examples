@@ -19,6 +19,11 @@ import java.util.List;
 @Mapper
 public interface ConnectionConfigMapper extends BaseMapper<JdbcConnInfo> {
 
+    /**
+     * 查询所有连接名称
+     *
+     * @return
+     */
     List<ConnectionNameVO> selectAllConnectionNames();
 
     @Select(value = "SELECT * FROM connection_config WHERE `name` = #{connectionName}")

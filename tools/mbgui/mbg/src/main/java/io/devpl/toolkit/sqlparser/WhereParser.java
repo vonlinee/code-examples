@@ -23,9 +23,9 @@ public class WhereParser extends ExpressionVisitorAdapter {
     /**
      * 所有解析到的符合规则的where条件，用于进一步匹配
      */
-    private List<ConditionExpr> conditions = Lists.newArrayList();
+    private List<ConditionExpression> conditions = Lists.newArrayList();
 
-    public List<ConditionExpr> getConditions() {
+    public List<ConditionExpression> getConditions() {
         return conditions;
     }
 
@@ -107,9 +107,9 @@ public class WhereParser extends ExpressionVisitorAdapter {
     }
 
     private void parseBetweenOperator(Between between) {
-        if (ConditionExpr.isDynamicParam(between.getBetweenExpressionStart().toString())
-                || ConditionExpr.isDynamicParam(between.getBetweenExpressionEnd().toString())) {
-            ConditionExpr condition = new ConditionExpr();
+        if (ConditionExpression.isDynamicParam(between.getBetweenExpressionStart().toString())
+                || ConditionExpression.isDynamicParam(between.getBetweenExpressionEnd().toString())) {
+            ConditionExpression condition = new ConditionExpression();
             condition.setLogicOperator(currentLogicOp);
             condition.setLeftExpr(between.getLeftExpression().toString());
             condition.setOperator("between");
@@ -128,8 +128,8 @@ public class WhereParser extends ExpressionVisitorAdapter {
             currentLogicOp = "";
             return;
         }
-        if (ConditionExpr.isDynamicParam(right.toString())) {
-            ConditionExpr condition = new ConditionExpr();
+        if (ConditionExpression.isDynamicParam(right.toString())) {
+            ConditionExpression condition = new ConditionExpression();
             condition.setLeftExpr(left.toString());
             condition.setOperator(operator);
             condition.setRightExpr(right.toString());

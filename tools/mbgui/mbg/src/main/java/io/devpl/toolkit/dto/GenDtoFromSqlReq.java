@@ -5,8 +5,10 @@ import lombok.Data;
 @Data
 public class GenDtoFromSqlReq {
 
+    /**
+     * Base64编码后的SQL
+     */
     private String sql;
 
-    private GenDtoConfig config = new GenDtoConfig();
-
+    private GenConfigDTO config;
 }

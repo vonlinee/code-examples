@@ -30,7 +30,7 @@ public class AppConfig {
 
     public static List<ConnectionInfo> listConnectionInfo() {
         try (Connection conn = getConnection();) {
-            String sql = "select * from connection_info";
+            String sql = "select * from connection_config";
             ResultSet rs = DBUtils.executeQuery(conn, sql);
             List<ConnectionInfo> results = new ArrayList<>();
             while (rs.next()) {
@@ -59,7 +59,7 @@ public class AppConfig {
      * @return
      */
     public static int deleteConnectionById(List<ConnectionInfo> connectionInfos) {
-        String sql = "DELETE FROM connection_info WHERE id IN ";
+        String sql = "DELETE FROM connection_config WHERE id IN ";
         StringJoiner stringJoiner = new StringJoiner(",", "(", ")");
         for (ConnectionInfo connectionInfo : connectionInfos) {
             stringJoiner.add("'" + connectionInfo.getId() + "'");
@@ -74,7 +74,7 @@ public class AppConfig {
     }
 
     public static void saveConnectionConfig(ConnectionInfo config) {
-        String sql = "INSERT INTO connection_info\n" + "(id, name, host, port, db_type, db_name, username, password)\n" + "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO connection_config " + "(id, name, host, port, db_type, db_name, username, password)\n" + "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         if (StringUtils.hasNotText(config.getId())) {
             config.setId(UUID.randomUUID().toString());
         }

@@ -37,15 +37,9 @@ public class CodeGenConfigService {
     /**
      * 存储目录
      */
-    private String storeDir;
+    private final String storeDir = "D:/Temp";
 
-    private String userConfigPath;
-
-    @PostConstruct
-    public void init() {
-        this.storeDir = StringUtils.join(File.separator, false, CONFIG_HOME);
-        this.userConfigPath = this.storeDir + File.separator + "user-config.json";
-    }
+    private final Path pathOfConfigFile = Path.of(storeDir, "user-config.json");
 
     public String getTemplateStoreDir() {
         return PathUtils.join(this.storeDir, "template");
@@ -61,12 +55,17 @@ public class CodeGenConfigService {
         return userConfig;
     }
 
+    /**
+     * 读取本地配置文件保存的配置信息
+     *
+     * @return 配置信息
+     */
     public UserConfig getUserConfigFromFile() {
-        if (!Files.exists(Path.of(this.userConfigPath))) {
+        if (!Files.exists(pathOfConfigFile)) {
             return null;
         }
         try {
-            String userConfigStr = Files.readString(Path.of(userConfigPath), StandardCharsets.UTF_8);
+            String userConfigStr = Files.readString(pathOfConfigFile, StandardCharsets.UTF_8);
             return JSONUtils.parseObject(userConfigStr, UserConfig.class);
         } catch (Exception e) {
             log.error("读取用户配置文件发生错误：", e);
@@ -78,8 +77,7 @@ public class CodeGenConfigService {
         if (userConfig == null) {
             throw new BusinessException("不能写入空的用户配置");
         }
-        File userConfigFile = new File(this.userConfigPath);
-        Path path = userConfigFile.toPath();
+        Path path = pathOfConfigFile;
         Files.deleteIfExists(path);
         Files.createDirectories(path.getParent());
         Path configFilePath = Files.createFile(path);
@@ -165,9 +163,7 @@ public class CodeGenConfigService {
      * 默认的配置信息
      */
     private List<OutputFileInfo> getBuiltInFileInfo() {
-
         ProjectPathResolver pathResolver = new ProjectPathResolver("basePackage");
-
         List<OutputFileInfo> builtInFiles = new ArrayList<>();
         // Entity
         OutputFileInfo entityFile = new OutputFileInfo();

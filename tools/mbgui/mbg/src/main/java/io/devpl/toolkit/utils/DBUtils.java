@@ -1,6 +1,8 @@
 package io.devpl.toolkit.utils;
 
 import io.devpl.toolkit.codegen.JDBCDriver;
+import io.devpl.toolkit.sqlparser.meta.ColumnMetadata;
+import io.devpl.toolkit.sqlparser.meta.TableMetadata;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.QueryRunner;

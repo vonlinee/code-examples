@@ -21,11 +21,12 @@
       cat2.color; // 'white'
 
 
-      function f() {
+      (function f(p) {
         console.log(this);
-      }
+        console.log(p);
+      })(12)
 
-      f()
+     
 
 
     </script>

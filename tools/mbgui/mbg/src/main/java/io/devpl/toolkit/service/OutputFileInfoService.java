@@ -18,7 +18,7 @@ public class OutputFileInfoService {
     private CodeGenConfigService userConfigStore;
 
     public void deleteOutputFileInfo(OutputFileInfo fileInfo) throws IOException {
-        if (fileInfo.isBuiltIn()) {
+        if (fileInfo.isBuiltin()) {
             throw new BusinessException("内置文件配置信息不能删除");
         }
         UserConfig userConfig = userConfigStore.getDefaultUserConfig();
@@ -31,7 +31,7 @@ public class OutputFileInfoService {
         UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         List<OutputFileInfo> fileInfos = userConfig.getOutputFiles();
         // 替换原来的配置
-        if (saveFileInfo.isBuiltIn()) {
+        if (saveFileInfo.isBuiltin()) {
             CollectionUtils.replaceAll(fileInfos, saveFileInfo, saveFileInfo);
         } else if (fileInfos.contains(saveFileInfo)) {
             CollectionUtils.replaceAll(fileInfos, saveFileInfo, saveFileInfo);
@@ -41,6 +41,12 @@ public class OutputFileInfoService {
         userConfigStore.saveUserConfig(userConfig);
     }
 
+    /**
+     * 保存实体配置
+     *
+     * @param entityStrategy 实体配置
+     * @throws IOException
+     */
     public void saveEntityStrategy(EntityStrategy entityStrategy) throws IOException {
         UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         userConfig.setEntityStrategy(entityStrategy);

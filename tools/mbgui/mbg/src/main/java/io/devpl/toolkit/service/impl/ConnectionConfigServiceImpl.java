@@ -8,7 +8,7 @@ import io.devpl.toolkit.entity.JdbcConnInfo;
 import io.devpl.toolkit.mapper.ConnectionConfigMapper;
 import io.devpl.toolkit.service.ConnectionConfigService;
 import io.devpl.toolkit.utils.DBUtils;
-import io.devpl.toolkit.utils.TableMetadata;
+import io.devpl.toolkit.sqlparser.meta.TableMetadata;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
