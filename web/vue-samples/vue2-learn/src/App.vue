@@ -2,16 +2,18 @@
   <div id="app">
     <button @click="show">show</button>
     <HelloWorld msg="message" :callbackFunction = "showValue" ref="hw"/>
+
+    <CodeMirrorEditor></CodeMirrorEditor>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-
+import CodeMirrorEditor from './components/CodeMirrorEditor.vue'
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HelloWorld, CodeMirrorEditor
   },
   data: function() {
     return {

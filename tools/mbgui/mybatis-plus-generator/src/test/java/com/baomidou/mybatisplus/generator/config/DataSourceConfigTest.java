@@ -6,9 +6,11 @@ import com.baomidou.mybatisplus.generator.config.querys.H2Query;
 import com.baomidou.mybatisplus.generator.config.querys.MySqlQuery;
 import com.baomidou.mybatisplus.generator.keywords.MySqlKeyWordsHandler;
 import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
-import org.h2.Driver;
+//import org.h2.Driver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.sql.Driver;
 
 
 /**
