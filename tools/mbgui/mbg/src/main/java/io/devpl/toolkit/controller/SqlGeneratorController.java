@@ -23,16 +23,6 @@ public class SqlGeneratorController {
     private SqlGeneratorService sqlGeneratorService;
 
     /**
-     * 获取基础包名
-     *
-     * @return 基础包名
-     */
-    @GetMapping("/basepackage")
-    public Result<String> getBasePackage() {
-        return Results.of("");
-    }
-
-    /**
      * 根据SQL生成Mapper
      *
      * @param param 参数

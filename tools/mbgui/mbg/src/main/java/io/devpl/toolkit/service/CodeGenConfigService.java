@@ -7,6 +7,8 @@ import io.devpl.toolkit.dto.OutputFileInfo;
 import io.devpl.toolkit.dto.UserConfig;
 import io.devpl.toolkit.utils.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,12 +39,14 @@ public class CodeGenConfigService {
     /**
      * 存储目录
      */
-    private final String storeDir = "D:/Temp";
+    @Value("${save.parent:D:/Temp}")
+    private String saveParent;
 
-    private final Path pathOfConfigFile = Path.of(storeDir, "user-config.json");
+    private Path pathOfConfigFile;
 
-    public String getTemplateStoreDir() {
-        return PathUtils.join(this.storeDir, "template");
+    @PostConstruct
+    public void init() {
+        this.pathOfConfigFile = Path.of(saveParent, "user-config.json");
     }
 
     public UserConfig getDefaultUserConfig() {
@@ -73,16 +77,20 @@ public class CodeGenConfigService {
         }
     }
 
-    public void saveUserConfig(UserConfig userConfig) throws IOException {
+    public void saveUserConfig(UserConfig userConfig) {
         if (userConfig == null) {
             throw new BusinessException("不能写入空的用户配置");
         }
         Path path = pathOfConfigFile;
-        Files.deleteIfExists(path);
-        Files.createDirectories(path.getParent());
-        Path configFilePath = Files.createFile(path);
-        String configStr = JSONUtils.toJSONString(userConfig);
-        StreamUtils.copy(new ByteArrayInputStream(configStr.getBytes(StandardCharsets.UTF_8)), Files.newOutputStream(configFilePath));
+        try {
+            Files.deleteIfExists(path);
+            Files.createDirectories(path.getParent());
+            Path configFilePath = Files.createFile(path);
+            String configStr = JSONUtils.toJSONString(userConfig);
+            StreamUtils.copy(new ByteArrayInputStream(configStr.getBytes(StandardCharsets.UTF_8)), Files.newOutputStream(configFilePath));
+        } catch (IOException exception) {
+            throw new BusinessException("保存配置失败");
+        }
     }
 
     /**
@@ -93,12 +101,13 @@ public class CodeGenConfigService {
      */
     public String uploadTemplate(MultipartFile file) {
         String fileName = file.getOriginalFilename();
+        // TODO 处理文件名为空
         assert fileName != null;
-        String fileSuffix = fileName.substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+        String fileSuffix = FileUtils.getExtension(fileName);
         // 保存文件名
         String saveFileName = fileName.substring(0, fileName.lastIndexOf(fileSuffix)) + DateTimeUtils.nowDateTime();
-        // 模板文件存放目录
-        String savePath = PathUtils.join(this.storeDir, "template", saveFileName);
+        // 模板文件存放目录s
+        String savePath = PathUtils.join(this.saveParent, "template", saveFileName);
         log.info("模板上传路径为：{}", savePath);
         try {
             Path path = Path.of(savePath);
@@ -111,9 +120,9 @@ public class CodeGenConfigService {
         return "file:" + savePath;
     }
 
-    public void importProjectConfig(String sourcePkg) throws IOException {
+    public void importProjectConfig(String sourcePkg) {
         String configHomePath = PathUtils.join(System.getProperty("user.home"), CONFIG_HOME);
-        if (!FileUtil.exist(configHomePath)) {
+        if (!FileUtils.exist(configHomePath)) {
             throw new BusinessException("配置主目录不存在：" + configHomePath);
         }
         try (Stream<Path> stream = Files.list(Path.of(configHomePath))) {
@@ -121,11 +130,10 @@ public class CodeGenConfigService {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        File[] files = FileUtil.ls(configHomePath);
         boolean flag = false;
-        for (File file : files) {
+        for (File file : FileUtils.listFiles(configHomePath, true)) {
             if (file.isDirectory() && file.getName().equals(sourcePkg)) {
-                File projectConfigDir = new File(this.storeDir);
+                File projectConfigDir = new File(this.saveParent);
                 FileUtil.copyContent(file, projectConfigDir, true);
                 flag = true;
                 break;
@@ -135,10 +143,9 @@ public class CodeGenConfigService {
             throw new BusinessException("未找到待导入的源项目配置");
         }
         String sourceProjectConfigPath = PathUtils.join(System.getProperty("user.home"), CONFIG_HOME, sourcePkg);
-        String targetProjectConfigPath = this.storeDir;
         UserConfig currentUserConfig = new UserConfig();
         currentUserConfig.setOutputFiles(getBuiltInFileInfo());
-        currentUserConfig.merge(this.getUserConfigFromFile(), sourceProjectConfigPath, targetProjectConfigPath);
+        currentUserConfig.merge(this.getUserConfigFromFile(), sourceProjectConfigPath, this.saveParent);
         // 保存用户配置信息
         this.saveUserConfig(currentUserConfig);
     }

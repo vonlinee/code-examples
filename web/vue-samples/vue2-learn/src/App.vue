@@ -1,21 +1,21 @@
 <template>
   <div id="app">
-    <button @click="show">show</button>
-    <HelloWorld msg="message" :callbackFunction = "showValue" ref="hw"/>
+    <!-- <button @click="show">show</button>
+    <HelloWorld msg="message" :callbackFunction="showValue" ref="hw" /> -->
 
     <CodeMirrorEditor></CodeMirrorEditor>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import CodeMirrorEditor from './components/CodeMirrorEditor.vue'
+// import HelloWorld from './components/HelloWorld.vue'
+import CodeMirrorEditor from './components/cm/CodeMirrorEditor.vue'
 export default {
   name: 'App',
   components: {
-    HelloWorld, CodeMirrorEditor
+    CodeMirrorEditor
   },
-  data: function() {
+  data: function () {
     return {
       parentData: "111"
     }
@@ -29,9 +29,9 @@ export default {
     }
   },
   mounted() {
-    this.$refs.hw.$on('event', function(val) {
-      console.log(val)
-    })
+    // this.$refs.hw.$on('event', function (val) {
+    //   console.log(val)
+    // })
   }
 }
 </script>

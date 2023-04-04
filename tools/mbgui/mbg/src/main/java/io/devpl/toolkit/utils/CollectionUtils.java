@@ -4,6 +4,7 @@ import org.springframework.lang.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -76,5 +77,9 @@ public abstract class CollectionUtils {
             return false;
         }
         return Collections.replaceAll(list, oldVal, newVal);
+    }
+
+    public static <T> T findFirst(List<T> list, Predicate<? super T> predicate, T defaultValue) {
+        return list.stream().filter(predicate).findFirst().orElse(defaultValue);
     }
 }

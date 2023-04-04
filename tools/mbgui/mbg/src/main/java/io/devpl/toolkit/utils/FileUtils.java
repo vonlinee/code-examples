@@ -6,13 +6,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
+import java.io.InputStream;
+import java.nio.file.*;
+import java.util.Collection;
 
 public class FileUtils {
-
-    private static final Logger log = LoggerFactory.getLogger(FileUtils.class);
 
     /**
      * @param path   路径
@@ -70,7 +68,6 @@ public class FileUtils {
     public static boolean createFile(Path path) {
         if (!Files.exists(path) && createDirectoriesQuitely(path.getParent())) {
             try {
-                log.info("创建文件 {}", path);
                 Files.createFile(path);
             } catch (IOException e) {
                 return false;
@@ -79,6 +76,12 @@ public class FileUtils {
         return false;
     }
 
+    /**
+     * 创建多级目录，捕获异常
+     *
+     * @param dir 目录
+     * @return 是否成功
+     */
     public static boolean createDirectoriesQuitely(String dir) {
         return createDirectoriesQuitely(Path.of(dir));
     }
@@ -103,12 +106,12 @@ public class FileUtils {
     /**
      * 列出目录下的所有文件
      *
-     * @param directory
-     * @param recursive
-     * @return
+     * @param directory 目录
+     * @param recursive 是否递归搜索
+     * @return 目录下的所有文件
      */
-    public static File[] listFiles(String directory, boolean recursive) {
-        return new File[0];
+    public static Collection<File> listFiles(String directory, boolean recursive) {
+        return org.apache.commons.io.FileUtils.listFiles(new File(directory), null, recursive);
     }
 
     /**
@@ -123,5 +126,45 @@ public class FileUtils {
             return filename.substring(index + 1);
         }
         return "";
+    }
+
+    /**
+     * 获取文件名
+     *
+     * @param pathname 路径名称
+     * @return 文件名
+     */
+    public static String getFilename(String pathname) {
+        int index = pathname.lastIndexOf(".");
+        int indexOfSeparator = pathname.lastIndexOf(File.separator);
+        if (index > 0) {
+            if (indexOfSeparator > 0) {
+                return pathname.substring(indexOfSeparator, index + 1);
+            }
+            return pathname.substring(0, index + 1);
+        } else {
+            if (indexOfSeparator > 0) {
+                return pathname.substring(indexOfSeparator);
+            }
+            return pathname;
+        }
+    }
+
+    /**
+     * 文件是否存在
+     *
+     * @param path 绝对路径
+     * @return 文件是否存在
+     */
+    public static boolean exist(String path) {
+        return new File(path).exists();
+    }
+
+    public static long copy(InputStream in, Path target) {
+        try {
+            return Files.copy(in, target);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

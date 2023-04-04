@@ -9,6 +9,8 @@ import lombok.Data;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * 配置项
@@ -46,7 +48,7 @@ public class UserConfig {
             return null;
         }
         return outputFiles.stream()
-                .filter((f -> Constant.FILE_TYPE_CONTROLLER.equals(f.getFileType())))
+                .filter((f -> "Controller".equals(f.getFileType())))
                 .findFirst()
                 .get();
     }
@@ -97,6 +99,8 @@ public class UserConfig {
                 .get();
     }
 
+
+
     /**
      * 从另一个项目配置中合并可修改的配置项
      *
@@ -114,8 +118,6 @@ public class UserConfig {
 
         List<OutputFileInfo> files = sourceUserConfig.getOutputFiles();
         Map<String, OutputFileInfo> map = CollectionUtils.toMap(files, OutputFileInfo::getFileType);
-
-
 
 
         changeTplPath(map.get(Constant.FILE_TYPE_SERVICEIMPL), this.getControllerInfo(), sourceProjectConfigPath, targetProjectConfigPath);

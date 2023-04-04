@@ -6,6 +6,7 @@ import io.devpl.toolkit.common.Results;
 import io.devpl.toolkit.dto.OutputFileInfo;
 import io.devpl.toolkit.dto.UserConfig;
 import io.devpl.toolkit.service.CodeGenConfigService;
+import io.devpl.toolkit.utils.IOUtils;
 import io.devpl.toolkit.utils.StringUtils;
 import io.devpl.toolkit.utils.TemplateUtil;
 import lombok.AllArgsConstructor;
@@ -102,13 +103,8 @@ public class TemplateController {
         if (tplIn != null) {
             res.setCharacterEncoding("utf-8");
             res.setContentType("multipart/form-data;charset=UTF-8");
-            try (tplIn) {
-                OutputStream os = res.getOutputStream();
-                byte[] b = new byte[2048];
-                int length;
-                while ((length = tplIn.read(b)) > 0) {
-                    os.write(b, 0, length);
-                }
+            try {
+                IOUtils.copy(tplIn, res.getOutputStream());
             } catch (Exception e) {
                 e.printStackTrace();
             }

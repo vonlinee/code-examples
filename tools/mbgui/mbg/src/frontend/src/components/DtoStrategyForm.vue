@@ -10,16 +10,13 @@
             <el-autocomplete
                     v-model="form.mapperPackage"
                     style="width:95%;"
-                    :fetch-suggestions="queryMapperPackage"
                     @select="handleMapperPackageSelect"
-                    placeholder="例如：com.example.OrderMapper"
-            >
+                    placeholder="例如：com.example.OrderMapper">
                 <el-select
                         v-model="form.mapperLocationPrefix"
                         style="width:110px;"
                         slot="prepend"
-                        placeholder="请选择源码目录"
-                >
+                        placeholder="请选择源码目录">
                     <el-option label="java" value="java"></el-option>
                     <el-option label="resources" value="resources"></el-option>
                 </el-select>
@@ -61,7 +58,7 @@
             </el-radio-group>
         </el-form-item>
         <el-form-item
-                v-if="form.enableCreateDaoMethod && form.daoMethodParamType == 'bean'"
+                v-if="form.enableCreateDaoMethod && form.daoMethodParamType === 'bean'"
                 label="Mapper(java)方法参数DTO">
             <el-input
                     style="width:80%;"
@@ -122,9 +119,7 @@ export default {
         };
     },
     mounted: function () {
-        axios.get("/api/sql/basepackage").then((res) => {
-            this.userBasePkg = res;
-        });
+        this.userBasePkg = "org.example";
     },
     methods: {
         handleMapperMethodInput() {
@@ -141,23 +136,6 @@ export default {
                     "ParamDto";
             }
         },
-        queryMapperPackage(queryString, cb) {
-            axios
-                .get("/api/ac/mapperxml", {
-                    params: {
-                        mapperLocationPrefix: this.form.mapperLocationPrefix,
-                        searchKey: this.form.mapperPackage,
-                    },
-                })
-                .then((res) => {
-                    if (res) {
-                        let options = res.map((v) => {
-                            return {value: v};
-                        });
-                        cb(options);
-                    }
-                });
-        },
         handleMapperPackageSelect(op) {
             this.form.mapperPackage = op.value;
         },
@@ -167,12 +145,12 @@ export default {
                     this.form.mapperLocation =
                         this.form.mapperPackage + "." + this.form.mapperMethod;
                     axios.post("/api/sql/gen-mapper-method", {
-                            sql: this.sql,
-                            config: this.form,
-                        }).then((res) => {
-                            this.$message.success("代码已经成功生成");
-                            this.$emit("done");
-                        });
+                        sql: this.sql,
+                        config: this.form,
+                    }).then((res) => {
+                        this.$message.success("代码已经成功生成");
+                        this.$emit("done");
+                    });
                 } else {
                     return false;
                 }

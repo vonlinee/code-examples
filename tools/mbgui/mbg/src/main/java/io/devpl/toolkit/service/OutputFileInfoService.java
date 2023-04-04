@@ -17,18 +17,18 @@ public class OutputFileInfoService {
     @Resource
     private CodeGenConfigService userConfigStore;
 
+    UserConfig userConfig = userConfigStore.getDefaultUserConfig();
+
     public void deleteOutputFileInfo(OutputFileInfo fileInfo) throws IOException {
         if (fileInfo.isBuiltin()) {
             throw new BusinessException("内置文件配置信息不能删除");
         }
-        UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         List<OutputFileInfo> fileInfos = userConfig.getOutputFiles();
         fileInfos.remove(fileInfo);
         userConfigStore.saveUserConfig(userConfig);
     }
 
     public void saveOutputFileInfo(OutputFileInfo saveFileInfo) throws IOException {
-        UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         List<OutputFileInfo> fileInfos = userConfig.getOutputFiles();
         // 替换原来的配置
         if (saveFileInfo.isBuiltin()) {
@@ -48,43 +48,36 @@ public class OutputFileInfoService {
      * @throws IOException
      */
     public void saveEntityStrategy(EntityStrategy entityStrategy) throws IOException {
-        UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         userConfig.setEntityStrategy(entityStrategy);
         userConfigStore.saveUserConfig(userConfig);
     }
 
     public void saveMapperXmlStrategy(MapperXmlStrategy mapperXmlStrategy) throws IOException {
-        UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         userConfig.setMapperXmlStrategy(mapperXmlStrategy);
         userConfigStore.saveUserConfig(userConfig);
     }
 
     public void saveMapperStrategy(MapperStrategy mapperStrategy) throws IOException {
-        UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         userConfig.setMapperStrategy(mapperStrategy);
         userConfigStore.saveUserConfig(userConfig);
     }
 
     public void saveControllerStrategy(ControllerStrategy controllerStrategy) throws IOException {
-        UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         userConfig.setControllerStrategy(controllerStrategy);
         userConfigStore.saveUserConfig(userConfig);
     }
 
     public void saveServiceStrategy(ServiceStrategy serviceStrategy) throws IOException {
-        UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         userConfig.setServiceStrategy(serviceStrategy);
         userConfigStore.saveUserConfig(userConfig);
     }
 
     public void saveServiceImplStrategy(ServiceImplStrategy serviceImplStrategy) throws IOException {
-        UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         userConfig.setServiceImplStrategy(serviceImplStrategy);
         userConfigStore.saveUserConfig(userConfig);
     }
 
     public String getOutputPkgByFileType(String fileType) {
-        UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         List<OutputFileInfo> fileInfos = userConfig.getOutputFiles();
         for (OutputFileInfo fileInfo : fileInfos) {
             if (fileInfo.getFileType().equals(fileType)) {

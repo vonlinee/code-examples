@@ -22,11 +22,9 @@ import io.devpl.toolkit.entity.JdbcConnInfo;
 import io.devpl.toolkit.service.CodeGenConfigService;
 import io.devpl.toolkit.service.ConnectionConfigService;
 import io.devpl.toolkit.strategy.*;
-import io.devpl.toolkit.utils.CollectionUtils;
-import io.devpl.toolkit.utils.FileUtils;
-import io.devpl.toolkit.utils.ProjectPathResolver;
-import io.devpl.toolkit.utils.StringUtils;
+import io.devpl.toolkit.utils.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
@@ -48,6 +46,9 @@ public class MBPGBridge {
     @Resource
     private ConnectionConfigService connConfigService;
 
+    @Value("${save.parent}")
+    private String saveParent;
+
     NameConverter nameConverter = new DefaultNameConverter();
 
     private final ProjectPathResolver projectPathResolver = new ProjectPathResolver("");
@@ -57,7 +58,7 @@ public class MBPGBridge {
      */
     public void doGenerate(GenSetting genSetting, List<String> tables) {
         projectPathResolver.refreshBaseProjectPath(genSetting.getRootPath());
-        BeetlTemplateEngine beetlTemplateEngine = new BeetlTemplateEngine(userConfigStore.getTemplateStoreDir());
+        BeetlTemplateEngine beetlTemplateEngine = new BeetlTemplateEngine(PathUtils.join(this.saveParent, "template"));
         JdbcConnInfo connInfo = connConfigService.getOne(new LambdaQueryWrapper<JdbcConnInfo>().eq(JdbcConnInfo::getName, genSetting.getConnectionName()));
         if (connInfo == null) {
             throw new RuntimeException("连接不存在");
