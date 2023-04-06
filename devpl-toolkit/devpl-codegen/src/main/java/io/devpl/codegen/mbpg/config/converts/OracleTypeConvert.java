@@ -2,7 +2,7 @@ package io.devpl.codegen.mbpg.config.converts;
 
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
-import io.devpl.codegen.mbpg.config.rules.DbColumnType;
+import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
 
 /**
@@ -24,13 +24,13 @@ public class OracleTypeConvert implements ITypeConvert {
     @Override
     public IColumnType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(TypeConverts.containsAny("char", "clob").then(DbColumnType.STRING))
+            .test(TypeConverts.containsAny("char", "clob").then(JavaType.STRING))
             .test(TypeConverts.containsAny("date", "timestamp").then(p -> toDateType(config)))
             .test(TypeConverts.contains("number").then(OracleTypeConvert::toNumberType))
-            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
-            .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
-            .test(TypeConverts.containsAny("binary", "raw").then(DbColumnType.BYTE_ARRAY))
-            .or(DbColumnType.STRING);
+            .test(TypeConverts.contains("float").then(JavaType.FLOAT))
+            .test(TypeConverts.contains("blob").then(JavaType.BLOB))
+            .test(TypeConverts.containsAny("binary", "raw").then(JavaType.BYTE_ARRAY))
+            .or(JavaType.STRING);
     }
 
     /**
@@ -47,11 +47,11 @@ public class OracleTypeConvert implements ITypeConvert {
      */
     private static IColumnType toNumberType(String typeName) {
         if (typeName.matches("number\\([0-9]\\)")) {
-            return DbColumnType.INTEGER;
+            return JavaType.INTEGER;
         } else if (typeName.matches("number\\(1[0-8]\\)")) {
-            return DbColumnType.LONG;
+            return JavaType.LONG;
         }
-        return DbColumnType.BIG_DECIMAL;
+        return JavaType.BIG_DECIMAL;
     }
 
     /**
@@ -64,13 +64,13 @@ public class OracleTypeConvert implements ITypeConvert {
     protected static IColumnType toDateType(GlobalConfig config) {
         switch (config.getDateType()) {
             case ONLY_DATE:
-                return DbColumnType.DATE;
+                return JavaType.DATE;
             case SQL_PACK:
-                return DbColumnType.TIMESTAMP;
+                return JavaType.TIMESTAMP;
             case TIME_PACK:
-                return DbColumnType.LOCAL_DATE_TIME;
+                return JavaType.LOCAL_DATE_TIME;
             default:
-                return DbColumnType.STRING;
+                return JavaType.STRING;
         }
     }
 

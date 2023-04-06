@@ -2,7 +2,7 @@ package io.devpl.codegen.mbpg.config.converts;
 
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
-import io.devpl.codegen.mbpg.config.rules.DbColumnType;
+import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,17 +46,17 @@ public class ClickHouseTypeConvert implements ITypeConvert {
     @Override
     public IColumnType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(containsAny(INTEGER_TYPE).then(DbColumnType.INTEGER))
-            .test(containsAny(BIGINTEGER_TYPE).then(DbColumnType.BIG_INTEGER))
-            .test(containsAny(BIGDECIMAL_TYPE).then(DbColumnType.BIG_DECIMAL))
-            .test(containsAny(LONG_TYPE).then(DbColumnType.LONG))
-            .test(contains("float32").then(DbColumnType.FLOAT))
-            .test(contains("float64").then(DbColumnType.DOUBLE))
-            .test(contains("map").then(DbColumnType.MAP))
-            .test(contains("array").then(DbColumnType.OBJECT))
+            .test(containsAny(INTEGER_TYPE).then(JavaType.INTEGER))
+            .test(containsAny(BIGINTEGER_TYPE).then(JavaType.BIG_INTEGER))
+            .test(containsAny(BIGDECIMAL_TYPE).then(JavaType.BIG_DECIMAL))
+            .test(containsAny(LONG_TYPE).then(JavaType.LONG))
+            .test(contains("float32").then(JavaType.FLOAT))
+            .test(contains("float64").then(JavaType.DOUBLE))
+            .test(contains("map").then(JavaType.MAP))
+            .test(contains("array").then(JavaType.OBJECT))
             .test(containsAny("date", "datetime", "datetime64").then(t -> toDateType(globalConfig, fieldType)))
-            .test(containsAny(STRING_TYPE).then(DbColumnType.STRING))
-            .or(DbColumnType.STRING);
+            .test(containsAny(STRING_TYPE).then(JavaType.STRING))
+            .or(JavaType.STRING);
     }
 
     /**
@@ -70,16 +70,16 @@ public class ClickHouseTypeConvert implements ITypeConvert {
         switch (config.getDateType()) {
             case SQL_PACK:
                 if ("date".equals(type)) {
-                    return DbColumnType.DATE_SQL;
+                    return JavaType.DATE_SQL;
                 }
-                return DbColumnType.TIMESTAMP;
+                return JavaType.TIMESTAMP;
             case TIME_PACK:
                 if ("date".equals(type)) {
-                    return DbColumnType.LOCAL_DATE;
+                    return JavaType.LOCAL_DATE;
                 }
-                return DbColumnType.LOCAL_DATE_TIME;
+                return JavaType.LOCAL_DATE_TIME;
             default:
-                return DbColumnType.DATE;
+                return JavaType.DATE;
         }
     }
 

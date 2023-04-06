@@ -36,13 +36,12 @@ public class PluginRegistry extends CompositePlugin {
     }
 
     public void registerPlugin(Class<?> pluginClass) {
-        if (plugins.containsKey(pluginClass)) {
-            return;
+        if (!contains(pluginClass)) {
+            PluginConfiguration pluginConfiguration = new PluginConfiguration();
+            pluginConfiguration.addProperty("type", pluginClass.getName());
+            pluginConfiguration.setConfigurationType(pluginClass.getName());
+            plugins.put(pluginClass, pluginConfiguration);
         }
-        PluginConfiguration pluginConfiguration = new PluginConfiguration();
-        pluginConfiguration.addProperty("type", pluginClass.getName());
-        pluginConfiguration.setConfigurationType(pluginClass.getName());
-        plugins.put(pluginClass, pluginConfiguration);
     }
 
     public boolean contains(Class<?> clazz) {

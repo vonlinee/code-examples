@@ -2,7 +2,7 @@ package io.devpl.codegen.mbpg.config.converts;
 
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
-import io.devpl.codegen.mbpg.config.rules.DbColumnType;
+import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
 
 /**
@@ -21,19 +21,19 @@ public class MySqlTypeConvert implements ITypeConvert {
     public IColumnType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts
                 .use(fieldType)
-                .test(TypeConverts.containsAny("char", "text", "json", "enum").then(DbColumnType.STRING))
-                .test(TypeConverts.contains("bigint").then(DbColumnType.LONG))
-                .test(TypeConverts.containsAny("tinyint(1)", "bit(1)").then(DbColumnType.BOOLEAN))
-                .test(TypeConverts.contains("bit").then(DbColumnType.BYTE))
-                .test(TypeConverts.contains("int").then(DbColumnType.INTEGER))
-                .test(TypeConverts.contains("decimal").then(DbColumnType.BIG_DECIMAL))
-                .test(TypeConverts.contains("clob").then(DbColumnType.CLOB))
-                .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
-                .test(TypeConverts.contains("binary").then(DbColumnType.BYTE_ARRAY))
-                .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
-                .test(TypeConverts.contains("double").then(DbColumnType.DOUBLE))
+                .test(TypeConverts.containsAny("char", "text", "json", "enum").then(JavaType.STRING))
+                .test(TypeConverts.contains("bigint").then(JavaType.LONG))
+                .test(TypeConverts.containsAny("tinyint(1)", "bit(1)").then(JavaType.BOOLEAN))
+                .test(TypeConverts.contains("bit").then(JavaType.BYTE))
+                .test(TypeConverts.contains("int").then(JavaType.INTEGER))
+                .test(TypeConverts.contains("decimal").then(JavaType.BIG_DECIMAL))
+                .test(TypeConverts.contains("clob").then(JavaType.CLOB))
+                .test(TypeConverts.contains("blob").then(JavaType.BLOB))
+                .test(TypeConverts.contains("binary").then(JavaType.BYTE_ARRAY))
+                .test(TypeConverts.contains("float").then(JavaType.FLOAT))
+                .test(TypeConverts.contains("double").then(JavaType.DOUBLE))
                 .test(TypeConverts.containsAny("date", "time", "year").then(t -> toDateType(config, t)))
-                .or(DbColumnType.STRING);
+                .or(JavaType.STRING);
     }
 
     /**
@@ -46,29 +46,29 @@ public class MySqlTypeConvert implements ITypeConvert {
         String dateType = type.replaceAll("\\(\\d+\\)", "");
         switch (config.getDateType()) {
             case ONLY_DATE:
-                return DbColumnType.DATE;
+                return JavaType.DATE;
             case SQL_PACK:
                 switch (dateType) {
                     case "date":
                     case "year":
-                        return DbColumnType.DATE_SQL;
+                        return JavaType.DATE_SQL;
                     case "time":
-                        return DbColumnType.TIME;
+                        return JavaType.TIME;
                     default:
-                        return DbColumnType.TIMESTAMP;
+                        return JavaType.TIMESTAMP;
                 }
             case TIME_PACK:
                 switch (dateType) {
                     case "date":
-                        return DbColumnType.LOCAL_DATE;
+                        return JavaType.LOCAL_DATE;
                     case "time":
-                        return DbColumnType.LOCAL_TIME;
+                        return JavaType.LOCAL_TIME;
                     case "year":
-                        return DbColumnType.YEAR;
+                        return JavaType.YEAR;
                     default:
-                        return DbColumnType.LOCAL_DATE_TIME;
+                        return JavaType.LOCAL_DATE_TIME;
                 }
         }
-        return DbColumnType.STRING;
+        return JavaType.STRING;
     }
 }

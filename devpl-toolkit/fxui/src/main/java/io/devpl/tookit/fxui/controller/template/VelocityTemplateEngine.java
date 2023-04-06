@@ -35,12 +35,4 @@ public class VelocityTemplateEngine {
         }
         return result;
     }
-
-    public static void main(String[] args) {
-        VelocityContext context = new VelocityContext();
-        context.put("name", "zs");
-        String result = VelocityTemplateEngine.evaluate("hello $name $name", context);
-
-        System.out.println(result);
-    }
 }

@@ -17,9 +17,6 @@ import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * @author Yuhi Ishikura
- */
 public class ConsoleView extends BorderPane {
 
     private final PrintStream out;

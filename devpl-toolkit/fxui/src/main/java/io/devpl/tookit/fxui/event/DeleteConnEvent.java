@@ -1,6 +1,5 @@
 package io.devpl.tookit.fxui.event;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

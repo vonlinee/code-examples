@@ -18,7 +18,7 @@ package io.devpl.codegen.mbpg.config.converts;
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.DateType;
-import io.devpl.codegen.mbpg.config.rules.DbColumnType;
+import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
 
 /**
@@ -39,18 +39,18 @@ public class OscarTypeConvert implements ITypeConvert {
     public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts
-                    .containsAny("CHARACTER", "char", "varchar", "text", "character varying").then(DbColumnType.STRING))
-            .test(TypeConverts.containsAny("bigint", "int8").then(DbColumnType.LONG))
+                    .containsAny("CHARACTER", "char", "varchar", "text", "character varying").then(JavaType.STRING))
+            .test(TypeConverts.containsAny("bigint", "int8").then(JavaType.LONG))
             .test(TypeConverts
-                    .containsAny("int", "int1", "int2", "int3", "int4", "tinyint", "integer").then(DbColumnType.INTEGER))
+                    .containsAny("int", "int1", "int2", "int3", "int4", "tinyint", "integer").then(JavaType.INTEGER))
             .test(TypeConverts.containsAny("date", "time", "timestamp").then(p -> toDateType(globalConfig, p)))
-            .test(TypeConverts.containsAny("bit", "boolean").then(DbColumnType.BOOLEAN))
-            .test(TypeConverts.containsAny("decimal", "numeric", "number").then(DbColumnType.BIG_DECIMAL))
-            .test(TypeConverts.contains("clob").then(DbColumnType.CLOB))
-            .test(TypeConverts.contains("blob").then(DbColumnType.BYTE_ARRAY))
-            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
-            .test(TypeConverts.containsAny("double", "real", "float4", "float8").then(DbColumnType.DOUBLE))
-            .or(DbColumnType.STRING);
+            .test(TypeConverts.containsAny("bit", "boolean").then(JavaType.BOOLEAN))
+            .test(TypeConverts.containsAny("decimal", "numeric", "number").then(JavaType.BIG_DECIMAL))
+            .test(TypeConverts.contains("clob").then(JavaType.CLOB))
+            .test(TypeConverts.contains("blob").then(JavaType.BYTE_ARRAY))
+            .test(TypeConverts.contains("float").then(JavaType.FLOAT))
+            .test(TypeConverts.containsAny("double", "real", "float4", "float8").then(JavaType.DOUBLE))
+            .or(JavaType.STRING);
     }
 
     /**
@@ -65,23 +65,23 @@ public class OscarTypeConvert implements ITypeConvert {
         if (dateType == DateType.SQL_PACK) {
             switch (type) {
                 case "date":
-                    return DbColumnType.DATE_SQL;
+                    return JavaType.DATE_SQL;
                 case "time":
-                    return DbColumnType.TIME;
+                    return JavaType.TIME;
                 default:
-                    return DbColumnType.TIMESTAMP;
+                    return JavaType.TIMESTAMP;
             }
         } else if (dateType == DateType.TIME_PACK) {
             switch (type) {
                 case "date":
-                    return DbColumnType.LOCAL_DATE;
+                    return JavaType.LOCAL_DATE;
                 case "time":
-                    return DbColumnType.LOCAL_TIME;
+                    return JavaType.LOCAL_TIME;
                 default:
-                    return DbColumnType.LOCAL_DATE_TIME;
+                    return JavaType.LOCAL_DATE_TIME;
             }
         }
-        return DbColumnType.DATE;
+        return JavaType.DATE;
     }
 
 }

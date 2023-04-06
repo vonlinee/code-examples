@@ -64,7 +64,6 @@ public class TaggedRegion extends Region {
      */
     @Override
     protected void layoutChildren() {
-
         tagNode.resizeRelocate(0, 0, 200, 200);
     }
 

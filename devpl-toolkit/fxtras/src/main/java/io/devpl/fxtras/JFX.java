@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -116,6 +115,7 @@ public final class JFX {
 
     /**
      * 给控件添加一个按钮
+     *
      * @param group Group容器
      * @param text  按钮文本
      */
@@ -127,6 +127,7 @@ public final class JFX {
 
     /**
      * 给控件添加一个按钮
+     *
      * @param pane 容器面板
      * @param text 文本
      */
@@ -138,6 +139,7 @@ public final class JFX {
 
     /**
      * 加载图片
+     *
      * @param pathname 相对路径
      * @param size     高度=宽度
      * @return ImageView
@@ -151,6 +153,7 @@ public final class JFX {
 
     /**
      * 加载图片
+     *
      * @param pathname 相对路径
      * @param w        宽度
      * @param h        高度
@@ -165,6 +168,7 @@ public final class JFX {
 
     /**
      * ImageView对象是否可以缓存
+     *
      * @param pathname 路径名称
      * @param size     图片尺寸大小
      * @param userData 节点缓存的数据
@@ -194,6 +198,7 @@ public final class JFX {
 
     /**
      * Observable集合实质上也是对普通集合的包装
+     *
      * @param elements 元素
      * @param <E>      元素类型
      * @return FXCollections.observableArrayList
@@ -210,11 +215,12 @@ public final class JFX {
 
     /**
      * 不要在Controller的构造，initialize方法里调用
+     *
      * @param node 节点
      * @param <W>  Window
      * @return Window
      */
-    public static <W extends Window> W getStage(@NotNull Node node) {
+    public static <W extends Window> W getStage(Node node) {
         @SuppressWarnings("unchecked") final W window = (W) node.getScene().getWindow();
         return window;
     }
@@ -224,6 +230,7 @@ public final class JFX {
      * When accessing a Stage, timing is important, as the Stage is not created
      * until the very end of a View-creation process.
      * <a href="https://edencoding.com/stage-controller/">...</a>
+     *
      * @param event JavaFX event
      * @return 当前事件源所在的舞台对象
      * @throws RuntimeException 如果事件源不是Node

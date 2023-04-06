@@ -4,15 +4,12 @@ open module fxtras {
     requires javafx.fxml;
     requires javafx.graphics;
 
-    requires org.slf4j;
     requires javafx.controls;
     requires cglib;
-    requires org.jetbrains.annotations;
-
-    requires devpl.logging;
 
     requires devpl.eventbus;
     requires java.logging;
+    requires org.slf4j;
 
 
     exports io.devpl.fxtras.mvc;

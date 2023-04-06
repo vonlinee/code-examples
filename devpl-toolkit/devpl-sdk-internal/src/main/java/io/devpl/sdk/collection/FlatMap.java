@@ -1,8 +1,5 @@
 package io.devpl.sdk.collection;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -46,7 +43,6 @@ public class FlatMap<V> implements Map<String, V> {
         return null;
     }
 
-    @Nullable
     @Override
     public V put(String key, V value) {
         final String[] split = key.split(SEPARATOR);
@@ -59,7 +55,7 @@ public class FlatMap<V> implements Map<String, V> {
     }
 
     @Override
-    public void putAll(@NotNull Map<? extends String, ? extends V> m) {
+    public void putAll(Map<? extends String, ? extends V> m) {
 
     }
 
@@ -68,19 +64,16 @@ public class FlatMap<V> implements Map<String, V> {
 
     }
 
-    @NotNull
     @Override
     public Set<String> keySet() {
         return null;
     }
 
-    @NotNull
     @Override
     public Collection<V> values() {
         return null;
     }
 
-    @NotNull
     @Override
     public Set<Entry<String, V>> entrySet() {
         return null;

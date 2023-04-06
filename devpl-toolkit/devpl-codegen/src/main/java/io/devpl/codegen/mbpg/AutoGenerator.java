@@ -1,10 +1,10 @@
 package io.devpl.codegen.mbpg;
 
+import com.github.javaparser.quality.NotNull;
 import io.devpl.codegen.mbpg.config.*;
 import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.template.AbstractTemplateEngine;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,7 +154,6 @@ public class AutoGenerator {
      * @param config 配置信息
      * @return ignore
      */
-    @NotNull
     protected List<TableInfo> getAllTableInfoList(@NotNull CodeGenConfiguration config) {
         return config.getTableInfoList();
     }

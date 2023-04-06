@@ -12,7 +12,6 @@
 
   <modules>
     <module>devpl-codegen</module>
-    <module>devpl-logging</module>
     <module>devpl-sdk-internal</module>
     <module>fxui</module>
     <module>devpl-eventbus</module>
@@ -33,15 +32,6 @@
     <argLine>-Djdk.attach.allowAttachSelf -Xmx1024m -Duser.timezone=UTC</argLine>
     <spring.version>5.2.21.RELEASE</spring.version>
   </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-      <version>23.1.0</version>
-      <scope>compile</scope>
-    </dependency>
-  </dependencies>
 
   <dependencyManagement>
     <dependencies>

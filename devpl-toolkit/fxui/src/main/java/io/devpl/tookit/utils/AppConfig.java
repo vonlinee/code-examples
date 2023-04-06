@@ -55,8 +55,8 @@ public class AppConfig {
     /**
      * 根据ID删除连接信息
      *
-     * @param connectionInfos
-     * @return
+     * @param connectionInfos 连接信息列表
+     * @return 删除条数
      */
     public static int deleteConnectionById(List<ConnectionInfo> connectionInfos) {
         String sql = "DELETE FROM connection_config WHERE id IN ";
@@ -66,7 +66,6 @@ public class AppConfig {
         }
         sql += stringJoiner;
         try (Connection conn = getConnection()) {
-            System.out.println(sql);
             return DBUtils.delete(conn, sql);
         } catch (Exception e) {
             throw new RuntimeException(e);

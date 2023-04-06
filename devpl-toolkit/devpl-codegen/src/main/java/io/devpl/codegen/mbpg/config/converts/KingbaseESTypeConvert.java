@@ -18,7 +18,7 @@ package io.devpl.codegen.mbpg.config.converts;
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.DateType;
-import io.devpl.codegen.mbpg.config.rules.DbColumnType;
+import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
 
 import static io.devpl.codegen.mbpg.config.converts.TypeConverts.contains;
@@ -41,17 +41,17 @@ public class KingbaseESTypeConvert implements ITypeConvert {
     @Override
     public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(containsAny("char", "text", "json", "enum").then(DbColumnType.STRING))
-            .test(contains("bigint").then(DbColumnType.LONG))
-            .test(contains("int").then(DbColumnType.INTEGER))
+            .test(containsAny("char", "text", "json", "enum").then(JavaType.STRING))
+            .test(contains("bigint").then(JavaType.LONG))
+            .test(contains("int").then(JavaType.INTEGER))
             .test(containsAny("date", "time").then(p -> toDateType(globalConfig, p)))
-            .test(containsAny("bit", "boolean").then(DbColumnType.BOOLEAN))
-            .test(containsAny("decimal", "numeric").then(DbColumnType.BIG_DECIMAL))
-            .test(contains("clob").then(DbColumnType.CLOB))
-            .test(contains("blob").then(DbColumnType.BYTE_ARRAY))
-            .test(contains("float").then(DbColumnType.FLOAT))
-            .test(contains("double").then(DbColumnType.DOUBLE))
-            .or(DbColumnType.STRING);
+            .test(containsAny("bit", "boolean").then(JavaType.BOOLEAN))
+            .test(containsAny("decimal", "numeric").then(JavaType.BIG_DECIMAL))
+            .test(contains("clob").then(JavaType.CLOB))
+            .test(contains("blob").then(JavaType.BYTE_ARRAY))
+            .test(contains("float").then(JavaType.FLOAT))
+            .test(contains("double").then(JavaType.DOUBLE))
+            .or(JavaType.STRING);
     }
 
     /**
@@ -66,23 +66,23 @@ public class KingbaseESTypeConvert implements ITypeConvert {
         if (dateType == DateType.SQL_PACK) {
             switch (type) {
                 case "date":
-                    return DbColumnType.DATE_SQL;
+                    return JavaType.DATE_SQL;
                 case "time":
-                    return DbColumnType.TIME;
+                    return JavaType.TIME;
                 default:
-                    return DbColumnType.TIMESTAMP;
+                    return JavaType.TIMESTAMP;
             }
         } else if (dateType == DateType.TIME_PACK) {
             switch (type) {
                 case "date":
-                    return DbColumnType.LOCAL_DATE;
+                    return JavaType.LOCAL_DATE;
                 case "time":
-                    return DbColumnType.LOCAL_TIME;
+                    return JavaType.LOCAL_TIME;
                 default:
-                    return DbColumnType.LOCAL_DATE_TIME;
+                    return JavaType.LOCAL_DATE_TIME;
             }
         }
-        return DbColumnType.DATE;
+        return JavaType.DATE;
     }
 
 }

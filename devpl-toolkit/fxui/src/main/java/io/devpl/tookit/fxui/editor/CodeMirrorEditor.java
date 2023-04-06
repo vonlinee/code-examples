@@ -5,7 +5,6 @@ import javafx.scene.Parent;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
-import java.net.URI;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;

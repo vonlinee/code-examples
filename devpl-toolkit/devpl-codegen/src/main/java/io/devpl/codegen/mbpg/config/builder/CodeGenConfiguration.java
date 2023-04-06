@@ -3,8 +3,6 @@ package io.devpl.codegen.mbpg.config.builder;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.query.DatabaseIntrospector;
 import io.devpl.codegen.mbpg.config.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,19 +64,21 @@ public class CodeGenConfiguration {
 
     /**
      * 数据查询实例
+     *
      * @since 3.5.3
      */
     private final DatabaseIntrospector databaseQuery;
 
     /**
      * 在构造器中处理配置
+     *
      * @param packageConfig    包配置
      * @param dataSourceConfig 数据源配置
      * @param strategyConfig   表配置
      * @param templateConfig   模板配置
      * @param globalConfig     全局配置
      */
-    public CodeGenConfiguration(@Nullable PackageConfig packageConfig, @NotNull DataSourceConfig dataSourceConfig, @Nullable StrategyConfig strategyConfig, @Nullable TemplateConfig templateConfig, @Nullable GlobalConfig globalConfig, @Nullable InjectionConfig injectionConfig) {
+    public CodeGenConfiguration(PackageConfig packageConfig, DataSourceConfig dataSourceConfig, StrategyConfig strategyConfig, TemplateConfig templateConfig, GlobalConfig globalConfig, InjectionConfig injectionConfig) {
         this.dataSourceConfig = dataSourceConfig;
         this.strategyConfig = Optional.ofNullable(strategyConfig).orElseGet(GeneratorBuilder::strategyConfig);
         this.globalConfig = Optional.ofNullable(globalConfig).orElseGet(GeneratorBuilder::globalConfig);
@@ -98,38 +98,39 @@ public class CodeGenConfiguration {
 
     /**
      * 判断表名是否为正则表名(这表名规范比较随意,只能尽量匹配上特殊符号)
+     *
      * @param tableName 表名
      * @return 是否正则
      * @since 3.5.0
      */
-    public static boolean matcherRegTable(@NotNull String tableName) {
+    public static boolean matcherRegTable(String tableName) {
         return REGX.matcher(tableName).find();
     }
 
-    @NotNull
-    public CodeGenConfiguration setStrategyConfig(@NotNull StrategyConfig strategyConfig) {
+
+    public CodeGenConfiguration setStrategyConfig(StrategyConfig strategyConfig) {
         this.strategyConfig = strategyConfig;
         return this;
     }
 
-    @NotNull
-    public CodeGenConfiguration setGlobalConfig(@NotNull GlobalConfig globalConfig) {
+
+    public CodeGenConfiguration setGlobalConfig(GlobalConfig globalConfig) {
         this.globalConfig = globalConfig;
         return this;
     }
 
-    @NotNull
-    public CodeGenConfiguration setInjectionConfig(@NotNull InjectionConfig injectionConfig) {
+
+    public CodeGenConfiguration setInjectionConfig(InjectionConfig injectionConfig) {
         this.injectionConfig = injectionConfig;
         return this;
     }
 
-    @NotNull
+
     public TemplateConfig getTemplateConfig() {
         return templateConfig;
     }
 
-    @NotNull
+
     public List<TableInfo> getTableInfoList() {
         if (tableInfoList.isEmpty()) {
             List<TableInfo> tableInfos = this.databaseQuery.queryTables();
@@ -140,32 +141,32 @@ public class CodeGenConfiguration {
         return tableInfoList;
     }
 
-    @NotNull
+
     public Map<OutputFile, String> getPathInfo() {
         return pathInfo;
     }
 
-    @NotNull
+
     public StrategyConfig getStrategyConfig() {
         return strategyConfig;
     }
 
-    @NotNull
+
     public GlobalConfig getGlobalConfig() {
         return globalConfig;
     }
 
-    @Nullable
+
     public InjectionConfig getInjectionConfig() {
         return injectionConfig;
     }
 
-    @NotNull
+
     public PackageConfig getPackageConfig() {
         return packageConfig;
     }
 
-    @NotNull
+
     public DataSourceConfig getDataSourceConfig() {
         return dataSourceConfig;
     }

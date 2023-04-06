@@ -3,7 +3,6 @@ module devpl.sdk.internal {
     requires java.sql;
     requires lombok;
     requires spring.core;
-    requires org.jetbrains.annotations;
     requires jsr305;
     requires java.net.http;
     requires java.datatransfer;

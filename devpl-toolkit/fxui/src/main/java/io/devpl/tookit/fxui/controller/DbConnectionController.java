@@ -57,6 +57,7 @@ public class DbConnectionController extends FxmlView {
 
     /**
      * 初始化连接配置数据绑定
+     *
      * @param configuration 事件
      * @see ConnectionInfo
      */
@@ -86,6 +87,7 @@ public class DbConnectionController extends FxmlView {
 
     /**
      * 填充默认值
+     *
      * @param event 填充默认值
      */
     @Subscribe

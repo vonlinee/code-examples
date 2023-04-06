@@ -1,9 +1,9 @@
 package io.devpl.tookit.utils;
 
+import javafx.application.Application;
+import javafx.application.HostServices;
 import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.file.Counters;
-import org.apache.commons.io.file.PathUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
@@ -22,7 +22,6 @@ public class FileUtils {
 
     private static final File[] EMPTY_FILES = new File[0];
 
-    @NotNull
     public static File[] listAllFiles(File dir) {
         if (!isDirectory(dir)) {
             return EMPTY_FILES;
@@ -150,65 +149,6 @@ public class FileUtils {
      */
     public static void delete(File file) {
         org.apache.commons.io.FileUtils.deleteQuietly(file);
-    }
-
-    /**
-     * Cleans a directory without deleting it.
-     *
-     * @param directory directory to clean
-     * @throws NullPointerException     if the given {@code File} is {@code null}.
-     * @throws IllegalArgumentException if directory does not exist or is not a directory.
-     * @throws IOException              if an I/O error occurs.
-     * @see #forceDelete(File)
-     */
-    public static void cleanDirectory(final File directory) throws IOException {
-        final File[] files = listFiles(directory, null);
-
-        final List<Exception> causeList = new ArrayList<>();
-        for (final File file : files) {
-            try {
-                forceDelete(file);
-            } catch (final IOException ioe) {
-                causeList.add(ioe);
-            }
-        }
-
-        if (!causeList.isEmpty()) {
-            // throw new IOExceptionList(directory.toString(), causeList);
-            throw new IOExceptionList(causeList);
-        }
-    }
-
-    /**
-     * Deletes a file or directory. For a directory, delete it and all sub-directories.
-     * <p>
-     * The difference between File.delete() and this method are:
-     * </p>
-     * <ul>
-     * <li>The directory does not have to be empty.</li>
-     * <li>You get an exception when a file or directory cannot be deleted.</li>
-     * </ul>
-     *
-     * @param file file or directory to delete, must not be {@code null}.
-     * @throws NullPointerException  if the file is {@code null}.
-     * @throws FileNotFoundException if the file was not found.
-     * @throws IOException           in case deletion is unsuccessful.
-     */
-    public static void forceDelete(final File file) throws IOException {
-        Objects.requireNonNull(file, "file");
-        final Counters.PathCounters deleteCounters;
-        try {
-            deleteCounters = PathUtils.delete(file.toPath());
-        } catch (final IOException e) {
-            throw new IOException("Cannot delete file: " + file, e);
-        }
-
-        if (deleteCounters.getFileCounter()
-                .get() < 1 && deleteCounters.getDirectoryCounter()
-                .get() < 1) {
-            // didn't find a file to delete.
-            throw new FileNotFoundException("File does not exist: " + file);
-        }
     }
 
     private static File[] listFiles(final File directory, final FileFilter fileFilter) throws IOException {

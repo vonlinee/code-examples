@@ -17,7 +17,7 @@ package io.devpl.codegen.mbpg.config.converts;
 
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
-import io.devpl.codegen.mbpg.config.rules.DbColumnType;
+import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
 
 import static io.devpl.codegen.mbpg.config.converts.TypeConverts.contains;
@@ -38,17 +38,17 @@ public class PostgreSqlTypeConvert implements ITypeConvert {
     @Override
     public IColumnType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(containsAny("char", "text", "json", "enum").then(DbColumnType.STRING))
-            .test(contains("bigint").then(DbColumnType.LONG))
-            .test(contains("int").then(DbColumnType.INTEGER))
+            .test(containsAny("char", "text", "json", "enum").then(JavaType.STRING))
+            .test(contains("bigint").then(JavaType.LONG))
+            .test(contains("int").then(JavaType.INTEGER))
             .test(containsAny("date", "time").then(t -> toDateType(config, t)))
-            .test(contains("bit").then(DbColumnType.BOOLEAN))
-            .test(containsAny("decimal", "numeric").then(DbColumnType.BIG_DECIMAL))
-            .test(contains("bytea").then(DbColumnType.BYTE_ARRAY))
-            .test(contains("float").then(DbColumnType.FLOAT))
-            .test(contains("double").then(DbColumnType.DOUBLE))
-            .test(contains("boolean").then(DbColumnType.BOOLEAN))
-            .or(DbColumnType.STRING);
+            .test(contains("bit").then(JavaType.BOOLEAN))
+            .test(containsAny("decimal", "numeric").then(JavaType.BIG_DECIMAL))
+            .test(contains("bytea").then(JavaType.BYTE_ARRAY))
+            .test(contains("float").then(JavaType.FLOAT))
+            .test(contains("double").then(JavaType.DOUBLE))
+            .test(contains("boolean").then(JavaType.BOOLEAN))
+            .or(JavaType.STRING);
     }
 
     /**
@@ -63,23 +63,23 @@ public class PostgreSqlTypeConvert implements ITypeConvert {
             case SQL_PACK:
                 switch (type) {
                     case "date":
-                        return DbColumnType.DATE_SQL;
+                        return JavaType.DATE_SQL;
                     case "time":
-                        return DbColumnType.TIME;
+                        return JavaType.TIME;
                     default:
-                        return DbColumnType.TIMESTAMP;
+                        return JavaType.TIMESTAMP;
                 }
             case TIME_PACK:
                 switch (type) {
                     case "date":
-                        return DbColumnType.LOCAL_DATE;
+                        return JavaType.LOCAL_DATE;
                     case "time":
-                        return DbColumnType.LOCAL_TIME;
+                        return JavaType.LOCAL_TIME;
                     default:
-                        return DbColumnType.LOCAL_DATE_TIME;
+                        return JavaType.LOCAL_DATE_TIME;
                 }
             default:
-                return DbColumnType.DATE;
+                return JavaType.DATE;
         }
     }
 }

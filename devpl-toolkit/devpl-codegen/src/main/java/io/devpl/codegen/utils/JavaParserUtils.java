@@ -18,7 +18,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
-import io.devpl.codegen.mbpg.util.FastJsonUtils;
+import io.devpl.codegen.mbpg.util.JSONUtils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -71,7 +71,7 @@ public class JavaParserUtils {
     }
 
     public static void json2ObjectSchema(String jsonStr, String packageName, String className) {
-        final Map<String, Object> map = FastJsonUtils.toMap(jsonStr);
+        final Map<String, Object> map = JSONUtils.toMap(jsonStr);
         final Name annoJsonAlias = newTypeName("com.fasterxml.jackson.annotation.JsonAlias");
         CompilationUnit cu = new CompilationUnit();
         cu.setPackageDeclaration(packageName);

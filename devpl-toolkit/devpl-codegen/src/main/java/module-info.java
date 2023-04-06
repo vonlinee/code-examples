@@ -1,5 +1,4 @@
 module devpl.codegen {
-    requires org.jetbrains.annotations;
     requires org.slf4j;
     requires java.sql;
     requires devpl.sdk.internal;
@@ -17,6 +16,7 @@ module devpl.codegen {
     requires org.apache.commons.text;
     requires spring.beans;
     requires com.github.javaparser.core;
+    requires org.jetbrains.annotations;
 
     exports io.devpl.codegen;
     exports io.devpl.codegen.mbpg.jdbc.dialect.mysql;

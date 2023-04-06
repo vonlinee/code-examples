@@ -1,0 +1,44 @@
+module fxui {
+
+    requires javafx.graphics;
+    requires javafx.fxml;
+    requires javafx.web;
+    requires javafx.controls;
+
+    requires fxtras;
+    requires com.github.javaparser.core;
+
+    requires org.slf4j;
+    requires java.sql;
+    requires lombok;
+    requires org.girod.javafx.svgimage;
+    requires devpl.eventbus;
+    requires velocity.engine.core;
+    requires devpl.codegen;
+    requires com.google.gson;
+
+    requires jdk.jsobject;
+    requires com.google.googlejavaformat;
+    requires org.kordamp.ikonli.materialdesign2;
+    requires org.kordamp.ikonli.javafx;
+    requires org.kordamp.ikonli.core;
+    requires commons.dbutils;
+    requires devpl.sdk.internal;
+    requires org.apache.commons.io;
+    requires poi.ooxml;
+    requires spring.jdbc;
+    requires easypoi.annotation;
+    requires org.apache.commons.lang3;
+    requires poi.ooxml.schemas;
+    requires ST4;
+    requires easypoi.base;
+    requires poi;
+    requires xmlbeans;
+    requires jsch;
+    requires java.desktop;
+    requires java.compiler;
+    requires com.squareup.javapoet;
+    requires dom4j;
+
+    requires org.mybatis.generator;
+}

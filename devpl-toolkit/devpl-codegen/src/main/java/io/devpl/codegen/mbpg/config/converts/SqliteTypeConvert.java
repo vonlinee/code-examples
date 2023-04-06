@@ -17,7 +17,7 @@ package io.devpl.codegen.mbpg.config.converts;
 
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
-import io.devpl.codegen.mbpg.config.rules.DbColumnType;
+import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
 
 /**
@@ -36,17 +36,17 @@ public class SqliteTypeConvert implements ITypeConvert {
     @Override
     public IColumnType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(TypeConverts.contains("bigint").then(DbColumnType.LONG))
-            .test(TypeConverts.containsAny("tinyint(1)", "boolean").then(DbColumnType.BOOLEAN))
-            .test(TypeConverts.contains("int").then(DbColumnType.INTEGER))
-            .test(TypeConverts.containsAny("text", "char", "enum").then(DbColumnType.STRING))
-            .test(TypeConverts.containsAny("decimal", "numeric").then(DbColumnType.BIG_DECIMAL))
-            .test(TypeConverts.contains("clob").then(DbColumnType.CLOB))
-            .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
-            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
-            .test(TypeConverts.contains("double").then(DbColumnType.DOUBLE))
+            .test(TypeConverts.contains("bigint").then(JavaType.LONG))
+            .test(TypeConverts.containsAny("tinyint(1)", "boolean").then(JavaType.BOOLEAN))
+            .test(TypeConverts.contains("int").then(JavaType.INTEGER))
+            .test(TypeConverts.containsAny("text", "char", "enum").then(JavaType.STRING))
+            .test(TypeConverts.containsAny("decimal", "numeric").then(JavaType.BIG_DECIMAL))
+            .test(TypeConverts.contains("clob").then(JavaType.CLOB))
+            .test(TypeConverts.contains("blob").then(JavaType.BLOB))
+            .test(TypeConverts.contains("float").then(JavaType.FLOAT))
+            .test(TypeConverts.contains("double").then(JavaType.DOUBLE))
             .test(TypeConverts.containsAny("date", "time", "year").then(t -> MySqlTypeConvert.toDateType(config, t)))
-            .or(DbColumnType.STRING);
+            .or(JavaType.STRING);
     }
 
 }

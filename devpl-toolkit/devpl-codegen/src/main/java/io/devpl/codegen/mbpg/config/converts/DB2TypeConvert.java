@@ -18,7 +18,7 @@ package io.devpl.codegen.mbpg.config.converts;
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
-import io.devpl.codegen.mbpg.config.rules.DbColumnType;
+import io.devpl.codegen.mbpg.config.rules.JavaType;
 
 /**
  * DB2 字段类型转换
@@ -35,19 +35,19 @@ public class DB2TypeConvert implements ITypeConvert {
     @Override
     public IColumnType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(TypeConverts.containsAny("char", "text", "json", "enum").then(DbColumnType.STRING))
-            .test(TypeConverts.contains("bigint").then(DbColumnType.LONG))
-            .test(TypeConverts.contains("smallint").then(DbColumnType.BASE_SHORT))
-            .test(TypeConverts.contains("int").then(DbColumnType.INTEGER))
-            .test(TypeConverts.containsAny("date", "time", "year").then(DbColumnType.DATE))
-            .test(TypeConverts.contains("bit").then(DbColumnType.BOOLEAN))
-            .test(TypeConverts.contains("decimal").then(DbColumnType.BIG_DECIMAL))
-            .test(TypeConverts.contains("clob").then(DbColumnType.CLOB))
-            .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
-            .test(TypeConverts.contains("binary").then(DbColumnType.BYTE_ARRAY))
-            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
-            .test(TypeConverts.contains("double").then(DbColumnType.DOUBLE))
-            .or(DbColumnType.STRING);
+            .test(TypeConverts.containsAny("char", "text", "json", "enum").then(JavaType.STRING))
+            .test(TypeConverts.contains("bigint").then(JavaType.LONG))
+            .test(TypeConverts.contains("smallint").then(JavaType.BASE_SHORT))
+            .test(TypeConverts.contains("int").then(JavaType.INTEGER))
+            .test(TypeConverts.containsAny("date", "time", "year").then(JavaType.DATE))
+            .test(TypeConverts.contains("bit").then(JavaType.BOOLEAN))
+            .test(TypeConverts.contains("decimal").then(JavaType.BIG_DECIMAL))
+            .test(TypeConverts.contains("clob").then(JavaType.CLOB))
+            .test(TypeConverts.contains("blob").then(JavaType.BLOB))
+            .test(TypeConverts.contains("binary").then(JavaType.BYTE_ARRAY))
+            .test(TypeConverts.contains("float").then(JavaType.FLOAT))
+            .test(TypeConverts.contains("double").then(JavaType.DOUBLE))
+            .or(JavaType.STRING);
     }
 
 }

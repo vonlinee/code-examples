@@ -16,8 +16,6 @@ import io.devpl.tookit.fxui.model.ProjectConfiguration;
 import io.devpl.tookit.fxui.model.TableCodeGeneration;
 import io.devpl.tookit.utils.*;
 import io.devpl.tookit.utils.fx.FileChooserDialog;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -258,7 +256,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
             exception.printStackTrace();
             Alerts.exception("生成失败", exception).showAndWait();
         } finally {
-            FileUtils.show(new File(projectConfig.getProjectRootFolder()));
+            // FileUtils.show(new File(projectConfig.getProjectRootFolder()));
         }
     }
 

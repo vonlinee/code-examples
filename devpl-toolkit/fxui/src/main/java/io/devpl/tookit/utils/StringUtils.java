@@ -1,9 +1,5 @@
 package io.devpl.tookit.utils;
 
-import org.apache.commons.lang3.ArrayUtils;
-
-import static org.apache.commons.lang3.StringUtils.isAnyBlank;
-
 /**
  * 统一工具类
  */
@@ -40,7 +36,7 @@ public final class StringUtils {
     }
 
     public static boolean isNotEmpty(final CharSequence cs) {
-        return org.apache.commons.lang3.StringUtils.isNotEmpty(cs);
+        return !isEmpty(cs);
     }
 
     /**
@@ -76,11 +72,16 @@ public final class StringUtils {
     }
 
     public static String[] split(String source, String separator) {
-        return org.apache.commons.lang3.StringUtils.split(source, separator);
+        return source.split(separator);
     }
 
     public static boolean containsAny(final CharSequence cs, final CharSequence... searchCharSequences) {
-        return org.apache.commons.lang3.StringUtils.containsAny(cs, searchCharSequences);
+        for (CharSequence searchCharSequence : searchCharSequences) {
+            if (cs.toString().contains(searchCharSequence)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -104,7 +105,7 @@ public final class StringUtils {
      * @since 3.2
      */
     public static boolean isAnyEmpty(final CharSequence... css) {
-        if (ArrayUtils.isEmpty(css)) {
+        if (css == null) {
             return false;
         }
         for (final CharSequence cs : css) {
@@ -162,33 +163,6 @@ public final class StringUtils {
 
     public static boolean isNotBlank(String string) {
         return !isBlank(string);
-    }
-
-    /**
-     * <p>Checks if none of the CharSequences are empty (""), null or whitespace only.</p>
-     *
-     * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.</p>
-     *
-     * <pre>
-     * StringUtils.isNoneBlank((String) null)    = false
-     * StringUtils.isNoneBlank((String[]) null)  = true
-     * StringUtils.isNoneBlank(null, "foo")      = false
-     * StringUtils.isNoneBlank(null, null)       = false
-     * StringUtils.isNoneBlank("", "bar")        = false
-     * StringUtils.isNoneBlank("bob", "")        = false
-     * StringUtils.isNoneBlank("  bob  ", null)  = false
-     * StringUtils.isNoneBlank(" ", "bar")       = false
-     * StringUtils.isNoneBlank(new String[] {})  = true
-     * StringUtils.isNoneBlank(new String[]{""}) = false
-     * StringUtils.isNoneBlank("foo", "bar")     = true
-     * </pre>
-     *
-     * @param css the CharSequences to check, may be null or empty
-     * @return {@code true} if none of the CharSequences are empty or null or whitespace only
-     * @since 3.2
-     */
-    public static boolean isAllNotBlank(final CharSequence... css) {
-        return !isAnyBlank(css);
     }
 
     /**

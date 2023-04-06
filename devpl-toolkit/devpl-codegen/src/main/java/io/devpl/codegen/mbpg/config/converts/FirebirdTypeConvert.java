@@ -17,7 +17,7 @@ package io.devpl.codegen.mbpg.config.converts;
 
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
-import io.devpl.codegen.mbpg.config.rules.DbColumnType;
+import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.IColumnType;
 
 /**
@@ -35,15 +35,15 @@ public class FirebirdTypeConvert implements ITypeConvert {
     @Override
     public IColumnType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(TypeConverts.containsAny("cstring", "text").then(DbColumnType.STRING))
-            .test(TypeConverts.contains("short").then(DbColumnType.SHORT))
-            .test(TypeConverts.contains("long").then(DbColumnType.LONG))
-            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
-            .test(TypeConverts.contains("double").then(DbColumnType.DOUBLE))
-            .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
-            .test(TypeConverts.contains("int64").then(DbColumnType.LONG))
+            .test(TypeConverts.containsAny("cstring", "text").then(JavaType.STRING))
+            .test(TypeConverts.contains("short").then(JavaType.SHORT))
+            .test(TypeConverts.contains("long").then(JavaType.LONG))
+            .test(TypeConverts.contains("float").then(JavaType.FLOAT))
+            .test(TypeConverts.contains("double").then(JavaType.DOUBLE))
+            .test(TypeConverts.contains("blob").then(JavaType.BLOB))
+            .test(TypeConverts.contains("int64").then(JavaType.LONG))
             .test(TypeConverts.containsAny("date", "time", "year").then(t -> toDateType(config, t)))
-            .or(DbColumnType.STRING);
+            .or(JavaType.STRING);
     }
 
     /**
@@ -56,30 +56,30 @@ public class FirebirdTypeConvert implements ITypeConvert {
     public static IColumnType toDateType(GlobalConfig config, String type) {
         switch (config.getDateType()) {
             case ONLY_DATE:
-                return DbColumnType.DATE;
+                return JavaType.DATE;
             case SQL_PACK:
                 switch (type) {
                     case "date":
                     case "year":
-                        return DbColumnType.DATE_SQL;
+                        return JavaType.DATE_SQL;
                     case "time":
-                        return DbColumnType.TIME;
+                        return JavaType.TIME;
                     default:
-                        return DbColumnType.TIMESTAMP;
+                        return JavaType.TIMESTAMP;
                 }
             case TIME_PACK:
                 switch (type) {
                     case "date":
-                        return DbColumnType.LOCAL_DATE;
+                        return JavaType.LOCAL_DATE;
                     case "time":
-                        return DbColumnType.LOCAL_TIME;
+                        return JavaType.LOCAL_TIME;
                     case "year":
-                        return DbColumnType.YEAR;
+                        return JavaType.YEAR;
                     default:
-                        return DbColumnType.LOCAL_DATE_TIME;
+                        return JavaType.LOCAL_DATE_TIME;
                 }
         }
-        return DbColumnType.STRING;
+        return JavaType.STRING;
     }
 
 }
