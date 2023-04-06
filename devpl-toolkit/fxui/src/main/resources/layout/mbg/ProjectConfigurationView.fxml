@@ -9,20 +9,20 @@
             prefHeight="400.0"
             fx:controller="io.devpl.tookit.fxui.controller.mbg.ProjectConfigurationView">
 
-    <top>
-        <ToolBar>
-            <Button fx:id="btnRefresh" text="加载" onAction="#refreshConfig"/>
-            <Button fx:id="btnApply" text="确认" onAction="#applyConfig"/>
-        </ToolBar>
-    </top>
+  <top>
+    <ToolBar>
+      <Button fx:id="btnRefresh" text="加载" onAction="#refreshConfig"/>
+      <Button fx:id="btnApply" text="确认" onAction="#applyConfig"/>
+    </ToolBar>
+  </top>
 
-    <center>
-        <TableView fx:id="tbvConfig">
-            <columns>
-                <TableColumn text="名称" fx:id="tblcName"/>
-                <TableColumn text="值" fx:id="tblcValue"/>
-            </columns>
-        </TableView>
-    </center>
+  <center>
+    <TableView fx:id="tbvConfig">
+      <columns>
+        <TableColumn text="名称" fx:id="tblcName"/>
+        <TableColumn text="值" fx:id="tblcValue"/>
+      </columns>
+    </TableView>
+  </center>
 
 </BorderPane>

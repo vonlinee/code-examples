@@ -13,6 +13,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * Druid Sql Parser
+ */
 public class SqlUtils {
 
     /**
@@ -27,11 +30,6 @@ public class SqlUtils {
             return getSelectedColumns((SQLSelectStatement) sqlStatement);
         }
         return Collections.emptyMap();
-    }
-
-    public static ColumnMetadata getColumnMetadata(Connection conn, String tableName, String columnName) throws SQLException {
-        final DatabaseMetaData dbmd = conn.getMetaData();
-        return null;
     }
 
     /**

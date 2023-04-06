@@ -122,11 +122,7 @@
             <version>8.0.29</version>
         </dependency>
 
-        <dependency>
-            <groupId>io.devpl</groupId>
-            <artifactId>devpl-sdk-internal</artifactId>
-            <version>1.0</version>
-        </dependency>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-core</artifactId>

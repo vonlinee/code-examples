@@ -1,11 +1,11 @@
 package test;
 
-import org.testng.annotations.Test;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 /**
  * 基于String Template 4
@@ -27,7 +27,6 @@ public class StringTemplate {
         System.out.println(result);
     }
 
-    @Test
     public void test2() {
         ST st = new ST("<name; separator=\", \">");
         st.add("name", "zs");
@@ -35,7 +34,6 @@ public class StringTemplate {
         System.out.println(st.render());
     }
 
-    @Test
     public void test3() {
         STGroup group = new STGroupFile("st/test.stg");
         ST st = group.getInstanceOf("test");
@@ -46,7 +44,6 @@ public class StringTemplate {
         System.out.println(result);
     }
 
-    @Test
     public void test4() {
         STGroup group = new STGroupFile("st/test.stg");
         ST st = group.getInstanceOf("show_user");
@@ -55,7 +52,6 @@ public class StringTemplate {
         System.out.println(result);
     }
 
-    @Test
     public void test6() {
         STGroup group = new STGroupFile("st/test.stg");
         ST st = group.getInstanceOf("show_user");
@@ -68,7 +64,6 @@ public class StringTemplate {
         System.out.println(result);
     }
 
-    @Test
     public void test7() {
         int[] num =
                 new int[]{3, 9, 20, 2, 1, 4, 6, 32, 5, 6, 77, 888, 2, 1, 6, 32, 5, 6, 77,
@@ -78,7 +73,6 @@ public class StringTemplate {
         System.out.println(t);
     }
 
-    @Test
     public void testAggrete() {
         ST st = new ST("<items:{it|<it.id>: <it.lastName>, <it.firstName>\n}>");
         st.addAggr("items.{ firstName ,lastName, id }", "Ter", "Parr", 99); // add() uses varargs

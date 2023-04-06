@@ -2,6 +2,7 @@ package io.devpl.codegen.mbpg.jdbc;
 
 /**
  * 支持的数据库类型,主要用于分页方言
+ *
  * @author hubin
  * @since 2018-06-23
  */
@@ -85,11 +86,13 @@ public enum DbType {
     GBASE_8S("gbase-8s", "南大通用数据库 GBase 8s"),
     /**
      * use {@link  #GBASE_8S}
+     *
      * @deprecated 2022-05-30
      */
     @Deprecated GBASEDBT("gbasedbt", "南大通用数据库"),
     /**
      * use {@link  #GBASE_8S}
+     *
      * @deprecated 2022-05-30
      */
     @Deprecated GBASE_INFORMIX("gbase 8s", "南大通用数据库 GBase 8s"),
@@ -160,6 +163,7 @@ public enum DbType {
 
     /**
      * 获取数据库类型
+     *
      * @param dbType 数据库类型字符串
      */
     public static DbType getDbType(String dbType) {

@@ -3,12 +3,6 @@ package ${package.Entity}
 <#list table.importPackages as pkg>
 import ${pkg}
 </#list>
-<#if springdoc>
-import io.swagger.v3.oas.annotations.media.Schema;
-<#elseif swagger>
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-</#if>
 
 /**
  * <p>
@@ -19,21 +13,14 @@ import io.swagger.annotations.ApiModelProperty;
  * @since ${date}
  */
 <#if table.convert>
-@TableName("${schemaName}${table.name}")
-</#if>
-<#if springdoc>
-@Schema(name = "${entity}", description = "$!{table.comment}")
-<#elseif swagger>
-@ApiModel(value = "${entity}对象", description = "${table.comment!}")
+@TableName("${table.name}")
 </#if>
 <#if superEntityClass??>
 class ${entity} : ${superEntityClass}<#if activeRecord><${entity}></#if> {
 <#elseif activeRecord>
 class ${entity} : Model<${entity}>() {
-<#elseif entitySerialVersionUID>
-class ${entity} : Serializable {
 <#else>
-class ${entity} {
+class ${entity} : Serializable {
 </#if>
 
 <#-- ----------  BEGIN 字段循环遍历  ---------->
@@ -41,43 +28,38 @@ class ${entity} {
 <#if field.keyFlag>
     <#assign keyPropertyName="${field.propertyName}"/>
 </#if>
+
 <#if field.comment!?length gt 0>
-    <#if springdoc>
-    @Schema(description = "${field.comment}")
-    <#elseif swagger>
-    @ApiModelProperty("${field.comment}")
-    <#else>
     /**
      * ${field.comment}
      */
-    </#if>
 </#if>
 <#if field.keyFlag>
 <#-- 主键 -->
 <#if field.keyIdentityFlag>
-    @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
+    @TableId(value = "${field.name}", type = IdType.AUTO)
 <#elseif idType ??>
-    @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
+    @TableId(value = "${field.name}", type = IdType.${idType})
 <#elseif field.convert>
-    @TableId("${field.annotationColumnName}")
+    @TableId("${field.name}")
 </#if>
 <#-- 普通字段 -->
 <#elseif field.fill??>
 <#-- -----   存在字段填充设置   ----->
 <#if field.convert>
-    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
+    @TableField(value = "${field.name}", fill = FieldFill.${field.fill})
 <#else>
     @TableField(fill = FieldFill.${field.fill})
 </#if>
 <#elseif field.convert>
-    @TableField(value = "${field.annotationColumnName}")
+    @TableField("${field.name}")
 </#if>
 <#-- 乐观锁注解 -->
-<#if field.versionField>
+<#if (versionFieldName!"") == field.name>
     @Version
 </#if>
 <#-- 逻辑删除注解 -->
-<#if field.logicDeleteField>
+<#if (logicDeleteFieldName!"") == field.name>
     @TableLogic
 </#if>
     <#if field.propertyType == "Integer">
@@ -85,21 +67,22 @@ class ${entity} {
     <#else>
     var ${field.propertyName}: ${field.propertyType}? = null
     </#if>
-
 </#list>
 <#-- ----------  END 字段循环遍历  ---------->
+
+
 <#if entityColumnConstant>
     companion object {
 <#list table.fields as field>
 
-        const val ${field.name?upper_case} : String = "${field.name}"
+        const val ${field.name.toUpperCase()} : String = "${field.name}"
 
 </#list>
     }
 
 </#if>
 <#if activeRecord>
-    override fun pkVal(): Serializable? {
+    override fun pkVal(): Serializable {
 <#if keyPropertyName??>
         return ${keyPropertyName}
 <#else>

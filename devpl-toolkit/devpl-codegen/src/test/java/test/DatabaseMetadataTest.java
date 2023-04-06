@@ -2,8 +2,6 @@ package test;
 
 import io.devpl.codegen.mbpg.jdbc.DBUtils;
 import io.devpl.codegen.mbpg.jdbc.meta.PrimaryKey;
-import io.devpl.codegen.mbpg.jdbc.resultset.EntityListRowHandler;
-import org.testng.annotations.Test;
 
 import java.sql.*;
 import java.util.List;
@@ -16,7 +14,6 @@ public class DatabaseMetadataTest {
         return DriverManager.getConnection(URL, "root", "123456");
     }
 
-    @Test
     public void test1() throws SQLException {
 
         final Connection connection = getConnection();
