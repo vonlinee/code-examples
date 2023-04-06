@@ -5,7 +5,9 @@ import io.devpl.toolkit.common.Result;
 import io.devpl.toolkit.common.Results;
 import io.devpl.toolkit.dto.OutputFileInfo;
 import io.devpl.toolkit.dto.UserConfig;
+import io.devpl.toolkit.entity.TemplateInfo;
 import io.devpl.toolkit.service.CodeGenConfigService;
+import io.devpl.toolkit.service.TemplateService;
 import io.devpl.toolkit.utils.IOUtils;
 import io.devpl.toolkit.utils.StringUtils;
 import io.devpl.toolkit.utils.TemplateUtil;
@@ -18,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
@@ -34,9 +35,23 @@ import java.util.Map;
 public class TemplateController {
 
     private CodeGenConfigService userConfigStore;
+    private TemplateService templateService;
+
+    /**
+     * 注册模板
+     */
+    @PostMapping("/register")
+    public Result<TemplateInfo> addTemplate(@RequestBody TemplateInfo templateInfo) {
+        templateInfo.setTemplatePath(templateService.assignPath(templateInfo));
+        if (templateService.addNewTemplate(templateInfo)) {
+
+        }
+        return Results.of();
+    }
 
     /**
      * 下载模板
+     * TODO 调整逻辑
      *
      * @param res      HttpServletResponse
      * @param fileType 文件类型
@@ -59,8 +74,7 @@ public class TemplateController {
         for (OutputFileInfo fileInfo : fileInfos) {
             if (fileType.equals(fileInfo.getFileType())) {
                 if (fileInfo.isBuiltin() && StringUtils.hasLength(fileInfo.getTemplatePath())) {
-                    InputStream tplIn = TemplateUtil.getBuiltInTemplate(fileType);
-                    download(res, tplIn);
+                    download(res, templateService.loadTemplate(fileType));
                 } else {
                     String tplPath = fileInfo.getTemplatePath();
                     if (tplPath.startsWith("file:")) {
@@ -85,10 +99,9 @@ public class TemplateController {
      * @return 结果
      */
     @PostMapping("/upload")
-    public Result<?> upload(@RequestParam("file") MultipartFile file) {
+    public Result<Map<String, Object>> upload(@RequestParam("file") MultipartFile file) {
         Map<String, Object> params = new HashMap<>();
-        String storePath = userConfigStore.uploadTemplate(file);
-        params.put("templatePath", storePath);
+        params.put("templatePath", templateService.uploadTemplate(file));
         params.put("templateName", file.getOriginalFilename());
         return Results.of(params);
     }

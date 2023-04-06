@@ -7,6 +7,7 @@ import io.devpl.toolkit.strategy.*;
 import io.devpl.toolkit.utils.CollectionUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +18,12 @@ public class OutputFileInfoService {
     @Resource
     private CodeGenConfigService userConfigStore;
 
-    UserConfig userConfig = userConfigStore.getDefaultUserConfig();
+    UserConfig userConfig;
+
+    @PostConstruct
+    public void init() {
+        userConfig = userConfigStore.getDefaultUserConfig();
+    }
 
     public void deleteOutputFileInfo(OutputFileInfo fileInfo) throws IOException {
         if (fileInfo.isBuiltin()) {

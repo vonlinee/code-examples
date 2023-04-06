@@ -3,6 +3,7 @@ package use;
 import org.apache.velocity.Template;
 import org.apache.velocity.runtime.parser.node.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,7 +25,9 @@ public class VelocityTemplateAnalyzer implements TemplateVariableAnalyzer<Templa
         Object data = template.getData();
         if (data instanceof SimpleNode) {
             SimpleNode sn = (SimpleNode) data;
-            recursive(sn);
+            Map<String, Object> map = new HashMap<>();
+            recursive(sn, map);
+            System.out.println(map);
         } else {
             throw new RuntimeException(String.valueOf(data.getClass()));
         }
@@ -35,7 +38,7 @@ public class VelocityTemplateAnalyzer implements TemplateVariableAnalyzer<Templa
      *
      * @param parent AST点
      */
-    private void recursive(Node parent) {
+    private void recursive(Node parent, Map<String, Object> map) {
         int numOfChildren = parent.jjtGetNumChildren();
         if (numOfChildren <= 0) {
             return;
@@ -45,59 +48,57 @@ public class VelocityTemplateAnalyzer implements TemplateVariableAnalyzer<Templa
             if (node instanceof ASTText) {
                 // 普通文本节点
                 ASTText astText = (ASTText) node;
-                recursive(astText);
+                recursive(astText, map);
             } else if (node instanceof ASTReference) {
                 // ASTReference的子节点为ASTIdentifier或ASTMethod
                 ASTReference astReference = (ASTReference) node;
-                Node node1 = astReference.jjtGetParent();
-                System.out.println("父节点" + node1.getClass().getSimpleName() + "当前节点" + astReference.getRootString() + " " + astReference.literal());
-                int num = astReference.jjtGetNumChildren();
-                for (int j = 0; j < num; j++) {
-                    Node childNode = astReference.jjtGetChild(j);
-                    if (childNode instanceof ASTIdentifier) {
-                        ASTIdentifier identifier = (ASTIdentifier) childNode;
-                        System.out.println(identifier.getIdentifier());
-                    } else if (childNode instanceof ASTMethod) {
-                        ASTMethod method = (ASTMethod) childNode;
-
-                    }
-                }
+                checkVariableType(astReference, map);
             } else if (node instanceof ASTDirective) {
+                //
                 ASTDirective astDirective = (ASTDirective) node;
-                recursive(astDirective);
+                recursive(astDirective, map);
             } else if (node instanceof ASTIfStatement) {
                 // #if
                 ASTIfStatement astIfStatement = (ASTIfStatement) node;
-                recursive(astIfStatement);
+                recursive(astIfStatement, map);
             } else if (node instanceof ASTElseIfStatement) {
                 ASTElseIfStatement astElseIfStatement = (ASTElseIfStatement) node;
-                recursive(astElseIfStatement);
+                recursive(astElseIfStatement, map);
             } else if (node instanceof ASTComment) {
                 ASTComment astComment = (ASTComment) node;
-                recursive(astComment);
+                recursive(astComment, map);
             } else if (node instanceof ASTBlock) {
                 ASTBlock astBlock = (ASTBlock) node;
-                recursive(astBlock);
+                recursive(astBlock, map);
             } else if (node instanceof ASTDivNode) {
                 ASTDivNode astDivNode = (ASTDivNode) node;
-                recursive(astDivNode);
+                recursive(astDivNode, map);
             } else if (node instanceof ASTExpression) {
                 ASTExpression astExpression = (ASTExpression) node;
-                recursive(astExpression);
+                recursive(astExpression, map);
             } else if (node instanceof ASTVariable) {
                 ASTVariable astVariable = (ASTVariable) node;
-                recursive(astVariable);
+                recursive(astVariable, map);
             } else if (node instanceof ASTMethod) {
                 ASTMethod astMethod = (ASTMethod) node;
-                recursive(astMethod);
+                recursive(astMethod, map);
             } else if (node instanceof ASTIdentifier) {
                 ASTIdentifier astIdentifier = (ASTIdentifier) node;
-                recursive(astIdentifier);
+                recursive(astIdentifier, map);
             }
         }
     }
 
-    private void fill(ASTReference ref, Map<String, Integer> map) {
-
+    private void checkVariableType(ASTReference ref, Map<String, Object> map) {
+        Node parent = ref.jjtGetParent();
+        if (parent instanceof ASTprocess) {
+            return;
+        }
+        if (parent instanceof ASTDirective) {
+            ASTDirective directive = (ASTDirective) parent;
+            System.out.println(directive.getDirectiveName());
+        } else if (parent instanceof ASTIfStatement) {
+            //
+        }
     }
 }

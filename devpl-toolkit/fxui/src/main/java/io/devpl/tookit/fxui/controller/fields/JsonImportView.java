@@ -4,11 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.tookit.editor.CodeEditor;
+import io.devpl.tookit.fxui.editor.CodeMirrorEditor;
+import io.devpl.tookit.fxui.editor.LanguageMode;
 import io.devpl.tookit.fxui.model.FieldSpec;
 import io.devpl.tookit.fxui.view.json.JSONTreeView;
 import io.devpl.tookit.utils.FileUtils;
@@ -17,29 +17,43 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.*;
 
+/**
+ * 导入JSON格式数据
+ */
 @FxmlLocation(location = "layout/fields/ImportFieldsJSONView.fxml")
 public class JsonImportView extends FxmlView {
 
     @FXML
-    public CodeEditor content;
-    @FXML
     public ChoiceBox<String> chbJsonSpec;
+    @FXML
+    public BorderPane bopRoot;
+
+    CodeMirrorEditor codeEditor;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         chbJsonSpec.getItems().addAll("JSON", "JSON5", "HJSON");
         chbJsonSpec.getSelectionModel().select(0);
+
+        if (codeEditor == null) {
+            codeEditor = new CodeMirrorEditor();
+            log.info("初始化编辑器");
+            codeEditor.init(
+                    () -> codeEditor.setContent("select * from T t where t.name = \"test\" limit 20;", true),
+                    () -> codeEditor.setMode(LanguageMode.JSON),
+                    () -> codeEditor.setTheme("xq-light"));
+
+            bopRoot.setCenter(codeEditor.getView());
+        }
     }
 
     /**
@@ -50,7 +64,7 @@ public class JsonImportView extends FxmlView {
     @Subscribe
     public void parseFieldsFromInput(FieldImportEvent event) {
         try {
-            List<FieldSpec> list = extractFieldsFromJson(content.getText());
+            List<FieldSpec> list = extractFieldsFromJson(codeEditor.getContent());
             publish("AddFields", list);
         } catch (Exception exception) {
             Alerts.exception("解析异常", exception).showAndWait();
@@ -107,7 +121,7 @@ public class JsonImportView extends FxmlView {
 
     @FXML
     public void showJsonTree(ActionEvent actionEvent) {
-        String text = content.getText();
+        String text = codeEditor.getContent();
         if (StringUtils.hasNotText(text)) {
             return;
         }
@@ -139,8 +153,8 @@ public class JsonImportView extends FxmlView {
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("json", ".json"));
         File file = fileChooser.showOpenDialog(getStage(actionEvent));
         if (file != null) {
-            content.clear();
-            content.appendText(FileUtils.readToString(file));
+            codeEditor.setContent("", true);
+            codeEditor.setContent(FileUtils.readToString(file), false);
         }
     }
 }

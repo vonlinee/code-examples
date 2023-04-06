@@ -14,7 +14,6 @@ import org.beetl.core.resource.ClasspathResourceLoader;
 import org.beetl.core.resource.CompositeResourceLoader;
 import org.beetl.core.resource.FileResourceLoader;
 import org.beetl.core.resource.StartsWithMatcher;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.io.ByteArrayOutputStream;
@@ -24,8 +23,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-
-import static io.devpl.toolkit.dto.Constant.RESOURCE_PREFIX_FILE;
 
 /**
  * 对原模板引擎进行改造，使其支持file和classpath两类加载模式
@@ -73,9 +70,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
         return this;
     }
 
-
     @Override
-    @Nonnull
     public String templateFilePath(@Nonnull String filePath) {
         return filePath;
     }

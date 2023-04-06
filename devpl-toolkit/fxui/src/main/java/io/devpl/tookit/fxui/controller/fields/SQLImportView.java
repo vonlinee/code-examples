@@ -5,7 +5,8 @@ import io.devpl.codegen.sql.SqlUtils;
 import io.devpl.fxtras.Alerts;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.tookit.editor.CodeEditor;
+import io.devpl.tookit.fxui.editor.CodeMirrorEditor;
+import io.devpl.tookit.fxui.editor.LanguageMode;
 import io.devpl.tookit.fxui.model.FieldInfo;
 import io.devpl.tookit.utils.DBUtils;
 import io.devpl.tookit.utils.StringUtils;
@@ -13,7 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import org.fxmisc.richtext.CodeArea;
+import javafx.scene.layout.BorderPane;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -23,25 +24,36 @@ import java.util.*;
 /**
  * SQL字段导入
  */
-@FxmlLocation(location = "layout/fields/ImportFieldsJSONView.fxml")
+@FxmlLocation(location = "layout/fields/FieldsImportSQLView.fxml")
 public class SQLImportView extends FxmlView {
 
     @FXML
     public ChoiceBox<String> chbJsonSpec;
 
     @FXML
-    public CodeEditor txaContent;
-    @FXML
     public TextField txfDbName;
+    @FXML
+    public BorderPane bopRoot;
+
+    CodeMirrorEditor codeEditor;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        if (codeEditor == null) {
+            codeEditor = new CodeMirrorEditor();
+            log.info("初始化编辑器");
+            codeEditor.init(
+                    () -> codeEditor.setContent("select * from T t where t.name = \"test\" limit 20;", true),
+                    () -> codeEditor.setMode(LanguageMode.SQL),
+                    () -> codeEditor.setTheme("xq-light"));
+            bopRoot.setCenter(null);
+            bopRoot.setCenter(codeEditor.getView());
+        }
     }
 
     @FXML
     public void parseColumns(ActionEvent actionEvent) {
-        String text = txaContent.getText();
+        String text = codeEditor.getContent();
         if (StringUtils.hasNotText(text)) {
             Alerts.warn("待解析SQL为空!").showAndWait();
             return;

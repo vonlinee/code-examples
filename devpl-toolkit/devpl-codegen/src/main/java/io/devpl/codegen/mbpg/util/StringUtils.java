@@ -1,6 +1,5 @@
 package io.devpl.codegen.mbpg.util;
 
-import com.google.common.base.Preconditions;
 import io.devpl.sdk.lang.Interpolations;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
@@ -553,8 +552,8 @@ public final class StringUtils {
      * purpose except to supplant the real information you were trying to provide. These are the cases
      * this method is made for; it instead generates a best-effort string with all supplied argument
      * values present. This method is also useful in environments such as GWT where {@code
-     * String.format} is not available. As an example, method implementations of the {@link
-     * Preconditions} class use this formatter, for both of the reasons just discussed.
+     * String.format} is not available. As an example, method implementations of the
+     * Preconditions class use this formatter, for both of the reasons just discussed.
      *
      * <p><b>Warning:</b> Only the exact two-character placeholder sequence {@code "%s"} is
      * recognized.

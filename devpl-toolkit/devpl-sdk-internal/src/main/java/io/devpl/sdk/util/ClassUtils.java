@@ -1283,8 +1283,7 @@ public abstract class ClassUtils {
 	 * may be {@code DefaultFoo}. In this case, the method may be
 	 * {@code DefaultFoo.bar()}. This enables attributes on that method to be found.
 	 * <p>
-	 * <b>NOTE:</b> In contrast to
-	 * {@link org.springframework.aop.support.AopUtils#getMostSpecificMethod}, this
+	 * <b>NOTE:</b> In contrast to org.springframework.aop.support.AopUtils#getMostSpecificMethod, this
 	 * method does <i>not</i> resolve Java 5 bridge methods automatically. Call
 	 * {@link org.springframework.core.BridgeMethodResolver#findBridgedMethod} if
 	 * bridge method resolution is desirable (e.g. for obtaining metadata from the

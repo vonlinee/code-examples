@@ -2,17 +2,18 @@
   <div>
     <el-button @click="open">点我打开</el-button>
     <Dialog ref="dialog" :config="config" :beforeClose="beforeClose" @close="resetForm">
-        <CodeMirrorEditor></CodeMirrorEditor>
+        <VueCM></VueCM>
     </Dialog>
   </div>
 </template>
 <script>
-import CodeMirrorEditor from '~/components/editor/CodeMirrorEditor.vue';
+// import CodeMirrorEditor from '~/components/editor/CodeMirrorEditor.vue';
+import VueCM from '~/components/editor/VueCM.vue';
 import Dialog from "@/components/Dialog.vue";
 
 export default {
   components: {
-    Dialog, CodeMirrorEditor
+    Dialog, VueCM
   },
   data() {
     return {

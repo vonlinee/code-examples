@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class TemplateInfo implements Serializable {
 
     /**
-     * 模板ID
+     * 模板唯一ID
      */
     @TableId(value = "template_id", type = IdType.ASSIGN_UUID)
     private String templateId;

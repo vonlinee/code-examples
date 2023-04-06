@@ -14,6 +14,11 @@ public class OutputFileInfo {
         this(true);
     }
 
+    public OutputFileInfo(String fileType) {
+        this(true);
+        this.fileType = fileType;
+    }
+
     public OutputFileInfo(boolean builtIn) {
         this.builtin = builtIn;
     }
@@ -25,8 +30,14 @@ public class OutputFileInfo {
      */
     private String outputLocation;
 
+    /**
+     * 模板名称
+     */
     private String templateName;
 
+    /**
+     * 模板路径
+     */
     private String templatePath;
 
     /**

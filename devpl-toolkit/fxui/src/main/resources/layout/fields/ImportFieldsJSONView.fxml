@@ -4,9 +4,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
-<?import org.fxmisc.richtext.CodeArea?>
-<?import io.devpl.tookit.editor.CodeEditor?>
-<BorderPane xmlns="http://javafx.com/javafx"
+<BorderPane fx:id="bopRoot" xmlns="http://javafx.com/javafx"
             fx:controller="io.devpl.tookit.fxui.controller.fields.JsonImportView"
             xmlns:fx="http://javafx.com/fxml">
 
@@ -19,8 +17,6 @@
     </top>
 
     <center>
-        <CodeEditor fx:id="content">
 
-        </CodeEditor>
     </center>
 </BorderPane>

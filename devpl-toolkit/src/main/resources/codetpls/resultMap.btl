@@ -1,3 +1,0 @@
-<resultMap id="${config.dtoName}Map" type="${config.fullPackage}">
-<% for(field in config.fields){ %><result column="${field.columnName}" property="${field.propertyName}" /><% } %>
-</resultMap>

@@ -1,7 +1,7 @@
 package io.devpl.tookit.fxui.controller;
 
 import com.squareup.javapoet.*;
-import de.marhali.json5.*;
+import de.marhail.json5.*;
 import io.devpl.fxtras.mvc.FxmlLocation;
 import io.devpl.fxtras.mvc.FxmlView;
 import javafx.event.ActionEvent;

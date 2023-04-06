@@ -14,9 +14,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -91,33 +89,6 @@ public class CodeGenConfigService {
         } catch (IOException exception) {
             throw new BusinessException("保存配置失败");
         }
-    }
-
-    /**
-     * 上传模板
-     *
-     * @param file 模板文件
-     * @return 返回模板文件路径
-     */
-    public String uploadTemplate(MultipartFile file) {
-        String fileName = file.getOriginalFilename();
-        // TODO 处理文件名为空
-        assert fileName != null;
-        String fileSuffix = FileUtils.getExtension(fileName);
-        // 保存文件名
-        String saveFileName = fileName.substring(0, fileName.lastIndexOf(fileSuffix)) + DateTimeUtils.nowDateTime();
-        // 模板文件存放目录s
-        String savePath = PathUtils.join(this.saveParent, "template", saveFileName);
-        log.info("模板上传路径为：{}", savePath);
-        try {
-            Path path = Path.of(savePath);
-            if (FileUtils.createFile(path)) {
-                Files.copy(file.getInputStream(), path);
-            }
-        } catch (IOException e) {
-            throw new BusinessException("上传模板文件失败", e);
-        }
-        return "file:" + savePath;
     }
 
     public void importProjectConfig(String sourcePkg) {

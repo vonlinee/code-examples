@@ -1,6 +1,5 @@
 package io.devpl.tookit.utils;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import org.apache.commons.lang3.ArrayUtils;
 
 import static org.apache.commons.lang3.StringUtils.isAnyBlank;
@@ -25,7 +24,7 @@ public final class StringUtils {
     }
 
     public static boolean hasText(final CharSequence cs) {
-        return org.springframework.util.StringUtils.hasText(cs);
+        return !isEmpty(cs);
     }
 
     public static boolean hasNotText(CharSequence sequence) {
@@ -46,6 +45,7 @@ public final class StringUtils {
 
     /**
      * convert string from slash style to camel style, such as my_course will convert to MyCourse
+     *
      * @param str 数据库字符串
      * @return
      */
@@ -98,6 +98,7 @@ public final class StringUtils {
      * StringUtils.isAnyEmpty(new String[]{})   = false
      * StringUtils.isAnyEmpty(new String[]{""}) = true
      * </pre>
+     *
      * @param css the CharSequences to check, may be null or empty
      * @return {@code true} if any of the CharSequences are empty or null
      * @since 3.2
@@ -126,6 +127,7 @@ public final class StringUtils {
      * StringUtils.isBlank("bob")     = false
      * StringUtils.isBlank("  bob  ") = false
      * </pre>
+     *
      * @param cs the CharSequence to check, may be null
      * @return {@code true} if the CharSequence is null, empty or whitespace only
      * @since 2.0
@@ -147,6 +149,7 @@ public final class StringUtils {
     /**
      * Gets a CharSequence length or {@code 0} if the CharSequence is
      * {@code null}.
+     *
      * @param cs a CharSequence or {@code null}
      * @return CharSequence length or {@code 0} if the CharSequence is
      * {@code null}.
@@ -179,6 +182,7 @@ public final class StringUtils {
      * StringUtils.isNoneBlank(new String[]{""}) = false
      * StringUtils.isNoneBlank("foo", "bar")     = true
      * </pre>
+     *
      * @param css the CharSequences to check, may be null or empty
      * @return {@code true} if none of the CharSequences are empty or null or whitespace only
      * @since 3.2
@@ -189,12 +193,13 @@ public final class StringUtils {
 
     /**
      * 字符串下划线转驼峰格式
+     *
      * @param param 需要转换的字符串
      * @return 转换好的字符串
      */
     public static String underlineToCamel(String param) {
         if (isBlank(param)) {
-            return StringPool.EMPTY;
+            return "";
         }
         String temp = param.toLowerCase();
         int len = temp.length();
@@ -214,6 +219,7 @@ public final class StringUtils {
 
     /**
      * 首字母大写(进行字母的ascii编码前移，效率是最高的)
+     *
      * @param fieldName 需要转化的字符串
      */
     public static String upperFirst(String fieldName) {

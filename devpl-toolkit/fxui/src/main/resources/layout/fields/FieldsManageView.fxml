@@ -61,7 +61,6 @@
             <TabPane fx:id="tbpImportContent">
             </TabPane>
         </center>
-
         <bottom>
             <AnchorPane prefHeight="51.0" BorderPane.alignment="CENTER">
                 <ButtonBar layoutX="380.0" layoutY="5.0" prefHeight="40.0" prefWidth="200.0"

@@ -65,11 +65,9 @@ public class FileUtils {
 
     public static void show(File file) {
         try {
-            // Desktop.getDesktop().browse(new File(projectFolder).toURI());
-            Desktop.getDesktop()
-                    .open(file);
+            Desktop.getDesktop().open(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

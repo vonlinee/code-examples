@@ -1,7 +1,5 @@
 package io.devpl.codegen.mbpg.jdbc.dialect.mysql;
 
-import lombok.Data;
-
 /**
  * CREATE TEMPORARY TABLE `COLUMNS` (
  * `TABLE_CATALOG` varchar(512) NOT NULL DEFAULT '',

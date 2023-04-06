@@ -1,7 +1,5 @@
 package io.devpl.codegen.utils;
 
-import org.apache.commons.text.CaseUtils;
-
 public class StringUtils {
 
     /**

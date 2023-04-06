@@ -7,16 +7,14 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
 /**
- * javafx组件拖动工具类
- * @author 徐志林
- * @createTime 2020-04-23 10:46
+ * JavaFX Node拖动工具类
  */
 public class NodeDragUtil {
-    public static void addNodeDragListener(Node node){
+    public static void addNodeDragListener(Node node) {
         new DragListener(node).enableDrag(node);
     }
 
-    public static void addAllDragListener(List<Node> nodeList){
+    public static void addAllDragListener(List<Node> nodeList) {
         nodeList.forEach(node -> {
             new DragListener(node).enableDrag(node);
         });
@@ -38,8 +36,8 @@ public class NodeDragUtil {
                 xOffset = event.getX();
                 yOffset = event.getY();
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-                node.setTranslateX((node.getTranslateX()+event.getX() - xOffset));
-                node.setTranslateY((node.getTranslateY()+event.getY() - yOffset));
+                node.setTranslateX((node.getTranslateX() + event.getX() - xOffset));
+                node.setTranslateY((node.getTranslateY() + event.getY() - yOffset));
             }
         }
 

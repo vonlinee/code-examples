@@ -10,6 +10,4 @@ public class ServiceStrategy {
      * 自定义继承的Service类全称，带包名
      */
     private String superServiceClass = ConstVal.SUPER_SERVICE_CLASS;
-
-    
 }

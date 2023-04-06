@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 import java.util.Map;
 
 /**
- * JSON树结构视图
+ * JSON树结构视图 - 可视化
  */
 public class JSONTreeView extends TreeTableView<JSONNode> {
 
@@ -22,6 +22,7 @@ public class JSONTreeView extends TreeTableView<JSONNode> {
                 @SuppressWarnings("unchecked")
                 TreeTableRow<JSONNode> clickedRow = (TreeTableRow<JSONNode>) event.getSource();
                 TreeItem<JSONNode> treeItem = clickedRow.getTreeItem();
+                System.out.println(treeItem.getValue());
             });
             return row;
         });

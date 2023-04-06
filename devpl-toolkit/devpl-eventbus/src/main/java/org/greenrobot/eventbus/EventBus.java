@@ -16,7 +16,6 @@
 package org.greenrobot.eventbus;
 
 import org.greenrobot.eventbus.android.AndroidDependenciesDetector;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -58,9 +57,7 @@ public class EventBus {
 
     private final ThreadLocal<PostingThreadState> currentPostingThreadState = ThreadLocal.withInitial(PostingThreadState::new);
 
-    @Nullable
     private final MainThreadSupport mainThreadSupport;
-    @Nullable
     private final Poster mainThreadPoster;
     private final BackgroundPoster backgroundPoster;
     private final AsyncPoster asyncPoster;

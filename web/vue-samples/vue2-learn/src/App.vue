@@ -3,21 +3,62 @@
     <!-- <button @click="show">show</button>
     <HelloWorld msg="message" :callbackFunction="showValue" ref="hw" /> -->
 
-    <CodeMirrorEditor></CodeMirrorEditor>
+    <VueCM></VueCM>
+    <p></p>
+    <p></p>
+
+    <!-- Table -->
+    <el-button type="text" @click="dialogTableVisible = true">打开嵌套表格的 Dialog</el-button>
+
+    <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+      <VueCM></VueCM>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
-import CodeMirrorEditor from './components/cm/CodeMirrorEditor.vue'
+// import CodeMirrorEditor from './components/cm/CodeMirrorEditor.vue'
+import VueCM from './components/cm/VueCM.vue'
 export default {
   name: 'App',
   components: {
-    CodeMirrorEditor
-  },
+    // CodeMirrorEditor,
+    VueCM
+},
   data: function () {
     return {
-      parentData: "111"
+      parentData: "111",
+      gridData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }],
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      formLabelWidth: '120px'
     }
   },
   methods: {
@@ -38,10 +79,8 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #135ea9;
   margin-top: 60px;
 }

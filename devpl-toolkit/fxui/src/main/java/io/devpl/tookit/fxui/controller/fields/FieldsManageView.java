@@ -103,12 +103,22 @@ public class FieldsManageView extends FxmlView {
         // 初始化所有Tab
         for (ImportType importType : ImportType.values()) {
             Tab tab = new Tab(importType.name());
-            tab.setContent(newTabContentByImportType(importType));
+            Node node = newTabContentByImportType(importType);
+            if (node == null) {
+                continue;
+            }
+            tab.setContent(node);
             tab.setClosable(false);
             tbpImportContent.getTabs().add(tab);
         }
     }
 
+    /**
+     * 导入类型决定节点
+     *
+     * @param importType 导入类型
+     * @return
+     */
     private Node newTabContentByImportType(ImportType importType) {
         Node node;
         if (importType == ImportType.SQL) {
@@ -116,7 +126,7 @@ public class FieldsManageView extends FxmlView {
         } else if (importType == ImportType.JSON) {
             node = ViewLoader.load(JsonImportView.class).getRoot();
         } else {
-            node = new Button("Button");
+            return null;
         }
         return node;
     }

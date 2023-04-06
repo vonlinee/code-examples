@@ -6,7 +6,7 @@ public class CellUtils {
 
     /**
      * 删除TableView的选择项，JavaFX提供的API有点问题
-     * https://stackoverflow.com/questions/18700430/issue-with-removing-multiple-rows-at-once-from-javafx-tableview
+     * <a href="https://stackoverflow.com/questions/18700430/issue-with-removing-multiple-rows-at-once-from-javafx-tableview">...</a>
      *
      * @param tableView TableView
      * @param <S>       数据类型

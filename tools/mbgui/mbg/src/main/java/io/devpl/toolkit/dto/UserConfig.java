@@ -74,10 +74,7 @@ public class UserConfig {
         if (outputFiles == null) {
             return null;
         }
-        return outputFiles.stream()
-                .filter((f -> Constant.FILE_TYPE_MAPPER_XML.equals(f.getFileType())))
-                .findFirst()
-                .get();
+        return CollectionUtils.findFirst(outputFiles, (f -> Constant.FILE_TYPE_MAPPER_XML.equals(f.getFileType())), null);
     }
 
     @JsonIgnore
@@ -100,7 +97,6 @@ public class UserConfig {
     }
 
 
-
     /**
      * 从另一个项目配置中合并可修改的配置项
      *
@@ -119,13 +115,11 @@ public class UserConfig {
         List<OutputFileInfo> files = sourceUserConfig.getOutputFiles();
         Map<String, OutputFileInfo> map = CollectionUtils.toMap(files, OutputFileInfo::getFileType);
 
-
         changeTplPath(map.get(Constant.FILE_TYPE_SERVICEIMPL), this.getControllerInfo(), sourceProjectConfigPath, targetProjectConfigPath);
         changeTplPath(map.get(Constant.FILE_TYPE_SERVICEIMPL), this.getEntityInfo(), sourceProjectConfigPath, targetProjectConfigPath);
         changeTplPath(map.get(Constant.FILE_TYPE_SERVICEIMPL), this.getMapperInfo(), sourceProjectConfigPath, targetProjectConfigPath);
         changeTplPath(map.get(Constant.FILE_TYPE_SERVICEIMPL), this.getMapperXmlInfo(), sourceProjectConfigPath, targetProjectConfigPath);
         changeTplPath(map.get(Constant.FILE_TYPE_SERVICEIMPL), this.getServiceInfo(), sourceProjectConfigPath, targetProjectConfigPath);
-
 
         changeTplPath(map.get(Constant.FILE_TYPE_SERVICEIMPL), this.getServiceImplInfo(), sourceProjectConfigPath, targetProjectConfigPath);
     }

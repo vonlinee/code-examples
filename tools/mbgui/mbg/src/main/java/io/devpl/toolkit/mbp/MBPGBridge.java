@@ -208,9 +208,7 @@ public class MBPGBridge {
     private void configInjection(InjectionConfig.Builder builder, UserConfig userConfig, GenSetting genSetting) {
         // 自定义参数
         builder.beforeOutputFile((tableInfo, objectMap) -> {
-            Map<String, Object> vars;
-            TemplateVaribleInjecter varibleInjecter = tableInfo1 -> new HashMap<>();
-            vars = varibleInjecter.getCustomTemplateVaribles(tableInfo);
+            Map<String, Object> vars = new HashMap<>();
             // 用于控制controller中对应API是否展示的自定义参数
             Map<String, Object> controllerMethodsVar = new HashMap<>();
             for (String method : genSetting.getChoosedControllerMethods()) {

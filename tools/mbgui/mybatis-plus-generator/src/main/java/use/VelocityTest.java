@@ -19,7 +19,6 @@ public class VelocityTest {
         props.setProperty(VelocityEngine.RESOURCE_LOADER,"file");//模板文件加载方式
         VelocityEngine ve = new VelocityEngine(props); // // 初始化模板引擎
 
-
         // 设置velocity资源加载方式为class
         ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
         ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());

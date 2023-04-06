@@ -5,8 +5,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
-<?import io.devpl.tookit.editor.CodeEditor?>
-<BorderPane xmlns="http://javafx.com/javafx"
+<BorderPane
+    fx:id="bopRoot"
+    xmlns="http://javafx.com/javafx"
             fx:controller="io.devpl.tookit.fxui.controller.fields.SQLImportView"
             xmlns:fx="http://javafx.com/fxml">
 
@@ -20,8 +21,6 @@
     </top>
 
     <center>
-        <CodeEditor fx:id="txaContent">
 
-        </CodeEditor>
     </center>
 </BorderPane>

@@ -1,26 +1,27 @@
 <!--https://www.cnblogs.com/tnnyang/p/13596099.html-->
 <template>
-  <el-dialog
-      class="el-dialog-cus"
-      v-bind="attributes"
-      :visible="visible"
-      :before-close="beClose"
-      append-to-body
-      :close-on-click-modal="false"
-      v-on="on">
-    <!-- 防止在弹窗中嵌套一些其他组件时，那些组件的生命周期只会执行一次的问题出现 -->
-    <div class="sync-dialog__div">
-      <slot v-if="visibleSlot"></slot>
-    </div>
-    <div slot="footer">
-      <el-button @click="cancel" plain>{{ btnTxt[0] }}</el-button>
-      <el-button @click="confirm" type="primary" v-if="btnTxt[1]">{{ btnTxt[1] }}</el-button>
-    </div>
-  </el-dialog>
+    <el-dialog
+            class="el-dialog-cus"
+            v-bind="attributes"
+            :visible="visible"
+            :before-close="beClose"
+            append-to-body
+            :close-on-click-modal="false"
+            v-on="on">
+        <div class="sync-dialog__div">
+            <!-- visibleSlot 防止在弹窗中嵌套一些其他组件时，那些组件的生命周期只会执行一次的问题出现 -->
+            <slot v-if="visibleSlot"></slot>
+        </div>
+        <div slot="footer">
+            <el-button @click="cancel" plain>{{ btnTxt[0] }}</el-button>
+            <el-button @click="confirm" type="primary" v-if="btnTxt[1]">{{ btnTxt[1] }}</el-button>
+        </div>
+    </el-dialog>
 </template>
 
 <script>
 export default {
+  name: "Dialog",
   inheritAttrs: false,
   props: {
     config: Object,
@@ -89,15 +90,14 @@ export default {
 </script>
 
 <style lang="scss">
-
+/*控制弹窗内容的高度*/
 .sync-dialog__div {
   height: 300px;
-  overflow: visible;
 }
 
 .el-dialog-cus {
   .el-dialog {
-    padding: 8px;
+    padding: 4px;
   }
 
   .el-dialog__title {

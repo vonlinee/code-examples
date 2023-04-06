@@ -2,7 +2,7 @@ import qs from 'qs'; // 根据需求是否导入qs模块
 import {get, post, postJson} from './request.js'
 import Vue from 'vue'
 
-const api = {
+const api= {
     get(params) {
         return get('', {
             url: '/artical',

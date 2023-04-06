@@ -26,7 +26,7 @@ public class MainUI extends JavaFXApplication {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = ViewLoader.load(MainView.class).getRoot();
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(new Scene(root, 600, 600));
         primaryStage.show();
     }
 }

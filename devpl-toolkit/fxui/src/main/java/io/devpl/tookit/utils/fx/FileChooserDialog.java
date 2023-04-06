@@ -8,6 +8,9 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 文件选择弹窗
+ */
 public class FileChooserDialog {
 
     private final DirectoryChooser directoryChooser = new DirectoryChooser();

@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * 将ResultSet转换为Map,列名如果是下划线,将会被转换为驼峰
- * @see org.springframework.jdbc.core.ColumnMapRowMapper
+ * org.springframework.jdbc.core.ColumnMapRowMapper
  */
 public class MapEntityRowMapper implements RowMapper<Map<String, Object>> {
 

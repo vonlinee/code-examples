@@ -4,6 +4,7 @@ import io.devpl.fxtras.utils.WeakValueHashMap;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -34,6 +35,7 @@ public class ViewLoader {
                     String packageName = clazz.getPackageName();
                     fxmlLocation = packageName.replace(".", "/") + "/" + clazz.getSimpleName() + ".fxml";
                 }
+                // JDK17 通过此方式获取不到资源
                 URL resource = Thread.currentThread().getContextClassLoader().getResource(fxmlLocation);
                 FXMLLoader fxmlLoader = new FXMLLoader(resource);
                 try {

@@ -10,7 +10,7 @@ import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 // 引入代码块主题  我这边是动态主题，所以引入的有点多
 // 正常下面设置 theme: '3024-day' 就好了
-import 'codemirror/theme/eclipse.css';
+// import 'codemirror/theme/eclipse.css';
 
 // 需要引入具体的语法高亮库才会有对应的语法高亮效果
 // codemirror 官方其实支持通过 /addon/mode/loadmode.js 和 /mode/meta.js 来实现动态加载对应语法高亮库
@@ -35,10 +35,10 @@ export default {
 </script>
 
 <style scoped>
-.CodeMirror {
+/* .CodeMirror {
 	height: auto;
 	widows: '100%';
 	text-align: left!important;
-}
+} */
 </style>
 

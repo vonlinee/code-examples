@@ -29,12 +29,9 @@ public class ClassDefinitionController extends FxmlView {
 
     private JavaFileStrucutreTreeView jfsTreeView;
 
-    private ScrollPane detailPane;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         jfsTreeView = new JavaFileStrucutreTreeView();
-        detailPane = new ScrollPane();
 
         ViewLoader load = ViewLoader.load(ClassView.class);
 

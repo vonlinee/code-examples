@@ -72,55 +72,9 @@ public final class Alerts {
         return EXCEPTION;
     }
 
-    /**
-     * 创建Alert对象
-     *
-     * @param alertType   Alert.AlertType
-     * @param contentText 文本
-     * @param width       宽度
-     * @param height      高度
-     * @param resizable   是否可改变大小
-     * @return Alert实例
-     */
-    public static Alert newAlert(Alert.AlertType alertType, String contentText, double width, double height, boolean resizable) {
-        final Alert alert = new Alert(alertType);
-        alert.setResizable(resizable);
-        alert.setWidth(width);
-        alert.setHeight(height);
-        alert.setContentText(contentText);
-        return alert;
-    }
-
     public static Alert confirm(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setContentText(message);
         return alert;
-    }
-
-    /**
-     * build both OK and Cancel buttons for the user to click on to dismiss the
-     * dialog.
-     *
-     * @param message
-     */
-    public static Alert confirmation(String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setContentText(message);
-        return alert;
-    }
-
-    public static Optional<ButtonType> assertTrue(boolean expression, String message) {
-        if (!expression) {
-            return error(message).showAndWait();
-        }
-        return Optional.empty();
-    }
-
-    public static void run(Runnable action) {
-        try {
-            action.run();
-        } catch (Exception exception) {
-            exception(exception.getMessage(), exception);
-        }
     }
 }

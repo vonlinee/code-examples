@@ -2,7 +2,6 @@ package io.devpl.sdk.io;
 
 import io.devpl.sdk.validation.Validator;
 
-import java.awt.*;
 import java.io.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -120,7 +119,6 @@ public class FileUtils {
      * @param canonicalParent the file to consider as the parent.
      * @param canonicalChild  the file to consider as the child.
      * @return true is the candidate leaf is under by the specified composite. False otherwise.
-     * @see org.apache.commons.io.FileUtils#directoryContains(File, File)
      * @since 2.2
      */
     public static boolean directoryContains(final String canonicalParent, final String canonicalChild) {
@@ -153,7 +151,6 @@ public class FileUtils {
      * @throws IOException              if an IO error occurs while checking the files.
      * @throws NullPointerException     if the given {@code File} is {@code null}.
      * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
-     * @see org.apache.commons.io.FilenameUtils#directoryContains(String, String)
      * @since 2.2
      */
     public static boolean directoryContains(final File directory, final File child) throws IOException {
@@ -1840,12 +1837,6 @@ public class FileUtils {
      */
     public static boolean openDirectory(File file) {
         if (file.isDirectory()) {
-            try {
-                Desktop.getDesktop().open(file);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
             return true;
         }
         return openDirectory(getParentFile(file));
@@ -1861,35 +1852,12 @@ public class FileUtils {
      */
     public static void edit(File file) {
         if (file.isFile()) {
-            try {
-                if (Desktop.isDesktopSupported()) {
-                    Desktop desktop = Desktop.getDesktop();
-                    if (desktop.isSupported(Desktop.Action.EDIT)) {
-                        desktop.edit(file);
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * 调用系统接口打开文件
-     * @param file
-     */
-    public static void openFile(File file) {
-        if (!file.exists()) {
-            throw new RuntimeException(file.getAbsolutePath() + " is not existed!");
-        }
-        if (file.isFile()) {
-            try {
-                Desktop.getDesktop().open(file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (file.isDirectory()) {
-            showFile(file);
+            //                if (Desktop.isDesktopSupported()) {
+//                    Desktop desktop = Desktop.getDesktop();
+//                    if (desktop.isSupported(Desktop.Action.EDIT)) {
+//                        desktop.edit(file);
+//                    }
+//                }
         }
     }
 
@@ -1903,11 +1871,6 @@ public class FileUtils {
             tmp = file.getParentFile();
         } else if (file.isDirectory()) {
             tmp = file;
-        }
-        try {
-            Desktop.getDesktop().open(tmp);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

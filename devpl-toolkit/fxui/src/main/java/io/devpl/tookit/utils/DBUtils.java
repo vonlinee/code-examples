@@ -11,8 +11,8 @@ import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.*;
-import org.mybatis.generator.logging.Log;
-import org.mybatis.generator.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.sql.*;
@@ -23,7 +23,7 @@ import java.util.*;
  */
 public class DBUtils {
 
-    private static final Log log = LogFactory.getLog(DBUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(DBUtils.class);
 
     /**
      * 数据库连接超时时长

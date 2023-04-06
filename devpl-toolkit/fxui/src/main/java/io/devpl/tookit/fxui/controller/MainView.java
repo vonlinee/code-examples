@@ -34,8 +34,7 @@ public class MainView extends FxmlView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // ConnectionRegistry.getConnectionConfigurations()
-        //         .forEach(connectionInfo -> trvDbNavigation.addConnection(connectionInfo));
+
     }
 
     @FXML
