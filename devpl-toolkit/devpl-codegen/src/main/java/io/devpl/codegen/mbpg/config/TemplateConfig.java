@@ -16,6 +16,7 @@
 package io.devpl.codegen.mbpg.config;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import net.sf.jsqlparser.util.deparser.CreateIndexDeParser;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +84,10 @@ public class TemplateConfig {
         this.serviceImpl = ConstVal.TEMPLATE_SERVICE_IMPL;
     }
 
+    public boolean isEntityTemplateDisabled() {
+        return disableEntity;
+    }
+
     /**
      * 当模板赋值为空时进行日志提示打印
      *
@@ -115,11 +120,9 @@ public class TemplateConfig {
      * 禁用模板
      *
      * @param templateTypes 模板类型
-     * @return this
-     * @since 3.3.2
      */
-    public TemplateConfig disable(@NotNull TemplateType... templateTypes) {
-        if (templateTypes != null && templateTypes.length > 0) {
+    public TemplateConfig disable(TemplateType... templateTypes) {
+        if (templateTypes != null) {
             for (TemplateType templateType : templateTypes) {
                 switch (templateType) {
                     case ENTITY:
@@ -243,7 +246,7 @@ public class TemplateConfig {
         /**
          * 设置service模板路径
          *
-         * @param serviceTemplate     service接口模板路径
+         * @param serviceTemplate service接口模板路径
          * @return this
          */
         public Builder service(@NotNull String serviceTemplate) {

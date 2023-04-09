@@ -80,7 +80,11 @@ public class CodeGenConfiguration {
      */
     public CodeGenConfiguration(PackageConfig packageConfig, DataSourceConfig dataSourceConfig, StrategyConfig strategyConfig, TemplateConfig templateConfig, GlobalConfig globalConfig, InjectionConfig injectionConfig) {
         this.dataSourceConfig = dataSourceConfig;
-        this.strategyConfig = Optional.ofNullable(strategyConfig).orElseGet(GeneratorBuilder::strategyConfig);
+        if (strategyConfig == null) {
+            this.strategyConfig = new StrategyConfig.Builder().build();
+        } else {
+            this.strategyConfig = strategyConfig;
+        }
         this.globalConfig = Optional.ofNullable(globalConfig).orElseGet(GeneratorBuilder::globalConfig);
         this.templateConfig = Optional.ofNullable(templateConfig).orElseGet(GeneratorBuilder::templateConfig);
         this.packageConfig = Optional.ofNullable(packageConfig).orElseGet(GeneratorBuilder::packageConfig);

@@ -143,7 +143,7 @@ public class AutoGenerator {
             // templateEngine = new VelocityTemplateEngine();
             throw new RuntimeException("模板引擎未配置");
         }
-        templateEngine.setConfigBuilder(config);
+        templateEngine.setConfig(config);
         // 模板引擎初始化执行文件输出
         templateEngine.init(config).batchOutput().open();
         logger.debug("==========================文件生成完成！！！==========================");

@@ -2,9 +2,9 @@ package io.devpl.codegen.mbpg.type;
 
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.po.TableField;
-import io.devpl.codegen.mbpg.config.rules.DateType;
+import io.devpl.codegen.mbpg.config.rules.DateTimeType;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
-import io.devpl.codegen.mbpg.config.rules.IColumnType;
+import io.devpl.codegen.mbpg.config.rules.DataType;
 
 import java.sql.Types;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public class TypeRegistry {
 
     private final GlobalConfig globalConfig;
 
-    private final Map<Integer, IColumnType> typeMap = new HashMap<>();
+    private final Map<Integer, DataType> typeMap = new HashMap<>();
 
     public TypeRegistry(GlobalConfig globalConfig) {
         this.globalConfig = globalConfig;
@@ -59,7 +59,7 @@ public class TypeRegistry {
         // TODO 类型需要补充完整
     }
 
-    public IColumnType getColumnType(TableField.MetaInfo metaInfo) {
+    public DataType getColumnType(TableField.MetaInfo metaInfo) {
         // TODO 是否用包装类??? 可以尝试判断字段是否允许为null来判断是否用包装类
         int typeCode = metaInfo.getJdbcType().TYPE_CODE;
         switch (typeCode) {
@@ -80,14 +80,14 @@ public class TypeRegistry {
         }
     }
 
-    private IColumnType getBitType(TableField.MetaInfo metaInfo) {
+    private DataType getBitType(TableField.MetaInfo metaInfo) {
         if (metaInfo.getLength() > 1) {
             return JavaType.BYTE_ARRAY;
         }
         return JavaType.BOOLEAN;
     }
 
-    private IColumnType getNumber(TableField.MetaInfo metaInfo) {
+    private DataType getNumber(TableField.MetaInfo metaInfo) {
         if (metaInfo.getScale() > 0 || metaInfo.getLength() > 18) {
             return typeMap.get(metaInfo.getJdbcType().TYPE_CODE);
         } else if (metaInfo.getLength() > 9) {
@@ -99,9 +99,9 @@ public class TypeRegistry {
         }
     }
 
-    private IColumnType getDateType(TableField.MetaInfo metaInfo) {
+    private DataType getDateType(TableField.MetaInfo metaInfo) {
         JavaType dbColumnType;
-        DateType dateType = globalConfig.getDateType();
+        DateTimeType dateType = globalConfig.getDateType();
         switch (dateType) {
             case SQL_PACK:
                 dbColumnType = JavaType.DATE_SQL;
@@ -115,10 +115,10 @@ public class TypeRegistry {
         return dbColumnType;
     }
 
-    private IColumnType getTimeType(TableField.MetaInfo metaInfo) {
+    private DataType getTimeType(TableField.MetaInfo metaInfo) {
         JavaType dbColumnType;
-        DateType dateType = globalConfig.getDateType();
-        if (dateType == DateType.TIME_PACK) {
+        DateTimeType dateType = globalConfig.getDateType();
+        if (dateType == DateTimeType.TIME_PACK) {
             dbColumnType = JavaType.LOCAL_TIME;
         } else {
             dbColumnType = JavaType.TIME;
@@ -126,12 +126,12 @@ public class TypeRegistry {
         return dbColumnType;
     }
 
-    private IColumnType getTimestampType(TableField.MetaInfo metaInfo) {
+    private DataType getTimestampType(TableField.MetaInfo metaInfo) {
         JavaType dbColumnType;
-        DateType dateType = globalConfig.getDateType();
-        if (dateType == DateType.TIME_PACK) {
+        DateTimeType dateType = globalConfig.getDateType();
+        if (dateType == DateTimeType.TIME_PACK) {
             dbColumnType = JavaType.LOCAL_DATE_TIME;
-        } else if (dateType == DateType.ONLY_DATE) {
+        } else if (dateType == DateTimeType.ONLY_DATE) {
             dbColumnType = JavaType.DATE;
         } else {
             dbColumnType = JavaType.TIMESTAMP;

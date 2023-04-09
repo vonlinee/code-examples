@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import io.devpl.fxtras.Alerts;
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
+import io.fxtras.Alerts;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
 import io.devpl.tookit.fxui.editor.CodeMirrorEditor;
 import io.devpl.tookit.fxui.editor.LanguageMode;
 import io.devpl.tookit.fxui.model.FieldSpec;
@@ -125,7 +125,13 @@ public class JsonImportView extends FxmlView {
         if (StringUtils.hasNotText(text)) {
             return;
         }
-        JsonElement jsonElement = gson.fromJson(text, JsonElement.class);
+        JsonElement jsonElement;
+        try {
+            jsonElement = gson.fromJson(text, JsonElement.class);
+        } catch (Exception exception) {
+            Alerts.exception("JSON解析异常", exception).show();
+            return;
+        }
         jsonTreeView.addRootJson(jsonElement);
 
         Scene scene;

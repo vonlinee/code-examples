@@ -2,9 +2,9 @@ package io.devpl.tookit.fxui.controller.fields;
 
 import io.devpl.codegen.mbpg.jdbc.dialect.mysql.InfoSchemaColumn;
 import io.devpl.codegen.sql.SqlUtils;
-import io.devpl.fxtras.Alerts;
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
+import io.fxtras.Alerts;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
 import io.devpl.tookit.fxui.editor.CodeMirrorEditor;
 import io.devpl.tookit.fxui.editor.LanguageMode;
 import io.devpl.tookit.fxui.model.FieldInfo;
@@ -41,7 +41,6 @@ public class SQLImportView extends FxmlView {
     public void initialize(URL location, ResourceBundle resources) {
         if (codeEditor == null) {
             codeEditor = new CodeMirrorEditor();
-            log.info("初始化编辑器");
             codeEditor.init(
                     () -> codeEditor.setContent("select * from T t where t.name = \"test\" limit 20;", true),
                     () -> codeEditor.setMode(LanguageMode.SQL),

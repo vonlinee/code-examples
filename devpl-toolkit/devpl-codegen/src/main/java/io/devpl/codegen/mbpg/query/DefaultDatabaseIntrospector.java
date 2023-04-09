@@ -5,7 +5,7 @@ import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
 import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
-import io.devpl.codegen.mbpg.config.rules.IColumnType;
+import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
 import io.devpl.codegen.mbpg.type.ITypeConvertHandler;
 import io.devpl.codegen.mbpg.type.TypeRegistry;
@@ -97,7 +97,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
             }
             field.setColumnName(columnName).setComment(columnInfo.getRemarks());
             String propertyName = entity.getNameConvert().propertyNameConvert(field);
-            IColumnType columnType = typeRegistry.getColumnType(metaInfo);
+            DataType columnType = typeRegistry.getColumnType(metaInfo);
             ITypeConvertHandler typeConvertHandler = dataSourceConfig.getTypeConvertHandler();
             if (typeConvertHandler != null) {
                 columnType = typeConvertHandler.convert(globalConfig, typeRegistry, metaInfo);

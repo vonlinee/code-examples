@@ -1,8 +1,8 @@
 package io.devpl.tookit.fxui.controller;
 
-import io.devpl.fxtras.Alerts;
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
+import io.fxtras.Alerts;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
 import io.devpl.tookit.fxui.common.Constants;
 import io.devpl.tookit.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.tookit.utils.CollectionUtils;

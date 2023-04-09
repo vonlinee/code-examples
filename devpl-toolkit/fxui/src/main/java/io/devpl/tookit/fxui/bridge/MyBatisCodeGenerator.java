@@ -4,12 +4,13 @@ import io.devpl.tookit.fxui.common.Constants;
 import io.devpl.tookit.fxui.common.JDBCDriver;
 import io.devpl.tookit.fxui.common.StringKey;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
-import io.devpl.tookit.fxui.model.TableCodeGeneration;
-import io.devpl.tookit.fxui.model.TableCodeGenOption;
-import io.devpl.tookit.fxui.model.ConnectionInfo;
+import io.devpl.tookit.fxui.model.TableGeneration;
+import io.devpl.tookit.fxui.model.CodeGenOption;
+import io.devpl.tookit.fxui.model.ConnectionConfig;
 import io.devpl.tookit.fxui.model.ProjectConfiguration;
 import io.devpl.tookit.fxui.plugins.*;
 import io.devpl.tookit.utils.StringUtils;
+import io.fxtras.utils.Utils;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.api.Plugin;
 import org.mybatis.generator.api.ProgressCallback;
@@ -52,7 +53,7 @@ public class MyBatisCodeGenerator {
         this.generatorConfig = generatorConfig;
     }
 
-    public void generate(Collection<TableCodeGeneration> tablesForGeneration) throws Exception {
+    public void generate(Collection<TableGeneration> tablesForGeneration) throws Exception {
         Configuration configuration = new Configuration();
 
         // ClassPathEntry
@@ -69,7 +70,7 @@ public class MyBatisCodeGenerator {
 
         // 按连接名称进行分组
         tablesForGeneration.stream()
-                .collect(Collectors.groupingBy(TableCodeGeneration::getConnectionName))
+                .collect(Collectors.groupingBy(TableGeneration::getConnectionName))
                 .forEach((connectionName, tableCodeGenConfigs) -> {
                     Context context = prepareContextForSingleConnection(connectionName, tableCodeGenConfigs);
                     context.setCommentGeneratorConfiguration(commentConfig);
@@ -80,11 +81,12 @@ public class MyBatisCodeGenerator {
 
     /**
      * 每个连接生成一个Context
+     *
      * @param connectionName             连接名称
      * @param tableConfigOfOneConnection 该连接下被选中的参与代码生成的表配置信息
      * @return MyBatis Generator Context
      */
-    private Context prepareContextForSingleConnection(String connectionName, List<TableCodeGeneration> tableConfigOfOneConnection) {
+    private Context prepareContextForSingleConnection(String connectionName, List<TableGeneration> tableConfigOfOneConnection) {
         Context context = new Context(ModelType.CONDITIONAL);
         context.setId(connectionName);
         // 设置运行时环境
@@ -92,7 +94,7 @@ public class MyBatisCodeGenerator {
         context.addProperty(StringKey.JAVA_FILE_ENCODING, StandardCharsets.UTF_8.name());
         context.addProperty(StringKey.AUTO_DELIMIT_KEYWORDS, "true");
         // 父包名
-        context.addProperty(StringKey.PARENT_PACKAGE, generatorConfig.getParentPackage());
+        context.addProperty(StringKey.PARENT_PACKAGE, Utils.whenNull(generatorConfig.getParentPackage(), ""));
         // 文件编码
         context.addProperty("javaFileEncoding", StandardCharsets.UTF_8.name());
 
@@ -101,16 +103,15 @@ public class MyBatisCodeGenerator {
         pluginRegistry.addProperty("type", PluginRegistry.class.getName());
         context.addPluginConfiguration(pluginRegistry);
 
-        ConnectionInfo connectionConfig = ConnectionRegistry.getConnectionConfiguration(connectionName);
-        for (TableCodeGeneration tableCodeGenConfig : tableConfigOfOneConnection) {
+        ConnectionConfig connectionConfig = ConnectionRegistry.get(connectionName);
+        for (TableGeneration tableCodeGenConfig : tableConfigOfOneConnection) {
             TableConfiguration tableConfig = prepareTableConfiguration(context, tableCodeGenConfig, connectionConfig);
-
             // 确定哪些插件参与工作
-            preparePlugins(context, tableCodeGenConfig, connectionConfig.getDriverInfo());
+            preparePlugins(context, tableCodeGenConfig, connectionConfig.getDriver());
             // 初始化通用配置信息
             prepareCommonConfig(context, generatorConfig);
             // 初始化JDBC连接配置信息
-            prepareJdbcConnectionConfig(context, tableCodeGenConfig, connectionConfig.getDriverInfo(), connectionConfig);
+            prepareJdbcConnectionConfig(context, tableCodeGenConfig, connectionConfig.getDriver(), connectionConfig);
             // 初始化表生成选项配置
             prepareTableOption(tableCodeGenConfig.getOption());
             context.addTableConfiguration(tableConfig);
@@ -120,12 +121,13 @@ public class MyBatisCodeGenerator {
 
     /**
      * 准备表配置信息
+     *
      * @param context            Context对象
      * @param tableCodeGenConfig 表生成配置信息
      * @param connectionConfig   连接配置信息
      * @return TableConfiguration对象
      */
-    private TableConfiguration prepareTableConfiguration(Context context, TableCodeGeneration tableCodeGenConfig, ConnectionInfo connectionConfig) {
+    private TableConfiguration prepareTableConfiguration(Context context, TableGeneration tableCodeGenConfig, ConnectionConfig connectionConfig) {
         // TableTreeItem configuration
         String tableName = tableCodeGenConfig.getTableName();
         TableConfiguration tableConfig = new TableConfiguration(context);
@@ -133,7 +135,7 @@ public class MyBatisCodeGenerator {
         // Mapper名称
         tableConfig.setMapperName(tableCodeGenConfig.getMapperName());
         // 单表的配置选项
-        TableCodeGenOption option = tableCodeGenConfig.getOption();
+        CodeGenOption option = tableCodeGenConfig.getOption();
         // 实体类名称
         tableConfig.setDomainObjectName(tableCodeGenConfig.getDomainObjectName());
         if (!option.isUseExample()) {
@@ -144,7 +146,7 @@ public class MyBatisCodeGenerator {
         }
         // 数据库schema
 
-        JDBCDriver driverType = connectionConfig.getDriverInfo();
+        JDBCDriver driverType = connectionConfig.getDriver();
 
         // Oracle的不知道，但是Mysql的Catalog是数据库名，Schema不支持
         if (driverType == JDBCDriver.MYSQL5 || driverType == JDBCDriver.MYSQL8) {
@@ -213,6 +215,7 @@ public class MyBatisCodeGenerator {
 
     /**
      * 采用指定的配置进行代码生成
+     *
      * @param configuration 总配置类
      * @throws InvalidConfigurationException
      * @throws SQLException
@@ -233,9 +236,10 @@ public class MyBatisCodeGenerator {
 
     /**
      * 单表选项配置消费
+     *
      * @param option
      */
-    public void prepareTableOption(TableCodeGenOption option) {
+    public void prepareTableOption(CodeGenOption option) {
         // if overrideXML selected, delete oldXML ang generate new one
         if (option.isOverrideXML()) {
             String mappingXMLFilePath = getMappingXMLFilePath(generatorConfig);
@@ -251,12 +255,12 @@ public class MyBatisCodeGenerator {
 
     /**
      * 准备上下文中用到的插件
-     * @param context
+     *
+     * @param context    MyBatis上下文
      * @param generation
      */
-    private void preparePlugins(Context context, TableCodeGeneration generation, JDBCDriver driverInfo) {
-        TableCodeGenOption option = generation.getOption();
-
+    private void preparePlugins(Context context, TableGeneration generation, JDBCDriver driverInfo) {
+        CodeGenOption option = generation.getOption();
         // 实体添加序列化
         addPluginConfiguration(context, SerializablePlugin.class);
         // Lombok 插件
@@ -307,7 +311,7 @@ public class MyBatisCodeGenerator {
         }
     }
 
-    private void prepareJdbcConnectionConfig(Context context, TableCodeGeneration tableCodeGenConfig, JDBCDriver driverType, ConnectionInfo connectionConfig) {
+    private void prepareJdbcConnectionConfig(Context context, TableGeneration tableCodeGenConfig, JDBCDriver driverType, ConnectionConfig connectionConfig) {
         JDBCConnectionConfiguration jdbcConfig = new JDBCConnectionConfiguration();
         if (JDBCDriver.MYSQL5 == driverType || JDBCDriver.MYSQL8 == driverType) {
             jdbcConfig.addProperty(StringKey.NULL_CATALOG_MEANS_CURRENT, "true");
@@ -327,6 +331,7 @@ public class MyBatisCodeGenerator {
 
     /**
      * 通用配置信息
+     *
      * @param context
      * @param generatorConfig
      */
@@ -362,6 +367,7 @@ public class MyBatisCodeGenerator {
 
     /**
      * 新增方法
+     *
      * @param pluginClass 插件类
      * @return PluginConfiguration
      */

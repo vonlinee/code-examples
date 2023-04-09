@@ -45,6 +45,13 @@ public class DBUtils {
         return DriverManager.getConnection(url, username, password);
     }
 
+    /**
+     * 获取连接
+     *
+     * @param config 数据库信息
+     * @return JDBC连接对象
+     * @throws SQLException
+     */
     public static Connection getConnection(DatabaseInfo config) throws SQLException {
         JDBCDriver dbType = JDBCDriver.valueOf(config.getDbType());
         loadDbDriver(dbType);

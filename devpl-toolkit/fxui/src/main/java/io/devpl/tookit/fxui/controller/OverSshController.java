@@ -2,9 +2,9 @@ package io.devpl.tookit.fxui.controller;
 
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import io.devpl.fxtras.Alerts;
-import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.fxtras.mvc.FxmlLocation;
+import io.fxtras.Alerts;
+import io.fxtras.mvc.FxmlView;
+import io.fxtras.mvc.FxmlLocation;
 import io.devpl.tookit.fxui.model.DatabaseInfo;
 import io.devpl.tookit.utils.StringUtils;
 import io.devpl.tookit.utils.ssh.JSchUtils;

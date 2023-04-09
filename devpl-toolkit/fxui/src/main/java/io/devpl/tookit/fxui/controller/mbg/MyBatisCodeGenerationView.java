@@ -1,23 +1,23 @@
 package io.devpl.tookit.fxui.controller.mbg;
 
 import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
-import io.devpl.fxtras.Alerts;
-import io.devpl.fxtras.beans.ValueUpdateListener;
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.fxtras.mvc.ViewLoader;
-import io.devpl.fxtras.utils.StageManager;
-import io.devpl.tookit.fxui.bridge.MyBatisCodeGenerator;
+import io.devpl.tookit.fxui.bridge.MyBatisPlusGenerator;
+import io.devpl.tookit.fxui.common.ProgressDialog;
+import io.devpl.tookit.fxui.model.*;
+import io.fxtras.Alerts;
+import io.fxtras.beans.PropertyBinder;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
+import io.fxtras.mvc.ViewLoader;
+import io.fxtras.utils.StageManager;
 import io.devpl.tookit.fxui.controller.TableCustomizationController;
-import io.devpl.tookit.fxui.event.Events;
-import io.devpl.tookit.fxui.model.ConnectionInfo;
-import io.devpl.tookit.fxui.model.ConnectionRegistry;
-import io.devpl.tookit.fxui.model.ProjectConfiguration;
-import io.devpl.tookit.fxui.model.TableCodeGeneration;
+import io.devpl.tookit.fxui.event.EventUtils;
 import io.devpl.tookit.utils.*;
 import io.devpl.tookit.utils.fx.FileChooserDialog;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -43,21 +43,21 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MyBatisCodeGenerationView extends FxmlView {
 
     @FXML
-    public TableView<TableCodeGeneration> tblvTableCustomization;
+    public TableView<TableGeneration> tblvTableCustomization;
     @FXML
-    public TableColumn<TableCodeGeneration, String> tblcTableName;
+    public TableColumn<TableGeneration, String> tblcTableName;
     @FXML
-    public TableColumn<TableCodeGeneration, String> tblcTableComment;
+    public TableColumn<TableGeneration, String> tblcTableComment;
     @FXML
     public ComboBox<String> cboxConnection;
     @FXML
     public ComboBox<String> cboxDatabase;
     @FXML
-    public TableView<TableCodeGeneration> tblvTableSelected; // 选中的表
+    public TableView<TableGeneration> tblvTableSelected; // 选中的表
     @FXML
-    public TableColumn<TableCodeGeneration, String> tblcSelectedTableName;
+    public TableColumn<TableGeneration, String> tblcSelectedTableName;
     @FXML
-    public TableColumn<TableCodeGeneration, String> tblcSelectedTableComment;
+    public TableColumn<TableGeneration, String> tblcSelectedTableComment;
     @FXML
     public TextField txfParentPackageName;
     @FXML
@@ -117,62 +117,53 @@ public class MyBatisCodeGenerationView extends FxmlView {
      * 项目配置项
      */
     private final ProjectConfiguration projectConfig = new ProjectConfiguration();
+
+    private final ProgressDialog progressDialog = new ProgressDialog();
+
     /**
      * 保存哪些表需要进行代码生成
      * 存放的key:TableCodeGenConfig#getUniqueKey()
      *
-     * @see TableCodeGeneration#getUniqueKey()
+     * @see TableGeneration#getUniqueKey()
      */
-    private final Map<String, TableCodeGeneration> tableConfigsToBeGenerated = new ConcurrentHashMap<>(10);
+    private final Map<String, TableGeneration> tableConfigsToBeGenerated = new ConcurrentHashMap<>(10);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         btnLoadConfig.setOnAction(event -> StageManager.show(ProjectConfigurationView.class));
         cboxConnection.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            ConnectionInfo cf = ConnectionRegistry.getConnectionConfiguration(newValue);
-            try (Connection connection = cf.getConnection()) {
-                List<String> databaseNames = DBUtils.getDatabaseNames(connection);
-                cboxDatabase.getItems().addAll(databaseNames);
-            } catch (SQLException e) {
-                log.error("连接失败{} ", newValue);
+            if (StringUtils.hasText(newValue)) {
+                cboxDatabase.getItems().clear();
+                ConnectionConfig cf = ConnectionRegistry.get(newValue);
+                try (Connection connection = cf.getConnection()) {
+                    cboxDatabase.getItems().addAll(DBUtils.getDatabaseNames(connection));
+                } catch (SQLException e) {
+                    log.error("连接失败{} ", newValue);
+                }
+                cboxDatabase.getSelectionModel().selectFirst();
             }
         });
+
         cboxDatabase.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            String selectedItem = cboxConnection.getSelectionModel().getSelectedItem();
-            ConnectionInfo cf = ConnectionRegistry.getConnectionConfiguration(selectedItem);
-            final ObservableList<TableCodeGeneration> items = tblvTableCustomization.getItems();
-            if (items.size() > 0) {
-                items.clear();
+            String connectionNameSelected = cboxConnection.getSelectionModel().getSelectedItem();
+            if (connectionNameSelected == null) {
+                return;
             }
-            try (Connection connection = cf.getConnection(newValue)) {
-                List<TableMetadata> tablesMetadata = DBUtils.getTablesMetadata(connection);
-                for (TableMetadata tablesMetadatum : tablesMetadata) {
-                    TableCodeGeneration tcgf = new TableCodeGeneration();
-                    tcgf.setConnectionName(selectedItem);
-                    tcgf.setDatabaseName(newValue);
-                    tcgf.setTableName(tablesMetadatum.getTableName());
-                    items.add(tcgf);
-                }
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            refreshTables(connectionNameSelected, newValue);
         });
 
         cboxConnection.getItems().addAll(ConnectionRegistry.getRegisteredConnectionConfigMap().keySet());
-        if (!cboxConnection.getItems().isEmpty()) {
-            cboxConnection.getSelectionModel().select(0);
-        }
 
         tblcTableName.setCellValueFactory(new PropertyValueFactory<>("tableName"));
         tblcTableName.setCellFactory(param -> {
-            TableCell<TableCodeGeneration, String> cell = new TextFieldTableCell<>();
+            TableCell<TableGeneration, String> cell = new TextFieldTableCell<>();
             cell.setAlignment(Pos.CENTER);
             cell.setTextAlignment(TextAlignment.CENTER);
             return cell;
         });
         tblcSelectedTableName.setCellValueFactory(new PropertyValueFactory<>("tableName"));
         tblcSelectedTableName.setCellFactory(param -> {
-            TableCell<TableCodeGeneration, String> cell = new TextFieldTableCell<>();
+            TableCell<TableGeneration, String> cell = new TextFieldTableCell<>();
             cell.setAlignment(Pos.CENTER);
             cell.setTextAlignment(TextAlignment.CENTER);
             return cell;
@@ -181,19 +172,18 @@ public class MyBatisCodeGenerationView extends FxmlView {
         tblvTableCustomization.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tblvTableSelected.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tblvTableSelected.setRowFactory(param -> {
-            TableRow<TableCodeGeneration> row = new TableRow<>();
+            TableRow<TableGeneration> row = new TableRow<>();
             MenuItem deleteThisRowMenuItem = new MenuItem("删除");
             MenuItem customizeMenuItem = new MenuItem("定制");
             deleteThisRowMenuItem.setOnAction(event -> {
-                TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
+                TableGeneration item = param.getSelectionModel().getSelectedItem();
                 param.getItems().remove(item);
                 tableConfigsToBeGenerated.remove(item.getUniqueKey()); // 移除该表
             });
             customizeMenuItem.setOnAction(event -> {
                 // 表定制事件
-                TableCodeGeneration item = param.getSelectionModel().getSelectedItem();
+                TableGeneration item = param.getSelectionModel().getSelectedItem();
                 Parent root = ViewLoader.load(TableCustomizationController.class).getRoot();
-
                 this.publish("CustomizeTable", item);
                 StageManager.show("表生成定制", root);
                 event.consume();
@@ -204,11 +194,11 @@ public class MyBatisCodeGenerationView extends FxmlView {
         });
 
         tblvTableCustomization.setRowFactory(param -> {
-            TableRow<TableCodeGeneration> row = new TableRow<>();
+            TableRow<TableGeneration> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (Events.isPrimaryButtonDoubleClicked(event)) {
-                    final TableCodeGeneration tableItem = row.getItem();
-                    final String uniqueKey = tableItem.getUniqueKey();
+                if (EventUtils.isPrimaryButtonDoubleClicked(event)) {
+                    TableGeneration tableItem = row.getItem();
+                    String uniqueKey = tableItem.getUniqueKey();
                     if (!tableConfigsToBeGenerated.containsKey(uniqueKey)) {
                         tableConfigsToBeGenerated.put(uniqueKey, tableItem);
                         tblvTableSelected.getItems().add(tableItem);
@@ -218,14 +208,14 @@ public class MyBatisCodeGenerationView extends FxmlView {
             return row;
         });
 
-        ValueUpdateListener.bind(projectFolderField.textProperty(), projectConfig, ProjectConfiguration::setProjectRootFolder);
-        ValueUpdateListener.bind(modelTargetPackage.textProperty(), projectConfig, ProjectConfiguration::setEntityPackageName);
-        ValueUpdateListener.bind(modelTargetProject.textProperty(), projectConfig, ProjectConfiguration::setEntityPackageFolder);
-        ValueUpdateListener.bind(txfParentPackageName.textProperty(), projectConfig, ProjectConfiguration::setParentPackage);
-        ValueUpdateListener.bind(txfMapperPackageName.textProperty(), projectConfig, ProjectConfiguration::setMapperPackageName);
-        ValueUpdateListener.bind(daoTargetProject.textProperty(), projectConfig, ProjectConfiguration::setMapperFolder);
-        ValueUpdateListener.bind(mapperTargetPackage.textProperty(), projectConfig, ProjectConfiguration::setMapperXmlPackage);
-        ValueUpdateListener.bind(mappingTargetProject.textProperty(), projectConfig, ProjectConfiguration::setMapperXmlFolder);
+        PropertyBinder.bind(projectFolderField.textProperty(), projectConfig, ProjectConfiguration::setProjectRootFolder);
+        PropertyBinder.bind(modelTargetPackage.textProperty(), projectConfig, ProjectConfiguration::setEntityPackageName);
+        PropertyBinder.bind(modelTargetProject.textProperty(), projectConfig, ProjectConfiguration::setEntityPackageFolder);
+        PropertyBinder.bind(txfParentPackageName.textProperty(), projectConfig, ProjectConfiguration::setParentPackage);
+        PropertyBinder.bind(txfMapperPackageName.textProperty(), projectConfig, ProjectConfiguration::setMapperPackageName);
+        PropertyBinder.bind(daoTargetProject.textProperty(), projectConfig, ProjectConfiguration::setMapperFolder);
+        PropertyBinder.bind(mapperTargetPackage.textProperty(), projectConfig, ProjectConfiguration::setMapperXmlPackage);
+        PropertyBinder.bind(mappingTargetProject.textProperty(), projectConfig, ProjectConfiguration::setMapperXmlFolder);
 
         chobProjectLayout.getItems().addAll("MAVEN");
         chobProjectLayout.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -238,25 +228,58 @@ public class MyBatisCodeGenerationView extends FxmlView {
         chobProjectLayout.getSelectionModel().selectFirst();
     }
 
+    /**
+     * 刷新表信息
+     *
+     * @param connectionName
+     */
+    private void refreshTables(String connectionName, String dbName) {
+        ConnectionConfig cf = ConnectionRegistry.get(connectionName);
+        final ObservableList<TableGeneration> items = tblvTableCustomization.getItems();
+        if (items.size() > 0) items.clear();
+        try (Connection connection = cf.getConnection(dbName)) {
+            List<TableMetadata> tablesMetadata = DBUtils.getTablesMetadata(connection);
+            for (TableMetadata tablesMetadatum : tablesMetadata) {
+                TableGeneration tcgf = new TableGeneration();
+                tcgf.setConnectionName(connectionName);
+                tcgf.setDatabaseName(dbName);
+                tcgf.setTableName(tablesMetadatum.getTableName());
+                items.add(tcgf);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
     @FXML
     public void generateCode(ActionEvent actionEvent) {
         if (tableConfigsToBeGenerated.isEmpty()) {
             Alerts.error("选择的数据表为空").show();
             return;
         }
-        generate(this.projectConfig);
+        CodeGenContext context = new CodeGenContext();
+        context.setProjectConfiguration(this.projectConfig);
+        context.setTargetedTables(new HashMap<>(tableConfigsToBeGenerated));
+        generate(context);
     }
 
-    public void generate(ProjectConfiguration projectConfig) {
-        MyBatisCodeGenerator mbgGenerator = new MyBatisCodeGenerator();
-        mbgGenerator.setGeneratorConfig(projectConfig);
+    /**
+     * 代码生成
+     * 使用mybatis-plus-generator
+     *
+     * @param context 参数
+     */
+    private void generate(CodeGenContext context) {
+        MyBatisPlusGenerator mbpgGenerator = new MyBatisPlusGenerator();
         try {
-            mbgGenerator.generate(tableConfigsToBeGenerated.values());
+            mbpgGenerator.generate(context);
+//            progressDialog.showAndWait().ifPresent(buttonType -> {
+//                if (buttonType == ButtonType.OK) {
+            FileUtils.show(new File(projectConfig.getProjectRootFolder()));
+//                }
+//            });
         } catch (Exception exception) {
-            exception.printStackTrace();
             Alerts.exception("生成失败", exception).showAndWait();
-        } finally {
-            // FileUtils.show(new File(projectConfig.getProjectRootFolder()));
         }
     }
 
@@ -297,7 +320,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
      * @param tableInfo
      */
     @Subscribe
-    public void addTable(TableCodeGeneration tableInfo) {
+    public void addTable(TableGeneration tableInfo) {
         String key = tableInfo.getUniqueKey();
         if (tableConfigsToBeGenerated.containsKey(key)) {
             return;

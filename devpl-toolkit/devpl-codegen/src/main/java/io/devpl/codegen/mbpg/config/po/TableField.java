@@ -6,7 +6,7 @@ import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.IKeyWordsHandler;
 import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
 import io.devpl.codegen.mbpg.config.builder.Entity;
-import io.devpl.codegen.mbpg.config.rules.IColumnType;
+import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.config.rules.NamingStrategyEnum;
 import io.devpl.codegen.mbpg.fill.Column;
 import io.devpl.codegen.mbpg.fill.Property;
@@ -30,7 +30,7 @@ public class TableField {
     private String name;
     private String type;
     private String propertyName;
-    private IColumnType columnType;
+    private DataType columnType;
     private String comment;
     private String fill;
     /**
@@ -81,7 +81,7 @@ public class TableField {
      * @return this
      * @since 3.5.0
      */
-    public TableField setPropertyName(@NotNull String propertyName, @NotNull IColumnType columnType) {
+    public TableField setPropertyName(@NotNull String propertyName, @NotNull DataType columnType) {
         this.columnType = columnType;
         if (entity.isBooleanColumnRemoveIsPrefix() && "boolean".equalsIgnoreCase(this.getPropertyType()) && propertyName.startsWith("is")) {
             this.convert = true;
@@ -231,7 +231,7 @@ public class TableField {
         return propertyName;
     }
 
-    public IColumnType getColumnType() {
+    public DataType getColumnType() {
         return columnType;
     }
 

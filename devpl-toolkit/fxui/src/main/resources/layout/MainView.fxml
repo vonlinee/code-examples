@@ -33,7 +33,7 @@
       <Tab fx:id="tabMbg" closable="false" text="代码生成">
         <fx:include source="/layout/mbg/MyBatisCodeGenerationView.fxml"/>
       </Tab>
-      <Tab closable="false" text="类编辑">
+      <Tab closable="false" text="领域模型">
         <fx:include source="/layout/class_definition.fxml"/>
       </Tab>
       <Tab closable="false" text="模板管理">

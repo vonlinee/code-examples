@@ -1,6 +1,5 @@
 package io.devpl.codegen.mbpg.config.builder;
 
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.devpl.codegen.mbpg.config.*;
@@ -36,13 +35,14 @@ class PathInfoHandler {
         this.setDefaultPathInfo(globalConfig, templateConfig);
         // 覆盖自定义路径
         Map<OutputFile, String> pathInfo = packageConfig.getPathInfo();
-        if (CollectionUtils.isNotEmpty(pathInfo)) {
+        if (pathInfo != null && !pathInfo.isEmpty()) {
             this.pathInfo.putAll(pathInfo);
         }
     }
 
     /**
      * 设置默认输出路径
+     *
      * @param globalConfig   全局配置
      * @param templateConfig 模板配置
      */
@@ -72,6 +72,7 @@ class PathInfoHandler {
 
     /**
      * 连接路径字符串
+     *
      * @param parentDir   路径常量字符串
      * @param packageName 包名
      * @return 连接后的路径

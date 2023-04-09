@@ -1,5 +1,7 @@
 package io.devpl.tookit.fxui.model;
 
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -52,4 +54,9 @@ public class ProjectConfiguration {
      * 映射XML文件存放目录
      */
     private String mapperXmlFolder;
+
+    /**
+     * 作者信息
+     */
+    private List<AuthorInfo> authors;
 }

@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.config;
 
-import io.devpl.codegen.mbpg.config.rules.DateType;
+import io.devpl.codegen.mbpg.config.rules.DateTimeType;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +65,7 @@ public class GlobalConfig {
     /**
      * 时间类型对应策略
      */
-    private DateType dateType = DateType.TIME_PACK;
+    private DateTimeType dateType = DateTimeType.TIME_PACK;
 
     /**
      * 获取注释日期
@@ -107,7 +107,7 @@ public class GlobalConfig {
     }
 
     @NotNull
-    public DateType getDateType() {
+    public DateTimeType getDateType() {
         return dateType;
     }
 
@@ -187,7 +187,7 @@ public class GlobalConfig {
         /**
          * 时间类型对应策略
          */
-        public Builder dateType(@NotNull DateType dateType) {
+        public Builder dateType(@NotNull DateTimeType dateType) {
             this.globalConfig.dateType = dateType;
             return this;
         }

@@ -1,7 +1,7 @@
 package io.devpl.tookit.fxui.controller.mbg;
 
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
 import io.devpl.tookit.fxui.model.ProjectConfiguration;
 import io.devpl.tookit.utils.AppConfig;
 import io.devpl.tookit.utils.json.JSONUtils;

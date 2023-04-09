@@ -4,7 +4,7 @@ import io.devpl.codegen.mbpg.FastAutoGenerator;
 import io.devpl.codegen.mbpg.config.OutputFile;
 import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.builder.Mapper;
-import io.devpl.codegen.mbpg.config.rules.DateType;
+import io.devpl.codegen.mbpg.config.rules.DateTimeType;
 import io.devpl.codegen.mbpg.template.FreemarkerTemplateEngine;
 
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class DevplCodeGenerator {
                     builder.fileOverride();
                     // .enableSwagger() // 开启 swagger 模式
                     // .enableSpringdoc()  // 开启 springdoc 模式  @Schema注解
-                    builder.dateType(DateType.TIME_PACK);  // 时间策略
+                    builder.dateType(DateTimeType.TIME_PACK);  // 时间策略
                     builder.commentDate("yyyy-MM-dd HH:mm:ss");// 注释日期 默认值: yyyy-MM-dd
                     builder.outputDir(outputRootDir); // 指定输出根目录 默认值: windows:D:// linux or mac : /tmp
                 }).packageConfig(builder -> {

@@ -18,7 +18,7 @@ package io.devpl.codegen.mbpg.config.converts;
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
-import io.devpl.codegen.mbpg.config.rules.IColumnType;
+import io.devpl.codegen.mbpg.config.rules.DataType;
 
 /**
  * SQLite 字段类型转换
@@ -34,7 +34,7 @@ public class SqliteTypeConvert implements ITypeConvert {
      * @see MySqlTypeConvert#toDateType(GlobalConfig, String)
      */
     @Override
-    public IColumnType processTypeConvert(GlobalConfig config, String fieldType) {
+    public DataType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.contains("bigint").then(JavaType.LONG))
             .test(TypeConverts.containsAny("tinyint(1)", "boolean").then(JavaType.BOOLEAN))

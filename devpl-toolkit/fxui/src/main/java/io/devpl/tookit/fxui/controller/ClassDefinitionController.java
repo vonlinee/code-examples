@@ -1,15 +1,14 @@
 package io.devpl.tookit.fxui.controller;
 
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.fxtras.mvc.ViewLoader;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
+import io.fxtras.mvc.ViewLoader;
 import io.devpl.tookit.fxui.view.filestructure.FieldItem;
 import io.devpl.tookit.fxui.view.filestructure.JavaFileStrucutreTreeView;
 import io.devpl.tookit.fxui.view.filestructure.MethodItem;
 import io.devpl.tookit.fxui.view.filestructure.TopLevelClassItem;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 
@@ -32,9 +31,7 @@ public class ClassDefinitionController extends FxmlView {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         jfsTreeView = new JavaFileStrucutreTreeView();
-
         ViewLoader load = ViewLoader.load(ClassView.class);
-
         sppCenter.getItems().addAll(jfsTreeView, load.getRoot());
     }
 

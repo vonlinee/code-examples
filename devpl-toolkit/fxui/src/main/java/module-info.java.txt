@@ -1,3 +1,6 @@
+/**
+ * 使用模块化会导致整个工程跑不起来
+ */
 open module fxui {
 
     requires javafx.graphics;

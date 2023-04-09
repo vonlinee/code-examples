@@ -16,7 +16,7 @@
 package io.devpl.codegen.mbpg.config;
 
 import io.devpl.codegen.mbpg.config.po.TableField;
-import io.devpl.codegen.mbpg.config.rules.IColumnType;
+import io.devpl.codegen.mbpg.config.rules.DataType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,7 +35,7 @@ public interface ITypeConvert {
      * @param tableField   字段列信息
      * @return ignore
      */
-    default IColumnType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull TableField tableField) {
+    default DataType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull TableField tableField) {
         return processTypeConvert(globalConfig, tableField.getType());
     }
 
@@ -46,6 +46,6 @@ public interface ITypeConvert {
      * @param fieldType    字段类型
      * @return ignore
      */
-    IColumnType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull String fieldType);
+    DataType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull String fieldType);
 
 }

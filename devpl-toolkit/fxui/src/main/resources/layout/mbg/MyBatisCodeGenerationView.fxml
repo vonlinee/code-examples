@@ -20,10 +20,10 @@
       </VBox.margin>
       <columnConstraints>
         <ColumnConstraints halignment="RIGHT" hgrow="NEVER"/>
-        <ColumnConstraints hgrow="ALWAYS"/>
+        <ColumnConstraints hgrow="SOMETIMES"/>
         <ColumnConstraints halignment="LEFT" hgrow="NEVER"/>
         <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES"/>
-        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
+        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES"/>
       </columnConstraints>
       <rowConstraints>
         <RowConstraints vgrow="NEVER"/>

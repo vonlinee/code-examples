@@ -1,24 +1,18 @@
 package io.devpl.tookit.fxui.controller;
 
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.fxtras.utils.StageManager;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
+import io.fxtras.utils.StageManager;
 import io.devpl.tookit.fxui.event.DeleteConnEvent;
-import io.devpl.tookit.fxui.model.ConnectionInfo;
-import io.devpl.tookit.fxui.model.ConnectionRegistry;
-import io.devpl.tookit.fxui.view.navigation.impl.DBTreeView;
-import javafx.collections.ObservableList;
+import io.devpl.tookit.fxui.model.ConnectionConfig;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseEvent;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.URL;
-import java.util.Iterator;
 import java.util.ResourceBundle;
 
 /**
@@ -48,7 +42,7 @@ public class MainView extends FxmlView {
      * @param connectionInfo 连接信息
      */
     @Subscribe(name = "add-new-connection", threadMode = ThreadMode.BACKGROUND)
-    public void addConnection(ConnectionInfo connectionInfo) {
+    public void addConnection(ConnectionConfig connectionInfo) {
         // trvDbNavigation.addConnection(connectionInfo);
     }
 

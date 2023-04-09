@@ -1,73 +1,66 @@
 package io.devpl.tookit.fxui.common;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextArea;
 import org.mybatis.generator.api.ProgressCallback;
+
+import java.time.LocalDateTime;
 
 /**
  * 进度弹窗
+ * TODO 改成追加模式
  */
 public class ProgressDialog extends Alert implements ProgressCallback {
 
-    private final StringProperty progressText = new SimpleStringProperty();
-    private final StringBuilder progressTextBuilder = new StringBuilder();
+    private final TextArea textArea = new TextArea();
 
-    public ProgressDialog(AlertType alertType) {
-        super(alertType);
-        this.contentTextProperty()
-                .bindBidirectional(progressText);
+    public ProgressDialog() {
+        super(AlertType.INFORMATION);
         setResizable(true);
-        setHeight(500.0);
-        setWidth(800.0);
-        setTitle("进度显示");
-
+        textArea.setPrefSize(800.0, 500.0);
+        getDialogPane().setContent(textArea);
         showingProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 setContentText(""); // 清空文本
+                textArea.clear();
             }
         });
     }
 
     @Override
     public void introspectionStarted(int totalTasks) {
-        progressTextBuilder.append("introspectionStarted => 开始代码检查\n");
-        progressText.setValue(progressTextBuilder.toString());
+        textArea.appendText(LocalDateTime.now().toString());
+        textArea.appendText(" 开始获取表信息: totalTasks=" + totalTasks + "\n");
     }
 
     @Override
     public void generationStarted(int totalTasks) {
-        progressTextBuilder.append("generationStarted => 开始代码生成\n");
-        progressText.setValue(progressTextBuilder.toString());
+        textArea.appendText(LocalDateTime.now().toString());
+        textArea.appendText(" 开始代码生成: totalTasks=" + totalTasks + "\n");
     }
 
     @Override
     public void saveStarted(int totalTasks) {
-        progressTextBuilder.append("saveStarted => 开始保存生成的文件\n");
-        progressText.setValue(progressTextBuilder.toString());
+        textArea.appendText(LocalDateTime.now().toString());
+        textArea.appendText(" 开始保存生成的文件: totalTasks=" + totalTasks + "\n");
     }
 
     @Override
     public void startTask(String taskName) {
-        progressTextBuilder.append("startTask => 代码生成任务开始" + taskName + "\n");
-        progressText.setValue(progressTextBuilder.toString());
+        textArea.appendText(LocalDateTime.now().toString());
+        textArea.appendText(" 开始代码生成任务: taskName=" + taskName + "\n");
     }
 
     @Override
     public void done() {
-        progressTextBuilder.append("Done => 代码生成完成\n");
-        progressText.setValue(progressTextBuilder.toString());
+        textArea.appendText(LocalDateTime.now().toString());
+        textArea.appendText(" 完成");
     }
 
     @Override
-    public void checkCancel() throws InterruptedException {
-        progressTextBuilder.append("checkCancel => 取消\n");
-        progressText.setValue(progressTextBuilder.toString());
-    }
-
-    public void closeIfShowing() {
-        if (isShowing()) {
-            this.close();
-        }
+    public void checkCancel() {
+        textArea.appendText(LocalDateTime.now().toString());
+        textArea.appendText(" 取消\n");
     }
 }

@@ -1,11 +1,11 @@
 package io.devpl.tookit.fxui.controller;
 
-import io.devpl.fxtras.Alerts;
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.fxtras.utils.StageManager;
+import io.fxtras.Alerts;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
+import io.fxtras.utils.StageManager;
 import io.devpl.tookit.fxui.event.DeleteConnEvent;
-import io.devpl.tookit.fxui.model.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ConnectionConfig;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import io.devpl.tookit.utils.AppConfig;
 import javafx.beans.property.SimpleStringProperty;
@@ -34,36 +34,36 @@ import java.util.stream.Collectors;
 public class ConnectionManageController extends FxmlView {
 
     @FXML
-    public TableColumn<ConnectionInfo, String> tblcDbType;
+    public TableColumn<ConnectionConfig, String> tblcDbType;
     @FXML
-    public TableColumn<ConnectionInfo, String> tblcProtocol;
+    public TableColumn<ConnectionConfig, String> tblcProtocol;
     @FXML
-    public TableColumn<ConnectionInfo, String> tblcHostname;
+    public TableColumn<ConnectionConfig, String> tblcHostname;
     @FXML
-    public TableColumn<ConnectionInfo, String> tblcPort;
+    public TableColumn<ConnectionConfig, String> tblcPort;
     @FXML
-    public TableColumn<ConnectionInfo, String> tblcDatabaseName;
+    public TableColumn<ConnectionConfig, String> tblcDatabaseName;
     @FXML
-    public TableView<ConnectionInfo> tblvConnectionList;
+    public TableView<ConnectionConfig> tblvConnectionList;
     @FXML
-    public TableColumn<ConnectionInfo, String> tblcConnectionName;
+    public TableColumn<ConnectionConfig, String> tblcConnectionName;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tblvConnectionList.setRowFactory(param -> {
-            final TableRow<ConnectionInfo> row = new TableRow<>();
+            final TableRow<ConnectionConfig> row = new TableRow<>();
             row.setAlignment(Pos.CENTER);
             row.setTextAlignment(TextAlignment.CENTER);
             return row;
         });
         tblvConnectionList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tblcDbType.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getDriverInfo().name()));
+        tblcDbType.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getDriver().name()));
         tblcHostname.setCellValueFactory(new PropertyValueFactory<>("host"));
         tblcPort.setCellValueFactory(new PropertyValueFactory<>("port"));
         tblcDatabaseName.setCellValueFactory(new PropertyValueFactory<>("dbName"));
         tblcConnectionName.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getConnectionName()));
         tblcProtocol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()
-                .getDriverInfo()
+                .getDriver()
                 .getSubProtocol()));
         fillConnectionInfo();
     }
@@ -74,7 +74,7 @@ public class ConnectionManageController extends FxmlView {
     }
 
     @Subscribe(name = "add-new-connection", threadMode = ThreadMode.BACKGROUND)
-    public void addNewConnectionInfo(ConnectionInfo connectionInfo) {
+    public void addNewConnectionInfo(ConnectionConfig connectionInfo) {
         tblvConnectionList.getItems().add(connectionInfo);
     }
 
@@ -84,8 +84,8 @@ public class ConnectionManageController extends FxmlView {
 
     @FXML
     public void deleteConnection(ActionEvent actionEvent) {
-        ObservableList<ConnectionInfo> selectedItems = tblvConnectionList.getSelectionModel().getSelectedItems();
-        List<ConnectionInfo> list = new ArrayList<>(selectedItems);
+        ObservableList<ConnectionConfig> selectedItems = tblvConnectionList.getSelectionModel().getSelectedItems();
+        List<ConnectionConfig> list = new ArrayList<>(selectedItems);
         try {
             if (AppConfig.deleteConnectionById(list) == list.size()) {
                 tblvConnectionList.getItems().removeAll(list);
@@ -95,7 +95,7 @@ public class ConnectionManageController extends FxmlView {
             return;
         }
         DeleteConnEvent event = new DeleteConnEvent();
-        event.setConnectionNames(list.stream().map(ConnectionInfo::getConnectionName).collect(Collectors.toList()));
+        event.setConnectionNames(list.stream().map(ConnectionConfig::getConnectionName).collect(Collectors.toList()));
         publish(event);
     }
 }

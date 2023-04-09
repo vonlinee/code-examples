@@ -3,7 +3,7 @@ package io.devpl.tookit.utils.ssh;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import io.devpl.fxtras.Alerts;
+import io.fxtras.Alerts;
 import io.devpl.tookit.fxui.common.JDBCDriver;
 import io.devpl.tookit.fxui.model.DatabaseInfo;
 import io.devpl.tookit.fxui.model.props.ColumnCustomConfiguration;

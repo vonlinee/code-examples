@@ -17,6 +17,8 @@ module devpl.codegen {
     requires spring.beans;
     requires com.github.javaparser.core;
     requires org.jetbrains.annotations;
+    requires velocity.engine.core;
+
 
     exports io.devpl.codegen;
     exports io.devpl.codegen.mbpg.jdbc.dialect.mysql;
@@ -30,4 +32,5 @@ module devpl.codegen {
     exports io.devpl.codegen.mbpg.config.converts;
     exports io.devpl.codegen.mbpg.keywords;
     exports io.devpl.codegen.mbpg;
+    exports io.devpl.codegen.mbpg.config.po;
 }

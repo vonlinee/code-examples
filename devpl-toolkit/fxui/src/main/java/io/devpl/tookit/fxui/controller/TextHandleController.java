@@ -1,6 +1,6 @@
 package io.devpl.tookit.fxui.controller;
 
-import io.devpl.fxtras.mvc.FxmlView;
+import io.fxtras.mvc.FxmlView;
 import io.devpl.tookit.fxui.text.TextHandleMap;
 import io.devpl.tookit.utils.StringUtils;
 import io.devpl.tookit.utils.xml.XMLUtils;

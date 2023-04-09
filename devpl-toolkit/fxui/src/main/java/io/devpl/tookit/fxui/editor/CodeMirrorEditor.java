@@ -23,6 +23,15 @@ public class CodeMirrorEditor implements CodeEditor {
         webView = new WebView();
     }
 
+    public static CodeMirrorEditor newInstance(LanguageMode languageMode) {
+        CodeMirrorEditor codeEditor = new CodeMirrorEditor();
+        codeEditor.init(
+                () -> codeEditor.setContent("", true),
+                () -> codeEditor.setMode(languageMode),
+                () -> codeEditor.setTheme("xq-light"));
+        return codeEditor;
+    }
+
     @Override
     public void init(Runnable... runAfterLoading) {
         try {

@@ -1,11 +1,11 @@
 package io.devpl.tookit.fxui.controller;
 
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
 import io.devpl.tookit.fxui.common.Constants;
 import io.devpl.tookit.fxui.common.JDBCDriver;
 import io.devpl.tookit.fxui.event.FillDefaultValueEvent;
-import io.devpl.tookit.fxui.model.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ConnectionConfig;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -59,10 +59,10 @@ public class DbConnectionController extends FxmlView {
      * 初始化连接配置数据绑定
      *
      * @param configuration 事件
-     * @see ConnectionInfo
+     * @see ConnectionConfig
      */
     @Subscribe(name = "Event-FillConnectionInfo", threadMode = ThreadMode.BACKGROUND)
-    public void initBinder(ConnectionInfo configuration) {
+    public void initBinder(ConnectionConfig configuration) {
         configuration.setPort(portField.getText());
         configuration.setUsername(userNameField.getText());
         configuration.setPassword(passwordField.getText());

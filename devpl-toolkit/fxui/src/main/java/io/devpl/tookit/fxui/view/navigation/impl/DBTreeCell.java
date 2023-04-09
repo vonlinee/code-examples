@@ -1,9 +1,9 @@
 package io.devpl.tookit.fxui.view.navigation.impl;
 
 import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
-import io.devpl.tookit.fxui.event.Events;
+import io.devpl.tookit.fxui.event.EventUtils;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
-import io.devpl.tookit.fxui.model.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ConnectionConfig;
 import io.devpl.tookit.fxui.view.IconKey;
 import io.devpl.tookit.fxui.view.IconMap;
 import io.devpl.tookit.utils.DBUtils;
@@ -47,7 +47,7 @@ public class DBTreeCell extends TreeCell<String> {
             final TreeView<String> treeView = clickedTreeCell.getTreeView();
             int treeItemLevel = treeView.getTreeItemLevel(clickedTreeItem);
             // 数据库连接
-            if (Events.isPrimaryButtonDoubleClicked(event)) {
+            if (EventUtils.isPrimaryButtonDoubleClicked(event)) {
                 initializeChildren(clickedTreeItem, treeItemLevel);
             }
         }
@@ -75,7 +75,7 @@ public class DBTreeCell extends TreeCell<String> {
          * @param connectionItem 连接TreeCell
          */
         private void loadDatabases(TreeItem<String> connectionItem) {
-            ConnectionInfo connectionInfo = ConnectionRegistry.getConnectionConfiguration(connectionItem.getValue());
+            ConnectionConfig connectionInfo = ConnectionRegistry.get(connectionItem.getValue());
             try (Connection connection = connectionInfo.getConnection()) {
                 List<String> databaseNames = DBUtils.getDatabaseNames(connection);
                 ObservableList<TreeItem<String>> children = connectionItem.getChildren();
@@ -89,7 +89,7 @@ public class DBTreeCell extends TreeCell<String> {
 
         private void loadTables(TreeItem<String> databaseItem) {
             final TreeItem<String> connectionItem = databaseItem.getParent();
-            ConnectionInfo connectionInfo = ConnectionRegistry.getConnectionConfiguration(connectionItem.getValue());
+            ConnectionConfig connectionInfo = ConnectionRegistry.get(connectionItem.getValue());
             try (Connection connection = connectionInfo.getConnection(databaseItem.getValue())) {
                 final List<TableMetadata> tableMetadataList = DBUtils.getTablesMetadata(connection);
                 ObservableList<TreeItem<String>> children = databaseItem.getChildren();

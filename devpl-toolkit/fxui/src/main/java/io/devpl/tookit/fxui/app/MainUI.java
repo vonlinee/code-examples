@@ -1,7 +1,7 @@
 package io.devpl.tookit.fxui.app;
 
-import io.devpl.fxtras.JavaFXApplication;
-import io.devpl.fxtras.mvc.ViewLoader;
+import io.fxtras.JavaFXApplication;
+import io.fxtras.mvc.ViewLoader;
 import io.devpl.tookit.fxui.controller.MainView;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import javafx.scene.Parent;

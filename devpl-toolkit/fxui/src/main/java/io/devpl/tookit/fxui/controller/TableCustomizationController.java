@@ -1,14 +1,14 @@
 package io.devpl.tookit.fxui.controller;
 
-import io.devpl.fxtras.Alerts;
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.fxtras.mvc.ViewLoader;
-import io.devpl.fxtras.utils.StageManager;
+import io.fxtras.Alerts;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
+import io.fxtras.mvc.ViewLoader;
+import io.fxtras.utils.StageManager;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
-import io.devpl.tookit.fxui.model.TableCodeGeneration;
+import io.devpl.tookit.fxui.model.TableGeneration;
 import io.devpl.tookit.fxui.model.props.ColumnCustomConfiguration;
-import io.devpl.tookit.fxui.model.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ConnectionConfig;
 import io.devpl.tookit.utils.CollectionUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -103,12 +103,12 @@ public class TableCustomizationController extends FxmlView {
      * @param tableInfo 表生成信息
      */
     @Subscribe(name = "CustomizeTable")
-    public void customize(TableCodeGeneration tableInfo) {
+    public void customize(TableGeneration tableInfo) {
         // 获取数据库表的所有列信息
         List<ColumnCustomConfiguration> columns = new ArrayList<>();
 
         String connectionName = tableInfo.getConnectionName();
-        ConnectionInfo connectionConfig = ConnectionRegistry.getConnectionConfiguration(connectionName);
+        ConnectionConfig connectionConfig = ConnectionRegistry.get(connectionName);
 
         try (Connection conn = connectionConfig.getConnection()) {
             DatabaseMetaData md = conn.getMetaData();

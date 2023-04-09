@@ -1,5 +1,8 @@
 package io.devpl.tookit.utils;
 
+/**
+ * 数字工具
+ */
 public class NumberUtils {
 
     /**
@@ -8,6 +11,7 @@ public class NumberUtils {
      * N.B. a leading zero means octal; spaces are not trimmed.</p>
      *
      * <p>Returns {@code null} if the string is {@code null}.</p>
+     *
      * @param str a {@code String} to convert, may be null
      * @return converted {@code Integer} (or null if the input is null)
      * @throws NumberFormatException if the value cannot be converted
@@ -26,6 +30,7 @@ public class NumberUtils {
 
     /**
      * 解析字符串为int类型,解析失败返回默认值
+     *
      * @param str          字符串
      * @param defaultValue 默认值
      * @return Integer
@@ -40,6 +45,7 @@ public class NumberUtils {
 
     /**
      * 解析字符串为int类型,解析失败返回默认值
+     *
      * @param str          字符串
      * @param defaultValue 默认值
      * @return int

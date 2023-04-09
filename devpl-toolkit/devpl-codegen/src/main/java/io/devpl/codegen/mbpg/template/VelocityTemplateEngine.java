@@ -15,21 +15,24 @@
  */
 package io.devpl.codegen.mbpg.template;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.util.Map;
-import java.util.Properties;
-
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import io.devpl.codegen.mbpg.config.ConstVal;
+import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.jetbrains.annotations.NotNull;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.generator.config.ConstVal;
-import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * <p>
@@ -45,23 +48,22 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     private VelocityEngine velocityEngine;
 
     @Override
-    public VelocityTemplateEngine init(ConfigBuilder configBuilder) {
-        super.init(configBuilder);
+    public VelocityTemplateEngine init(CodeGenConfiguration configBuilder) {
         if (null == velocityEngine) {
             Properties p = new Properties();
-            p.setProperty(ConstVal.VM_LOAD_PATH_KEY, ConstVal.VM_LOAD_PATH_VALUE);
+            // 加载类路径下的模板文件 /templates/*.vm
+            p.setProperty("file.resource.loader.class", ClasspathResourceLoader.class.getName());
             p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, StringPool.EMPTY);
-            p.setProperty(Velocity.ENCODING_DEFAULT, ConstVal.UTF8);
-            p.setProperty(Velocity.INPUT_ENCODING, ConstVal.UTF8);
-            p.setProperty("file.resource.loader.unicode", StringPool.TRUE);
+            p.setProperty(Velocity.ENCODING_DEFAULT, StandardCharsets.UTF_8.name());
+            p.setProperty(Velocity.INPUT_ENCODING, StandardCharsets.UTF_8.name());
+            p.setProperty("file.resource.loader.unicode", "true");
             velocityEngine = new VelocityEngine(p);
         }
         return this;
     }
 
-
     @Override
-    public void writer(Map<String, Object> objectMap, String templatePath, String outputFile) throws Exception {
+    public void write(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception {
         if (StringUtils.isEmpty(templatePath)) {
             return;
         }
@@ -70,17 +72,14 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos, ConstVal.UTF8));
         template.merge(new VelocityContext(objectMap), writer);
         writer.close();
-        logger.debug("模板:" + templatePath + ";  文件:" + outputFile);
+        log.debug("模板:" + templatePath + ";  文件:" + outputFile);
     }
 
-
     @Override
-    public String templateFilePath(String filePath) {
-        if (null == filePath || filePath.contains(DOT_VM)) {
+    public @NotNull String templateFilePath(@NotNull String filePath) {
+        if (filePath.contains(DOT_VM)) {
             return filePath;
         }
-        StringBuilder fp = new StringBuilder();
-        fp.append(filePath).append(DOT_VM);
-        return fp.toString();
+        return filePath + DOT_VM;
     }
 }

@@ -4,9 +4,9 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.SimpleName;
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.fxtras.utils.StageManager;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
+import io.fxtras.utils.StageManager;
 import io.devpl.tookit.fxui.controller.fields.FieldsManageView;
 import io.devpl.tookit.fxui.view.filestructure.FieldType;
 import javafx.beans.property.SimpleStringProperty;
@@ -34,7 +34,8 @@ public class ClassView extends FxmlView {
     public TableView<FieldDeclaration> tbvFieldInfo;
     @FXML
     public Button btnAddOne;
-
+    @FXML
+    public Button btnImport;
     @FXML
     TableColumn<FieldDeclaration, String> tblcFieldName;
     @FXML
@@ -44,12 +45,7 @@ public class ClassView extends FxmlView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tblcFieldName.setCellValueFactory(new Callback<>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<FieldDeclaration, String> param) {
-                return new SimpleStringProperty(getFieldName(param.getValue()));
-            }
-        });
+        tblcFieldName.setCellValueFactory(param -> new SimpleStringProperty(getFieldName(param.getValue())));
         tblcFieldName.setCellFactory(param -> {
             TextFieldTableCell<FieldDeclaration, String> tableCell = new TextFieldTableCell<>(new DefaultStringConverter());
             tableCell.setAlignment(Pos.CENTER);

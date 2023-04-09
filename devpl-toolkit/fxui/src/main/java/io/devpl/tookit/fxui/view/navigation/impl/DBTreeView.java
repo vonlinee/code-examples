@@ -1,6 +1,6 @@
 package io.devpl.tookit.fxui.view.navigation.impl;
 
-import io.devpl.tookit.fxui.model.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ConnectionConfig;
 import io.devpl.tookit.fxui.view.IconKey;
 import io.devpl.tookit.fxui.view.IconMap;
 import javafx.scene.control.TreeItem;
@@ -20,7 +20,7 @@ public final class DBTreeView extends TreeView<String> {
         setCellFactory(param -> new DBTreeCell());
     }
 
-    public void addConnection(ConnectionInfo connectionInfo) {
+    public void addConnection(ConnectionConfig connectionInfo) {
         TreeItem<String> connTreeItem = new TreeItem<>(connectionInfo.getConnectionName(), IconMap.loadSVG(IconKey.DB_MYSQL));
         getRoot().getChildren().add(connTreeItem);
     }

@@ -225,7 +225,6 @@ public class DataSourceConfig {
             properties.put("password", password);
             // 使用元数据查询方式时，有些数据库需要增加属性才能读取注释
             this.processProperties(properties);
-            logger.info("\n获取数据库连接: {} \nproperties: {}", url, properties);
             this.connection = DriverManager.getConnection(url, properties);
         }
         return this.connection;

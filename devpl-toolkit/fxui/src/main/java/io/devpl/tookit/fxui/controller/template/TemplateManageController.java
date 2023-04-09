@@ -1,17 +1,23 @@
 package io.devpl.tookit.fxui.controller.template;
 
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
 import io.devpl.tookit.fxui.editor.CodeMirrorEditor;
 import io.devpl.tookit.fxui.editor.LanguageMode;
+import io.devpl.tookit.utils.FileUtils;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -31,6 +37,8 @@ public class TemplateManageController extends FxmlView {
     @FXML
     public VBox vboxRight;
 
+    TemplateInfoTableView tbvTemplateInfo = new TemplateInfoTableView();
+
     CodeMirrorEditor codeEditor;
 
     @Override
@@ -47,13 +55,15 @@ public class TemplateManageController extends FxmlView {
                     () -> codeEditor.setTheme("xq-light"));
             vboxLeft.getChildren().add(codeEditor.getView());
         }
+        vboxRight.getChildren().add(tbvTemplateInfo);
+
+        tbvTemplateInfo.refreshItemsData();
     }
 
     @FXML
     public void parseTemplate(MouseEvent mouseEvent) {
 
     }
-
 
 
     public void m1() throws IOException {
@@ -74,5 +84,18 @@ public class TemplateManageController extends FxmlView {
         Template t = ve.getTemplate(templateFile.toAbsolutePath().toString());
 
         analyzer.analyze(t);
+    }
+
+    FileChooser chooser = new FileChooser();
+
+    @FXML
+    public void openFileChooser(ActionEvent actionEvent) {
+        chooser.setInitialDirectory(new File("D:/Temp"));
+        chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("仅支持vm文件", "vm"));
+        File file = chooser.showOpenDialog(getStage(actionEvent));
+        if (file != null) {
+            System.out.println(file);
+            codeEditor.setContent(FileUtils.readToString(file), false);
+        }
     }
 }

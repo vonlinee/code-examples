@@ -1,8 +1,8 @@
 package io.devpl.tookit.fxui.controller.fields;
 
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.fxtras.mvc.ViewLoader;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
+import io.fxtras.mvc.ViewLoader;
 import io.devpl.tookit.fxui.model.FieldSpec;
 import io.devpl.tookit.utils.fx.CellUtils;
 import javafx.collections.ObservableList;

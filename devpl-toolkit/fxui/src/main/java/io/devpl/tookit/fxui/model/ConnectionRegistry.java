@@ -20,16 +20,16 @@ public class ConnectionRegistry {
     /**
      * 保存已注册的连接配置
      */
-    static WeakReference<Map<String, ConnectionInfo>> connConfigRef;
+    static WeakReference<Map<String, ConnectionConfig>> connConfigRef;
 
     static {
         loadFromDatabase();
     }
 
     private static void loadFromDatabase() {
-        List<ConnectionInfo> connConfigList = AppConfig.listConnectionInfo();
-        Map<String, ConnectionInfo> registeredConnectionConfigMap = new ConcurrentHashMap<>();
-        for (ConnectionInfo item : connConfigList) {
+        List<ConnectionConfig> connConfigList = AppConfig.listConnectionInfo();
+        Map<String, ConnectionConfig> registeredConnectionConfigMap = new ConcurrentHashMap<>();
+        for (ConnectionConfig item : connConfigList) {
             registeredConnectionConfigMap.put(item.getConnectionName(), item);
         }
         connConfigRef = new WeakReference<>(registeredConnectionConfigMap);
@@ -39,11 +39,17 @@ public class ConnectionRegistry {
         return getRegisteredConnectionConfigMap().containsKey(connectionName);
     }
 
-    public static ConnectionInfo getConnectionConfiguration(String connectionName) {
+    /**
+     * 根据连接名称获取连接配置
+     *
+     * @param connectionName 连接名称
+     * @return 连接配置
+     */
+    public static ConnectionConfig get(String connectionName) {
         return getRegisteredConnectionConfigMap().get(connectionName);
     }
 
-    public static Collection<ConnectionInfo> getConnectionConfigurations() {
+    public static Collection<ConnectionConfig> getConnectionConfigurations() {
         return getRegisteredConnectionConfigMap().values();
     }
 
@@ -52,8 +58,8 @@ public class ConnectionRegistry {
      *
      * @return key为连接名，value为对应的连接信息
      */
-    public static synchronized Map<String, ConnectionInfo> getRegisteredConnectionConfigMap() {
-        Map<String, ConnectionInfo> map = connConfigRef.get();
+    public static synchronized Map<String, ConnectionConfig> getRegisteredConnectionConfigMap() {
+        Map<String, ConnectionConfig> map = connConfigRef.get();
         if (map == null) {
             logger.info("reload ConnectionInfo from database");
             loadFromDatabase();

@@ -7,7 +7,7 @@ import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
 import io.devpl.codegen.mbpg.config.builder.Entity;
-import io.devpl.codegen.mbpg.config.rules.IColumnType;
+import io.devpl.codegen.mbpg.config.rules.DataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -215,9 +215,9 @@ public class TableInfo {
             this.importPackages.add(TableId.class.getCanonicalName());
         }
         this.fields.forEach(field -> {
-            IColumnType columnType = field.getColumnType();
-            if (null != columnType && null != columnType.getClassName()) {
-                importPackages.add(columnType.getClassName());
+            DataType columnType = field.getColumnType();
+            if (null != columnType && null != columnType.getQulifiedName()) {
+                importPackages.add(columnType.getQulifiedName());
             }
             if (field.isKeyFlag()) {
                 // 主键

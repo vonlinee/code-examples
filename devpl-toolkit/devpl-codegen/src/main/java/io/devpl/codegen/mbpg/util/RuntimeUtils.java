@@ -32,8 +32,4 @@ public class RuntimeUtils {
             LOGGER.warn("读取操作系统失败");
         }
     }
-
-    public static Process openTextFile(String textFilePath) throws IOException {
-        return Runtime.getRuntime().exec("notepad " + textFilePath);
-    }
 }

@@ -59,7 +59,7 @@ public class ReflectionUtils {
     public static List<String> getInterfaces(Class<?> clazz) {
         Class<?>[] interfaces = clazz.getInterfaces();
         int len = interfaces.length;
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (int i = 0; i < len; i++) {
             Class<?> itfc = interfaces[i];
             // 接口名
@@ -84,14 +84,14 @@ public class ReflectionUtils {
             sb = new StringBuilder();
             // 修饰符
             String modifier = Modifier.toString(field.getModifiers());
-            sb.append(modifier + " ");
+            sb.append(modifier).append(" ");
             // 数据类型
             Class<?> type = field.getType();
             String typeName = type.getSimpleName();
-            sb.append(typeName + " ");
+            sb.append(typeName).append(" ");
             // 属性名
             String fieldName = field.getName();
-            sb.append(fieldName + ";");
+            sb.append(fieldName).append(";");
             list.add(sb);
         }
         return list;
@@ -105,21 +105,21 @@ public class ReflectionUtils {
     public static List<StringBuilder> getPublicFields(Class<?> clazz) {
         Field[] fields = clazz.getFields();
         int len = fields.length;
-        List<StringBuilder> list = new ArrayList<StringBuilder>();
-        StringBuilder sb = null;
+        List<StringBuilder> list = new ArrayList<>();
+        StringBuilder sb;
         for (int i = 0; i < len; i++) {
             Field field = fields[i];
             sb = new StringBuilder();
             // 修饰符
             String modifier = Modifier.toString(field.getModifiers());
-            sb.append(modifier + " ");
+            sb.append(modifier).append(" ");
             // 数据类型
             Class<?> type = field.getType();
             String typeName = type.getSimpleName();
-            sb.append(typeName + " ");
+            sb.append(typeName).append(" ");
             // 属性名
             String fieldName = field.getName();
-            sb.append(fieldName + ";");
+            sb.append(fieldName).append(";");
             list.add(sb);
         }
         return list;
@@ -133,17 +133,17 @@ public class ReflectionUtils {
     public static List<StringBuilder> getConstructors(Class<?> clazz) {
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
         int len = constructors.length;
-        List<StringBuilder> list = new ArrayList<StringBuilder>();
+        List<StringBuilder> list = new ArrayList<>();
         StringBuilder sb = null;
         for (int i = 0; i < len; i++) {
             Constructor<?> constructor = constructors[i];
             sb = new StringBuilder();
             // 修饰符
             String modifier = Modifier.toString(constructor.getModifiers());
-            sb.append(modifier + " ");
+            sb.append(modifier).append(" ");
             // 方法名（类名）
             String constructorName = clazz.getSimpleName();
-            sb.append(constructorName + " (");
+            sb.append(constructorName).append(" (");
             // 形参列表
             Class<?>[] parameterTypes = constructor.getParameterTypes();
             int length = parameterTypes.length;
@@ -151,7 +151,7 @@ public class ReflectionUtils {
                 Class<?> parameterType = parameterTypes[j];
                 String parameterTypeName = parameterType.getSimpleName();
                 if (j < length - 1) {
-                    sb.append(parameterTypeName + ", ");
+                    sb.append(parameterTypeName).append(", ");
                 } else {
                     sb.append(parameterTypeName);
                 }
@@ -177,14 +177,14 @@ public class ReflectionUtils {
             sb = new StringBuilder();
             // 修饰符
             String modifier = Modifier.toString(method.getModifiers());
-            sb.append(modifier + " ");
+            sb.append(modifier).append(" ");
             // 返回值类型
             Class<?> returnClass = method.getReturnType();
             String returnType = returnClass.getSimpleName();
-            sb.append(returnType + " ");
+            sb.append(returnType).append(" ");
             // 方法名
             String methodName = method.getName();
-            sb.append(methodName + " (");
+            sb.append(methodName).append(" (");
             // 形参列表
             Class<?>[] parameterTypes = method.getParameterTypes();
             int length = parameterTypes.length;
@@ -193,7 +193,7 @@ public class ReflectionUtils {
                 // 形参类型
                 String parameterTypeName = parameterType.getSimpleName();
                 if (j < length - 1) {
-                    sb.append(parameterTypeName + ", ");
+                    sb.append(parameterTypeName).append(", ");
                 } else {
                     sb.append(parameterTypeName);
                 }
@@ -212,21 +212,21 @@ public class ReflectionUtils {
     public static List<StringBuilder> getPublicMethods(Class<?> clazz) {
         Method[] methods = clazz.getMethods();
         int len = methods.length;
-        List<StringBuilder> list = new ArrayList<StringBuilder>();
+        List<StringBuilder> list = new ArrayList<>();
         StringBuilder sb = null;
         for (int i = 0; i < len; i++) {
             Method method = methods[i];
             sb = new StringBuilder();
             // 修饰符
             String modifier = Modifier.toString(method.getModifiers());
-            sb.append(modifier + " ");
+            sb.append(modifier).append(" ");
             // 返回值类型
             Class<?> returnClass = method.getReturnType();
             String returnType = returnClass.getSimpleName();
-            sb.append(returnType + " ");
+            sb.append(returnType).append(" ");
             // 方法名
             String methodName = method.getName();
-            sb.append(methodName + " (");
+            sb.append(methodName).append(" (");
             // 形参列表
             Class<?>[] parameterTypes = method.getParameterTypes();
             int length = parameterTypes.length;
@@ -235,7 +235,7 @@ public class ReflectionUtils {
                 // 形参类型
                 String parameterTypeName = parameterType.getSimpleName();
                 if (j < length - 1) {
-                    sb.append(parameterTypeName + ", ");
+                    sb.append(parameterTypeName).append(", ");
                 } else {
                     sb.append(parameterTypeName);
                 }
@@ -254,7 +254,7 @@ public class ReflectionUtils {
     public static List<String> getAnnotations(Class<?> clazz) {
         Annotation[] annotations = clazz.getAnnotations();
         int len = annotations.length;
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (int i = 0; i < len; i++) {
             Annotation annotation = annotations[i];
             String annotationName = annotation.annotationType().getSimpleName();
@@ -291,7 +291,7 @@ public class ReflectionUtils {
     public static List<Class<?>> getInterfaceGenericParameterizedTypes(Class<?> clazz) {
         Type[] genericInterfaces = clazz.getGenericInterfaces();
         int len = genericInterfaces.length;
-        List<Class<?>> list = new ArrayList<Class<?>>();
+        List<Class<?>> list = new ArrayList<>();
         for (int i = 0; i < len; i++) {
             Type genericInterface = genericInterfaces[i];
             // 判断接口是否有泛型
@@ -491,15 +491,6 @@ public class ReflectionUtils {
         printPublicFields(clazz);
         System.out.println("\n【公共的方法】");
         printPublicMethods(clazz);
-    }
-
-    /**
-     * 根据Class类型，获取对应的实例【要求必须有无参的构造器】
-     *
-     * @return 对应的实例【Object类型】
-     */
-    public static Object getNewInstance(Class<?> clazz) throws InstantiationException, IllegalAccessException {
-        return clazz.newInstance();
     }
 
     /**

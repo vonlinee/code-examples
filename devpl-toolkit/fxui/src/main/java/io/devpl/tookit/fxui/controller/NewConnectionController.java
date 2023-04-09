@@ -1,13 +1,13 @@
 package io.devpl.tookit.fxui.controller;
 
-import io.devpl.fxtras.Alerts;
-import io.devpl.fxtras.mvc.FxmlLocation;
-import io.devpl.fxtras.mvc.FxmlView;
-import io.devpl.tookit.fxui.event.Events;
+import io.fxtras.Alerts;
+import io.fxtras.mvc.FxmlLocation;
+import io.fxtras.mvc.FxmlView;
+import io.devpl.tookit.fxui.event.EventUtils;
 import io.devpl.tookit.fxui.event.FillDefaultValueEvent;
 import io.devpl.tookit.utils.AppConfig;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
-import io.devpl.tookit.fxui.model.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ConnectionConfig;
 import io.devpl.tookit.utils.StringUtils;
 import io.devpl.tookit.utils.Validator;
 import javafx.application.Platform;
@@ -37,11 +37,11 @@ public class NewConnectionController extends FxmlView {
     /**
      * 与界面绑定的连接信息配置
      */
-    private final ConnectionInfo connConfig = new ConnectionInfo();
+    private final ConnectionConfig connConfig = new ConnectionConfig();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        publish(Events.FILL_CONNECTION_INFO, connConfig);
+        publish("Event-FillConnectionInfo", connConfig);
     }
 
     /**
@@ -52,9 +52,9 @@ public class NewConnectionController extends FxmlView {
     @FXML
     public void saveConnection(ActionEvent event) {
         String msg = Validator.target(connConfig)
-                .hasText(ConnectionInfo::getUsername, "用户名不能为空")
-                .hasText(ConnectionInfo::getPassword, "密码不能为空")
-                .hasText(ConnectionInfo::getHost, "连接地址不能为空")
+                .hasText(ConnectionConfig::getUsername, "用户名不能为空")
+                .hasText(ConnectionConfig::getPassword, "密码不能为空")
+                .hasText(ConnectionConfig::getHost, "连接地址不能为空")
                 .getErrorMessages();
         if (StringUtils.hasText(msg)) {
             Alerts.error(msg).show();
@@ -70,7 +70,7 @@ public class NewConnectionController extends FxmlView {
             });
             return;
         }
-        publish(Events.ADD_NEW_CONNECTION, connConfig);
+        publish("add-new-connection", connConfig);
         getStage(event).close();
 
         Platform.runLater(() -> AppConfig.saveConnectionConfig(connConfig));
@@ -84,9 +84,9 @@ public class NewConnectionController extends FxmlView {
     @FXML
     public void testConnection(ActionEvent actionEvent) {
         String msg = Validator.target(connConfig)
-                .hasText(ConnectionInfo::getUsername, "用户名不能为空")
-                .hasText(ConnectionInfo::getPassword, "密码不能为空")
-                .hasText(ConnectionInfo::getHost, "连接地址不能为空")
+                .hasText(ConnectionConfig::getUsername, "用户名不能为空")
+                .hasText(ConnectionConfig::getPassword, "密码不能为空")
+                .hasText(ConnectionConfig::getHost, "连接地址不能为空")
                 .getErrorMessages();
         if (StringUtils.hasText(msg)) {
             Alerts.error(msg).show();

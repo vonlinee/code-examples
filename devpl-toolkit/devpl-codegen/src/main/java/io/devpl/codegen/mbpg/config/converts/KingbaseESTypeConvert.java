@@ -17,9 +17,9 @@ package io.devpl.codegen.mbpg.config.converts;
 
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
-import io.devpl.codegen.mbpg.config.rules.DateType;
+import io.devpl.codegen.mbpg.config.rules.DateTimeType;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
-import io.devpl.codegen.mbpg.config.rules.IColumnType;
+import io.devpl.codegen.mbpg.config.rules.DataType;
 
 import static io.devpl.codegen.mbpg.config.converts.TypeConverts.contains;
 import static io.devpl.codegen.mbpg.config.converts.TypeConverts.containsAny;
@@ -39,7 +39,7 @@ public class KingbaseESTypeConvert implements ITypeConvert {
      * @return 返回对应的字段类型
      */
     @Override
-    public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
+    public DataType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(containsAny("char", "text", "json", "enum").then(JavaType.STRING))
             .test(contains("bigint").then(JavaType.LONG))
@@ -61,9 +61,9 @@ public class KingbaseESTypeConvert implements ITypeConvert {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    private IColumnType toDateType(GlobalConfig config, String type) {
-        DateType dateType = config.getDateType();
-        if (dateType == DateType.SQL_PACK) {
+    private DataType toDateType(GlobalConfig config, String type) {
+        DateTimeType dateType = config.getDateType();
+        if (dateType == DateTimeType.SQL_PACK) {
             switch (type) {
                 case "date":
                     return JavaType.DATE_SQL;
@@ -72,7 +72,7 @@ public class KingbaseESTypeConvert implements ITypeConvert {
                 default:
                     return JavaType.TIMESTAMP;
             }
-        } else if (dateType == DateType.TIME_PACK) {
+        } else if (dateType == DateTimeType.TIME_PACK) {
             switch (type) {
                 case "date":
                     return JavaType.LOCAL_DATE;

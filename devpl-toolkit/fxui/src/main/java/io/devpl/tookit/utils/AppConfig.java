@@ -1,6 +1,6 @@
 package io.devpl.tookit.utils;
 
-import io.devpl.tookit.fxui.model.ConnectionInfo;
+import io.devpl.tookit.fxui.model.ConnectionConfig;
 import io.devpl.tookit.fxui.model.ProjectConfiguration;
 import io.devpl.tookit.utils.json.JSONUtils;
 
@@ -28,13 +28,13 @@ public class AppConfig {
         return DBUtils.getConnection(URL, USERNAME, PASSWORD);
     }
 
-    public static List<ConnectionInfo> listConnectionInfo() {
+    public static List<ConnectionConfig> listConnectionInfo() {
         try (Connection conn = getConnection();) {
             String sql = "select * from connection_config";
             ResultSet rs = DBUtils.executeQuery(conn, sql);
-            List<ConnectionInfo> results = new ArrayList<>();
+            List<ConnectionConfig> results = new ArrayList<>();
             while (rs.next()) {
-                ConnectionInfo item = new ConnectionInfo();
+                ConnectionConfig item = new ConnectionConfig();
                 item.setId(rs.getString("id"));
                 item.setPort(rs.getString("port"));
                 item.setDbName(rs.getString("db_name"));
@@ -58,10 +58,10 @@ public class AppConfig {
      * @param connectionInfos 连接信息列表
      * @return 删除条数
      */
-    public static int deleteConnectionById(List<ConnectionInfo> connectionInfos) {
+    public static int deleteConnectionById(List<ConnectionConfig> connectionInfos) {
         String sql = "DELETE FROM connection_config WHERE id IN ";
         StringJoiner stringJoiner = new StringJoiner(",", "(", ")");
-        for (ConnectionInfo connectionInfo : connectionInfos) {
+        for (ConnectionConfig connectionInfo : connectionInfos) {
             stringJoiner.add("'" + connectionInfo.getId() + "'");
         }
         sql += stringJoiner;
@@ -72,7 +72,7 @@ public class AppConfig {
         }
     }
 
-    public static void saveConnectionConfig(ConnectionInfo config) {
+    public static void saveConnectionConfig(ConnectionConfig config) {
         String sql = "INSERT INTO connection_config " + "(id, name, host, port, db_type, db_name, username, password)\n" + "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         if (StringUtils.hasNotText(config.getId())) {
             config.setId(UUID.randomUUID().toString());

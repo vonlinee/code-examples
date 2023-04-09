@@ -5,13 +5,27 @@ import javafx.scene.Parent;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * <a href="https://tun6.com/projects/code_mirror/api/#api_doc">...</a>
+ */
 public interface CodeEditor {
     String getContent();
 
     void setContent(String newContent, boolean markClean);
 
+    /**
+     * doc.isClean(?generation: integer) → boolean
+     * 参数为空时，从初始化或最后一次调用 markClean 函数到现在，正文是否有修改。
+     * 参数不为空时，从调用 changeGeneration 函数到现在，正文是否有修改。
+     *
+     * @return 返回正文是否是 "clean" 的。
+     */
     boolean isClean();
 
+    /**
+     * 标记正文是 "clean" 的，该状态会一直保持到下次编辑时，可用来判断正文是否需要保存。
+     * 该函数与 changeGeneration 不同，后者支持多个子系统在不互相干扰的情况下跟踪多个 "clean" 状态。
+     */
     void markClean();
 
     Position getCursorPosition();
@@ -50,7 +64,7 @@ public interface CodeEditor {
     void setMode(LanguageMode mode);
 
     //TODO add includeJSModules back in later
-    //void includeJSModules(String[] modules, Runnable runnable);
+//    void includeJSModules(String[] modules, Runnable runnable);
 
     String getTheme();
 
@@ -66,4 +80,5 @@ public interface CodeEditor {
     void setAutoCompleteFunction(Function<String, List<String>> autoCompleteFunction);
 
     Function<String, List<String>> getAutoCompleteFunction();
+
 }

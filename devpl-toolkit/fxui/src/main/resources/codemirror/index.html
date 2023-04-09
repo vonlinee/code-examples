@@ -41,11 +41,14 @@
     return newAnyword;
   };
 
+  /**
+   * 由外部调用
+   * @see https://tun6.com/projects/code_mirror/api/ CodeMirror6 API
+   */
   function init() {
     CodeMirror.commands.autocomplete = function (cm) {
       cm.showHint({hint: CodeMirror.hint.anyword});
     }
-
     codeMirror = CodeMirror(document.body);
     codeMirror.setOption("lineNumbers", true);
     codeMirror.setOption("dragDrop", false);

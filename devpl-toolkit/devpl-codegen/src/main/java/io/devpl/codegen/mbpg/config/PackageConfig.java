@@ -89,7 +89,7 @@ public class PackageConfig {
     /**
      * 父包名
      */
-    @NotNull
+
     public String getParent() {
         if (StringUtils.isNotBlank(moduleName)) {
             return parent + StringPool.DOT + moduleName;
@@ -103,7 +103,7 @@ public class PackageConfig {
      * @param subPackage 子包名
      * @return 连接后的包名
      */
-    @NotNull
+
     public String joinPackage(String subPackage) {
         String parent = getParent();
         return StringUtils.isBlank(parent) ? subPackage : (parent + StringPool.DOT + subPackage);
@@ -115,7 +115,7 @@ public class PackageConfig {
      * @return 包配置信息
      * @since 3.5.0
      */
-    @NotNull
+
     public Map<String, String> getPackageInfo() {
         if (packageInfo.isEmpty()) {
             packageInfo.put(ConstVal.MODULE_NAME, this.getModuleName());
@@ -187,7 +187,7 @@ public class PackageConfig {
             this.packageConfig = new PackageConfig();
         }
 
-        public Builder(@NotNull String parent, @NotNull String moduleName) {
+        public Builder(String parent, String moduleName) {
             this();
             this.packageConfig.parent = parent;
             this.packageConfig.moduleName = moduleName;
@@ -199,7 +199,7 @@ public class PackageConfig {
          * @param parent 父包名
          * @return this
          */
-        public Builder parent(@NotNull String parent) {
+        public Builder parent(String parent) {
             this.packageConfig.parent = parent;
             return this;
         }
@@ -210,18 +210,18 @@ public class PackageConfig {
          * @param moduleName 模块名
          * @return this
          */
-        public Builder moduleName(@NotNull String moduleName) {
+        public Builder moduleName(String moduleName) {
             this.packageConfig.moduleName = moduleName;
             return this;
         }
 
         /**
-         * 指定实体包名
+         * 指定实体包名，不指定默认为 entity
          *
          * @param entity 实体包名
          * @return this
          */
-        public Builder entity(@NotNull String entity) {
+        public Builder entity(String entity) {
             this.packageConfig.entity = entity;
             return this;
         }
@@ -232,7 +232,7 @@ public class PackageConfig {
          * @param service service包名
          * @return this
          */
-        public Builder service(@NotNull String service) {
+        public Builder service(String service) {
             this.packageConfig.service = service;
             return this;
         }
@@ -243,7 +243,7 @@ public class PackageConfig {
          * @param serviceImpl service实现类包名
          * @return this
          */
-        public Builder serviceImpl(@NotNull String serviceImpl) {
+        public Builder serviceImpl(String serviceImpl) {
             this.packageConfig.serviceImpl = serviceImpl;
             return this;
         }
@@ -254,7 +254,7 @@ public class PackageConfig {
          * @param mapper mapper包名
          * @return this
          */
-        public Builder mapper(@NotNull String mapper) {
+        public Builder mapper(String mapper) {
             this.packageConfig.mapper = mapper;
             return this;
         }
@@ -265,7 +265,7 @@ public class PackageConfig {
          * @param xml xml包名
          * @return this
          */
-        public Builder xml(@NotNull String xml) {
+        public Builder xml(String xml) {
             this.packageConfig.xml = xml;
             return this;
         }
@@ -276,7 +276,7 @@ public class PackageConfig {
          * @param controller 控制器包名
          * @return this
          */
-        public Builder controller(@NotNull String controller) {
+        public Builder controller(String controller) {
             this.packageConfig.controller = controller;
             return this;
         }
@@ -287,7 +287,7 @@ public class PackageConfig {
          * @param pathInfo 路径配置信息
          * @return this
          */
-        public Builder pathInfo(@NotNull Map<OutputFile, String> pathInfo) {
+        public Builder pathInfo(Map<OutputFile, String> pathInfo) {
             this.packageConfig.pathInfo = pathInfo;
             return this;
         }
@@ -298,8 +298,8 @@ public class PackageConfig {
          * @param subPackage 子包名
          * @return 连接后的包名
          */
-        @NotNull
-        public String joinPackage(@NotNull String subPackage) {
+
+        public String joinPackage(String subPackage) {
             return this.packageConfig.joinPackage(subPackage);
         }
 

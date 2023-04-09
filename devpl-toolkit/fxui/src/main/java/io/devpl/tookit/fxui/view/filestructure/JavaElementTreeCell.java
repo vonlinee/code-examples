@@ -1,6 +1,6 @@
 package io.devpl.tookit.fxui.view.filestructure;
 
-import io.devpl.fxtras.utils.StageManager;
+import io.fxtras.utils.StageManager;
 import io.devpl.tookit.fxui.controller.fields.FieldsManageView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

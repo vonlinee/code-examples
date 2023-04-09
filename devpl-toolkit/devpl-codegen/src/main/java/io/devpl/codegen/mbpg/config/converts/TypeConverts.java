@@ -3,7 +3,7 @@ package io.devpl.codegen.mbpg.config.converts;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.converts.select.BranchBuilder;
 import io.devpl.codegen.mbpg.config.converts.select.Selector;
-import io.devpl.codegen.mbpg.config.rules.IColumnType;
+import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.jdbc.DbType;
 
 /**
@@ -56,7 +56,7 @@ public class TypeConverts {
      * @param param 参数
      * @return 返回选择器
      */
-    static Selector<String, IColumnType> use(String param) {
+    static Selector<String, DataType> use(String param) {
         return new Selector<>(param.toLowerCase());
     }
 
@@ -67,14 +67,14 @@ public class TypeConverts {
      * @return 返回分支构建器
      * @see #containsAny(CharSequence...)
      */
-    static BranchBuilder<String, IColumnType> contains(CharSequence value) {
+    static BranchBuilder<String, DataType> contains(CharSequence value) {
         return BranchBuilder.of(s -> s.contains(value));
     }
 
     /**
      * @see #contains(CharSequence)
      */
-    static BranchBuilder<String, IColumnType> containsAny(CharSequence... values) {
+    static BranchBuilder<String, DataType> containsAny(CharSequence... values) {
         return BranchBuilder.of(s -> {
             for (CharSequence value : values) {
                 if (s.contains(value)) return true;

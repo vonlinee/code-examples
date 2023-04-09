@@ -7,7 +7,7 @@ import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.querys.H2Query;
-import io.devpl.codegen.mbpg.config.rules.IColumnType;
+import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
 import io.devpl.codegen.mbpg.jdbc.DbType;
 import io.devpl.sdk.util.StringUtils;
@@ -107,7 +107,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
                      .setComment(result.getFiledComment())
                      .setCustomMap(dbQuery.getCustomFields(result.getResultSet()));
                 String propertyName = entity.getNameConvert().propertyNameConvert(field);
-                IColumnType columnType = dataSourceConfig.getTypeConvert().processTypeConvert(globalConfig, field);
+                DataType columnType = dataSourceConfig.getTypeConvert().processTypeConvert(globalConfig, field);
                 field.setPropertyName(propertyName, columnType);
                 field.setMetaInfo(metaInfo);
                 tableInfo.addField(field);

@@ -20,7 +20,7 @@ import static io.devpl.codegen.mbpg.config.converts.TypeConverts.containsAny;
 
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
-import io.devpl.codegen.mbpg.config.rules.IColumnType;
+import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 
 /**
@@ -37,7 +37,7 @@ public class SqlServerTypeConvert implements ITypeConvert {
      * @inheritDoc
      */
     @Override
-    public IColumnType processTypeConvert(GlobalConfig config, String fieldType) {
+    public DataType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(containsAny("char", "xml", "text").then(JavaType.STRING))
             .test(contains("bigint").then(JavaType.LONG))
@@ -58,7 +58,7 @@ public class SqlServerTypeConvert implements ITypeConvert {
      * @param fieldType   类型
      * @return 返回对应的列类型
      */
-    public static IColumnType toDateType(GlobalConfig config, String fieldType) {
+    public static DataType toDateType(GlobalConfig config, String fieldType) {
         switch (config.getDateType()) {
             case SQL_PACK:
                 switch (fieldType) {
