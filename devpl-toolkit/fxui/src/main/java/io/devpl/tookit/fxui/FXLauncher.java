@@ -1,11 +1,7 @@
 package io.devpl.tookit.fxui;
 
 import io.devpl.tookit.fxui.app.MainUI;
-import io.devpl.tookit.fxui.model.TemplateInfo;
-import io.devpl.tookit.utils.json.JSONUtils;
 import javafx.application.Application;
-
-import java.util.UUID;
 
 /**
  * JDK 11 + MyBatis Generator V1.4.1（截止2022-09-12最新版）

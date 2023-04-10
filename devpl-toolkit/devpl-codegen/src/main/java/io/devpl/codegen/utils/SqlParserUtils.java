@@ -38,7 +38,7 @@ public class SqlParserUtils {
         Select select = (Select) parserManager.parse(new StringReader(sql));
         PlainSelect plain = (PlainSelect) select.getSelectBody();
         List<SelectItem> selectitems = plain.getSelectItems();
-        List<String> str_items = new ArrayList<String>();
+        List<String> str_items = new ArrayList<>();
         if (selectitems != null) {
             for (SelectItem selectitem : selectitems) {
                 str_items.add(selectitem.toString());

@@ -1,4 +1,4 @@
-package io.devpl.codegen.meta;
+package io.devpl.codegen.utils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;

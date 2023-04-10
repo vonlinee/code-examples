@@ -46,25 +46,14 @@
       <Label text="实体类名包名" GridPane.rowIndex="2"/>
       <TextField fx:id="modelTargetPackage" GridPane.columnIndex="1" GridPane.rowIndex="2">
       </TextField>
-      <Label text="存放目录" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-      <TextField fx:id="modelTargetProject" GridPane.columnIndex="3" GridPane.rowIndex="2">
-      </TextField>
       <Label text="Mapper接口包名" GridPane.rowIndex="3"/>
       <TextField fx:id="txfMapperPackageName" promptText="Mapper接口包名,例如com.example.mapper"
                  GridPane.columnIndex="1"
                  GridPane.rowIndex="3">
       </TextField>
-      <Label text="存放目录" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-      <TextField fx:id="daoTargetProject" GridPane.columnIndex="3"
-                 GridPane.columnSpan="2" GridPane.rowIndex="3">
-      </TextField>
       <!--映射XML文件包名-->
       <Label text="映射XML文件包名" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
       <TextField fx:id="mapperTargetPackage" GridPane.columnIndex="1" GridPane.rowIndex="4">
-      </TextField>
-      <Label text="存放目录" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
-      <TextField fx:id="mappingTargetProject" GridPane.columnIndex="3"
-                 GridPane.rowIndex="4">
       </TextField>
 
       <GridPane GridPane.columnSpan="4" GridPane.rowIndex="5">

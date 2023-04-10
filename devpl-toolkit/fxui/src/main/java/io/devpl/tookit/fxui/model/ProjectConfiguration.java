@@ -1,8 +1,9 @@
 package io.devpl.tookit.fxui.model;
 
-import java.util.List;
-
+import io.devpl.tookit.fxui.controller.mbg.ProjectLayout;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 项目配置
@@ -59,4 +60,9 @@ public class ProjectConfiguration {
      * 作者信息
      */
     private List<AuthorInfo> authors;
+
+    /**
+     * 项目结构
+     */
+    private ProjectLayout projectLayout;
 }

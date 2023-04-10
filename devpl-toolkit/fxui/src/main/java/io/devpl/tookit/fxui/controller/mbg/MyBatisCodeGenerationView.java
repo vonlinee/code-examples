@@ -3,21 +3,19 @@ package io.devpl.tookit.fxui.controller.mbg;
 import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
 import io.devpl.tookit.fxui.bridge.MyBatisPlusGenerator;
 import io.devpl.tookit.fxui.common.ProgressDialog;
+import io.devpl.tookit.fxui.controller.TableCustomizationController;
+import io.devpl.tookit.fxui.event.EventUtils;
 import io.devpl.tookit.fxui.model.*;
+import io.devpl.tookit.utils.*;
+import io.devpl.tookit.utils.fx.FileChooserDialog;
 import io.fxtras.Alerts;
 import io.fxtras.beans.PropertyBinder;
 import io.fxtras.mvc.FxmlLocation;
 import io.fxtras.mvc.FxmlView;
 import io.fxtras.mvc.ViewLoader;
 import io.fxtras.utils.StageManager;
-import io.devpl.tookit.fxui.controller.TableCustomizationController;
-import io.devpl.tookit.fxui.event.EventUtils;
-import io.devpl.tookit.utils.*;
-import io.devpl.tookit.utils.fx.FileChooserDialog;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -67,12 +65,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
     @FXML
     public TextField txfMapperPackageName;  // DAO接口包名
     @FXML
-    public TextField modelTargetProject; // 实体类存放目录
-    @FXML
-    public TextField mappingTargetProject; // 映射XML文件包名存放目录
-    @FXML
-    public TextField daoTargetProject;
-    @FXML
     public TextField projectFolderField;
     @FXML
     public Button btnSaveConfig;
@@ -118,6 +110,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
      */
     private final ProjectConfiguration projectConfig = new ProjectConfiguration();
 
+    // 进度回调
     private final ProgressDialog progressDialog = new ProgressDialog();
 
     /**
@@ -210,19 +203,14 @@ public class MyBatisCodeGenerationView extends FxmlView {
 
         PropertyBinder.bind(projectFolderField.textProperty(), projectConfig, ProjectConfiguration::setProjectRootFolder);
         PropertyBinder.bind(modelTargetPackage.textProperty(), projectConfig, ProjectConfiguration::setEntityPackageName);
-        PropertyBinder.bind(modelTargetProject.textProperty(), projectConfig, ProjectConfiguration::setEntityPackageFolder);
         PropertyBinder.bind(txfParentPackageName.textProperty(), projectConfig, ProjectConfiguration::setParentPackage);
         PropertyBinder.bind(txfMapperPackageName.textProperty(), projectConfig, ProjectConfiguration::setMapperPackageName);
-        PropertyBinder.bind(daoTargetProject.textProperty(), projectConfig, ProjectConfiguration::setMapperFolder);
         PropertyBinder.bind(mapperTargetPackage.textProperty(), projectConfig, ProjectConfiguration::setMapperXmlPackage);
-        PropertyBinder.bind(mappingTargetProject.textProperty(), projectConfig, ProjectConfiguration::setMapperXmlFolder);
 
         chobProjectLayout.getItems().addAll("MAVEN");
         chobProjectLayout.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if ("MAVEN".equals(newValue)) {
-                modelTargetProject.setText("src/main/java");
-                daoTargetProject.setText("src/main/java");
-                mappingTargetProject.setText("src/main/resources");
+            if ("MAVEN".equalsIgnoreCase(newValue)) {
+                this.projectConfig.setProjectLayout(new MavenProjectLayout());
             }
         });
         chobProjectLayout.getSelectionModel().selectFirst();
@@ -388,11 +376,8 @@ public class MyBatisCodeGenerationView extends FxmlView {
     public void loadConfig(ProjectConfiguration projectConfig) {
         projectFolderField.setText(projectConfig.getProjectRootFolder());
         modelTargetPackage.setText(projectConfig.getEntityPackageName());
-        modelTargetProject.setText(projectConfig.getEntityPackageFolder());
         txfParentPackageName.setText(projectConfig.getParentPackage());
         txfMapperPackageName.setText(projectConfig.getMapperPackageName());
-        daoTargetProject.setText(projectConfig.getMapperFolder());
         mapperTargetPackage.setText(projectConfig.getMapperXmlPackage());
-        mappingTargetProject.setText(projectConfig.getMapperXmlFolder());
     }
 }
