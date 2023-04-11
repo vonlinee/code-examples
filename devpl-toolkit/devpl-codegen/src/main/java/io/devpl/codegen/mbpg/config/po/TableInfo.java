@@ -1,13 +1,13 @@
 package io.devpl.codegen.mbpg.config.po;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 // import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
+import io.devpl.codegen.mbpg.config.builder.Context;
 import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.rules.DataType;
+import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -108,14 +108,14 @@ public class TableInfo {
 
     /**
      * 构造方法
-     * @param configBuilder 配置构建
+     * @param context 配置构建
      * @param name          表名
      * @since 3.5.0
      */
-    public TableInfo(@NotNull CodeGenConfiguration configBuilder, @NotNull String name) {
-        this.strategyConfig = configBuilder.getStrategyConfig();
-        this.globalConfig = configBuilder.getGlobalConfig();
-        this.entity = configBuilder.getStrategyConfig().entity();
+    public TableInfo(@NotNull Context context, @NotNull String name) {
+        this.strategyConfig = context.getStrategyConfig();
+        this.globalConfig = context.getGlobalConfig();
+        this.entity = context.getStrategyConfig().entity();
         this.name = name;
     }
 

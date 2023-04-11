@@ -1,13 +1,11 @@
 package io.devpl.codegen.mbpg.config.querys;
 
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.IDbQuery;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.po.LikeTable;
 import io.devpl.codegen.mbpg.jdbc.DbType;
+import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -54,17 +49,17 @@ public class DbQueryDecorator extends AbstractDbQuery {
                 sql.append(" AND ").append(dbQuery.tableName()).append(" LIKE '").append(table.getValue()).append("'");
             } else if ((table = strategyConfig.getNotLikeTable()) != null) {
                 sql.append(" AND ")
-                   .append(dbQuery.tableName())
-                   .append(" NOT LIKE '")
-                   .append(table.getValue())
-                   .append("'");
+                        .append(dbQuery.tableName())
+                        .append(" NOT LIKE '")
+                        .append(table.getValue())
+                        .append("'");
             }
             if (!(tables = strategyConfig.getInclude()).isEmpty()) {
                 sql.append(" AND ").append(dbQuery.tableName()).append(" IN (")
-                   .append(tables.stream().map(tb -> "'" + tb + "'").collect(Collectors.joining(","))).append(")");
+                        .append(tables.stream().map(tb -> "'" + tb + "'").collect(Collectors.joining(","))).append(")");
             } else if (!(tables = strategyConfig.getExclude()).isEmpty()) {
                 sql.append(" AND ").append(dbQuery.tableName()).append(" NOT IN (")
-                   .append(tables.stream().map(tb -> "'" + tb + "'").collect(Collectors.joining(","))).append(")");
+                        .append(tables.stream().map(tb -> "'" + tb + "'").collect(Collectors.joining(","))).append(")");
             }
             return sql.toString();
         }
@@ -78,6 +73,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
     /**
      * 扩展{@link #tableFieldsSql()}方法
+     *
      * @param tableName 表名
      * @return 查询表字段语句
      */
@@ -147,7 +143,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
     public Map<String, Object> getCustomFields(ResultSet resultSet) {
         String[] fcs = this.fieldCustom();
         if (null != fcs) {
-            Map<String, Object> customMap = CollectionUtils.newHashMapWithExpectedSize(fcs.length);
+            Map<String, Object> customMap = new HashMap<>(fcs.length);
             for (String fc : fcs) {
                 try {
                     customMap.put(fc, resultSet.getObject(fc));
@@ -162,6 +158,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
     /**
      * 执行 SQL 查询，回调返回结果
+     *
      * @param sql      执行SQL
      * @param consumer 结果处理
      * @throws SQLException SQLException
@@ -230,15 +227,17 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
         /**
          * 获取格式化注释
+         *
          * @param columnLabel 字段列
          * @return 注释
          */
         private String getComment(String columnLabel) {
-            return StringUtils.isNotBlank(columnLabel) ? formatComment(getStringResult(columnLabel)) : StringPool.EMPTY;
+            return StringUtils.isNotBlank(columnLabel) ? formatComment(getStringResult(columnLabel)) : "";
         }
 
         /**
          * 获取表注释
+         *
          * @return 表注释
          */
         public String getTableComment() {
@@ -250,7 +249,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
          * @return 格式化内容
          */
         public String formatComment(String comment) {
-            return StringUtils.isBlank(comment) ? StringPool.EMPTY : comment.replaceAll("\r\n", "\t");
+            return StringUtils.isBlank(comment) ? "" : comment.replaceAll("\r\n", "\t");
         }
 
         /**

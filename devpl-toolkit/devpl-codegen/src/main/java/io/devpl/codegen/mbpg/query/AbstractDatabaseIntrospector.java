@@ -3,7 +3,7 @@ package io.devpl.codegen.mbpg.query;
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
+import io.devpl.codegen.mbpg.config.builder.Context;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.querys.DbQueryDecorator;
 import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 /**
  * 数据库查询抽象类
+ *
  * @author nieqiurong
  * @since 3.5.3
  */
@@ -26,7 +27,7 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
 
     protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    protected final CodeGenConfiguration configBuilder;
+    protected final Context context;
 
     protected final DataSourceConfig dataSourceConfig;
 
@@ -38,8 +39,8 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
 
     protected final DatabaseMetaDataWrapper databaseMetaDataWrapper;
 
-    public AbstractDatabaseIntrospector(@NotNull CodeGenConfiguration configBuilder) {
-        this.configBuilder = configBuilder;
+    public AbstractDatabaseIntrospector(@NotNull Context configBuilder) {
+        this.context = configBuilder;
         this.dataSourceConfig = configBuilder.getDataSourceConfig();
         this.strategyConfig = configBuilder.getStrategyConfig();
         this.dbQuery = new DbQueryDecorator(dataSourceConfig, strategyConfig);
@@ -48,8 +49,8 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
     }
 
     @NotNull
-    public CodeGenConfiguration getConfigBuilder() {
-        return configBuilder;
+    public Context getContext() {
+        return context;
     }
 
     @NotNull
@@ -63,7 +64,7 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
         if (isExclude || isInclude) {
             Map<String, String> notExistTables = new HashSet<>(isExclude ? strategyConfig.getExclude() : strategyConfig.getInclude())
                     .stream()
-                    .filter(s -> !CodeGenConfiguration.matcherRegTable(s))
+                    .filter(s -> !Context.matcherRegTable(s))
                     .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n));
             // 将已经存在的表移除，获取配置中数据库不存在的表
             for (TableInfo tabInfo : tableList) {

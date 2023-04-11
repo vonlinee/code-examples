@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg.query;
 
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
-import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
+import io.devpl.codegen.mbpg.config.builder.Context;
 import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
@@ -18,6 +18,7 @@ import java.util.Map;
 
 /**
  * 元数据查询数据库信息.
+ *
  * @author nieqiurong 2022/5/11.
  * @see ITypeConvertHandler 类型转换器(如果默认逻辑不能满足，可实现此接口重写类型转换)
  * <p>
@@ -34,13 +35,13 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
 
     private final TypeRegistry typeRegistry;
 
-    public DefaultDatabaseIntrospector(@NotNull CodeGenConfiguration configBuilder) {
-        super(configBuilder);
-        typeRegistry = new TypeRegistry(configBuilder.getGlobalConfig());
+    public DefaultDatabaseIntrospector(@NotNull Context context) {
+        super(context);
+        typeRegistry = new TypeRegistry(context.getGlobalConfig());
     }
 
     @Override
-    public @NotNull List<TableInfo> queryTables() {
+    public @NotNull List<TableInfo> introspecTables() {
         boolean isInclude = strategyConfig.getInclude().size() > 0;
         boolean isExclude = strategyConfig.getExclude().size() > 0;
         // 所有的表信息
@@ -52,7 +53,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
         tables.forEach(table -> {
             String tableName = table.getName();
             if (StringUtils.isNotBlank(tableName)) {
-                TableInfo tableInfo = new TableInfo(this.configBuilder, tableName);
+                TableInfo tableInfo = new TableInfo(this.context, tableName);
                 tableInfo.setComment(table.getRemarks());
                 if (isInclude && strategyConfig.matchIncludeTable(tableName)) {
                     includeTableList.add(tableInfo);
@@ -86,7 +87,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
         columnsInfoMap.forEach((k, columnInfo) -> {
             TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo);
             String columnName = columnInfo.getName();
-            TableField field = new TableField(this.configBuilder, columnName);
+            TableField field = new TableField(this.context, columnName);
             // 处理ID
             if (columnInfo.isPrimaryKey()) {
                 field.primaryKey(columnInfo.isAutoIncrement());

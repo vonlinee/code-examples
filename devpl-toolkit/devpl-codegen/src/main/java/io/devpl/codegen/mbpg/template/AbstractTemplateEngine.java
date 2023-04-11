@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg.template;
 
 import io.devpl.codegen.mbpg.config.*;
-import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
+import io.devpl.codegen.mbpg.config.builder.Context;
 import io.devpl.codegen.mbpg.config.builder.CustomFile;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
@@ -34,12 +34,12 @@ public abstract class AbstractTemplateEngine {
     /**
      * 配置信息
      */
-    private CodeGenConfiguration configBuilder;
+    private Context context;
 
     /**
      * 模板引擎初始化
      */
-    public abstract AbstractTemplateEngine init(CodeGenConfiguration configBuilder);
+    public abstract AbstractTemplateEngine init(Context context);
 
     /**
      * 输出自定义模板文件
@@ -51,7 +51,7 @@ public abstract class AbstractTemplateEngine {
      */
     protected void outputCustomFile(List<CustomFile> customFiles, TableInfo tableInfo, Map<String, Object> objectMap) {
         String entityName = tableInfo.getEntityName();
-        String parentPath = getPathInfo(OutputFile.parent);
+        String parentPath = getPathInfo(OutputFile.PARENT);
         customFiles.forEach(file -> {
             String filePath = io.devpl.sdk.util.StringUtils.hasText(file.getFilePath()) ? file.getFilePath() : parentPath;
             if (io.devpl.sdk.util.StringUtils.hasText(file.getPackageName())) {
@@ -72,13 +72,13 @@ public abstract class AbstractTemplateEngine {
      */
     protected void outputEntity(TableInfo tableInfo, Map<String, Object> objectMap) {
         String entityName = tableInfo.getEntityName();
-        String entityPath = getPathInfo(OutputFile.entity);
+        String entityPath = getPathInfo(OutputFile.ENTITY);
         if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
-            CodeGenConfiguration config = getCodeGenConfiguration();
+            Context config = getContext();
             TemplateConfig templateConfig = config.getTemplateConfig();
             boolean useKotlin = config.getGlobalConfig().isKotlin();
             // 实体类模板文件路径
-            String entity = templateConfig.getEntity(useKotlin);
+            String entity = templateConfig.getEntityTemplatePath(useKotlin);
             if (StringUtils.hasLength(entity)) {
                 // 扩展名
                 String extension = useKotlin ? ConstVal.KT_SUFFIX : ConstVal.JAVA_SUFFIX;
@@ -106,17 +106,17 @@ public abstract class AbstractTemplateEngine {
      */
     protected void outputMapper(TableInfo tableInfo, Map<String, Object> objectMap) {
         // MpMapper.java
-        final CodeGenConfiguration config = getCodeGenConfiguration();
+        final Context config = getContext();
         String entityName = tableInfo.getEntityName();
-        String mapperPath = getPathInfo(OutputFile.mapper);
+        String mapperPath = getPathInfo(OutputFile.MAPPER);
         if (StringUtils.hasText(tableInfo.getMapperName()) && StringUtils.isNotBlank(mapperPath)) {
-            getTemplateFilePath(TemplateConfig::getMapper).ifPresent(mapper -> {
+            getTemplateFilePath(TemplateConfig::getMapperTemplatePath).ifPresent(mapper -> {
                 String mapperFile = String.format((mapperPath + File.separator + tableInfo.getMapperName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(mapperFile), objectMap, mapper, config.getStrategyConfig().mapper().isFileOverride());
             });
         }
         // MpMapper.xml
-        String xmlPath = getPathInfo(OutputFile.xml);
+        String xmlPath = getPathInfo(OutputFile.XML);
         if (StringUtils.isNotBlank(tableInfo.getXmlName()) && StringUtils.isNotBlank(xmlPath)) {
             getTemplateFilePath(TemplateConfig::getXml).ifPresent(xml -> {
                 String xmlFile = String.format((xmlPath + File.separator + tableInfo.getXmlName() + ConstVal.XML_SUFFIX), entityName);
@@ -135,10 +135,10 @@ public abstract class AbstractTemplateEngine {
     protected void outputService(TableInfo tableInfo, Map<String, Object> objectMap) {
         // IMpService.java
 
-        final CodeGenConfiguration config = getCodeGenConfiguration();
+        final Context config = getContext();
 
         String entityName = tableInfo.getEntityName();
-        String servicePath = getPathInfo(OutputFile.service);
+        String servicePath = getPathInfo(OutputFile.SERVICE);
         if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getServiceName()) && io.devpl.sdk.util.StringUtils.isNotBlank(servicePath)) {
             getTemplateFilePath(TemplateConfig::getService).ifPresent(service -> {
                 String serviceFile = String.format((servicePath + File.separator + tableInfo.getServiceName() + suffixJavaOrKt()), entityName);
@@ -146,7 +146,7 @@ public abstract class AbstractTemplateEngine {
             });
         }
         // MpServiceImpl.java
-        String serviceImplPath = getPathInfo(OutputFile.serviceImpl);
+        String serviceImplPath = getPathInfo(OutputFile.SERVICE_IMPL);
         if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getServiceImplName()) && io.devpl.sdk.util.StringUtils.isNotBlank(serviceImplPath)) {
             getTemplateFilePath(TemplateConfig::getServiceImpl).ifPresent(serviceImpl -> {
                 String implFile = String.format((serviceImplPath + File.separator + tableInfo.getServiceImplName() + suffixJavaOrKt()), entityName);
@@ -164,12 +164,12 @@ public abstract class AbstractTemplateEngine {
      */
     protected void outputController(TableInfo tableInfo, Map<String, Object> objectMap) {
         // MpController.java
-        String controllerPath = getPathInfo(OutputFile.controller);
+        String controllerPath = getPathInfo(OutputFile.CONTROLLER);
         if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getControllerName()) && io.devpl.sdk.util.StringUtils.isNotBlank(controllerPath)) {
             getTemplateFilePath(TemplateConfig::getController).ifPresent(controller -> {
                 String entityName = tableInfo.getEntityName();
                 String controllerFile = String.format((controllerPath + File.separator + tableInfo.getControllerName() + suffixJavaOrKt()), entityName);
-                outputFile(new File(controllerFile), objectMap, controller, getCodeGenConfiguration().getStrategyConfig().controller().isFileOverride());
+                outputFile(new File(controllerFile), objectMap, controller, getContext().getStrategyConfig().controller().isFileOverride());
             });
         }
     }
@@ -208,7 +208,7 @@ public abstract class AbstractTemplateEngine {
      */
 
     protected Optional<String> getTemplateFilePath(Function<TemplateConfig, String> function) {
-        TemplateConfig templateConfig = getCodeGenConfiguration().getTemplateConfig();
+        TemplateConfig templateConfig = getContext().getTemplateConfig();
         String filePath = function.apply(templateConfig);
         if (io.devpl.sdk.util.StringUtils.isNotBlank(filePath)) {
             return Optional.of(templateFilePath(filePath));
@@ -224,39 +224,7 @@ public abstract class AbstractTemplateEngine {
      */
     @Nullable
     protected String getPathInfo(OutputFile outputFile) {
-        return getCodeGenConfiguration().getPathInfo().get(outputFile);
-    }
-
-    /**
-     * 批量输出 java xml 文件
-     */
-    public AbstractTemplateEngine batchOutput() {
-        try {
-            CodeGenConfiguration config = this.getCodeGenConfiguration();
-            List<TableInfo> tableInfoList = config.getTableInfoList();
-            for (TableInfo tableInfo : tableInfoList) {
-                Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
-                // 类似于插件的配置项
-                InjectionConfig injectionConfig = config.getInjectionConfig();
-                if (injectionConfig != null) {
-                    // 添加自定义属性
-                    injectionConfig.beforeOutputFile(tableInfo, objectMap);
-                    // 输出自定义文件
-                    outputCustomFile(injectionConfig.getCustomFiles(), tableInfo, objectMap);
-                }
-                // entity
-                outputEntity(tableInfo, objectMap);
-                // mapper and xml
-                outputMapper(tableInfo, objectMap);
-                // service
-                outputService(tableInfo, objectMap);
-                // controller
-                outputController(tableInfo, objectMap);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("无法创建文件，请检查配置信息！", e);
-        }
-        return this;
+        return getContext().getPathInfo().get(outputFile);
     }
 
     /**
@@ -278,10 +246,10 @@ public abstract class AbstractTemplateEngine {
      * 打开输出目录
      */
     public void open() {
-        String outDir = configBuilder.getGlobalConfig().getOutputDir();
+        String outDir = context.getGlobalConfig().getOutputDir();
         if (StringUtils.isBlank(outDir) || !new File(outDir).exists()) {
             log.error("未找到输出目录 {}", outDir);
-        } else if (getCodeGenConfiguration().getGlobalConfig().isOpenOutputDir()) {
+        } else if (getContext().getGlobalConfig().isOpenOutputDir()) {
             try {
                 RuntimeUtils.openDirectory(outDir);
             } catch (IOException e) {
@@ -293,13 +261,12 @@ public abstract class AbstractTemplateEngine {
     /**
      * 渲染对象 MAP 信息
      *
-     * @param config    配置信息
+     * @param context    配置信息
      * @param tableInfo 表信息对象
      * @return ignore
      */
-
-    public Map<String, Object> getObjectMap(CodeGenConfiguration config, TableInfo tableInfo) {
-        StrategyConfig strategyConfig = config.getStrategyConfig();
+    public Map<String, Object> getObjectMap(Context context, TableInfo tableInfo) {
+        StrategyConfig strategyConfig = context.getStrategyConfig();
         Map<String, Object> controllerData = strategyConfig.controller().renderData(tableInfo);
         Map<String, Object> objectMap = new HashMap<>(controllerData);
         Map<String, Object> mapperData = strategyConfig.mapper().renderData(tableInfo);
@@ -310,11 +277,11 @@ public abstract class AbstractTemplateEngine {
         // 实体类
         Map<String, Object> entityData = strategyConfig.entity().renderData(tableInfo);
         objectMap.putAll(entityData);
-        objectMap.put("config", config);
+        objectMap.put("config", context);
         // 包配置信息
-        objectMap.put("package", config.getPackageConfig().getPackageInfo());
+        objectMap.put("package", context.getPackageConfig().getPackageInfo());
 
-        GlobalConfig globalConfig = config.getGlobalConfig();
+        GlobalConfig globalConfig = context.getGlobalConfig();
         objectMap.put("author", globalConfig.getAuthor());
         objectMap.put("kotlin", globalConfig.isKotlin());
         objectMap.put("swagger", globalConfig.isSwagger());
@@ -324,7 +291,7 @@ public abstract class AbstractTemplateEngine {
         String schemaName = "";
         if (strategyConfig.isEnableSchema()) {
             // 存在 schemaName 设置拼接 . 组合表名
-            schemaName = config.getDataSourceConfig().getSchemaName();
+            schemaName = context.getDataSourceConfig().getSchemaName();
             if (io.devpl.sdk.util.StringUtils.isNotBlank(schemaName)) {
                 schemaName += ".";
                 tableInfo.setConvert(true);
@@ -365,15 +332,15 @@ public abstract class AbstractTemplateEngine {
      * 文件后缀
      */
     protected String suffixJavaOrKt() {
-        return getCodeGenConfiguration().getGlobalConfig().isKotlin() ? ConstVal.KT_SUFFIX : ConstVal.JAVA_SUFFIX;
+        return getContext().getGlobalConfig().isKotlin() ? ConstVal.KT_SUFFIX : ConstVal.JAVA_SUFFIX;
     }
 
-    public CodeGenConfiguration getCodeGenConfiguration() {
-        return configBuilder;
+    public Context getContext() {
+        return context;
     }
 
-    public AbstractTemplateEngine setConfig(CodeGenConfiguration configBuilder) {
-        this.configBuilder = configBuilder;
+    public AbstractTemplateEngine setContext(Context context) {
+        this.context = context;
         return this;
     }
 }

@@ -15,8 +15,7 @@
  */
 package io.devpl.codegen.mbpg.config;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import net.sf.jsqlparser.util.deparser.CreateIndexDeParser;
+import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +73,7 @@ public class TemplateConfig {
     /**
      * 不对外爆露
      */
-    private TemplateConfig() {
+    public TemplateConfig() {
         this.entity = ConstVal.TEMPLATE_ENTITY_JAVA;
         this.entityKt = ConstVal.TEMPLATE_ENTITY_KT;
         this.controller = ConstVal.TEMPLATE_CONTROLLER;
@@ -106,7 +105,7 @@ public class TemplateConfig {
      * @param kotlin 是否kotlin
      * @return 模板路径
      */
-    public String getEntity(boolean kotlin) {
+    public String getEntityTemplatePath(boolean kotlin) {
         if (!this.disableEntity) {
             if (kotlin) {
                 return StringUtils.isBlank(this.entityKt) ? ConstVal.TEMPLATE_ENTITY_KT : this.entityKt;
@@ -171,7 +170,7 @@ public class TemplateConfig {
         return serviceImpl;
     }
 
-    public String getMapper() {
+    public String getMapperTemplatePath() {
         return mapper;
     }
 

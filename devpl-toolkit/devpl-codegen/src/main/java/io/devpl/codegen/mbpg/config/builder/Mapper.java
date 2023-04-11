@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.devpl.codegen.mbpg.config.builder;
 
 import io.devpl.codegen.mbpg.ITemplate;
@@ -21,8 +6,6 @@ import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.function.ConverterFileName;
 import io.devpl.codegen.mbpg.util.ClassUtils;
-import org.apache.ibatis.cache.Cache;
-import org.apache.ibatis.cache.decorators.LoggingCache;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +16,7 @@ import java.util.Map;
 
 /**
  * 控制器属性配置
+ *
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
@@ -50,6 +34,7 @@ public class Mapper implements ITemplate {
 
     /**
      * 是否添加 @Mapper 注解（默认 false）
+     *
      * @see #mapperAnnotationClass
      * @since 3.5.1
      * @deprecated 3.5.4
@@ -59,45 +44,52 @@ public class Mapper implements ITemplate {
 
     /**
      * Mapper标记注解
+     *
      * @since 3.5.3
      */
-    private Class<? extends Annotation> mapperAnnotationClass;
+    private String mapperAnnotationClass;
 
     /**
      * 是否开启BaseResultMap（默认 false）
+     *
      * @since 3.5.0
      */
     private boolean baseResultMap;
 
     /**
      * 是否开启baseColumnList（默认 false）
+     *
      * @since 3.5.0
      */
     private boolean baseColumnList;
 
     /**
      * 转换输出Mapper文件名称
+     *
      * @since 3.5.0
      */
     private ConverterFileName converterMapperFileName = (entityName -> entityName + ConstVal.MAPPER);
 
     /**
      * 转换输出Xml文件名称
+     *
      * @since 3.5.0
      */
     private ConverterFileName converterXmlFileName = (entityName -> entityName + ConstVal.MAPPER);
 
     /**
      * 是否覆盖已有文件（默认 false）
+     *
      * @since 3.5.2
      */
     private boolean fileOverride;
 
     /**
      * 设置缓存实现类
+     *
      * @since 3.5.0
      */
-    private Class<? extends Cache> cache;
+    private String cache;
 
     @NotNull
     public String getSuperClass() {
@@ -125,8 +117,8 @@ public class Mapper implements ITemplate {
         return converterXmlFileName;
     }
 
-    public Class<? extends Cache> getCache() {
-        return this.cache == null ? LoggingCache.class : this.cache;
+    public String getCache() {
+        return this.cache == null ? "org.apache.ibatis.cache.decorators.LoggingCache" : this.cache;
     }
 
     public boolean isFileOverride() {
@@ -145,9 +137,9 @@ public class Mapper implements ITemplate {
         data.put("baseColumnList", this.baseColumnList);
         data.put("superMapperClassPackage", this.superClass);
         if (enableCache) {
-            Class<? extends Cache> cacheClass = this.getCache();
+            String cacheClass = this.getCache();
             data.put("cache", cacheClass);
-            data.put("cacheClassName", cacheClass.getName());
+            data.put("cacheClassName", cacheClass);
         }
         data.put("superMapperClass", ClassUtils.getSimpleName(this.superClass));
         return data;
@@ -163,6 +155,7 @@ public class Mapper implements ITemplate {
 
         /**
          * 父类Mapper
+         *
          * @param superClass 类名
          * @return this
          */
@@ -173,6 +166,7 @@ public class Mapper implements ITemplate {
 
         /**
          * 父类Mapper
+         *
          * @param superClass 类
          * @return this
          * @since 3.5.0
@@ -183,6 +177,7 @@ public class Mapper implements ITemplate {
 
         /**
          * 开启 @Mapper 注解
+         *
          * @return this
          * @see #mapperAnnotation(Class)
          * @since 3.5.1
@@ -192,23 +187,25 @@ public class Mapper implements ITemplate {
         public Builder enableMapperAnnotation() {
             this.mapper.mapperAnnotation = true;
             // TODO 因为现在mybatis-plus传递mybatis-spring依赖，这里是没问题的，但后面如果考虑脱离mybatis-spring的时候就需要把这里处理掉，建议使用mapperAnnotation方法来标记自己的注解。
-            this.mapper.mapperAnnotationClass = org.apache.ibatis.annotations.Mapper.class;
+            this.mapper.mapperAnnotationClass = "org.apache.ibatis.annotations.Mapper";
             return this;
         }
 
         /**
          * 标记 Mapper 注解
-         * @param annotationClass 注解Class
+         *
+         * @param mapperAnnotationClass 注解Class
          * @return this
          * @since 3.5.3
          */
-        public Builder mapperAnnotation(Class<? extends Annotation> annotationClass) {
-            this.mapper.mapperAnnotationClass = annotationClass;
+        public Builder mapperAnnotation(String mapperAnnotationClass) {
+            this.mapper.mapperAnnotationClass = mapperAnnotationClass;
             return this;
         }
 
         /**
          * 开启baseResultMap
+         *
          * @return this
          * @since 3.5.0
          */
@@ -219,6 +216,7 @@ public class Mapper implements ITemplate {
 
         /**
          * 开启baseColumnList
+         *
          * @return this
          * @since 3.5.0
          */
@@ -229,17 +227,19 @@ public class Mapper implements ITemplate {
 
         /**
          * 设置缓存实现类
+         *
          * @param cache 缓存实现
          * @return this
          * @since 3.5.0
          */
-        public Builder cache(@NotNull Class<? extends Cache> cache) {
+        public Builder cache(@NotNull String cache) {
             this.mapper.cache = cache;
             return this;
         }
 
         /**
          * 输出Mapper文件名称转换
+         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
@@ -251,6 +251,7 @@ public class Mapper implements ITemplate {
 
         /**
          * 转换Xml文件名称处理
+         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
@@ -262,6 +263,7 @@ public class Mapper implements ITemplate {
 
         /**
          * 格式化Mapper文件名称
+         *
          * @param format 　格式
          * @return this
          * @since 3.5.0
@@ -272,6 +274,7 @@ public class Mapper implements ITemplate {
 
         /**
          * 格式化Xml文件名称
+         *
          * @param format 格式
          * @return this
          * @since 3.5.0
@@ -282,6 +285,7 @@ public class Mapper implements ITemplate {
 
         /**
          * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
+         *
          * @see #enableFileOverride()
          */
         @Deprecated

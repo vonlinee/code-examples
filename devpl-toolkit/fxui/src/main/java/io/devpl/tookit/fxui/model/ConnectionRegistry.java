@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ConnectionRegistry {
 
-    static final Logger logger = LoggerFactory.getLogger(ConnectionRegistry.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConnectionRegistry.class);
 
     /**
      * 保存已注册的连接配置
@@ -49,6 +49,11 @@ public class ConnectionRegistry {
         return getRegisteredConnectionConfigMap().get(connectionName);
     }
 
+    /**
+     * 获取所有连接配置
+     *
+     * @return 连接配置列表
+     */
     public static Collection<ConnectionConfig> getConnectionConfigurations() {
         return getRegisteredConnectionConfigMap().values();
     }

@@ -1,8 +1,8 @@
 package io.devpl.codegen.mbpg.config.rules;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.devpl.codegen.mbpg.config.ConstVal;
+import io.devpl.codegen.mbpg.util.StringPool;
+import io.devpl.codegen.mbpg.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Set;

@@ -8,7 +8,8 @@ public interface DatabaseIntrospector {
 
     /**
      * 获取表信息
+     *
      * @return 表信息
      */
-    List<TableInfo> queryTables();
+    List<TableInfo> introspecTables();
 }

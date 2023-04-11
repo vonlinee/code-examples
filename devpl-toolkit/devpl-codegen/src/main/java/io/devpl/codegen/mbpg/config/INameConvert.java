@@ -15,10 +15,10 @@
  */
 package io.devpl.codegen.mbpg.config;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.rules.NamingStrategyEnum;
+import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;

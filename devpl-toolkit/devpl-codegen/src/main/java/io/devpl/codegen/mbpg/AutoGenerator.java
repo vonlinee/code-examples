@@ -1,10 +1,12 @@
 package io.devpl.codegen.mbpg;
 
-import com.github.javaparser.quality.NotNull;
 import io.devpl.codegen.mbpg.config.*;
-import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
+import io.devpl.codegen.mbpg.config.builder.Context;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.template.AbstractTemplateEngine;
+import io.devpl.codegen.mbpg.template.CodeGenerator;
+import io.devpl.codegen.mbpg.template.TemplateCodeGenerator;
+import io.devpl.codegen.mbpg.template.VelocityTemplateEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +14,7 @@ import java.util.List;
 
 /**
  * 生成文件
+ *
  * @author YangHu, tangguo, hubin
  * @since 2016-08-30
  */
@@ -22,7 +25,7 @@ public class AutoGenerator {
     /**
      * 配置信息
      */
-    protected CodeGenConfiguration config;
+    protected Context context;
     /**
      * 注入配置
      */
@@ -54,115 +57,112 @@ public class AutoGenerator {
 
     /**
      * 构造方法
+     *
      * @param dataSourceConfig 数据库配置
      * @since 3.5.0
      */
-    public AutoGenerator(@NotNull DataSourceConfig dataSourceConfig) {
+    public AutoGenerator(DataSourceConfig dataSourceConfig) {
         // 这个是必须参数,其他都是可选的,后续去除默认构造更改成final
         this.dataSource = dataSourceConfig;
     }
 
     /**
      * 注入配置
+     *
      * @param injectionConfig 注入配置
      * @return this
      * @since 3.5.0
      */
-    public AutoGenerator injection(@NotNull InjectionConfig injectionConfig) {
+    public AutoGenerator injection(InjectionConfig injectionConfig) {
         this.injection = injectionConfig;
         return this;
     }
 
     /**
      * 生成策略
+     *
      * @param strategyConfig 策略配置
      * @return this
      * @since 3.5.0
      */
-    public AutoGenerator strategy(@NotNull StrategyConfig strategyConfig) {
+    public AutoGenerator strategy(StrategyConfig strategyConfig) {
         this.strategy = strategyConfig;
         return this;
     }
 
     /**
      * 指定包配置信息
+     *
      * @param packageConfig 包配置
      * @return this
      * @since 3.5.0
      */
-    public AutoGenerator packageInfo(@NotNull PackageConfig packageConfig) {
+    public AutoGenerator packageInfo(PackageConfig packageConfig) {
         this.packageInfo = packageConfig;
         return this;
     }
 
     /**
      * 指定模板配置
+     *
      * @param templateConfig 模板配置
      * @return this
      * @since 3.5.0
      */
-    public AutoGenerator template(@NotNull TemplateConfig templateConfig) {
+    public AutoGenerator template(TemplateConfig templateConfig) {
         this.templateConfig = templateConfig;
         return this;
     }
 
     /**
      * 指定全局配置
+     *
      * @param globalConfig 全局配置
      * @return this
      * @see 3.5.0
      */
-    public AutoGenerator global(@NotNull GlobalConfig globalConfig) {
+    public AutoGenerator global(GlobalConfig globalConfig) {
         this.globalConfig = globalConfig;
         return this;
     }
 
     /**
      * 设置配置汇总
-     * @param configBuilder 配置汇总
+     *
+     * @param context 连接配置上下文对象
      * @return this
      * @since 3.5.0
      */
-    public AutoGenerator config(@NotNull CodeGenConfiguration configBuilder) {
-        this.config = configBuilder;
+    public AutoGenerator config(Context context) {
+        this.context = context;
         return this;
     }
 
+    CodeGenerator generator;
+
     /**
      * 生成代码
+     *
      * @param templateEngine 模板引擎
      */
     public void execute(AbstractTemplateEngine templateEngine) {
         logger.debug("==========================准备生成文件...==========================");
         // 初始化配置
-        if (null == config) {
-            config = new CodeGenConfiguration(packageInfo, dataSource, strategy, templateConfig, globalConfig, injection);
+        if (null == context) {
+            context = new Context(packageInfo, dataSource, strategy, templateConfig, globalConfig, injection);
         }
         if (null == templateEngine) {
             // 为了兼容之前逻辑，采用 Velocity 引擎 【 默认 】
-            // templateEngine = new VelocityTemplateEngine();
-            throw new RuntimeException("模板引擎未配置");
+            templateEngine = new VelocityTemplateEngine();
         }
-        templateEngine.setConfig(config);
+        templateEngine.setContext(context);
         // 模板引擎初始化执行文件输出
-        templateEngine.init(config).batchOutput().open();
+        AbstractTemplateEngine te = templateEngine.init(context);
+
+        this.generator = new TemplateCodeGenerator(te);
+
+        generator.generate(null);
+        te.open();
         logger.debug("==========================文件生成完成！！！==========================");
-    }
-
-    /**
-     * 开放表信息、预留子类重写
-     * @param config 配置信息
-     * @return ignore
-     */
-    protected List<TableInfo> getAllTableInfoList(@NotNull CodeGenConfiguration config) {
-        return config.getTableInfoList();
-    }
-
-    public CodeGenConfiguration getConfig() {
-        return config;
-    }
-
-    public GlobalConfig getGlobalConfig() {
-        return globalConfig;
     }
 }

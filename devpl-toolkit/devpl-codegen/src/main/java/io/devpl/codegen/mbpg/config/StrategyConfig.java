@@ -1,8 +1,8 @@
 package io.devpl.codegen.mbpg.config;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.devpl.codegen.mbpg.config.builder.*;
 import io.devpl.codegen.mbpg.config.po.LikeTable;
+import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,9 +17,6 @@ import java.util.Set;
  * @since 2016/8/30
  */
 public class StrategyConfig {
-
-    private StrategyConfig() {
-    }
 
     /**
      * 是否大写命名（默认 false）

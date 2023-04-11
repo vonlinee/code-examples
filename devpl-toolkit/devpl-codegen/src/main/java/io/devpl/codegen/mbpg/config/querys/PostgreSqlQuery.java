@@ -15,7 +15,7 @@
  */
 package io.devpl.codegen.mbpg.config.querys;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import io.devpl.codegen.mbpg.util.StringUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

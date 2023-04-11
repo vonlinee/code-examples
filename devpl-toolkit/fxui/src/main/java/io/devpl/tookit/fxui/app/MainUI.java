@@ -6,6 +6,8 @@ import io.devpl.tookit.fxui.controller.MainView;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**

@@ -1,10 +1,9 @@
 package io.devpl.codegen.mbpg.config.po;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.IKeyWordsHandler;
-import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
+import io.devpl.codegen.mbpg.config.builder.Context;
 import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.config.rules.NamingStrategyEnum;
@@ -12,6 +11,7 @@ import io.devpl.codegen.mbpg.fill.Column;
 import io.devpl.codegen.mbpg.fill.Property;
 import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
 import io.devpl.codegen.mbpg.jdbc.JdbcType;
+import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -66,7 +66,7 @@ public class TableField {
      * @param name          数据库字段名称
      * @since 3.5.0
      */
-    public TableField(@NotNull CodeGenConfiguration configBuilder, @NotNull String name) {
+    public TableField(@NotNull Context configBuilder, @NotNull String name) {
         this.name = name;
         this.columnName = name;
         this.entity = configBuilder.getStrategyConfig().entity();

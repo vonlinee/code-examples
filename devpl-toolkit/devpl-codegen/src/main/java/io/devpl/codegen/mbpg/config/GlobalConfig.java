@@ -11,18 +11,16 @@ import java.util.function.Supplier;
 
 /**
  * 全局配置
+ *
  * @author hubin
  * @since 2016-12-02
  */
 public class GlobalConfig {
 
-    private GlobalConfig() {
-    }
-
     protected static final Logger LOGGER = LoggerFactory.getLogger(GlobalConfig.class);
 
     /**
-     * 生成文件的输出目录【 windows:D://  linux or mac:/tmp 】
+     * 生成文件的输出根目录【 windows:D://  linux or mac:/tmp 】
      */
     private String outputDir = System.getProperty("os.name").toLowerCase().contains("windows") ? "D://" : "/tmp";
 
@@ -69,6 +67,7 @@ public class GlobalConfig {
 
     /**
      * 获取注释日期
+     *
      * @since 3.5.0
      */
     private Supplier<String> commentDate = () -> new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -195,6 +194,7 @@ public class GlobalConfig {
         /**
          * 注释日期获取处理
          * example: () -> LocalDateTime.now().format(DateTimeFormatter.ISO_DATE)
+         *
          * @param commentDate 获取注释日期
          * @return this
          * @since 3.5.0
@@ -206,6 +206,7 @@ public class GlobalConfig {
 
         /**
          * 指定注释日期格式化
+         *
          * @param pattern 格式
          * @return this
          * @since 3.5.0

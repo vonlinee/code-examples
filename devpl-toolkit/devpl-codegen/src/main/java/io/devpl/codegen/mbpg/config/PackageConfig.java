@@ -1,23 +1,6 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.devpl.codegen.mbpg.config;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import io.devpl.codegen.mbpg.util.StringUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,14 +8,8 @@ import java.util.Map;
 
 /**
  * 包相关的配置项
- *
- * @author YangHu, tangguo, hubin
- * @since 2016-08-30
  */
 public class PackageConfig {
-
-    private PackageConfig() {
-    }
 
     /**
      * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
@@ -92,7 +69,7 @@ public class PackageConfig {
 
     public String getParent() {
         if (StringUtils.isNotBlank(moduleName)) {
-            return parent + StringPool.DOT + moduleName;
+            return parent + "." + moduleName;
         }
         return parent;
     }
@@ -106,16 +83,15 @@ public class PackageConfig {
 
     public String joinPackage(String subPackage) {
         String parent = getParent();
-        return StringUtils.isBlank(parent) ? subPackage : (parent + StringPool.DOT + subPackage);
+        return StringUtils.isBlank(parent) ? subPackage : (parent + "." + subPackage);
     }
 
     /**
      * 获取包配置信息
      *
-     * @return 包配置信息
+     * @return 包配置信息， 返回不可更改的map
      * @since 3.5.0
      */
-
     public Map<String, String> getPackageInfo() {
         if (packageInfo.isEmpty()) {
             packageInfo.put(ConstVal.MODULE_NAME, this.getModuleName());

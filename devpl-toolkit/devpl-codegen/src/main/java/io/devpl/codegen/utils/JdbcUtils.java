@@ -1,9 +1,6 @@
 package io.devpl.codegen.utils;
 
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
@@ -32,7 +29,7 @@ public class JdbcUtils {
             Connection conn = executor.getTransaction().getConnection();
             return JDBC_DB_TYPE_CACHE.computeIfAbsent(conn.getMetaData().getURL(), JdbcUtils::getDbType);
         } catch (SQLException e) {
-            throw ExceptionUtils.mpe(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -42,7 +39,9 @@ public class JdbcUtils {
      * @return ignore
      */
     public static DbType getDbType(String jdbcUrl) {
-        Assert.isFalse(StringUtils.isBlank(jdbcUrl), "Error: The jdbcUrl is Null, Cannot read database type");
+        if (StringUtils.isBlank(jdbcUrl)) {
+            throw new RuntimeException("Error: The jdbcUrl is Null, Cannot read database type");
+        }
         String url = jdbcUrl.toLowerCase();
         if (url.contains(":mysql:") || url.contains(":cobar:")) {
             return DbType.MYSQL;

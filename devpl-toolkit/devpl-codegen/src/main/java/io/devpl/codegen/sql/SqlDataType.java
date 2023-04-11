@@ -276,7 +276,7 @@ import java.util.Map;
  * CHECKSTYLE: ON
  * -->
  */
-public enum SqlDataTypeEnum {
+public enum SqlDataType {
 
     BIT(Types.BIT, boolean.class),
     BOOLEAN(Types.BOOLEAN, boolean.class),
@@ -347,31 +347,31 @@ public enum SqlDataTypeEnum {
      */
     public final Class<?> serial;
 
-    private static final Map<Integer, SqlDataTypeEnum> BY_ID = new HashMap<>();
+    private static final Map<Integer, SqlDataType> BY_ID = new HashMap<>();
 
     static {
-        for (SqlDataTypeEnum sqlType : values()) {
+        for (SqlDataType sqlType : values()) {
             BY_ID.put(sqlType.id, sqlType);
         }
     }
 
-    SqlDataTypeEnum(int id, Class<?> clazz, Class<?> internal, Class<?> serial) {
+    SqlDataType(int id, Class<?> clazz, Class<?> internal, Class<?> serial) {
         this.id = id;
         this.clazz = clazz;
         this.internal = internal;
         this.serial = serial;
     }
 
-    SqlDataTypeEnum(int id, Class<?> clazz, Class<?> internal) {
+    SqlDataType(int id, Class<?> clazz, Class<?> internal) {
         this(id, clazz, internal, internal);
     }
 
-    SqlDataTypeEnum(int id, Class<?> clazz) {
+    SqlDataType(int id, Class<?> clazz) {
         this(id, clazz, clazz, clazz);
     }
 
-    public static SqlDataTypeEnum valueOf(int type) {
-        final SqlDataTypeEnum sqlType = BY_ID.get(type);
+    public static SqlDataType valueOf(int type) {
+        final SqlDataType sqlType = BY_ID.get(type);
         if (sqlType == null) {
             throw new IllegalArgumentException("Unknown SQL type " + type);
         }
@@ -388,30 +388,30 @@ public enum SqlDataTypeEnum {
     /**
      * Returns the entries in JDBC table B-5.
      */
-    public static Iterable<Map.Entry<Class<?>, SqlDataTypeEnum>> getSetConversions() {
-        final ArrayList<Map.Entry<Class<?>, SqlDataTypeEnum>> list = new ArrayList<>();
-        for (Map.Entry<Class<?>, EnumSet<SqlDataTypeEnum>> entry : SET_LIST.entrySet()) {
-            for (SqlDataTypeEnum sqlType : entry.getValue()) {
+    public static Iterable<Map.Entry<Class<?>, SqlDataType>> getSetConversions() {
+        final ArrayList<Map.Entry<Class<?>, SqlDataType>> list = new ArrayList<>();
+        for (Map.Entry<Class<?>, EnumSet<SqlDataType>> entry : SET_LIST.entrySet()) {
+            for (SqlDataType sqlType : entry.getValue()) {
                 list.add(new AbstractMap.SimpleEntry<>(entry.getKey(), sqlType));
             }
         }
         return list;
     }
 
-    public static final Map<Class<?>, EnumSet<SqlDataTypeEnum>> SET_LIST;
-    public static final Map<Method, EnumSet<SqlDataTypeEnum>> GET_LIST;
+    public static final Map<Class<?>, EnumSet<SqlDataType>> SET_LIST;
+    public static final Map<Method, EnumSet<SqlDataType>> GET_LIST;
 
     static {
         SET_LIST = new HashMap<>();
         GET_LIST = new HashMap<>();
 
-        EnumSet<SqlDataTypeEnum> numericTypes = EnumSet.of(TINYINT, SMALLINT, INTEGER, BIGINT, REAL, FLOAT, DOUBLE, DECIMAL, NUMERIC, BIT, BOOLEAN);
+        EnumSet<SqlDataType> numericTypes = EnumSet.of(TINYINT, SMALLINT, INTEGER, BIGINT, REAL, FLOAT, DOUBLE, DECIMAL, NUMERIC, BIT, BOOLEAN);
         Class<?>[] numericClasses = {BigDecimal.class, Boolean.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class};
-        EnumSet<SqlDataTypeEnum> charTypes = EnumSet.of(CHAR, VARCHAR, LONGVARCHAR);
-        EnumSet<SqlDataTypeEnum> ncharTypes = EnumSet.of(NCHAR, NVARCHAR, LONGNVARCHAR);
-        EnumSet<SqlDataTypeEnum> binaryTypes = EnumSet.of(BINARY, VARBINARY, LONGVARBINARY);
-        EnumSet<SqlDataTypeEnum> dateTimeTypes = EnumSet.of(DATE, TIME, TIMESTAMP);
-        final EnumSet<SqlDataTypeEnum> numericCharTypes = concat(numericTypes, charTypes);
+        EnumSet<SqlDataType> charTypes = EnumSet.of(CHAR, VARCHAR, LONGVARCHAR);
+        EnumSet<SqlDataType> ncharTypes = EnumSet.of(NCHAR, NVARCHAR, LONGNVARCHAR);
+        EnumSet<SqlDataType> binaryTypes = EnumSet.of(BINARY, VARBINARY, LONGVARBINARY);
+        EnumSet<SqlDataType> dateTimeTypes = EnumSet.of(DATE, TIME, TIMESTAMP);
+        final EnumSet<SqlDataType> numericCharTypes = concat(numericTypes, charTypes);
         SET_LIST.put(String.class, concat(numericCharTypes, binaryTypes, dateTimeTypes, ncharTypes));
         for (Class<?> clazz : numericClasses) {
             SET_LIST.put(clazz, numericCharTypes);
@@ -456,7 +456,7 @@ public enum SqlDataTypeEnum {
         GET_LIST.put(Method.GET_ARRAY, EnumSet.of(ARRAY));
         GET_LIST.put(Method.GET_REF, EnumSet.of(REF));
         GET_LIST.put(Method.GET_URL, EnumSet.of(DATALINK));
-        GET_LIST.put(Method.GET_OBJECT, EnumSet.allOf(SqlDataTypeEnum.class));
+        GET_LIST.put(Method.GET_OBJECT, EnumSet.allOf(SqlDataType.class));
         GET_LIST.put(Method.GET_ROW_ID, EnumSet.of(ROWID));
         GET_LIST.put(Method.GET_SQLXML, EnumSet.of(SQLXML));
     }
@@ -477,8 +477,8 @@ public enum SqlDataTypeEnum {
      *
      * <p>The JDBC standard describes the mapping in table <a href="#B5">B-5</a>.
      */
-    public static boolean canSet(Class<?> aClass, SqlDataTypeEnum sqlType) {
-        final EnumSet<SqlDataTypeEnum> sqlTypes = SET_LIST.get(aClass);
+    public static boolean canSet(Class<?> aClass, SqlDataType sqlType) {
+        final EnumSet<SqlDataType> sqlTypes = SET_LIST.get(aClass);
         return sqlTypes != null && sqlTypes.contains(sqlType);
     }
 
@@ -488,8 +488,8 @@ public enum SqlDataTypeEnum {
      *
      * <p>The JDBC standard describes the mapping in table <a href="#B6">B-6</a>.
      */
-    public static boolean canGet(Method method, SqlDataTypeEnum sqlType) {
-        final EnumSet<SqlDataTypeEnum> sqlTypes = GET_LIST.get(method);
+    public static boolean canGet(Method method, SqlDataType sqlType) {
+        final EnumSet<SqlDataType> sqlTypes = GET_LIST.get(method);
         return sqlTypes != null && sqlTypes.contains(sqlType);
     }
 

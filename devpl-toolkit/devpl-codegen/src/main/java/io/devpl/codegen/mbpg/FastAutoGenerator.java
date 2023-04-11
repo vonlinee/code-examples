@@ -2,7 +2,6 @@ package io.devpl.codegen.mbpg;
 
 import io.devpl.codegen.mbpg.config.*;
 import io.devpl.codegen.mbpg.template.AbstractTemplateEngine;
-import io.devpl.codegen.mbpg.template.FreemarkerTemplateEngine;
 import io.devpl.codegen.mbpg.template.VelocityTemplateEngine;
 import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -203,6 +202,9 @@ public final class FastAutoGenerator {
         throw new UnsupportedOperationException("暂不支持其他模板引擎，只支持VelocityTemplateEngine");
     }
 
+    /**
+     * 开始生成代码
+     */
     public void execute() {
         final AutoGenerator generator = new AutoGenerator(this.dataSourceConfigBuilder.build());
         generator.global(this.globalConfigBuilder.build()); // 全局配置

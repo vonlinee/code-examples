@@ -1,8 +1,5 @@
 package io.devpl.codegen.mbpg.config.po;
 
-import com.baomidou.mybatisplus.core.enums.SqlLike;
-import com.baomidou.mybatisplus.core.toolkit.sql.SqlUtils;
-
 /**
  * 表名拼接
  */
@@ -27,6 +24,25 @@ public class LikeTable {
     }
 
     public String getValue() {
-        return SqlUtils.concatLike(this.value, like);
+        return concatLike(this.value, like);
+    }
+
+
+    /**
+     * 用%连接like
+     *
+     * @param str 原字符串
+     * @return like 的值
+     */
+    public static String concatLike(Object str, SqlLike type) {
+        String PERCENT = "%";
+        switch (type) {
+            case LEFT:
+                return PERCENT + str;
+            case RIGHT:
+                return str + PERCENT;
+            default:
+                return PERCENT + str + PERCENT;
+        }
     }
 }

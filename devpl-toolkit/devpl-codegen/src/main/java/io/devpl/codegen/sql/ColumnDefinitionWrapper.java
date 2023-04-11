@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class ColumnDefinitionWrapper {
     private String columnName;
-    private SqlDataTypeEnum sqlType;
+    private SqlDataType sqlType;
     private Boolean hasDefaultExpression;
     private String defaultExpression;
 
@@ -36,11 +36,11 @@ public class ColumnDefinitionWrapper {
         return defaultExpression == null ? "" : defaultExpression;
     }
 
-    public SqlDataTypeEnum getSqlType() {
+    public SqlDataType getSqlType() {
         if (sqlType == null) {
             final SQLDataType dataType = columnDefinition.getDataType();
-            if (dataType == null) return SqlDataTypeEnum.NULL;
-            sqlType = SqlDataTypeEnum.valueOf(dataType.jdbcType());
+            if (dataType == null) return SqlDataType.NULL;
+            sqlType = SqlDataType.valueOf(dataType.jdbcType());
         }
         return sqlType;
     }

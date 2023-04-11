@@ -2,7 +2,7 @@ package io.devpl.codegen.mbpg.query;
 
 import io.devpl.codegen.mbpg.config.IDbQuery;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
-import io.devpl.codegen.mbpg.config.builder.CodeGenConfiguration;
+import io.devpl.codegen.mbpg.config.builder.Context;
 import io.devpl.codegen.mbpg.config.builder.Entity;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
@@ -25,13 +25,13 @@ import java.util.*;
  */
 public class SQLQuery extends AbstractDatabaseIntrospector {
 
-    public SQLQuery(@NotNull CodeGenConfiguration configBuilder) {
+    public SQLQuery(@NotNull Context configBuilder) {
         super(configBuilder);
     }
 
     @NotNull
     @Override
-    public List<TableInfo> queryTables() {
+    public List<TableInfo> introspecTables() {
         boolean isInclude = strategyConfig.getInclude().size() > 0;
         boolean isExclude = strategyConfig.getExclude().size() > 0;
         // 所有的表信息
@@ -44,7 +44,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
             dbQuery.execute(dbQuery.tablesSql(), result -> {
                 String tableName = result.getStringResult(dbQuery.tableName());
                 if (StringUtils.isNotBlank(tableName)) {
-                    TableInfo tableInfo = new TableInfo(this.configBuilder, tableName);
+                    TableInfo tableInfo = new TableInfo(this.context, tableName);
                     String tableComment = result.getTableComment();
                     // 跳过视图
                     if (!(strategyConfig.isSkipView() && tableComment.toUpperCase().contains("VIEW"))) {
@@ -88,7 +88,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
             Entity entity = strategyConfig.entity();
             dbQuery.execute(tableFieldsSql, result -> {
                 String columnName = result.getStringResult(dbQuery.fieldName());
-                TableField field = new TableField(this.configBuilder, columnName);
+                TableField field = new TableField(this.context, columnName);
                 DatabaseMetaDataWrapper.Column column = columnsInfoMap.get(columnName.toLowerCase());
                 TableField.MetaInfo metaInfo = new TableField.MetaInfo(column);
                 // 避免多重主键设置，目前只取第一个找到ID，并放到list中的索引为0的位置
