@@ -1,15 +1,17 @@
-package io.devpl.codegen.mbpg.config.builder;
+package io.devpl.codegen.mbpg.template.impl;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.devpl.codegen.mbpg.IFill;
-import io.devpl.codegen.mbpg.ITemplate;
+import io.devpl.codegen.mbpg.config.builder.BaseBuilder;
+import io.devpl.codegen.mbpg.config.builder.TableInfoHelper;
 import io.devpl.codegen.mbpg.config.INameConvert;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.rules.NamingStrategyEnum;
 import io.devpl.codegen.mbpg.function.ConverterFileName;
+import io.devpl.codegen.mbpg.template.TemplateArguments;
 import io.devpl.codegen.mbpg.util.ClassUtils;
 import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -24,11 +26,11 @@ import java.util.stream.Collectors;
 /**
  * 实体属性配置
  */
-public class Entity implements ITemplate {
+public class EntityTemplateArguments extends TemplateArguments {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Entity.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(EntityTemplateArguments.class);
 
-    private Entity() {
+    private EntityTemplateArguments() {
     }
 
     /**
@@ -289,8 +291,7 @@ public class Entity implements ITemplate {
     }
 
     @Override
-    @NotNull
-    public Map<String, Object> renderData(@NotNull TableInfo tableInfo) {
+    public Map<String, Object> initialize(@NotNull TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
         data.put("idType", idType == null ? null : idType.toString());
         data.put("logicDeleteFieldName", this.logicDeleteColumnName);
@@ -308,7 +309,7 @@ public class Entity implements ITemplate {
 
     public static class Builder extends BaseBuilder {
 
-        private final Entity entity = new Entity();
+        private final EntityTemplateArguments entity = new EntityTemplateArguments();
 
         public Builder(StrategyConfig strategyConfig) {
             super(strategyConfig);
@@ -577,7 +578,7 @@ public class Entity implements ITemplate {
             return this;
         }
 
-        public Entity get() {
+        public EntityTemplateArguments get() {
             String superClass = this.entity.superClass;
             if (StringUtils.isNotBlank(superClass)) {
                 tryLoadClass(superClass).ifPresent(this.entity::convertSuperEntityColumns);

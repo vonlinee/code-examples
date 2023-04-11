@@ -2,7 +2,7 @@ package io.devpl.codegen.mbpg.query;
 
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.builder.Context;
-import io.devpl.codegen.mbpg.config.builder.Entity;
+import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.rules.DataType;
@@ -83,7 +83,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
     protected void convertTableFields(@NotNull TableInfo tableInfo) {
         String tableName = tableInfo.getName();
         Map<String, DatabaseMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
-        Entity entity = strategyConfig.entity();
+        EntityTemplateArguments entity = strategyConfig.entity();
         columnsInfoMap.forEach((k, columnInfo) -> {
             TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo);
             String columnName = columnInfo.getName();

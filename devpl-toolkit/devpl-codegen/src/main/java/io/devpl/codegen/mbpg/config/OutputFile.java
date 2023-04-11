@@ -1,18 +1,18 @@
 package io.devpl.codegen.mbpg.config;
 
+/**
+ * 输出文件类型
+ */
 public enum OutputFile implements TypeEnum<String, OutputFile> {
 
-    ENTITY(ConstVal.ENTITY, ""),
-    SERVICE(ConstVal.SERVICE, ""),
-    SERVICE_IMPL(ConstVal.SERVICE_IMPL, ""),
-    MAPPER(ConstVal.MAPPER, ""),
-    XML(ConstVal.XML, ""),
-    CONTROLLER(ConstVal.CONTROLLER, ""),
-    /**
-     * 已弃用，已重构自定义文件生成，3.5.4版本会删除
-     */
-    @Deprecated other("OTHER", ""),
-    PARENT(ConstVal.PARENT, "");
+    ENTITY("Entity", ""),
+    SERVICE("Service", ""),
+    SERVICE_IMPL("ServiceImpl", ""),
+    MAPPER("Mapper", ""),
+    XML("Xml", ""),
+    CONTROLLER("Controller", ""),
+    PARENT("Parent", ""),
+    CUSTOM("Custom", ""); // 自定义文件生成
 
     private final String type;
     private final String typeName;

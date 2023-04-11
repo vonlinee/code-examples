@@ -2,6 +2,10 @@ package io.devpl.codegen.mbpg.config;
 
 import io.devpl.codegen.mbpg.config.builder.*;
 import io.devpl.codegen.mbpg.config.po.LikeTable;
+import io.devpl.codegen.mbpg.template.impl.ControllerTemplateArguments;
+import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.mbpg.template.impl.MapperTemplateArguments;
+import io.devpl.codegen.mbpg.template.impl.ServiceTemplateArguments;
 import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -91,21 +95,21 @@ public class StrategyConfig {
      */
     private LikeTable notLikeTable;
 
-    private final Entity.Builder entityBuilder = new Entity.Builder(this);
+    private final EntityTemplateArguments.Builder entityBuilder = new EntityTemplateArguments.Builder(this);
 
-    private final Controller.Builder controllerBuilder = new Controller.Builder(this);
+    private final ControllerTemplateArguments.Builder controllerBuilder = new ControllerTemplateArguments.Builder(this);
 
-    private final Mapper.Builder mapperBuilder = new Mapper.Builder(this);
+    private final MapperTemplateArguments.Builder mapperBuilder = new MapperTemplateArguments.Builder(this);
 
-    private final Service.Builder serviceBuilder = new Service.Builder(this);
+    private final ServiceTemplateArguments.Builder serviceBuilder = new ServiceTemplateArguments.Builder(this);
 
-    private Entity entity;
+    private EntityTemplateArguments entity;
 
-    private Controller controller;
+    private ControllerTemplateArguments controller;
 
-    private Mapper mapper;
+    private MapperTemplateArguments mapper;
 
-    private Service service;
+    private ServiceTemplateArguments service;
 
     /**
      * 实体配置构建者
@@ -113,7 +117,7 @@ public class StrategyConfig {
      * @since 3.5.0
      */
     @NotNull
-    public Entity.Builder entityBuilder() {
+    public EntityTemplateArguments.Builder entityBuilder() {
         return entityBuilder;
     }
 
@@ -123,7 +127,7 @@ public class StrategyConfig {
      * @since 3.5.0
      */
     @NotNull
-    public Entity entity() {
+    public EntityTemplateArguments entity() {
         if (entity == null) {
             this.entity = entityBuilder.get();
         }
@@ -136,7 +140,7 @@ public class StrategyConfig {
      * @since 3.5.0
      */
     @NotNull
-    public Controller.Builder controllerBuilder() {
+    public ControllerTemplateArguments.Builder controllerBuilder() {
         return controllerBuilder;
     }
 
@@ -146,7 +150,7 @@ public class StrategyConfig {
      * @since 3.5.0
      */
     @NotNull
-    public Controller controller() {
+    public ControllerTemplateArguments controller() {
         if (controller == null) {
             this.controller = controllerBuilder.get();
         }
@@ -159,7 +163,7 @@ public class StrategyConfig {
      * @since 3.5.0
      */
     @NotNull
-    public Mapper.Builder mapperBuilder() {
+    public MapperTemplateArguments.Builder mapperBuilder() {
         return mapperBuilder;
     }
 
@@ -169,7 +173,7 @@ public class StrategyConfig {
      * @since 3.5.0
      */
     @NotNull
-    public Mapper mapper() {
+    public MapperTemplateArguments mapper() {
         if (mapper == null) {
             this.mapper = mapperBuilder.get();
         }
@@ -182,7 +186,7 @@ public class StrategyConfig {
      * @since 3.5.0
      */
     @NotNull
-    public Service.Builder serviceBuilder() {
+    public ServiceTemplateArguments.Builder serviceBuilder() {
         return serviceBuilder;
     }
 
@@ -192,7 +196,7 @@ public class StrategyConfig {
      * @since 3.5.0
      */
     @NotNull
-    public Service service() {
+    public ServiceTemplateArguments service() {
         if (service == null) {
             this.service = serviceBuilder.get();
         }

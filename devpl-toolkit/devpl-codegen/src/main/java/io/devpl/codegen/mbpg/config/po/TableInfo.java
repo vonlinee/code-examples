@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.builder.Context;
-import io.devpl.codegen.mbpg.config.builder.Entity;
+import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -104,7 +104,7 @@ public class TableInfo {
     /**
      * 实体
      */
-    private final Entity entity;
+    private final EntityTemplateArguments entity;
 
     /**
      * 构造方法

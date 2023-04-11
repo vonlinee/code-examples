@@ -13,13 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.devpl.codegen.mbpg.config.builder;
+package io.devpl.codegen.mbpg.template.impl;
 
-import io.devpl.codegen.mbpg.ITemplate;
+import io.devpl.codegen.mbpg.config.builder.BaseBuilder;
 import io.devpl.codegen.mbpg.config.ConstVal;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.function.ConverterFileName;
+import io.devpl.codegen.mbpg.template.TemplateArguments;
 import io.devpl.codegen.mbpg.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -34,11 +35,11 @@ import java.util.Map;
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
-public class Service implements ITemplate {
+public class ServiceTemplateArguments extends TemplateArguments {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Service.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(ServiceTemplateArguments.class);
 
-    private Service() {
+    private ServiceTemplateArguments() {
     }
 
     /**
@@ -98,7 +99,7 @@ public class Service implements ITemplate {
 
     @Override
     @NotNull
-    public Map<String, Object> renderData(@NotNull TableInfo tableInfo) {
+    public Map<String, Object> initialize(@NotNull TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
         data.put("superServiceClassPackage", this.superServiceClass);
         data.put("superServiceClass", ClassUtils.getSimpleName(this.superServiceClass));
@@ -109,7 +110,7 @@ public class Service implements ITemplate {
 
     public static class Builder extends BaseBuilder {
 
-        private final Service service = new Service();
+        private final ServiceTemplateArguments service = new ServiceTemplateArguments();
 
         public Builder(@NotNull StrategyConfig strategyConfig) {
             super(strategyConfig);
@@ -224,7 +225,7 @@ public class Service implements ITemplate {
         }
 
         @NotNull
-        public Service get() {
+        public ServiceTemplateArguments get() {
             return this.service;
         }
     }

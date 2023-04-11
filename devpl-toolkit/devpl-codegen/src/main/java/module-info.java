@@ -35,4 +35,5 @@ module devpl.codegen {
     exports io.devpl.codegen.mbpg;
     exports io.devpl.codegen.mbpg.config.po;
     exports io.devpl.codegen.mbpg.core;
+    exports io.devpl.codegen.mbpg.template.impl;
 }

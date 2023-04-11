@@ -3,7 +3,7 @@ package io.devpl.codegen.mbpg.query;
 import io.devpl.codegen.mbpg.config.IDbQuery;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.builder.Context;
-import io.devpl.codegen.mbpg.config.builder.Entity;
+import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.querys.H2Query;
@@ -85,7 +85,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
                     }
                 });
             }
-            Entity entity = strategyConfig.entity();
+            EntityTemplateArguments entity = strategyConfig.entity();
             dbQuery.execute(tableFieldsSql, result -> {
                 String columnName = result.getStringResult(dbQuery.fieldName());
                 TableField field = new TableField(this.context, columnName);

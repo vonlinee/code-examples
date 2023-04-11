@@ -24,7 +24,7 @@ public class Context extends AbstractContext {
     /**
      * 模板路径配置信息
      */
-    private final TemplateConfig templateConfig;
+    private final TemplateConfiguration templateConfig;
 
     /**
      * 数据库表信息
@@ -79,14 +79,14 @@ public class Context extends AbstractContext {
      * @param packageConfig    包配置
      * @param dataSourceConfig 数据源配置
      * @param strategyConfig   表配置
-     * @param templateConfig   模板配置
+     * @param tc               模板配置
      * @param globalConfig     全局配置
      */
-    public Context(PackageConfig packageConfig, DataSourceConfig dataSourceConfig, StrategyConfig strategyConfig, TemplateConfig templateConfig, GlobalConfig globalConfig, InjectionConfig injectionConfig) {
+    public Context(PackageConfig packageConfig, DataSourceConfig dataSourceConfig, StrategyConfig strategyConfig, TemplateConfiguration tc, GlobalConfig globalConfig, InjectionConfig injectionConfig) {
         this.dataSourceConfig = dataSourceConfig;
         this.strategyConfig = Objects.requireNonNullElse(strategyConfig, new StrategyConfig());
         this.globalConfig = Objects.requireNonNullElse(globalConfig, new GlobalConfig());
-        this.templateConfig = Objects.requireNonNullElse(templateConfig, new TemplateConfig());
+        this.templateConfig = Objects.requireNonNullElse(tc, new TemplateConfiguration());
         this.packageConfig = Objects.requireNonNullElse(packageConfig, new PackageConfig());
         this.injectionConfig = Objects.requireNonNullElse(injectionConfig, new InjectionConfig());
 
@@ -166,7 +166,7 @@ public class Context extends AbstractContext {
         return this;
     }
 
-    public TemplateConfig getTemplateConfig() {
+    public TemplateConfiguration getTemplateConfiguration() {
         return templateConfig;
     }
 

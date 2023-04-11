@@ -1,30 +1,23 @@
-package io.devpl.codegen.mbpg.config.builder;
+package io.devpl.codegen.mbpg.template.impl;
 
-import io.devpl.codegen.mbpg.ITemplate;
+import io.devpl.codegen.mbpg.config.builder.BaseBuilder;
 import io.devpl.codegen.mbpg.config.ConstVal;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.function.ConverterFileName;
+import io.devpl.codegen.mbpg.template.TemplateArguments;
 import io.devpl.codegen.mbpg.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 控制器属性配置
- *
- * @author nieqiurong 2020/10/11.
- * @since 3.5.0
+ * Mapper模板参数
  */
-public class Mapper implements ITemplate {
+public class MapperTemplateArguments extends TemplateArguments {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Mapper.class);
-
-    private Mapper() {
+    private MapperTemplateArguments() {
     }
 
     /**
@@ -127,7 +120,7 @@ public class Mapper implements ITemplate {
 
     @Override
     @NotNull
-    public Map<String, Object> renderData(@NotNull TableInfo tableInfo) {
+    public Map<String, Object> initialize(@NotNull TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
         boolean enableCache = this.cache != null;
         data.put("enableCache", enableCache);
@@ -147,7 +140,7 @@ public class Mapper implements ITemplate {
 
     public static class Builder extends BaseBuilder {
 
-        private final Mapper mapper = new Mapper();
+        private final MapperTemplateArguments mapper = new MapperTemplateArguments();
 
         public Builder(StrategyConfig strategyConfig) {
             super(strategyConfig);
@@ -179,7 +172,6 @@ public class Mapper implements ITemplate {
          * 开启 @Mapper 注解
          *
          * @return this
-         * @see #mapperAnnotation(Class)
          * @since 3.5.1
          * @deprecated 3.5.4
          */
@@ -290,7 +282,6 @@ public class Mapper implements ITemplate {
          */
         @Deprecated
         public Builder fileOverride() {
-            LOGGER.warn("fileOverride方法后续会删除，替代方法为enableFileOverride方法");
             this.mapper.fileOverride = true;
             return this;
         }
@@ -304,7 +295,7 @@ public class Mapper implements ITemplate {
         }
 
         @NotNull
-        public Mapper get() {
+        public MapperTemplateArguments get() {
             return this.mapper;
         }
     }

@@ -2,10 +2,10 @@ package io.devpl.tookit.fxui.bridge;
 
 import io.devpl.codegen.mbpg.FastAutoGenerator;
 import io.devpl.codegen.mbpg.config.OutputFile;
-import io.devpl.codegen.mbpg.config.builder.Controller;
-import io.devpl.codegen.mbpg.config.builder.Entity;
-import io.devpl.codegen.mbpg.config.builder.Mapper;
-import io.devpl.codegen.mbpg.config.builder.Service;
+import io.devpl.codegen.mbpg.template.impl.ControllerTemplateArguments;
+import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.mbpg.template.impl.MapperTemplateArguments;
+import io.devpl.codegen.mbpg.template.impl.ServiceTemplateArguments;
 import io.devpl.codegen.mbpg.config.rules.DateTimeType;
 import io.devpl.codegen.mbpg.template.VelocityTemplateEngine;
 import io.devpl.tookit.fxui.model.*;
@@ -97,21 +97,21 @@ public class MyBatisPlusGenerator {
                     builder.addTableSuffix("");
                     builder.addInclude(tableNames); // 设置需要生成的表名
                     // Entity策略配置
-                    Entity.Builder entityBuilder = builder.entityBuilder();
+                    EntityTemplateArguments.Builder entityBuilder = builder.entityBuilder();
                     entityBuilder.enableFileOverride();  // 文件覆盖
                     entityBuilder.enableLombok();  // 使用Lombok
                     entityBuilder.enableTableFieldAnnotation(); // 字段添加TableField注解
                     entityBuilder.mapperBuilder();
                     entityBuilder.enableFileOverride();
                     // Mapper配置
-                    Mapper.Builder mapperBuilder = builder.mapperBuilder();
+                    MapperTemplateArguments.Builder mapperBuilder = builder.mapperBuilder();
                     mapperBuilder.enableFileOverride();
                     mapperBuilder.enableBaseResultMap(); // 生成默认的ResultMap标签
                     // Controller 配置
-                    Controller.Builder controllerBuilder = builder.controllerBuilder();
+                    ControllerTemplateArguments.Builder controllerBuilder = builder.controllerBuilder();
                     controllerBuilder.enableFileOverride();
                     // Service配置
-                    Service.Builder serviceBuilder = builder.serviceBuilder();
+                    ServiceTemplateArguments.Builder serviceBuilder = builder.serviceBuilder();
                     serviceBuilder.enableFileOverride();
                 });
                 autoGenerator.templateEngine(new VelocityTemplateEngine()); // 使用Freemarker引擎模板，默认的是Velocity引擎模板

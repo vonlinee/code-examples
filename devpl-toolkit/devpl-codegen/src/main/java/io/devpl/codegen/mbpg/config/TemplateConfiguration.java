@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.devpl.codegen.mbpg.config;
 
 import io.devpl.codegen.mbpg.util.StringUtils;
@@ -21,14 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 模板路径配置项
- *
- * @author tzg hubin
- * @since 2017-06-17
+ * 模板配置项
  */
-public class TemplateConfig {
+public class TemplateConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateConfig.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateConfiguration.class);
 
     /**
      * 设置实体模板路径
@@ -73,7 +55,7 @@ public class TemplateConfig {
     /**
      * 不对外爆露
      */
-    public TemplateConfig() {
+    public TemplateConfiguration() {
         this.entity = ConstVal.TEMPLATE_ENTITY_JAVA;
         this.entityKt = ConstVal.TEMPLATE_ENTITY_KT;
         this.controller = ConstVal.TEMPLATE_CONTROLLER;
@@ -120,7 +102,7 @@ public class TemplateConfig {
      *
      * @param templateTypes 模板类型
      */
-    public TemplateConfig disable(TemplateType... templateTypes) {
+    public TemplateConfiguration disable(TemplateType... templateTypes) {
         if (templateTypes != null) {
             for (TemplateType templateType : templateTypes) {
                 switch (templateType) {
@@ -158,7 +140,7 @@ public class TemplateConfig {
      * @return this
      * @since 3.5.0
      */
-    public TemplateConfig disable() {
+    public TemplateConfiguration disable() {
         return disable(TemplateType.values());
     }
 
@@ -187,25 +169,15 @@ public class TemplateConfig {
      *
      * @author nieqiurong 3.5.0
      */
-    public static class Builder implements io.devpl.codegen.mbpg.config.Builder<TemplateConfig> {
+    public static class Builder {
 
-        private final TemplateConfig templateConfig;
+        private final TemplateConfiguration templateConfig;
 
         /**
          * 默认生成一个空的
          */
         public Builder() {
-            this.templateConfig = new TemplateConfig();
-        }
-
-        /**
-         * 禁用所有模板
-         *
-         * @return this
-         */
-        public Builder disable() {
-            this.templateConfig.disable();
-            return this;
+            this.templateConfig = new TemplateConfiguration();
         }
 
         /**
@@ -302,8 +274,7 @@ public class TemplateConfig {
          *
          * @return 模板配置对象
          */
-        @Override
-        public TemplateConfig build() {
+        public TemplateConfiguration build() {
             return this.templateConfig;
         }
     }

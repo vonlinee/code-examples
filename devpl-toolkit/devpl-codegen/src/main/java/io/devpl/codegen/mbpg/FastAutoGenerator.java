@@ -47,7 +47,7 @@ public final class FastAutoGenerator {
     /**
      * 模板配置 Builder
      */
-    private final TemplateConfig.Builder templateConfigBuilder;
+    private final TemplateConfiguration.Builder templateConfigBuilder;
 
     /**
      * 模板引擎
@@ -60,7 +60,7 @@ public final class FastAutoGenerator {
         this.packageConfigBuilder = new PackageConfig.Builder();
         this.strategyConfigBuilder = new StrategyConfig.Builder();
         this.injectionConfigBuilder = new InjectionConfig.Builder();
-        this.templateConfigBuilder = new TemplateConfig.Builder();
+        this.templateConfigBuilder = new TemplateConfiguration.Builder();
     }
 
     public static FastAutoGenerator create(@NotNull String url, String username, String password) {
@@ -178,12 +178,12 @@ public final class FastAutoGenerator {
      * @param consumer 自定义模板配置
      * @return FastAutoGenerator
      */
-    public FastAutoGenerator templateConfig(Consumer<TemplateConfig.Builder> consumer) {
+    public FastAutoGenerator templateConfig(Consumer<TemplateConfiguration.Builder> consumer) {
         consumer.accept(this.templateConfigBuilder);
         return this;
     }
 
-    public FastAutoGenerator templateConfig(BiConsumer<Function<String, String>, TemplateConfig.Builder> biConsumer) {
+    public FastAutoGenerator templateConfig(BiConsumer<Function<String, String>, TemplateConfiguration.Builder> biConsumer) {
         biConsumer.accept(this::scannerNext, this.templateConfigBuilder);
         return this;
     }

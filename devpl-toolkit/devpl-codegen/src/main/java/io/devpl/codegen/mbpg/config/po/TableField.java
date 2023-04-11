@@ -4,7 +4,7 @@ import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.IKeyWordsHandler;
 import io.devpl.codegen.mbpg.config.builder.Context;
-import io.devpl.codegen.mbpg.config.builder.Entity;
+import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.config.rules.NamingStrategyEnum;
 import io.devpl.codegen.mbpg.fill.Column;
@@ -54,7 +54,7 @@ public class TableField {
      */
     private MetaInfo metaInfo;
 
-    private final Entity entity;
+    private final EntityTemplateArguments entity;
 
     private final DataSourceConfig dataSourceConfig;
 

@@ -1,13 +1,13 @@
-package io.devpl.codegen.mbpg.config.builder;
+package io.devpl.codegen.mbpg.template.impl;
 
-import io.devpl.codegen.mbpg.ITemplate;
+import io.devpl.codegen.mbpg.config.builder.BaseBuilder;
 import io.devpl.codegen.mbpg.config.ConstVal;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.function.ConverterFileName;
+import io.devpl.codegen.mbpg.template.TemplateArguments;
 import io.devpl.codegen.mbpg.util.ClassUtils;
 import io.devpl.codegen.mbpg.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +18,11 @@ import java.util.Map;
 /**
  * 控制器属性配置
  */
-public class Controller implements ITemplate {
+public class ControllerTemplateArguments extends TemplateArguments {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Controller.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(ControllerTemplateArguments.class);
 
-    private Controller() {
+    private ControllerTemplateArguments() {
     }
 
     /**
@@ -73,7 +73,6 @@ public class Controller implements ITemplate {
         return superClass;
     }
 
-
     public ConverterFileName getConverterFileName() {
         return converterFileName;
     }
@@ -83,7 +82,7 @@ public class Controller implements ITemplate {
     }
 
     @Override
-    public Map<String, Object> renderData(TableInfo tableInfo) {
+    public Map<String, Object> initialize(TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>(5);
         data.put("controllerMappingHyphen", StringUtils.camelToHyphen(tableInfo.getEntityPath()));
         data.put("controllerMappingHyphenStyle", this.hyphenStyle);
@@ -95,7 +94,7 @@ public class Controller implements ITemplate {
 
     public static class Builder extends BaseBuilder {
 
-        private final Controller controller = new Controller();
+        private final ControllerTemplateArguments controller = new ControllerTemplateArguments();
 
         public Builder(StrategyConfig strategyConfig) {
             super(strategyConfig);
@@ -190,7 +189,7 @@ public class Controller implements ITemplate {
         }
 
 
-        public Controller get() {
+        public ControllerTemplateArguments get() {
             return this.controller;
         }
     }

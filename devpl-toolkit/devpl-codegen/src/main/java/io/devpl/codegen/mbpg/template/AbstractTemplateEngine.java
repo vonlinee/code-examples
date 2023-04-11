@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,9 +22,7 @@ import java.util.function.Function;
 
 /**
  * 模板引擎抽象类
- *
- * @author hubin
- * @since 2018-01-10
+ * 屏蔽具体的模板引擎差异性
  */
 public abstract class AbstractTemplateEngine {
 
@@ -75,7 +72,7 @@ public abstract class AbstractTemplateEngine {
         String entityPath = getPathInfo(OutputFile.ENTITY);
         if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
             Context config = getContext();
-            TemplateConfig templateConfig = config.getTemplateConfig();
+            TemplateConfiguration templateConfig = config.getTemplateConfiguration();
             boolean useKotlin = config.getGlobalConfig().isKotlin();
             // 实体类模板文件路径
             String entity = templateConfig.getEntityTemplatePath(useKotlin);
@@ -110,7 +107,7 @@ public abstract class AbstractTemplateEngine {
         String entityName = tableInfo.getEntityName();
         String mapperPath = getPathInfo(OutputFile.MAPPER);
         if (StringUtils.hasText(tableInfo.getMapperName()) && StringUtils.isNotBlank(mapperPath)) {
-            getTemplateFilePath(TemplateConfig::getMapperTemplatePath).ifPresent(mapper -> {
+            getTemplateFilePath(TemplateConfiguration::getMapperTemplatePath).ifPresent(mapper -> {
                 String mapperFile = String.format((mapperPath + File.separator + tableInfo.getMapperName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(mapperFile), objectMap, mapper, config.getStrategyConfig().mapper().isFileOverride());
             });
@@ -118,7 +115,7 @@ public abstract class AbstractTemplateEngine {
         // MpMapper.xml
         String xmlPath = getPathInfo(OutputFile.XML);
         if (StringUtils.isNotBlank(tableInfo.getXmlName()) && StringUtils.isNotBlank(xmlPath)) {
-            getTemplateFilePath(TemplateConfig::getXml).ifPresent(xml -> {
+            getTemplateFilePath(TemplateConfiguration::getXml).ifPresent(xml -> {
                 String xmlFile = String.format((xmlPath + File.separator + tableInfo.getXmlName() + ConstVal.XML_SUFFIX), entityName);
                 outputFile(new File(xmlFile), objectMap, xml, config.getStrategyConfig().mapper().isFileOverride());
             });
@@ -134,13 +131,11 @@ public abstract class AbstractTemplateEngine {
      */
     protected void outputService(TableInfo tableInfo, Map<String, Object> objectMap) {
         // IMpService.java
-
         final Context config = getContext();
-
         String entityName = tableInfo.getEntityName();
         String servicePath = getPathInfo(OutputFile.SERVICE);
         if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getServiceName()) && io.devpl.sdk.util.StringUtils.isNotBlank(servicePath)) {
-            getTemplateFilePath(TemplateConfig::getService).ifPresent(service -> {
+            getTemplateFilePath(TemplateConfiguration::getService).ifPresent(service -> {
                 String serviceFile = String.format((servicePath + File.separator + tableInfo.getServiceName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(serviceFile), objectMap, service, config.getStrategyConfig().service().isFileOverride());
             });
@@ -148,7 +143,7 @@ public abstract class AbstractTemplateEngine {
         // MpServiceImpl.java
         String serviceImplPath = getPathInfo(OutputFile.SERVICE_IMPL);
         if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getServiceImplName()) && io.devpl.sdk.util.StringUtils.isNotBlank(serviceImplPath)) {
-            getTemplateFilePath(TemplateConfig::getServiceImpl).ifPresent(serviceImpl -> {
+            getTemplateFilePath(TemplateConfiguration::getServiceImpl).ifPresent(serviceImpl -> {
                 String implFile = String.format((serviceImplPath + File.separator + tableInfo.getServiceImplName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(implFile), objectMap, serviceImpl, config.getStrategyConfig().service().isFileOverride());
             });
@@ -166,7 +161,7 @@ public abstract class AbstractTemplateEngine {
         // MpController.java
         String controllerPath = getPathInfo(OutputFile.CONTROLLER);
         if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getControllerName()) && io.devpl.sdk.util.StringUtils.isNotBlank(controllerPath)) {
-            getTemplateFilePath(TemplateConfig::getController).ifPresent(controller -> {
+            getTemplateFilePath(TemplateConfiguration::getController).ifPresent(controller -> {
                 String entityName = tableInfo.getEntityName();
                 String controllerFile = String.format((controllerPath + File.separator + tableInfo.getControllerName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(controllerFile), objectMap, controller, getContext().getStrategyConfig().controller().isFileOverride());
@@ -207,8 +202,8 @@ public abstract class AbstractTemplateEngine {
      * @since 3.5.0
      */
 
-    protected Optional<String> getTemplateFilePath(Function<TemplateConfig, String> function) {
-        TemplateConfig templateConfig = getContext().getTemplateConfig();
+    protected Optional<String> getTemplateFilePath(Function<TemplateConfiguration, String> function) {
+        TemplateConfiguration templateConfig = getContext().getTemplateConfiguration();
         String filePath = function.apply(templateConfig);
         if (io.devpl.sdk.util.StringUtils.isNotBlank(filePath)) {
             return Optional.of(templateFilePath(filePath));
@@ -256,51 +251,6 @@ public abstract class AbstractTemplateEngine {
                 log.error(e.getMessage(), e);
             }
         }
-    }
-
-    /**
-     * 渲染对象 MAP 信息
-     *
-     * @param context    配置信息
-     * @param tableInfo 表信息对象
-     * @return ignore
-     */
-    public Map<String, Object> getObjectMap(Context context, TableInfo tableInfo) {
-        StrategyConfig strategyConfig = context.getStrategyConfig();
-        Map<String, Object> controllerData = strategyConfig.controller().renderData(tableInfo);
-        Map<String, Object> objectMap = new HashMap<>(controllerData);
-        Map<String, Object> mapperData = strategyConfig.mapper().renderData(tableInfo);
-        objectMap.putAll(mapperData);
-        Map<String, Object> serviceData = strategyConfig.service().renderData(tableInfo);
-        objectMap.putAll(serviceData);
-
-        // 实体类
-        Map<String, Object> entityData = strategyConfig.entity().renderData(tableInfo);
-        objectMap.putAll(entityData);
-        objectMap.put("config", context);
-        // 包配置信息
-        objectMap.put("package", context.getPackageConfig().getPackageInfo());
-
-        GlobalConfig globalConfig = context.getGlobalConfig();
-        objectMap.put("author", globalConfig.getAuthor());
-        objectMap.put("kotlin", globalConfig.isKotlin());
-        objectMap.put("swagger", globalConfig.isSwagger());
-        objectMap.put("springdoc", globalConfig.isSpringdoc());
-        objectMap.put("date", globalConfig.getCommentDate());
-        // 启用 schema 处理逻辑
-        String schemaName = "";
-        if (strategyConfig.isEnableSchema()) {
-            // 存在 schemaName 设置拼接 . 组合表名
-            schemaName = context.getDataSourceConfig().getSchemaName();
-            if (io.devpl.sdk.util.StringUtils.isNotBlank(schemaName)) {
-                schemaName += ".";
-                tableInfo.setConvert(true);
-            }
-        }
-        objectMap.put("schemaName", schemaName);
-        objectMap.put("table", tableInfo);
-        objectMap.put("entity", tableInfo.getEntityName());
-        return objectMap;
     }
 
     /**

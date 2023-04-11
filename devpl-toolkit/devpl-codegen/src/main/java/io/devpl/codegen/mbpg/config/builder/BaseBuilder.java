@@ -2,6 +2,10 @@ package io.devpl.codegen.mbpg.config.builder;
 
 import io.devpl.codegen.mbpg.config.Builder;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
+import io.devpl.codegen.mbpg.template.impl.ControllerTemplateArguments;
+import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.mbpg.template.impl.MapperTemplateArguments;
+import io.devpl.codegen.mbpg.template.impl.ServiceTemplateArguments;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -19,22 +23,22 @@ public class BaseBuilder implements Builder<StrategyConfig> {
     }
 
     @NotNull
-    public Entity.Builder entityBuilder() {
+    public EntityTemplateArguments.Builder entityBuilder() {
         return strategyConfig.entityBuilder();
     }
 
     @NotNull
-    public Controller.Builder controllerBuilder() {
+    public ControllerTemplateArguments.Builder controllerBuilder() {
         return strategyConfig.controllerBuilder();
     }
 
     @NotNull
-    public Mapper.Builder mapperBuilder() {
+    public MapperTemplateArguments.Builder mapperBuilder() {
         return strategyConfig.mapperBuilder();
     }
 
     @NotNull
-    public Service.Builder serviceBuilder() {
+    public ServiceTemplateArguments.Builder serviceBuilder() {
         return strategyConfig.serviceBuilder();
     }
 

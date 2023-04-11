@@ -2,15 +2,12 @@ package io.devpl.codegen.mbpg;
 
 import io.devpl.codegen.mbpg.config.*;
 import io.devpl.codegen.mbpg.config.builder.Context;
-import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.template.AbstractTemplateEngine;
-import io.devpl.codegen.mbpg.template.CodeGenerator;
+import io.devpl.codegen.mbpg.core.CodeGenerator;
 import io.devpl.codegen.mbpg.template.TemplateCodeGenerator;
 import io.devpl.codegen.mbpg.template.VelocityTemplateEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * 生成文件
@@ -45,7 +42,7 @@ public class AutoGenerator {
     /**
      * 模板 相关配置
      */
-    private TemplateConfig templateConfig;
+    private TemplateConfiguration templateConfig;
     /**
      * 全局 相关配置
      */
@@ -109,7 +106,7 @@ public class AutoGenerator {
      * @return this
      * @since 3.5.0
      */
-    public AutoGenerator template(TemplateConfig templateConfig) {
+    public AutoGenerator template(TemplateConfiguration templateConfig) {
         this.templateConfig = templateConfig;
         return this;
     }
@@ -161,7 +158,7 @@ public class AutoGenerator {
 
         this.generator = new TemplateCodeGenerator(te);
 
-        generator.generate(null);
+        generator.generate(context, null);
         te.open();
         logger.debug("==========================文件生成完成！！！==========================");
     }

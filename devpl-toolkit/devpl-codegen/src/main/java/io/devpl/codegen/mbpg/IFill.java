@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface IFill {
 
-    @NotNull String getName();
+    String getName();
 
-    @NotNull FieldFill getFieldFill();
+    FieldFill getFieldFill();
 }
