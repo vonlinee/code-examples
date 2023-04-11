@@ -222,8 +222,7 @@ public final class StringUtils {
      * @deprecated as of 5.3, in favor of {@link #hasLength(String)} and
      * {@link #hasText(String)} (or {@link ObjectUtils#isEmpty(Object)})
      */
-    @Deprecated
-    public static boolean isEmpty(@Nullable Object str) {
+    public static boolean isEmpty(Object str) {
         return (str == null || "".equals(str));
     }
 

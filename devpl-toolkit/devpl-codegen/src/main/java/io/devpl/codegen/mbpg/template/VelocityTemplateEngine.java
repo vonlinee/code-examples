@@ -19,12 +19,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * <p>
  * Velocity 模板引擎实现文件输出
- * </p>
- *
- * @author hubin
- * @since 2018-01-10
  */
 public class VelocityTemplateEngine extends AbstractTemplateEngine {
 
@@ -32,7 +27,7 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     private VelocityEngine velocityEngine;
 
     @Override
-    public VelocityTemplateEngine init(Context context) {
+    public void init(Context context) {
         if (null == velocityEngine) {
             Properties p = new Properties();
             // 加载类路径下的模板文件 /templates/*.vm
@@ -43,11 +38,10 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
             p.setProperty("file.resource.loader.unicode", "true");
             velocityEngine = new VelocityEngine(p);
         }
-        return this;
     }
 
     @Override
-    public void write(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull File outputFile) throws Exception {
+    public void write(Map<String, Object> objectMap, String templatePath, File outputFile) throws Exception {
         if (StringUtils.isEmpty(templatePath)) {
             return;
         }
@@ -60,7 +54,7 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public @NotNull String templateFilePath(@NotNull String filePath) {
+    public String templateFilePath(String filePath) {
         if (filePath.contains(DOT_VM)) {
             return filePath;
         }

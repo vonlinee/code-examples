@@ -36,7 +36,6 @@ public class MyBatisPlusGenerator {
         for (Map.Entry<String, List<TableGeneration>> entry : targetTables.entrySet()) {
             // 连接名称
             String connectionName = entry.getKey();
-
             // 按数据库名称分组
             Map<String, List<TableGeneration>> groupingByDbName =
                     CollectionUtils.groupingBy(entry.getValue(), TableGeneration::getDatabaseName);

@@ -48,55 +48,18 @@ public class AutoGenerator {
      */
     private GlobalConfig globalConfig;
 
-    private AutoGenerator() {
-        // 不推荐使用
-    }
-
     /**
      * 构造方法
      *
      * @param dataSourceConfig 数据库配置
      * @since 3.5.0
      */
-    public AutoGenerator(DataSourceConfig dataSourceConfig) {
+    public AutoGenerator(DataSourceConfig dataSourceConfig, InjectionConfig ic, PackageConfig pc, StrategyConfig sc) {
         // 这个是必须参数,其他都是可选的,后续去除默认构造更改成final
         this.dataSource = dataSourceConfig;
-    }
-
-    /**
-     * 注入配置
-     *
-     * @param injectionConfig 注入配置
-     * @return this
-     * @since 3.5.0
-     */
-    public AutoGenerator injection(InjectionConfig injectionConfig) {
-        this.injection = injectionConfig;
-        return this;
-    }
-
-    /**
-     * 生成策略
-     *
-     * @param strategyConfig 策略配置
-     * @return this
-     * @since 3.5.0
-     */
-    public AutoGenerator strategy(StrategyConfig strategyConfig) {
-        this.strategy = strategyConfig;
-        return this;
-    }
-
-    /**
-     * 指定包配置信息
-     *
-     * @param packageConfig 包配置
-     * @return this
-     * @since 3.5.0
-     */
-    public AutoGenerator packageInfo(PackageConfig packageConfig) {
-        this.packageInfo = packageConfig;
-        return this;
+        this.injection = ic;
+        this.packageInfo = pc;
+        this.strategy = sc;
     }
 
     /**
@@ -123,18 +86,6 @@ public class AutoGenerator {
         return this;
     }
 
-    /**
-     * 设置配置汇总
-     *
-     * @param context 连接配置上下文对象
-     * @return this
-     * @since 3.5.0
-     */
-    public AutoGenerator config(Context context) {
-        this.context = context;
-        return this;
-    }
-
     CodeGenerator generator;
 
     /**
@@ -153,13 +104,12 @@ public class AutoGenerator {
             templateEngine = new VelocityTemplateEngine();
         }
         templateEngine.setContext(context);
-        // 模板引擎初始化执行文件输出
-        AbstractTemplateEngine te = templateEngine.init(context);
-
-        this.generator = new TemplateCodeGenerator(te);
-
+        // 模板引擎初始化
+        templateEngine.init(context);
+        this.generator = new TemplateCodeGenerator(templateEngine);
+        // 执行文件输出
         generator.generate(context, null);
-        te.open();
+        templateEngine.open();
         logger.debug("==========================文件生成完成！！！==========================");
     }
 }

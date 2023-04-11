@@ -17,10 +17,22 @@ public enum OutputFile implements TypeEnum<String, OutputFile> {
     private final String type;
     private final String typeName;
 
+    /**
+     * 模板路径，可在运行时进行修改
+     */
+    private String template;
+
     OutputFile(String type, String typeName) {
         this.type = type;
         this.typeName = typeName;
     }
+
+    OutputFile(String type, String typeName, String template) {
+        this.type = type;
+        this.typeName = typeName;
+        this.template = template;
+    }
+
 
     @Override
     public String getType() {

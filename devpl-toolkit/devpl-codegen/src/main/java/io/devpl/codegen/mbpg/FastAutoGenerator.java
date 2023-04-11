@@ -11,12 +11,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * mybatis plus FastAutoGenerator
- *
- * @author L.cm, lanjerry
- * @since 2021-07-22
- */
 public final class FastAutoGenerator {
 
     /**
@@ -206,11 +200,8 @@ public final class FastAutoGenerator {
      * 开始生成代码
      */
     public void execute() {
-        final AutoGenerator generator = new AutoGenerator(this.dataSourceConfigBuilder.build());
+        AutoGenerator generator = new AutoGenerator(this.dataSourceConfigBuilder.build(), this.injectionConfigBuilder.build(), this.packageConfigBuilder.build(), this.strategyConfigBuilder.build());
         generator.global(this.globalConfigBuilder.build()); // 全局配置
-        generator.packageInfo(this.packageConfigBuilder.build()); // 包配置
-        generator.strategy(this.strategyConfigBuilder.build()); // 策略配置
-        generator.injection(this.injectionConfigBuilder.build()); // 注入配置
         generator.template(this.templateConfigBuilder.build()); // 模板配置
         // 执行
         generator.execute(this.templateEngine);

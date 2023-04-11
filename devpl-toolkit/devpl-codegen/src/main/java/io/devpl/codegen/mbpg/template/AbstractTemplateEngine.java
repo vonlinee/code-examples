@@ -36,7 +36,7 @@ public abstract class AbstractTemplateEngine {
     /**
      * 模板引擎初始化
      */
-    public abstract AbstractTemplateEngine init(Context context);
+    public abstract void init(Context context);
 
     /**
      * 输出自定义模板文件

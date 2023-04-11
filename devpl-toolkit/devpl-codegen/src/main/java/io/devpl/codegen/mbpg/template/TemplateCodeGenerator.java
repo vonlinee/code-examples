@@ -77,7 +77,7 @@ public class TemplateCodeGenerator implements CodeGenerator {
      * @return
      */
     public List<Template> prepareTemplates(Context context, TableInfo tableInfo) {
-
+        // 模板配置
         TemplateConfiguration tc = context.getTemplateConfiguration();
 
         return new ArrayList<>();

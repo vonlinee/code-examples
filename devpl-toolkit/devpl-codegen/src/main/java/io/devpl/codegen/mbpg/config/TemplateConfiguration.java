@@ -10,7 +10,10 @@ import org.slf4j.LoggerFactory;
  */
 public class TemplateConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateConfiguration.class);
+    /**
+     * 模板存放根目录
+     */
+    private String templateLocation;
 
     /**
      * 设置实体模板路径
@@ -67,18 +70,6 @@ public class TemplateConfiguration {
 
     public boolean isEntityTemplateDisabled() {
         return disableEntity;
-    }
-
-    /**
-     * 当模板赋值为空时进行日志提示打印
-     *
-     * @param value        模板值
-     * @param templateType 模板类型
-     */
-    private void logger(String value, TemplateType templateType) {
-        if (StringUtils.isBlank(value)) {
-            LOGGER.warn("推荐使用disable(TemplateType.{})方法进行默认模板禁用.", templateType.name());
-        }
     }
 
     /**
