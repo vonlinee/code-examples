@@ -1,14 +1,13 @@
 package io.devpl.codegen.mbpg.template;
 
 import io.devpl.codegen.mbpg.config.ConstVal;
-import io.devpl.codegen.mbpg.config.builder.Context;
+import io.devpl.codegen.mbpg.config.Context;
 import io.devpl.codegen.mbpg.util.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;
 import java.io.File;

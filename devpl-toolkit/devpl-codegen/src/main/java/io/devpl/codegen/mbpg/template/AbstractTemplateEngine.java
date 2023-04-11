@@ -1,8 +1,8 @@
 package io.devpl.codegen.mbpg.template;
 
 import io.devpl.codegen.mbpg.config.*;
-import io.devpl.codegen.mbpg.config.builder.Context;
-import io.devpl.codegen.mbpg.config.builder.CustomFile;
+import io.devpl.codegen.mbpg.config.Context;
+import io.devpl.codegen.mbpg.config.CustomFile;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.util.FileUtils;

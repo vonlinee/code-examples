@@ -15,7 +15,6 @@
  */
 package io.devpl.codegen.mbpg.config;
 
-import io.devpl.codegen.mbpg.config.builder.CustomFile;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -118,7 +117,7 @@ public class InjectionConfig {
     /**
      * 构建者
      */
-    public static class Builder implements io.devpl.codegen.mbpg.config.Builder<InjectionConfig> {
+    public static class Builder  {
 
         private final InjectionConfig injectionConfig;
 
@@ -187,7 +186,6 @@ public class InjectionConfig {
             return this;
         }
 
-        @Override
         public InjectionConfig build() {
             return this.injectionConfig;
         }

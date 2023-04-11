@@ -2,7 +2,7 @@ package io.devpl.codegen.mbpg.template;
 
 import io.devpl.codegen.mbpg.config.ContextAware;
 import io.devpl.codegen.mbpg.config.PropertyHolder;
-import io.devpl.codegen.mbpg.config.builder.Context;
+import io.devpl.codegen.mbpg.config.Context;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 
 import java.util.Map;

@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg;
 
 import io.devpl.codegen.mbpg.config.*;
-import io.devpl.codegen.mbpg.config.builder.Context;
+import io.devpl.codegen.mbpg.config.Context;
 import io.devpl.codegen.mbpg.template.AbstractTemplateEngine;
 import io.devpl.codegen.mbpg.core.CodeGenerator;
 import io.devpl.codegen.mbpg.template.TemplateCodeGenerator;

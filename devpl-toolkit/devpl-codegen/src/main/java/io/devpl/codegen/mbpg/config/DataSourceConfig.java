@@ -314,7 +314,7 @@ public class DataSourceConfig {
      * @author nieqiurong 2020/10/10.
      * @since 3.5.0
      */
-    public static class Builder implements io.devpl.codegen.mbpg.config.Builder<DataSourceConfig> {
+    public static class Builder  {
 
         private final DataSourceConfig dataSourceConfig;
 
@@ -438,7 +438,6 @@ public class DataSourceConfig {
          * 构建数据库配置
          * @return 数据库配置
          */
-        @Override
         public DataSourceConfig build() {
             return this.dataSourceConfig;
         }

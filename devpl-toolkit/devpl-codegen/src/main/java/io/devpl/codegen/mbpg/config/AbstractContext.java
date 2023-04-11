@@ -1,4 +1,4 @@
-package io.devpl.codegen.mbpg.config.builder;
+package io.devpl.codegen.mbpg.config;
 
 import io.devpl.codegen.mbpg.config.PropertyHolder;
 

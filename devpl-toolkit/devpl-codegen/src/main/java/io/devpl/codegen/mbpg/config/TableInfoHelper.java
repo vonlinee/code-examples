@@ -1,4 +1,4 @@
-package io.devpl.codegen.mbpg.config.builder;
+package io.devpl.codegen.mbpg.config;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.devpl.codegen.mbpg.util.ClassUtils;
@@ -19,9 +19,6 @@ import static java.util.stream.Collectors.toMap;
  * <p>
  * 实体类反射表辅助类
  * </p>
- *
- * @author hubin sjy
- * @since 2016-09-09
  */
 public class TableInfoHelper {
 

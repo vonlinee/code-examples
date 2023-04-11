@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.template.impl;
 
-import io.devpl.codegen.mbpg.config.builder.BaseBuilder;
+import io.devpl.codegen.mbpg.config.BaseBuilder;
 import io.devpl.codegen.mbpg.config.ConstVal;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.po.TableInfo;

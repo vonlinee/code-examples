@@ -3,7 +3,7 @@ package io.devpl.codegen.mbpg.query;
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.GlobalConfig;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.mbpg.config.builder.Context;
+import io.devpl.codegen.mbpg.config.Context;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.querys.DbQueryDecorator;
 import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;

@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg.core;
 
 import io.devpl.codegen.mbpg.ProgressCallback;
-import io.devpl.codegen.mbpg.config.builder.Context;
+import io.devpl.codegen.mbpg.config.Context;
 
 public interface CodeGenerator {
 

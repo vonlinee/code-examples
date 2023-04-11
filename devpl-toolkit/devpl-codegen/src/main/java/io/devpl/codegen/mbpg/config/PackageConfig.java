@@ -155,7 +155,7 @@ public class PackageConfig {
      * @author nieqiurong
      * @since 3.5.0
      */
-    public static class Builder implements io.devpl.codegen.mbpg.config.Builder<PackageConfig> {
+    public static class Builder {
 
         private final PackageConfig packageConfig;
 
@@ -290,7 +290,6 @@ public class PackageConfig {
          *
          * @return 包配置对象
          */
-        @Override
         public PackageConfig build() {
             return this.packageConfig;
         }

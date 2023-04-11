@@ -26,7 +26,6 @@ module devpl.codegen {
     exports io.devpl.codegen.sql;
     exports io.devpl.codegen.mbpg.jdbc.meta;
     exports io.devpl.codegen.mbpg.util;
-    exports io.devpl.codegen.mbpg.config.builder;
     exports io.devpl.codegen.mbpg.config;
     exports io.devpl.codegen.mbpg.template;
     exports io.devpl.codegen.mbpg.config.querys;

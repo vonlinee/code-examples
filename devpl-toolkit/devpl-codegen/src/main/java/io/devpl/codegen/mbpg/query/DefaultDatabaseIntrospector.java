@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg.query;
 
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
-import io.devpl.codegen.mbpg.config.builder.Context;
+import io.devpl.codegen.mbpg.config.Context;
 import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.po.TableInfo;

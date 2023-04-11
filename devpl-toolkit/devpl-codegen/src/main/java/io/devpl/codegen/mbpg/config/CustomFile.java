@@ -1,4 +1,4 @@
-package io.devpl.codegen.mbpg.config.builder;
+package io.devpl.codegen.mbpg.config;
 
 /**
  * 自定义模板文件配置
@@ -53,7 +53,7 @@ public class CustomFile {
     /**
      * 构建者
      */
-    public static class Builder implements io.devpl.codegen.mbpg.config.Builder<CustomFile> {
+    public static class Builder {
 
         private final CustomFile customFile;
 
@@ -101,7 +101,6 @@ public class CustomFile {
             return this;
         }
 
-        @Override
         public CustomFile build() {
             return this.customFile;
         }

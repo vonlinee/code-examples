@@ -1,7 +1,5 @@
 package io.devpl.codegen.mbpg.config;
 
-import io.devpl.codegen.mbpg.config.builder.Context;
-
 /**
  * 注入全局Context实例
  */

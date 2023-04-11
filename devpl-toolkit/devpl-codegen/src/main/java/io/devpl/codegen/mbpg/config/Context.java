@@ -1,8 +1,7 @@
-package io.devpl.codegen.mbpg.config.builder;
+package io.devpl.codegen.mbpg.config;
 
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.query.DatabaseIntrospector;
-import io.devpl.codegen.mbpg.config.*;
 import io.devpl.codegen.mbpg.util.StringPool;
 import io.devpl.codegen.mbpg.util.StringUtils;
 import org.slf4j.Logger;

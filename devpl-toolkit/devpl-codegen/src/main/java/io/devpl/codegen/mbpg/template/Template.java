@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg.template;
 
 import io.devpl.codegen.mbpg.config.ContextAware;
-import io.devpl.codegen.mbpg.config.builder.Context;
+import io.devpl.codegen.mbpg.config.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
