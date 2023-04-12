@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.config.converts;
 
-import io.devpl.codegen.mbpg.config.GlobalConfig;
+import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.DataType;
@@ -44,7 +44,7 @@ public class ClickHouseTypeConvert implements ITypeConvert {
 
 
     @Override
-    public DataType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull String fieldType) {
+    public DataType processTypeConvert(@NotNull ProjectConfiguration globalConfig, @NotNull String fieldType) {
         return TypeConverts.use(fieldType)
             .test(containsAny(INTEGER_TYPE).then(JavaType.INTEGER))
             .test(containsAny(BIGINTEGER_TYPE).then(JavaType.BIG_INTEGER))
@@ -66,7 +66,7 @@ public class ClickHouseTypeConvert implements ITypeConvert {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    public static DataType toDateType(GlobalConfig config, String type) {
+    public static DataType toDateType(ProjectConfiguration config, String type) {
         switch (config.getDateType()) {
             case SQL_PACK:
                 if ("date".equals(type)) {

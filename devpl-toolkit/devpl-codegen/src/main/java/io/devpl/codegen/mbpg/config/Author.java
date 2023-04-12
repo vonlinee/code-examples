@@ -1,4 +1,4 @@
-package io.devpl.tookit.fxui.model;
+package io.devpl.codegen.mbpg.config;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import lombok.Data;
  * 作者信息
  */
 @Data
-public class AuthorInfo {
+public class Author {
 
     /**
      * 姓名

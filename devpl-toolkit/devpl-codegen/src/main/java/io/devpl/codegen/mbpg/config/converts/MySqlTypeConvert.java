@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.config.converts;
 
-import io.devpl.codegen.mbpg.config.GlobalConfig;
+import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.DataType;
@@ -18,7 +18,7 @@ public class MySqlTypeConvert implements ITypeConvert {
      * @inheritDoc
      */
     @Override
-    public DataType processTypeConvert(GlobalConfig config, String fieldType) {
+    public DataType processTypeConvert(ProjectConfiguration config, String fieldType) {
         return TypeConverts
                 .use(fieldType)
                 .test(TypeConverts.containsAny("char", "text", "json", "enum").then(JavaType.STRING))
@@ -42,7 +42,7 @@ public class MySqlTypeConvert implements ITypeConvert {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    public static DataType toDateType(GlobalConfig config, String type) {
+    public static DataType toDateType(ProjectConfiguration config, String type) {
         String dateType = type.replaceAll("\\(\\d+\\)", "");
         switch (config.getDateType()) {
             case ONLY_DATE:

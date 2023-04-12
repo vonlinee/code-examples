@@ -38,7 +38,7 @@ public class AutoGenerator {
     /**
      * 包 相关配置
      */
-    private PackageConfig packageInfo;
+    private PackageConfiguration packageInfo;
     /**
      * 模板 相关配置
      */
@@ -46,7 +46,7 @@ public class AutoGenerator {
     /**
      * 全局 相关配置
      */
-    private GlobalConfig globalConfig;
+    private ProjectConfiguration globalConfig;
 
     /**
      * 构造方法
@@ -54,7 +54,7 @@ public class AutoGenerator {
      * @param dataSourceConfig 数据库配置
      * @since 3.5.0
      */
-    public AutoGenerator(DataSourceConfig dataSourceConfig, InjectionConfig ic, PackageConfig pc, StrategyConfig sc) {
+    public AutoGenerator(DataSourceConfig dataSourceConfig, InjectionConfig ic, PackageConfiguration pc, StrategyConfig sc) {
         // 这个是必须参数,其他都是可选的,后续去除默认构造更改成final
         this.dataSource = dataSourceConfig;
         this.injection = ic;
@@ -81,7 +81,7 @@ public class AutoGenerator {
      * @return this
      * @see 3.5.0
      */
-    public AutoGenerator global(GlobalConfig globalConfig) {
+    public AutoGenerator global(ProjectConfiguration globalConfig) {
         this.globalConfig = globalConfig;
         return this;
     }

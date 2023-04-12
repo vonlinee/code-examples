@@ -1,4 +1,4 @@
-package io.devpl.codegen.sql;
+package io.devpl.codegen.mbpg.config.rules;
 
 import io.devpl.codegen.utils.AvaticaUtils;
 import io.devpl.codegen.utils.ByteArray;

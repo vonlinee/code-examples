@@ -13,8 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,8 +51,8 @@ public abstract class AbstractTemplateEngine {
         String entityName = tableInfo.getEntityName();
         String parentPath = getPathInfo(OutputFile.PARENT);
         customFiles.forEach(file -> {
-            String filePath = io.devpl.sdk.util.StringUtils.hasText(file.getFilePath()) ? file.getFilePath() : parentPath;
-            if (io.devpl.sdk.util.StringUtils.hasText(file.getPackageName())) {
+            String filePath = StringUtils.hasText(file.getFilePath()) ? file.getFilePath() : parentPath;
+            if (StringUtils.hasText(file.getPackageName())) {
                 filePath = filePath + File.separator + file.getPackageName();
                 filePath = filePath.replaceAll("\\.", StringPool.BACK_SLASH + File.separator);
             }
@@ -134,7 +135,7 @@ public abstract class AbstractTemplateEngine {
         final Context config = getContext();
         String entityName = tableInfo.getEntityName();
         String servicePath = getPathInfo(OutputFile.SERVICE);
-        if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getServiceName()) && io.devpl.sdk.util.StringUtils.isNotBlank(servicePath)) {
+        if (StringUtils.isNotBlank(tableInfo.getServiceName()) && StringUtils.isNotBlank(servicePath)) {
             getTemplateFilePath(TemplateConfiguration::getService).ifPresent(service -> {
                 String serviceFile = String.format((servicePath + File.separator + tableInfo.getServiceName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(serviceFile), objectMap, service, config.getStrategyConfig().service().isFileOverride());
@@ -142,7 +143,7 @@ public abstract class AbstractTemplateEngine {
         }
         // MpServiceImpl.java
         String serviceImplPath = getPathInfo(OutputFile.SERVICE_IMPL);
-        if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getServiceImplName()) && io.devpl.sdk.util.StringUtils.isNotBlank(serviceImplPath)) {
+        if (StringUtils.isNotBlank(tableInfo.getServiceImplName()) && StringUtils.isNotBlank(serviceImplPath)) {
             getTemplateFilePath(TemplateConfiguration::getServiceImpl).ifPresent(serviceImpl -> {
                 String implFile = String.format((serviceImplPath + File.separator + tableInfo.getServiceImplName() + suffixJavaOrKt()), entityName);
                 outputFile(new File(implFile), objectMap, serviceImpl, config.getStrategyConfig().service().isFileOverride());
@@ -155,12 +156,11 @@ public abstract class AbstractTemplateEngine {
      *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
-     * @since 3.5.0
      */
     protected void outputController(TableInfo tableInfo, Map<String, Object> objectMap) {
-        // MpController.java
+        // 绝对路径
         String controllerPath = getPathInfo(OutputFile.CONTROLLER);
-        if (io.devpl.sdk.util.StringUtils.isNotBlank(tableInfo.getControllerName()) && io.devpl.sdk.util.StringUtils.isNotBlank(controllerPath)) {
+        if (StringUtils.isNotBlank(tableInfo.getControllerName()) && StringUtils.isNotBlank(controllerPath)) {
             getTemplateFilePath(TemplateConfiguration::getController).ifPresent(controller -> {
                 String entityName = tableInfo.getEntityName();
                 String controllerFile = String.format((controllerPath + File.separator + tableInfo.getControllerName() + suffixJavaOrKt()), entityName);
@@ -187,7 +187,9 @@ public abstract class AbstractTemplateEngine {
                     File parentFile = file.getParentFile();
                     FileUtils.forceMkdir(parentFile);
                 }
-                write(objectMap, templatePath, file);
+                try (FileWriter fw = new FileWriter(file)) {
+                    write(objectMap, templatePath, fw);
+                }
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
@@ -205,7 +207,7 @@ public abstract class AbstractTemplateEngine {
     protected Optional<String> getTemplateFilePath(Function<TemplateConfiguration, String> function) {
         TemplateConfiguration templateConfig = getContext().getTemplateConfiguration();
         String filePath = function.apply(templateConfig);
-        if (io.devpl.sdk.util.StringUtils.isNotBlank(filePath)) {
+        if (StringUtils.isNotBlank(filePath)) {
             return Optional.of(templateFilePath(filePath));
         }
         return Optional.empty();
@@ -225,17 +227,11 @@ public abstract class AbstractTemplateEngine {
     /**
      * 将模板转化成为文件
      *
-     * @param objectMap    渲染对象 MAP 信息
-     * @param templatePath 模板文件
-     * @param outputFile   文件生成的目录
-     * @throws Exception 异常
-     * @since 3.5.0
+     * @param objectMap 渲染对象 MAP 信息
+     * @param template  模板，可能是字符串模板，可能是指向文件模板的路径，可能是指向模板文件的URL，有些模板引擎API不支持通过输入流获取模板
+     * @param writer    文件生成输出位置
      */
-//    public void writer(Map<String, Object> objectMap, String templatePath, File outputFile) throws Exception {
-//        this.writer(objectMap, templatePath, outputFile.getPath());
-//        logger.debug("模板:" + templatePath + ";  文件:" + outputFile);
-//    }
-    public abstract void write(Map<String, Object> objectMap, String templatePath, File outputFile) throws Exception;
+    public abstract void write(Map<String, Object> objectMap, String template, Writer writer) throws Exception;
 
     /**
      * 打开输出目录

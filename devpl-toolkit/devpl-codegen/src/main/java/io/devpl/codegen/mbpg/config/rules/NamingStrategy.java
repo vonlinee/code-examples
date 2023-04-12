@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * 从数据库表到文件的命名策略
  */
-public enum NamingStrategyEnum {
+public enum NamingStrategy {
 
     /**
      * 不做任何改变，原样输出

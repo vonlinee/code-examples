@@ -9,7 +9,7 @@ import io.devpl.codegen.mbpg.config.TableInfoHelper;
 import io.devpl.codegen.mbpg.config.INameConvert;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
-import io.devpl.codegen.mbpg.config.rules.NamingStrategyEnum;
+import io.devpl.codegen.mbpg.config.rules.NamingStrategy;
 import io.devpl.codegen.mbpg.function.ConverterFileName;
 import io.devpl.codegen.mbpg.template.TemplateArguments;
 import io.devpl.codegen.mbpg.util.ClassUtils;
@@ -68,6 +68,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
     /**
      * 【实体】是否为链式模型（默认 false）
+     *
      * @since 3.3.2
      */
     private boolean chain;
@@ -91,24 +92,28 @@ public class EntityTemplateArguments extends TemplateArguments {
 
     /**
      * 乐观锁字段名称(数据库字段)
+     *
      * @since 3.5.0
      */
     private String versionColumnName;
 
     /**
      * 乐观锁属性名称(实体字段)
+     *
      * @since 3.5.0
      */
     private String versionPropertyName;
 
     /**
      * 逻辑删除字段名称(数据库字段)
+     *
      * @since 3.5.0
      */
     private String logicDeleteColumnName;
 
     /**
      * 逻辑删除属性名称(实体字段)
+     *
      * @since 3.5.0
      */
     private String logicDeletePropertyName;
@@ -121,34 +126,38 @@ public class EntityTemplateArguments extends TemplateArguments {
     /**
      * 数据库表映射到实体的命名策略，默认下划线转驼峰命名
      */
-    private NamingStrategyEnum naming = NamingStrategyEnum.UNDERLINE_TO_CAMEL;
+    private NamingStrategy naming = NamingStrategy.UNDERLINE_TO_CAMEL;
 
     /**
      * 数据库表字段映射到实体的命名策略
      * <p>未指定按照 naming 执行</p>
      */
-    private NamingStrategyEnum columnNaming = null;
+    private NamingStrategy columnNaming = null;
 
     /**
      * 开启 ActiveRecord 模式（默认 false）
+     *
      * @since 3.5.0
      */
     private boolean activeRecord;
 
     /**
      * 指定生成的主键的ID类型
+     *
      * @since 3.5.0
      */
     private IdType idType;
 
     /**
      * 转换输出文件名称
+     *
      * @since 3.5.0
      */
     private ConverterFileName converterFileName = (entityName -> entityName);
 
     /**
      * 是否覆盖已有文件（默认 false）
+     *
      * @since 3.5.2
      */
     private boolean fileOverride;
@@ -157,6 +166,7 @@ public class EntityTemplateArguments extends TemplateArguments {
      * <p>
      * 父类 Class 反射属性转换为公共字段
      * </p>
+     *
      * @param clazz 实体父类 Class
      */
     public void convertSuperEntityColumns(Class<?> clazz) {
@@ -170,7 +180,7 @@ public class EntityTemplateArguments extends TemplateArguments {
             if (tableField != null && StringUtils.isNotBlank(tableField.value())) {
                 return tableField.value();
             }
-            if (null == columnNaming || columnNaming == NamingStrategyEnum.NO_CHANGE) {
+            if (null == columnNaming || columnNaming == NamingStrategy.NO_CHANGE) {
                 return field.getName();
             }
             return StringUtils.camelToUnderline(field.getName());
@@ -178,13 +188,14 @@ public class EntityTemplateArguments extends TemplateArguments {
     }
 
     @NotNull
-    public NamingStrategyEnum getColumnNaming() {
+    public NamingStrategy getColumnNaming() {
         // 未指定以 naming 策略为准
         return Optional.ofNullable(columnNaming).orElse(naming);
     }
 
     /**
      * 匹配父类字段(忽略大小写)
+     *
      * @param fieldName 字段名
      * @return 是否匹配
      * @since 3.5.0
@@ -196,6 +207,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
     /**
      * 匹配忽略字段(忽略大小写)
+     *
      * @param fieldName 字段名
      * @return 是否匹配
      * @since 3.5.0
@@ -268,7 +280,7 @@ public class EntityTemplateArguments extends TemplateArguments {
     }
 
     @NotNull
-    public NamingStrategyEnum getNamingStrategy() {
+    public NamingStrategy getNamingStrategy() {
         return naming;
     }
 
@@ -318,6 +330,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 名称转换实现
+         *
          * @param nameConvert 名称转换实现
          * @return this
          */
@@ -328,6 +341,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 自定义继承的Entity类全称
+         *
          * @param clazz 类
          * @return this
          */
@@ -337,6 +351,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 自定义继承的Entity类全称，带包名
+         *
          * @param superEntityClass 类全称
          * @return this
          */
@@ -347,6 +362,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 禁用生成serialVersionUID
+         *
          * @return this
          * @since 3.5.0
          */
@@ -357,6 +373,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 开启生成字段常量
+         *
          * @return this
          * @since 3.5.0
          */
@@ -367,6 +384,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 开启链式模型
+         *
          * @return this
          * @since 3.5.0
          */
@@ -377,6 +395,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 开启lombok模型
+         *
          * @return this
          * @since 3.5.0
          */
@@ -387,6 +406,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 开启Boolean类型字段移除is前缀
+         *
          * @return this
          * @since 3.5.0
          */
@@ -397,6 +417,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 开启生成实体时生成字段注解
+         *
          * @return this
          * @since 3.5.0
          */
@@ -407,6 +428,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 开启 ActiveRecord 模式
+         *
          * @return this
          * @since 3.5.0
          */
@@ -417,6 +439,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 设置乐观锁数据库表字段名称
+         *
          * @param versionColumnName 乐观锁数据库字段名称
          * @return this
          */
@@ -427,6 +450,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 设置乐观锁实体属性字段名称
+         *
          * @param versionPropertyName 乐观锁实体属性字段名称
          * @return this
          */
@@ -437,6 +461,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 逻辑删除数据库字段名称
+         *
          * @param logicDeleteColumnName 逻辑删除字段名称
          * @return this
          */
@@ -447,6 +472,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 逻辑删除实体属性名称
+         *
          * @param logicDeletePropertyName 逻辑删除实体属性名称
          * @return this
          */
@@ -457,26 +483,29 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 数据库表映射到实体的命名策略
+         *
          * @param namingStrategy 数据库表映射到实体的命名策略
          * @return this
          */
-        public Builder naming(NamingStrategyEnum namingStrategy) {
+        public Builder naming(NamingStrategy namingStrategy) {
             this.entity.naming = namingStrategy;
             return this;
         }
 
         /**
          * 数据库表字段映射到实体的命名策略
+         *
          * @param namingStrategy 数据库表字段映射到实体的命名策略
          * @return this
          */
-        public Builder columnNaming(NamingStrategyEnum namingStrategy) {
+        public Builder columnNaming(NamingStrategy namingStrategy) {
             this.entity.columnNaming = namingStrategy;
             return this;
         }
 
         /**
          * 添加父类公共字段
+         *
          * @param superEntityColumns 父类字段(数据库字段列名)
          * @return this
          * @since 3.5.0
@@ -492,6 +521,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 添加忽略字段
+         *
          * @param ignoreColumns 需要忽略的字段(数据库字段列名)
          * @return this
          * @since 3.5.0
@@ -507,6 +537,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 添加表字段填充
+         *
          * @param tableFills 填充字段
          * @return this
          * @since 3.5.0
@@ -517,6 +548,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 添加表字段填充
+         *
          * @param tableFillList 填充字段集合
          * @return this
          * @since 3.5.0
@@ -528,6 +560,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 指定生成的主键的ID类型
+         *
          * @param idType ID类型
          * @return this
          * @since 3.5.0
@@ -539,6 +572,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 转换输出文件名称
+         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
@@ -550,6 +584,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 格式化文件名称
+         *
          * @param format 　格式
          * @return this
          * @since 3.5.0
@@ -560,6 +595,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
+         *
          * @see #enableFileOverride()
          */
         @Deprecated
@@ -571,6 +607,7 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 覆盖已有文件
+         *
          * @since 3.5.3
          */
         public Builder enableFileOverride() {

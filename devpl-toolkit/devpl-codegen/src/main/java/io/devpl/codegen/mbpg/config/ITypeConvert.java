@@ -35,7 +35,7 @@ public interface ITypeConvert {
      * @param tableField   字段列信息
      * @return ignore
      */
-    default DataType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull TableField tableField) {
+    default DataType processTypeConvert(@NotNull ProjectConfiguration globalConfig, @NotNull TableField tableField) {
         return processTypeConvert(globalConfig, tableField.getType());
     }
 
@@ -46,6 +46,6 @@ public interface ITypeConvert {
      * @param fieldType    字段类型
      * @return ignore
      */
-    DataType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull String fieldType);
+    DataType processTypeConvert(@NotNull ProjectConfiguration globalConfig, @NotNull String fieldType);
 
 }

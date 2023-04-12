@@ -10,9 +10,9 @@ public interface TemplateRenderer {
     /**
      * 渲染模板
      *
-     * @param arguments 模板参数
-     * @param template  模板信息
-     * @param writer    渲染输出位置
+     * @param arguments    模板参数
+     * @param templateFile 模板文件
+     * @param writer       渲染输出位置
      */
-    void render(TemplateArguments arguments, Template template, Writer writer);
+    void render(Template templateFile, TemplateArguments arguments, Writer writer);
 }

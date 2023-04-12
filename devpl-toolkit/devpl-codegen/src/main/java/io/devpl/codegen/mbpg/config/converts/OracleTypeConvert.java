@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.config.converts;
 
-import io.devpl.codegen.mbpg.config.GlobalConfig;
+import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.DataType;
@@ -22,7 +22,7 @@ public class OracleTypeConvert implements ITypeConvert {
      * @return 返回的对应的列类型
      */
     @Override
-    public DataType processTypeConvert(GlobalConfig config, String fieldType) {
+    public DataType processTypeConvert(ProjectConfiguration config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.containsAny("char", "clob").then(JavaType.STRING))
             .test(TypeConverts.containsAny("date", "timestamp").then(p -> toDateType(config)))
@@ -59,9 +59,9 @@ public class OracleTypeConvert implements ITypeConvert {
      *
      * @param config 全局配置
      * @return 时间类型
-     * @see GlobalConfig#getDateType()
+     * @see ProjectConfiguration#getDateType()
      */
-    protected static DataType toDateType(GlobalConfig config) {
+    protected static DataType toDateType(ProjectConfiguration config) {
         switch (config.getDateType()) {
             case ONLY_DATE:
                 return JavaType.DATE;

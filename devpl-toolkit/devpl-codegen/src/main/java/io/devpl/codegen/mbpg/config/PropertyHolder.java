@@ -26,4 +26,8 @@ public abstract class PropertyHolder {
         Object value = properties.get(name);
         return value == null ? defaultValue : (String) value;
     }
+
+    public Hashtable<String, Object> getProperties() {
+        return properties;
+    }
 }

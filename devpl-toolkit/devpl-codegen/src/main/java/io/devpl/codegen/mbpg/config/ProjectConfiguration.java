@@ -7,22 +7,30 @@ import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * 全局配置
- *
- * @author hubin
- * @since 2016-12-02
+ * 项目配置信息
  */
-public class GlobalConfig {
+public class ProjectConfiguration {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(GlobalConfig.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(ProjectConfiguration.class);
 
     /**
      * 生成文件的输出根目录【 windows:D://  linux or mac:/tmp 】
      */
     private String outputDir = System.getProperty("os.name").toLowerCase().contains("windows") ? "D://" : "/tmp";
+
+    /**
+     * 项目作者
+     */
+    private List<Author> authors;
+
+    /**
+     * 开启 Kotlin 模式（默认 false）
+     */
+    private boolean kotlin;
 
     /**
      * 默认输出目录
@@ -43,12 +51,7 @@ public class GlobalConfig {
     /**
      * 作者
      */
-    private String author = "baomidou";
-
-    /**
-     * 开启 Kotlin 模式（默认 false）
-     */
-    private boolean kotlin;
+    private String author = "";
 
     /**
      * 开启 swagger 模式（默认 false 与 springdoc 不可同时使用）
@@ -120,10 +123,10 @@ public class GlobalConfig {
      */
     public static class Builder {
 
-        private final GlobalConfig globalConfig;
+        private final ProjectConfiguration globalConfig;
 
         public Builder() {
-            this.globalConfig = new GlobalConfig();
+            this.globalConfig = new ProjectConfiguration();
         }
 
         /**
@@ -215,7 +218,7 @@ public class GlobalConfig {
             return commentDate(() -> new SimpleDateFormat(pattern).format(new Date()));
         }
 
-        public GlobalConfig build() {
+        public ProjectConfiguration build() {
             return this.globalConfig;
         }
     }

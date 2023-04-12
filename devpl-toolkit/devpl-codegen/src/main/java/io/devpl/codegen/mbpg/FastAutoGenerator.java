@@ -21,12 +21,12 @@ public final class FastAutoGenerator {
     /**
      * 全局配置 Builder
      */
-    private final GlobalConfig.Builder globalConfigBuilder;
+    private final ProjectConfiguration.Builder globalConfigBuilder;
 
     /**
      * 包配置 Builder
      */
-    private final PackageConfig.Builder packageConfigBuilder;
+    private final PackageConfiguration.Builder packageConfigBuilder;
 
     /**
      * 策略配置 Builder
@@ -50,8 +50,8 @@ public final class FastAutoGenerator {
 
     private FastAutoGenerator(DataSourceConfig.Builder dataSourceConfigBuilder) {
         this.dataSourceConfigBuilder = dataSourceConfigBuilder;
-        this.globalConfigBuilder = new GlobalConfig.Builder();
-        this.packageConfigBuilder = new PackageConfig.Builder();
+        this.globalConfigBuilder = new ProjectConfiguration.Builder();
+        this.packageConfigBuilder = new PackageConfiguration.Builder();
         this.strategyConfigBuilder = new StrategyConfig.Builder();
         this.injectionConfigBuilder = new InjectionConfig.Builder();
         this.templateConfigBuilder = new TemplateConfiguration.Builder();
@@ -108,12 +108,12 @@ public final class FastAutoGenerator {
      * @param consumer 自定义全局配置
      * @return FastAutoGenerator
      */
-    public FastAutoGenerator globalConfig(Consumer<GlobalConfig.Builder> consumer) {
+    public FastAutoGenerator globalConfig(Consumer<ProjectConfiguration.Builder> consumer) {
         consumer.accept(this.globalConfigBuilder);
         return this;
     }
 
-    public FastAutoGenerator globalConfig(BiConsumer<Function<String, String>, GlobalConfig.Builder> biConsumer) {
+    public FastAutoGenerator globalConfig(BiConsumer<Function<String, String>, ProjectConfiguration.Builder> biConsumer) {
         biConsumer.accept(this::scannerNext, this.globalConfigBuilder);
         return this;
     }
@@ -124,12 +124,12 @@ public final class FastAutoGenerator {
      * @param consumer 自定义包配置
      * @return FastAutoGenerator
      */
-    public FastAutoGenerator packageConfig(Consumer<PackageConfig.Builder> consumer) {
+    public FastAutoGenerator packageConfig(Consumer<PackageConfiguration.Builder> consumer) {
         consumer.accept(this.packageConfigBuilder);
         return this;
     }
 
-    public FastAutoGenerator packageConfig(BiConsumer<Function<String, String>, PackageConfig.Builder> biConsumer) {
+    public FastAutoGenerator packageConfig(BiConsumer<Function<String, String>, PackageConfiguration.Builder> biConsumer) {
         biConsumer.accept(this::scannerNext, this.packageConfigBuilder);
         return this;
     }

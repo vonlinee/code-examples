@@ -1,5 +1,6 @@
 package io.devpl.tookit.fxui.model;
 
+import io.devpl.codegen.mbpg.config.Author;
 import io.devpl.tookit.fxui.controller.mbg.ProjectLayout;
 import lombok.Data;
 
@@ -59,7 +60,7 @@ public class ProjectConfiguration {
     /**
      * 作者信息
      */
-    private List<AuthorInfo> authors;
+    private List<Author> authors;
 
     /**
      * 项目结构

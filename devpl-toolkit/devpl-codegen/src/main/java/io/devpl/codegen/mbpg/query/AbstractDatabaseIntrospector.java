@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg.query;
 
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
-import io.devpl.codegen.mbpg.config.GlobalConfig;
+import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.Context;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
@@ -33,7 +33,7 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
 
     protected final StrategyConfig strategyConfig;
 
-    protected final GlobalConfig globalConfig;
+    protected final ProjectConfiguration globalConfig;
 
     protected final DbQueryDecorator dbQuery;
 

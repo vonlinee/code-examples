@@ -15,7 +15,7 @@
  */
 package io.devpl.codegen.mbpg.config.converts;
 
-import io.devpl.codegen.mbpg.config.GlobalConfig;
+import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.DataType;
@@ -52,7 +52,7 @@ public class DmTypeConvert implements ITypeConvert {
      * @inheritDoc
      */
     @Override
-    public DataType processTypeConvert(GlobalConfig config, String fieldType) {
+    public DataType processTypeConvert(ProjectConfiguration config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(containsAny("char", "text").then(JavaType.STRING))
             .test(contains("number").then(DmTypeConvert::toNumberType))

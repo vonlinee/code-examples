@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * 包相关的配置项
  */
-public class PackageConfig {
+public class PackageConfiguration {
 
     /**
      * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
@@ -157,10 +157,10 @@ public class PackageConfig {
      */
     public static class Builder {
 
-        private final PackageConfig packageConfig;
+        private final PackageConfiguration packageConfig;
 
         public Builder() {
-            this.packageConfig = new PackageConfig();
+            this.packageConfig = new PackageConfiguration();
         }
 
         public Builder(String parent, String moduleName) {
@@ -290,7 +290,7 @@ public class PackageConfig {
          *
          * @return 包配置对象
          */
-        public PackageConfig build() {
+        public PackageConfiguration build() {
             return this.packageConfig;
         }
     }

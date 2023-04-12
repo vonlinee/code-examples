@@ -1,12 +1,12 @@
 package io.devpl.codegen.mbpg.config.po;
 
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
-import io.devpl.codegen.mbpg.config.GlobalConfig;
+import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.IKeyWordsHandler;
 import io.devpl.codegen.mbpg.config.Context;
 import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.mbpg.config.rules.DataType;
-import io.devpl.codegen.mbpg.config.rules.NamingStrategyEnum;
+import io.devpl.codegen.mbpg.config.rules.NamingStrategy;
 import io.devpl.codegen.mbpg.fill.Column;
 import io.devpl.codegen.mbpg.fill.Property;
 import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
@@ -35,11 +35,13 @@ public class TableField {
     private String fill;
     /**
      * 是否关键字
+     *
      * @since 3.3.2
      */
     private boolean keyWords;
     /**
      * 数据库字段（关键字含转义符号）
+     *
      * @since 3.3.2
      */
     private String columnName;
@@ -50,6 +52,7 @@ public class TableField {
 
     /**
      * 字段元数据信息
+     *
      * @since 3.5.0
      */
     private MetaInfo metaInfo;
@@ -58,10 +61,11 @@ public class TableField {
 
     private final DataSourceConfig dataSourceConfig;
 
-    private final GlobalConfig globalConfig;
+    private final ProjectConfiguration globalConfig;
 
     /**
      * 构造方法
+     *
      * @param configBuilder 配置构建
      * @param name          数据库字段名称
      * @since 3.5.0
@@ -76,6 +80,7 @@ public class TableField {
 
     /**
      * 设置属性名称
+     *
      * @param propertyName 属性名
      * @param columnType   字段类型
      * @return this
@@ -89,11 +94,11 @@ public class TableField {
             return this;
         }
         // 下划线转驼峰策略
-        if (NamingStrategyEnum.UNDERLINE_TO_CAMEL.equals(this.entity.getColumnNaming())) {
-            this.convert = !propertyName.equalsIgnoreCase(NamingStrategyEnum.underlineToCamel(this.columnName));
+        if (NamingStrategy.UNDERLINE_TO_CAMEL.equals(this.entity.getColumnNaming())) {
+            this.convert = !propertyName.equalsIgnoreCase(NamingStrategy.underlineToCamel(this.columnName));
         }
         // 原样输出策略
-        if (NamingStrategyEnum.NO_CHANGE.equals(this.entity.getColumnNaming())) {
+        if (NamingStrategy.NO_CHANGE.equals(this.entity.getColumnNaming())) {
             this.convert = !propertyName.equalsIgnoreCase(this.columnName);
         }
         if (entity.isTableFieldAnnotationEnable()) {
@@ -131,6 +136,7 @@ public class TableField {
 
     /**
      * 获取注解字段名称
+     *
      * @return 字段
      * @since 3.3.2
      */
@@ -145,6 +151,7 @@ public class TableField {
 
     /**
      * 是否为乐观锁字段
+     *
      * @return 是否为乐观锁字段
      * @since 3.5.0
      */
@@ -156,6 +163,7 @@ public class TableField {
 
     /**
      * 是否为逻辑删除字段
+     *
      * @return 是否为逻辑删除字段
      * @since 3.5.0
      */
@@ -167,6 +175,7 @@ public class TableField {
 
     /**
      * 设置主键
+     *
      * @param autoIncrement 自增标识
      * @return this
      * @since 3.5.0
@@ -241,15 +250,9 @@ public class TableField {
 
     public String getFill() {
         if (StringUtils.isBlank(fill)) {
-            entity
-                    .getTableFillList()
-                    .stream()
+            entity.getTableFillList().stream()
                     // 忽略大写字段问题
-                    .filter(tf -> tf instanceof Column && tf
-                            .getName()
-                            .equalsIgnoreCase(name) || tf instanceof Property && tf.getName().equals(propertyName))
-                    .findFirst()
-                    .ifPresent(tf -> this.fill = tf.getFieldFill().name());
+                    .filter(tf -> tf instanceof Column && tf.getName().equalsIgnoreCase(name) || tf instanceof Property && tf.getName().equals(propertyName)).findFirst().ifPresent(tf -> this.fill = tf.getFieldFill().name());
         }
         return fill;
     }
@@ -276,6 +279,7 @@ public class TableField {
 
     /**
      * 元数据信息
+     *
      * @author nieqiurong 2021/2/8
      * @since 3.5.0
      */

@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.type;
 
-import io.devpl.codegen.mbpg.config.GlobalConfig;
+import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 import org.jetbrains.annotations.NotNull;
@@ -18,5 +18,5 @@ public interface ITypeConvertHandler {
      * @return 子类类型
      */
     @NotNull
-    DataType convert(GlobalConfig globalConfig, TypeRegistry typeRegistry, TableField.MetaInfo metaInfo);
+    DataType convert(ProjectConfiguration globalConfig, TypeRegistry typeRegistry, TableField.MetaInfo metaInfo);
 }

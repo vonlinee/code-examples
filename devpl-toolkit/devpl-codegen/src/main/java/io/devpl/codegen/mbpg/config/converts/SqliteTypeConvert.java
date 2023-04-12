@@ -15,7 +15,7 @@
  */
 package io.devpl.codegen.mbpg.config.converts;
 
-import io.devpl.codegen.mbpg.config.GlobalConfig;
+import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.DataType;
@@ -31,10 +31,10 @@ public class SqliteTypeConvert implements ITypeConvert {
 
     /**
      * @inheritDoc
-     * @see MySqlTypeConvert#toDateType(GlobalConfig, String)
+     * @see MySqlTypeConvert#toDateType(ProjectConfiguration, String)
      */
     @Override
-    public DataType processTypeConvert(GlobalConfig config, String fieldType) {
+    public DataType processTypeConvert(ProjectConfiguration config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.contains("bigint").then(JavaType.LONG))
             .test(TypeConverts.containsAny("tinyint(1)", "boolean").then(JavaType.BOOLEAN))

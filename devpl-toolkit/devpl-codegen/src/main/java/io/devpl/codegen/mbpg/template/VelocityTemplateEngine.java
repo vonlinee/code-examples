@@ -1,18 +1,13 @@
 package io.devpl.codegen.mbpg.template;
 
-import io.devpl.codegen.mbpg.config.ConstVal;
 import io.devpl.codegen.mbpg.config.Context;
-import io.devpl.codegen.mbpg.util.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
@@ -40,16 +35,14 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public void write(Map<String, Object> objectMap, String templatePath, File outputFile) throws Exception {
-        if (StringUtils.isEmpty(templatePath)) {
-            return;
+    public void write(Map<String, Object> templateParamMap, String template, Writer writer) throws IOException {
+        // 加载模板
+        Template vt = velocityEngine.getTemplate(template, StandardCharsets.UTF_8.name());
+        if (writer instanceof BufferedWriter) {
+            vt.merge(new VelocityContext(templateParamMap), writer);
+        } else {
+            vt.merge(new VelocityContext(templateParamMap), new BufferedWriter(writer));
         }
-        Template template = velocityEngine.getTemplate(templatePath, ConstVal.UTF8);
-        FileOutputStream fos = new FileOutputStream(outputFile);
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos, ConstVal.UTF8));
-        template.merge(new VelocityContext(objectMap), writer);
-        writer.close();
-        log.debug("模板:" + templatePath + ";  文件:" + outputFile);
     }
 
     @Override

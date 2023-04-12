@@ -15,7 +15,7 @@
  */
 package io.devpl.codegen.mbpg.config.converts;
 
-import io.devpl.codegen.mbpg.config.GlobalConfig;
+import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
@@ -33,7 +33,7 @@ public class DB2TypeConvert implements ITypeConvert {
      * @inheritDoc
      */
     @Override
-    public DataType processTypeConvert(GlobalConfig config, String fieldType) {
+    public DataType processTypeConvert(ProjectConfiguration config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.containsAny("char", "text", "json", "enum").then(JavaType.STRING))
             .test(TypeConverts.contains("bigint").then(JavaType.LONG))

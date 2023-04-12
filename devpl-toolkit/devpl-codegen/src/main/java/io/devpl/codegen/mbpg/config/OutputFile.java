@@ -12,7 +12,9 @@ public enum OutputFile implements TypeEnum<String, OutputFile> {
     XML("Xml", ""),
     CONTROLLER("Controller", ""),
     PARENT("Parent", ""),
-    CUSTOM("Custom", ""); // 自定义文件生成
+
+    // 自定义文件生成，需要指定模板
+    CUSTOM("Custom", "");
 
     private final String type;
     private final String typeName;
@@ -32,7 +34,6 @@ public enum OutputFile implements TypeEnum<String, OutputFile> {
         this.typeName = typeName;
         this.template = template;
     }
-
 
     @Override
     public String getType() {

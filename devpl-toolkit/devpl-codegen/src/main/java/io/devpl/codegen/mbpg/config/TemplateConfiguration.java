@@ -2,8 +2,6 @@ package io.devpl.codegen.mbpg.config;
 
 import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 模板配置项
@@ -123,16 +121,6 @@ public class TemplateConfiguration {
             }
         }
         return this;
-    }
-
-    /**
-     * 禁用全部模板
-     *
-     * @return this
-     * @since 3.5.0
-     */
-    public TemplateConfiguration disable() {
-        return disable(TemplateType.values());
     }
 
     public String getService() {

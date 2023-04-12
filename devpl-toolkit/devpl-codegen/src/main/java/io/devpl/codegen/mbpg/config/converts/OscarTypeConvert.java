@@ -15,7 +15,7 @@
  */
 package io.devpl.codegen.mbpg.config.converts;
 
-import io.devpl.codegen.mbpg.config.GlobalConfig;
+import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.DateTimeType;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
@@ -36,7 +36,7 @@ public class OscarTypeConvert implements ITypeConvert {
      * @return 返回对应的字段类型
      */
     @Override
-    public DataType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
+    public DataType processTypeConvert(ProjectConfiguration globalConfig, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts
                     .containsAny("CHARACTER", "char", "varchar", "text", "character varying").then(JavaType.STRING))
@@ -60,7 +60,7 @@ public class OscarTypeConvert implements ITypeConvert {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    private DataType toDateType(GlobalConfig config, String type) {
+    private DataType toDateType(ProjectConfiguration config, String type) {
         DateTimeType dateType = config.getDateType();
         if (dateType == DateTimeType.SQL_PACK) {
             switch (type) {

@@ -2,6 +2,7 @@ package io.devpl.codegen.sql;
 
 import com.alibaba.druid.sql.ast.SQLDataType;
 import com.alibaba.druid.sql.ast.statement.SQLColumnDefinition;
+import io.devpl.codegen.mbpg.config.rules.SqlDataType;
 import lombok.Data;
 
 /**

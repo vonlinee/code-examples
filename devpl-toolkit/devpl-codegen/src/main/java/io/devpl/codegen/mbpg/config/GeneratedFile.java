@@ -1,4 +1,4 @@
-package io.devpl.codegen.mbpg.core;
+package io.devpl.codegen.mbpg.config;
 
 import java.nio.charset.StandardCharsets;
 
@@ -47,5 +47,14 @@ public abstract class GeneratedFile {
      */
     public String getFileEncoding() {
         return StandardCharsets.UTF_8.name();
+    }
+
+    /**
+     * 获取该文件应该生成的绝对路径
+     *
+     * @return
+     */
+    public String getAbsolutePath() {
+        return path;
     }
 }

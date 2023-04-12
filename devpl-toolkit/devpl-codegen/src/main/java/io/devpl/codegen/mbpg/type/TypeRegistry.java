@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.type;
 
-import io.devpl.codegen.mbpg.config.GlobalConfig;
+import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.po.TableField;
 import io.devpl.codegen.mbpg.config.rules.DateTimeType;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
@@ -15,11 +15,11 @@ import java.util.Map;
  */
 public class TypeRegistry {
 
-    private final GlobalConfig globalConfig;
+    private final ProjectConfiguration globalConfig;
 
     private final Map<Integer, DataType> typeMap = new HashMap<>();
 
-    public TypeRegistry(GlobalConfig globalConfig) {
+    public TypeRegistry(ProjectConfiguration globalConfig) {
         this.globalConfig = globalConfig;
         // byte[]
         typeMap.put(Types.BINARY, JavaType.BYTE_ARRAY);

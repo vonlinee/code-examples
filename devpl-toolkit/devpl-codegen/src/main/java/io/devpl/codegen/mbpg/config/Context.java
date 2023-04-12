@@ -43,7 +43,7 @@ public class Context extends AbstractContext {
     /**
      * 全局配置信息
      */
-    private GlobalConfig globalConfig;
+    private ProjectConfiguration globalConfig;
 
     /**
      * 注入配置信息
@@ -58,7 +58,7 @@ public class Context extends AbstractContext {
     /**
      * 包配置信息
      */
-    private final PackageConfig packageConfig;
+    private final PackageConfiguration packageConfig;
 
     /**
      * 数据库配置信息
@@ -75,37 +75,37 @@ public class Context extends AbstractContext {
     /**
      * 在构造器中处理配置
      *
-     * @param packageConfig    包配置
-     * @param dataSourceConfig 数据源配置
-     * @param strategyConfig   表配置
+     * @param pkc    包配置
+     * @param dsc 数据源配置
+     * @param sc   表配置
      * @param tc               模板配置
-     * @param globalConfig     全局配置
+     * @param pc     全局配置
      */
-    public Context(PackageConfig packageConfig, DataSourceConfig dataSourceConfig, StrategyConfig strategyConfig, TemplateConfiguration tc, GlobalConfig globalConfig, InjectionConfig injectionConfig) {
-        this.dataSourceConfig = dataSourceConfig;
-        this.strategyConfig = Objects.requireNonNullElse(strategyConfig, new StrategyConfig());
-        this.globalConfig = Objects.requireNonNullElse(globalConfig, new GlobalConfig());
+    public Context(PackageConfiguration pkc, DataSourceConfig dsc, StrategyConfig sc, TemplateConfiguration tc, ProjectConfiguration pc, InjectionConfig ic) {
+        this.dataSourceConfig = dsc;
+        this.strategyConfig = Objects.requireNonNullElse(sc, new StrategyConfig());
+        this.globalConfig = Objects.requireNonNullElse(pc, new ProjectConfiguration());
         this.templateConfig = Objects.requireNonNullElse(tc, new TemplateConfiguration());
-        this.packageConfig = Objects.requireNonNullElse(packageConfig, new PackageConfig());
-        this.injectionConfig = Objects.requireNonNullElse(injectionConfig, new InjectionConfig());
+        this.packageConfig = Objects.requireNonNullElse(pkc, new PackageConfiguration());
+        this.injectionConfig = Objects.requireNonNullElse(ic, new InjectionConfig());
 
-        final String outputDir = globalConfig.getOutputDir();
+        final String outputDir = pc.getOutputDir();
         // 设置默认输出路径
-        putPathInfo(templateConfig.getEntityTemplatePath(globalConfig.isKotlin()), OutputFile.ENTITY, outputDir);
+        putPathInfo(templateConfig.getEntityTemplatePath(pc.isKotlin()), OutputFile.ENTITY, outputDir);
         putPathInfo(templateConfig.getMapperTemplatePath(), OutputFile.MAPPER, outputDir);
         putPathInfo(templateConfig.getXml(), OutputFile.XML, outputDir);
         putPathInfo(templateConfig.getService(), OutputFile.SERVICE, outputDir);
         putPathInfo(templateConfig.getServiceImpl(), OutputFile.SERVICE_IMPL, outputDir);
         putPathInfo(templateConfig.getController(), OutputFile.CONTROLLER, outputDir);
-        pathInfo.putIfAbsent(OutputFile.PARENT, joinPath(outputDir, packageConfig.getPackageInfo(ConstVal.PARENT)));
+        pathInfo.putIfAbsent(OutputFile.PARENT, joinPath(outputDir, pkc.getPackageInfo(ConstVal.PARENT)));
         // 如果有配置则覆盖自定义路径
-        Map<OutputFile, String> pathInfo = packageConfig.getPathInfo();
+        Map<OutputFile, String> pathInfo = pkc.getPathInfo();
         if (pathInfo != null && !pathInfo.isEmpty()) {
             this.pathInfo.putAll(pathInfo);
         }
 
         // 数据库信息提取
-        Class<? extends DatabaseIntrospector> databaseQueryClass = dataSourceConfig.getDatabaseQueryClass();
+        Class<? extends DatabaseIntrospector> databaseQueryClass = dsc.getDatabaseQueryClass();
         try {
             Constructor<? extends DatabaseIntrospector> declaredConstructor = databaseQueryClass.getDeclaredConstructor(this.getClass());
             this.databaseIntrospector = declaredConstructor.newInstance(this);
@@ -155,7 +155,7 @@ public class Context extends AbstractContext {
         return this;
     }
 
-    public Context setGlobalConfig(GlobalConfig globalConfig) {
+    public Context setGlobalConfig(ProjectConfiguration globalConfig) {
         this.globalConfig = globalConfig;
         return this;
     }
@@ -181,7 +181,7 @@ public class Context extends AbstractContext {
         return strategyConfig;
     }
 
-    public GlobalConfig getGlobalConfig() {
+    public ProjectConfiguration getGlobalConfig() {
         return globalConfig;
     }
 
@@ -189,7 +189,7 @@ public class Context extends AbstractContext {
         return injectionConfig;
     }
 
-    public PackageConfig getPackageConfig() {
+    public PackageConfiguration getPackageConfig() {
         return packageConfig;
     }
 
