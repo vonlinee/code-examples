@@ -27,6 +27,4 @@ public class TypeInfo {
         typeInfo.setFullName(typeDeclaration.getFullyQualifiedName().orElse(""));
         return typeInfo;
     }
-    
-    
 }

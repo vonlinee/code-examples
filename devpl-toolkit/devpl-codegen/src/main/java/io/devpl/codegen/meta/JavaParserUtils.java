@@ -24,7 +24,6 @@ public class JavaParserUtils {
 
     /**
      * 解析工程下的所有Java文件
-     *
      * @param path 工程根目录
      */
     public static void parseProject(String path) {
@@ -50,6 +49,28 @@ public class JavaParserUtils {
                 e.printStackTrace();
             }
         });
+    }
+
+    public static <T> T parse(File file, CompilationUnitVisitor<T> visitor) {
+        final ParseResult<CompilationUnit> cuResult = parseResult(file);
+        if (cuResult.isSuccessful()) {
+            final Optional<CompilationUnit> result = cuResult.getResult();
+            if (result.isPresent()) {
+                return visitor.visit(result.get());
+            }
+        }
+        return null;
+    }
+
+    public static ParseResult<CompilationUnit> parseResult(File file) {
+        JavaParser javaParser = new JavaParser();
+        ParseResult<CompilationUnit> result = null;
+        try {
+            result = javaParser.parse(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public static ParseResult<CompilationUnit> parseFile(File file) {
@@ -124,7 +145,6 @@ public class JavaParserUtils {
 
     /**
      * 处理类型,方法,成员
-     *
      * @param node
      */
     public static void processNode(Node node) {

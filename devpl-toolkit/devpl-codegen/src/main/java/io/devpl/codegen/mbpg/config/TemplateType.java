@@ -3,7 +3,7 @@ package io.devpl.codegen.mbpg.config;
 /**
  * 模板类型
  */
-public enum  TemplateType {
+public enum TemplateType {
 
     ENTITY,
     SERVICE,

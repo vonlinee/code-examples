@@ -1,4 +1,4 @@
-package io.devpl.codegen.mbpg.config;
+package io.devpl.codegen.api;
 
 import java.nio.charset.StandardCharsets;
 

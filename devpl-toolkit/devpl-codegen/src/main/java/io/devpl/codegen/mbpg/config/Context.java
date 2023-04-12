@@ -91,7 +91,7 @@ public class Context extends AbstractContext {
 
         final String outputDir = pc.getOutputDir();
         // 设置默认输出路径
-        putPathInfo(templateConfig.getEntityTemplatePath(pc.isKotlin()), OutputFile.ENTITY, outputDir);
+        putPathInfo(templateConfig.getEntityTemplatePath(pc.isKotlin()), OutputFile.ENTITY_KOTLIN, outputDir);
         putPathInfo(templateConfig.getMapperTemplatePath(), OutputFile.MAPPER, outputDir);
         putPathInfo(templateConfig.getXml(), OutputFile.XML, outputDir);
         putPathInfo(templateConfig.getService(), OutputFile.SERVICE, outputDir);

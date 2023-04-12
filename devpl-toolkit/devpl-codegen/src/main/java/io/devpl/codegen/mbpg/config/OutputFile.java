@@ -5,7 +5,7 @@ package io.devpl.codegen.mbpg.config;
  */
 public enum OutputFile implements TypeEnum<String, OutputFile> {
 
-    ENTITY("Entity", ""),
+    ENTITY_KOTLIN("Entity_Kotlin", "", ConstVal.TEMPLATE_ENTITY_KT),
     SERVICE("Service", ""),
     SERVICE_IMPL("ServiceImpl", ""),
     MAPPER("Mapper", ""),

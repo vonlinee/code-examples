@@ -14,8 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -70,7 +68,7 @@ public abstract class AbstractTemplateEngine {
      */
     protected void outputEntity(TableInfo tableInfo, Map<String, Object> objectMap) {
         String entityName = tableInfo.getEntityName();
-        String entityPath = getPathInfo(OutputFile.ENTITY);
+        String entityPath = getPathInfo(OutputFile.ENTITY_KOTLIN);
         if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
             Context config = getContext();
             TemplateConfiguration templateConfig = config.getTemplateConfiguration();

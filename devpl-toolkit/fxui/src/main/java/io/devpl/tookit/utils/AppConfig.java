@@ -1,28 +1,42 @@
 package io.devpl.tookit.utils;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import io.devpl.tookit.fxui.model.ConnectionConfig;
 import io.devpl.tookit.fxui.model.ProjectConfiguration;
 import io.devpl.tookit.utils.json.JSONUtils;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 本应用所有的数据库操作都在此
  */
 public class AppConfig {
 
-    // static final String URL = "jdbc:h2:~/devpl";
-    // static final String USERNAME = "sa";
-
     static final String URL = "jdbc:mysql://localhost:3306/devpl?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8";
 
     static final String USERNAME = "root";
     static final String PASSWORD = "123456";
+
+    public static JdbcTemplate initJdbcTemplate() {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        DruidDataSource dds = new DruidDataSource();
+        dds.setUrl("jdbc:sqlite::resource:db/sqlite.db");
+        dds.setDriverClassName("org.sqlite.JDBC");
+        jdbcTemplate.setDataSource(dds);
+        return jdbcTemplate;
+    }
+
+    public static void main(String[] args) {
+        final JdbcTemplate jdbcTemplate = initJdbcTemplate();
+
+        final List<Map<String, Object>> map = jdbcTemplate.query("select 1", new ColumnMapRowMapper());
+
+        System.out.println(map);
+    }
 
     public static Connection getConnection() throws Exception {
         return DBUtils.getConnection(URL, USERNAME, PASSWORD);

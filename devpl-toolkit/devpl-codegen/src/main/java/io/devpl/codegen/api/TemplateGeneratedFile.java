@@ -1,8 +1,7 @@
-package io.devpl.codegen.mbpg.config;
+package io.devpl.codegen.api;
 
-import io.devpl.codegen.mbpg.template.TemplateArguments;
 import io.devpl.codegen.mbpg.template.Template;
-import io.devpl.codegen.mbpg.util.FileUtils;
+import io.devpl.codegen.mbpg.template.TemplateArguments;
 
 import java.io.IOException;
 import java.io.StringWriter;

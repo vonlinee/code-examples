@@ -76,7 +76,7 @@ public class MyBatisPlusGenerator {
                     Map<OutputFile, String> pathInfoMap = new HashMap<>();
                     pathInfoMap.put(OutputFile.CONTROLLER, outputRootDir + parentFolder + "/controller");
                     pathInfoMap.put(OutputFile.XML, outputRootDir + parentFolder + "/mapping");
-                    pathInfoMap.put(OutputFile.ENTITY, outputRootDir + parentFolder + "/entity");
+                    pathInfoMap.put(OutputFile.ENTITY_KOTLIN, outputRootDir + parentFolder + "/entity");
                     pathInfoMap.put(OutputFile.SERVICE, outputRootDir + parentFolder + "/service");
                     pathInfoMap.put(OutputFile.SERVICE_IMPL, outputRootDir + parentFolder + "/service/impl");
                     builder.pathInfo(pathInfoMap); // 设置mapperXml生成路径

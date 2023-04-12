@@ -42,6 +42,8 @@ public class TemplateCodeGenerator implements CodeGenerator {
                 // 准备模板
                 List<Template> templates = this.prepareTemplates(context, tableInfo);
 
+                // 确定生成哪些文件
+
                 for (Template template : templates) {
                     template.initialize();
                 }

@@ -258,6 +258,12 @@
             <artifactId>formsfx-core</artifactId>
             <version>11.3.2</version>
         </dependency>
+        <!--Sqlite驱动-->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.8.11.2</version>
+        </dependency>
     </dependencies>
 
     <repositories>
