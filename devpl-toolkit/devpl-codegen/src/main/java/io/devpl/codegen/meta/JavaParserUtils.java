@@ -2,28 +2,42 @@ package io.devpl.codegen.meta;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.ParserCollectionStrategy;
 import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
+import io.devpl.codegen.utils.FieldsData;
+import io.devpl.codegen.utils.JSONUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+/**
+ * https://houbb.github.io/2020/05/29/java-ast-06-comments
+ *
+ * @author wangliang
+ * Created On 2022-12-29 10:11:33
+ */
 public class JavaParserUtils {
 
     /**
      * 解析工程下的所有Java文件
+     *
      * @param path 工程根目录
      */
     public static void parseProject(String path) {
@@ -51,15 +65,24 @@ public class JavaParserUtils {
         });
     }
 
-    public static <T> T parse(File file, CompilationUnitVisitor<T> visitor) {
-        final ParseResult<CompilationUnit> cuResult = parseResult(file);
-        if (cuResult.isSuccessful()) {
-            final Optional<CompilationUnit> result = cuResult.getResult();
-            if (result.isPresent()) {
-                return visitor.visit(result.get());
-            }
+    public static <T> Optional<T> parse(File file, CompilationUnitVisitor<T> visitor) {
+        ParseResult<CompilationUnit> pr = parseResult(file);
+        if (pr.isSuccessful()) {
+            return pr.getResult().map(visitor::visit);
         }
-        return null;
+        return Optional.empty();
+    }
+
+    public static ParseResult<CompilationUnit> parseResult(Reader reader) {
+        return JAVA_PARSER_INSTANCE.parse(reader);
+    }
+
+    public static <T> Optional<T> parse(Reader reader, CompilationUnitVisitor<T> visitor) {
+        ParseResult<CompilationUnit> result = JAVA_PARSER_INSTANCE.parse(reader);
+        if (result.isSuccessful()) {
+            return result.getResult().map(visitor::visit);
+        }
+        return Optional.empty();
     }
 
     public static ParseResult<CompilationUnit> parseResult(File file) {
@@ -145,6 +168,7 @@ public class JavaParserUtils {
 
     /**
      * 处理类型,方法,成员
+     *
      * @param node
      */
     public static void processNode(Node node) {
@@ -178,5 +202,95 @@ public class JavaParserUtils {
 
     private static boolean handleComment(String content) {
         return false;
+    }
+
+
+    private static final JavaParser JAVA_PARSER_INSTANCE;
+
+    static {
+        ParserConfiguration parserConfig = new ParserConfiguration();
+        parserConfig.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_8); // JDK8
+        parserConfig.setCharacterEncoding(StandardCharsets.UTF_8); // 源代码字符编码
+        // 关闭注释分析 默认情况下启用注释分析，禁用将加快解析速度，但在处理单个源文件时速度提升不明显，如果要解析大量文件，建议禁用。
+        parserConfig.setAttributeComments(true);
+        // 设置为孤立注释
+        parserConfig.setDoNotAssignCommentsPrecedingEmptyLines(true);
+        JAVA_PARSER_INSTANCE = new JavaParser(parserConfig);
+    }
+
+    // 打印配置
+    static PrinterConfiguration printerConfiguration;
+
+    static {
+        printerConfiguration = new DefaultPrinterConfiguration();
+        printerConfiguration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.PRINT_COMMENTS, true));
+        printerConfiguration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.PRINT_JAVADOC, true));
+        printerConfiguration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN, true));
+    }
+
+    public static String toString(CompilationUnit compilationUnit) {
+        return compilationUnit.toString(printerConfiguration);
+    }
+
+    public static Name newTypeName(String typeName) {
+        final int i = typeName.lastIndexOf(".");
+        if (i < 0) {
+            return new Name(typeName);
+        }
+        return new Name(new Name(typeName.substring(0, i)), typeName.substring(i + 1));
+    }
+
+    public static void json2ObjectSchema(String jsonStr, String packageName, String className) {
+        final Map<String, Object> map = JSONUtils.toMap(jsonStr);
+        final Name annoJsonAlias = newTypeName("com.fasterxml.jackson.annotation.JsonAlias");
+        CompilationUnit cu = new CompilationUnit();
+        cu.setPackageDeclaration(packageName);
+        cu.addImport(new ImportDeclaration(annoJsonAlias, false, false));
+        ClassOrInterfaceDeclaration book = cu.addClass(className);
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            final String key = entry.getKey();
+            final Object value = entry.getValue();
+            java.lang.reflect.Type fieldType;
+            final Class<?> type = value.getClass();
+            // JSON序列化不会序列化为基本类型，一般都是包装类
+            if (type == Integer.class) {
+                fieldType = Integer.class;
+            } else if (type == String.class) {
+                fieldType = String.class;
+            } else {
+                fieldType = String.class;
+            }
+            ParseResult<ClassOrInterfaceType> result = JAVA_PARSER_INSTANCE.parseClassOrInterfaceType(fieldType.getTypeName());
+
+            result.getResult().ifPresent(data -> {
+                FieldDeclaration field = book.addField(data, key, Modifier.Keyword.PRIVATE);
+                NormalAnnotationExpr annotationExpr = new NormalAnnotationExpr();
+                annotationExpr.setName(annoJsonAlias.getIdentifier());
+
+                // 注意添加的顺序：注释在注解的前面，否则不会打印注释
+                final JavadocComment fieldComment = new JavadocComment(key);
+                field.addOrphanComment(fieldComment);
+
+                final NodeList<MemberValuePair> annoMemberMap = new NodeList<>();
+                final MemberValuePair annoMember = new MemberValuePair();
+                annoMember.setName("value");
+                annoMember.setValue(new StringLiteralExpr(key));
+                annoMemberMap.add(annoMember);
+                annotationExpr.setPairs(annoMemberMap);
+
+                field.addAnnotation(annotationExpr);
+            });
+        }
+        System.out.println(toString(cu));
+    }
+
+    public static List<FieldsData> getFieldsDataList(String filePath) {
+        try (FileInputStream in = new FileInputStream(filePath)) {
+            ParseResult<CompilationUnit> cu = JAVA_PARSER_INSTANCE.parse(in);
+            System.out.println(cu);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

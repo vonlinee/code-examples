@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg.config;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import io.devpl.codegen.mbpg.util.ClassUtils;
+import io.devpl.codegen.utils.ClassUtils;
 import io.devpl.codegen.utils.CollectionUtils;
 
 import java.lang.reflect.Field;

@@ -1,4 +1,4 @@
-package io.devpl.codegen.mbpg.util;
+package io.devpl.codegen.utils;
 
 import io.devpl.sdk.util.StringUtils;
 
@@ -44,10 +44,63 @@ public final class ClassUtils {
         return StringUtils.isBlank(className) ? null : className.substring(className.lastIndexOf(StringPool.DOT) + 1);
     }
 
-    private static final Pattern CLASS_NAME_PATTERN = Pattern.compile("");
+    /**
+     * 开头不能是数字，不能包含.
+     *
+     * @param identifier 类名
+     * @return 是否是合法的Java标识符
+     */
+    public static boolean isValidJavaIdentifier(String identifier) {
+        //确定是否允许将指定字符作为 Java 标识符中的首字符。
+        if (identifier.length() == 0 || !Character.isJavaIdentifierStart(identifier.charAt(0))) {
+            return false;
+        }
+        int len = identifier.length();
+        for (int i = 1; i < len; i++) {
+            char c = identifier.charAt(i);
+            if (c == '.') {
+                return false;
+            }
+            //确定指定字符是否可以是 Java 标识符中首字符以外的部分。
+            if (!Character.isJavaIdentifierPart(identifier.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-    public static boolean isQualifiedClassName(String str) {
-        return false;
+    /**
+     * 不用正则判断
+     * [a-zA-Z]+[0-9a-zA-Z_]*(\.[a-zA-Z]+[0-9a-zA-Z_]*)*\.[a-zA-Z]+[0-9a-zA-Z_]*(\$[a-zA-Z]+[0-9a-zA-Z_]*)*
+     * 不能有空格，不能连续两个.
+     * 支持内部类，不支持lambda
+     * https://blog.csdn.net/zhanglianyu00/article/details/77499295
+     *
+     * @param str 字符串
+     * @return 是否是全限定类名
+     */
+    public static boolean isValidQualifiedClassName(String str) {
+        // 空字符串或者以.开头或结尾
+        if (str == null || str.length() == 0 || str.startsWith(".") || str.endsWith(".")) {
+            return false;
+        }
+        boolean flag = true;
+        char[] chars = str.toCharArray();
+        int curDotIndex = 0;
+        // O(n)
+        for (int i = 1; i < chars.length - 1; i++) {
+            if (chars[i] == '.') {
+                curDotIndex = i;
+                if (chars[i - 1] == '.' || Character.isJavaIdentifierPart(chars[i - 1])) {
+                    return false;
+                }
+                break;
+            } else if (chars[i] == ' ') {
+                // 空格
+                return false;
+            }
+        }
+        return curDotIndex == 0;
     }
 
     /**
@@ -91,8 +144,7 @@ public final class ClassUtils {
      */
     private static final List<String> PROXY_CLASS_NAMES = Arrays.asList("net.sf.cglib.proxy.Factory"
             // cglib
-            , "org.springframework.cglib.proxy.Factory"
-            , "javassist.util.proxy.ProxyObject"
+            , "org.springframework.cglib.proxy.Factory", "javassist.util.proxy.ProxyObject"
             // javassist
             , "org.apache.ibatis.javassist.util.proxy.ProxyObject");
 

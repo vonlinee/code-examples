@@ -21,7 +21,7 @@ import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.function.ConverterFileName;
 import io.devpl.codegen.mbpg.template.TemplateArguments;
-import io.devpl.codegen.mbpg.util.ClassUtils;
+import io.devpl.codegen.utils.ClassUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

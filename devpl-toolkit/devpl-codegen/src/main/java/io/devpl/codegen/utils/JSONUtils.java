@@ -1,4 +1,4 @@
-package io.devpl.codegen.mbpg.util;
+package io.devpl.codegen.utils;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONReader;

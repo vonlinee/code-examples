@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.config.rules;
 
-import io.devpl.codegen.utils.AvaticaUtils;
+import io.devpl.codegen.utils.TypeUtils;
 import io.devpl.codegen.utils.ByteArray;
 
 import java.math.BigDecimal;
@@ -382,7 +382,7 @@ public enum SqlDataType {
      * Returns the boxed type.
      */
     public Class<?> boxedClass() {
-        return AvaticaUtils.box(clazz);
+        return TypeUtils.box(clazz);
     }
 
     /**

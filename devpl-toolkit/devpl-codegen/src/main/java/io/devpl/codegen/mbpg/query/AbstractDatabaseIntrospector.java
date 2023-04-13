@@ -7,7 +7,7 @@ import io.devpl.codegen.mbpg.config.Context;
 import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.querys.DbQueryDecorator;
 import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
-import io.devpl.codegen.mbpg.util.StringPool;
+import io.devpl.codegen.utils.StringPool;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

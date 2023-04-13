@@ -2,7 +2,7 @@ package io.devpl.codegen.mbpg.jdbc.meta;
 
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.jdbc.JdbcType;
-import io.devpl.codegen.mbpg.util.StringPool;
+import io.devpl.codegen.utils.StringPool;
 import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

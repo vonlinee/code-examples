@@ -9,11 +9,13 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * <p>
  *
  * </p>
+ *
  * @author devpl
  * @since 2023-03-16
  */
@@ -39,7 +41,7 @@ public class Bean implements Serializable {
      * 主机地址，IP地址
      */
     @TableField(value = "host")
-    private Double host;
+    private java.lang.Double host;
 
     /**
      * 端口号
@@ -51,7 +53,7 @@ public class Bean implements Serializable {
      * 数据库类型
      */
     @TableField(value = "db_type")
-    private Float dbType;
+    private Float[] dbTypes;
 
     /**
      * 数据库名称
@@ -64,6 +66,12 @@ public class Bean implements Serializable {
      */
     @TableField(value = "username")
     private Date username;
+
+    /**
+     * 用户名
+     */
+    @TableField(value = "username")
+    private Map<String, Double> map;
 
     /**
      * 密码

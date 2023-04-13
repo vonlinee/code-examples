@@ -2,6 +2,7 @@ package io.devpl.codegen.meta;
 
 import java.io.File;
 import java.util.List;
+import java.util.function.Function;
 
 public class Test {
 
@@ -11,8 +12,8 @@ public class Test {
 
         String path = root + Bean.class.getName().replace(".", "/") + ".java";
 
-        List<FieldMetaData> list = JavaParserUtils.parse(new File(path), new ASTFieldParser());
+        JavaParserUtils.parse(new File(path), new ASTFieldParser()).ifPresent(System.out::println);
 
-        System.out.println(list);
+
     }
 }

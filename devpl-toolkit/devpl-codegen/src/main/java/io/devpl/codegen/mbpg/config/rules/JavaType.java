@@ -1,5 +1,8 @@
 package io.devpl.codegen.mbpg.config.rules;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Java实体类字段类型
  * <a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html">...</a>
@@ -16,15 +19,15 @@ public enum JavaType implements DataType {
     BASE_BOOLEAN("boolean", null),
 
     // 包装类型
-    BYTE("Byte", null),
-    SHORT("Short", null),
-    CHARACTER("Character", null),
-    INTEGER("Integer", null),
-    LONG("Long", null),
-    FLOAT("Float", null),
-    DOUBLE("Double", null),
-    BOOLEAN("Boolean", null),
-    STRING("String", null),
+    BYTE("Byte", "java.lang.Byte"),
+    SHORT("Short", "java.lang.Short"),
+    CHARACTER("Character", "java.lang.Character"),
+    INTEGER("Integer", "java.lang.Integer"),
+    LONG("Long", "java.lang.Long"),
+    FLOAT("Float", "java.lang.Float"),
+    DOUBLE("Double", "java.lang.Double"),
+    BOOLEAN("Boolean", "java.lang.Boolean"),
+    STRING("String", "java.lang.String"),
 
     // sql 包下数据类型
     DATE_SQL("Date", "java.sql.Date"),
@@ -43,11 +46,18 @@ public enum JavaType implements DataType {
 
     // 其他杂类
     MAP("Map", "java.util.Map"),
-    BYTE_ARRAY("byte[]", null),
-    OBJECT("Object", null),
+    OBJECT("Object", "java.lang.Object"),
     DATE("Date", "java.util.Date"),
     BIG_INTEGER("BigInteger", "java.math.BigInteger"),
-    BIG_DECIMAL("BigDecimal", "java.math.BigDecimal");
+    BIG_DECIMAL("BigDecimal", "java.math.BigDecimal"),
+
+    // 数组类型
+    OBJECT_ARRAY("Object[]", "java.lang.Object[]"),
+    BYTE_ARRAY("byte[]", null),
+    ANY_ARRAY("*[]", null),
+
+    UNKNOWN(OBJECT),
+    ;
 
     /**
      * 类型
@@ -57,11 +67,16 @@ public enum JavaType implements DataType {
     /**
      * 包路径
      */
-    private final String className;
+    private final String qualifiedName;
 
-    JavaType(final String type, final String pkg) {
+    JavaType(JavaType type) {
+        this.type = type.type;
+        this.qualifiedName = type.qualifiedName;
+    }
+
+    JavaType(final String type, final String qulifiedName) {
         this.type = type;
-        this.className = pkg;
+        this.qualifiedName = qulifiedName;
     }
 
     @Override
@@ -70,7 +85,20 @@ public enum JavaType implements DataType {
     }
 
     @Override
-    public String getQulifiedName() {
-        return className;
+    public String getQualifiedName() {
+        return qualifiedName;
+    }
+
+    public static Map<String, JavaType> typeMap() {
+        HashMap<String, JavaType> map = new HashMap<>();
+        for (JavaType type : values()) {
+            if (type.getType() != null) {
+                map.put(type.getType(), type);
+            }
+            if (type.getQualifiedName() != null) {
+                map.put(type.getQualifiedName(), type);
+            }
+        }
+        return map;
     }
 }

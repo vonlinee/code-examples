@@ -17,5 +17,5 @@ public interface DataType {
      *
      * @return 字段类型完整名
      */
-    String getQulifiedName();
+    String getQualifiedName();
 }

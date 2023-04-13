@@ -76,6 +76,11 @@ public class FieldsManageView extends FxmlView {
         ObservableList<FieldSpec> items = tbvMetaFields.getItems();
     }
 
+    /**
+     * 删除选中的字段
+     *
+     * @param actionEvent 事件
+     */
     @FXML
     public void deleteSelectedFields(ActionEvent actionEvent) {
         CellUtils.removeSelected(tbvMetaFields);
@@ -94,7 +99,8 @@ public class FieldsManageView extends FxmlView {
     enum ImportType {
         JSON,
         SQL,
-        TEXT
+        TEXT,
+        JAVA
     }
 
     @Override
@@ -120,13 +126,13 @@ public class FieldsManageView extends FxmlView {
      * @return
      */
     private Node newTabContentByImportType(ImportType importType) {
-        Node node;
+        Node node = null;
         if (importType == ImportType.SQL) {
             node = ViewLoader.load(SQLImportView.class).getRoot();
         } else if (importType == ImportType.JSON) {
             node = ViewLoader.load(JsonImportView.class).getRoot();
-        } else {
-            return null;
+        } else if (importType == ImportType.JAVA) {
+            node = ViewLoader.load(JavaImportView.class).getRoot();
         }
         return node;
     }

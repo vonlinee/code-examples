@@ -18,9 +18,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Avatica utilities.
+ * type utilities.
  */
-public class AvaticaUtils {
+public class TypeUtils {
 
     private static final Map<Class<?>, Class<?>> BOX;
 
@@ -31,16 +31,11 @@ public class AvaticaUtils {
 
     private static final Set<String> UNIQUE_STRINGS = new HashSet<>();
 
-    private static final ThreadLocal<byte[]> PER_THREAD_BUFFER = new ThreadLocal<byte[]>() {
-        @Override
-        protected byte[] initialValue() {
-            return new byte[4096];
-        }
-    };
+    private static final ThreadLocal<byte[]> PER_THREAD_BUFFER = ThreadLocal.withInitial(() -> new byte[4096]);
 
     private static final int SKIP_BUFFER_SIZE = 4096;
 
-    private AvaticaUtils() {
+    private TypeUtils() {
     }
 
     static {
@@ -184,6 +179,7 @@ public class AvaticaUtils {
      * member called INSTANCE, then calls a public default constructor.
      *
      * <p>If className contains a "#" instead looks for a static field.
+     *
      * @param pluginClass Class (or interface) to instantiate
      * @param className   Name of implementing class
      * @param <T>         Class
@@ -266,6 +262,7 @@ public class AvaticaUtils {
 
     /**
      * Reads the contents of an input stream and returns a byte array.
+     *
      * @param inputStream the input to read from.
      * @return A byte array whose length is equal to the number of bytes contained.
      */
@@ -421,6 +418,7 @@ public class AvaticaUtils {
      * Converts an array of {@code long} values to an array of {@code int}
      * values, truncating values outside the legal range for an {@code int}
      * to {@link Integer#MIN_VALUE} or {@link Integer#MAX_VALUE}.
+     *
      * @param longs An array of {@code long}s
      * @return An array of {@code int}s
      */

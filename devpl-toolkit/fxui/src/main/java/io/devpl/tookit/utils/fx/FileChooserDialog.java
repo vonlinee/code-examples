@@ -18,8 +18,8 @@ public class FileChooserDialog {
 
     static FileChooserDialog instance = new FileChooserDialog();
 
-    public static File showFileOpenDialog(Window ownerWindow) {
-        return instance.fileChooser.showOpenDialog(ownerWindow);
+    public static Optional<File> showFileOpenDialog(Window ownerWindow) {
+        return Optional.ofNullable(instance.fileChooser.showOpenDialog(ownerWindow));
     }
 
     public static File showFileOpenDialog(File initialDirectory, Window ownerWindow) {

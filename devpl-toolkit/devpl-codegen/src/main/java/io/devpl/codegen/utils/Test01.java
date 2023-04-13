@@ -7,12 +7,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * @author 烟花巷子
- * @package com.util
- * @description
- * @date 2022-08-01 09:17:29
- */
 public class Test01 {
 
     public static void main(String[] args) {

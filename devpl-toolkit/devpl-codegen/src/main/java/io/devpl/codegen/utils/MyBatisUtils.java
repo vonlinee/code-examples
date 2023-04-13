@@ -1,4 +1,4 @@
-package io.devpl.codegen.mbpg.util;
+package io.devpl.codegen.utils;
 
 import io.devpl.sdk.lang.Interpolations;
 

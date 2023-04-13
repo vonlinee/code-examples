@@ -220,8 +220,8 @@ public class TableInfo {
         }
         this.fields.forEach(field -> {
             DataType columnType = field.getColumnType();
-            if (null != columnType && null != columnType.getQulifiedName()) {
-                importPackages.add(columnType.getQulifiedName());
+            if (null != columnType && null != columnType.getQualifiedName()) {
+                importPackages.add(columnType.getQualifiedName());
             }
             if (field.isKeyFlag()) {
                 // 主键

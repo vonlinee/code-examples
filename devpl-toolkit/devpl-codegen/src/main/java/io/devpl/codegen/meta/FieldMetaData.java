@@ -1,5 +1,6 @@
 package io.devpl.codegen.meta;
 
+import io.devpl.codegen.mbpg.config.rules.JavaType;
 import lombok.Data;
 
 /**
@@ -19,8 +20,11 @@ public class FieldMetaData {
     private String description;
 
     /**
-     * 用常量表示数据类型
+     * 数据类型名称
+     * 使用字符串来表示任意值，增加灵活性，使用时需解析此值得到相应的类型
+     *
      * @see java.sql.Types
+     * @see JavaType
      */
-    private int dataType; // 数据类型
+    private String dataTypeName;
 }
