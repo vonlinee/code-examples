@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.query;
 
-import io.devpl.codegen.mbpg.config.po.TableInfo;
+import io.devpl.codegen.mbpg.config.po.IntrospectedTable;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ public interface DatabaseIntrospector {
      *
      * @return 表信息
      */
-    List<TableInfo> introspecTables();
+    List<IntrospectedTable> introspecTables();
 }

@@ -18,7 +18,7 @@ package io.devpl.codegen.mbpg.template.impl;
 import io.devpl.codegen.mbpg.config.BaseBuilder;
 import io.devpl.codegen.mbpg.config.ConstVal;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.mbpg.config.po.TableInfo;
+import io.devpl.codegen.mbpg.config.po.IntrospectedTable;
 import io.devpl.codegen.mbpg.function.ConverterFileName;
 import io.devpl.codegen.mbpg.template.TemplateArguments;
 import io.devpl.codegen.utils.ClassUtils;
@@ -38,9 +38,6 @@ import java.util.Map;
 public class ServiceTemplateArguments extends TemplateArguments {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ServiceTemplateArguments.class);
-
-    private ServiceTemplateArguments() {
-    }
 
     /**
      * 自定义继承的Service类全称，带包名
@@ -99,7 +96,7 @@ public class ServiceTemplateArguments extends TemplateArguments {
 
     @Override
     @NotNull
-    public Map<String, Object> initialize(@NotNull TableInfo tableInfo) {
+    public Map<String, Object> calculateArgumentsMap(@NotNull IntrospectedTable tableInfo) {
         Map<String, Object> data = new HashMap<>();
         data.put("superServiceClassPackage", this.superServiceClass);
         data.put("superServiceClass", ClassUtils.getSimpleName(this.superServiceClass));

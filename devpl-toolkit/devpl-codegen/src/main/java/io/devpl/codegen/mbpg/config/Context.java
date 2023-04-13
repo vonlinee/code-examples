@@ -1,9 +1,13 @@
 package io.devpl.codegen.mbpg.config;
 
-import io.devpl.codegen.mbpg.config.po.TableInfo;
+import io.devpl.codegen.api.GeneratedFile;
+import io.devpl.codegen.api.TemplateGeneratedFile;
+import io.devpl.codegen.mbpg.config.po.IntrospectedTable;
 import io.devpl.codegen.mbpg.query.DatabaseIntrospector;
-import io.devpl.codegen.utils.StringPool;
+import io.devpl.codegen.mbpg.template.impl.MapperTemplateArguments;
+import io.devpl.codegen.mbpg.template.impl.ServiceImplTemplateArguments;
 import io.devpl.codegen.mbpg.util.StringUtils;
+import io.devpl.codegen.utils.StringPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +32,7 @@ public class Context extends AbstractContext {
     /**
      * 数据库表信息
      */
-    private final List<TableInfo> tableInfoList = new ArrayList<>();
+    private final List<IntrospectedTable> tableInfoList = new ArrayList<>();
 
     /**
      * 路径配置信息
@@ -67,19 +71,17 @@ public class Context extends AbstractContext {
 
     /**
      * 数据查询实例
-     *
      * @since 3.5.3
      */
     private final DatabaseIntrospector databaseIntrospector;
 
     /**
      * 在构造器中处理配置
-     *
-     * @param pkc    包配置
+     * @param pkc 包配置
      * @param dsc 数据源配置
-     * @param sc   表配置
-     * @param tc               模板配置
-     * @param pc     全局配置
+     * @param sc  表配置
+     * @param tc  模板配置
+     * @param pc  全局配置
      */
     public Context(PackageConfiguration pkc, DataSourceConfig dsc, StrategyConfig sc, TemplateConfiguration tc, ProjectConfiguration pc, InjectionConfig ic) {
         this.dataSourceConfig = dsc;
@@ -88,21 +90,6 @@ public class Context extends AbstractContext {
         this.templateConfig = Objects.requireNonNullElse(tc, new TemplateConfiguration());
         this.packageConfig = Objects.requireNonNullElse(pkc, new PackageConfiguration());
         this.injectionConfig = Objects.requireNonNullElse(ic, new InjectionConfig());
-
-        final String outputDir = pc.getOutputDir();
-        // 设置默认输出路径
-        putPathInfo(templateConfig.getEntityTemplatePath(pc.isKotlin()), OutputFile.ENTITY_KOTLIN, outputDir);
-        putPathInfo(templateConfig.getMapperTemplatePath(), OutputFile.MAPPER, outputDir);
-        putPathInfo(templateConfig.getXml(), OutputFile.XML, outputDir);
-        putPathInfo(templateConfig.getService(), OutputFile.SERVICE, outputDir);
-        putPathInfo(templateConfig.getServiceImpl(), OutputFile.SERVICE_IMPL, outputDir);
-        putPathInfo(templateConfig.getController(), OutputFile.CONTROLLER, outputDir);
-        pathInfo.putIfAbsent(OutputFile.PARENT, joinPath(outputDir, pkc.getPackageInfo(ConstVal.PARENT)));
-        // 如果有配置则覆盖自定义路径
-        Map<OutputFile, String> pathInfo = pkc.getPathInfo();
-        if (pathInfo != null && !pathInfo.isEmpty()) {
-            this.pathInfo.putAll(pathInfo);
-        }
 
         // 数据库信息提取
         Class<? extends DatabaseIntrospector> databaseQueryClass = dsc.getDatabaseQueryClass();
@@ -116,14 +103,17 @@ public class Context extends AbstractContext {
     }
 
     private void putPathInfo(String template, OutputFile outputFile, String outputDir) {
-        if (StringUtils.isNotBlank(template)) {
-            pathInfo.putIfAbsent(outputFile, joinPath(outputDir, packageConfig.getPackageInfo(outputFile.getType())));
+        if (StringUtils.hasText(template)) {
+            Map<String, String> packageInfoMap = packageConfig.getPackageInfo();
+            String packageName = packageInfoMap.get(outputFile.getType());
+            if (StringUtils.hasText(packageName)) {
+                pathInfo.putIfAbsent(outputFile, joinPath(outputDir, packageName));
+            }
         }
     }
 
     /**
      * 连接路径字符串
-     *
      * @param parentDir   路径常量字符串
      * @param packageName 包名
      * @return 连接后的路径
@@ -141,7 +131,6 @@ public class Context extends AbstractContext {
 
     /**
      * 判断表名是否为正则表名(这表名规范比较随意,只能尽量匹配上特殊符号)
-     *
      * @param tableName 表名
      * @return 是否正则
      * @since 3.5.0
@@ -169,7 +158,7 @@ public class Context extends AbstractContext {
         return templateConfig;
     }
 
-    public List<TableInfo> getTableInfoList() {
+    public List<IntrospectedTable> getTableInfoList() {
         return tableInfoList;
     }
 
@@ -197,10 +186,13 @@ public class Context extends AbstractContext {
         return dataSourceConfig;
     }
 
+    /**
+     * 获取表信息
+     */
     @Override
-    public void prepare() {
+    public void introspectTables() {
         if (tableInfoList.isEmpty()) {
-            List<TableInfo> tableInfos = this.databaseIntrospector.introspecTables();
+            List<IntrospectedTable> tableInfos = this.databaseIntrospector.introspecTables();
             if (!tableInfos.isEmpty()) {
                 this.tableInfoList.addAll(tableInfos);
             }
@@ -209,6 +201,79 @@ public class Context extends AbstractContext {
 
     @Override
     public void refresh() {
+        this.tableInfoList.clear();
+    }
 
+    /**
+     * 当前Context生成哪些文件
+     * @param generatedFiles
+     */
+    public void calculateGeneratedFiles(List<GeneratedFile> generatedFiles) {
+        for (IntrospectedTable tableInfo : tableInfoList) {
+            // 先初始化全局模板参数
+            Map<String, Object> objectMap = new HashMap<>();
+            objectMap.put("config", this);
+            // 包配置信息
+            objectMap.put("package", packageConfig.getPackageInfo());
+            ProjectConfiguration globalConfig = this.getGlobalConfig();
+            objectMap.put("author", globalConfig.getAuthor());
+            objectMap.put("kotlin", globalConfig.isKotlin());
+            objectMap.put("swagger", globalConfig.isSwagger());
+            objectMap.put("springdoc", globalConfig.isSpringdoc());
+            objectMap.put("date", globalConfig.getCommentDate());
+            // 包含代码生成的各项参数
+            StrategyConfig strategyConfig = this.getStrategyConfig();
+            // 启用 schema 处理逻辑
+            String schemaName = "";
+            if (strategyConfig.isEnableSchema()) {
+                // 存在 schemaName 设置拼接 . 组合表名
+                schemaName = this.getDataSourceConfig().getSchemaName();
+                if (StringUtils.hasText(schemaName)) {
+                    schemaName += ".";
+                    tableInfo.setConvert(true);
+                }
+            }
+            objectMap.put("schemaName", schemaName);
+            objectMap.put("table", tableInfo);
+            objectMap.put("entity", tableInfo.getEntityName());
+
+            // 类似于插件的配置项
+            InjectionConfig injectionConfig = this.getInjectionConfig();
+            if (injectionConfig != null) {
+                // 添加自定义属性
+                injectionConfig.beforeOutputFile(tableInfo, objectMap);
+                // 输出自定义文件
+            }
+
+            // Entity
+            TemplateGeneratedFile entityFile = new TemplateGeneratedFile();
+            entityFile.setTemplateArguments(strategyConfig.entity());
+            generatedFiles.add(entityFile);
+
+            // Mapper.java
+            TemplateGeneratedFile mapperJavaFile = new TemplateGeneratedFile();
+            entityFile.setTemplateArguments(new MapperTemplateArguments());
+            generatedFiles.add(mapperJavaFile);
+
+            // Mapper.xml
+            TemplateGeneratedFile mapperXmlFile = new TemplateGeneratedFile();
+            entityFile.setTemplateArguments(strategyConfig.mapper());
+            generatedFiles.add(mapperXmlFile);
+
+            // Service.java
+            TemplateGeneratedFile serviceJavaFile = new TemplateGeneratedFile();
+            entityFile.setTemplateArguments(strategyConfig.service());
+            generatedFiles.add(serviceJavaFile);
+
+            // ServiceImpl.java
+            TemplateGeneratedFile serviceImplJavaFile = new TemplateGeneratedFile();
+            entityFile.setTemplateArguments(new ServiceImplTemplateArguments());
+            generatedFiles.add(serviceImplJavaFile);
+
+            // Controller.java
+            TemplateGeneratedFile controllerJavaFile = new TemplateGeneratedFile();
+            entityFile.setTemplateArguments(strategyConfig.controller());
+            generatedFiles.add(controllerJavaFile);
+        }
     }
 }

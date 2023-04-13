@@ -1,16 +1,15 @@
 package io.devpl.codegen.mbpg.query;
 
-import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.Context;
-import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.mbpg.config.DataSourceConfig;
+import io.devpl.codegen.mbpg.config.po.IntrospectedTable;
 import io.devpl.codegen.mbpg.config.po.TableField;
-import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
+import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.mbpg.type.ITypeConvertHandler;
 import io.devpl.codegen.mbpg.type.TypeRegistry;
 import io.devpl.sdk.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.Map;
 
 /**
  * 元数据查询数据库信息.
- *
  * @author nieqiurong 2022/5/11.
  * @see ITypeConvertHandler 类型转换器(如果默认逻辑不能满足，可实现此接口重写类型转换)
  * <p>
@@ -35,25 +33,25 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
 
     private final TypeRegistry typeRegistry;
 
-    public DefaultDatabaseIntrospector(@NotNull Context context) {
+    public DefaultDatabaseIntrospector(Context context) {
         super(context);
         typeRegistry = new TypeRegistry(context.getGlobalConfig());
     }
 
     @Override
-    public @NotNull List<TableInfo> introspecTables() {
+    public List<IntrospectedTable> introspecTables() {
         boolean isInclude = strategyConfig.getInclude().size() > 0;
         boolean isExclude = strategyConfig.getExclude().size() > 0;
         // 所有的表信息
-        List<TableInfo> tableList = new ArrayList<>();
+        List<IntrospectedTable> tableList = new ArrayList<>();
         List<DatabaseMetaDataWrapper.Table> tables = getTables();
         // 需要反向生成或排除的表信息
-        List<TableInfo> includeTableList = new ArrayList<>();
-        List<TableInfo> excludeTableList = new ArrayList<>();
+        List<IntrospectedTable> includeTableList = new ArrayList<>();
+        List<IntrospectedTable> excludeTableList = new ArrayList<>();
         tables.forEach(table -> {
             String tableName = table.getName();
             if (StringUtils.isNotBlank(tableName)) {
-                TableInfo tableInfo = new TableInfo(this.context, tableName);
+                IntrospectedTable tableInfo = new IntrospectedTable(this.context, tableName);
                 tableInfo.setComment(table.getRemarks());
                 if (isInclude && strategyConfig.matchIncludeTable(tableName)) {
                     includeTableList.add(tableInfo);
@@ -80,7 +78,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
         return databaseMetaDataWrapper.getTables(tableNamePattern, skipView ? new String[]{"TABLE"} : new String[]{"TABLE", "VIEW"});
     }
 
-    protected void convertTableFields(@NotNull TableInfo tableInfo) {
+    protected void convertTableFields(IntrospectedTable tableInfo) {
         String tableName = tableInfo.getName();
         Map<String, DatabaseMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
         EntityTemplateArguments entity = strategyConfig.entity();

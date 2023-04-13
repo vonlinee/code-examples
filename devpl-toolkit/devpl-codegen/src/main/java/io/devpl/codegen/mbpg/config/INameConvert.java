@@ -16,7 +16,7 @@
 package io.devpl.codegen.mbpg.config;
 
 import io.devpl.codegen.mbpg.config.po.TableField;
-import io.devpl.codegen.mbpg.config.po.TableInfo;
+import io.devpl.codegen.mbpg.config.po.IntrospectedTable;
 import io.devpl.codegen.mbpg.config.rules.NamingStrategy;
 import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +38,7 @@ public interface INameConvert {
      * @return
      */
     @NotNull
-    String entityNameConvert(@NotNull TableInfo tableInfo);
+    String entityNameConvert(@NotNull IntrospectedTable tableInfo);
 
     /**
      * 执行属性名称转换
@@ -64,7 +64,7 @@ public interface INameConvert {
         }
 
         @Override
-        public @NotNull String entityNameConvert(@NotNull TableInfo tableInfo) {
+        public @NotNull String entityNameConvert(@NotNull IntrospectedTable tableInfo) {
             return NamingStrategy.capitalFirst(processName(tableInfo.getName(), strategyConfig.entity().getNamingStrategy(), strategyConfig.getTablePrefix(), strategyConfig.getTableSuffix()));
         }
 

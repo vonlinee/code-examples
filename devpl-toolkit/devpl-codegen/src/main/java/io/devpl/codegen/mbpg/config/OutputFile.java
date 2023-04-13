@@ -5,16 +5,16 @@ package io.devpl.codegen.mbpg.config;
  */
 public enum OutputFile implements TypeEnum<String, OutputFile> {
 
-    ENTITY_KOTLIN("Entity_Kotlin", "", ConstVal.TEMPLATE_ENTITY_KT),
-    SERVICE("Service", ""),
-    SERVICE_IMPL("ServiceImpl", ""),
-    MAPPER("Mapper", ""),
-    XML("Xml", ""),
-    CONTROLLER("Controller", ""),
-    PARENT("Parent", ""),
-
+    ENTITY_KOTLIN("Entity", "", "/templates/entity.kt"),
+    ENTITY_JAVA("Entity", "", "/templates/entity.java"),
+    SERVICE("Service", "", "/templates/service.java"),
+    SERVICE_IMPL("ServiceImpl", "", "/templates/serviceImpl.java"),
+    MAPPER("Mapper", "", "/templates/mapper.java"),
+    XML("Xml", "", "/templates/mapper.xml"),
+    CONTROLLER("Controller", "", "/templates/controller.java"),
+    PARENT("Parent", "", null),
     // 自定义文件生成，需要指定模板
-    CUSTOM("Custom", "");
+    CUSTOM("Custom", "", "");
 
     private final String type;
     private final String typeName;
@@ -48,5 +48,9 @@ public enum OutputFile implements TypeEnum<String, OutputFile> {
     @Override
     public OutputFile getEnum() {
         return this;
+    }
+
+    public String getTemplate() {
+        return template;
     }
 }

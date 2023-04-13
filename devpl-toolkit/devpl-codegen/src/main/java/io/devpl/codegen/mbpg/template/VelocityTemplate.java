@@ -22,7 +22,6 @@ public class VelocityTemplate extends Template {
 
     @Override
     public void write(TemplateArguments arguments, Writer writer) throws IOException {
-        Hashtable<String, Object> properties = arguments.getProperties();
-        templateEngine.write(properties, getName(), writer);
+        templateEngine.write(arguments.getProperties(), getName(), writer);
     }
 }

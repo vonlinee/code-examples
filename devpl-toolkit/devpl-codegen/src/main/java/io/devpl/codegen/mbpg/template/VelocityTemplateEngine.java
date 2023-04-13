@@ -46,7 +46,7 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public String templateFilePath(String filePath) {
+    public String getTemplateFilePath(String filePath) {
         if (filePath.contains(DOT_VM)) {
             return filePath;
         }

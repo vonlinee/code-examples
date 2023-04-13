@@ -14,7 +14,7 @@ public class PackageConfiguration {
     /**
      * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
      */
-    private String parent = "com.baomidou";
+    private String parent = "";
 
     /**
      * 父包模块名
@@ -58,7 +58,6 @@ public class PackageConfiguration {
 
     /**
      * 包配置信息
-     *
      * @since 3.5.0
      */
     private final Map<String, String> packageInfo = new HashMap<>();
@@ -76,11 +75,9 @@ public class PackageConfiguration {
 
     /**
      * 连接父子包名
-     *
      * @param subPackage 子包名
      * @return 连接后的包名
      */
-
     public String joinPackage(String subPackage) {
         String parent = getParent();
         return StringUtils.isBlank(parent) ? subPackage : (parent + "." + subPackage);
@@ -88,14 +85,13 @@ public class PackageConfiguration {
 
     /**
      * 获取包配置信息
-     *
      * @return 包配置信息， 返回不可更改的map
      * @since 3.5.0
      */
     public Map<String, String> getPackageInfo() {
         if (packageInfo.isEmpty()) {
             packageInfo.put(ConstVal.MODULE_NAME, this.getModuleName());
-            packageInfo.put(ConstVal.ENTITY, this.joinPackage(this.getEntity()));
+            packageInfo.put(ConstVal.ENTITY, this.joinPackage("entity"));
             packageInfo.put(ConstVal.MAPPER, this.joinPackage(this.getMapper()));
             packageInfo.put(ConstVal.XML, this.joinPackage(this.getXml()));
             packageInfo.put(ConstVal.SERVICE, this.joinPackage(this.getService()));
@@ -108,7 +104,6 @@ public class PackageConfiguration {
 
     /**
      * 获取包配置信息
-     *
      * @param module 模块
      * @return 配置信息
      * @since 3.5.0
@@ -151,7 +146,6 @@ public class PackageConfiguration {
 
     /**
      * 构建者
-     *
      * @author nieqiurong
      * @since 3.5.0
      */
@@ -171,7 +165,6 @@ public class PackageConfiguration {
 
         /**
          * 指定父包名
-         *
          * @param parent 父包名
          * @return this
          */
@@ -182,7 +175,6 @@ public class PackageConfiguration {
 
         /**
          * 指定模块名称
-         *
          * @param moduleName 模块名
          * @return this
          */
@@ -193,7 +185,6 @@ public class PackageConfiguration {
 
         /**
          * 指定实体包名，不指定默认为 entity
-         *
          * @param entity 实体包名
          * @return this
          */
@@ -204,7 +195,6 @@ public class PackageConfiguration {
 
         /**
          * 指定service接口包名
-         *
          * @param service service包名
          * @return this
          */
@@ -215,7 +205,6 @@ public class PackageConfiguration {
 
         /**
          * service实现类包名
-         *
          * @param serviceImpl service实现类包名
          * @return this
          */
@@ -226,7 +215,6 @@ public class PackageConfiguration {
 
         /**
          * 指定mapper接口包名
-         *
          * @param mapper mapper包名
          * @return this
          */
@@ -237,7 +225,6 @@ public class PackageConfiguration {
 
         /**
          * 指定xml包名
-         *
          * @param xml xml包名
          * @return this
          */
@@ -248,7 +235,6 @@ public class PackageConfiguration {
 
         /**
          * 指定控制器包名
-         *
          * @param controller 控制器包名
          * @return this
          */
@@ -259,7 +245,6 @@ public class PackageConfiguration {
 
         /**
          * 路径配置信息
-         *
          * @param pathInfo 路径配置信息
          * @return this
          */
@@ -270,7 +255,6 @@ public class PackageConfiguration {
 
         /**
          * 连接父子包名
-         *
          * @param subPackage 子包名
          * @return 连接后的包名
          */
@@ -287,7 +271,6 @@ public class PackageConfiguration {
          * <p>当设置 {@link #parent(String)},那么entity的配置为 {@link #getParent()}.{@link #getEntity()}</p>
          * <p>当设置 {@link #parent(String)}与{@link #moduleName(String)},那么entity的配置为 {@link #getParent()}.{@link #getModuleName()}.{@link #getEntity()} </p>
          * </p>
-         *
          * @return 包配置对象
          */
         public PackageConfiguration build() {

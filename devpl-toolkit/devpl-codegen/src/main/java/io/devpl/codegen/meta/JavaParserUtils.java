@@ -73,10 +73,6 @@ public class JavaParserUtils {
         return Optional.empty();
     }
 
-    public static ParseResult<CompilationUnit> parseResult(Reader reader) {
-        return JAVA_PARSER_INSTANCE.parse(reader);
-    }
-
     public static <T> Optional<T> parse(Reader reader, CompilationUnitVisitor<T> visitor) {
         ParseResult<CompilationUnit> result = JAVA_PARSER_INSTANCE.parse(reader);
         if (result.isSuccessful()) {

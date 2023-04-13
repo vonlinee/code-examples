@@ -4,7 +4,7 @@ import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.Context;
-import io.devpl.codegen.mbpg.config.po.TableInfo;
+import io.devpl.codegen.mbpg.config.po.IntrospectedTable;
 import io.devpl.codegen.mbpg.config.querys.DbQueryDecorator;
 import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
 import io.devpl.codegen.utils.StringPool;
@@ -58,7 +58,7 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
         return dataSourceConfig;
     }
 
-    protected void filter(List<TableInfo> tableList, List<TableInfo> includeTableList, List<TableInfo> excludeTableList) {
+    protected void filter(List<IntrospectedTable> tableList, List<IntrospectedTable> includeTableList, List<IntrospectedTable> excludeTableList) {
         boolean isInclude = strategyConfig.getInclude().size() > 0;
         boolean isExclude = strategyConfig.getExclude().size() > 0;
         if (isExclude || isInclude) {
@@ -67,7 +67,7 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
                     .filter(s -> !Context.matcherRegTable(s))
                     .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n));
             // 将已经存在的表移除，获取配置中数据库不存在的表
-            for (TableInfo tabInfo : tableList) {
+            for (IntrospectedTable tabInfo : tableList) {
                 if (notExistTables.isEmpty()) {
                     break;
                 }

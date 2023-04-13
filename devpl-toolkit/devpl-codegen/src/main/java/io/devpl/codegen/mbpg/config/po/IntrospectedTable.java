@@ -1,14 +1,13 @@
 package io.devpl.codegen.mbpg.config.po;
 
 import com.baomidou.mybatisplus.annotation.*;
-// import com.baomidou.mybatisplus.extension.activerecord.Model;
+import io.devpl.codegen.mbpg.ProgressCallback;
+import io.devpl.codegen.mbpg.config.Context;
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.mbpg.config.Context;
-import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.mbpg.config.rules.DataType;
+import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.mbpg.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.*;
@@ -16,11 +15,8 @@ import java.util.stream.Collectors;
 
 /**
  * 表信息，关联到当前字段信息
- *
- * @author YangHu, lanjerry
- * @since 2016/8/30
  */
-public class TableInfo {
+public class IntrospectedTable {
 
     /**
      * 策略配置
@@ -109,12 +105,11 @@ public class TableInfo {
 
     /**
      * 构造方法
-     *
      * @param context 配置构建
      * @param name    表名
      * @since 3.5.0
      */
-    public TableInfo(@NotNull Context context, @NotNull String name) {
+    public IntrospectedTable(Context context, String name) {
         this.strategyConfig = context.getStrategyConfig();
         this.globalConfig = context.getGlobalConfig();
         this.entity = context.getStrategyConfig().entity();
@@ -124,7 +119,7 @@ public class TableInfo {
     /**
      * @since 3.5.0
      */
-    protected TableInfo setConvert() {
+    protected IntrospectedTable setConvert() {
         if (strategyConfig.startsWithTablePrefix(name) || entity.isTableFieldAnnotationEnable()) {
             this.convert = true;
         } else {
@@ -141,7 +136,7 @@ public class TableInfo {
      * @param entityName 实体名称
      * @return this
      */
-    public TableInfo setEntityName(@NotNull String entityName) {
+    public IntrospectedTable setEntityName(String entityName) {
         this.entityName = entityName;
         // TODO 先放置在这里
         setConvert();
@@ -150,11 +145,10 @@ public class TableInfo {
 
     /**
      * 添加字段
-     *
      * @param field 字段
      * @since 3.5.0
      */
-    public void addField(@NotNull TableField field) {
+    public void addField(TableField field) {
         if (entity.matchIgnoreColumns(field.getColumnName())) {
             // 忽略字段不在处理
             return;
@@ -170,11 +164,11 @@ public class TableInfo {
      * @return this
      * @since 3.5.0
      */
-    public TableInfo addImportPackages(@NotNull String... pkgs) {
+    public IntrospectedTable addImportPackages(String... pkgs) {
         return addImportPackages(Arrays.asList(pkgs));
     }
 
-    public TableInfo addImportPackages(@NotNull List<String> pkgList) {
+    public IntrospectedTable addImportPackages(List<String> pkgList) {
         importPackages.addAll(pkgList);
         return this;
     }
@@ -192,7 +186,6 @@ public class TableInfo {
 
     /**
      * 导包处理
-     *
      * @since 3.5.0
      */
     public void importPackage() {
@@ -253,7 +246,6 @@ public class TableInfo {
 
     /**
      * 处理表信息(文件名与导包)
-     *
      * @since 3.5.0
      */
     public void processTable() {
@@ -267,18 +259,17 @@ public class TableInfo {
         this.importPackage();
     }
 
-    public TableInfo setComment(String comment) {
+    public IntrospectedTable setComment(String comment) {
         // TODO 暂时挪动到这
         this.comment = this.globalConfig.isSwagger() && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
         return this;
     }
 
-    public TableInfo setHavePrimaryKey(boolean havePrimaryKey) {
+    public IntrospectedTable setHavePrimaryKey(boolean havePrimaryKey) {
         this.havePrimaryKey = havePrimaryKey;
         return this;
     }
 
-    @NotNull
     public Set<String> getImportPackages() {
         return importPackages;
     }
@@ -287,7 +278,7 @@ public class TableInfo {
         return convert;
     }
 
-    public TableInfo setConvert(boolean convert) {
+    public IntrospectedTable setConvert(boolean convert) {
         this.convert = convert;
         return this;
     }
@@ -324,7 +315,6 @@ public class TableInfo {
         return controllerName;
     }
 
-    @NotNull
     public List<TableField> getFields() {
         return fields;
     }
@@ -333,14 +323,13 @@ public class TableInfo {
         return havePrimaryKey;
     }
 
-    @NotNull
     public List<TableField> getCommonFields() {
         return commonFields;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("TableInfo{");
+        final StringBuilder sb = new StringBuilder("IntrospectedTable{");
         sb.append("strategyConfig=").append(strategyConfig);
         sb.append(", globalConfig=").append(globalConfig);
         sb.append(", importPackages=").append(importPackages);
@@ -360,5 +349,13 @@ public class TableInfo {
         sb.append(", entity=").append(entity);
         sb.append('}');
         return sb.toString();
+    }
+
+    /**
+     * 初始化
+     * @param progressCallback
+     */
+    public void calculateGeneratedFiles(ProgressCallback progressCallback) {
+
     }
 }

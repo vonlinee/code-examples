@@ -3,9 +3,9 @@ package io.devpl.codegen.mbpg.query;
 import io.devpl.codegen.mbpg.config.IDbQuery;
 import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.Context;
+import io.devpl.codegen.mbpg.config.po.IntrospectedTable;
 import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.mbpg.config.po.TableField;
-import io.devpl.codegen.mbpg.config.po.TableInfo;
 import io.devpl.codegen.mbpg.config.querys.H2Query;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
@@ -31,20 +31,20 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
 
     @NotNull
     @Override
-    public List<TableInfo> introspecTables() {
+    public List<IntrospectedTable> introspecTables() {
         boolean isInclude = strategyConfig.getInclude().size() > 0;
         boolean isExclude = strategyConfig.getExclude().size() > 0;
         // 所有的表信息
-        List<TableInfo> tableList = new ArrayList<>();
+        List<IntrospectedTable> tableList = new ArrayList<>();
 
         // 需要反向生成或排除的表信息
-        List<TableInfo> includeTableList = new ArrayList<>();
-        List<TableInfo> excludeTableList = new ArrayList<>();
+        List<IntrospectedTable> includeTableList = new ArrayList<>();
+        List<IntrospectedTable> excludeTableList = new ArrayList<>();
         try {
             dbQuery.execute(dbQuery.tablesSql(), result -> {
                 String tableName = result.getStringResult(dbQuery.tableName());
                 if (StringUtils.isNotBlank(tableName)) {
-                    TableInfo tableInfo = new TableInfo(this.context, tableName);
+                    IntrospectedTable tableInfo = new IntrospectedTable(this.context, tableName);
                     String tableComment = result.getTableComment();
                     // 跳过视图
                     if (!(strategyConfig.isSkipView() && tableComment.toUpperCase().contains("VIEW"))) {
@@ -70,7 +70,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
         }
     }
 
-    protected void convertTableFields(@NotNull TableInfo tableInfo) {
+    protected void convertTableFields(@NotNull IntrospectedTable tableInfo) {
         DbType dbType = this.dataSourceConfig.getDbType();
         String tableName = tableInfo.getName();
         try {

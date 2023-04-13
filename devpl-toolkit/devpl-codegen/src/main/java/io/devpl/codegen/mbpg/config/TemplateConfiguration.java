@@ -1,7 +1,9 @@
 package io.devpl.codegen.mbpg.config;
 
-import io.devpl.codegen.mbpg.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 模板配置项
@@ -9,143 +11,36 @@ import org.jetbrains.annotations.NotNull;
 public class TemplateConfiguration {
 
     /**
-     * 模板存放根目录
+     * key: 输出文件类型，不包含自定义文件
+     * value：模板位置，如果该位置无法找到可用的模板，则会使用OutputFile自身的默认模板
      */
-    private String templateLocation;
-
-    /**
-     * 设置实体模板路径
-     */
-    private String entity;
-
-    /**
-     * 设置实体模板路径(kotlin模板)
-     */
-    private String entityKt;
-
-    /**
-     * 设置控制器模板路径
-     */
-    private String controller;
-
-    /**
-     * 设置Mapper模板路径
-     */
-    private String mapper;
-
-    /**
-     * 设置MapperXml模板路径
-     */
-    private String xml;
-
-    /**
-     * 设置Service模板路径
-     */
-    private String service;
-
-    /**
-     * 设置ServiceImpl模板路径
-     */
-    private String serviceImpl;
-
-    /**
-     * 是否禁用实体模板（默认 false）
-     */
-    private boolean disableEntity;
-
-    /**
-     * 不对外爆露
-     */
-    public TemplateConfiguration() {
-        this.entity = ConstVal.TEMPLATE_ENTITY_JAVA;
-        this.entityKt = ConstVal.TEMPLATE_ENTITY_KT;
-        this.controller = ConstVal.TEMPLATE_CONTROLLER;
-        this.mapper = ConstVal.TEMPLATE_MAPPER;
-        this.xml = ConstVal.TEMPLATE_XML;
-        this.service = ConstVal.TEMPLATE_SERVICE;
-        this.serviceImpl = ConstVal.TEMPLATE_SERVICE_IMPL;
-    }
-
-    public boolean isEntityTemplateDisabled() {
-        return disableEntity;
-    }
+    Map<OutputFile, String> templates = new HashMap<>();
 
     /**
      * 获取实体模板路径
-     *
      * @param kotlin 是否kotlin
      * @return 模板路径
      */
     public String getEntityTemplatePath(boolean kotlin) {
-        if (!this.disableEntity) {
-            if (kotlin) {
-                return StringUtils.isBlank(this.entityKt) ? ConstVal.TEMPLATE_ENTITY_KT : this.entityKt;
-            }
-            return StringUtils.isBlank(this.entity) ? ConstVal.TEMPLATE_ENTITY_JAVA : this.entity;
+        OutputFile fileType = kotlin ? OutputFile.ENTITY_KOTLIN : OutputFile.ENTITY_JAVA;
+        String templateLocation = templates.get(fileType);
+        if (templateLocation == null) {
+            templateLocation = fileType.getTemplate();
         }
-        return null;
+        return templateLocation;
     }
 
-    /**
-     * 禁用模板
-     *
-     * @param templateTypes 模板类型
-     */
-    public TemplateConfiguration disable(TemplateType... templateTypes) {
-        if (templateTypes != null) {
-            for (TemplateType templateType : templateTypes) {
-                switch (templateType) {
-                    case ENTITY:
-                        this.entity = null;
-                        this.entityKt = null;
-                        //暂时没其他多的需求,使用一个单独的boolean变量进行支持一下.
-                        this.disableEntity = true;
-                        break;
-                    case CONTROLLER:
-                        this.controller = null;
-                        break;
-                    case MAPPER:
-                        this.mapper = null;
-                        break;
-                    case XML:
-                        this.xml = null;
-                        break;
-                    case SERVICE:
-                        this.service = null;
-                        break;
-                    case SERVICE_IMPL:
-                        this.serviceImpl = null;
-                        break;
-                    default:
-                }
-            }
+    @NotNull
+    public String getTemplate(OutputFile outputFile) {
+        String template = templates.get(outputFile);
+        if (template == null) {
+            template = outputFile.getTemplate();
         }
-        return this;
-    }
-
-    public String getService() {
-        return service;
-    }
-
-    public String getServiceImpl() {
-        return serviceImpl;
-    }
-
-    public String getMapperTemplatePath() {
-        return mapper;
-    }
-
-    public String getXml() {
-        return xml;
-    }
-
-    public String getController() {
-        return controller;
+        return template;
     }
 
     /**
      * 模板路径配置构建者
-     *
      * @author nieqiurong 3.5.0
      */
     public static class Builder {
@@ -160,97 +55,7 @@ public class TemplateConfiguration {
         }
 
         /**
-         * 禁用模板
-         *
-         * @return this
-         */
-        public Builder disable(@NotNull TemplateType... templateTypes) {
-            this.templateConfig.disable(templateTypes);
-            return this;
-        }
-
-        /**
-         * 设置实体模板路径(JAVA)
-         *
-         * @param entityTemplate 实体模板
-         * @return this
-         */
-        public Builder entity(@NotNull String entityTemplate) {
-            this.templateConfig.disableEntity = false;
-            this.templateConfig.entity = entityTemplate;
-            return this;
-        }
-
-        /**
-         * 设置实体模板路径(kotlin)
-         *
-         * @param entityKtTemplate 实体模板
-         * @return this
-         */
-        public Builder entityKt(@NotNull String entityKtTemplate) {
-            this.templateConfig.disableEntity = false;
-            this.templateConfig.entityKt = entityKtTemplate;
-            return this;
-        }
-
-        /**
-         * 设置service模板路径
-         *
-         * @param serviceTemplate service接口模板路径
-         * @return this
-         */
-        public Builder service(@NotNull String serviceTemplate) {
-            this.templateConfig.service = serviceTemplate;
-            return this;
-        }
-
-        /**
-         * 设置serviceImpl模板路径
-         *
-         * @param serviceImplTemplate service实现类模板路径
-         * @return this
-         */
-        public Builder serviceImpl(@NotNull String serviceImplTemplate) {
-            this.templateConfig.serviceImpl = serviceImplTemplate;
-            return this;
-        }
-
-        /**
-         * 设置mapper模板路径
-         *
-         * @param mapperTemplate mapper模板路径
-         * @return this
-         */
-        public Builder mapper(@NotNull String mapperTemplate) {
-            this.templateConfig.mapper = mapperTemplate;
-            return this;
-        }
-
-        /**
-         * 设置mapperXml模板路径
-         *
-         * @param xmlTemplate xml模板路径
-         * @return this
-         */
-        public Builder xml(@NotNull String xmlTemplate) {
-            this.templateConfig.xml = xmlTemplate;
-            return this;
-        }
-
-        /**
-         * 设置控制器模板路径
-         *
-         * @param controllerTemplate 控制器模板路径
-         * @return this
-         */
-        public Builder controller(@NotNull String controllerTemplate) {
-            this.templateConfig.controller = controllerTemplate;
-            return this;
-        }
-
-        /**
          * 构建模板配置对象
-         *
          * @return 模板配置对象
          */
         public TemplateConfiguration build() {

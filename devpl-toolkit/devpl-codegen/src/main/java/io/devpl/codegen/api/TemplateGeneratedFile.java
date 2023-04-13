@@ -16,14 +16,6 @@ public class TemplateGeneratedFile extends GeneratedFile {
     private Template templateFile;
     private TemplateArguments templateArguments;
 
-    public Template getTemplateFile() {
-        return templateFile;
-    }
-
-    public void setTemplateFile(Template templateFile) {
-        this.templateFile = templateFile;
-    }
-
     public TemplateArguments getTemplateArguments() {
         return templateArguments;
     }

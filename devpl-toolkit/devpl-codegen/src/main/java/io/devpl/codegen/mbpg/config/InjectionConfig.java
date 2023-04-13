@@ -15,7 +15,7 @@
  */
 package io.devpl.codegen.mbpg.config;
 
-import io.devpl.codegen.mbpg.config.po.TableInfo;
+import io.devpl.codegen.mbpg.config.po.IntrospectedTable;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class InjectionConfig {
     /**
      * 输出文件之前消费者
      */
-    private BiConsumer<TableInfo, Map<String, Object>> beforeOutputFileBiConsumer;
+    private BiConsumer<IntrospectedTable, Map<String, Object>> beforeOutputFileBiConsumer;
 
     /**
      * 自定义配置 Map 对象
@@ -72,7 +72,7 @@ public class InjectionConfig {
     /**
      * 输出文件前
      */
-    public void beforeOutputFile(TableInfo tableInfo, Map<String, Object> objectMap) {
+    public void beforeOutputFile(IntrospectedTable tableInfo, Map<String, Object> objectMap) {
         if (!customMap.isEmpty()) {
             objectMap.putAll(customMap);
         }
@@ -131,7 +131,7 @@ public class InjectionConfig {
          * @param biConsumer 消费者
          * @return this
          */
-        public Builder beforeOutputFile(@NotNull BiConsumer<TableInfo, Map<String, Object>> biConsumer) {
+        public Builder beforeOutputFile(@NotNull BiConsumer<IntrospectedTable, Map<String, Object>> biConsumer) {
             this.injectionConfig.beforeOutputFileBiConsumer = biConsumer;
             return this;
         }

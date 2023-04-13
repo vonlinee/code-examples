@@ -7,7 +7,7 @@ import io.devpl.codegen.mbpg.config.PropertyHolder;
  */
 public abstract class AbstractContext extends PropertyHolder {
 
-    public abstract void prepare();
+    public abstract void introspectTables();
 
     public abstract void refresh();
 }

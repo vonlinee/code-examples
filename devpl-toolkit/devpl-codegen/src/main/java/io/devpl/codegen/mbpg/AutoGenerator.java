@@ -1,9 +1,8 @@
 package io.devpl.codegen.mbpg;
 
 import io.devpl.codegen.mbpg.config.*;
-import io.devpl.codegen.mbpg.config.Context;
-import io.devpl.codegen.mbpg.template.AbstractTemplateEngine;
 import io.devpl.codegen.mbpg.core.CodeGenerator;
+import io.devpl.codegen.mbpg.template.AbstractTemplateEngine;
 import io.devpl.codegen.mbpg.template.TemplateCodeGenerator;
 import io.devpl.codegen.mbpg.template.VelocityTemplateEngine;
 import org.slf4j.Logger;
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 生成文件
- *
  * @author YangHu, tangguo, hubin
  * @since 2016-08-30
  */
@@ -50,7 +48,6 @@ public class AutoGenerator {
 
     /**
      * 构造方法
-     *
      * @param dataSourceConfig 数据库配置
      * @since 3.5.0
      */
@@ -64,7 +61,6 @@ public class AutoGenerator {
 
     /**
      * 指定模板配置
-     *
      * @param templateConfig 模板配置
      * @return this
      * @since 3.5.0
@@ -76,7 +72,6 @@ public class AutoGenerator {
 
     /**
      * 指定全局配置
-     *
      * @param globalConfig 全局配置
      * @return this
      * @see 3.5.0
@@ -90,7 +85,6 @@ public class AutoGenerator {
 
     /**
      * 生成代码
-     *
      * @param templateEngine 模板引擎
      */
     public void execute(AbstractTemplateEngine templateEngine) {

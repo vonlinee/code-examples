@@ -3,7 +3,7 @@ package io.devpl.codegen.mbpg.template.impl;
 import io.devpl.codegen.mbpg.config.BaseBuilder;
 import io.devpl.codegen.mbpg.config.ConstVal;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.mbpg.config.po.TableInfo;
+import io.devpl.codegen.mbpg.config.po.IntrospectedTable;
 import io.devpl.codegen.mbpg.function.ConverterFileName;
 import io.devpl.codegen.mbpg.template.TemplateArguments;
 import io.devpl.codegen.utils.ClassUtils;
@@ -21,9 +21,6 @@ import java.util.Map;
 public class ControllerTemplateArguments extends TemplateArguments {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ControllerTemplateArguments.class);
-
-    private ControllerTemplateArguments() {
-    }
 
     /**
      * 生成 <code>@RestController</code> 控制器（默认 false）
@@ -82,7 +79,7 @@ public class ControllerTemplateArguments extends TemplateArguments {
     }
 
     @Override
-    public Map<String, Object> initialize(TableInfo tableInfo) {
+    public Map<String, Object> calculateArgumentsMap(IntrospectedTable tableInfo) {
         Map<String, Object> data = new HashMap<>(5);
         data.put("controllerMappingHyphen", StringUtils.camelToHyphen(tableInfo.getEntityPath()));
         data.put("controllerMappingHyphenStyle", this.hyphenStyle);

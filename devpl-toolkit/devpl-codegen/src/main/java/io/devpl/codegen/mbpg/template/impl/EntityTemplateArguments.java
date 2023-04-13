@@ -8,7 +8,7 @@ import io.devpl.codegen.mbpg.config.BaseBuilder;
 import io.devpl.codegen.mbpg.config.TableInfoHelper;
 import io.devpl.codegen.mbpg.config.INameConvert;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.mbpg.config.po.TableInfo;
+import io.devpl.codegen.mbpg.config.po.IntrospectedTable;
 import io.devpl.codegen.mbpg.config.rules.NamingStrategy;
 import io.devpl.codegen.mbpg.function.ConverterFileName;
 import io.devpl.codegen.mbpg.template.TemplateArguments;
@@ -29,9 +29,6 @@ import java.util.stream.Collectors;
 public class EntityTemplateArguments extends TemplateArguments {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(EntityTemplateArguments.class);
-
-    private EntityTemplateArguments() {
-    }
 
     /**
      * 名称转换
@@ -303,7 +300,7 @@ public class EntityTemplateArguments extends TemplateArguments {
     }
 
     @Override
-    public Map<String, Object> initialize(@NotNull TableInfo tableInfo) {
+    public Map<String, Object> calculateArgumentsMap(@NotNull IntrospectedTable tableInfo) {
         Map<String, Object> data = new HashMap<>();
         data.put("idType", idType == null ? null : idType.toString());
         data.put("logicDeleteFieldName", this.logicDeleteColumnName);
@@ -556,41 +553,6 @@ public class EntityTemplateArguments extends TemplateArguments {
         public Builder addTableFills(@NotNull List<IFill> tableFillList) {
             this.entity.tableFillList.addAll(tableFillList);
             return this;
-        }
-
-        /**
-         * 指定生成的主键的ID类型
-         *
-         * @param idType ID类型
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder idType(IdType idType) {
-            this.entity.idType = idType;
-            return this;
-        }
-
-        /**
-         * 转换输出文件名称
-         *
-         * @param converter 　转换处理
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder convertFileName(@NotNull ConverterFileName converter) {
-            this.entity.converterFileName = converter;
-            return this;
-        }
-
-        /**
-         * 格式化文件名称
-         *
-         * @param format 　格式
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder formatFileName(String format) {
-            return convertFileName((entityName) -> String.format(format, entityName));
         }
 
         /**
