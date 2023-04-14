@@ -1,19 +1,27 @@
 package io.devpl.codegen.mbpg;
 
+import io.devpl.codegen.api.Context;
+import io.devpl.codegen.generator.GeneratedFile;
+import io.devpl.codegen.api.ProgressCallback;
+import io.devpl.codegen.generator.template.DefaultShellCallback;
+import io.devpl.codegen.generator.template.ShellCallback;
 import io.devpl.codegen.mbpg.config.*;
-import io.devpl.codegen.mbpg.core.CodeGenerator;
-import io.devpl.codegen.mbpg.template.AbstractTemplateEngine;
-import io.devpl.codegen.mbpg.template.TemplateCodeGenerator;
-import io.devpl.codegen.mbpg.template.VelocityTemplateEngine;
+import io.devpl.codegen.api.IntrospectedTable;
+import io.devpl.codegen.api.CodeGenerator;
+import io.devpl.codegen.generator.template.AbstractTemplateEngine;
+import io.devpl.codegen.generator.template.VelocityTemplateEngine;
+import io.devpl.codegen.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 生成文件
- * @author YangHu, tangguo, hubin
- * @since 2016-08-30
  */
-public class AutoGenerator {
+public class AutoGenerator implements CodeGenerator {
 
     private static final Logger logger = LoggerFactory.getLogger(AutoGenerator.class);
 
@@ -81,7 +89,7 @@ public class AutoGenerator {
         return this;
     }
 
-    CodeGenerator generator;
+    private final ShellCallback shellCallback = new DefaultShellCallback();
 
     /**
      * 生成代码
@@ -98,12 +106,53 @@ public class AutoGenerator {
             templateEngine = new VelocityTemplateEngine();
         }
         templateEngine.setContext(context);
+        templateConfig.setTemplateEngine(templateEngine);
         // 模板引擎初始化
         templateEngine.init(context);
-        this.generator = new TemplateCodeGenerator(templateEngine);
         // 执行文件输出
-        generator.generate(context, null);
+        generate(context, null);
+
         templateEngine.open();
         logger.debug("==========================文件生成完成！！！==========================");
+    }
+
+
+    /**
+     * 步骤如下：
+     * 1.先确定参与生成的模板
+     * 2.根据配置初始化模板：初始化模板参数
+     * @param context          上下文对象
+     * @param progressCallback 进度回调
+     */
+    @Override
+    public void generate(Context context, ProgressCallback progressCallback) {
+        try {
+            // 生成表信息
+            context.introspectTables();
+            // 所有的表信息
+            List<IntrospectedTable> introspectedTables = context.getIntrospectedTables();
+
+            for (IntrospectedTable introspectedTable : introspectedTables) {
+                introspectedTable.initialize();
+                // TODO 优化
+                introspectedTable.setContext(context);
+            }
+
+            List<GeneratedFile> generatedFiles = new ArrayList<>();
+            for (IntrospectedTable introspectedTable : introspectedTables) {
+                // 由每个表确定哪些文件需要生成
+                generatedFiles.addAll(introspectedTable.calculateGeneratedFiles(null));
+            }
+
+            for (GeneratedFile generatedFile : generatedFiles) {
+                File directory = shellCallback.getDirectory(generatedFile.getFileName(), null);
+
+                String formattedContent = generatedFile.getFormattedContent();
+
+                System.out.println(formattedContent);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("无法创建文件，请检查配置信息！", e);
+        }
     }
 }

@@ -1,7 +1,7 @@
 package test;
 
-import io.devpl.codegen.mbpg.jdbc.DBUtils;
-import io.devpl.codegen.mbpg.jdbc.meta.PrimaryKey;
+import io.devpl.codegen.jdbc.DBUtils;
+import io.devpl.codegen.jdbc.meta.PrimaryKey;
 
 import java.sql.*;
 import java.util.List;

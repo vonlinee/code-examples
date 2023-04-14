@@ -1,7 +1,8 @@
 package io.devpl.codegen.api;
 
-import io.devpl.codegen.mbpg.template.Template;
-import io.devpl.codegen.mbpg.template.TemplateArguments;
+import io.devpl.codegen.generator.GeneratedFile;
+import io.devpl.codegen.generator.template.TemplateSource;
+import io.devpl.codegen.generator.template.TemplateArguments;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -13,7 +14,7 @@ public class TemplateGeneratedFile extends GeneratedFile {
 
     private String filename;
 
-    private Template templateFile;
+    private TemplateSource templateSource;
     private TemplateArguments templateArguments;
 
     public TemplateArguments getTemplateArguments() {
@@ -28,7 +29,7 @@ public class TemplateGeneratedFile extends GeneratedFile {
     public String getFormattedContent() {
         StringWriter sw = new StringWriter();
         try {
-            templateFile.write(templateArguments, sw);
+            templateSource.render(templateArguments, sw);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -45,12 +46,15 @@ public class TemplateGeneratedFile extends GeneratedFile {
         return false;
     }
 
-    /**
-     * 该文件对应的模板文件
-     *
-     * @return 模板文件
-     */
-    public Template getTemplate() {
-        return templateFile;
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public void setTemplateSource(TemplateSource templateSource) {
+        this.templateSource = templateSource;
     }
 }

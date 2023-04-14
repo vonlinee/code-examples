@@ -1,9 +1,9 @@
 package io.devpl.codegen.mbpg.config;
 
-import io.devpl.codegen.mbpg.template.impl.ControllerTemplateArguments;
-import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
-import io.devpl.codegen.mbpg.template.impl.MapperTemplateArguments;
-import io.devpl.codegen.mbpg.template.impl.ServiceTemplateArguments;
+import io.devpl.codegen.generator.template.impl.ControllerTemplateArguments;
+import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.generator.template.impl.MapperTemplateArguments;
+import io.devpl.codegen.generator.template.impl.ServiceTemplateArguments;
 
 /**
  * 配置构建

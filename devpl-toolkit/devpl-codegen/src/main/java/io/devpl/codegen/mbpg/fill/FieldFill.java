@@ -1,5 +1,7 @@
 package io.devpl.codegen.mbpg.fill;
 
+import io.devpl.codegen.mbpg.FieldStrategy;
+
 /**
  * 字段填充策略枚举类
  *

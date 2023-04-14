@@ -6,11 +6,7 @@ import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.*;
 import com.alibaba.druid.sql.parser.SQLParserUtils;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
-import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.*;
 
 /**

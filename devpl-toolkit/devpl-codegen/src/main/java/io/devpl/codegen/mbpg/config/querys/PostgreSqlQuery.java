@@ -15,7 +15,7 @@
  */
 package io.devpl.codegen.mbpg.config.querys;
 
-import io.devpl.codegen.mbpg.util.StringUtils;
+import io.devpl.codegen.utils.StringUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

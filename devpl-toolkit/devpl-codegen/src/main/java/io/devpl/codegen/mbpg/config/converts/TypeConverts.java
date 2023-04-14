@@ -4,7 +4,7 @@ import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.mbpg.config.converts.select.BranchBuilder;
 import io.devpl.codegen.mbpg.config.converts.select.Selector;
 import io.devpl.codegen.mbpg.config.rules.DataType;
-import io.devpl.codegen.mbpg.jdbc.DbType;
+import io.devpl.codegen.jdbc.DbType;
 
 /**
  * 该注册器负责注册并查询类型注册器

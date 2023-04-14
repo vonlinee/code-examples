@@ -1,5 +1,7 @@
 package tools.file;
 
+import com.jfoenix.animation.alert.JFXAlertAnimation;
+import com.jfoenix.controls.JFXAlert;
 import javafx.application.Application;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
@@ -28,8 +30,10 @@ public class TestChoiceDialog extends Application {
         final ChoiceDialog<String> dialog = new ChoiceDialog<>("2", choices);
         fileChooserDialog.showAndWait().ifPresent(buttonType -> {
             if (buttonType == ButtonType.OK) {
-                final File selectedFile = fileChooserDialog.getSelectedFile();
-                System.out.println(selectedFile);
+                // final File selectedFile = fileChooserDialog.getSelectedFile();
+                JFXAlert<String> alert = new JFXAlert<>();
+                alert.setAnimation(JFXAlertAnimation.SMOOTH);
+                alert.show();
             }
         });
     }

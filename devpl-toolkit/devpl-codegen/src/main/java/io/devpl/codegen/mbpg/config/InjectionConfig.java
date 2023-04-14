@@ -15,7 +15,7 @@
  */
 package io.devpl.codegen.mbpg.config;
 
-import io.devpl.codegen.mbpg.config.po.IntrospectedTable;
+import io.devpl.codegen.api.IntrospectedTable;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,17 +1,16 @@
 package io.devpl.codegen.mbpg.config.po;
 
+import io.devpl.codegen.jdbc.MetaInfo;
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.IKeyWordsHandler;
-import io.devpl.codegen.mbpg.config.Context;
-import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.api.Context;
+import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.config.rules.NamingStrategy;
-import io.devpl.codegen.mbpg.fill.Column;
-import io.devpl.codegen.mbpg.fill.Property;
-import io.devpl.codegen.mbpg.jdbc.meta.DatabaseMetaDataWrapper;
-import io.devpl.codegen.mbpg.jdbc.JdbcType;
-import io.devpl.codegen.mbpg.util.StringUtils;
+import io.devpl.codegen.mbpg.Column;
+import io.devpl.codegen.mbpg.Property;
+import io.devpl.codegen.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -35,13 +34,11 @@ public class TableField {
     private String fill;
     /**
      * 是否关键字
-     *
      * @since 3.3.2
      */
     private boolean keyWords;
     /**
      * 数据库字段（关键字含转义符号）
-     *
      * @since 3.3.2
      */
     private String columnName;
@@ -52,7 +49,6 @@ public class TableField {
 
     /**
      * 字段元数据信息
-     *
      * @since 3.5.0
      */
     private MetaInfo metaInfo;
@@ -65,7 +61,6 @@ public class TableField {
 
     /**
      * 构造方法
-     *
      * @param configBuilder 配置构建
      * @param name          数据库字段名称
      * @since 3.5.0
@@ -80,7 +75,6 @@ public class TableField {
 
     /**
      * 设置属性名称
-     *
      * @param propertyName 属性名
      * @param columnType   字段类型
      * @return this
@@ -136,7 +130,6 @@ public class TableField {
 
     /**
      * 获取注解字段名称
-     *
      * @return 字段
      * @since 3.3.2
      */
@@ -151,7 +144,6 @@ public class TableField {
 
     /**
      * 是否为乐观锁字段
-     *
      * @return 是否为乐观锁字段
      * @since 3.5.0
      */
@@ -163,7 +155,6 @@ public class TableField {
 
     /**
      * 是否为逻辑删除字段
-     *
      * @return 是否为逻辑删除字段
      * @since 3.5.0
      */
@@ -175,7 +166,6 @@ public class TableField {
 
     /**
      * 设置主键
-     *
      * @param autoIncrement 自增标识
      * @return this
      * @since 3.5.0
@@ -252,7 +242,9 @@ public class TableField {
         if (StringUtils.isBlank(fill)) {
             entity.getTableFillList().stream()
                     // 忽略大写字段问题
-                    .filter(tf -> tf instanceof Column && tf.getName().equalsIgnoreCase(name) || tf instanceof Property && tf.getName().equals(propertyName)).findFirst().ifPresent(tf -> this.fill = tf.getFieldFill().name());
+                    .filter(tf -> tf instanceof Column && tf.getName()
+                            .equalsIgnoreCase(name) || tf instanceof Property && tf.getName().equals(propertyName))
+                    .findFirst().ifPresent(tf -> this.fill = tf.getFieldFill().name());
         }
         return fill;
     }
@@ -275,68 +267,5 @@ public class TableField {
 
     public void setMetaInfo(MetaInfo metaInfo) {
         this.metaInfo = metaInfo;
-    }
-
-    /**
-     * 元数据信息
-     *
-     * @author nieqiurong 2021/2/8
-     * @since 3.5.0
-     */
-    public static class MetaInfo {
-        private String name;
-
-        private int length;
-
-        private boolean nullable;
-
-        private String remarks;
-
-        private String defaultValue;
-
-        private int scale;
-
-        private JdbcType jdbcType;
-
-        public MetaInfo(DatabaseMetaDataWrapper.Column column) {
-            if (column != null) {
-                this.name = column.getName();
-                this.length = column.getLength();
-                this.nullable = column.isNullable();
-                this.remarks = column.getRemarks();
-                this.defaultValue = column.getDefaultValue();
-                this.scale = column.getScale();
-                this.jdbcType = column.getJdbcType();
-            }
-        }
-
-        public int getLength() {
-            return length;
-        }
-
-        public boolean isNullable() {
-            return nullable;
-        }
-
-        public String getRemarks() {
-            return remarks;
-        }
-
-        public String getDefaultValue() {
-            return defaultValue;
-        }
-
-        public int getScale() {
-            return scale;
-        }
-
-        public JdbcType getJdbcType() {
-            return jdbcType;
-        }
-
-        @Override
-        public String toString() {
-            return "MetaInfo{" + "length=" + length + ", nullable=" + nullable + ", remarks='" + remarks + '\'' + ", defaultValue='" + defaultValue + '\'' + ", scale=" + scale + ", jdbcType=" + jdbcType + '}';
-        }
     }
 }

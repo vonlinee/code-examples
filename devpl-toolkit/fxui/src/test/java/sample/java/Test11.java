@@ -11,7 +11,7 @@ import java.util.Map;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
+import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.tookit.utils.DBUtils;
 
 public class Test11 {

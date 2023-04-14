@@ -2,12 +2,12 @@ package io.devpl.tookit.fxui.bridge;
 
 import io.devpl.codegen.mbpg.FastAutoGenerator;
 import io.devpl.codegen.mbpg.config.OutputFile;
-import io.devpl.codegen.mbpg.template.impl.ControllerTemplateArguments;
-import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
-import io.devpl.codegen.mbpg.template.impl.MapperTemplateArguments;
-import io.devpl.codegen.mbpg.template.impl.ServiceTemplateArguments;
+import io.devpl.codegen.generator.template.impl.ControllerTemplateArguments;
+import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.generator.template.impl.MapperTemplateArguments;
+import io.devpl.codegen.generator.template.impl.ServiceTemplateArguments;
 import io.devpl.codegen.mbpg.config.rules.DateTimeType;
-import io.devpl.codegen.mbpg.template.VelocityTemplateEngine;
+import io.devpl.codegen.generator.template.VelocityTemplateEngine;
 import io.devpl.tookit.fxui.model.*;
 import io.devpl.tookit.utils.CollectionUtils;
 
@@ -80,12 +80,6 @@ public class MyBatisPlusGenerator {
                     pathInfoMap.put(OutputFile.SERVICE, outputRootDir + parentFolder + "/service");
                     pathInfoMap.put(OutputFile.SERVICE_IMPL, outputRootDir + parentFolder + "/service/impl");
                     builder.pathInfo(pathInfoMap); // 设置mapperXml生成路径
-                });
-                autoGenerator.injectionConfig(builder -> {
-                    builder.beforeOutputFile((tableInfo, stringObjectMap) -> {
-                        System.out.println(tableInfo);
-                        System.out.println(stringObjectMap);
-                    });
                 });
                 // 所有生成的表名
                 List<String> tableNames = dbEntry.getValue().stream().map(TableGeneration::getTableName).toList();

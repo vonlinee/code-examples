@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.config;
 
-import io.devpl.codegen.mbpg.util.StringUtils;
+import io.devpl.codegen.utils.StringUtils;
 
 import java.util.Collections;
 import java.util.HashMap;

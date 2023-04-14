@@ -1,8 +1,7 @@
 package io.devpl.codegen.mbpg;
 
 import io.devpl.codegen.mbpg.config.*;
-import io.devpl.codegen.mbpg.template.AbstractTemplateEngine;
-import io.devpl.codegen.mbpg.template.VelocityTemplateEngine;
+import io.devpl.codegen.generator.template.AbstractTemplateEngine;
 import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,7 +71,6 @@ public final class FastAutoGenerator {
 
     /**
      * 控制台输入内容读取并打印提示信息
-     *
      * @param message 提示信息
      * @return String
      */
@@ -88,23 +86,6 @@ public final class FastAutoGenerator {
 
     /**
      * 全局配置
-     *
-     * @param consumer 自定义全局配置
-     * @return FastAutoGenerator
-     */
-    public FastAutoGenerator dataSourceConfig(Consumer<DataSourceConfig.Builder> consumer) {
-        consumer.accept(this.dataSourceConfigBuilder);
-        return this;
-    }
-
-    public FastAutoGenerator dataSourceConfig(BiConsumer<Function<String, String>, DataSourceConfig.Builder> biConsumer) {
-        biConsumer.accept(this::scannerNext, this.dataSourceConfigBuilder);
-        return this;
-    }
-
-    /**
-     * 全局配置
-     *
      * @param consumer 自定义全局配置
      * @return FastAutoGenerator
      */
@@ -113,14 +94,8 @@ public final class FastAutoGenerator {
         return this;
     }
 
-    public FastAutoGenerator globalConfig(BiConsumer<Function<String, String>, ProjectConfiguration.Builder> biConsumer) {
-        biConsumer.accept(this::scannerNext, this.globalConfigBuilder);
-        return this;
-    }
-
     /**
      * 包配置
-     *
      * @param consumer 自定义包配置
      * @return FastAutoGenerator
      */
@@ -129,14 +104,8 @@ public final class FastAutoGenerator {
         return this;
     }
 
-    public FastAutoGenerator packageConfig(BiConsumer<Function<String, String>, PackageConfiguration.Builder> biConsumer) {
-        biConsumer.accept(this::scannerNext, this.packageConfigBuilder);
-        return this;
-    }
-
     /**
      * 策略配置
-     *
      * @param consumer 自定义策略配置
      * @return FastAutoGenerator
      */
@@ -151,49 +120,13 @@ public final class FastAutoGenerator {
     }
 
     /**
-     * 注入配置
-     *
-     * @param consumer 自定义注入配置
-     * @return FastAutoGenerator
-     */
-    public FastAutoGenerator injectionConfig(Consumer<InjectionConfig.Builder> consumer) {
-        consumer.accept(this.injectionConfigBuilder);
-        return this;
-    }
-
-    public FastAutoGenerator injectionConfig(BiConsumer<Function<String, String>, InjectionConfig.Builder> biConsumer) {
-        biConsumer.accept(this::scannerNext, this.injectionConfigBuilder);
-        return this;
-    }
-
-    /**
-     * 模板配置
-     *
-     * @param consumer 自定义模板配置
-     * @return FastAutoGenerator
-     */
-    public FastAutoGenerator templateConfig(Consumer<TemplateConfiguration.Builder> consumer) {
-        consumer.accept(this.templateConfigBuilder);
-        return this;
-    }
-
-    public FastAutoGenerator templateConfig(BiConsumer<Function<String, String>, TemplateConfiguration.Builder> biConsumer) {
-        biConsumer.accept(this::scannerNext, this.templateConfigBuilder);
-        return this;
-    }
-
-    /**
      * 模板引擎配置
-     *
      * @param templateEngine 模板引擎
      * @return FastAutoGenerator
      */
     public FastAutoGenerator templateEngine(AbstractTemplateEngine templateEngine) {
-        if (templateEngine instanceof VelocityTemplateEngine) {
-            this.templateEngine = templateEngine;
-            return this;
-        }
-        throw new UnsupportedOperationException("暂不支持其他模板引擎，只支持VelocityTemplateEngine");
+        this.templateEngine = templateEngine;
+        return this;
     }
 
     /**

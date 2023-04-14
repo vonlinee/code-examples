@@ -2,7 +2,7 @@ package io.devpl.codegen.mbpg.config.rules;
 
 import io.devpl.codegen.mbpg.config.ConstVal;
 import io.devpl.codegen.utils.StringPool;
-import io.devpl.codegen.mbpg.util.StringUtils;
+import io.devpl.codegen.utils.StringUtils;
 
 import java.util.Arrays;
 import java.util.Set;

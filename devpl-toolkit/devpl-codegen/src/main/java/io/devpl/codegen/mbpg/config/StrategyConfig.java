@@ -1,11 +1,11 @@
 package io.devpl.codegen.mbpg.config;
 
-import io.devpl.codegen.mbpg.config.po.LikeTable;
-import io.devpl.codegen.mbpg.template.impl.ControllerTemplateArguments;
-import io.devpl.codegen.mbpg.template.impl.EntityTemplateArguments;
-import io.devpl.codegen.mbpg.template.impl.MapperTemplateArguments;
-import io.devpl.codegen.mbpg.template.impl.ServiceTemplateArguments;
-import io.devpl.codegen.mbpg.util.StringUtils;
+import io.devpl.codegen.jdbc.LikeTable;
+import io.devpl.codegen.generator.template.impl.ControllerTemplateArguments;
+import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.generator.template.impl.MapperTemplateArguments;
+import io.devpl.codegen.generator.template.impl.ServiceTemplateArguments;
+import io.devpl.codegen.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,11 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * 策略配置项
- * @author YangHu, tangguo, hubin
- * @since 2016/8/30
- */
 public class StrategyConfig {
 
     /**
@@ -128,7 +123,7 @@ public class StrategyConfig {
     @NotNull
     public EntityTemplateArguments entity() {
         if (entity == null) {
-            this.entity = entityBuilder.get();
+            this.entity = new EntityTemplateArguments();
         }
         return entity;
     }
@@ -151,7 +146,7 @@ public class StrategyConfig {
     @NotNull
     public ControllerTemplateArguments controller() {
         if (controller == null) {
-            this.controller = controllerBuilder.get();
+            this.controller = new ControllerTemplateArguments();
         }
         return controller;
     }
@@ -174,7 +169,7 @@ public class StrategyConfig {
     @NotNull
     public MapperTemplateArguments mapper() {
         if (mapper == null) {
-            this.mapper = mapperBuilder.get();
+            this.mapper = new MapperTemplateArguments();
         }
         return mapper;
     }
@@ -197,7 +192,7 @@ public class StrategyConfig {
     @NotNull
     public ServiceTemplateArguments service() {
         if (service == null) {
-            this.service = serviceBuilder.get();
+            this.service = new ServiceTemplateArguments();
         }
         return service;
     }

@@ -16,7 +16,7 @@
 package io.devpl.codegen.mbpg.config.querys;
 
 import io.devpl.codegen.mbpg.config.IDbQuery;
-import io.devpl.codegen.mbpg.jdbc.DbType;
+import io.devpl.codegen.jdbc.DbType;
 
 import java.util.EnumMap;
 import java.util.Map;

@@ -1,6 +1,6 @@
 package io.devpl.tookit.fxui.controller.mbg;
 
-import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
+import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.tookit.fxui.bridge.MyBatisPlusGenerator;
 import io.devpl.tookit.fxui.common.ProgressDialog;
 import io.devpl.tookit.fxui.controller.TableCustomizationController;

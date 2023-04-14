@@ -22,20 +22,20 @@ module devpl.codegen {
     requires org.mybatis;
 
     exports io.devpl.codegen;
-    exports io.devpl.codegen.mbpg.jdbc.dialect.mysql;
+    exports io.devpl.codegen.jdbc.dialect.mysql;
     exports io.devpl.codegen.sql;
-    exports io.devpl.codegen.mbpg.jdbc.meta;
-    exports io.devpl.codegen.mbpg.util;
+    exports io.devpl.codegen.jdbc.meta;
     exports io.devpl.codegen.mbpg.config;
-    exports io.devpl.codegen.mbpg.template;
+    exports io.devpl.codegen.generator.template;
     exports io.devpl.codegen.mbpg.config.querys;
     exports io.devpl.codegen.mbpg.config.converts;
-    exports io.devpl.codegen.mbpg.keywords;
+    exports io.devpl.codegen.keywords;
     exports io.devpl.codegen.mbpg;
     exports io.devpl.codegen.mbpg.config.po;
-    exports io.devpl.codegen.mbpg.core;
-    exports io.devpl.codegen.mbpg.template.impl;
+    exports io.devpl.codegen.generator.template.impl;
     exports io.devpl.codegen.mbpg.config.rules;
     exports io.devpl.codegen.api;
     exports io.devpl.codegen.utils;
+    exports io.devpl.codegen.generator;
+    exports io.devpl.codegen.jdbc;
 }

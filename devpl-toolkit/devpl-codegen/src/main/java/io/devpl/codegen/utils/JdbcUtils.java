@@ -39,7 +39,7 @@ public class JdbcUtils {
      * @return ignore
      */
     public static DbType getDbType(String jdbcUrl) {
-        if (StringUtils.isBlank(jdbcUrl)) {
+        if (!StringUtils.hasText(jdbcUrl)) {
             throw new RuntimeException("Error: The jdbcUrl is Null, Cannot read database type");
         }
         String url = jdbcUrl.toLowerCase();

@@ -1,5 +1,7 @@
 package io.devpl.codegen.mbpg.config;
 
+import io.devpl.codegen.generator.template.AbstractTemplateEngine;
+import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.Map;
 /**
  * 模板配置项
  */
+@Data
 public class TemplateConfiguration {
 
     /**
@@ -15,6 +18,8 @@ public class TemplateConfiguration {
      * value：模板位置，如果该位置无法找到可用的模板，则会使用OutputFile自身的默认模板
      */
     Map<OutputFile, String> templates = new HashMap<>();
+
+    AbstractTemplateEngine templateEngine;
 
     /**
      * 获取实体模板路径

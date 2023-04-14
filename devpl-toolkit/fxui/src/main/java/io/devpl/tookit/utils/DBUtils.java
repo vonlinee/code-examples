@@ -1,7 +1,7 @@
 package io.devpl.tookit.utils;
 
-import io.devpl.codegen.mbpg.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
+import io.devpl.codegen.jdbc.meta.ColumnMetadata;
+import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.sdk.util.ResourceUtils;
 import io.devpl.tookit.fxui.common.JDBCDriver;
 import io.devpl.tookit.fxui.model.DatabaseInfo;

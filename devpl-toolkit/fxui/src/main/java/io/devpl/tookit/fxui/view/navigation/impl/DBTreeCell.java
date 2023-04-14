@@ -1,6 +1,6 @@
 package io.devpl.tookit.fxui.view.navigation.impl;
 
-import io.devpl.codegen.mbpg.jdbc.meta.TableMetadata;
+import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.tookit.fxui.event.EventUtils;
 import io.devpl.tookit.fxui.model.ConnectionRegistry;
 import io.devpl.tookit.fxui.model.ConnectionConfig;

@@ -1,6 +1,6 @@
 package io.devpl.tookit.fxui.controller.fields;
 
-import io.devpl.codegen.mbpg.jdbc.dialect.mysql.InfoSchemaColumn;
+import io.devpl.codegen.jdbc.dialect.mysql.InfoSchemaColumn;
 import io.devpl.codegen.sql.SqlUtils;
 import io.fxtras.Alerts;
 import io.fxtras.mvc.FxmlLocation;

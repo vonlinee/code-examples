@@ -2,8 +2,8 @@ package io.devpl.tookit.utils.office;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
-import io.devpl.codegen.mbpg.jdbc.dialect.mysql.InfoSchemaColumn;
-import io.devpl.codegen.mbpg.jdbc.dialect.mysql.InfoSchemaTable;
+import io.devpl.codegen.jdbc.dialect.mysql.InfoSchemaColumn;
+import io.devpl.codegen.jdbc.dialect.mysql.InfoSchemaTable;
 import io.devpl.tookit.utils.CollectionUtils;
 import io.devpl.tookit.utils.DBUtils;
 import lombok.Data;
