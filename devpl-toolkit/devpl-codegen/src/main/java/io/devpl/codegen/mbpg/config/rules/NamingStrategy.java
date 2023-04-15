@@ -1,6 +1,5 @@
 package io.devpl.codegen.mbpg.config.rules;
 
-import io.devpl.codegen.mbpg.config.ConstVal;
 import io.devpl.codegen.utils.StringPool;
 import io.devpl.codegen.utils.StringUtils;
 
@@ -114,5 +113,24 @@ public enum NamingStrategy {
             return name.substring(0, 1).toUpperCase() + name.substring(1);
         }
         return StringPool.EMPTY;
+    }
+
+    /**
+     * 按 JavaBean 规则来生成 get 和 set 方法后面的属性名称
+     * 需要处理一下特殊情况：
+     * <p>
+     * 1、如果只有一位，转换为大写形式
+     * 2、如果多于 1 位，只有在第二位是小写的情况下，才会把第一位转为小写
+     * <p>
+     * 我们并不建议在数据库对应的对象中使用基本类型，因此这里不会考虑基本类型的情况
+     */
+    public static String getCapitalName(String name) {
+        if (name.length() == 1) {
+            return name.toUpperCase();
+        }
+        if (Character.isLowerCase(name.charAt(1))) {
+            return Character.toUpperCase(name.charAt(0)) + name.substring(1);
+        }
+        return name;
     }
 }

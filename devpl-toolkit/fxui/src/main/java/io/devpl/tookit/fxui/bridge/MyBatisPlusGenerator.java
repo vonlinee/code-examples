@@ -2,12 +2,12 @@ package io.devpl.tookit.fxui.bridge;
 
 import io.devpl.codegen.mbpg.FastAutoGenerator;
 import io.devpl.codegen.mbpg.config.OutputFile;
-import io.devpl.codegen.generator.template.impl.ControllerTemplateArguments;
-import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
-import io.devpl.codegen.generator.template.impl.MapperTemplateArguments;
-import io.devpl.codegen.generator.template.impl.ServiceTemplateArguments;
+import io.devpl.codegen.api.gen.template.impl.ControllerTemplateArguments;
+import io.devpl.codegen.api.gen.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.api.gen.template.impl.MapperTemplateArguments;
+import io.devpl.codegen.api.gen.template.impl.ServiceTemplateArguments;
 import io.devpl.codegen.mbpg.config.rules.DateTimeType;
-import io.devpl.codegen.generator.template.VelocityTemplateEngine;
+import io.devpl.codegen.api.gen.template.VelocityTemplateEngine;
 import io.devpl.tookit.fxui.model.*;
 import io.devpl.tookit.utils.CollectionUtils;
 

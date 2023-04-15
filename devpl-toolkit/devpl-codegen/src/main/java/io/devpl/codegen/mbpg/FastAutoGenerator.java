@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg;
 
 import io.devpl.codegen.mbpg.config.*;
-import io.devpl.codegen.generator.template.AbstractTemplateEngine;
+import io.devpl.codegen.api.gen.template.AbstractTemplateEngine;
 import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 

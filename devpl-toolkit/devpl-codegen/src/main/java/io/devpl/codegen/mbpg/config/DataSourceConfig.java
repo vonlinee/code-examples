@@ -25,16 +25,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
-/**
- * 数据库配置
- * @author YangHu, hcl, hubin
- * @since 2016/8/30
- */
 public class DataSourceConfig {
     protected final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
-
-    private DataSourceConfig() {
-    }
 
     /**
      * 数据库信息查询
@@ -279,7 +271,6 @@ public class DataSourceConfig {
         return schemaName;
     }
 
-    @Nullable
     public IKeyWordsHandler getKeyWordsHandler() {
         return keyWordsHandler;
     }

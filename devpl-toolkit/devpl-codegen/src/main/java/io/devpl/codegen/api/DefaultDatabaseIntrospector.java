@@ -1,22 +1,19 @@
 package io.devpl.codegen.api;
 
-import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
-import io.devpl.codegen.jdbc.MetaInfo;
-import io.devpl.codegen.jdbc.meta.Column;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.jdbc.meta.Table;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.codegen.jdbc.query.AbstractDatabaseIntrospector;
 import io.devpl.codegen.mbpg.ITypeConvertHandler;
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
-import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.sdk.util.StringUtils;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * 元数据查询数据库信息.
@@ -48,15 +45,13 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
         // 所有的表信息
         List<IntrospectedTable> tableList = new ArrayList<>();
 
-
         List<TableMetadata> tablesMetaDataList = new ArrayList<>();
 
-        try (Connection connection = dataSourceConfig.getConnection()){
+        try (Connection connection = dataSourceConfig.getConnection()) {
             tablesMetaDataList.addAll(databaseMetaDataWrapper.getTables(connection));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         // 需要反向生成或排除的表信息
         List<IntrospectedTable> includeTableList = new ArrayList<>();
         List<IntrospectedTable> excludeTableList = new ArrayList<>();
@@ -64,7 +59,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
             String tableName = table.getTableName();
             if (StringUtils.isNotBlank(tableName)) {
                 IntrospectedTable tableInfo = new IntrospectedTable(this.context, tableName);
-                tableInfo.setComment(table.getRemarks());
+
                 if (isInclude && strategyConfig.matchIncludeTable(tableName)) {
                     includeTableList.add(tableInfo);
                 } else if (isExclude && strategyConfig.matchExcludeTable(tableName)) {
@@ -84,44 +79,15 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
     @Override
     public void convertTableFields(IntrospectedTable tableInfo) {
         String tableName = tableInfo.getName();
-
         List<ColumnMetadata> columnsMetaDataList;
         try (Connection connection = dataSourceConfig.getConnection()) {
-            columnsMetaDataList = databaseMetaDataWrapper.getColumns(connection);
+            columnsMetaDataList = databaseMetaDataWrapper.getColumns(connection, tableName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        System.out.println(columnsMetaDataList);
-
-        // 获取数据库连接，得到表信息
-        Map<String, Column> columnsInfoMap = databaseMetaDataWrapper.getColumnsInfo(tableName, true);
-        EntityTemplateArguments entity = strategyConfig.entityArguments();
-        columnsInfoMap.forEach((k, columnInfo) -> {
-            MetaInfo metaInfo = new MetaInfo(columnInfo);
-            String columnName = columnInfo.getName();
-            TableColumn column = new TableColumn(this.context, columnName);
-            // 处理ID
-            if (columnInfo.isPrimaryKey()) {
-                column.primaryKey(columnInfo.isAutoIncrement());
-                tableInfo.setHavePrimaryKey(true);
-                if (column.isKeyIdentityFlag() && entity.getIdType() != null) {
-                    LOGGER.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableName);
-                }
-            }
-            column.setColumnName(columnName).setComment(columnInfo.getRemarks());
-            DataType columnType = typeRegistry.getColumnType(metaInfo);
-            ITypeConvertHandler typeConvertHandler = dataSourceConfig.getTypeConvertHandler();
-            if (typeConvertHandler != null) {
-                columnType = typeConvertHandler.convert(globalConfig, typeRegistry, metaInfo);
-            }
-            INameConvert nameConvert = entity.getNameConvert();
-            if (nameConvert != null) {
-                String propertyName = nameConvert.propertyNameConvert(column.getName());
-                column.setPropertyName(propertyName, columnType);
-            }
-            column.setMetaInfo(metaInfo);
-            tableInfo.addField(column);
-        });
+        // TODO 获取主键信息
+        for (ColumnMetadata columnMetadata : columnsMetaDataList) {
+            tableInfo.getColumns().add(new IntrospectedColumn(columnMetadata));
+        }
     }
 }

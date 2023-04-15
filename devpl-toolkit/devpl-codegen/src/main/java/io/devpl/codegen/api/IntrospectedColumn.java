@@ -1,5 +1,6 @@
 package io.devpl.codegen.api;
 
+import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.utils.StringUtils;
 
 import java.sql.Types;
@@ -9,6 +10,90 @@ import java.util.Properties;
  * This class holds information about an introspected column.
  */
 public class IntrospectedColumn {
+
+    private boolean isPrimaryKey;
+
+    /**
+     * 主键是否为自增类型
+     */
+    private boolean autoIncrement;
+
+    private String name;
+    private String type;
+
+    private Context context;
+
+    /**
+     * 数据库字段（关键字含转义符号）
+     * @since 3.3.2
+     */
+    private String columnName;
+
+    /**
+     * 字段元数据信息
+     * @since 3.5.0
+     */
+    private IntrospectedColumn columnInfo;
+
+    /**
+     * 构造方法
+     * @param context  配置构建
+     * @param metadata 数据库字段元数据
+     * @since 3.5.0
+     */
+    public TableColumn(Context context, ColumnMetadata metadata) {
+        this.context = context;
+        this.columnInfo = new IntrospectedColumn(metadata);
+    }
+
+    /**
+     * 是否为乐观锁字段
+     * @return 是否为乐观锁字段
+     * @see com.baomidou.mybatisplus.annotation.Version
+     * @since 3.5.0
+     */
+    public boolean isVersionField() {
+        return true;
+    }
+
+    /**
+     * 是否为逻辑删除字段
+     * @return 是否为逻辑删除字段
+     * @see com.baomidou.mybatisplus.annotation.TableLogic
+     * @since 3.5.0
+     */
+    public boolean isLogicDeleteField() {
+        return true;
+    }
+
+    /**
+     * @param type 类型
+     * @return this
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
+    }
+
+    public boolean isPrimaryKey() {
+        return isPrimaryKey;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getColumnName() {
+        return columnName;
+    }
+
     protected String actualColumnName;
 
     protected int jdbcType;
@@ -36,13 +121,13 @@ public class IntrospectedColumn {
 
     protected String typeHandler;
 
-    protected Context context;
-
     protected boolean isColumnNameDelimited;
 
     protected IntrospectedTable introspectedTable;
 
     protected final Properties properties;
+
+    protected ColumnMetadata metadata;
 
     // any database comment associated with this column. May be null
     protected String remarks;
@@ -70,6 +155,11 @@ public class IntrospectedColumn {
      */
     public IntrospectedColumn() {
         super();
+        properties = new Properties();
+    }
+
+    public IntrospectedColumn(ColumnMetadata metadata) {
+        this.metadata = metadata;
         properties = new Properties();
     }
 
@@ -138,9 +228,11 @@ public class IntrospectedColumn {
         this.identity = identity;
     }
 
+    /**
+     * @return if the column is blob
+     */
     public boolean isBLOBColumn() {
         String typeName = getJdbcTypeName();
-
         return "BINARY".equals(typeName) || "BLOB".equals(typeName) //$NON-NLS-1$ //$NON-NLS-2$
                 || "CLOB".equals(typeName) || "LONGNVARCHAR".equals(typeName) //$NON-NLS-1$ //$NON-NLS-2$
                 || "LONGVARBINARY".equals(typeName) || "LONGVARCHAR".equals(typeName) //$NON-NLS-1$ //$NON-NLS-2$
@@ -162,7 +254,6 @@ public class IntrospectedColumn {
         if (prefix == null) {
             return javaProperty;
         }
-
         return prefix + javaProperty;
     }
 

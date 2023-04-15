@@ -1,8 +1,8 @@
 package io.devpl.codegen.api;
 
-import io.devpl.codegen.generator.GeneratedFile;
-import io.devpl.codegen.generator.template.TemplateSource;
-import io.devpl.codegen.generator.template.TemplateArguments;
+import io.devpl.codegen.api.gen.GeneratedFile;
+import io.devpl.codegen.api.gen.template.TemplateSource;
+import io.devpl.codegen.api.gen.template.TemplateArguments;
 
 import java.io.IOException;
 import java.io.StringWriter;

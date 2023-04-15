@@ -206,7 +206,7 @@ public class Context extends AbstractContext {
             // 性能优化，只处理需执行表字段 https://github.com/baomidou/mybatis-plus/issues/219
             introspectedTables.forEach(table -> {
                 databaseIntrospector.convertTableFields(table);
-                table.processTable();
+                table.importPackage();
             });
             this.tableInfoList.addAll(introspectedTables);
         }

@@ -1,6 +1,7 @@
 package io.devpl.codegen.jdbc.meta;
 
 import java.io.Serializable;
+import java.sql.DatabaseMetaData;
 
 /**
  * @see java.sql.DatabaseMetaData#getColumns(String, String, String, String)
@@ -235,6 +236,10 @@ public class ColumnMetadata implements Serializable {
         return nullable;
     }
 
+    public boolean isNullable() {
+        return nullable == DatabaseMetaData.columnNullable;
+    }
+
     public void setNullable(Integer nullable) {
         this.nullable = nullable;
     }
@@ -245,6 +250,14 @@ public class ColumnMetadata implements Serializable {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    /**
+     * for the api readability
+     * @return the default value of this column
+     */
+    public String getDefaultValue() {
+        return columnDef;
     }
 
     public String getColumnDef() {
@@ -325,6 +338,14 @@ public class ColumnMetadata implements Serializable {
 
     public void setSourceDataType(String sourceDataType) {
         this.sourceDataType = sourceDataType;
+    }
+
+    /**
+     * isAutoincrement cannot be null
+     * @return if this column is autoincrement, true, or else false
+     */
+    public boolean isAutoIncrement() {
+        return "YES".equals(isAutoincrement);
     }
 
     public String getIsAutoincrement() {

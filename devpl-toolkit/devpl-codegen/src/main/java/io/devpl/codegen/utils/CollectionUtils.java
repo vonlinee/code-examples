@@ -8,7 +8,7 @@ public class CollectionUtils {
 
     /**
      * 用来过渡下Jdk1.8下ConcurrentHashMap的性能bug
-     * https://bugs.openjdk.java.net/browse/JDK-8161372
+     * <a href="https://bugs.openjdk.java.net/browse/JDK-8161372">...</a>
      *
      * @param concurrentHashMap ConcurrentHashMap 没限制类型了，非ConcurrentHashMap就别调用这方法了
      * @param key               key

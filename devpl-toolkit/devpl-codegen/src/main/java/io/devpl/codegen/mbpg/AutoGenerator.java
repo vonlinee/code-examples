@@ -1,15 +1,15 @@
 package io.devpl.codegen.mbpg;
 
 import io.devpl.codegen.api.Context;
-import io.devpl.codegen.generator.GeneratedFile;
+import io.devpl.codegen.api.gen.GeneratedFile;
 import io.devpl.codegen.api.ProgressCallback;
-import io.devpl.codegen.generator.template.DefaultShellCallback;
-import io.devpl.codegen.generator.template.ShellCallback;
+import io.devpl.codegen.api.gen.template.DefaultShellCallback;
+import io.devpl.codegen.api.gen.template.ShellCallback;
 import io.devpl.codegen.mbpg.config.*;
 import io.devpl.codegen.api.IntrospectedTable;
 import io.devpl.codegen.api.CodeGenerator;
-import io.devpl.codegen.generator.template.AbstractTemplateEngine;
-import io.devpl.codegen.generator.template.VelocityTemplateEngine;
+import io.devpl.codegen.api.gen.template.AbstractTemplateEngine;
+import io.devpl.codegen.api.gen.template.VelocityTemplateEngine;
 import io.devpl.codegen.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

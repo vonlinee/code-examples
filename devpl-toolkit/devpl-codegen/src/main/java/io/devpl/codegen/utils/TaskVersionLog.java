@@ -12,5 +12,4 @@ public class TaskVersionLog {
     String name;
 
     List<TaskVersionLog> list;
-
 }

@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.config;
 
-import io.devpl.codegen.generator.template.AbstractTemplateEngine;
+import io.devpl.codegen.api.gen.template.AbstractTemplateEngine;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 

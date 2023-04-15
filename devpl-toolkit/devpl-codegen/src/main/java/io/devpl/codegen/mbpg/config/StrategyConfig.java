@@ -1,10 +1,10 @@
 package io.devpl.codegen.mbpg.config;
 
 import io.devpl.codegen.jdbc.LikeTable;
-import io.devpl.codegen.generator.template.impl.ControllerTemplateArguments;
-import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
-import io.devpl.codegen.generator.template.impl.MapperTemplateArguments;
-import io.devpl.codegen.generator.template.impl.ServiceTemplateArguments;
+import io.devpl.codegen.api.gen.template.impl.ControllerTemplateArguments;
+import io.devpl.codegen.api.gen.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.api.gen.template.impl.MapperTemplateArguments;
+import io.devpl.codegen.api.gen.template.impl.ServiceTemplateArguments;
 import io.devpl.codegen.utils.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,11 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 public class StrategyConfig {
-
-    /**
-     * 是否大写命名（默认 false）
-     */
-    private boolean isCapitalMode;
 
     /**
      * 是否跳过视图（默认 false）
@@ -197,23 +192,6 @@ public class StrategyConfig {
     }
 
     /**
-     * 大写命名、字段符合大写字母数字下划线命名
-     * @param word 待判断字符串
-     */
-    public boolean isCapitalModeNaming(String word) {
-        return isCapitalMode && StringUtils.isCapitalMode(word);
-    }
-
-    /**
-     * 表名称匹配过滤表前缀
-     * @param tableName 表名称
-     * @since 3.3.2
-     */
-    public boolean startsWithTablePrefix(String tableName) {
-        return this.tablePrefix.stream().anyMatch(tableName::startsWith);
-    }
-
-    /**
      * 验证配置项
      * @since 3.5.0
      */
@@ -269,14 +247,9 @@ public class StrategyConfig {
         return matchTableName.equalsIgnoreCase(dbTableName) || StringUtils.matches(matchTableName, dbTableName);
     }
 
-    public boolean isCapitalMode() {
-        return isCapitalMode;
-    }
-
     public boolean isSkipView() {
         return skipView;
     }
-
 
     public Set<String> getTablePrefix() {
         return tablePrefix;
@@ -337,16 +310,6 @@ public class StrategyConfig {
         public Builder() {
             super(new StrategyConfig());
             strategyConfig = super.build();
-        }
-
-        /**
-         * 开启大写命名
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder enableCapitalMode() {
-            this.strategyConfig.isCapitalMode = true;
-            return this;
         }
 
         /**

@@ -2,14 +2,10 @@ package io.devpl.codegen.jdbc.query;
 
 import io.devpl.codegen.api.Context;
 import io.devpl.codegen.api.IntrospectedTable;
-import io.devpl.codegen.jdbc.meta.JdbcMetaDataAcessor;
+import io.devpl.codegen.jdbc.meta.DatabaseMetaDataHolder;
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.mbpg.config.querys.DbQueryDecorator;
-import io.devpl.codegen.utils.StringPool;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,8 +13,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospector {
-
-    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     protected final Context context;
 
@@ -33,20 +27,23 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
      */
     protected boolean skipView;
 
-    protected final DbQueryDecorator dbQuery;
-
-    protected final JdbcMetaDataAcessor databaseMetaDataWrapper;
+    protected final DatabaseMetaDataHolder databaseMetaDataWrapper;
 
     public AbstractDatabaseIntrospector(Context context) {
         this.context = context;
         this.dataSourceConfig = context.getDataSourceConfig();
         this.strategyConfig = context.getStrategyConfig();
         skipView = strategyConfig.isSkipView();
-        this.dbQuery = new DbQueryDecorator(dataSourceConfig, strategyConfig);
         this.globalConfig = context.getGlobalConfig();
-        this.databaseMetaDataWrapper = new JdbcMetaDataAcessor(dataSourceConfig);
+        this.databaseMetaDataWrapper = new DatabaseMetaDataHolder();
     }
 
+    /**
+     * 过滤表
+     * @param tableList
+     * @param includeTableList
+     * @param excludeTableList
+     */
     protected void filter(List<IntrospectedTable> tableList, List<IntrospectedTable> includeTableList, List<IntrospectedTable> excludeTableList) {
         boolean isInclude = strategyConfig.getInclude().size() > 0;
         boolean isExclude = strategyConfig.getExclude().size() > 0;
@@ -63,7 +60,7 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
                 notExistTables.remove(tabInfo.getName().toLowerCase());
             }
             if (notExistTables.size() > 0) {
-                LOGGER.warn("表[{}]在数据库中不存在！！！", String.join(StringPool.COMMA, notExistTables.values()));
+
             }
             // 需要反向生成的表信息
             if (isExclude) {
