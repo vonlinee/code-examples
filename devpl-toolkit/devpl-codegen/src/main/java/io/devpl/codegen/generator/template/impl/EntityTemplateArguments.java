@@ -3,18 +3,17 @@ package io.devpl.codegen.generator.template.impl;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import io.devpl.codegen.api.DefaultNameConvert;
 import io.devpl.codegen.mbpg.IFill;
 import io.devpl.codegen.mbpg.config.BaseBuilder;
 import io.devpl.codegen.mbpg.config.TableInfoHelper;
-import io.devpl.codegen.mbpg.config.INameConvert;
+import io.devpl.codegen.api.INameConvert;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.api.IntrospectedTable;
 import io.devpl.codegen.mbpg.config.rules.NamingStrategy;
 import io.devpl.codegen.mbpg.ConverterFileName;
 import io.devpl.codegen.generator.template.TemplateArguments;
 import io.devpl.codegen.utils.ClassUtils;
 import io.devpl.codegen.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * 实体属性配置
  */
-public class EntityTemplateArguments extends TemplateArguments {
+public class EntityTemplateArguments implements TemplateArguments {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(EntityTemplateArguments.class);
 
@@ -65,7 +64,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
     /**
      * 【实体】是否为链式模型（默认 false）
-     *
      * @since 3.3.2
      */
     private boolean chain;
@@ -89,28 +87,24 @@ public class EntityTemplateArguments extends TemplateArguments {
 
     /**
      * 乐观锁字段名称(数据库字段)
-     *
      * @since 3.5.0
      */
     private String versionColumnName;
 
     /**
      * 乐观锁属性名称(实体字段)
-     *
      * @since 3.5.0
      */
     private String versionPropertyName;
 
     /**
      * 逻辑删除字段名称(数据库字段)
-     *
      * @since 3.5.0
      */
     private String logicDeleteColumnName;
 
     /**
      * 逻辑删除属性名称(实体字段)
-     *
      * @since 3.5.0
      */
     private String logicDeletePropertyName;
@@ -133,28 +127,18 @@ public class EntityTemplateArguments extends TemplateArguments {
 
     /**
      * 开启 ActiveRecord 模式（默认 false）
-     *
      * @since 3.5.0
      */
     private boolean activeRecord;
 
     /**
      * 指定生成的主键的ID类型
-     *
      * @since 3.5.0
      */
     private IdType idType;
 
     /**
-     * 转换输出文件名称
-     *
-     * @since 3.5.0
-     */
-    private ConverterFileName converterFileName = (entityName -> entityName);
-
-    /**
      * 是否覆盖已有文件（默认 false）
-     *
      * @since 3.5.2
      */
     private boolean fileOverride;
@@ -163,7 +147,6 @@ public class EntityTemplateArguments extends TemplateArguments {
      * <p>
      * 父类 Class 反射属性转换为公共字段
      * </p>
-     *
      * @param clazz 实体父类 Class
      */
     public void convertSuperEntityColumns(Class<?> clazz) {
@@ -184,7 +167,7 @@ public class EntityTemplateArguments extends TemplateArguments {
         }).collect(Collectors.toSet()));
     }
 
-    @NotNull
+
     public NamingStrategy getColumnNaming() {
         // 未指定以 naming 策略为准
         return Optional.ofNullable(columnNaming).orElse(naming);
@@ -192,7 +175,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
     /**
      * 匹配父类字段(忽略大小写)
-     *
      * @param fieldName 字段名
      * @return 是否匹配
      * @since 3.5.0
@@ -204,7 +186,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
     /**
      * 匹配忽略字段(忽略大小写)
-     *
      * @param fieldName 字段名
      * @return 是否匹配
      * @since 3.5.0
@@ -270,12 +251,12 @@ public class EntityTemplateArguments extends TemplateArguments {
         return logicDeletePropertyName;
     }
 
-    @NotNull
+
     public List<IFill> getTableFillList() {
         return tableFillList;
     }
 
-    @NotNull
+
     public NamingStrategy getNamingStrategy() {
         return naming;
     }
@@ -288,18 +269,12 @@ public class EntityTemplateArguments extends TemplateArguments {
     public IdType getIdType() {
         return idType;
     }
-
-    @NotNull
-    public ConverterFileName getConverterFileName() {
-        return converterFileName;
-    }
-
     public boolean isFileOverride() {
         return fileOverride;
     }
 
     @Override
-    public Map<String, Object> calculateArgumentsMap(@NotNull IntrospectedTable tableInfo) {
+    public Map<String, Object> asMap() {
         Map<String, Object> data = new HashMap<>();
         data.put("idType", idType == null ? null : idType.toString());
         data.put("logicDeleteFieldName", this.logicDeleteColumnName);
@@ -321,12 +296,11 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         public Builder(StrategyConfig strategyConfig) {
             super(strategyConfig);
-            this.entity.nameConvert = new INameConvert.DefaultNameConvert(strategyConfig);
+            this.entity.nameConvert = new DefaultNameConvert(strategyConfig);
         }
 
         /**
          * 名称转换实现
-         *
          * @param nameConvert 名称转换实现
          * @return this
          */
@@ -337,17 +311,15 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 自定义继承的Entity类全称
-         *
          * @param clazz 类
          * @return this
          */
-        public Builder superClass(@NotNull Class<?> clazz) {
+        public Builder superClass(Class<?> clazz) {
             return superClass(clazz.getName());
         }
 
         /**
          * 自定义继承的Entity类全称，带包名
-         *
          * @param superEntityClass 类全称
          * @return this
          */
@@ -358,7 +330,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 禁用生成serialVersionUID
-         *
          * @return this
          * @since 3.5.0
          */
@@ -369,7 +340,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 开启生成字段常量
-         *
          * @return this
          * @since 3.5.0
          */
@@ -380,7 +350,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 开启链式模型
-         *
          * @return this
          * @since 3.5.0
          */
@@ -391,7 +360,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 开启lombok模型
-         *
          * @return this
          * @since 3.5.0
          */
@@ -402,7 +370,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 开启Boolean类型字段移除is前缀
-         *
          * @return this
          * @since 3.5.0
          */
@@ -413,7 +380,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 开启生成实体时生成字段注解
-         *
          * @return this
          * @since 3.5.0
          */
@@ -424,7 +390,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 开启 ActiveRecord 模式
-         *
          * @return this
          * @since 3.5.0
          */
@@ -435,7 +400,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 设置乐观锁数据库表字段名称
-         *
          * @param versionColumnName 乐观锁数据库字段名称
          * @return this
          */
@@ -446,7 +410,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 设置乐观锁实体属性字段名称
-         *
          * @param versionPropertyName 乐观锁实体属性字段名称
          * @return this
          */
@@ -457,7 +420,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 逻辑删除数据库字段名称
-         *
          * @param logicDeleteColumnName 逻辑删除字段名称
          * @return this
          */
@@ -468,7 +430,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 逻辑删除实体属性名称
-         *
          * @param logicDeletePropertyName 逻辑删除实体属性名称
          * @return this
          */
@@ -479,7 +440,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 数据库表映射到实体的命名策略
-         *
          * @param namingStrategy 数据库表映射到实体的命名策略
          * @return this
          */
@@ -490,7 +450,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 数据库表字段映射到实体的命名策略
-         *
          * @param namingStrategy 数据库表字段映射到实体的命名策略
          * @return this
          */
@@ -501,62 +460,57 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 添加父类公共字段
-         *
          * @param superEntityColumns 父类字段(数据库字段列名)
          * @return this
          * @since 3.5.0
          */
-        public Builder addSuperEntityColumns(@NotNull String... superEntityColumns) {
+        public Builder addSuperEntityColumns(String... superEntityColumns) {
             return addSuperEntityColumns(Arrays.asList(superEntityColumns));
         }
 
-        public Builder addSuperEntityColumns(@NotNull List<String> superEntityColumnList) {
+        public Builder addSuperEntityColumns(List<String> superEntityColumnList) {
             this.entity.superEntityColumns.addAll(superEntityColumnList);
             return this;
         }
 
         /**
          * 添加忽略字段
-         *
          * @param ignoreColumns 需要忽略的字段(数据库字段列名)
          * @return this
          * @since 3.5.0
          */
-        public Builder addIgnoreColumns(@NotNull String... ignoreColumns) {
+        public Builder addIgnoreColumns(String... ignoreColumns) {
             return addIgnoreColumns(Arrays.asList(ignoreColumns));
         }
 
-        public Builder addIgnoreColumns(@NotNull List<String> ignoreColumnList) {
+        public Builder addIgnoreColumns(List<String> ignoreColumnList) {
             this.entity.ignoreColumns.addAll(ignoreColumnList);
             return this;
         }
 
         /**
          * 添加表字段填充
-         *
          * @param tableFills 填充字段
          * @return this
          * @since 3.5.0
          */
-        public Builder addTableFills(@NotNull IFill... tableFills) {
+        public Builder addTableFills(IFill... tableFills) {
             return addTableFills(Arrays.asList(tableFills));
         }
 
         /**
          * 添加表字段填充
-         *
          * @param tableFillList 填充字段集合
          * @return this
          * @since 3.5.0
          */
-        public Builder addTableFills(@NotNull List<IFill> tableFillList) {
+        public Builder addTableFills(List<IFill> tableFillList) {
             this.entity.tableFillList.addAll(tableFillList);
             return this;
         }
 
         /**
          * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
-         *
          * @see #enableFileOverride()
          */
         @Deprecated
@@ -568,7 +522,6 @@ public class EntityTemplateArguments extends TemplateArguments {
 
         /**
          * 覆盖已有文件
-         *
          * @since 3.5.3
          */
         public Builder enableFileOverride() {

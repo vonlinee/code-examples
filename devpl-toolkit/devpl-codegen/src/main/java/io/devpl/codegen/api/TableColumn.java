@@ -1,24 +1,22 @@
-package io.devpl.codegen.mbpg.config.po;
+package io.devpl.codegen.api;
 
-import io.devpl.codegen.jdbc.MetaInfo;
-import io.devpl.codegen.mbpg.config.DataSourceConfig;
-import io.devpl.codegen.mbpg.config.ProjectConfiguration;
-import io.devpl.codegen.mbpg.config.IKeyWordsHandler;
-import io.devpl.codegen.api.Context;
 import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.jdbc.MetaInfo;
+import io.devpl.codegen.mbpg.Column;
+import io.devpl.codegen.mbpg.PropertyFill;
+import io.devpl.codegen.mbpg.config.DataSourceConfig;
+import io.devpl.codegen.mbpg.config.IKeyWordsHandler;
+import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.config.rules.NamingStrategy;
-import io.devpl.codegen.mbpg.Column;
-import io.devpl.codegen.mbpg.Property;
 import io.devpl.codegen.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 /**
  * 表字段信息
  */
-public class TableField {
+public class TableColumn {
 
     private boolean convert; // 是否生成@TableField
     private boolean keyFlag;
@@ -61,16 +59,16 @@ public class TableField {
 
     /**
      * 构造方法
-     * @param configBuilder 配置构建
+     * @param context 配置构建
      * @param name          数据库字段名称
      * @since 3.5.0
      */
-    public TableField(@NotNull Context configBuilder, @NotNull String name) {
+    public TableColumn(Context context, String name) {
         this.name = name;
         this.columnName = name;
-        this.entity = configBuilder.getStrategyConfig().entity();
-        this.dataSourceConfig = configBuilder.getDataSourceConfig();
-        this.globalConfig = configBuilder.getGlobalConfig();
+        this.entity = context.getStrategyConfig().entityArguments();
+        this.dataSourceConfig = context.getDataSourceConfig();
+        this.globalConfig = context.getGlobalConfig();
     }
 
     /**
@@ -80,7 +78,7 @@ public class TableField {
      * @return this
      * @since 3.5.0
      */
-    public TableField setPropertyName(@NotNull String propertyName, @NotNull DataType columnType) {
+    public TableColumn setPropertyName(String propertyName, DataType columnType) {
         this.columnType = columnType;
         if (entity.isBooleanColumnRemoveIsPrefix() && "boolean".equalsIgnoreCase(this.getPropertyType()) && propertyName.startsWith("is")) {
             this.convert = true;
@@ -170,7 +168,7 @@ public class TableField {
      * @return this
      * @since 3.5.0
      */
-    public TableField primaryKey(boolean autoIncrement) {
+    public TableColumn primaryKey(boolean autoIncrement) {
         this.keyFlag = true;
         this.keyIdentityFlag = autoIncrement;
         return this;
@@ -180,18 +178,18 @@ public class TableField {
      * @param type 类型
      * @return this
      */
-    public TableField setType(String type) {
+    public TableColumn setType(String type) {
         this.type = type;
         return this;
     }
 
-    public TableField setComment(String comment) {
+    public TableColumn setComment(String comment) {
         // TODO 暂时挪动到这
         this.comment = this.globalConfig.isSwagger() && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
         return this;
     }
 
-    public TableField setColumnName(String columnName) {
+    public TableColumn setColumnName(String columnName) {
         this.columnName = columnName;
         IKeyWordsHandler keyWordsHandler = dataSourceConfig.getKeyWordsHandler();
         if (keyWordsHandler != null && keyWordsHandler.isKeyWords(columnName)) {
@@ -201,7 +199,7 @@ public class TableField {
         return this;
     }
 
-    public TableField setCustomMap(Map<String, Object> customMap) {
+    public TableColumn setCustomMap(Map<String, Object> customMap) {
         this.customMap = customMap;
         return this;
     }
@@ -243,7 +241,7 @@ public class TableField {
             entity.getTableFillList().stream()
                     // 忽略大写字段问题
                     .filter(tf -> tf instanceof Column && tf.getName()
-                            .equalsIgnoreCase(name) || tf instanceof Property && tf.getName().equals(propertyName))
+                            .equalsIgnoreCase(name) || tf instanceof PropertyFill && tf.getName().equals(propertyName))
                     .findFirst().ifPresent(tf -> this.fill = tf.getFieldFill().name());
         }
         return fill;

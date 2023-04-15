@@ -1,18 +1,17 @@
 package io.devpl.codegen.jdbc.query;
 
-import io.devpl.codegen.mbpg.config.IDbQuery;
-import io.devpl.codegen.mbpg.config.ITypeConvert;
 import io.devpl.codegen.api.Context;
+import io.devpl.codegen.api.ITypeConvert;
 import io.devpl.codegen.api.IntrospectedTable;
+import io.devpl.codegen.api.TableColumn;
 import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.jdbc.DbType;
 import io.devpl.codegen.jdbc.MetaInfo;
-import io.devpl.codegen.mbpg.config.po.TableField;
+import io.devpl.codegen.jdbc.meta.Column;
+import io.devpl.codegen.mbpg.config.IDbQuery;
 import io.devpl.codegen.mbpg.config.querys.H2Query;
 import io.devpl.codegen.mbpg.config.rules.DataType;
-import io.devpl.codegen.jdbc.meta.DatabaseMetaDataWrapper;
-import io.devpl.codegen.jdbc.DbType;
 import io.devpl.sdk.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -26,18 +25,16 @@ import java.util.*;
  */
 public class SQLQuery extends AbstractDatabaseIntrospector {
 
-    public SQLQuery(@NotNull Context configBuilder) {
-        super(configBuilder);
+    public SQLQuery(Context context) {
+        super(context);
     }
 
-    @NotNull
     @Override
     public List<IntrospectedTable> introspecTables() {
         boolean isInclude = strategyConfig.getInclude().size() > 0;
         boolean isExclude = strategyConfig.getExclude().size() > 0;
         // 所有的表信息
         List<IntrospectedTable> tableList = new ArrayList<>();
-
         // 需要反向生成或排除的表信息
         List<IntrospectedTable> includeTableList = new ArrayList<>();
         List<IntrospectedTable> excludeTableList = new ArrayList<>();
@@ -71,11 +68,12 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
         }
     }
 
-    protected void convertTableFields(@NotNull IntrospectedTable tableInfo) {
+    @Override
+    public void convertTableFields(IntrospectedTable tableInfo) {
         DbType dbType = this.dataSourceConfig.getDbType();
         String tableName = tableInfo.getName();
         try {
-            Map<String, DatabaseMetaDataWrapper.Column> columnsInfoMap = databaseMetaDataWrapper.getColumnsInfo(tableName, false);
+            Map<String, Column> columnsInfoMap = databaseMetaDataWrapper.getColumnsInfo(tableName, false);
             String tableFieldsSql = dbQuery.tableFieldsSql(tableName);
             Set<String> h2PkColumns = new HashSet<>();
             if (DbType.H2 == dbType) {
@@ -86,11 +84,11 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
                     }
                 });
             }
-            EntityTemplateArguments entity = strategyConfig.entity();
+            EntityTemplateArguments entity = strategyConfig.entityArguments();
             dbQuery.execute(tableFieldsSql, result -> {
                 String columnName = result.getStringResult(dbQuery.fieldName());
-                TableField field = new TableField(this.context, columnName);
-                DatabaseMetaDataWrapper.Column column = columnsInfoMap.get(columnName.toLowerCase());
+                TableColumn field = new TableColumn(this.context, columnName);
+                Column column = columnsInfoMap.get(columnName.toLowerCase());
                 MetaInfo metaInfo = new MetaInfo(column);
                 // 避免多重主键设置，目前只取第一个找到ID，并放到list中的索引为0的位置
                 boolean isId = DbType.H2 == dbType ? h2PkColumns.contains(columnName) : result.isPrimaryKey();
@@ -104,11 +102,12 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
                 }
                 // 处理ID
                 field.setColumnName(columnName)
-                     .setType(result.getStringResult(dbQuery.fieldType()))
-                     .setComment(result.getFiledComment())
-                     .setCustomMap(dbQuery.getCustomFields(result.getResultSet()));
-                String propertyName = entity.getNameConvert().propertyNameConvert(field);
-                DataType columnType = dataSourceConfig.getTypeConvert().processTypeConvert(globalConfig, field);
+                        .setType(result.getStringResult(dbQuery.fieldType()))
+                        .setComment(result.getFiledComment())
+                        .setCustomMap(dbQuery.getCustomFields(result.getResultSet()));
+                String propertyName = entity.getNameConvert().propertyNameConvert(field.getName());
+                DataType columnType = dataSourceConfig.getTypeConvert()
+                        .processTypeConvert(globalConfig, field.getType());
                 field.setPropertyName(propertyName, columnType);
                 field.setMetaInfo(metaInfo);
                 tableInfo.addField(field);

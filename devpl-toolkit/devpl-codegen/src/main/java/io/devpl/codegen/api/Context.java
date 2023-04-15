@@ -1,15 +1,15 @@
 package io.devpl.codegen.api;
 
-import io.devpl.codegen.generator.GeneratedFile;
-import io.devpl.codegen.mbpg.config.*;
 import io.devpl.codegen.jdbc.query.DatabaseIntrospector;
-import io.devpl.codegen.utils.StringUtils;
+import io.devpl.codegen.mbpg.config.*;
 import io.devpl.codegen.utils.StringPool;
+import io.devpl.codegen.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -68,7 +68,6 @@ public class Context extends AbstractContext {
 
     /**
      * 数据查询实例
-     * @since 3.5.3
      */
     private final DatabaseIntrospector databaseIntrospector;
 
@@ -117,7 +116,7 @@ public class Context extends AbstractContext {
      */
     private String joinPath(String parentDir, String packageName) {
         if (StringUtils.isBlank(parentDir)) {
-            parentDir = System.getProperty(ConstVal.JAVA_TMPDIR);
+            parentDir = System.getProperty("java.io.tmpdir");
         }
         if (!StringUtils.endsWith(parentDir, File.separator)) {
             parentDir += File.separator;
@@ -184,15 +183,32 @@ public class Context extends AbstractContext {
     }
 
     /**
-     * 获取表信息
+     * Introspect tables based on the configuration specified in the
+     * constructor. This method is long running.
+     * @param callback                 a progress callback if progress information is desired, or
+     *                                 <code>null</code>
+     * @param warnings                 any warning generated from this method will be added to the
+     *                                 List. Warnings are always Strings.
+     * @param fullyQualifiedTableNames a set of table names to generate. The elements of the set must
+     *                                 be Strings that exactly match what's specified in the
+     *                                 configuration. For example, if table name = "foo" and schema =
+     *                                 "bar", then the fully qualified table name is "foo.bar". If
+     *                                 the Set is null or empty, then all tables in the configuration
+     *                                 will be used for code generation.
+     * @throws SQLException         if some error arises while introspecting the specified
+     *                              database tables.
+     * @throws InterruptedException if the progress callback reports a cancel
      */
     @Override
-    public void introspectTables() {
+    public void introspectTables(ProgressCallback callback, List<String> warnings, Set<String> fullyQualifiedTableNames) {
         if (tableInfoList.isEmpty()) {
-            List<IntrospectedTable> tableInfos = this.databaseIntrospector.introspecTables();
-            if (!tableInfos.isEmpty()) {
-                this.tableInfoList.addAll(tableInfos);
-            }
+            List<IntrospectedTable> introspectedTables = this.databaseIntrospector.introspecTables();
+            // 性能优化，只处理需执行表字段 https://github.com/baomidou/mybatis-plus/issues/219
+            introspectedTables.forEach(table -> {
+                databaseIntrospector.convertTableFields(table);
+                table.processTable();
+            });
+            this.tableInfoList.addAll(introspectedTables);
         }
     }
 

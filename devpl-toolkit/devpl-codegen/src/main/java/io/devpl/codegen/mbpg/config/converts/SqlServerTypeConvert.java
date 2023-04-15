@@ -19,7 +19,7 @@ import static io.devpl.codegen.mbpg.config.converts.TypeConverts.contains;
 import static io.devpl.codegen.mbpg.config.converts.TypeConverts.containsAny;
 
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
-import io.devpl.codegen.mbpg.config.ITypeConvert;
+import io.devpl.codegen.api.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 

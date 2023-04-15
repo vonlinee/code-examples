@@ -1,14 +1,12 @@
 package io.devpl.codegen.api;
 
-import com.baomidou.mybatisplus.annotation.*;
+import io.devpl.codegen.generator.AbstractGenerator;
 import io.devpl.codegen.generator.GeneratedFile;
-import io.devpl.codegen.mbpg.config.INameConvert;
+import io.devpl.codegen.generator.template.TemplateBasedGenerator;
+import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
 import io.devpl.codegen.mbpg.config.rules.DataType;
-import io.devpl.codegen.generator.AbstractGenerator;
-import io.devpl.codegen.generator.template.TemplateBasedGenerator;
-import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.utils.StringUtils;
 import lombok.Data;
 
@@ -44,7 +42,7 @@ public class IntrospectedTable {
     private final Set<String> importPackages = new TreeSet<>();
 
     /**
-     * 是否转换
+     * 是否转换 表名
      */
     private boolean convert;
 
@@ -91,7 +89,7 @@ public class IntrospectedTable {
     /**
      * 表字段
      */
-    private final List<io.devpl.codegen.mbpg.config.po.TableField> fields = new ArrayList<>();
+    private final List<TableColumn> fields = new ArrayList<>();
 
     /**
      * 是否有主键
@@ -101,7 +99,7 @@ public class IntrospectedTable {
     /**
      * 公共字段
      */
-    private final List<io.devpl.codegen.mbpg.config.po.TableField> commonFields = new ArrayList<>();
+    private final List<TableColumn> commonFields = new ArrayList<>();
 
     /**
      * 字段名称集
@@ -122,7 +120,7 @@ public class IntrospectedTable {
     public IntrospectedTable(Context context, String name) {
         this.strategyConfig = context.getStrategyConfig();
         this.globalConfig = context.getGlobalConfig();
-        this.entity = context.getStrategyConfig().entity();
+        this.entity = context.getStrategyConfig().entityArguments();
         this.name = name;
     }
 
@@ -136,10 +134,6 @@ public class IntrospectedTable {
             this.convert = !entityName.equalsIgnoreCase(name);
         }
         return this;
-    }
-
-    public String getEntityPath() {
-        return entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
     }
 
     /**
@@ -158,7 +152,7 @@ public class IntrospectedTable {
      * @param field 字段
      * @since 3.5.0
      */
-    public void addField(io.devpl.codegen.mbpg.config.po.TableField field) {
+    public void addField(TableColumn field) {
         if (entity.matchIgnoreColumns(field.getColumnName())) {
             // 忽略字段不在处理
             return;
@@ -167,11 +161,6 @@ public class IntrospectedTable {
         } else {
             this.fields.add(field);
         }
-    }
-
-    public IntrospectedTable addImportPackages(List<String> pkgList) {
-        importPackages.addAll(pkgList);
-        return this;
     }
 
     /**
@@ -186,20 +175,19 @@ public class IntrospectedTable {
         } else {
             if (entity.isActiveRecord()) {
                 // 无父类开启 AR 模式
-                // this.importPackages.add(Model.class.getCanonicalName());
+                this.importPackages.add("com.baomidou.mybatisplus.Mode");
             }
         }
         if (entity.isSerialVersionUID() || entity.isActiveRecord()) {
             this.importPackages.add(Serializable.class.getCanonicalName());
         }
         if (this.isConvert()) {
-            this.importPackages.add(TableName.class.getCanonicalName());
+            this.importPackages.add("com.baomidou.mybatisplus.annotation.TableName");
         }
-        IdType idType = entity.getIdType();
-        if (null != idType && this.isHavePrimaryKey()) {
+        if (this.isHavePrimaryKey()) {
             // 指定需要 IdType 场景
-            this.importPackages.add(IdType.class.getCanonicalName());
-            this.importPackages.add(TableId.class.getCanonicalName());
+            this.importPackages.add("com.baomidou.mybatisplus.annotation.IdType");
+            this.importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
         }
         this.fields.forEach(field -> {
             DataType columnType = field.getColumnType();
@@ -209,27 +197,27 @@ public class IntrospectedTable {
             if (field.isKeyFlag()) {
                 // 主键
                 if (field.isConvert() || field.isKeyIdentityFlag()) {
-                    importPackages.add(TableId.class.getCanonicalName());
+                    importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
                 }
                 // 自增
                 if (field.isKeyIdentityFlag()) {
-                    importPackages.add(IdType.class.getCanonicalName());
+                    importPackages.add("com.baomidou.mybatisplus.annotation.IdType");
                 }
             } else if (field.isConvert()) {
                 // 普通字段
-                importPackages.add(com.baomidou.mybatisplus.annotation.TableField.class.getCanonicalName());
+                importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
             }
             if (null != field.getFill()) {
                 // 填充字段
-                importPackages.add(com.baomidou.mybatisplus.annotation.TableField.class.getCanonicalName());
+                importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
                 // TODO 好像default的不用处理也行,这个做优化项目.
-                importPackages.add(FieldFill.class.getCanonicalName());
+                importPackages.add("com.baomidou.mybatisplus.annotation.FieldFill");
             }
             if (field.isVersionField()) {
-                this.importPackages.add(Version.class.getCanonicalName());
+                this.importPackages.add("com.baomidou.mybatisplus.annotation.Version");
             }
             if (field.isLogicDeleteField()) {
-                this.importPackages.add(TableLogic.class.getCanonicalName());
+                this.importPackages.add("com.baomidou.mybatisplus.annotation.TableLogic");
             }
         });
     }
@@ -241,15 +229,15 @@ public class IntrospectedTable {
     public void processTable() {
         INameConvert nameConvert = entity.getNameConvert();
         if (nameConvert == null) {
-            nameConvert = new INameConvert.DefaultNameConvert(strategyConfig);
+            nameConvert = new DefaultNameConvert(strategyConfig);
         }
         String entityName = nameConvert.entityNameConvert(this);
-        this.setEntityName(entity.getConverterFileName().convert(entityName));
-        this.mapperName = strategyConfig.mapper().getConverterMapperFileName().convert(entityName);
-        this.xmlName = strategyConfig.mapper().getConverterXmlFileName().convert(entityName);
+        this.setEntityName("");
+        this.mapperName = strategyConfig.mapperArguments().getConverterMapperFileName().convert(entityName);
+        this.xmlName = strategyConfig.mapperArguments().getConverterXmlFileName().convert(entityName);
         this.serviceName = strategyConfig.service().getConverterServiceFileName().convert(entityName);
         this.serviceImplName = strategyConfig.service().getConverterServiceImplFileName().convert(entityName);
-        this.controllerName = strategyConfig.controller().getConverterFileName().convert(entityName);
+        this.controllerName = strategyConfig.controllerArguments().getConverterFileName().convert(entityName);
         this.importPackage();
     }
 
@@ -285,27 +273,7 @@ public class IntrospectedTable {
         return entityName;
     }
 
-    public String getMapperName() {
-        return mapperName;
-    }
-
-    public String getXmlName() {
-        return xmlName;
-    }
-
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public String getServiceImplName() {
-        return serviceImplName;
-    }
-
-    public String getControllerName() {
-        return controllerName;
-    }
-
-    public List<io.devpl.codegen.mbpg.config.po.TableField> getFields() {
+    public List<TableColumn> getFields() {
         return fields;
     }
 

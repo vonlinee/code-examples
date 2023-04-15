@@ -2,6 +2,7 @@ package io.devpl.codegen.mbpg.config;
 
 /**
  * 输出文件类型
+ * 模板命名方式
  */
 public enum OutputFile implements TypeEnum<String, OutputFile> {
 

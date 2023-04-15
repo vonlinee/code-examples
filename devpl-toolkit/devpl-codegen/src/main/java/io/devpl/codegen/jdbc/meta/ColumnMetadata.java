@@ -1,11 +1,9 @@
 package io.devpl.codegen.jdbc.meta;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * @see java.sql.DatabaseMetaData#getColumns(String, String, String, String)
- * @since 11
  */
 public class ColumnMetadata implements Serializable {
 
@@ -43,7 +41,6 @@ public class ColumnMetadata implements Serializable {
 
     /**
      * COLUMN_SIZE int => column size.
-     *
      * @see java.sql.DatabaseMetaData#getColumns(String, String, String, String)
      */
     private Integer columnSize;
@@ -69,7 +66,6 @@ public class ColumnMetadata implements Serializable {
      * 0 - Indicates that the column definitely allows NULL values.
      * 1 - Indicates that the column definitely allows NULL values.
      * 2 - Indicates that the nullability of columns is unknown.
-     *
      * @see java.sql.DatabaseMetaData#columnNoNulls
      * @see java.sql.DatabaseMetaData#columnNullable
      * @see java.sql.DatabaseMetaData#columnNullableUnknown

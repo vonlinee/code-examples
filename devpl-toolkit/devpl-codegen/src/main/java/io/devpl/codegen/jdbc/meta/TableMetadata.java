@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
+ * <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/">JDBC specification</a>
  * @see java.sql.DatabaseMetaData#getTables(String, String, String, String[])
  */
 public class TableMetadata implements Serializable {
@@ -42,7 +43,7 @@ public class TableMetadata implements Serializable {
     private String typeCat;
 
     /**
-     * String => the types schema (may be null)
+     * String => the types schema (maybe null)
      */
     private String typeSchem;
 
@@ -143,17 +144,7 @@ public class TableMetadata implements Serializable {
 
     @Override
     public String toString() {
-        return "TableMetadata{" + "tableCat='" + tableCat + '\'' +
-                ", tableSchem='" + tableSchem + '\'' +
-                ", tableName='" + tableName + '\'' +
-                ", tableType='" + tableType + '\'' +
-                ", remarks='" + remarks + '\'' +
-                ", typeCat='" + typeCat + '\'' +
-                ", typeSchem='" + typeSchem + '\'' +
-                ", typeName='" + typeName + '\'' +
-                ", selfReferencingColName='" + selfReferencingColName + '\'' +
-                ", refGeneration='" + refGeneration + '\'' +
-                '}';
+        return "TableMetadata{" + "tableCat='" + tableCat + '\'' + ", tableSchem='" + tableSchem + '\'' + ", tableName='" + tableName + '\'' + ", tableType='" + tableType + '\'' + ", remarks='" + remarks + '\'' + ", typeCat='" + typeCat + '\'' + ", typeSchem='" + typeSchem + '\'' + ", typeName='" + typeName + '\'' + ", selfReferencingColName='" + selfReferencingColName + '\'' + ", refGeneration='" + refGeneration + '\'' + '}';
     }
 
     @Override

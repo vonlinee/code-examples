@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * 控制器属性配置
  */
-public class ControllerTemplateArguments extends TemplateArguments {
+public class ControllerTemplateArguments implements TemplateArguments {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ControllerTemplateArguments.class);
 
@@ -45,14 +45,12 @@ public class ControllerTemplateArguments extends TemplateArguments {
 
     /**
      * 转换输出控制器文件名称
-     *
      * @since 3.5.0
      */
     private ConverterFileName converterFileName = (entityName -> entityName + ConstVal.CONTROLLER);
 
     /**
      * 是否覆盖已有文件（默认 false）
-     *
      * @since 3.5.2
      */
     private boolean fileOverride;
@@ -78,10 +76,12 @@ public class ControllerTemplateArguments extends TemplateArguments {
         return fileOverride;
     }
 
+    private String entityPath;
+
     @Override
-    public Map<String, Object> calculateArgumentsMap(IntrospectedTable tableInfo) {
+    public Map<String, Object> asMap() {
         Map<String, Object> data = new HashMap<>(5);
-        data.put("controllerMappingHyphen", StringUtils.camelToHyphen(tableInfo.getEntityPath()));
+        data.put("controllerMappingHyphen", StringUtils.camelToHyphen(entityPath));
         data.put("controllerMappingHyphenStyle", this.hyphenStyle);
         data.put("restControllerStyle", this.restStyle);
         data.put("superControllerClassPackage", StringUtils.isBlank(superClass) ? null : superClass);
@@ -99,7 +99,6 @@ public class ControllerTemplateArguments extends TemplateArguments {
 
         /**
          * 父类控制器
-         *
          * @param clazz 父类控制器
          * @return this
          */
@@ -109,7 +108,6 @@ public class ControllerTemplateArguments extends TemplateArguments {
 
         /**
          * 父类控制器
-         *
          * @param superClass 父类控制器类名
          * @return this
          */
@@ -120,7 +118,6 @@ public class ControllerTemplateArguments extends TemplateArguments {
 
         /**
          * 开启驼峰转连字符
-         *
          * @return this
          * @since 3.5.0
          */
@@ -131,7 +128,6 @@ public class ControllerTemplateArguments extends TemplateArguments {
 
         /**
          * 开启生成@RestController控制器
-         *
          * @return this
          * @since 3.5.0
          */
@@ -142,7 +138,6 @@ public class ControllerTemplateArguments extends TemplateArguments {
 
         /**
          * 转换输出文件名称
-         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
@@ -154,7 +149,6 @@ public class ControllerTemplateArguments extends TemplateArguments {
 
         /**
          * 格式化文件名称
-         *
          * @param format 　格式
          * @return this
          * @since 3.5.0
@@ -165,7 +159,6 @@ public class ControllerTemplateArguments extends TemplateArguments {
 
         /**
          * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
-         *
          * @see #enableFileOverride()
          */
         @Deprecated
@@ -177,7 +170,6 @@ public class ControllerTemplateArguments extends TemplateArguments {
 
         /**
          * 覆盖已有文件
-         *
          * @since 3.5.3
          */
         public Builder enableFileOverride() {

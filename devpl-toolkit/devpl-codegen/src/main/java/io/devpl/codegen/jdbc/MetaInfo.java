@@ -1,13 +1,7 @@
 package io.devpl.codegen.jdbc;
 
-import io.devpl.codegen.jdbc.JdbcType;
-import io.devpl.codegen.jdbc.meta.DatabaseMetaDataWrapper;
+import io.devpl.codegen.jdbc.meta.Column;
 
-/**
- * 元数据信息
- * @author nieqiurong 2021/2/8
- * @since 3.5.0
- */
 public class MetaInfo {
     private String name;
 
@@ -23,7 +17,7 @@ public class MetaInfo {
 
     private JdbcType jdbcType;
 
-    public MetaInfo(DatabaseMetaDataWrapper.Column column) {
+    public MetaInfo(Column column) {
         if (column != null) {
             this.name = column.getName();
             this.length = column.getLength();

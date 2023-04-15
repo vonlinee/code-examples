@@ -15,16 +15,15 @@ import java.util.Map;
 /**
  * Mapper模板参数
  */
-public class MapperTemplateArguments extends TemplateArguments {
+public class MapperTemplateArguments implements TemplateArguments {
 
     /**
      * 自定义继承的Mapper类全称，带包名
      */
-    private String superClass = ConstVal.SUPER_MAPPER_CLASS;
+    private String superClass = "com.baomidou.mybatisplus.core.mapper.BaseMapper";
 
     /**
      * 是否添加 @Mapper 注解（默认 false）
-     *
      * @see #mapperAnnotationClass
      * @since 3.5.1
      * @deprecated 3.5.4
@@ -34,49 +33,42 @@ public class MapperTemplateArguments extends TemplateArguments {
 
     /**
      * Mapper标记注解
-     *
      * @since 3.5.3
      */
     private String mapperAnnotationClass;
 
     /**
      * 是否开启BaseResultMap（默认 false）
-     *
      * @since 3.5.0
      */
     private boolean baseResultMap;
 
     /**
      * 是否开启baseColumnList（默认 false）
-     *
      * @since 3.5.0
      */
     private boolean baseColumnList;
 
     /**
      * 转换输出Mapper文件名称
-     *
      * @since 3.5.0
      */
     private ConverterFileName converterMapperFileName = (entityName -> entityName + ConstVal.MAPPER);
 
     /**
      * 转换输出Xml文件名称
-     *
      * @since 3.5.0
      */
     private ConverterFileName converterXmlFileName = (entityName -> entityName + ConstVal.MAPPER);
 
     /**
      * 是否覆盖已有文件（默认 false）
-     *
      * @since 3.5.2
      */
     private boolean fileOverride;
 
     /**
      * 设置缓存实现类
-     *
      * @since 3.5.0
      */
     private String cache;
@@ -116,8 +108,7 @@ public class MapperTemplateArguments extends TemplateArguments {
     }
 
     @Override
-    @NotNull
-    public Map<String, Object> calculateArgumentsMap(@NotNull IntrospectedTable tableInfo) {
+    public Map<String, Object> asMap() {
         Map<String, Object> data = new HashMap<>();
         boolean enableCache = this.cache != null;
         data.put("enableCache", enableCache);
@@ -145,7 +136,6 @@ public class MapperTemplateArguments extends TemplateArguments {
 
         /**
          * 父类Mapper
-         *
          * @param superClass 类名
          * @return this
          */
@@ -156,7 +146,6 @@ public class MapperTemplateArguments extends TemplateArguments {
 
         /**
          * 父类Mapper
-         *
          * @param superClass 类
          * @return this
          * @since 3.5.0
@@ -167,7 +156,6 @@ public class MapperTemplateArguments extends TemplateArguments {
 
         /**
          * 开启 @Mapper 注解
-         *
          * @return this
          * @since 3.5.1
          * @deprecated 3.5.4
@@ -182,7 +170,6 @@ public class MapperTemplateArguments extends TemplateArguments {
 
         /**
          * 标记 Mapper 注解
-         *
          * @param mapperAnnotationClass 注解Class
          * @return this
          * @since 3.5.3
@@ -194,7 +181,6 @@ public class MapperTemplateArguments extends TemplateArguments {
 
         /**
          * 开启baseResultMap
-         *
          * @return this
          * @since 3.5.0
          */
@@ -205,7 +191,6 @@ public class MapperTemplateArguments extends TemplateArguments {
 
         /**
          * 开启baseColumnList
-         *
          * @return this
          * @since 3.5.0
          */
@@ -216,7 +201,6 @@ public class MapperTemplateArguments extends TemplateArguments {
 
         /**
          * 设置缓存实现类
-         *
          * @param cache 缓存实现
          * @return this
          * @since 3.5.0
@@ -228,7 +212,6 @@ public class MapperTemplateArguments extends TemplateArguments {
 
         /**
          * 输出Mapper文件名称转换
-         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
@@ -240,7 +223,6 @@ public class MapperTemplateArguments extends TemplateArguments {
 
         /**
          * 转换Xml文件名称处理
-         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
@@ -252,7 +234,6 @@ public class MapperTemplateArguments extends TemplateArguments {
 
         /**
          * 格式化Mapper文件名称
-         *
          * @param format 　格式
          * @return this
          * @since 3.5.0
@@ -263,7 +244,6 @@ public class MapperTemplateArguments extends TemplateArguments {
 
         /**
          * 格式化Xml文件名称
-         *
          * @param format 格式
          * @return this
          * @since 3.5.0
@@ -274,7 +254,6 @@ public class MapperTemplateArguments extends TemplateArguments {
 
         /**
          * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
-         *
          * @see #enableFileOverride()
          */
         @Deprecated

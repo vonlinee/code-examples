@@ -1,7 +1,9 @@
 package io.devpl.codegen.utils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class FileUtils {
 
@@ -58,5 +60,13 @@ public class FileUtils {
 
     public static void show() {
 
+    }
+
+    public static void write(String content, File file) {
+        try {
+            Files.writeString(file.toPath(), content);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

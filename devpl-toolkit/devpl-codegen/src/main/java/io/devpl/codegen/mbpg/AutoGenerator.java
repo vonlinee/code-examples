@@ -16,7 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 生成文件
@@ -111,11 +113,8 @@ public class AutoGenerator implements CodeGenerator {
         templateEngine.init(context);
         // 执行文件输出
         generate(context, null);
-
         templateEngine.open();
-        logger.debug("==========================文件生成完成！！！==========================");
     }
-
 
     /**
      * 步骤如下：
@@ -123,36 +122,29 @@ public class AutoGenerator implements CodeGenerator {
      * 2.根据配置初始化模板：初始化模板参数
      * @param context          上下文对象
      * @param progressCallback 进度回调
+     * @see org.mybatis.generator.config.Context#generateFiles(org.mybatis.generator.api.ProgressCallback, List, List, List, List, List)
      */
     @Override
     public void generate(Context context, ProgressCallback progressCallback) {
-        try {
-            // 生成表信息
-            context.introspectTables();
-            // 所有的表信息
-            List<IntrospectedTable> introspectedTables = context.getIntrospectedTables();
+        // 生成表信息
+        context.introspectTables(progressCallback, new ArrayList<>(), new HashSet<>());
+        // 所有的表信息
+        List<IntrospectedTable> introspectedTables = context.getIntrospectedTables();
+        // 初始化 IntrospectedTable
+        for (IntrospectedTable introspectedTable : introspectedTables) {
+            introspectedTable.setContext(context);
+            introspectedTable.initialize();
+        }
 
-            for (IntrospectedTable introspectedTable : introspectedTables) {
-                introspectedTable.initialize();
-                // TODO 优化
-                introspectedTable.setContext(context);
-            }
-
-            List<GeneratedFile> generatedFiles = new ArrayList<>();
-            for (IntrospectedTable introspectedTable : introspectedTables) {
-                // 由每个表确定哪些文件需要生成
-                generatedFiles.addAll(introspectedTable.calculateGeneratedFiles(null));
-            }
-
-            for (GeneratedFile generatedFile : generatedFiles) {
-                File directory = shellCallback.getDirectory(generatedFile.getFileName(), null);
-
-                String formattedContent = generatedFile.getFormattedContent();
-
-                System.out.println(formattedContent);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("无法创建文件，请检查配置信息！", e);
+        List<GeneratedFile> generatedFiles = new ArrayList<>();
+        for (IntrospectedTable introspectedTable : introspectedTables) {
+            // 由每个表确定哪些文件需要生成
+            generatedFiles.addAll(introspectedTable.calculateGeneratedFiles(null));
+        }
+        // 遍历所有文件
+        for (GeneratedFile generatedFile : generatedFiles) {
+            String formattedContent = generatedFile.getFormattedContent();
+            FileUtils.write(formattedContent, new File("D:/Temp", UUID.randomUUID().toString() + ".java"));
         }
     }
 }

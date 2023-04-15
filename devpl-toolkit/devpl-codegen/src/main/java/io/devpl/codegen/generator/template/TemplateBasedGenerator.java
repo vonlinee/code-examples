@@ -1,18 +1,16 @@
 package io.devpl.codegen.generator.template;
 
-import io.devpl.codegen.generator.GeneratedFile;
+import io.devpl.codegen.api.Context;
+import io.devpl.codegen.api.IntrospectedTable;
 import io.devpl.codegen.api.TemplateGeneratedFile;
 import io.devpl.codegen.generator.AbstractGenerator;
-import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
-import io.devpl.codegen.generator.template.impl.ServiceImplTemplateArguments;
-import io.devpl.codegen.api.Context;
+import io.devpl.codegen.generator.GeneratedFile;
+import io.devpl.codegen.generator.template.impl.*;
 import io.devpl.codegen.mbpg.config.OutputFile;
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.api.IntrospectedTable;
 import io.devpl.codegen.utils.StringUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,43 +61,46 @@ public class TemplateBasedGenerator extends AbstractGenerator {
 
         // Entity
         TemplateGeneratedFile entityFile = new TemplateGeneratedFile();
-        entityFile.setFilename("Entity.java");
+        entityFile.setFilename(table.getEntityName() + ".java");
 
         TemplateSource ts = te.load(OutputFile.ENTITY_JAVA.getTemplate());
 
-
         entityFile.setTemplateSource(ts);
-        EntityTemplateArguments entity = strategyConfig.entity();
-
-        Map<String, Object> map = entity.calculateArgumentsMap(table);
-
-        entity.getProperties().putAll(map);
-        entityFile.setTemplateArguments(entity);
+        EntityTemplateArguments etArgs = strategyConfig.entityArguments();
+        entityFile.setTemplateArguments(etArgs);
         generatedFiles.add(entityFile);
 
         // Mapper.java
         TemplateGeneratedFile mapperJavaFile = new TemplateGeneratedFile();
-        entityFile.setTemplateArguments(strategyConfig.mapper());
+        MapperTemplateArguments mapperArgs = strategyConfig.mapperArguments();
+        mapperJavaFile.setTemplateArguments(mapperArgs);
+        mapperJavaFile.setTemplateSource(te.load(OutputFile.MAPPER.getTemplate()));
         generatedFiles.add(mapperJavaFile);
 
         // Mapper.xml
         TemplateGeneratedFile mapperXmlFile = new TemplateGeneratedFile();
-        entityFile.setTemplateArguments(strategyConfig.mapper());
+        mapperXmlFile.setTemplateArguments(mapperArgs);
+        mapperXmlFile.setTemplateSource(te.load(OutputFile.XML.getTemplate()));
         generatedFiles.add(mapperXmlFile);
 
         // Service.java
         TemplateGeneratedFile serviceJavaFile = new TemplateGeneratedFile();
-        entityFile.setTemplateArguments(strategyConfig.service());
+        ServiceTemplateArguments serviceArgs = strategyConfig.service();
+        serviceJavaFile.setTemplateArguments(serviceArgs);
+        serviceJavaFile.setTemplateSource(te.load(OutputFile.SERVICE.getTemplate()));
         generatedFiles.add(serviceJavaFile);
 
         // ServiceImpl.java
         TemplateGeneratedFile serviceImplJavaFile = new TemplateGeneratedFile();
-        entityFile.setTemplateArguments(new ServiceImplTemplateArguments());
+        serviceImplJavaFile.setTemplateArguments(serviceArgs);
+        serviceImplJavaFile.setTemplateSource(te.load(OutputFile.SERVICE_IMPL.getTemplate()));
         generatedFiles.add(serviceImplJavaFile);
 
         // Controller.java
         TemplateGeneratedFile controllerJavaFile = new TemplateGeneratedFile();
-        entityFile.setTemplateArguments(strategyConfig.controller());
+        ControllerTemplateArguments controllerArgs = strategyConfig.controllerArguments();
+        controllerJavaFile.setTemplateArguments(controllerArgs);
+        controllerJavaFile.setTemplateSource(te.load(OutputFile.CONTROLLER.getTemplate()));
         generatedFiles.add(controllerJavaFile);
 
         return generatedFiles;

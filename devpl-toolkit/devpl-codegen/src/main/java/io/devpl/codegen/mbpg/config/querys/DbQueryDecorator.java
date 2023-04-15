@@ -1,12 +1,11 @@
 package io.devpl.codegen.mbpg.config.querys;
 
+import io.devpl.codegen.jdbc.DbType;
+import io.devpl.codegen.jdbc.LikeTable;
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.IDbQuery;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.jdbc.LikeTable;
-import io.devpl.codegen.jdbc.DbType;
 import io.devpl.codegen.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +25,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
     private final String schema;
     private final Logger logger;
 
-    public DbQueryDecorator(@NotNull DataSourceConfig dataSourceConfig, @NotNull StrategyConfig strategyConfig) {
+    public DbQueryDecorator(DataSourceConfig dataSourceConfig, StrategyConfig strategyConfig) {
         this.dbQuery = dataSourceConfig.getDbQuery();
         this.connection = dataSourceConfig.getConnection();
         this.dbType = dataSourceConfig.getDbType();
@@ -73,7 +72,6 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
     /**
      * 扩展{@link #tableFieldsSql()}方法
-     *
      * @param tableName 表名
      * @return 查询表字段语句
      */
@@ -158,7 +156,6 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
     /**
      * 执行 SQL 查询，回调返回结果
-     *
      * @param sql      执行SQL
      * @param consumer 结果处理
      * @throws SQLException SQLException
@@ -227,7 +224,6 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
         /**
          * 获取格式化注释
-         *
          * @param columnLabel 字段列
          * @return 注释
          */
@@ -237,7 +233,6 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
         /**
          * 获取表注释
-         *
          * @return 表注释
          */
         public String getTableComment() {

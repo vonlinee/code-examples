@@ -17,7 +17,7 @@ public class GsonConverter implements JSONConverter {
     public GsonConverter() {
         final GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls(); // 不忽略null值
-        // builder.registerTypeAdapter(Property.class, null);
+        // builder.registerTypeAdapter(PropertyFill.class, null);
         this.gson = builder.create();
     }
 

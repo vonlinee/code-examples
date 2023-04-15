@@ -191,10 +191,12 @@ public class MyBatisCodeGenerationView extends FxmlView {
             row.setOnMouseClicked(event -> {
                 if (EventUtils.isPrimaryButtonDoubleClicked(event)) {
                     TableGeneration tableItem = row.getItem();
-                    String uniqueKey = tableItem.getUniqueKey();
-                    if (!tableConfigsToBeGenerated.containsKey(uniqueKey)) {
-                        tableConfigsToBeGenerated.put(uniqueKey, tableItem);
-                        tblvTableSelected.getItems().add(tableItem);
+                    if (tableItem != null) {
+                        String uniqueKey = tableItem.getUniqueKey();
+                        if (!tableConfigsToBeGenerated.containsKey(uniqueKey)) {
+                            tableConfigsToBeGenerated.put(uniqueKey, tableItem);
+                            tblvTableSelected.getItems().add(tableItem);
+                        }
                     }
                 }
             });

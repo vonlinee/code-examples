@@ -5,6 +5,7 @@ import org.apache.velocity.VelocityContext;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Map;
 
 /**
  * 包含Velocity模板信息
@@ -12,7 +13,6 @@ import java.io.Writer;
 public class VelocityTemplateSource extends TemplateSource {
 
     Template template;
-
     VelocityTemplateEngine templateEngine;
 
     public VelocityTemplateSource(Template template, VelocityTemplateEngine templateEngine) {
@@ -20,18 +20,9 @@ public class VelocityTemplateSource extends TemplateSource {
         this.templateEngine = templateEngine;
     }
 
-    /**
-     * 模板文件路径
-     */
-    private String path;
-
-    @Override
-    public void initialize() {
-
-    }
-
     @Override
     public void render(TemplateArguments arguments, Writer writer) throws IOException {
-        template.merge(new VelocityContext(arguments.getProperties()), writer);
+        Map<String, Object> argumentsMap = arguments.asMap();
+        template.merge(argumentsMap == null ? new VelocityContext() : new VelocityContext(argumentsMap), writer);
     }
 }

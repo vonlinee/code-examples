@@ -1,15 +1,15 @@
 package io.devpl.codegen.mbpg.config;
 
+import io.devpl.codegen.api.ITypeConvert;
+import io.devpl.codegen.jdbc.DbType;
+import io.devpl.codegen.jdbc.query.AbstractDatabaseIntrospector;
+import io.devpl.codegen.jdbc.query.DatabaseIntrospector;
+import io.devpl.codegen.api.DefaultDatabaseIntrospector;
+import io.devpl.codegen.mbpg.ITypeConvertHandler;
 import io.devpl.codegen.mbpg.config.converts.MySqlTypeConvert;
 import io.devpl.codegen.mbpg.config.converts.TypeConverts;
 import io.devpl.codegen.mbpg.config.querys.DbQueryDecorator;
 import io.devpl.codegen.mbpg.config.querys.DbQueryRegistry;
-import io.devpl.codegen.jdbc.DbType;
-import io.devpl.codegen.jdbc.query.AbstractDatabaseIntrospector;
-import io.devpl.codegen.jdbc.query.DefaultDatabaseIntrospector;
-import io.devpl.codegen.jdbc.query.DatabaseIntrospector;
-import io.devpl.codegen.jdbc.query.SQLQuery;
-import io.devpl.codegen.mbpg.ITypeConvertHandler;
 import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -93,7 +93,7 @@ public class DataSourceConfig {
     /**
      * 查询方式
      * @see DefaultDatabaseIntrospector 默认查询方式，配合{@link #getTypeConvertHandler()} 使用
-     * @see SQLQuery SQL语句查询方式，配合{@link #typeConvert} 使用
+     * SQLQuery SQL语句查询方式，配合{@link #typeConvert} 使用
      * @since 3.5.3
      */
     private Class<? extends AbstractDatabaseIntrospector> databaseQueryClass = DefaultDatabaseIntrospector.class;

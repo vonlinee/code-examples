@@ -1,18 +1,19 @@
-package io.devpl.codegen.jdbc.query;
+package io.devpl.codegen.api;
 
-import io.devpl.codegen.api.Context;
-import io.devpl.codegen.mbpg.config.DataSourceConfig;
-import io.devpl.codegen.api.IntrospectedTable;
-import io.devpl.codegen.jdbc.MetaInfo;
-import io.devpl.codegen.mbpg.config.INameConvert;
-import io.devpl.codegen.mbpg.config.po.TableField;
-import io.devpl.codegen.mbpg.config.rules.DataType;
-import io.devpl.codegen.jdbc.meta.DatabaseMetaDataWrapper;
 import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
+import io.devpl.codegen.jdbc.MetaInfo;
+import io.devpl.codegen.jdbc.meta.Column;
+import io.devpl.codegen.jdbc.meta.ColumnMetadata;
+import io.devpl.codegen.jdbc.meta.Table;
+import io.devpl.codegen.jdbc.meta.TableMetadata;
+import io.devpl.codegen.jdbc.query.AbstractDatabaseIntrospector;
 import io.devpl.codegen.mbpg.ITypeConvertHandler;
-import io.devpl.codegen.api.TypeRegistry;
+import io.devpl.codegen.mbpg.config.DataSourceConfig;
+import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.sdk.util.StringUtils;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,12 +47,21 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
         boolean isExclude = strategyConfig.getExclude().size() > 0;
         // 所有的表信息
         List<IntrospectedTable> tableList = new ArrayList<>();
-        List<DatabaseMetaDataWrapper.Table> tables = getTables();
+
+
+        List<TableMetadata> tablesMetaDataList = new ArrayList<>();
+
+        try (Connection connection = dataSourceConfig.getConnection()){
+            tablesMetaDataList.addAll(databaseMetaDataWrapper.getTables(connection));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         // 需要反向生成或排除的表信息
         List<IntrospectedTable> includeTableList = new ArrayList<>();
         List<IntrospectedTable> excludeTableList = new ArrayList<>();
-        tables.forEach(table -> {
-            String tableName = table.getName();
+        tablesMetaDataList.forEach(table -> {
+            String tableName = table.getTableName();
             if (StringUtils.isNotBlank(tableName)) {
                 IntrospectedTable tableInfo = new IntrospectedTable(this.context, tableName);
                 tableInfo.setComment(table.getRemarks());
@@ -64,43 +74,42 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
             }
         });
         filter(tableList, includeTableList, excludeTableList);
-        // 性能优化，只处理需执行表字段 https://github.com/baomidou/mybatis-plus/issues/219
-        tableList.forEach(this::convertTableFields);
         return tableList;
-    }
-
-    protected List<DatabaseMetaDataWrapper.Table> getTables() {
-        // 是否跳过视图
-        boolean skipView = strategyConfig.isSkipView();
-        // 获取表过滤
-        String tableNamePattern = null;
-        if (strategyConfig.getLikeTable() != null) {
-            tableNamePattern = strategyConfig.getLikeTable().getValue();
-        }
-        return databaseMetaDataWrapper.getTables(tableNamePattern, skipView ? new String[]{"TABLE"} : new String[]{"TABLE", "VIEW"});
     }
 
     /**
      * 转换数据库字段
      * @param tableInfo 表信息
      */
-    protected void convertTableFields(IntrospectedTable tableInfo) {
+    @Override
+    public void convertTableFields(IntrospectedTable tableInfo) {
         String tableName = tableInfo.getName();
-        Map<String, DatabaseMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
-        EntityTemplateArguments entity = strategyConfig.entity();
+
+        List<ColumnMetadata> columnsMetaDataList;
+        try (Connection connection = dataSourceConfig.getConnection()) {
+            columnsMetaDataList = databaseMetaDataWrapper.getColumns(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println(columnsMetaDataList);
+
+        // 获取数据库连接，得到表信息
+        Map<String, Column> columnsInfoMap = databaseMetaDataWrapper.getColumnsInfo(tableName, true);
+        EntityTemplateArguments entity = strategyConfig.entityArguments();
         columnsInfoMap.forEach((k, columnInfo) -> {
             MetaInfo metaInfo = new MetaInfo(columnInfo);
             String columnName = columnInfo.getName();
-            TableField field = new TableField(this.context, columnName);
+            TableColumn column = new TableColumn(this.context, columnName);
             // 处理ID
             if (columnInfo.isPrimaryKey()) {
-                field.primaryKey(columnInfo.isAutoIncrement());
+                column.primaryKey(columnInfo.isAutoIncrement());
                 tableInfo.setHavePrimaryKey(true);
-                if (field.isKeyIdentityFlag() && entity.getIdType() != null) {
+                if (column.isKeyIdentityFlag() && entity.getIdType() != null) {
                     LOGGER.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableName);
                 }
             }
-            field.setColumnName(columnName).setComment(columnInfo.getRemarks());
+            column.setColumnName(columnName).setComment(columnInfo.getRemarks());
             DataType columnType = typeRegistry.getColumnType(metaInfo);
             ITypeConvertHandler typeConvertHandler = dataSourceConfig.getTypeConvertHandler();
             if (typeConvertHandler != null) {
@@ -108,16 +117,11 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
             }
             INameConvert nameConvert = entity.getNameConvert();
             if (nameConvert != null) {
-                String propertyName = nameConvert.propertyNameConvert(field);
-                field.setPropertyName(propertyName, columnType);
+                String propertyName = nameConvert.propertyNameConvert(column.getName());
+                column.setPropertyName(propertyName, columnType);
             }
-            field.setMetaInfo(metaInfo);
-            tableInfo.addField(field);
+            column.setMetaInfo(metaInfo);
+            tableInfo.addField(column);
         });
-        tableInfo.processTable();
-    }
-
-    protected Map<String, DatabaseMetaDataWrapper.Column> getColumnsInfo(String tableName) {
-        return databaseMetaDataWrapper.getColumnsInfo(tableName, true);
     }
 }

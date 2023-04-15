@@ -212,20 +212,20 @@ public class TypeUtils {
                 // ignore
             }
             if (!pluginClass.isAssignableFrom(clazz)) {
-                throw new RuntimeException("Property '" + className + "' not valid for plugin type " + pluginClass.getName());
+                throw new RuntimeException("PropertyFill '" + className + "' not valid for plugin type " + pluginClass.getName());
             }
             return clazz.getConstructor().newInstance();
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Property '" + className + "' not valid as '" + className + "' not found in the classpath", e);
+            throw new RuntimeException("PropertyFill '" + className + "' not valid as '" + className + "' not found in the classpath", e);
         } catch (NoSuchFieldException e) {
             // We can't ignore it because the right field is user configured.
-            throw new RuntimeException("Property '" + className + "' not valid as there is no '" + right + "' field in the class of '" + left + "'", e);
+            throw new RuntimeException("PropertyFill '" + className + "' not valid as there is no '" + right + "' field in the class of '" + left + "'", e);
         } catch (ClassCastException e) {
-            throw new RuntimeException("Property '" + className + "' not valid as " + e.getMessage(), e);
+            throw new RuntimeException("PropertyFill '" + className + "' not valid as " + e.getMessage(), e);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException("Property '" + className + "' not valid as " + "the default constructor is necessary, " + "but not found in the class of '" + className + "'", e);
+            throw new RuntimeException("PropertyFill '" + className + "' not valid as " + "the default constructor is necessary, " + "but not found in the class of '" + className + "'", e);
         } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Property '" + className + "' not valid. The exception info here : " + e.getMessage(), e);
+            throw new RuntimeException("PropertyFill '" + className + "' not valid. The exception info here : " + e.getMessage(), e);
         }
     }
 

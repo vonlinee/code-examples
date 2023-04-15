@@ -16,7 +16,7 @@
 package io.devpl.codegen.mbpg.config.converts;
 
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
-import io.devpl.codegen.mbpg.config.ITypeConvert;
+import io.devpl.codegen.api.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 

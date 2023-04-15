@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.config.converts;
 
-import io.devpl.codegen.mbpg.config.ITypeConvert;
+import io.devpl.codegen.api.ITypeConvert;
 import io.devpl.codegen.mbpg.config.converts.select.BranchBuilder;
 import io.devpl.codegen.mbpg.config.converts.select.Selector;
 import io.devpl.codegen.mbpg.config.rules.DataType;

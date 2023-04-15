@@ -2,18 +2,18 @@ package io.devpl.codegen.mbpg;
 
 import io.devpl.codegen.mbpg.fill.FieldFill;
 
-public class Property implements IFill {
+public class PropertyFill implements IFill {
 
     private final String propertyName;
 
     private final FieldFill fieldFill;
 
-    public Property(String propertyName, FieldFill fieldFill) {
+    public PropertyFill(String propertyName, FieldFill fieldFill) {
         this.propertyName = propertyName;
         this.fieldFill = fieldFill;
     }
 
-    public Property(String propertyName) {
+    public PropertyFill(String propertyName) {
         this.propertyName = propertyName;
         this.fieldFill = FieldFill.DEFAULT;
     }

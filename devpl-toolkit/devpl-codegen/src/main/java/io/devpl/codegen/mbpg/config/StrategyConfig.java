@@ -6,7 +6,6 @@ import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;
 import io.devpl.codegen.generator.template.impl.MapperTemplateArguments;
 import io.devpl.codegen.generator.template.impl.ServiceTemplateArguments;
 import io.devpl.codegen.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -110,7 +109,7 @@ public class StrategyConfig {
      * @return 实体配置构建者
      * @since 3.5.0
      */
-    @NotNull
+
     public EntityTemplateArguments.Builder entityBuilder() {
         return entityBuilder;
     }
@@ -120,8 +119,8 @@ public class StrategyConfig {
      * @return 实体配置
      * @since 3.5.0
      */
-    @NotNull
-    public EntityTemplateArguments entity() {
+
+    public EntityTemplateArguments entityArguments() {
         if (entity == null) {
             this.entity = new EntityTemplateArguments();
         }
@@ -133,7 +132,7 @@ public class StrategyConfig {
      * @return 控制器配置构建者
      * @since 3.5.0
      */
-    @NotNull
+
     public ControllerTemplateArguments.Builder controllerBuilder() {
         return controllerBuilder;
     }
@@ -143,8 +142,8 @@ public class StrategyConfig {
      * @return 控制器配置
      * @since 3.5.0
      */
-    @NotNull
-    public ControllerTemplateArguments controller() {
+
+    public ControllerTemplateArguments controllerArguments() {
         if (controller == null) {
             this.controller = new ControllerTemplateArguments();
         }
@@ -156,7 +155,7 @@ public class StrategyConfig {
      * @return Mapper配置构建者
      * @since 3.5.0
      */
-    @NotNull
+
     public MapperTemplateArguments.Builder mapperBuilder() {
         return mapperBuilder;
     }
@@ -166,8 +165,8 @@ public class StrategyConfig {
      * @return Mapper配置
      * @since 3.5.0
      */
-    @NotNull
-    public MapperTemplateArguments mapper() {
+
+    public MapperTemplateArguments mapperArguments() {
         if (mapper == null) {
             this.mapper = new MapperTemplateArguments();
         }
@@ -179,7 +178,7 @@ public class StrategyConfig {
      * @return Service配置构建者
      * @since 3.5.0
      */
-    @NotNull
+
     public ServiceTemplateArguments.Builder serviceBuilder() {
         return serviceBuilder;
     }
@@ -189,7 +188,7 @@ public class StrategyConfig {
      * @return Service配置
      * @since 3.5.0
      */
-    @NotNull
+
     public ServiceTemplateArguments service() {
         if (service == null) {
             this.service = new ServiceTemplateArguments();
@@ -201,7 +200,7 @@ public class StrategyConfig {
      * 大写命名、字段符合大写字母数字下划线命名
      * @param word 待判断字符串
      */
-    public boolean isCapitalModeNaming(@NotNull String word) {
+    public boolean isCapitalModeNaming(String word) {
         return isCapitalMode && StringUtils.isCapitalMode(word);
     }
 
@@ -210,7 +209,7 @@ public class StrategyConfig {
      * @param tableName 表名称
      * @since 3.3.2
      */
-    public boolean startsWithTablePrefix(@NotNull String tableName) {
+    public boolean startsWithTablePrefix(String tableName) {
         return this.tablePrefix.stream().anyMatch(tableName::startsWith);
     }
 
@@ -235,7 +234,7 @@ public class StrategyConfig {
      * @return 是否匹配
      * @since 3.5.0
      */
-    public boolean matchIncludeTable(@NotNull String tableName) {
+    public boolean matchIncludeTable(String tableName) {
         return matchTable(tableName, this.getInclude());
     }
 
@@ -245,7 +244,7 @@ public class StrategyConfig {
      * @return 是否匹配
      * @since 3.5.0
      */
-    public boolean matchExcludeTable(@NotNull String tableName) {
+    public boolean matchExcludeTable(String tableName) {
         return matchTable(tableName, this.getExclude());
     }
 
@@ -256,7 +255,7 @@ public class StrategyConfig {
      * @return 是否匹配
      * @since 3.5.0
      */
-    private boolean matchTable(@NotNull String tableName, @NotNull Set<String> matchTables) {
+    private boolean matchTable(String tableName, Set<String> matchTables) {
         return matchTables.stream().anyMatch(t -> tableNameMatches(t, tableName));
     }
 
@@ -266,7 +265,7 @@ public class StrategyConfig {
      * @param dbTableName    数据库表名
      * @return 是否匹配
      */
-    private boolean tableNameMatches(@NotNull String matchTableName, @NotNull String dbTableName) {
+    private boolean tableNameMatches(String matchTableName, String dbTableName) {
         return matchTableName.equalsIgnoreCase(dbTableName) || StringUtils.matches(matchTableName, dbTableName);
     }
 
@@ -278,32 +277,32 @@ public class StrategyConfig {
         return skipView;
     }
 
-    @NotNull
+
     public Set<String> getTablePrefix() {
         return tablePrefix;
     }
 
-    @NotNull
+
     public Set<String> getTableSuffix() {
         return tableSuffix;
     }
 
-    @NotNull
+
     public Set<String> getFieldPrefix() {
         return fieldPrefix;
     }
 
-    @NotNull
+
     public Set<String> getFieldSuffix() {
         return fieldSuffix;
     }
 
-    @NotNull
+
     public Set<String> getInclude() {
         return include;
     }
 
-    @NotNull
+
     public Set<String> getExclude() {
         return exclude;
     }
@@ -386,11 +385,11 @@ public class StrategyConfig {
          * @return this
          * @since 3.5.0
          */
-        public Builder addTablePrefix(@NotNull String... tablePrefix) {
+        public Builder addTablePrefix(String... tablePrefix) {
             return addTablePrefix(Arrays.asList(tablePrefix));
         }
 
-        public Builder addTablePrefix(@NotNull List<String> tablePrefixList) {
+        public Builder addTablePrefix(List<String> tablePrefixList) {
             this.strategyConfig.tablePrefix.addAll(tablePrefixList);
             return this;
         }
@@ -405,7 +404,7 @@ public class StrategyConfig {
             return addTableSuffix(Arrays.asList(tableSuffix));
         }
 
-        public Builder addTableSuffix(@NotNull List<String> tableSuffixList) {
+        public Builder addTableSuffix(List<String> tableSuffixList) {
             this.strategyConfig.tableSuffix.addAll(tableSuffixList);
             return this;
         }
@@ -416,11 +415,11 @@ public class StrategyConfig {
          * @return this
          * @since 3.5.0
          */
-        public Builder addFieldPrefix(@NotNull String... fieldPrefix) {
+        public Builder addFieldPrefix(String... fieldPrefix) {
             return addFieldPrefix(Arrays.asList(fieldPrefix));
         }
 
-        public Builder addFieldPrefix(@NotNull List<String> fieldPrefix) {
+        public Builder addFieldPrefix(List<String> fieldPrefix) {
             this.strategyConfig.fieldPrefix.addAll(fieldPrefix);
             return this;
         }
@@ -431,11 +430,11 @@ public class StrategyConfig {
          * @return this
          * @since 3.5.1
          */
-        public Builder addFieldSuffix(@NotNull String... fieldSuffix) {
+        public Builder addFieldSuffix(String... fieldSuffix) {
             return addFieldSuffix(Arrays.asList(fieldSuffix));
         }
 
-        public Builder addFieldSuffix(@NotNull List<String> fieldSuffixList) {
+        public Builder addFieldSuffix(List<String> fieldSuffixList) {
             this.strategyConfig.fieldSuffix.addAll(fieldSuffixList);
             return this;
         }
@@ -446,17 +445,17 @@ public class StrategyConfig {
          * @return this
          * @since 3.5.0
          */
-        public Builder addInclude(@NotNull String... include) {
+        public Builder addInclude(String... include) {
             this.strategyConfig.include.addAll(Arrays.asList(include));
             return this;
         }
 
-        public Builder addInclude(@NotNull List<String> includes) {
+        public Builder addInclude(List<String> includes) {
             this.strategyConfig.include.addAll(includes);
             return this;
         }
 
-        public Builder addInclude(@NotNull String include) {
+        public Builder addInclude(String include) {
             this.strategyConfig.include.addAll(Arrays.asList(include.split(",")));
             return this;
         }
@@ -467,11 +466,11 @@ public class StrategyConfig {
          * @return this
          * @since 3.5.0
          */
-        public Builder addExclude(@NotNull String... exclude) {
+        public Builder addExclude(String... exclude) {
             return addExclude(Arrays.asList(exclude));
         }
 
-        public Builder addExclude(@NotNull List<String> excludeList) {
+        public Builder addExclude(List<String> excludeList) {
             this.strategyConfig.exclude.addAll(excludeList);
             return this;
         }
@@ -480,7 +479,7 @@ public class StrategyConfig {
          * 包含表名
          * @return this
          */
-        public Builder likeTable(@NotNull LikeTable likeTable) {
+        public Builder likeTable(LikeTable likeTable) {
             this.strategyConfig.likeTable = likeTable;
             return this;
         }
@@ -489,13 +488,13 @@ public class StrategyConfig {
          * 不包含表名
          * @return this
          */
-        public Builder notLikeTable(@NotNull LikeTable notLikeTable) {
+        public Builder notLikeTable(LikeTable notLikeTable) {
             this.strategyConfig.notLikeTable = notLikeTable;
             return this;
         }
 
         @Override
-        @NotNull
+
         public StrategyConfig build() {
             this.strategyConfig.validate();
             return strategyConfig;

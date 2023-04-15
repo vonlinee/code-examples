@@ -5,6 +5,7 @@ import org.mybatis.generator.exception.ShellException;
 import java.io.File;
 
 public class DefaultShellCallback implements ShellCallback {
+
     @Override
     public File getDirectory(String targetProject, String targetPackage) throws ShellException {
         return new File("D:/Temp");

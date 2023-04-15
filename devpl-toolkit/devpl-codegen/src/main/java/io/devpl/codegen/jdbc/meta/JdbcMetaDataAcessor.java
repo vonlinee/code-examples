@@ -6,6 +6,8 @@ import io.devpl.codegen.utils.StringPool;
 import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.DataClassRowMapper;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -16,9 +18,9 @@ import java.util.*;
 /**
  * 数据库数据元包装类
  */
-public class DatabaseMetaDataWrapper {
+public class JdbcMetaDataAcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseMetaDataWrapper.class);
+    private static final Logger logger = LoggerFactory.getLogger(JdbcMetaDataAcessor.class);
 
     private final DatabaseMetaData databaseMetaData;
 
@@ -28,7 +30,33 @@ public class DatabaseMetaDataWrapper {
     // TODO 暂时只支持一种
     private final String schema;
 
-    public DatabaseMetaDataWrapper(DataSourceConfig dataSourceConfig) {
+    /**
+     * 获取表的元数据
+     * @param connection 连接信息
+     * @return 表的元数据
+     */
+    public List<TableMetadata> getTables(Connection connection) {
+        List<TableMetadata> tmdList = new ArrayList<>();
+        try {
+            String catalog = connection.getCatalog();
+            String schema = connection.getSchema();
+            DatabaseMetaData dbmd = connection.getMetaData();
+            BeanPropertyRowMapper<TableMetadata> rowMapper = new DataClassRowMapper<>(TableMetadata.class);
+
+            try (ResultSet resultSet = dbmd.getTables(catalog, schema, "%", new String[]{"TABLE", "VIEW"})) {
+                int rowIndex = 0;
+                while (resultSet.next()) {
+                    TableMetadata tmd = rowMapper.mapRow(resultSet, rowIndex++);
+                    tmdList.add(tmd);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return tmdList;
+    }
+
+    public JdbcMetaDataAcessor(DataSourceConfig dataSourceConfig) {
         try {
             Connection connection = dataSourceConfig.getConnection();
             this.databaseMetaData = connection.getMetaData();
@@ -48,6 +76,31 @@ public class DatabaseMetaDataWrapper {
 
     public Map<String, Column> getColumnsInfo(String tableNamePattern, boolean queryPrimaryKey) {
         return getColumnsInfo(this.catalog, this.schema, tableNamePattern, queryPrimaryKey);
+    }
+
+    /**
+     * 获取列的元数据信息
+     * @param connection
+     * @return
+     */
+    public List<ColumnMetadata> getColumns(Connection connection) {
+        List<ColumnMetadata> columnMetadataList = new ArrayList<>();
+        try {
+            String catalog = connection.getCatalog();
+            String schema = connection.getSchema();
+            DatabaseMetaData dbmd = connection.getMetaData();
+            BeanPropertyRowMapper<ColumnMetadata> rowMapper = new DataClassRowMapper<>(ColumnMetadata.class);
+
+            try (ResultSet resultSet = dbmd.getTables(catalog, schema, "%", new String[]{"TABLE", "VIEW"})) {
+                int rowIndex = 0;
+                while (resultSet.next()) {
+                    columnMetadataList.add(rowMapper.mapRow(resultSet, rowIndex++));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return columnMetadataList;
     }
 
     /**
@@ -73,22 +126,20 @@ public class DatabaseMetaDataWrapper {
         try (ResultSet resultSet = databaseMetaData.getColumns(catalog, schema, tableName, "%")) {
             while (resultSet.next()) {
                 Column column = new Column();
-                String name = resultSet.getString("COLUMN_NAME");
-                column.name = name;
-                column.primaryKey = primaryKeys.contains(name);
-                column.jdbcType = JdbcType.forCode(resultSet.getInt("DATA_TYPE"));
-                column.length = resultSet.getInt("COLUMN_SIZE");
-                column.scale = resultSet.getInt("DECIMAL_DIGITS");
-                column.remarks = formatComment(resultSet.getString("REMARKS"));
-                column.defaultValue = resultSet.getString("COLUMN_DEF");
-                column.nullable = resultSet.getInt("NULLABLE") == DatabaseMetaData.columnNullable;
+                column.setName(resultSet.getString("COLUMN_NAME"));
+                column.setPrimaryKey(primaryKeys.contains(column.getName()));
+                column.setJdbcType(JdbcType.forCode(resultSet.getInt("DATA_TYPE")));
+                column.setLength(resultSet.getInt("COLUMN_SIZE"));
+                column.setScale(resultSet.getInt("DECIMAL_DIGITS"));
+                column.setRemarks(formatComment(resultSet.getString("REMARKS")));
+                column.setDefaultValue(resultSet.getString("COLUMN_DEF"));
+                column.setNullable(resultSet.getInt("NULLABLE") == DatabaseMetaData.columnNullable);
                 try {
-                    column.autoIncrement = "YES".equals(resultSet.getString("IS_AUTOINCREMENT"));
+                    column.setAutoIncrement("YES".equals(resultSet.getString("IS_AUTOINCREMENT")));
                 } catch (SQLException sqlException) {
                     logger.warn("获取IS_AUTOINCREMENT出现异常:", sqlException);
-                    // TODO 目前测试在oracle旧驱动下存在问题，降级成false.
                 }
-                columnsInfoMap.put(name.toLowerCase(), column);
+                columnsInfoMap.put(column.getName().toLowerCase(), column);
             }
             return Collections.unmodifiableMap(columnsInfoMap);
         } catch (SQLException e) {
@@ -114,9 +165,9 @@ public class DatabaseMetaDataWrapper {
             Table table;
             while (resultSet.next()) {
                 table = new Table();
-                table.name = resultSet.getString("TABLE_NAME");
-                table.remarks = formatComment(resultSet.getString("REMARKS"));
-                table.tableType = resultSet.getString("TABLE_TYPE");
+                table.setName(resultSet.getString("TABLE_NAME"));
+                table.setRemarks(formatComment(resultSet.getString("REMARKS")));
+                table.setTableType(resultSet.getString("TABLE_TYPE"));
                 tables.add(table);
             }
         } catch (SQLException e) {
@@ -127,98 +178,15 @@ public class DatabaseMetaDataWrapper {
 
     public Table getTableInfo(String catalog, String schema, String tableName) {
         Table table = new Table();
-        // TODO 后面要根据表是否为视图来查询，后面重构表查询策略。
         try (ResultSet resultSet = databaseMetaData.getTables(catalog, schema, tableName, new String[]{"TABLE", "VIEW"})) {
-            table.name = tableName;
+            table.setName(tableName);
             while (resultSet.next()) {
-                table.remarks = formatComment(resultSet.getString("REMARKS"));
-                table.tableType = resultSet.getString("TABLE_TYPE");
+                table.setRemarks(formatComment(resultSet.getString("REMARKS")));
+                table.setTableType(resultSet.getString("TABLE_TYPE"));
             }
         } catch (SQLException e) {
             throw new RuntimeException("读取表信息:" + tableName + "错误:", e);
         }
         return table;
-    }
-
-    public static class Table {
-
-        private String name;
-
-        private String remarks;
-
-        private String tableType;
-
-        public String getRemarks() {
-            return remarks;
-        }
-
-        public String getTableType() {
-            return tableType;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public boolean isView() {
-            return "VIEW".equals(tableType);
-        }
-    }
-
-    public static class Column {
-
-        private boolean primaryKey;
-
-        private boolean autoIncrement;
-
-        private String name;
-
-        private int length;
-
-        private boolean nullable;
-
-        private String remarks;
-
-        private String defaultValue;
-
-        private int scale;
-
-        private JdbcType jdbcType;
-
-        public String getName() {
-            return name;
-        }
-
-        public int getLength() {
-            return length;
-        }
-
-        public boolean isNullable() {
-            return nullable;
-        }
-
-        public String getRemarks() {
-            return remarks;
-        }
-
-        public String getDefaultValue() {
-            return defaultValue;
-        }
-
-        public int getScale() {
-            return scale;
-        }
-
-        public JdbcType getJdbcType() {
-            return jdbcType;
-        }
-
-        public boolean isPrimaryKey() {
-            return primaryKey;
-        }
-
-        public boolean isAutoIncrement() {
-            return autoIncrement;
-        }
     }
 }

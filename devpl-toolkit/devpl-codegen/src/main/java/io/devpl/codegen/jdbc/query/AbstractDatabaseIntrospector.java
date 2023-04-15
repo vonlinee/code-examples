@@ -1,14 +1,13 @@
 package io.devpl.codegen.jdbc.query;
 
+import io.devpl.codegen.api.Context;
+import io.devpl.codegen.api.IntrospectedTable;
+import io.devpl.codegen.jdbc.meta.JdbcMetaDataAcessor;
 import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
-import io.devpl.codegen.api.Context;
-import io.devpl.codegen.api.IntrospectedTable;
 import io.devpl.codegen.mbpg.config.querys.DbQueryDecorator;
-import io.devpl.codegen.jdbc.meta.DatabaseMetaDataWrapper;
 import io.devpl.codegen.utils.StringPool;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,27 +28,23 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
 
     protected final ProjectConfiguration globalConfig;
 
+    /**
+     * 是否跳过视图
+     */
+    protected boolean skipView;
+
     protected final DbQueryDecorator dbQuery;
 
-    protected final DatabaseMetaDataWrapper databaseMetaDataWrapper;
+    protected final JdbcMetaDataAcessor databaseMetaDataWrapper;
 
-    public AbstractDatabaseIntrospector(@NotNull Context configBuilder) {
-        this.context = configBuilder;
-        this.dataSourceConfig = configBuilder.getDataSourceConfig();
-        this.strategyConfig = configBuilder.getStrategyConfig();
+    public AbstractDatabaseIntrospector(Context context) {
+        this.context = context;
+        this.dataSourceConfig = context.getDataSourceConfig();
+        this.strategyConfig = context.getStrategyConfig();
+        skipView = strategyConfig.isSkipView();
         this.dbQuery = new DbQueryDecorator(dataSourceConfig, strategyConfig);
-        this.globalConfig = configBuilder.getGlobalConfig();
-        this.databaseMetaDataWrapper = new DatabaseMetaDataWrapper(dataSourceConfig);
-    }
-
-    @NotNull
-    public Context getContext() {
-        return context;
-    }
-
-    @NotNull
-    public DataSourceConfig getDataSourceConfig() {
-        return dataSourceConfig;
+        this.globalConfig = context.getGlobalConfig();
+        this.databaseMetaDataWrapper = new JdbcMetaDataAcessor(dataSourceConfig);
     }
 
     protected void filter(List<IntrospectedTable> tableList, List<IntrospectedTable> includeTableList, List<IntrospectedTable> excludeTableList) {
@@ -57,8 +52,7 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
         boolean isExclude = strategyConfig.getExclude().size() > 0;
         if (isExclude || isInclude) {
             Map<String, String> notExistTables = new HashSet<>(isExclude ? strategyConfig.getExclude() : strategyConfig.getInclude())
-                    .stream()
-                    .filter(s -> !Context.matcherRegTable(s))
+                    .stream().filter(s -> !Context.matcherRegTable(s))
                     .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n));
             // 将已经存在的表移除，获取配置中数据库不存在的表
             for (IntrospectedTable tabInfo : tableList) {
