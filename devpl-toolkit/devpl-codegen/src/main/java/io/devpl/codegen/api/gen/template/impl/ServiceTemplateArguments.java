@@ -1,6 +1,5 @@
 package io.devpl.codegen.api.gen.template.impl;
 
-import io.devpl.codegen.api.gen.template.TemplateArguments;
 import io.devpl.codegen.mbpg.ConverterFileName;
 import io.devpl.codegen.mbpg.config.BaseBuilder;
 import io.devpl.codegen.mbpg.config.ConstVal;
@@ -12,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ServiceTemplateArguments implements TemplateArguments {
+public class ServiceTemplateArguments extends TemplateArgumentsMap {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ServiceTemplateArguments.class);
 

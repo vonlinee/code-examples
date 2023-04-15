@@ -1,7 +1,7 @@
 package io.devpl.codegen.jdbc.query;
 
 //import io.devpl.codegen.api.Context;
-//import io.devpl.codegen.api.ITypeConvert;
+//import io.devpl.codegen.api.TypeMapping;
 //import io.devpl.codegen.api.IntrospectedTable;
 //import io.devpl.codegen.api.TableColumn;
 //import io.devpl.codegen.generator.template.impl.EntityTemplateArguments;

@@ -16,7 +16,7 @@
 package io.devpl.codegen.mbpg.config.converts;
 
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
-import io.devpl.codegen.api.ITypeConvert;
+import io.devpl.codegen.api.TypeMapping;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 
@@ -29,7 +29,7 @@ import static io.devpl.codegen.mbpg.config.converts.TypeConverts.containsAny;
  * @author halower, hanchunlin, daiby
  * @since 2019-06-27
  */
-public class DmTypeConvert implements ITypeConvert {
+public class DmTypeConvert implements TypeMapping {
     public static final DmTypeConvert INSTANCE = new DmTypeConvert();
 
     /**

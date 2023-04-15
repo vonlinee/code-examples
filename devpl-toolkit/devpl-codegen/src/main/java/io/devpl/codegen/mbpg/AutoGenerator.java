@@ -141,10 +141,13 @@ public class AutoGenerator implements CodeGenerator {
             // 由每个表确定哪些文件需要生成
             generatedFiles.addAll(introspectedTable.calculateGeneratedFiles(null));
         }
+
+        ProjectConfiguration projectConfiguration = context.getProjectConfiguration();
+
         // 遍历所有文件
         for (GeneratedFile generatedFile : generatedFiles) {
             String formattedContent = generatedFile.getFormattedContent();
-            FileUtils.write(formattedContent, new File("D:/Temp", UUID.randomUUID().toString() + ".java"));
+            FileUtils.write(formattedContent, new File(projectConfiguration.getOutputDir(), UUID.randomUUID() + ".java"));
         }
     }
 }

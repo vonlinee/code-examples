@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Mapper模板参数
  */
-public class MapperTemplateArguments implements TemplateArguments {
+public class MapperTemplateArguments extends TemplateArgumentsMap {
 
     /**
      * 自定义继承的Mapper类全称，带包名

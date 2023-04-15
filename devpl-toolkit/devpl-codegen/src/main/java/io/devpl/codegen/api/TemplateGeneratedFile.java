@@ -12,14 +12,13 @@ import java.io.StringWriter;
  */
 public class TemplateGeneratedFile extends GeneratedFile {
 
+    /**
+     * 文件名
+     */
     private String filename;
 
     private TemplateSource templateSource;
     private TemplateArguments templateArguments;
-
-    public TemplateArguments getTemplateArguments() {
-        return templateArguments;
-    }
 
     public void setTemplateArguments(TemplateArguments templateArguments) {
         this.templateArguments = templateArguments;
@@ -56,5 +55,9 @@ public class TemplateGeneratedFile extends GeneratedFile {
 
     public void setTemplateSource(TemplateSource templateSource) {
         this.templateSource = templateSource;
+    }
+
+    public TemplateArguments getTemplateArguments() {
+        return templateArguments;
     }
 }

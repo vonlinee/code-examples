@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.config;
 
-import io.devpl.codegen.api.ITypeConvert;
+import io.devpl.codegen.api.TypeMapping;
 import io.devpl.codegen.jdbc.DbType;
 import io.devpl.codegen.jdbc.query.AbstractDatabaseIntrospector;
 import io.devpl.codegen.jdbc.query.DatabaseIntrospector;
@@ -41,7 +41,7 @@ public class DataSourceConfig {
     /**
      * 类型转换
      */
-    private ITypeConvert typeConvert;
+    private TypeMapping typeConvert;
 
     /**
      * 关键字处理器
@@ -169,7 +169,7 @@ public class DataSourceConfig {
      * 获取数据库字段类型转换
      */
     @NotNull
-    public ITypeConvert getTypeConvert() {
+    public TypeMapping getTypeConvert() {
         if (null == typeConvert) {
             DbType dbType = getDbType();
             // 默认 MYSQL
@@ -376,7 +376,7 @@ public class DataSourceConfig {
          * @param typeConvert 类型转换器
          * @return this
          */
-        public Builder typeConvert(@NotNull ITypeConvert typeConvert) {
+        public Builder typeConvert(@NotNull TypeMapping typeConvert) {
             this.dataSourceConfig.typeConvert = typeConvert;
             return this;
         }

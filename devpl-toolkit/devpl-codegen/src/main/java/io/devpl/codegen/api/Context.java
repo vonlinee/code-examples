@@ -44,7 +44,7 @@ public class Context extends AbstractContext {
     /**
      * 全局配置信息
      */
-    private ProjectConfiguration globalConfig;
+    private ProjectConfiguration projectConfiguration;
 
     /**
      * 注入配置信息
@@ -82,7 +82,7 @@ public class Context extends AbstractContext {
     public Context(PackageConfiguration pkc, DataSourceConfig dsc, StrategyConfig sc, TemplateConfiguration tc, ProjectConfiguration pc, InjectionConfig ic) {
         this.dataSourceConfig = dsc;
         this.strategyConfig = Objects.requireNonNullElse(sc, new StrategyConfig());
-        this.globalConfig = Objects.requireNonNullElse(pc, new ProjectConfiguration());
+        this.projectConfiguration = Objects.requireNonNullElse(pc, new ProjectConfiguration());
         this.templateConfig = Objects.requireNonNullElse(tc, new TemplateConfiguration());
         this.packageConfig = Objects.requireNonNullElse(pkc, new PackageConfiguration());
         this.injectionConfig = Objects.requireNonNullElse(ic, new InjectionConfig());
@@ -140,8 +140,8 @@ public class Context extends AbstractContext {
         return this;
     }
 
-    public Context setGlobalConfig(ProjectConfiguration globalConfig) {
-        this.globalConfig = globalConfig;
+    public Context setProjectConfiguration(ProjectConfiguration projectConfiguration) {
+        this.projectConfiguration = projectConfiguration;
         return this;
     }
 
@@ -166,8 +166,8 @@ public class Context extends AbstractContext {
         return strategyConfig;
     }
 
-    public ProjectConfiguration getGlobalConfig() {
-        return globalConfig;
+    public ProjectConfiguration getProjectConfiguration() {
+        return projectConfiguration;
     }
 
     public InjectionConfig getInjectionConfig() {
@@ -204,10 +204,7 @@ public class Context extends AbstractContext {
         if (tableInfoList.isEmpty()) {
             List<IntrospectedTable> introspectedTables = this.databaseIntrospector.introspecTables();
             // 性能优化，只处理需执行表字段 https://github.com/baomidou/mybatis-plus/issues/219
-            introspectedTables.forEach(table -> {
-                databaseIntrospector.convertTableFields(table);
-                table.importPackage();
-            });
+            introspectedTables.forEach(databaseIntrospector::convertTableFields);
             this.tableInfoList.addAll(introspectedTables);
         }
     }

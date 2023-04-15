@@ -15,8 +15,8 @@
  */
 package io.devpl.codegen.mbpg.config.converts;
 
+import io.devpl.codegen.api.TypeMapping;
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
-import io.devpl.codegen.api.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.DateTimeType;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.DataType;
@@ -27,7 +27,7 @@ import io.devpl.codegen.mbpg.config.rules.DataType;
  * @author kingbase, hanchunlin
  * @since 2019-10-12
  */
-public class OscarTypeConvert implements ITypeConvert {
+public class OscarTypeConvert implements TypeMapping {
     public static final OscarTypeConvert INSTANCE = new OscarTypeConvert();
 
     /**

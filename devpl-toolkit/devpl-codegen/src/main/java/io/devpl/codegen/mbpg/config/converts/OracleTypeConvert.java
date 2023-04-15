@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg.config.converts;
 
+import io.devpl.codegen.api.TypeMapping;
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
-import io.devpl.codegen.api.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 
@@ -11,7 +11,7 @@ import io.devpl.codegen.mbpg.config.rules.DataType;
  * @author hubin, hanchunlin
  * @since 2017-01-20
  */
-public class OracleTypeConvert implements ITypeConvert {
+public class OracleTypeConvert implements TypeMapping {
     public static final OracleTypeConvert INSTANCE = new OracleTypeConvert();
 
     /**

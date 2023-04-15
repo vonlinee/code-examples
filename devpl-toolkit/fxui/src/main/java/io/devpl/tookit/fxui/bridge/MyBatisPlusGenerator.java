@@ -23,7 +23,6 @@ public class MyBatisPlusGenerator {
     /**
      * 生成
      * TODO 不占用UI线程
-     *
      * @param context 待生成的参数
      * @throws Exception 任意异常都会被捕获
      */
@@ -31,7 +30,8 @@ public class MyBatisPlusGenerator {
 
         ProjectConfiguration projectConfiguration = context.getProjectConfiguration();
 
-        Map<String, List<TableGeneration>> targetTables = CollectionUtils.groupingBy(context.getTargetedTables().values(), TableGeneration::getConnectionName);
+        Map<String, List<TableGeneration>> targetTables = CollectionUtils.groupingBy(context.getTargetedTables()
+                .values(), TableGeneration::getConnectionName);
 
         for (Map.Entry<String, List<TableGeneration>> entry : targetTables.entrySet()) {
             // 连接名称
@@ -91,7 +91,6 @@ public class MyBatisPlusGenerator {
                     builder.addInclude(tableNames); // 设置需要生成的表名
                     // Entity策略配置
                     EntityTemplateArguments.Builder entityBuilder = builder.entityBuilder();
-                    entityBuilder.enableFileOverride();  // 文件覆盖
                     entityBuilder.enableLombok();  // 使用Lombok
                     entityBuilder.enableTableFieldAnnotation(); // 字段添加TableField注解
                     entityBuilder.mapperBuilder();

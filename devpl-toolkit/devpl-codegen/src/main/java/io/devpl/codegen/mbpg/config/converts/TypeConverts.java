@@ -1,6 +1,6 @@
 package io.devpl.codegen.mbpg.config.converts;
 
-import io.devpl.codegen.api.ITypeConvert;
+import io.devpl.codegen.api.TypeMapping;
 import io.devpl.codegen.mbpg.config.converts.select.BranchBuilder;
 import io.devpl.codegen.mbpg.config.converts.select.Selector;
 import io.devpl.codegen.mbpg.config.rules.DataType;
@@ -20,7 +20,7 @@ public class TypeConverts {
      * @param dbType 数据库类型
      * @return 返回转换器
      */
-    public static ITypeConvert getTypeConvert(DbType dbType) {
+    public static TypeMapping getTypeConvert(DbType dbType) {
         switch (dbType) {
             case ORACLE:
                 return OracleTypeConvert.INSTANCE;

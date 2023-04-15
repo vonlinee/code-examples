@@ -37,15 +37,14 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         }
     }
 
+    public void render(TemplateSource template, Map<String, Object> argumentsMap, Writer writer) {
+
+
+    }
+
     @Override
-    public void write(Map<String, Object> templateParamMap, String template, Writer writer) throws IOException {
-        // 加载模板
-        Template vt = velocityEngine.getTemplate(template, StandardCharsets.UTF_8.name());
-        if (writer instanceof BufferedWriter) {
-            vt.merge(new VelocityContext(templateParamMap), writer);
-        } else {
-            vt.merge(new VelocityContext(templateParamMap), new BufferedWriter(writer));
-        }
+    public void render(TemplateSource template, TemplateArguments arguments, Writer writer) {
+
     }
 
     @Override
@@ -58,7 +57,10 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
                 templateName += ".vm";
             }
             Template vt = velocityEngine.getTemplate(templateName, StandardCharsets.UTF_8.name());
-            return new VelocityTemplateSource(vt, this);
+
+            VelocityTemplateSource templateSource = new VelocityTemplateSource(vt, this);
+            templateSource.setName(templateName);
+            return templateSource;
         } catch (Exception exception) {
             throw new RuntimeException("加载模板失败" + exception.getMessage());
         }

@@ -16,7 +16,7 @@
 package io.devpl.codegen.mbpg.config.converts;
 
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
-import io.devpl.codegen.api.ITypeConvert;
+import io.devpl.codegen.api.TypeMapping;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 
@@ -26,7 +26,7 @@ import io.devpl.codegen.mbpg.config.rules.DataType;
  * @author chen_wj, hanchunlin
  * @since 2019-05-08
  */
-public class SqliteTypeConvert implements ITypeConvert {
+public class SqliteTypeConvert implements TypeMapping {
     public static final SqliteTypeConvert INSTANCE = new SqliteTypeConvert();
 
     /**

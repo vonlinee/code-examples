@@ -236,10 +236,10 @@ public class ColumnMetadata implements Serializable {
         return nullable;
     }
 
-    public boolean isNullable() {
-        return nullable == DatabaseMetaData.columnNullable;
-    }
-
+    /**
+     * JDBC使用 setter/getter 方法来确定字段
+     * @param nullable 是否可为null
+     */
     public void setNullable(Integer nullable) {
         this.nullable = nullable;
     }

@@ -25,15 +25,13 @@ public class IntrospectedColumn {
 
     /**
      * 数据库字段（关键字含转义符号）
-     * @since 3.3.2
      */
     private String columnName;
 
     /**
      * 字段元数据信息
-     * @since 3.5.0
      */
-    private IntrospectedColumn columnInfo;
+    private ColumnMetadata metadata;
 
     /**
      * 构造方法
@@ -41,9 +39,10 @@ public class IntrospectedColumn {
      * @param metadata 数据库字段元数据
      * @since 3.5.0
      */
-    public TableColumn(Context context, ColumnMetadata metadata) {
+    public IntrospectedColumn(Context context, ColumnMetadata metadata) {
         this.context = context;
-        this.columnInfo = new IntrospectedColumn(metadata);
+        this.metadata = metadata;
+        this.properties = new Properties();
     }
 
     /**
@@ -83,7 +82,7 @@ public class IntrospectedColumn {
     }
 
     public String getName() {
-        return name;
+        return metadata.getColumnName();
     }
 
     public String getType() {
@@ -127,8 +126,6 @@ public class IntrospectedColumn {
 
     protected final Properties properties;
 
-    protected ColumnMetadata metadata;
-
     // any database comment associated with this column. May be null
     protected String remarks;
 
@@ -148,15 +145,6 @@ public class IntrospectedColumn {
      * True if there is a column override that defines this column as GENERATED ALWAYS.
      */
     protected boolean isGeneratedAlways;
-
-    /**
-     * Constructs a Column definition. This object holds all the information
-     * about a column that is required to generate Java objects and SQL maps;
-     */
-    public IntrospectedColumn() {
-        super();
-        properties = new Properties();
-    }
 
     public IntrospectedColumn(ColumnMetadata metadata) {
         this.metadata = metadata;

@@ -3,7 +3,6 @@ package io.devpl.codegen.api.gen.template.impl;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import io.devpl.codegen.api.DefaultNameConvert;
 import io.devpl.codegen.mbpg.IFill;
 import io.devpl.codegen.mbpg.config.BaseBuilder;
 import io.devpl.codegen.mbpg.config.TableInfoHelper;
@@ -13,6 +12,7 @@ import io.devpl.codegen.mbpg.config.rules.NamingStrategy;
 import io.devpl.codegen.api.gen.template.TemplateArguments;
 import io.devpl.codegen.utils.ClassUtils;
 import io.devpl.codegen.utils.StringUtils;
+import lombok.Data;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,20 +23,24 @@ import java.util.stream.Collectors;
 
 /**
  * 实体属性配置
+ * 和模板属性变量一一对应
  */
-public class EntityTemplateArguments implements TemplateArguments {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(EntityTemplateArguments.class);
-
-    /**
-     * 名称转换
-     */
-    private INameConvert nameConvert;
+public class EntityTemplateArguments extends TemplateArgumentsMap {
 
     /**
      * 自定义继承的Entity类全称，带包名
      */
     private String superClass;
+
+    /**
+     * 导入声明
+     */
+    private List<String> importStatements;
+
+    /**
+     * 包名
+     */
+    private String packageName;
 
     /**
      * 自定义基础的Entity类，公共字段
@@ -193,27 +197,6 @@ public class EntityTemplateArguments implements TemplateArguments {
         return ignoreColumns.stream().anyMatch(e -> e.equalsIgnoreCase(fieldName));
     }
 
-    public INameConvert getNameConvert() {
-        return nameConvert;
-    }
-
-    @Nullable
-    public String getSuperClass() {
-        return superClass;
-    }
-
-    public Set<String> getSuperEntityColumns() {
-        return this.superEntityColumns;
-    }
-
-    public boolean isSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public boolean isColumnConstant() {
-        return columnConstant;
-    }
-
     public boolean isChain() {
         return chain;
     }
@@ -221,40 +204,6 @@ public class EntityTemplateArguments implements TemplateArguments {
     public boolean isLombok() {
         return lombok;
     }
-
-    public boolean isBooleanColumnRemoveIsPrefix() {
-        return booleanColumnRemoveIsPrefix;
-    }
-
-    public boolean isTableFieldAnnotationEnable() {
-        return tableFieldAnnotationEnable;
-    }
-
-    @Nullable
-    public String getVersionColumnName() {
-        return versionColumnName;
-    }
-
-    @Nullable
-    public String getVersionPropertyName() {
-        return versionPropertyName;
-    }
-
-    @Nullable
-    public String getLogicDeleteColumnName() {
-        return logicDeleteColumnName;
-    }
-
-    @Nullable
-    public String getLogicDeletePropertyName() {
-        return logicDeletePropertyName;
-    }
-
-
-    public List<IFill> getTableFillList() {
-        return tableFillList;
-    }
-
 
     public NamingStrategy getNamingStrategy() {
         return naming;
@@ -264,17 +213,18 @@ public class EntityTemplateArguments implements TemplateArguments {
         return activeRecord;
     }
 
-    @Nullable
+
     public IdType getIdType() {
         return idType;
     }
+
     public boolean isFileOverride() {
         return fileOverride;
     }
 
     @Override
     public Map<String, Object> asMap() {
-        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> data = super.asMap();
         data.put("idType", idType == null ? null : idType.toString());
         data.put("logicDeleteFieldName", this.logicDeleteColumnName);
         data.put("versionFieldName", this.versionColumnName);
@@ -295,17 +245,6 @@ public class EntityTemplateArguments implements TemplateArguments {
 
         public Builder(StrategyConfig strategyConfig) {
             super(strategyConfig);
-            this.entity.nameConvert = new DefaultNameConvert(strategyConfig);
-        }
-
-        /**
-         * 名称转换实现
-         * @param nameConvert 名称转换实现
-         * @return this
-         */
-        public Builder nameConvert(INameConvert nameConvert) {
-            this.entity.nameConvert = nameConvert;
-            return this;
         }
 
         /**
@@ -488,38 +427,6 @@ public class EntityTemplateArguments implements TemplateArguments {
         }
 
         /**
-         * 添加表字段填充
-         * @param tableFills 填充字段
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder addTableFills(IFill... tableFills) {
-            return addTableFills(Arrays.asList(tableFills));
-        }
-
-        /**
-         * 添加表字段填充
-         * @param tableFillList 填充字段集合
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder addTableFills(List<IFill> tableFillList) {
-            this.entity.tableFillList.addAll(tableFillList);
-            return this;
-        }
-
-        /**
-         * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
-         * @see #enableFileOverride()
-         */
-        @Deprecated
-        public Builder fileOverride() {
-            LOGGER.warn("fileOverride方法后续会删除，替代方法为enableFileOverride方法");
-            this.entity.fileOverride = true;
-            return this;
-        }
-
-        /**
          * 覆盖已有文件
          * @since 3.5.3
          */
@@ -532,10 +439,6 @@ public class EntityTemplateArguments implements TemplateArguments {
             String superClass = this.entity.superClass;
             if (StringUtils.isNotBlank(superClass)) {
                 tryLoadClass(superClass).ifPresent(this.entity::convertSuperEntityColumns);
-            } else {
-                if (!this.entity.superEntityColumns.isEmpty()) {
-                    LOGGER.warn("Forgot to set entity supper class ?");
-                }
             }
             return this.entity;
         }

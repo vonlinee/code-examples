@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg.config.converts;
 
+import io.devpl.codegen.api.TypeMapping;
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
-import io.devpl.codegen.api.ITypeConvert;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ import static io.devpl.codegen.mbpg.config.converts.TypeConverts.containsAny;
  * @author urzeye
  * @date 2021年9月12日
  */
-public class ClickHouseTypeConvert implements ITypeConvert {
+public class ClickHouseTypeConvert implements TypeMapping {
 
     public static final ClickHouseTypeConvert INSTANCE = new ClickHouseTypeConvert();
 

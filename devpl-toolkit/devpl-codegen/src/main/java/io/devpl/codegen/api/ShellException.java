@@ -1,4 +1,4 @@
-package io.devpl.codegen.api.gen.template;
+package io.devpl.codegen.api;
 
 /**
  * This class is used by the ShellCallback methods to denote unrecoverable

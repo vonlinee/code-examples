@@ -52,7 +52,7 @@ public class DatabaseMetaDataHolder {
             String catalog = connection.getCatalog();
             String schema = connection.getSchema();
             DatabaseMetaData dbmd = connection.getMetaData();
-            BeanPropertyRowMapper<ColumnMetadata> rowMapper = new DataClassRowMapper<>(ColumnMetadata.class);
+            BeanPropertyRowMapper<ColumnMetadata> rowMapper = new BeanPropertyRowMapper<>(ColumnMetadata.class);
             try (ResultSet resultSet = dbmd.getColumns(catalog, schema, tableNamePattern, "%")) {
                 int rowIndex = 0;
                 while (resultSet.next()) {

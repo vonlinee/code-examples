@@ -1,7 +1,7 @@
 package io.devpl.codegen.mbpg.config.converts;
 
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
-import io.devpl.codegen.api.ITypeConvert;
+import io.devpl.codegen.api.TypeMapping;
 import io.devpl.codegen.mbpg.config.rules.DateTimeType;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 import io.devpl.codegen.mbpg.config.rules.DataType;
@@ -15,7 +15,7 @@ import static io.devpl.codegen.mbpg.config.converts.TypeConverts.containsAny;
  * @author kingbase, hanchunlin
  * @since 2019-10-12
  */
-public class KingbaseESTypeConvert implements ITypeConvert {
+public class KingbaseESTypeConvert implements TypeMapping {
     public static final KingbaseESTypeConvert INSTANCE = new KingbaseESTypeConvert();
 
     /**

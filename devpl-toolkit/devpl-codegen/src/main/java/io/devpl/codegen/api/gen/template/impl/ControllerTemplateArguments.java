@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * 控制器属性配置
  */
-public class ControllerTemplateArguments implements TemplateArguments {
+public class ControllerTemplateArguments extends TemplateArgumentsMap {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ControllerTemplateArguments.class);
 

@@ -16,7 +16,7 @@
 package io.devpl.codegen.mbpg.config.converts;
 
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
-import io.devpl.codegen.api.ITypeConvert;
+import io.devpl.codegen.api.TypeMapping;
 import io.devpl.codegen.mbpg.config.rules.DataType;
 import io.devpl.codegen.mbpg.config.rules.JavaType;
 
@@ -26,7 +26,7 @@ import io.devpl.codegen.mbpg.config.rules.JavaType;
  * @author zhanyao, hanchunlin
  * @since 2018-05-16
  */
-public class DB2TypeConvert implements ITypeConvert {
+public class DB2TypeConvert implements TypeMapping {
     public static final DB2TypeConvert INSTANCE = new DB2TypeConvert();
 
     /**

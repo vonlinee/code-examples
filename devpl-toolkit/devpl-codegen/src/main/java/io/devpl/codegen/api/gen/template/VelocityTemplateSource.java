@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * 包含Velocity模板信息
  */
-public class VelocityTemplateSource extends TemplateSource {
+public class VelocityTemplateSource extends FileTemplateSource {
 
     Template template;
     VelocityTemplateEngine templateEngine;

@@ -34,7 +34,7 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
         this.dataSourceConfig = context.getDataSourceConfig();
         this.strategyConfig = context.getStrategyConfig();
         skipView = strategyConfig.isSkipView();
-        this.globalConfig = context.getGlobalConfig();
+        this.globalConfig = context.getProjectConfiguration();
         this.databaseMetaDataWrapper = new DatabaseMetaDataHolder();
     }
 

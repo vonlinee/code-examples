@@ -4,12 +4,11 @@ import io.devpl.codegen.api.Context;
 import io.devpl.codegen.api.IntrospectedTable;
 import io.devpl.codegen.api.TemplateGeneratedFile;
 import io.devpl.codegen.api.gen.AbstractGenerator;
+import io.devpl.codegen.api.gen.GeneratedFile;
 import io.devpl.codegen.api.gen.template.impl.ControllerTemplateArguments;
 import io.devpl.codegen.api.gen.template.impl.EntityTemplateArguments;
-import io.devpl.codegen.api.gen.GeneratedFile;
 import io.devpl.codegen.api.gen.template.impl.MapperTemplateArguments;
 import io.devpl.codegen.api.gen.template.impl.ServiceTemplateArguments;
-import io.devpl.codegen.gen.template.impl.*;
 import io.devpl.codegen.mbpg.config.OutputFile;
 import io.devpl.codegen.mbpg.config.ProjectConfiguration;
 import io.devpl.codegen.mbpg.config.StrategyConfig;
@@ -25,36 +24,6 @@ import java.util.Map;
  */
 public class TemplateBasedGenerator extends AbstractGenerator {
 
-    private Map<String, Object> globalTemplateArguments(Context context, IntrospectedTable table) {
-        // 先初始化全局模板参数
-        Map<String, Object> objectMap = new HashMap<>();
-        objectMap.put("config", this);
-        // 包配置信息
-        objectMap.put("package", context.getPackageConfig().getPackageInfo());
-        ProjectConfiguration globalConfig = context.getGlobalConfig();
-        objectMap.put("author", globalConfig.getAuthor());
-        objectMap.put("kotlin", globalConfig.isKotlin());
-        objectMap.put("swagger", globalConfig.isSwagger());
-        objectMap.put("springdoc", globalConfig.isSpringdoc());
-        objectMap.put("date", globalConfig.getCommentDate());
-        // 包含代码生成的各项参数
-        StrategyConfig strategyConfig = context.getStrategyConfig();
-        // 启用 schema 处理逻辑
-        String schemaName = "";
-        if (strategyConfig.isEnableSchema()) {
-            // 存在 schemaName 设置拼接 . 组合表名
-            schemaName = context.getDataSourceConfig().getSchemaName();
-            if (StringUtils.hasText(schemaName)) {
-                schemaName += ".";
-                table.setConvert(true);
-            }
-        }
-        objectMap.put("schemaName", schemaName);
-        objectMap.put("table", table);
-        objectMap.put("entity", table.getEntityName());
-        return objectMap;
-    }
-
     @Override
     public List<GeneratedFile> calculateGeneratedFiles(Context context, IntrospectedTable table) {
         List<GeneratedFile> generatedFiles = new ArrayList<>();
@@ -64,15 +33,7 @@ public class TemplateBasedGenerator extends AbstractGenerator {
         AbstractTemplateEngine te = context.getTemplateConfiguration().getTemplateEngine();
 
         // Entity
-        TemplateGeneratedFile entityFile = new TemplateGeneratedFile();
-        entityFile.setFilename(table.getEntityName() + ".java");
-
-        TemplateSource ts = te.load(OutputFile.ENTITY_JAVA.getTemplate());
-
-        entityFile.setTemplateSource(ts);
-        EntityTemplateArguments etArgs = strategyConfig.entityArguments();
-        entityFile.setTemplateArguments(etArgs);
-        generatedFiles.add(entityFile);
+        generatedFiles.add(calculateEntityFile(context, table));
 
         // Mapper.java
         TemplateGeneratedFile mapperJavaFile = new TemplateGeneratedFile();
@@ -107,6 +68,65 @@ public class TemplateBasedGenerator extends AbstractGenerator {
         controllerJavaFile.setTemplateSource(te.load(OutputFile.CONTROLLER.getTemplate()));
         generatedFiles.add(controllerJavaFile);
 
+
+        for (GeneratedFile generatedFile : generatedFiles) {
+            if (generatedFile instanceof TemplateGeneratedFile tgf) {
+                tgf.getTemplateArguments().putAll(globalTemplateArguments(context, table));
+            }
+        }
+
         return generatedFiles;
+    }
+
+    /**
+     * 实体类文件
+     * @param context
+     * @param table
+     * @return
+     */
+    private GeneratedFile calculateEntityFile(Context context, IntrospectedTable table) {
+        // Entity
+        TemplateGeneratedFile entityFile = new TemplateGeneratedFile();
+        entityFile.setFilename(table.getName() + ".java");
+
+        AbstractTemplateEngine te = context.getTemplateConfiguration().getTemplateEngine();
+        TemplateSource ts = te.load(OutputFile.ENTITY_JAVA.getTemplate());
+        entityFile.setTemplateSource(ts);
+        EntityTemplateArguments etArgs =
+        entityFile.setTemplateArguments(etArgs);
+        return entityFile;
+    }
+
+    /**
+     * 全局模板参数
+     * @param context
+     * @param table
+     * @return
+     */
+    private Map<String, Object> globalTemplateArguments(Context context, IntrospectedTable table) {
+        // 先初始化全局模板参数
+        Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put("config", this);
+        // 包配置信息
+        ProjectConfiguration pc = context.getProjectConfiguration();
+        objectMap.put("author", pc.getAuthor());
+        objectMap.put("kotlin", pc.isKotlin());
+        objectMap.put("swagger", pc.isSwagger());
+        objectMap.put("springdoc", pc.isSpringdoc());
+        objectMap.put("date", pc.getCommentDate());
+        // 包含代码生成的各项参数
+        StrategyConfig strategyConfig = context.getStrategyConfig();
+        // 启用 schema 处理逻辑
+        String schemaName = "";
+        if (strategyConfig.isEnableSchema()) {
+            // 存在 schemaName 设置拼接 . 组合表名
+            schemaName = context.getDataSourceConfig().getSchemaName();
+            if (StringUtils.hasText(schemaName)) {
+                schemaName += ".";
+            }
+        }
+        objectMap.put("schemaName", schemaName);
+        objectMap.put("table", table);
+        return objectMap;
     }
 }

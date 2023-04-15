@@ -5,11 +5,8 @@ import io.devpl.codegen.mbpg.config.rules.DataType;
 
 /**
  * 数据库字段类型转换
- * @author hubin
- * @author hanchunlin
- * @since 2017-01-20
  */
-public interface ITypeConvert {
+public interface TypeMapping {
 
     /**
      * 执行类型转换

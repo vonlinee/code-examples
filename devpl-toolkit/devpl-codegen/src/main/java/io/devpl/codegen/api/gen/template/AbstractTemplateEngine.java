@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Map;
 
 /**
  * 模板引擎抽象类
@@ -31,21 +30,13 @@ public abstract class AbstractTemplateEngine implements ContextAware {
     public abstract void init(Context context);
 
     /**
-     * 将模板转化成为文件
-     * @param objectMap 渲染对象 MAP 信息
-     * @param template  模板，可能是字符串模板，可能是指向文件模板的路径，可能是指向模板文件的URL，有些模板引擎API不支持通过输入流获取模板
-     * @param writer    文件生成输出位置
-     */
-    public abstract void write(Map<String, Object> objectMap, String template, Writer writer) throws Exception;
-
-    /**
      * 打开输出目录
      */
     public void open() {
-        String outDir = context.getGlobalConfig().getOutputDir();
+        String outDir = context.getProjectConfiguration().getOutputDir();
         if (!StringUtils.hasText(outDir) || !new File(outDir).exists()) {
             log.error("未找到输出目录 {}", outDir);
-        } else if (context.getGlobalConfig().isOpenOutputDir()) {
+        } else if (context.getProjectConfiguration().isOpenOutputDir()) {
             try {
                 RuntimeUtils.openDirectory(outDir);
             } catch (IOException e) {
@@ -53,6 +44,14 @@ public abstract class AbstractTemplateEngine implements ContextAware {
             }
         }
     }
+
+    /**
+     * 将模板转化成为文件
+     * @param arguments 模板参数
+     * @param template  模板，可能是字符串模板，可能是指向文件模板的路径，可能是指向模板文件的URL，有些模板引擎API不支持通过输入流获取模板
+     * @param writer    文件生成输出位置
+     */
+    public abstract void render(TemplateSource template, TemplateArguments arguments, Writer writer);
 
     @Override
     public void setContext(Context context) {

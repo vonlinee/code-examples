@@ -8,12 +8,9 @@ import io.devpl.codegen.mbpg.config.DataSourceConfig;
 import io.devpl.sdk.util.StringUtils;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 元数据查询数据库信息.
@@ -35,7 +32,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
 
     public DefaultDatabaseIntrospector(Context context) {
         super(context);
-        typeRegistry = new TypeRegistry(context.getGlobalConfig());
+        typeRegistry = new TypeRegistry(context.getProjectConfiguration());
     }
 
     @Override
@@ -55,11 +52,10 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
         // 需要反向生成或排除的表信息
         List<IntrospectedTable> includeTableList = new ArrayList<>();
         List<IntrospectedTable> excludeTableList = new ArrayList<>();
-        tablesMetaDataList.forEach(table -> {
-            String tableName = table.getTableName();
+        tablesMetaDataList.forEach(tableMetadata -> {
+            String tableName = tableMetadata.getTableName();
             if (StringUtils.isNotBlank(tableName)) {
-                IntrospectedTable tableInfo = new IntrospectedTable(this.context, tableName);
-
+                IntrospectedTable tableInfo = new IntrospectedTable(this.context, tableMetadata);
                 if (isInclude && strategyConfig.matchIncludeTable(tableName)) {
                     includeTableList.add(tableInfo);
                 } else if (isExclude && strategyConfig.matchExcludeTable(tableName)) {
