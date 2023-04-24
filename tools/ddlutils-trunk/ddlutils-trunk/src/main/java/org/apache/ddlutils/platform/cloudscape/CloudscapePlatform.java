@@ -20,7 +20,7 @@ package org.apache.ddlutils.platform.cloudscape;
  */
 
 import org.apache.ddlutils.PlatformInfo;
-import org.apache.ddlutils.platform.PlatformImplBase;
+import org.apache.ddlutils.platform.GenericDialect;
 
 import java.sql.Types;
 
@@ -28,7 +28,7 @@ import java.sql.Types;
  * The Cloudscape platform implementation.
  * @version $Revision: 231306 $
  */
-public class CloudscapePlatform extends PlatformImplBase {
+public class CloudscapePlatform extends GenericDialect {
     /**
      * Database name of this platform.
      */

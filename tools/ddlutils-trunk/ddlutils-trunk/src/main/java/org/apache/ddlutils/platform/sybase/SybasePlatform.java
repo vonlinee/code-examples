@@ -28,9 +28,9 @@ import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.PlatformImplBase;
+import org.apache.ddlutils.platform.GenericDialect;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -44,7 +44,7 @@ import java.util.List;
  * The platform implementation for Sybase.
  * @version $Revision: 231306 $
  */
-public class SybasePlatform extends PlatformImplBase {
+public class SybasePlatform extends GenericDialect {
     /**
      * Database name of this platform.
      */
@@ -348,7 +348,7 @@ public class SybasePlatform extends PlatformImplBase {
     /**
      * {@inheritDoc}
      */
-    protected Database processChanges(Database model, Collection changes, CreationParameters params) throws IOException, DdlUtilsException {
+    protected Database processChanges(Database model, Collection changes, SqlBuildContext params) throws IOException, DdlUtilsException {
         if (!changes.isEmpty()) {
             ((SybaseBuilder) getSqlBuilder()).turnOnQuotation();
         }
@@ -364,7 +364,7 @@ public class SybasePlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               RemoveColumnChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column removedColumn = changedTable.findColumn(change.getChangedColumn(), isDelimitedIdentifierModeOn());
@@ -381,7 +381,7 @@ public class SybasePlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               RemovePrimaryKeyChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
 
@@ -398,7 +398,7 @@ public class SybasePlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               ColumnDefinitionChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column changedColumn = changedTable.findColumn(change.getChangedColumn(), isDelimitedIdentifierModeOn());

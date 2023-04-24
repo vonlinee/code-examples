@@ -22,7 +22,7 @@ package org.apache.ddlutils.platform.mckoi;
 import org.apache.commons.collections.map.ListOrderedMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
@@ -49,7 +49,7 @@ public class MckoiModelReader extends JdbcModelReader {
      * Creates a new model reader for Mckoi databases.
      * @param platform The platform that this model reader belongs to
      */
-    public MckoiModelReader(Platform platform) {
+    public MckoiModelReader(DatabaseDialect platform) {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);

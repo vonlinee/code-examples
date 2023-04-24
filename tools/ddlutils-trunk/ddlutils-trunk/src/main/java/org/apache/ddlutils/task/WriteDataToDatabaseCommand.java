@@ -19,7 +19,7 @@ package org.apache.ddlutils.task;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.io.DataReader;
 import org.apache.ddlutils.model.Database;
 import org.apache.tools.ant.BuildException;
@@ -138,7 +138,7 @@ public class WriteDataToDatabaseCommand extends ConvertingDatabaseCommand {
             throw new BuildException("Please use either the datafile attribute or the sub fileset element, but not both");
         }
 
-        Platform platform = getPlatform();
+        DatabaseDialect platform = getPlatform();
         DataReader dataReader = null;
 
         platform.setIdentityOverrideOn(_useExplicitIdentityValues);

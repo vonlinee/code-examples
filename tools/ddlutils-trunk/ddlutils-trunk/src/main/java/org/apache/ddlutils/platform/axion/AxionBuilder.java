@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.axion;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Index;
 import org.apache.ddlutils.model.Table;
@@ -36,7 +36,7 @@ public class AxionBuilder extends SqlBuilder {
      * Creates a new axion sql builder.
      * @param platform The plaftform this builder belongs to
      */
-    public AxionBuilder(Platform platform) {
+    public AxionBuilder(DatabaseDialect platform) {
         super(platform);
         addEscapedCharSequence("'", "''");
     }

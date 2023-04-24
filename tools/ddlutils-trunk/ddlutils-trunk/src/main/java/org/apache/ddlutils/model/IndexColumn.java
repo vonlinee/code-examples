@@ -1,28 +1,10 @@
 package org.apache.ddlutils.model;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Represents a column of an index in the database model.
@@ -139,20 +121,7 @@ public class IndexColumn implements Serializable, Cloneable {
         _size = size;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean equals(Object obj) {
-        if (obj instanceof IndexColumn) {
-            IndexColumn other = (IndexColumn) obj;
 
-            return new EqualsBuilder().append(_name, other._name)
-                    .append(_size, other._size)
-                    .isEquals();
-        } else {
-            return false;
-        }
-    }
 
     /**
      * Compares this index column to the given one while ignoring the case of identifiers.
@@ -160,18 +129,7 @@ public class IndexColumn implements Serializable, Cloneable {
      * @return <code>true</code> if this index column is equal (ignoring case) to the given one
      */
     public boolean equalsIgnoreCase(IndexColumn other) {
-        return new EqualsBuilder().append(_name.toUpperCase(), other._name.toUpperCase())
-                .append(_size, other._size)
-                .isEquals();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(_name)
-                .append(_size)
-                .toHashCode();
+        return Objects.equals(_name, other._name) && Objects.equals(_size, other._size);
     }
 
     /**

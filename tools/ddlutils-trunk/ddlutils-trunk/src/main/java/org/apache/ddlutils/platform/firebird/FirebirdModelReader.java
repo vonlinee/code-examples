@@ -20,7 +20,7 @@ package org.apache.ddlutils.platform.firebird;
  */
 
 import org.apache.commons.collections.map.ListOrderedMap;
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
@@ -37,7 +37,7 @@ public class FirebirdModelReader extends JdbcModelReader {
      * Creates a new model reader for Firebird databases.
      * @param platform The platform that this model reader belongs to
      */
-    public FirebirdModelReader(Platform platform) {
+    public FirebirdModelReader(DatabaseDialect platform) {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);

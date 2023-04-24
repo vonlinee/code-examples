@@ -20,7 +20,7 @@ package org.apache.ddlutils.platform.mssql;
  */
 
 import org.apache.ddlutils.DdlUtilsException;
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Index;
 import org.apache.ddlutils.model.Table;
@@ -56,7 +56,7 @@ public class MSSqlModelReader extends JdbcModelReader {
      * Creates a new model reader for Microsoft Sql Server databases.
      * @param platform The platform that this model reader belongs to
      */
-    public MSSqlModelReader(Platform platform) {
+    public MSSqlModelReader(DatabaseDialect platform) {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);

@@ -25,9 +25,9 @@ import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.PlatformImplBase;
+import org.apache.ddlutils.platform.GenericDialect;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -36,7 +36,7 @@ import java.sql.Types;
  * The platform implementation for MySQL.
  * @version $Revision: 231306 $
  */
-public class MySqlPlatform extends PlatformImplBase {
+public class MySqlPlatform extends GenericDialect {
     /**
      * Database name of this platform.
      */
@@ -113,9 +113,12 @@ public class MySqlPlatform extends PlatformImplBase {
         setModelReader(new MySqlModelReader(this));
     }
 
+
+
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return DATABASENAME;
     }
@@ -123,6 +126,7 @@ public class MySqlPlatform extends PlatformImplBase {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected ModelComparator getModelComparator() {
         return new MySqlModelComparator(getPlatformInfo(), getTableDefinitionChangesPredicate(), isDelimitedIdentifierModeOn());
     }
@@ -130,8 +134,11 @@ public class MySqlPlatform extends PlatformImplBase {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
+
+            @Override
             protected boolean isSupported(Table intermediateTable, TableChange change) {
                 if (change instanceof AddColumnChange) {
                     AddColumnChange addColumnChange = (AddColumnChange) change;
@@ -163,7 +170,7 @@ public class MySqlPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               AddColumnChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column prevColumn = null;
@@ -183,7 +190,7 @@ public class MySqlPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               ColumnDefinitionChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
 
@@ -198,7 +205,7 @@ public class MySqlPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               RemoveColumnChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column removedColumn = changedTable.findColumn(change.getChangedColumn(), isDelimitedIdentifierModeOn());
@@ -215,7 +222,7 @@ public class MySqlPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               RemovePrimaryKeyChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
 
@@ -231,7 +238,7 @@ public class MySqlPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               PrimaryKeyChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         String[] newPKColumnNames = change.getNewPrimaryKeyColumns();

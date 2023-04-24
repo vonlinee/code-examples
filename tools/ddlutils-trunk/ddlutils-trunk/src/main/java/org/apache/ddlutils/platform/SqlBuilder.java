@@ -21,8 +21,8 @@ package org.apache.ddlutils.platform;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.DdlUtilsException;
-import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.StringUtils;
@@ -50,7 +50,7 @@ import java.util.Map;
  * Hopefully only a small amount code needs to be changed on a per database basis.
  * @version $Revision$
  */
-public abstract class DialectSqlBuilder {
+public abstract class SqlBuilder {
     /**
      * The placeholder for the size value in the native type spec.
      */
@@ -62,12 +62,12 @@ public abstract class DialectSqlBuilder {
     /**
      * The Log to which logging calls will be made.
      */
-    protected final Log _log = LogFactory.getLog(DialectSqlBuilder.class);
+    protected final Log _log = LogFactory.getLog(SqlBuilder.class);
 
     /**
      * The platform that this builder belongs to.
      */
-    private Platform _platform;
+    private DatabaseDialect _platform;
     /**
      * The current Writer used to output the SQL to.
      */
@@ -110,7 +110,7 @@ public abstract class DialectSqlBuilder {
      * Creates a new sql builder.
      * @param platform The plaftform this builder belongs to
      */
-    public DialectSqlBuilder(Platform platform) {
+    public SqlBuilder(DatabaseDialect platform) {
         _platform = platform;
     }
 
@@ -118,7 +118,7 @@ public abstract class DialectSqlBuilder {
      * Returns the platform object.
      * @return The platform
      */
-    public Platform getPlatform() {
+    public DatabaseDialect getPlatform() {
         return _platform;
     }
 
@@ -503,7 +503,7 @@ public abstract class DialectSqlBuilder {
             Index index = table.getIndex(idx);
 
             if (!index.isUnique() && !getPlatformInfo().isIndicesSupported()) {
-                throw new ModelException("Platform does not support non-unique indices");
+                throw new ModelException("DatabaseDialect does not support non-unique indices");
             }
             createIndex(table, index);
         }
@@ -1277,7 +1277,6 @@ public abstract class DialectSqlBuilder {
      */
     protected void writeColumnDefaultValueStatement(Table table, Column column) throws IOException {
         Object parsedDefault = column.getParsedDefaultValue();
-
         if (parsedDefault != null) {
             if (!getPlatformInfo().isDefaultValuesForLongTypesSupported() &&
                     ((column.getTypeCode() == Types.LONGVARBINARY) || (column.getTypeCode() == Types.LONGVARCHAR))) {

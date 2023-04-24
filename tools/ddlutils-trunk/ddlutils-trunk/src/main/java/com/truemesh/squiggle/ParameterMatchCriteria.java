@@ -63,7 +63,7 @@ public class ParameterMatchCriteria extends Criteria {
    * Predicate includes the table column name and comparison operator given at
    * criteria initialization.
    * 
-   * @see com.truemesh.squiggle.Criteria#write(com.truemesh.squiggle.output.Output)
+   * @see Criteria#write(Output)
    */
   public void write(Output out) {
     out.print(column).print(' ').print(comparisonOperator).print(" ?");

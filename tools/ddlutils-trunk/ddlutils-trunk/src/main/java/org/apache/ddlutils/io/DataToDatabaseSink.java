@@ -22,8 +22,8 @@ package org.apache.ddlutils.io;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.DatabaseOperationException;
-import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
 import org.apache.ddlutils.model.*;
 
@@ -49,7 +49,7 @@ public class DataToDatabaseSink implements DataSink {
     /**
      * Generates the sql and writes it to the database.
      */
-    private Platform _platform;
+    private DatabaseDialect _platform;
     /**
      * The database model.
      */
@@ -104,7 +104,7 @@ public class DataToDatabaseSink implements DataSink {
      * @param platform The database platform
      * @param model    The database model
      */
-    public DataToDatabaseSink(Platform platform, Database model) {
+    public DataToDatabaseSink(DatabaseDialect platform, Database model) {
         _platform = platform;
         _model = model;
         for (int tableIdx = 0; tableIdx < model.getTableCount(); tableIdx++) {

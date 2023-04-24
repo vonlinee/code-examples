@@ -20,7 +20,7 @@ package org.apache.ddlutils.task;
  */
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -78,7 +78,7 @@ public abstract class DatabaseCommand extends Command {
      * Creates the platform for the configured database.
      * @return The platform
      */
-    protected Platform getPlatform() throws BuildException {
+    protected DatabaseDialect getPlatform() throws BuildException {
         return _platformConf.getPlatform();
     }
 

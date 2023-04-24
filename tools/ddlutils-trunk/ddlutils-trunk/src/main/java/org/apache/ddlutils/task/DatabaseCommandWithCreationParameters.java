@@ -21,7 +21,7 @@ package org.apache.ddlutils.task;
 
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,8 +52,8 @@ public abstract class DatabaseCommandWithCreationParameters extends DatabaseComm
      * @param isCaseSensitive Whether case is relevant when comparing names of tables
      * @return The filtered parameters
      */
-    protected CreationParameters getFilteredParameters(Database model, String platformName, boolean isCaseSensitive) {
-        CreationParameters parameters = new CreationParameters();
+    protected SqlBuildContext getFilteredParameters(Database model, String platformName, boolean isCaseSensitive) {
+        SqlBuildContext parameters = new SqlBuildContext();
 
         for (Iterator it = _parameters.iterator(); it.hasNext(); ) {
             TableSpecificParameter param = (TableSpecificParameter) it.next();

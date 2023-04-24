@@ -19,7 +19,7 @@ package org.apache.ddlutils.alteration;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.TestBase;
 import org.apache.ddlutils.model.Column;
@@ -40,7 +40,7 @@ public abstract class TestComparisonBase extends TestBase {
      * @param delimitedIdentifierModeOn Whether delimited identifiers shall be used
      * @return The platform object
      */
-    protected Platform getPlatform(boolean delimitedIdentifierModeOn) {
+    protected DatabaseDialect getPlatform(boolean delimitedIdentifierModeOn) {
         TestPlatform platform = new TestPlatform() {
             protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
                 return null;

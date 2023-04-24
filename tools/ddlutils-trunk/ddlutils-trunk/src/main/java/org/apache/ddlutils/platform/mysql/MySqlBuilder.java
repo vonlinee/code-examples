@@ -1,12 +1,13 @@
 package org.apache.ddlutils.platform.mysql;
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.ForeignKey;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.SqlBuilder;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -22,7 +23,7 @@ public class MySqlBuilder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public MySqlBuilder(Platform platform) {
+    public MySqlBuilder(DatabaseDialect platform) {
         super(platform);
         // we need to handle the backslash first otherwise the other
         // already escaped sequences would be affected
@@ -85,15 +86,16 @@ public class MySqlBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
-    protected void writeTableCreationStmtEnding(Table table, Map parameters) throws IOException {
+    @Override
+    protected void writeTableCreationStmtEnding(Table table, Map<String, Object> parameters) throws IOException {
         if (parameters != null) {
             print(" ");
             // MySql supports additional table creation options which are appended
             // at the end of the CREATE TABLE statement
-            for (Iterator it = parameters.entrySet().iterator(); it.hasNext(); ) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Iterator<Map.Entry<String, Object>> it = parameters.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<String, Object> entry = it.next();
 
-                print(entry.getKey().toString());
+                print(entry.getKey());
                 if (entry.getValue() != null) {
                     print("=");
                     print(entry.getValue().toString());
@@ -106,9 +108,25 @@ public class MySqlBuilder extends SqlBuilder {
         super.writeTableCreationStmtEnding(table, parameters);
     }
 
+    @Override
+    protected String getSqlType(Column column) {
+        final String sqlType = super.getSqlType(column);
+        System.out.println(column.getName() + " " + sqlType);
+        return sqlType;
+    }
+
+    @Override
+    protected void writeColumn(Table table, Column column) throws IOException {
+        super.writeColumn(table, column);
+        if (!StringUtils.isEmpty(column.getDescription())) {
+            print(" COMMENT '" + column.getDescription() + "'");
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropForeignKey(Table table, ForeignKey foreignKey) throws IOException {
         writeTableAlterStmt(table);
         print("DROP FOREIGN KEY ");
@@ -189,6 +207,7 @@ public class MySqlBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         boolean sizeChanged = ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn);
         boolean typeChanged = ColumnDefinitionChange.isTypeChanged(getPlatformInfo(), sourceColumn, targetColumn);

@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.derby;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Index;
@@ -39,7 +39,7 @@ public class DerbyBuilder extends CloudscapeBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public DerbyBuilder(Platform platform) {
+    public DerbyBuilder(DatabaseDialect platform) {
         super(platform);
     }
 

@@ -151,7 +151,7 @@ public class BetweenCriteria extends Criteria {
    *            the output destination to which we write the SQL BETWEEN
    *            operator.
    * 
-   * @see com.truemesh.squiggle.Criteria#write(com.truemesh.squiggle.output.Output)
+   * @see Criteria#write(Output)
    */
   public void write(Output out) {
     out.print(column).print(" BETWEEN ").print(range.getStart()).print(" AND ")

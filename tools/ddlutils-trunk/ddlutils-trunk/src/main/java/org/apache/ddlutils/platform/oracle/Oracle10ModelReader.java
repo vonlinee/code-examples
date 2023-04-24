@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.oracle;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 
@@ -37,7 +37,7 @@ public class Oracle10ModelReader extends Oracle8ModelReader {
      * Creates a new model reader for Oracle 10 databases.
      * @param platform The platform that this model reader belongs to
      */
-    public Oracle10ModelReader(Platform platform) {
+    public Oracle10ModelReader(DatabaseDialect platform) {
         super(platform);
     }
 

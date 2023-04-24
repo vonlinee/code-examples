@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * Represents an index definition for a table.
  * @version $Revision: 289996 $
  */
-public class NonUniqueIndex extends IndexImplBase {
+public class NonUniqueIndex extends GenericIndex {
     /**
      * Unique ID for serialization purposes.
      */
@@ -41,7 +41,7 @@ public class NonUniqueIndex extends IndexImplBase {
     /**
      * {@inheritDoc}
      */
-    public Index getClone() throws ModelException {
+    public Index copy() throws ModelException {
         NonUniqueIndex result = new NonUniqueIndex();
         result._name = _name;
         ArrayList<IndexColumn> columnList = new ArrayList<>();
@@ -65,6 +65,7 @@ public class NonUniqueIndex extends IndexImplBase {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean equalsIgnoreCase(Index other) {
         if (other instanceof NonUniqueIndex) {
             NonUniqueIndex otherIndex = (NonUniqueIndex) other;

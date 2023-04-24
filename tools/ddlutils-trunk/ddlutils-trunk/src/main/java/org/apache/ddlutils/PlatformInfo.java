@@ -219,33 +219,35 @@ public class PlatformInfo {
 
     /**
      * Contains non-default mappings from jdbc to native types.
+     * key: JDBC type code
+     * value: native type name
      */
-    private HashMap _nativeTypes = new HashMap();
+    private final HashMap<Integer, String> _nativeTypes = new HashMap<>();
 
     /**
      * Contains the jdbc types corresponding to the native types for non-default mappings.
      */
-    private HashMap _targetJdbcTypes = new HashMap();
+    private final HashMap<Integer, Integer> _targetJdbcTypes = new HashMap<>();
 
     /**
      * Contains those JDBC types whose corresponding native types have a null value as the default value.
      */
-    private HashSet _typesWithNullDefault = new HashSet();
+    private final HashSet<Integer> _typesWithNullDefault = new HashSet<>();
 
     /**
      * Contains those JDBC types whose corresponding native types are types that have a size on this platform.
      */
-    private HashSet _typesWithSize = new HashSet();
+    private final HashSet<Integer> _typesWithSize = new HashSet<>();
 
     /**
      * Contains the default sizes for those JDBC types whose corresponding native types require a size.
      */
-    private HashMap _typesDefaultSizes = new HashMap();
+    private final HashMap<Integer, Integer> _typesDefaultSizes = new HashMap<>();
 
     /**
      * Contains those JDBC types whose corresponding native types are types that have precision and scale on this platform.
      */
-    private HashSet _typesWithPrecisionAndScale = new HashSet();
+    private final HashSet<Integer> _typesWithPrecisionAndScale = new HashSet<>();
 
     /**
      * The default ON UPDATE action.
@@ -260,43 +262,43 @@ public class PlatformInfo {
     /**
      * Contains the supported ON UPDATE actions.
      */
-    private HashSet _supportedOnUpdateActions = new HashSet();
+    private final HashSet<CascadeActionEnum> _supportedOnUpdateActions = new HashSet<>();
 
     /**
      * Contains the supported ON DELETE actions.
      */
-    private HashSet _supportedOnDeleteActions = new HashSet();
+    private final HashSet<CascadeActionEnum> _supportedOnDeleteActions = new HashSet<>();
 
     /**
      * Contains for each ON UPDATE action the list of equivalent actions.
      */
-    private HashMap _equivalentOnUpdateActions = new HashMap();
+    private final HashMap<CascadeActionEnum, Set<CascadeActionEnum>> _equivalentOnUpdateActions = new HashMap<>();
 
     /**
      * Contains for each ON DELETE action the list of equivalent actions.
      */
-    private HashMap<CascadeActionEnum, Set<?>> _equivalentOnDeleteActions = new HashMap<>();
+    private final HashMap<CascadeActionEnum, Set<CascadeActionEnum>> _equivalentOnDeleteActions = new HashMap<>();
 
     /**
      * Creates a new platform info object.
      */
     public PlatformInfo() {
-        _typesWithNullDefault.add(new Integer(Types.CHAR));
-        _typesWithNullDefault.add(new Integer(Types.VARCHAR));
-        _typesWithNullDefault.add(new Integer(Types.LONGVARCHAR));
-        _typesWithNullDefault.add(new Integer(Types.CLOB));
-        _typesWithNullDefault.add(new Integer(Types.BINARY));
-        _typesWithNullDefault.add(new Integer(Types.VARBINARY));
-        _typesWithNullDefault.add(new Integer(Types.LONGVARBINARY));
-        _typesWithNullDefault.add(new Integer(Types.BLOB));
+        _typesWithNullDefault.add(Types.CHAR);
+        _typesWithNullDefault.add(Types.VARCHAR);
+        _typesWithNullDefault.add(Types.LONGVARCHAR);
+        _typesWithNullDefault.add(Types.CLOB);
+        _typesWithNullDefault.add(Types.BINARY);
+        _typesWithNullDefault.add(Types.VARBINARY);
+        _typesWithNullDefault.add(Types.LONGVARBINARY);
+        _typesWithNullDefault.add(Types.BLOB);
 
-        _typesWithSize.add(new Integer(Types.CHAR));
-        _typesWithSize.add(new Integer(Types.VARCHAR));
-        _typesWithSize.add(new Integer(Types.BINARY));
-        _typesWithSize.add(new Integer(Types.VARBINARY));
+        _typesWithSize.add(Types.CHAR);
+        _typesWithSize.add(Types.VARCHAR);
+        _typesWithSize.add(Types.BINARY);
+        _typesWithSize.add(Types.VARBINARY);
 
-        _typesWithPrecisionAndScale.add(new Integer(Types.DECIMAL));
-        _typesWithPrecisionAndScale.add(new Integer(Types.NUMERIC));
+        _typesWithPrecisionAndScale.add(Types.DECIMAL);
+        _typesWithPrecisionAndScale.add(Types.NUMERIC);
 
         _supportedOnUpdateActions.addAll(CascadeActionEnum.getEnumList());
         _supportedOnDeleteActions.addAll(CascadeActionEnum.getEnumList());
@@ -906,7 +908,7 @@ public class PlatformInfo {
      * @return The native type or <code>null</code> if there isn't one defined
      */
     public String getNativeType(int typeCode) {
-        return (String) _nativeTypes.get(new Integer(typeCode));
+        return _nativeTypes.get(typeCode);
     }
 
     /**
@@ -919,9 +921,8 @@ public class PlatformInfo {
      * @return The target jdbc type
      */
     public int getTargetJdbcType(int typeCode) {
-        Integer targetJdbcType = (Integer) _targetJdbcTypes.get(new Integer(typeCode));
-
-        return targetJdbcType == null ? typeCode : targetJdbcType.intValue();
+        Integer targetJdbcType = (Integer) _targetJdbcTypes.get(typeCode);
+        return targetJdbcType == null ? typeCode : targetJdbcType;
     }
 
     /**
@@ -930,7 +931,7 @@ public class PlatformInfo {
      * @param nativeType   The native type
      */
     public void addNativeTypeMapping(int jdbcTypeCode, String nativeType) {
-        _nativeTypes.put(new Integer(jdbcTypeCode), nativeType);
+        _nativeTypes.put(jdbcTypeCode, nativeType);
     }
 
     /**
@@ -942,7 +943,7 @@ public class PlatformInfo {
      */
     public void addNativeTypeMapping(int jdbcTypeCode, String nativeType, int targetJdbcTypeCode) {
         addNativeTypeMapping(jdbcTypeCode, nativeType);
-        _targetJdbcTypes.put(new Integer(jdbcTypeCode), new Integer(targetJdbcTypeCode));
+        _targetJdbcTypes.put(jdbcTypeCode, targetJdbcTypeCode);
     }
 
     /**
@@ -958,7 +959,6 @@ public class PlatformInfo {
     public void addNativeTypeMapping(String jdbcTypeName, String nativeType) {
         try {
             Field constant = Types.class.getField(jdbcTypeName);
-
             if (constant != null) {
                 addNativeTypeMapping(constant.getInt(null), nativeType);
             }
@@ -984,7 +984,6 @@ public class PlatformInfo {
         try {
             Field sourceType = Types.class.getField(jdbcTypeName);
             Field targetType = Types.class.getField(targetJdbcTypeName);
-
             if ((sourceType != null) && (targetType != null)) {
                 addNativeTypeMapping(sourceType.getInt(null), nativeType, targetType.getInt(null));
             }
@@ -1001,7 +1000,7 @@ public class PlatformInfo {
      * @return <code>true</code> if the native type has a null default value
      */
     public boolean hasNullDefault(int sqlTypeCode) {
-        return _typesWithNullDefault.contains(new Integer(sqlTypeCode));
+        return _typesWithNullDefault.contains(sqlTypeCode);
     }
 
     /**
@@ -1012,9 +1011,9 @@ public class PlatformInfo {
      */
     public void setHasNullDefault(int sqlTypeCode, boolean hasNullDefault) {
         if (hasNullDefault) {
-            _typesWithNullDefault.add(new Integer(sqlTypeCode));
+            _typesWithNullDefault.add(sqlTypeCode);
         } else {
-            _typesWithNullDefault.remove(new Integer(sqlTypeCode));
+            _typesWithNullDefault.remove(sqlTypeCode);
         }
     }
 
@@ -1025,7 +1024,7 @@ public class PlatformInfo {
      * @return <code>true</code> if the native type has a size specification
      */
     public boolean hasSize(int sqlTypeCode) {
-        return _typesWithSize.contains(new Integer(sqlTypeCode));
+        return _typesWithSize.contains(sqlTypeCode);
     }
 
     /**
@@ -1036,9 +1035,9 @@ public class PlatformInfo {
      */
     public void setHasSize(int sqlTypeCode, boolean hasSize) {
         if (hasSize) {
-            _typesWithSize.add(new Integer(sqlTypeCode));
+            _typesWithSize.add(sqlTypeCode);
         } else {
-            _typesWithSize.remove(new Integer(sqlTypeCode));
+            _typesWithSize.remove(sqlTypeCode);
         }
     }
 
@@ -1048,7 +1047,7 @@ public class PlatformInfo {
      * @return The default size or <code>null</code> if none is defined
      */
     public Integer getDefaultSize(int jdbcTypeCode) {
-        return (Integer) _typesDefaultSizes.get(new Integer(jdbcTypeCode));
+        return _typesDefaultSizes.get(jdbcTypeCode);
     }
 
     /**
@@ -1057,7 +1056,7 @@ public class PlatformInfo {
      * @param defaultSize  The default size
      */
     public void setDefaultSize(int jdbcTypeCode, int defaultSize) {
-        _typesDefaultSizes.put(new Integer(jdbcTypeCode), new Integer(defaultSize));
+        _typesDefaultSizes.put(jdbcTypeCode, defaultSize);
     }
 
     /**
@@ -1069,9 +1068,7 @@ public class PlatformInfo {
         try {
             Field constant = Types.class.getField(jdbcTypeName);
 
-            if (constant != null) {
-                setDefaultSize(constant.getInt(null), defaultSize);
-            }
+            setDefaultSize(constant.getInt(null), defaultSize);
         } catch (Exception ex) {
             // ignore -> won't be defined
             _log.warn("Cannot add default size for undefined jdbc type " + jdbcTypeName, ex);
@@ -1086,7 +1083,7 @@ public class PlatformInfo {
      * @return <code>true</code> if the native type has precision and scale specifications
      */
     public boolean hasPrecisionAndScale(int sqlTypeCode) {
-        return _typesWithPrecisionAndScale.contains(new Integer(sqlTypeCode));
+        return _typesWithPrecisionAndScale.contains(sqlTypeCode);
     }
 
     /**
@@ -1098,9 +1095,9 @@ public class PlatformInfo {
      */
     public void setHasPrecisionAndScale(int sqlTypeCode, boolean hasPrecisionAndScale) {
         if (hasPrecisionAndScale) {
-            _typesWithPrecisionAndScale.add(new Integer(sqlTypeCode));
+            _typesWithPrecisionAndScale.add(sqlTypeCode);
         } else {
-            _typesWithPrecisionAndScale.remove(new Integer(sqlTypeCode));
+            _typesWithPrecisionAndScale.remove(sqlTypeCode);
         }
     }
 
@@ -1180,15 +1177,15 @@ public class PlatformInfo {
      */
     public void addEquivalentOnUpdateActions(CascadeActionEnum actionA, CascadeActionEnum actionB) {
         if (!actionA.equals(actionB)) {
-            Set actionsEquivalentToActionA = (Set) _equivalentOnUpdateActions.get(actionA);
-            Set actionsEquivalentToActionB = (Set) _equivalentOnUpdateActions.get(actionB);
+            Set<CascadeActionEnum> actionsEquivalentToActionA = _equivalentOnUpdateActions.get(actionA);
+            Set<CascadeActionEnum> actionsEquivalentToActionB = _equivalentOnUpdateActions.get(actionB);
 
             if (actionsEquivalentToActionA == null) {
-                actionsEquivalentToActionA = new HashSet();
+                actionsEquivalentToActionA = new HashSet<>();
                 _equivalentOnUpdateActions.put(actionA, actionsEquivalentToActionA);
             }
             if (actionsEquivalentToActionB == null) {
-                actionsEquivalentToActionB = new HashSet();
+                actionsEquivalentToActionB = new HashSet<>();
                 _equivalentOnUpdateActions.put(actionB, actionsEquivalentToActionB);
             }
             actionsEquivalentToActionA.add(actionB);
@@ -1204,9 +1201,8 @@ public class PlatformInfo {
      * @return <code>true</code> if the two actions are equivalent
      */
     public boolean areEquivalentOnUpdateActions(CascadeActionEnum actionA, CascadeActionEnum actionB) {
-        Set actionsEquivalentToActionA = (Set) _equivalentOnUpdateActions.get(actionA);
-
-        return actionsEquivalentToActionA == null ? false : actionsEquivalentToActionA.contains(actionB);
+        Set<CascadeActionEnum> actionsEquivalentToActionA = _equivalentOnUpdateActions.get(actionA);
+        return actionsEquivalentToActionA != null && actionsEquivalentToActionA.contains(actionB);
     }
 
     /**
@@ -1217,15 +1213,15 @@ public class PlatformInfo {
      */
     public void addEquivalentOnDeleteActions(CascadeActionEnum actionA, CascadeActionEnum actionB) {
         if (!actionA.equals(actionB)) {
-            Set actionsEquivalentToActionA = (Set) _equivalentOnDeleteActions.get(actionA);
-            Set actionsEquivalentToActionB = (Set) _equivalentOnDeleteActions.get(actionB);
+            Set<CascadeActionEnum> actionsEquivalentToActionA = _equivalentOnDeleteActions.get(actionA);
+            Set<CascadeActionEnum> actionsEquivalentToActionB = _equivalentOnDeleteActions.get(actionB);
 
             if (actionsEquivalentToActionA == null) {
-                actionsEquivalentToActionA = new HashSet();
+                actionsEquivalentToActionA = new HashSet<>();
                 _equivalentOnDeleteActions.put(actionA, actionsEquivalentToActionA);
             }
             if (actionsEquivalentToActionB == null) {
-                actionsEquivalentToActionB = new HashSet();
+                actionsEquivalentToActionB = new HashSet<>();
                 _equivalentOnDeleteActions.put(actionB, actionsEquivalentToActionB);
             }
             actionsEquivalentToActionA.add(actionB);
@@ -1241,8 +1237,7 @@ public class PlatformInfo {
      * @return <code>true</code> if the two actions are equivalent
      */
     public boolean areEquivalentOnDeleteActions(CascadeActionEnum actionA, CascadeActionEnum actionB) {
-        Set actionsEquivalentToActionA = (Set) _equivalentOnDeleteActions.get(actionA);
-
-        return actionsEquivalentToActionA == null ? false : actionsEquivalentToActionA.contains(actionB);
+        Set<CascadeActionEnum> actionsEquivalentToActionA = _equivalentOnDeleteActions.get(actionA);
+        return actionsEquivalentToActionA != null && actionsEquivalentToActionA.contains(actionB);
     }
 }

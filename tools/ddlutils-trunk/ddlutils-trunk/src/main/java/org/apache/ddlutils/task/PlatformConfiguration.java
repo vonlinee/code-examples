@@ -20,7 +20,7 @@ package org.apache.ddlutils.task;
  */
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.PlatformFactory;
 import org.apache.ddlutils.PlatformUtils;
 import org.apache.tools.ant.BuildException;
@@ -62,7 +62,7 @@ public class PlatformConfiguration {
     /**
      * The platform object.
      */
-    private Platform _platform;
+    private DatabaseDialect _platform;
 
     /**
      * Returns the database type.
@@ -182,7 +182,7 @@ public class PlatformConfiguration {
      * Creates the platform for the configured database.
      * @return The platform
      */
-    public Platform getPlatform() throws BuildException {
+    public DatabaseDialect getPlatform() throws BuildException {
         if (_platform == null) {
             if (_databaseType == null) {
                 if (_dataSource == null) {

@@ -171,7 +171,7 @@ public class TestMySql50Platform extends TestPlatformBase {
                         "</database>";
 
         Database testDb = parseDatabaseFromString(schema);
-        CreationParameters params = new CreationParameters();
+        SqlBuildContext params = new SqlBuildContext();
 
         params.addParameter(testDb.getTable(0),
                 "ROW_FORMAT",

@@ -25,9 +25,9 @@ import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.PlatformImplBase;
+import org.apache.ddlutils.platform.GenericDialect;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -42,7 +42,7 @@ import java.util.Map;
  * The Mckoi database platform implementation.
  * @version $Revision: 231306 $
  */
-public class MckoiPlatform extends PlatformImplBase {
+public class MckoiPlatform extends GenericDialect {
     /**
      * Database name of this platform.
      */
@@ -161,7 +161,7 @@ public class MckoiPlatform extends PlatformImplBase {
     /**
      * {@inheritDoc}
      */
-    public void processChange(Database currentModel, CreationParameters params, RecreateTableChange change) throws IOException {
+    public void processChange(Database currentModel, SqlBuildContext params, RecreateTableChange change) throws IOException {
         // McKoi has this nice ALTER CREATE TABLE statement which saves us a lot of work
         // We only have to handle auto-increment changes manually
         MckoiBuilder sqlBuilder = (MckoiBuilder) getSqlBuilder();

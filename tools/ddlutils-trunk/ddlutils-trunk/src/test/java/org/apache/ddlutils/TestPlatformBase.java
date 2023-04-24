@@ -34,7 +34,7 @@ public abstract class TestPlatformBase extends TestBase {
     /**
      * The tested platform.
      */
-    private Platform _platform;
+    private DatabaseDialect _platform;
     /**
      * The writer that the builder of the platform writes to.
      */
@@ -64,7 +64,7 @@ public abstract class TestPlatformBase extends TestBase {
      * Returns the tested platform.
      * @return The platform
      */
-    protected Platform getPlatform() {
+    protected DatabaseDialect getPlatform() {
         return _platform;
     }
 
@@ -107,9 +107,9 @@ public abstract class TestPlatformBase extends TestBase {
         Database testDb = parseDatabaseFromString(schema);
 
         // we're turning the comment creation off to make testing easier
-        Platform platform = getPlatform();
+        DatabaseDialect platform = getPlatform();
         platform.setSqlCommentsOn(false);
-        platform.getSqlBuilder().createTables(testDb);
+        platform.getSqlBuilder().createTables(testDb, null, true);
         return getBuilderOutput();
     }
 

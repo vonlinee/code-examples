@@ -21,7 +21,7 @@ package org.apache.ddlutils.platform.axion;
 
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.PlatformInfo;
-import org.apache.ddlutils.platform.PlatformImplBase;
+import org.apache.ddlutils.platform.GenericDialect;
 
 import java.sql.*;
 import java.util.Map;
@@ -30,7 +30,7 @@ import java.util.Map;
  * The platform for the Axion database.
  * @version $Revision: 231306 $
  */
-public class AxionPlatform extends PlatformImplBase {
+public class AxionPlatform extends GenericDialect {
     /**
      * Database name of this platform.
      */

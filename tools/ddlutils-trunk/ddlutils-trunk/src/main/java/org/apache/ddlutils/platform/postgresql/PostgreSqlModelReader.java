@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.postgresql;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
@@ -38,7 +38,7 @@ public class PostgreSqlModelReader extends JdbcModelReader {
      * Creates a new model reader for PostgreSql databases.
      * @param platform The platform that this model reader belongs to
      */
-    public PostgreSqlModelReader(Platform platform) {
+    public PostgreSqlModelReader(DatabaseDialect platform) {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);

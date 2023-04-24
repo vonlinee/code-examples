@@ -25,9 +25,9 @@ import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.PlatformImplBase;
+import org.apache.ddlutils.platform.GenericDialect;
 import org.apache.ddlutils.util.StringUtilsExt;
 
 import java.io.IOException;
@@ -37,7 +37,7 @@ import java.sql.Types;
  * The SapDB platform implementation.
  * @version $Revision: 231306 $
  */
-public class SapDbPlatform extends PlatformImplBase {
+public class SapDbPlatform extends GenericDialect {
     /**
      * Database name of this platform.
      */
@@ -168,7 +168,7 @@ public class SapDbPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               RemoveColumnChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column removedColumn = changedTable.findColumn(change.getChangedColumn(), isDelimitedIdentifierModeOn());
@@ -185,7 +185,7 @@ public class SapDbPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               RemovePrimaryKeyChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
 
@@ -201,7 +201,7 @@ public class SapDbPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               PrimaryKeyChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         String[] newPKColumnNames = change.getNewPrimaryKeyColumns();
@@ -224,7 +224,7 @@ public class SapDbPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               ColumnDefinitionChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column changedColumn = changedTable.findColumn(change.getChangedColumn(), isDelimitedIdentifierModeOn());

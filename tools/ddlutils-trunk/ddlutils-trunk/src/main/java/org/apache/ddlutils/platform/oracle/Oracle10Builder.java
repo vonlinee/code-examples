@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.oracle;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Table;
 
@@ -34,7 +34,7 @@ public class Oracle10Builder extends Oracle8Builder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public Oracle10Builder(Platform platform) {
+    public Oracle10Builder(DatabaseDialect platform) {
         super(platform);
     }
 

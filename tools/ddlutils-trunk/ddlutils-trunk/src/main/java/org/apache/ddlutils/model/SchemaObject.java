@@ -11,11 +11,4 @@ public interface SchemaObject {
      * @return name
      */
     String getName();
-
-    /**
-     * 类似于clone方法
-     * @param <T> 子类型
-     * @return 子类型
-     */
-    <T extends SchemaObject> T copyFor(T source);
 }

@@ -19,9 +19,9 @@ package org.apache.ddlutils.task;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.Database;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -85,9 +85,9 @@ public class WriteSchemaToDatabaseCommand extends DatabaseCommandWithCreationPar
             throw new BuildException("No database specified.");
         }
 
-        Platform platform = getPlatform();
+        DatabaseDialect platform = getPlatform();
         boolean isCaseSensitive = platform.isDelimitedIdentifierModeOn();
-        CreationParameters params = getFilteredParameters(model, platform.getName(), isCaseSensitive);
+        SqlBuildContext params = getFilteredParameters(model, platform.getName(), isCaseSensitive);
 
         platform.setScriptModeOn(false);
         // we're disabling the comment generation because we're writing directly to the database

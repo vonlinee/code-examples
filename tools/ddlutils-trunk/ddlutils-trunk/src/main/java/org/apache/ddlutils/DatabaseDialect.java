@@ -38,7 +38,7 @@ import java.util.Map;
  * and manipulations. It also contains an sql builder that is specific to this platform.
  * @version $Revision: 231110 $
  */
-public interface Platform {
+public interface DatabaseDialect {
     /**
      * Returns the name of the database that this platform is for.
      * @return The name

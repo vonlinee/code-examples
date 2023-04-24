@@ -1,7 +1,7 @@
 package com.truemesh.squiggle;
 
-import com.truemesh.squiggle.output.Outputable;
 import com.truemesh.squiggle.output.Output;
+import com.truemesh.squiggle.output.Outputable;
 import com.truemesh.squiggle.output.ToStringer;
 
 /**

@@ -126,7 +126,7 @@ public class CascadeActionEnum extends ValuedEnum {
      * Returns a list of all enum values.
      * @return The list of enum values
      */
-    public static List getEnumList() {
+    public static List<CascadeActionEnum> getEnumList() {
         return getEnumList(CascadeActionEnum.class);
     }
 

@@ -25,7 +25,7 @@ import java.io.Serializable;
  * Represents an index definition for a table which may be either unique or non-unique.
  * @version $Revision$
  */
-public interface Index extends Serializable {
+public interface Index extends SchemaObject, Serializable {
     /**
      * Determines whether this index is unique or not.
      * @return <code>true</code> if the index is an unique one
@@ -36,6 +36,7 @@ public interface Index extends Serializable {
      * Returns the name of the index.
      * @return The name
      */
+    @Override
     String getName();
 
     /**
@@ -100,7 +101,7 @@ public interface Index extends Serializable {
      * Returns a clone of this index object.
      * @return The clone
      */
-    Index getClone() throws ModelException;
+    Index copy() throws ModelException;
 
     /**
      * Compares this index to the given one while ignoring the case of identifiers.

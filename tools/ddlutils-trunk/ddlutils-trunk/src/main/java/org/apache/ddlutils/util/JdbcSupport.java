@@ -77,7 +77,6 @@ public abstract class JdbcSupport {
         _dataSource = dataSource;
     }
 
-
     /**
      * Returns the username used to access the database.
      * @return The username
@@ -119,8 +118,7 @@ public abstract class JdbcSupport {
      */
     public Connection borrowConnection() throws DatabaseOperationException {
         try {
-            Connection connection = null;
-
+            Connection connection;
             if (_username == null) {
                 connection = getDataSource().getConnection();
             } else {
@@ -150,7 +148,7 @@ public abstract class JdbcSupport {
 
                     _openConnectionNames.remove(connName);
 
-                    StringBuffer logMsg = new StringBuffer();
+                    StringBuilder logMsg = new StringBuilder();
 
                     logMsg.append("Returning connection ");
                     logMsg.append(connName);
@@ -158,9 +156,9 @@ public abstract class JdbcSupport {
                     if (_openConnectionNames.isEmpty()) {
                         logMsg.append(" None");
                     } else {
-                        for (Iterator it = _openConnectionNames.iterator(); it.hasNext(); ) {
+                        for (Iterator<String> it = _openConnectionNames.iterator(); it.hasNext(); ) {
                             logMsg.append("\n    ");
-                            logMsg.append(it.next().toString());
+                            logMsg.append(it.next());
                         }
                     }
                     _log.debug(logMsg.toString());

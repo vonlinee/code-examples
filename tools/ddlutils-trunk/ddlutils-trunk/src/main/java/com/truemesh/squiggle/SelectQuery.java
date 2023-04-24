@@ -160,7 +160,7 @@ public class SelectQuery implements Outputable {
     /**
      * Find all the tables used in the query (from columns, criteria and order).
      * 
-     * @return List of {@link com.truemesh.squiggle.Table}s
+     * @return List of {@link Table}s
      */
     private List findAllUsedTables() {
 

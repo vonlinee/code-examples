@@ -20,7 +20,7 @@ package org.apache.ddlutils.platform.mssql;
  */
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
@@ -49,7 +49,7 @@ public class MSSqlBuilder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public MSSqlBuilder(Platform platform) {
+    public MSSqlBuilder(DatabaseDialect platform) {
         super(platform);
         addEscapedCharSequence("'", "''");
     }

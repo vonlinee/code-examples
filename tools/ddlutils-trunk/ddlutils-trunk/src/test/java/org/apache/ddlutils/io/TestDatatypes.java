@@ -20,6 +20,7 @@ package org.apache.ddlutils.io;
  */
 
 import junit.framework.Test;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.platform.interbase.InterbasePlatform;
@@ -82,7 +83,7 @@ public class TestDatatypes extends TestAgainstLiveDatabaseBase {
      * Performs a data type test. In short, we're testing creation of a database, insertion of values
      * into it, and reading the model back. In addition we also check that DdlUtils does not try to
      * alter the new database when using the <code>alterTables</code>/<code>getAlterTablesSql</code>
-     * methods of the {@link org.apache.ddlutils.Platform} with the read-back model.
+     * methods of the {@link DatabaseDialect} with the read-back model.
      * @param modelXml  The model as XML
      * @param inserted1 The non-pk value to insert for the first row
      * @param inserted2 The non-pk value to insert for the second row

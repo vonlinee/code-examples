@@ -19,9 +19,9 @@ package org.apache.ddlutils.task;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.Database;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.tools.ant.BuildException;
 
 import java.io.File;
@@ -110,9 +110,9 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
             throw new BuildException("Cannot overwrite output file " + _outputFile.getAbsolutePath());
         }
 
-        Platform platform = getPlatform();
+        DatabaseDialect platform = getPlatform();
         boolean isCaseSensitive = platform.isDelimitedIdentifierModeOn();
-        CreationParameters params = getFilteredParameters(model, platform.getName(), isCaseSensitive);
+        SqlBuildContext params = getFilteredParameters(model, platform.getName(), isCaseSensitive);
         FileWriter writer = null;
 
         try {

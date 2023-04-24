@@ -20,7 +20,7 @@ package org.apache.ddlutils.platform.sybase;
  */
 
 import org.apache.ddlutils.DdlUtilsException;
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
@@ -51,7 +51,7 @@ public class SybaseModelReader extends JdbcModelReader {
      * Creates a new model reader for Sybase databases.
      * @param platform The platform that this model reader belongs to
      */
-    public SybaseModelReader(Platform platform) {
+    public SybaseModelReader(DatabaseDialect platform) {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);

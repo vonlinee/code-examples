@@ -16,7 +16,7 @@ public class InCriteria extends Criteria {
 
     public InCriteria(Column column, Collection values) {
         this.column = column;
-        StringBuffer v = new StringBuffer();
+        StringBuilder v = new StringBuilder();
         Iterator i = values.iterator();
         boolean hasNext = i.hasNext();
         while (hasNext) {

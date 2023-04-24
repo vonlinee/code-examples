@@ -25,9 +25,9 @@ import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.PlatformImplBase;
+import org.apache.ddlutils.platform.GenericDialect;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -39,7 +39,7 @@ import java.sql.Types;
  * The platform implementation for the HsqlDb database.
  * @version $Revision: 231306 $
  */
-public class HsqlDbPlatform extends PlatformImplBase {
+public class HsqlDbPlatform extends GenericDialect {
     /**
      * Database name of this platform.
      */
@@ -149,7 +149,7 @@ public class HsqlDbPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               AddColumnChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column nextColumn = null;
@@ -169,7 +169,7 @@ public class HsqlDbPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               RemoveColumnChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column removedColumn = changedTable.findColumn(change.getChangedColumn(), isDelimitedIdentifierModeOn());

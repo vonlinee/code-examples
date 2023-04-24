@@ -20,7 +20,9 @@ package org.apache.ddlutils.model;
  */
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.ddlutils.util.StringUtils;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +31,7 @@ import java.util.ArrayList;
  * same by the Table.
  * @version $Revision$
  */
-public class UniqueIndex extends IndexImplBase {
+public class UniqueIndex extends GenericIndex {
     /**
      * Unique ID for serialization purposes.
      */
@@ -45,12 +47,11 @@ public class UniqueIndex extends IndexImplBase {
     /**
      * {@inheritDoc}
      */
-    public Index getClone() throws ModelException {
+    @Override
+    public Index copy() throws ModelException {
         UniqueIndex result = new UniqueIndex();
-
         result._name = _name;
-        result._columns = (ArrayList) _columns.clone();
-
+        result._columns = (ArrayList<IndexColumn>) _columns.clone();
         return result;
     }
 
@@ -72,13 +73,11 @@ public class UniqueIndex extends IndexImplBase {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean equalsIgnoreCase(Index other) {
         if (other instanceof UniqueIndex) {
             UniqueIndex otherIndex = (UniqueIndex) other;
-
-            boolean checkName = (_name != null) && (_name.length() > 0) &&
-                    (otherIndex._name != null) && (otherIndex._name.length() > 0);
-
+            boolean checkName = StringUtils.hasText(_name, otherIndex._name);
             if ((!checkName || _name.equalsIgnoreCase(otherIndex._name)) &&
                     (getColumnCount() == otherIndex.getColumnCount())) {
                 for (int idx = 0; idx < getColumnCount(); idx++) {
@@ -95,6 +94,7 @@ public class UniqueIndex extends IndexImplBase {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int hashCode() {
         return _columns.hashCode();
     }
@@ -102,24 +102,21 @@ public class UniqueIndex extends IndexImplBase {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString() {
-        StringBuffer result = new StringBuffer();
-
-        result.append("Unique index [name=");
-        result.append(getName());
-        result.append("; ");
-        result.append(getColumnCount());
-        result.append(" columns]");
-
-        return result.toString();
+        return "Unique index [name=" +
+                getName() +
+                "; " +
+                getColumnCount() +
+                " columns]";
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toVerboseString() {
-        StringBuffer result = new StringBuffer();
-
+        StringBuilder result = new StringBuilder();
         result.append("Unique index [");
         result.append(getName());
         result.append("] columns:");
@@ -127,7 +124,6 @@ public class UniqueIndex extends IndexImplBase {
             result.append(" ");
             result.append(getColumn(idx).toString());
         }
-
         return result.toString();
     }
 }

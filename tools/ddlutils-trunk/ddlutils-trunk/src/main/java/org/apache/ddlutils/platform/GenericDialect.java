@@ -27,7 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.DdlUtilsException;
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
@@ -48,7 +48,8 @@ import java.util.*;
  * Base class for platform implementations.
  * @version $Revision: 231110 $
  */
-public abstract class PlatformImplBase extends JdbcSupport implements Platform {
+public abstract class GenericDialect extends JdbcSupport implements DatabaseDialect {
+
     /**
      * The default name for models read from the database, if no name as given.
      */
@@ -171,7 +172,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
     @Override
     public void setSqlCommentsOn(boolean sqlCommentsOn) {
         if (!getPlatformInfo().isSqlCommentsSupported() && sqlCommentsOn) {
-            throw new DdlUtilsException("Platform " + getName() + " does not support SQL comments");
+            throw new DdlUtilsException("DatabaseDialect " + getName() + " does not support SQL comments");
         }
         _sqlCommentsOn = sqlCommentsOn;
     }
@@ -190,7 +191,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
     @Override
     public void setDelimitedIdentifierModeOn(boolean delimitedIdentifierModeOn) {
         if (!getPlatformInfo().isDelimitedIdentifiersSupported() && delimitedIdentifierModeOn) {
-            throw new DdlUtilsException("Platform " + getName() + " does not support delimited identifier");
+            throw new DdlUtilsException("DatabaseDialect " + getName() + " does not support delimited identifier");
         }
         _delimitedIdentifierModeOn = delimitedIdentifierModeOn;
     }

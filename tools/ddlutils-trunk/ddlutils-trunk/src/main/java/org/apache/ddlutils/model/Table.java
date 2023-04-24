@@ -30,7 +30,7 @@ import java.util.*;
  * Represents a table in the database model.
  * @version $Revision$
  */
-public class Table implements Serializable {
+public class Table implements SchemaObject, Serializable {
     /**
      * Unique ID for serialization purposes.
      */
@@ -43,19 +43,19 @@ public class Table implements Serializable {
     /**
      * The table's schema.
      */
-    private String _schema = null;
+    private String _schema;
     /**
      * The name of this table.
      */
-    private String _name = null;
+    private String name;
     /**
      * A description of the table.
      */
-    private String _description = null;
+    private String _description;
     /**
      * The table's type as read from the database.
      */
-    private String _type = null;
+    private String _type;
     /**
      * The columns in this table.
      */
@@ -121,8 +121,9 @@ public class Table implements Serializable {
      * Returns the name of the table.
      * @return The name
      */
+    @Override
     public String getName() {
-        return _name;
+        return name;
     }
 
     /**
@@ -130,7 +131,7 @@ public class Table implements Serializable {
      * @param name The name
      */
     public void setName(String name) {
-        _name = name;
+        this.name = name;
     }
 
     /**
@@ -705,7 +706,7 @@ public class Table implements Serializable {
             Table other = (Table) obj;
             // Note that this compares case sensitive
             // TODO: For now we ignore catalog and schema (type should be irrelevant anyways)
-            return new EqualsBuilder().append(_name, other._name)
+            return new EqualsBuilder().append(name, other.name)
                     .append(_columns, other._columns)
                     .append(new HashSet<>(_foreignKeys), new HashSet<>(other._foreignKeys))
                     .append(new HashSet<>(_indices), new HashSet<>(other._indices))
@@ -720,7 +721,7 @@ public class Table implements Serializable {
      */
     public int hashCode() {
         // TODO: For now we ignore catalog and schema (type should be irrelevant anyways)
-        return new HashCodeBuilder(17, 37).append(_name)
+        return new HashCodeBuilder(17, 37).append(name)
                 .append(_columns)
                 .append(new HashSet<>(_foreignKeys))
                 .append(new HashSet<>(_indices))

@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.sybase;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
 import org.apache.ddlutils.util.StringUtilsExt;
@@ -38,7 +38,7 @@ public class SybaseBuilder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public SybaseBuilder(Platform platform) {
+    public SybaseBuilder(DatabaseDialect platform) {
         super(platform);
         addEscapedCharSequence("'", "''");
     }
@@ -54,7 +54,8 @@ public class SybaseBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
-    protected void writeTableCreationStmtEnding(Table table, Map parameters) throws IOException {
+    @Override
+    protected void writeTableCreationStmtEnding(Table table, Map<String, Object> parameters) throws IOException {
         if (parameters != null) {
             // We support
             // - 'lock'
@@ -75,9 +76,9 @@ public class SybaseBuilder extends SqlBuilder {
 
             boolean writtenWithParameters = false;
 
-            for (Iterator it = parameters.entrySet().iterator(); it.hasNext(); ) {
-                Map.Entry entry = (Map.Entry) it.next();
-                String name = entry.getKey().toString();
+            for (Iterator<Map.Entry<String, Object>> it = parameters.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<String, Object> entry = it.next();
+                String name = entry.getKey();
 
                 if (!"lock".equals(name) && !"at".equals(name) && !"external table at".equals(name) && !"on".equals(name)) {
                     if (!writtenWithParameters) {

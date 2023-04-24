@@ -36,7 +36,7 @@ import java.util.regex.PatternSyntaxException;
  * objects stored in the tables.
  * @version $Revision$
  */
-public class Database implements Serializable {
+public class Database implements SchemaObject, Serializable {
     /**
      * Unique ID for serialization purposes.
      */
@@ -110,6 +110,7 @@ public class Database implements Serializable {
      * Returns the name of this database model.
      * @return The name
      */
+    @Override
     public String getName() {
         return _name;
     }

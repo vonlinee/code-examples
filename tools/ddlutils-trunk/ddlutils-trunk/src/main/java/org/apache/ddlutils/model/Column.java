@@ -31,7 +31,7 @@ import java.util.Objects;
  * Represents a column in the database model.
  * @version $Revision$
  */
-public class Column implements Serializable {
+public class Column implements SchemaObject, Serializable {
     /**
      * Unique ID for serialization purposes.
      */
@@ -64,7 +64,7 @@ public class Column implements Serializable {
     /**
      * The JDBC type code, one of the constants in {@link java.sql.Types}.
      */
-    private int _typeCode;
+    private int typeCode;
     /**
      * The name of the JDBC type.
      */
@@ -90,6 +90,7 @@ public class Column implements Serializable {
      * Returns the name of the column.
      * @return The name
      */
+    @Override
     public String getName() {
         return _name;
     }
@@ -192,7 +193,7 @@ public class Column implements Serializable {
      * @return The type code
      */
     public int getTypeCode() {
-        return _typeCode;
+        return typeCode;
     }
 
     /**
@@ -205,7 +206,7 @@ public class Column implements Serializable {
         if (_type == null) {
             throw new ModelException("Unknown JDBC type code " + typeCode);
         }
-        _typeCode = typeCode;
+        this.typeCode = typeCode;
     }
 
     /**
@@ -226,10 +227,10 @@ public class Column implements Serializable {
         if (typeCode == null) {
             throw new ModelException("Unknown JDBC type " + type);
         } else {
-            _typeCode = typeCode;
+            this.typeCode = typeCode;
             // we get the corresponding string value from the TypeMap in order
             // to detect extension types which we don't want in the model
-            _type = TypeMap.getJdbcTypeName(_typeCode);
+            _type = TypeMap.getJdbcTypeName(this.typeCode);
         }
     }
 
@@ -380,7 +381,7 @@ public class Column implements Serializable {
     public Object getParsedDefaultValue() {
         if ((_defaultValue != null) && (_defaultValue.length() > 0)) {
             try {
-                switch (_typeCode) {
+                switch (typeCode) {
                     case Types.TINYINT:
                     case Types.SMALLINT:
                         return new Short(_defaultValue);
@@ -421,7 +422,7 @@ public class Column implements Serializable {
         if (_primaryKey != column._primaryKey) return false;
         if (_required != column._required) return false;
         if (_autoIncrement != column._autoIncrement) return false;
-        if (_typeCode != column._typeCode) return false;
+        if (typeCode != column.typeCode) return false;
         if (_scale != column._scale) return false;
         if (!Objects.equals(_name, column._name)) return false;
         if (!Objects.equals(_javaName, column._javaName)) return false;
@@ -435,7 +436,7 @@ public class Column implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(_name, _javaName, _description, _primaryKey, _required, _autoIncrement, _typeCode, _type, _size, _sizeAsInt, _scale, _defaultValue);
+        return Objects.hash(_name, _javaName, _description, _primaryKey, _required, _autoIncrement, typeCode, _type, _size, _sizeAsInt, _scale, _defaultValue);
     }
 
     /**

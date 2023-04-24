@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.firebird;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
@@ -37,7 +37,7 @@ public class FirebirdBuilder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public FirebirdBuilder(Platform platform) {
+    public FirebirdBuilder(DatabaseDialect platform) {
         super(platform);
         addEscapedCharSequence("'", "''");
     }

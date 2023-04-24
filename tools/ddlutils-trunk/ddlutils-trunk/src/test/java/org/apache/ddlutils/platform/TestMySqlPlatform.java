@@ -24,6 +24,10 @@ import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.platform.mysql.MySqlPlatform;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 /**
  * Tests the MySQL platform.
  * @version $Revision: 231110 $
@@ -77,6 +81,8 @@ public class TestMySqlPlatform extends TestPlatformBase {
                         "    `COL_VARCHAR`         VARCHAR(15) NULL\n" +
                         ");\n",
                 getColumnTestDatabaseCreationSql());
+
+
     }
 
     /**
@@ -161,7 +167,7 @@ public class TestMySqlPlatform extends TestPlatformBase {
                 "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
                         "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='columnconstraintstest'>\n" +
                         "  <table name='constraints'>\n" +
-                        "    <column name='COL_PK' type='VARCHAR' size='32' primaryKey='true'/>\n" +
+                        "    <column name='COL_PK' type='VARCHAR' size='32' primaryKey='true' description='主键列'/>\n" +
                         "    <column name='COL_PK_AUTO_INCR' type='INTEGER' primaryKey='true'/>\n" +
                         "    <column name='COL_NOT_NULL' type='BINARY' size='100' required='true'/>\n" +
                         "    <column name='COL_NOT_NULL_DEFAULT' type='DOUBLE' required='true' default='-2.0'/>\n" +
@@ -171,7 +177,7 @@ public class TestMySqlPlatform extends TestPlatformBase {
                         "</database>";
 
         Database testDb = parseDatabaseFromString(schema);
-        CreationParameters params = new CreationParameters();
+        SqlBuildContext params = new SqlBuildContext();
 
         params.addParameter(testDb.getTable(0),
                 "ROW_FORMAT",
@@ -196,7 +202,46 @@ public class TestMySqlPlatform extends TestPlatformBase {
                         "    PRIMARY KEY (`COL_PK`, `COL_PK_AUTO_INCR`)\n" +
                         ") ENGINE=INNODB ROW_FORMAT=COMPRESSED;\n",
                 getBuilderOutput());
+
+        final String builderOutput = getBuilderOutput();
+        System.out.println(builderOutput);
     }
+
+    /**
+     * Tests the usage of column comment
+     */
+    public void testComment() throws Exception {
+        // MySql-specfic schema
+        final String schema =
+                "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
+                        "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='columnconstraintstest'>\n" +
+                        "  <table name='constraints'>\n" +
+                        "    <column name='COL_PK' type='VARCHAR' size='32' primaryKey='true' description='主键列'/>\n" +
+                        "    <column name='COL_PK_AUTO_INCR' type='INTEGER' primaryKey='true'/>\n" +
+                        "    <column name='COL_NOT_NULL' type='BINARY' size='100' required='true'/>\n" +
+                        "    <column name='COL_NOT_NULL_DEFAULT' type='DOUBLE' required='true' default='-2.0'/>\n" +
+                        "    <column name='COL_DEFAULT' type='CHAR' size='4' default='test'/>\n" +
+                        "    <column name='COL_AUTO_INCR' type='BIGINT'/>\n" +
+                        "  </table>\n" +
+                        "</database>";
+
+        Database testDb = parseDatabaseFromString(schema);
+        SqlBuildContext params = new SqlBuildContext();
+
+        params.addParameter(testDb.getTable(0),
+                "ROW_FORMAT",
+                "COMPRESSED");
+        params.addParameter(null,
+                "ENGINE",
+                "INNODB");
+
+        getPlatform().setSqlCommentsOn(false);
+        getPlatform().getSqlBuilder().createTables(testDb, params, true);
+
+        final String builderOutput = getBuilderOutput();
+        System.out.println(builderOutput);
+    }
+
 
     /**
      * Tests the proper escaping of character sequences where MySQL requires it.
@@ -217,9 +262,26 @@ public class TestMySqlPlatform extends TestPlatformBase {
                         "CREATE TABLE `escapedcharacters`\n" +
                         "(\n" +
                         "    `COL_PK`   INTEGER,\n" +
-                        "    `COL_TEXT` VARCHAR(128) DEFAULT '\\_ \\\' \\\" \\n \\r \\t \\\\ \\%' NULL,\n" +
+                        "    `COL_TEXT` VARCHAR(128) DEFAULT '\\_ \\' \\\" \\n \\r \\t \\\\ \\%' NULL,\n" +
                         "    PRIMARY KEY (`COL_PK`)\n" +
                         ");\n",
                 getDatabaseCreationSql(schema));
+    }
+
+    public void testXml() throws IOException {
+        DatabaseIO io = new DatabaseIO();
+
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("schema.xml");
+
+        assert is != null;
+        Database database = io.read(new InputStreamReader(is));
+
+        System.out.println(database);
+
+        getPlatform().getSqlBuilder().createTables(database);
+
+        final String builderOutput = getBuilderOutput();
+
+        System.out.println(builderOutput);
     }
 }

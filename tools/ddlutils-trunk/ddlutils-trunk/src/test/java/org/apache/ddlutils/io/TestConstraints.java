@@ -22,6 +22,7 @@ package org.apache.ddlutils.io;
 import junit.framework.Test;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.model.CascadeActionEnum;
@@ -48,7 +49,7 @@ public class TestConstraints extends TestAgainstLiveDatabaseBase {
      * and then read it back and compare the original with the read one.
      * In addition we can also check that DdlUtils does not try to alter the new
      * database when using the <code>alterTables</code>/<code>getAlterTablesSql</code>
-     * methods of the {@link org.apache.ddlutils.Platform} with the read-back model.
+     * methods of the {@link DatabaseDialect} with the read-back model.
      * @param modelXml        The model to be tested in XML form
      * @param checkAlteration Whether to also check the alter tables sql
      */

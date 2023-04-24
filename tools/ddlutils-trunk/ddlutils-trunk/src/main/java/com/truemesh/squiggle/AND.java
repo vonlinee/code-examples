@@ -1,7 +1,5 @@
 package com.truemesh.squiggle;
 
-
-
 /**
  * Used for adding CRITERIA1 AND CRITERIA2 to a statement.
  * <p/>
@@ -21,5 +19,4 @@ public class AND extends BaseLogicGroup {
     public AND(Criteria left, Criteria right) {
         super("AND", left, right);
     }
-
 }

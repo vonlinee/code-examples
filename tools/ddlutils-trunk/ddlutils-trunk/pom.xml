@@ -176,6 +176,8 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+
+
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
@@ -235,6 +237,18 @@
      -->
     <!-- NB: No public driver for DB2, interbase, sapdb, oracle, sqlserver -->
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>central</id>
+      <name>Maven Repository Switchboard</name>
+      <layout>default</layout>
+      <url>https://repo1.maven.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
   <profiles>
     <profile>

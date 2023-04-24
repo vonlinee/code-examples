@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.hsqldb;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
@@ -36,7 +36,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
      * Creates a new model reader for HsqlDb databases.
      * @param platform The platform that this model reader belongs to
      */
-    public HsqlDbModelReader(Platform platform) {
+    public HsqlDbModelReader(DatabaseDialect platform) {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);

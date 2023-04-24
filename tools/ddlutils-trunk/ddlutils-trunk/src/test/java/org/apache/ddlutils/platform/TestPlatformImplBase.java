@@ -48,7 +48,7 @@ public class TestPlatformImplBase extends TestBase {
                         "</database>";
 
         Database database = parseDatabaseFromString(schema);
-        PlatformImplBase platform = new TestPlatform();
+        GenericDialect platform = new TestPlatform();
         Table table = database.getTable(0);
         SqlDynaClass clz = SqlDynaClass.newInstance(table);
         DynaBean db = new SqlDynaBean(SqlDynaClass.newInstance(table));

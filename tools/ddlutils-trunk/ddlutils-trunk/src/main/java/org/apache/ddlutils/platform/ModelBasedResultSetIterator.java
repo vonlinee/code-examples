@@ -45,7 +45,7 @@ public class ModelBasedResultSetIterator implements Iterator {
     /**
      * The platform.
      */
-    private PlatformImplBase _platform;
+    private GenericDialect _platform;
     /**
      * The base result set.
      */
@@ -89,7 +89,7 @@ public class ModelBasedResultSetIterator implements Iterator {
      * @param cleanUpAfterFinish Whether to close the statement and connection after finishing
      *                           the iteration, upon on exception, or when this iterator is garbage collected
      */
-    public ModelBasedResultSetIterator(PlatformImplBase platform, Database model, ResultSet resultSet, Table[] queryHints, boolean cleanUpAfterFinish) throws DatabaseOperationException {
+    public ModelBasedResultSetIterator(GenericDialect platform, Database model, ResultSet resultSet, Table[] queryHints, boolean cleanUpAfterFinish) throws DatabaseOperationException {
         if (resultSet != null) {
             _platform = platform;
             _resultSet = resultSet;

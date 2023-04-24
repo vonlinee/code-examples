@@ -25,9 +25,9 @@ import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.PlatformImplBase;
+import org.apache.ddlutils.platform.GenericDialect;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -40,7 +40,7 @@ import java.util.List;
  * It is assumed that the database is configured with sql dialect 3!
  * @version $Revision: 231306 $
  */
-public class FirebirdPlatform extends PlatformImplBase {
+public class FirebirdPlatform extends GenericDialect {
     /**
      * Database name of this platform.
      */
@@ -177,7 +177,7 @@ public class FirebirdPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               AddColumnChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column prevColumn = null;
@@ -204,7 +204,7 @@ public class FirebirdPlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               RemoveColumnChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column droppedColumn = changedTable.findColumn(change.getChangedColumn(), isDelimitedIdentifierModeOn());

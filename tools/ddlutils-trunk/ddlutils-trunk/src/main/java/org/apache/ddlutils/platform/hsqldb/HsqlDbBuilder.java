@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.hsqldb;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.ModelException;
@@ -38,7 +38,7 @@ public class HsqlDbBuilder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public HsqlDbBuilder(Platform platform) {
+    public HsqlDbBuilder(DatabaseDialect platform) {
         super(platform);
         addEscapedCharSequence("'", "''");
     }

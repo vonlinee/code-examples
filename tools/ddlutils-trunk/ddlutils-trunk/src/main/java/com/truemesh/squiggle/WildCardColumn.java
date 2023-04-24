@@ -10,5 +10,4 @@ public class WildCardColumn extends Column {
     public WildCardColumn(Table table) {
         super(table, "*");
     }
-
 }

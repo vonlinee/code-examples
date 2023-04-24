@@ -19,15 +19,16 @@ package org.apache.ddlutils.platform.oracle;
  * under the License.
  */
 
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.PlatformImplBase;
+import org.apache.ddlutils.platform.GenericDialect;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -36,11 +37,11 @@ import java.util.Map;
 /**
  * The platform for Oracle 8.
  * <p>
- * TODO: We might support the {@link org.apache.ddlutils.Platform#createDatabase(String, String, String, String, Map)}
+ * TODO: We might support the {@link DatabaseDialect#createDatabase(String, String, String, String, Map)}
  *       functionality via "CREATE SCHEMA"/"CREATE USER" or "CREATE TABLESPACE" ?
  * @version $Revision: 231306 $
  */
-public class Oracle8Platform extends PlatformImplBase {
+public class Oracle8Platform extends GenericDialect {
     /**
      * Database name of this platform.
      */
@@ -162,7 +163,7 @@ public class Oracle8Platform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               RemoveColumnChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column removedColumn = changedTable.findColumn(change.getChangedColumn(), isDelimitedIdentifierModeOn());
@@ -179,7 +180,7 @@ public class Oracle8Platform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               RemovePrimaryKeyChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
 
@@ -195,7 +196,7 @@ public class Oracle8Platform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               PrimaryKeyChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         String[] newPKColumnNames = change.getNewPrimaryKeyColumns();

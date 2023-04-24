@@ -22,12 +22,13 @@ package org.apache.ddlutils.model;
 import org.apache.ddlutils.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Base class for indexes.
  * @version $Revision: $
  */
-public abstract class IndexImplBase implements Index {
+public abstract class GenericIndex implements Index {
     /**
      * The name of the index.
      */
@@ -66,7 +67,7 @@ public abstract class IndexImplBase implements Index {
      */
     @Override
     public IndexColumn getColumn(int idx) {
-        return (IndexColumn) _columns.get(idx);
+        return _columns.get(idx);
     }
 
     /**

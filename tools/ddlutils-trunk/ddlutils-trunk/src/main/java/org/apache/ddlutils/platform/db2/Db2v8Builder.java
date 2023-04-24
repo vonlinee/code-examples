@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.db2;
  * under the License.
  */
 
-import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Table;
 
@@ -34,7 +34,7 @@ public class Db2v8Builder extends Db2Builder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public Db2v8Builder(Platform platform) {
+    public Db2v8Builder(DatabaseDialect platform) {
         super(platform);
     }
 

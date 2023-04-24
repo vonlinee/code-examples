@@ -25,9 +25,9 @@ import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.PlatformImplBase;
+import org.apache.ddlutils.platform.GenericDialect;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -45,7 +45,7 @@ import java.util.List;
  * The platform implementation for the Interbase database.
  * @version $Revision: 231306 $
  */
-public class InterbasePlatform extends PlatformImplBase {
+public class InterbasePlatform extends GenericDialect {
     /**
      * Database name of this platform.
      */
@@ -252,7 +252,7 @@ public class InterbasePlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               AddColumnChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column prevColumn = null;
@@ -275,7 +275,7 @@ public class InterbasePlatform extends PlatformImplBase {
      * @param change       The change object
      */
     public void processChange(Database currentModel,
-                              CreationParameters params,
+                              SqlBuildContext params,
                               RemoveColumnChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column droppedColumn = changedTable.findColumn(change.getChangedColumn(), isDelimitedIdentifierModeOn());

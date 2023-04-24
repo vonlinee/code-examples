@@ -34,7 +34,7 @@ import org.apache.ddlutils.io.DataReader;
 import org.apache.ddlutils.io.DataToDatabaseSink;
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.*;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultValueHelper;
 import org.apache.ddlutils.platform.firebird.FirebirdPlatform;
 import org.apache.ddlutils.platform.interbase.InterbasePlatform;
@@ -273,8 +273,8 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      * @param model The model
      * @return The creation parameters
      */
-    protected CreationParameters getTableCreationParameters(Database model) {
-        CreationParameters params = new CreationParameters();
+    protected SqlBuildContext getTableCreationParameters(Database model) {
+        SqlBuildContext params = new SqlBuildContext();
 
         for (Iterator entryIt = _testProps.entrySet().iterator(); entryIt.hasNext(); ) {
             Map.Entry entry = (Map.Entry) entryIt.next();

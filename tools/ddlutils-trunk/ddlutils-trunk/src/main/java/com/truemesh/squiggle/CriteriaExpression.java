@@ -27,16 +27,16 @@ public class CriteriaExpression extends Criteria {
   /**
    * Operator identifiers
    */
-  public static interface Operator {
+  public interface Operator {
     /**
      * Identifier for the AND operator.
      */
-    static final int AND = 0;
+    int AND = 0;
 
     /**
      * Identifier for the OR operator.
      */
-    static final int OR = 1;
+    int OR = 1;
   }
 
   // Recursive reference to another expression.
@@ -161,7 +161,7 @@ public class CriteriaExpression extends Criteria {
    *            the output destination to which to write this criteria
    *            expression.
    * 
-   * @see com.truemesh.squiggle.Criteria#write(com.truemesh.squiggle.output.Output)
+   * @see Criteria#write(Output)
    */
   public void write(Output out) {
     if (term == null && expression == null)

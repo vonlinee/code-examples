@@ -99,7 +99,7 @@ public class Parameter {
                 if (PlatformFactory.isPlatformSupported(platform)) {
                     _platforms.add(platform.toLowerCase());
                 } else {
-                    throw new IllegalArgumentException("Platform " + platform + " is not supported");
+                    throw new IllegalArgumentException("DatabaseDialect " + platform + " is not supported");
                 }
             }
         }

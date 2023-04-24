@@ -45,7 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A factory of {@link org.apache.ddlutils.Platform} instances based on a case
+ * A factory of {@link DatabaseDialect} instances based on a case
  * insensitive database name. Note that this is a convenience class as the platforms
  * can also simply be created via their constructors.
  * @version $Revision: 209952 $
@@ -54,13 +54,13 @@ public class PlatformFactory {
     /**
      * The database name -> platform map.
      */
-    private static Map<String, Class<? extends Platform>> _platforms = null;
+    private static Map<String, Class<? extends DatabaseDialect>> _platforms = null;
 
     /**
      * Returns the platform map.
      * @return The platform list
      */
-    private static synchronized Map<String, Class<? extends Platform>> getPlatforms() {
+    private static synchronized Map<String, Class<? extends DatabaseDialect>> getPlatforms() {
         if (_platforms == null) {
             // lazy initialization
             _platforms = new HashMap<>();
@@ -75,8 +75,8 @@ public class PlatformFactory {
      * @param databaseName The name of the database (case is not important)
      * @return The platform or <code>null</code> if the database is not supported
      */
-    public static synchronized Platform createNewPlatformInstance(String databaseName) throws DdlUtilsException {
-        Class<? extends Platform> platformClass = getPlatforms().get(databaseName.toLowerCase());
+    public static synchronized DatabaseDialect createNewPlatformInstance(String databaseName) throws DdlUtilsException {
+        Class<? extends DatabaseDialect> platformClass = getPlatforms().get(databaseName.toLowerCase());
         try {
             return platformClass != null ? platformClass.newInstance() : null;
         } catch (Exception ex) {
@@ -93,7 +93,7 @@ public class PlatformFactory {
      * @param jdbcConnectionUrl The connection url
      * @return The platform or <code>null</code> if the database is not supported
      */
-    public static synchronized Platform createNewPlatformInstance(String jdbcDriver, String jdbcConnectionUrl) throws DdlUtilsException {
+    public static synchronized DatabaseDialect createNewPlatformInstance(String jdbcDriver, String jdbcConnectionUrl) throws DdlUtilsException {
         return createNewPlatformInstance(new PlatformUtils().determineDatabaseType(jdbcDriver, jdbcConnectionUrl));
     }
 
@@ -101,12 +101,12 @@ public class PlatformFactory {
      * Creates a new platform for the specified database. This is a shortcut method that uses
      * {@link PlatformUtils#determineDatabaseType(DataSource)} to determine the parameter
      * for {@link #createNewPlatformInstance(String)}. Note that this method sets the data source
-     * at the returned platform instance (method {@link Platform#setDataSource(DataSource)}).
+     * at the returned platform instance (method {@link DatabaseDialect#setDataSource(DataSource)}).
      * @param dataSource The data source for the database
      * @return The platform or <code>null</code> if the database is not supported
      */
-    public static synchronized Platform createNewPlatformInstance(DataSource dataSource) throws DdlUtilsException {
-        Platform platform = createNewPlatformInstance(new PlatformUtils().determineDatabaseType(dataSource));
+    public static synchronized DatabaseDialect createNewPlatformInstance(DataSource dataSource) throws DdlUtilsException {
+        DatabaseDialect platform = createNewPlatformInstance(new PlatformUtils().determineDatabaseType(dataSource));
 
         platform.setDataSource(dataSource);
         return platform;
@@ -116,14 +116,14 @@ public class PlatformFactory {
      * Creates a new platform for the specified database. This is a shortcut method that uses
      * {@link PlatformUtils#determineDatabaseType(DataSource)} to determine the parameter
      * for {@link #createNewPlatformInstance(String)}. Note that this method sets the data source
-     * at the returned platform instance (method {@link Platform#setDataSource(DataSource)}).
+     * at the returned platform instance (method {@link DatabaseDialect#setDataSource(DataSource)}).
      * @param dataSource The data source for the database
      * @param username   The username to use for connecting to the database
      * @param password   The password to use for connecting to the database
      * @return The platform or <code>null</code> if the database is not supported
      */
-    public static synchronized Platform createNewPlatformInstance(DataSource dataSource, String username, String password) throws DdlUtilsException {
-        Platform platform = createNewPlatformInstance(new PlatformUtils().determineDatabaseType(dataSource, username, password));
+    public static synchronized DatabaseDialect createNewPlatformInstance(DataSource dataSource, String username, String password) throws DdlUtilsException {
+        DatabaseDialect platform = createNewPlatformInstance(new PlatformUtils().determineDatabaseType(dataSource, username, password));
 
         platform.setDataSource(dataSource);
         platform.setUsername(username);
@@ -151,9 +151,9 @@ public class PlatformFactory {
     /**
      * Registers a new platform.
      * @param platformName  The platform name
-     * @param platformClass The platform class which must implement the {@link Platform} interface
+     * @param platformClass The platform class which must implement the {@link DatabaseDialect} interface
      */
-    public static synchronized void registerPlatform(String platformName, Class<? extends Platform> platformClass) {
+    public static synchronized void registerPlatform(String platformName, Class<? extends DatabaseDialect> platformClass) {
         addPlatform(getPlatforms(), platformName, platformClass);
     }
 
@@ -187,11 +187,11 @@ public class PlatformFactory {
      * Registers a new platform.
      * @param platformMap   The map to add the platform info to
      * @param platformName  The platform name
-     * @param platformClass The platform class which must implement the {@link Platform} interface
+     * @param platformClass The platform class which must implement the {@link DatabaseDialect} interface
      */
-    private static synchronized void addPlatform(Map<String, Class<? extends Platform>> platformMap, String platformName, Class<? extends Platform> platformClass) {
-        if (!Platform.class.isAssignableFrom(platformClass)) {
-            throw new IllegalArgumentException("Cannot register class " + platformClass.getName() + " because it does not implement the " + Platform.class.getName() + " interface");
+    private static synchronized void addPlatform(Map<String, Class<? extends DatabaseDialect>> platformMap, String platformName, Class<? extends DatabaseDialect> platformClass) {
+        if (!DatabaseDialect.class.isAssignableFrom(platformClass)) {
+            throw new IllegalArgumentException("Cannot register class " + platformClass.getName() + " because it does not implement the " + DatabaseDialect.class.getName() + " interface");
         }
         platformMap.put(platformName.toLowerCase(), platformClass);
     }
