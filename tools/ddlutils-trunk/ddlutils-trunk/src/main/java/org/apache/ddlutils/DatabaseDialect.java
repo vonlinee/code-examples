@@ -22,7 +22,7 @@ package org.apache.ddlutils;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.CreationParameters;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.JdbcModelReader;
 import org.apache.ddlutils.platform.SqlBuilder;
 
@@ -313,9 +313,9 @@ public interface Platform {
      * @param params          The parameters used in the creation
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
-     * @deprecated Use {@link #createModel(Database, CreationParameters, boolean, boolean)} instead.
+     * @deprecated Use {@link #createModel(Database, SqlBuildContext, boolean, boolean)} instead.
      */
-    void createTables(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
+    void createTables(Database model, SqlBuildContext params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Creates the tables defined in the database model.
@@ -324,9 +324,9 @@ public interface Platform {
      * @param params          The parameters used in the creation
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
-     * @deprecated Use {@link #createModel(Connection, Database, CreationParameters, boolean, boolean)} instead.
+     * @deprecated Use {@link #createModel(Connection, Database, SqlBuildContext, boolean, boolean)} instead.
      */
-    void createTables(Connection connection, Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
+    void createTables(Connection connection, Database model, SqlBuildContext params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Returns the SQL for creating the tables defined in the database model.
@@ -345,9 +345,9 @@ public interface Platform {
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
      * @return The SQL statements
-     * @deprecated Use {@link #getCreateModelSql(Database, CreationParameters, boolean, boolean)} instead.
+     * @deprecated Use {@link #getCreateModelSql(Database, SqlBuildContext, boolean, boolean)} instead.
      */
-    String getCreateTablesSql(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError);
+    String getCreateTablesSql(Database model, SqlBuildContext params, boolean dropTablesFirst, boolean continueOnError);
 
     /**
      * Creates the tables defined in the database model.
@@ -373,7 +373,7 @@ public interface Platform {
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
      */
-    void createModel(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
+    void createModel(Database model, SqlBuildContext params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Creates the tables defined in the database model.
@@ -383,7 +383,7 @@ public interface Platform {
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
      */
-    void createModel(Connection connection, Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
+    void createModel(Connection connection, Database model, SqlBuildContext params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Returns the SQL for creating the tables defined in the database model.
@@ -402,7 +402,7 @@ public interface Platform {
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
      * @return The SQL statements
      */
-    String getCreateModelSql(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError);
+    String getCreateModelSql(Database model, SqlBuildContext params, boolean dropTablesFirst, boolean continueOnError);
 
     /**
      * Returns the necessary changes to apply to the current database to make it the desired one.
@@ -427,10 +427,10 @@ public interface Platform {
      * @param desiredDb       The desired database schema
      * @param params          The parameters used in the creation
      * @param continueOnError Whether to continue with the next sql statement when an error occurred
-     * @deprecated Use {@link #alterModel(Database, Database, CreationParameters, boolean)} together with
+     * @deprecated Use {@link #alterModel(Database, Database, SqlBuildContext, boolean)} together with
      * {@link #readModelFromDatabase(String)} instead.
      */
-    void alterTables(Database desiredDb, CreationParameters params, boolean continueOnError) throws DatabaseOperationException;
+    void alterTables(Database desiredDb, SqlBuildContext params, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Alters the database schema so that it match the given model.
@@ -458,10 +458,10 @@ public interface Platform {
      * @param desiredDb       The desired database schema
      * @param params          The parameters used in the creation
      * @param continueOnError Whether to continue with the next sql statement when an error occurred
-     * @deprecated Use {@link #alterModel(Database, Database, CreationParameters, boolean)} together with
+     * @deprecated Use {@link #alterModel(Database, Database, SqlBuildContext, boolean)} together with
      * {@link #readModelFromDatabase(String, String, String, String[])} instead.
      */
-    void alterTables(String catalog, String schema, String[] tableTypes, Database desiredDb, CreationParameters params, boolean continueOnError) throws DatabaseOperationException;
+    void alterTables(String catalog, String schema, String[] tableTypes, Database desiredDb, SqlBuildContext params, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Alters the database schema so that it match the given model.
@@ -479,10 +479,10 @@ public interface Platform {
      * @param desiredDb       The desired database schema
      * @param params          The parameters used in the creation
      * @param continueOnError Whether to continue with the next sql statement when an error occurred
-     * @deprecated Use {@link #alterModel(Connection, Database, Database, CreationParameters, boolean)} together with
+     * @deprecated Use {@link #alterModel(Connection, Database, Database, SqlBuildContext, boolean)} together with
      * {@link #readModelFromDatabase(Connection, String)} instead.
      */
-    void alterTables(Connection connection, Database desiredDb, CreationParameters params, boolean continueOnError) throws DatabaseOperationException;
+    void alterTables(Connection connection, Database desiredDb, SqlBuildContext params, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Alters the database schema so that it match the given model.
@@ -512,10 +512,10 @@ public interface Platform {
      * @param desiredDb       The desired database schema
      * @param params          The parameters used in the creation
      * @param continueOnError Whether to continue with the next sql statement when an error occurred
-     * @deprecated Use {@link #alterModel(Connection, Database, Database, CreationParameters, boolean)} together with
+     * @deprecated Use {@link #alterModel(Connection, Database, Database, SqlBuildContext, boolean)} together with
      * {@link #readModelFromDatabase(Connection, String, String, String, String[])} instead.
      */
-    void alterTables(Connection connection, String catalog, String schema, String[] tableTypes, Database desiredDb, CreationParameters params, boolean continueOnError) throws DatabaseOperationException;
+    void alterTables(Connection connection, String catalog, String schema, String[] tableTypes, Database desiredDb, SqlBuildContext params, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Returns the SQL for altering the database schema so that it match the given model.
@@ -531,10 +531,10 @@ public interface Platform {
      * @param desiredDb The desired database schema
      * @param params    The parameters used in the creation
      * @return The SQL statements
-     * @deprecated Use {@link #getAlterModelSql(Database, Database, CreationParameters)} together with
+     * @deprecated Use {@link #getAlterModelSql(Database, Database, SqlBuildContext)} together with
      * {@link #readModelFromDatabase(String)} instead.
      */
-    String getAlterTablesSql(Database desiredDb, CreationParameters params) throws DatabaseOperationException;
+    String getAlterTablesSql(Database desiredDb, SqlBuildContext params) throws DatabaseOperationException;
 
     /**
      * Returns the SQL for altering the database schema so that it match the given model.
@@ -562,10 +562,10 @@ public interface Platform {
      * @param desiredDb  The desired database schema
      * @param params     The parameters used in the creation
      * @return The SQL statements
-     * @deprecated Use {@link #getAlterModelSql(Database, Database, CreationParameters)} together with
+     * @deprecated Use {@link #getAlterModelSql(Database, Database, SqlBuildContext)} together with
      * {@link #readModelFromDatabase(String, String, String, String[])} instead.
      */
-    String getAlterTablesSql(String catalog, String schema, String[] tableTypes, Database desiredDb, CreationParameters params) throws DatabaseOperationException;
+    String getAlterTablesSql(String catalog, String schema, String[] tableTypes, Database desiredDb, SqlBuildContext params) throws DatabaseOperationException;
 
     /**
      * Returns the SQL for altering the database schema so that it match the given model.
@@ -583,10 +583,10 @@ public interface Platform {
      * @param desiredDb  The desired database schema
      * @param params     The parameters used in the creation
      * @return The SQL statements
-     * @deprecated Use {@link #getAlterModelSql(Database, Database, CreationParameters)} together with
+     * @deprecated Use {@link #getAlterModelSql(Database, Database, SqlBuildContext)} together with
      * {@link #readModelFromDatabase(Connection, String)} instead.
      */
-    String getAlterTablesSql(Connection connection, Database desiredDb, CreationParameters params) throws DatabaseOperationException;
+    String getAlterTablesSql(Connection connection, Database desiredDb, SqlBuildContext params) throws DatabaseOperationException;
 
     /**
      * Returns the SQL for altering the database schema so that it match the given model.
@@ -616,10 +616,10 @@ public interface Platform {
      * @param desiredDb  The desired database schema
      * @param params     The parameters used in the creation
      * @return The SQL statements
-     * @deprecated Use {@link #getAlterModelSql(Database, Database, CreationParameters)} together with
+     * @deprecated Use {@link #getAlterModelSql(Database, Database, SqlBuildContext)} together with
      * {@link #readModelFromDatabase(Connection, String, String, String, String[])} instead.
      */
-    String getAlterTablesSql(Connection connection, String catalog, String schema, String[] tableTypes, Database desiredDb, CreationParameters params) throws DatabaseOperationException;
+    String getAlterTablesSql(Connection connection, String catalog, String schema, String[] tableTypes, Database desiredDb, SqlBuildContext params) throws DatabaseOperationException;
 
     /**
      * Alters the given live database model so that it match the desired model, using the default database conneciton.
@@ -636,7 +636,7 @@ public interface Platform {
      * @param params          The parameters used in the creation
      * @param continueOnError Whether to continue with the next sql statement when an error occurred
      */
-    void alterModel(Database currentModel, Database desiredModel, CreationParameters params, boolean continueOnError) throws DatabaseOperationException;
+    void alterModel(Database currentModel, Database desiredModel, SqlBuildContext params, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Alters the given live database model so that it match the desired model.
@@ -655,7 +655,7 @@ public interface Platform {
      * @param params          The parameters used in the creation
      * @param continueOnError Whether to continue with the next sql statement when an error occurred
      */
-    void alterModel(Connection connection, Database currentModel, Database desiredModel, CreationParameters params, boolean continueOnError) throws DatabaseOperationException;
+    void alterModel(Connection connection, Database currentModel, Database desiredModel, SqlBuildContext params, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Returns the SQL for altering the given current model so that it match the desired model.
@@ -672,7 +672,7 @@ public interface Platform {
      * @param params       The parameters used in the creation of tables etc.
      * @return The SQL statements
      */
-    String getAlterModelSql(Database currentModel, Database desiredModel, CreationParameters params) throws DatabaseOperationException;
+    String getAlterModelSql(Database currentModel, Database desiredModel, SqlBuildContext params) throws DatabaseOperationException;
 
     /**
      * Drops the specified table and all foreign keys pointing to it.

@@ -19,15 +19,13 @@ package org.apache.ddlutils.platform;
  * under the License.
  */
 
-import org.apache.commons.collections.map.ListOrderedMap;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
-import org.apache.ddlutils.util.StringUtilsExt;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -52,7 +50,7 @@ import java.util.Map;
  * Hopefully only a small amount code needs to be changed on a per database basis.
  * @version $Revision$
  */
-public abstract class SqlBuilder {
+public abstract class DialectSqlBuilder {
     /**
      * The placeholder for the size value in the native type spec.
      */
@@ -64,7 +62,7 @@ public abstract class SqlBuilder {
     /**
      * The Log to which logging calls will be made.
      */
-    protected final Log _log = LogFactory.getLog(SqlBuilder.class);
+    protected final Log _log = LogFactory.getLog(DialectSqlBuilder.class);
 
     /**
      * The platform that this builder belongs to.
@@ -97,12 +95,12 @@ public abstract class SqlBuilder {
     /**
      * Helper object for dealing with default values.
      */
-    private DefaultValueHelper _defaultValueHelper = new DefaultValueHelper();
+    private final DefaultValueHelper _defaultValueHelper = new DefaultValueHelper();
     /**
      * 与普通的map相比，ListOrderedMap的key可保持原有顺序
      * The character sequences that need escaping.
      */
-    private Map _charSequencesToEscape = new ListOrderedMap();
+    private final Map<String, String> _charSequencesToEscape = new HashMap<>();
 
     //
     // Configuration
@@ -112,7 +110,7 @@ public abstract class SqlBuilder {
      * Creates a new sql builder.
      * @param platform The plaftform this builder belongs to
      */
-    public SqlBuilder(Platform platform) {
+    public DialectSqlBuilder(Platform platform) {
         _platform = platform;
     }
 
@@ -356,14 +354,14 @@ public abstract class SqlBuilder {
      * @param params     The parameters used in the creation
      * @param dropTables Whether to drop tables before creating them
      */
-    public void createTables(Database database, CreationParameters params, boolean dropTables) throws IOException {
+    public void createTables(Database database, SqlBuildContext params, boolean dropTables) throws IOException {
         if (dropTables) {
             dropTables(database);
         }
-
         for (int idx = 0; idx < database.getTableCount(); idx++) {
             Table table = database.getTable(idx);
             writeTableComment(table);
+            // output table
             createTable(database,
                     table,
                     params == null ? null : params.getParametersFor(table));
@@ -450,18 +448,6 @@ public abstract class SqlBuilder {
     }
 
     /**
-     * Compares the two strings.
-     * @param string1     The first string
-     * @param string2     The second string
-     * @param caseMatters Whether case matters in the comparison
-     * @return <code>true</code> if the string are equal
-     */
-    protected boolean areEqual(String string1, String string2, boolean caseMatters) {
-        return (caseMatters && string1.equals(string2)) ||
-                (!caseMatters && string1.equalsIgnoreCase(string2));
-    }
-
-    /**
      * Outputs the DDL to create the table along with any non-external constraints as well
      * as with external primary keys and indices (but not foreign keys).
      * @param database The database model
@@ -479,7 +465,7 @@ public abstract class SqlBuilder {
      * @param parameters Additional platform-specific parameters for the table creation
      */
     public void createTable(Database database, Table table, Map<String, Object> parameters) throws IOException {
-        writeTableCreationStmt(database, table, parameters);
+        writeCreateTableStatement(database, table, parameters);
         writeTableCreationStmtEnding(table, parameters);
 
         if (!getPlatformInfo().isPrimaryKeyEmbedded()) {
@@ -727,7 +713,7 @@ public abstract class SqlBuilder {
      * @return The insertion sql
      */
     public String getInsertSql(Table table, Map columnValues, boolean genPlaceholders) {
-        StringBuffer buffer = new StringBuffer("INSERT INTO ");
+        StringBuilder buffer = new StringBuilder("INSERT INTO ");
         boolean addComma = false;
 
         buffer.append(getDelimitedIdentifier(getTableName(table)));
@@ -842,7 +828,7 @@ public abstract class SqlBuilder {
      * @return The update sql
      */
     public String getUpdateSql(Table table, Map oldColumnValues, Map newColumnValues, boolean genPlaceholders) {
-        StringBuffer buffer = new StringBuffer("UPDATE ");
+        StringBuilder buffer = new StringBuilder("UPDATE ");
         boolean addSep = false;
 
         buffer.append(getDelimitedIdentifier(getTableName(table)));
@@ -900,8 +886,8 @@ public abstract class SqlBuilder {
      *                        prepared statement
      * @return The delete sql
      */
-    public String getDeleteSql(Table table, Map pkValues, boolean genPlaceholders) {
-        StringBuffer buffer = new StringBuffer("DELETE FROM ");
+    public String getDeleteSql(Table table, Map<String, Object> pkValues, boolean genPlaceholders) {
+        StringBuilder buffer = new StringBuilder("DELETE FROM ");
         boolean addSep = false;
 
         buffer.append(getDelimitedIdentifier(getTableName(table)));
@@ -910,9 +896,7 @@ public abstract class SqlBuilder {
 
             Column[] pkCols = table.getPrimaryKeyColumns();
 
-            for (int pkColIdx = 0; pkColIdx < pkCols.length; pkColIdx++) {
-                Column column = pkCols[pkColIdx];
-
+            for (Column column : pkCols) {
                 if (pkValues.containsKey(column.getName())) {
                     if (addSep) {
                         buffer.append(" AND ");
@@ -942,7 +926,7 @@ public abstract class SqlBuilder {
             return "NULL";
         }
 
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         // TODO: Handle binary types (BINARY, VARBINARY, LONGVARBINARY, BLOB)
         switch (column.getTypeCode()) {
@@ -962,7 +946,7 @@ public abstract class SqlBuilder {
                     // TODO: Can the format method handle java.sql.Date properly ?
                     result.append(getValueTimeFormat().format(value));
                 } else {
-                    result.append(value.toString());
+                    result.append(value);
                 }
                 result.append(getPlatformInfo().getValueQuoteToken());
                 break;
@@ -970,7 +954,7 @@ public abstract class SqlBuilder {
                 result.append(getPlatformInfo().getValueQuoteToken());
                 // TODO: SimpleDateFormat does not support nano seconds so we would
                 //       need a custom date formatter for timestamps
-                result.append(value.toString());
+                result.append(value);
                 result.append(getPlatformInfo().getValueQuoteToken());
                 break;
             case Types.REAL:
@@ -1033,16 +1017,16 @@ public abstract class SqlBuilder {
         int delta = originalLength - desiredLength;
         int startCut = desiredLength / 2;
 
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
-        result.append(name.substring(0, startCut));
+        result.append(name, 0, startCut);
         if (((startCut == 0) || (name.charAt(startCut - 1) != '_')) &&
                 ((startCut + delta + 1 == originalLength) || (name.charAt(startCut + delta + 1) != '_'))) {
             // just to make sure that there isn't already a '_' right before or right
             // after the cutting place (which would look odd with an aditional one)
             result.append("_");
         }
-        result.append(name.substring(startCut + delta + 1, originalLength));
+        result.append(name, startCut + delta + 1, originalLength);
         return result.toString();
     }
 
@@ -1083,12 +1067,13 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void writeTableCreationStmt(Database database, Table table, Map parameters) throws IOException {
+    protected void writeCreateTableStatement(Database database, Table table, Map<String, Object> parameters) throws IOException {
         print("CREATE TABLE ");
         printlnIdentifier(getTableName(table));
         println("(");
 
-        writeColumns(table);
+        // output columns of this table
+        writeColumns(table, parameters);
 
         if (getPlatformInfo().isPrimaryKeyEmbedded()) {
             writeEmbeddedPrimaryKeysStmt(table);
@@ -1110,18 +1095,20 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void writeTableCreationStmtEnding(Table table, Map parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, Map<String, Object> parameters) throws IOException {
         printEndOfStatement();
     }
 
     /**
      * Writes the columns of the given table.
-     * @param table The table
+     * @param table      The table
+     * @param parameters 该表的上下文参数
      */
-    protected void writeColumns(Table table) throws IOException {
+    protected void writeColumns(Table table, Map<String, Object> parameters) throws IOException {
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             printIndent();
             writeColumn(table, table.getColumn(idx));
+            // 每一列的分隔符
             if (idx < table.getColumnCount() - 1) {
                 println(",");
             }
@@ -1149,7 +1136,6 @@ public abstract class SqlBuilder {
         print(getSqlType(column));
         // then output column default value statement
         writeColumnDefaultValueStatement(table, column);
-
         PlatformInfo platformInfo = getPlatformInfo();
         if (column.isRequired()) {
             print(" ");
@@ -1190,16 +1176,13 @@ public abstract class SqlBuilder {
         StringBuilder sqlType = new StringBuilder();
 
         sqlType.append(sizePos >= 0 ? nativeType.substring(0, sizePos) : nativeType);
-
         String sizeSpec = getSizeSpec(column);
-
-        if (!StringUtilsExt.isEmpty(sizeSpec)) {
+        if (!StringUtils.isEmpty(sizeSpec)) {
             sqlType.append("(");
             sqlType.append(sizeSpec);
             sqlType.append(")");
         }
         sqlType.append(sizePos >= 0 ? nativeType.substring(sizePos + SIZE_PLACEHOLDER.length()) : "");
-
         return sqlType.toString();
     }
 
@@ -1210,7 +1193,6 @@ public abstract class SqlBuilder {
      */
     protected String getNativeType(Column column) {
         String nativeType = getPlatformInfo().getNativeType(column.getTypeCode());
-
         return nativeType == null ? column.getType() : nativeType;
     }
 
@@ -1242,7 +1224,7 @@ public abstract class SqlBuilder {
         }
         if (sizeSpec != null) {
             if (getPlatformInfo().hasSize(column.getTypeCode())) {
-                result.append(sizeSpec.toString());
+                result.append(sizeSpec);
             } else if (getPlatformInfo().hasPrecisionAndScale(column.getTypeCode())) {
                 result.append(column.getSizeAsInt());
                 result.append(",");
@@ -1268,11 +1250,8 @@ public abstract class SqlBuilder {
      */
     protected String escapeStringValue(String value) {
         String result = value;
-
-        for (Iterator it = _charSequencesToEscape.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry entry = (Map.Entry) it.next();
-
-            result = StringUtils.replace(result, (String) entry.getKey(), (String) entry.getValue());
+        for (Map.Entry<String, String> entry : _charSequencesToEscape.entrySet()) {
+            result = StringUtils.replace(result, entry.getKey(), entry.getValue());
         }
         return result;
     }
@@ -1397,14 +1376,10 @@ public abstract class SqlBuilder {
 
         // We're comparing the jdbc type that corresponds to the native type for the
         // desired type, in order to avoid repeated altering of a perfectly valid column
-        if ((getPlatformInfo().getTargetJdbcType(desiredColumn.getTypeCode()) != currentColumn.getTypeCode()) ||
+        return (getPlatformInfo().getTargetJdbcType(desiredColumn.getTypeCode()) != currentColumn.getTypeCode()) ||
                 (desiredColumn.isRequired() != currentColumn.isRequired()) ||
                 (sizeMatters && !StringUtils.equals(desiredColumn.getSize(), currentColumn.getSize())) ||
-                !defaultsEqual) {
-            return true;
-        } else {
-            return false;
-        }
+                !defaultsEqual;
     }
 
     /**
@@ -1420,7 +1395,7 @@ public abstract class SqlBuilder {
         boolean needsName = (fkName == null) || (fkName.length() == 0);
 
         if (needsName) {
-            StringBuffer name = new StringBuffer();
+            StringBuilder name = new StringBuilder();
 
             for (int idx = 0; idx < fk.getReferenceCount(); idx++) {
                 name.append(fk.getReference(idx).getLocalColumnName());
