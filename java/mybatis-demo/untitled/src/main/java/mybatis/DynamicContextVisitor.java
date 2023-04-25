@@ -13,16 +13,20 @@ public class DynamicContextVisitor extends DynamicContext {
 
     @Override
     public Map<String, Object> getBindings() {
-        return super.getBindings();
+        final Map<String, Object> bindings = super.getBindings();
+        System.out.println(bindings);
+        return bindings;
     }
 
     @Override
     public void bind(String name, Object value) {
+        System.out.println("bind => " + name + " " + value);
         super.bind(name, value);
     }
 
     @Override
     public void appendSql(String sql) {
+        System.out.println("appendSql => " + sql);
         super.appendSql(sql);
     }
 

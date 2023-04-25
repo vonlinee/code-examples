@@ -17,6 +17,9 @@
         1 = 2
       </if>
     </where>
+    <foreach collection="list" item="i">
+      #{i}
+    </foreach>
   </select>
 
   <sql id="Example_Where_Clause">
