@@ -1,24 +1,5 @@
 package org.apache.ddlutils;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
@@ -39,6 +20,10 @@ import java.util.Map;
  * @version $Revision: 231110 $
  */
 public interface DatabaseDialect {
+
+    String QUOTE_START = "`";
+    String QUOTE_END = "`";
+
     /**
      * Returns the name of the database that this platform is for.
      * @return The name
@@ -964,11 +949,11 @@ public interface DatabaseDialect {
      * @param model     The database model to use
      * @param dynaBeans The beans to insert
      */
-    void insert(Database model, Collection dynaBeans) throws DatabaseOperationException;
+    void insert(Database model, Collection<?> dynaBeans) throws DatabaseOperationException;
 
     /**
      * Inserts the given beans. Note that a batch insert is used for subsequent beans of the same type.
-     * Also the properties for the primary keys are not updated in the beans.  Hence you should
+     * Also, the properties for the primary keys are not updated in the beans.  Hence you should
      * not use this method when the primary key values are defined by the database (via a sequence
      * or identity constraint).
      * This method does not close the connection.
@@ -1102,7 +1087,6 @@ public interface DatabaseDialect {
      */
     Database readModelFromDatabase(Connection connection, String name, String catalog, String schema, String[] tableTypes) throws DatabaseOperationException;
 
-
     /**
      * The character specific to this dialect used to begin a quoted identifier.
      * @return The dialect's specific open quote character.
@@ -1135,8 +1119,15 @@ public interface DatabaseDialect {
         }
         if (name.charAt(0) == '`') {
             return openQuote() + name.substring(1, name.length() - 1) + closeQuote();
-        } else {
-            return name;
         }
+        return name;
+    }
+
+    /**
+     * Does this dialect support catalog creation?
+     * @return True if the dialect supports catalog creation; false otherwise.
+     */
+    default boolean canCreateCatalog() {
+        return false;
     }
 }

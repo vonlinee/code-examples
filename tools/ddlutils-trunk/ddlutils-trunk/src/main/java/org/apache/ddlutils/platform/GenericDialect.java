@@ -1833,7 +1833,6 @@ public abstract class GenericDialect extends JdbcSupport implements DatabaseDial
      */
     public void insert(Database model, Collection dynaBeans) throws DatabaseOperationException {
         Connection connection = borrowConnection();
-
         try {
             insert(connection, model, dynaBeans);
         } finally {

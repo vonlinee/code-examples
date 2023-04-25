@@ -16,11 +16,7 @@ import java.util.EnumSet;
 @SpringBootApplication
 public class SpringDataJpaHibernateApplication implements ApplicationListener<ContextRefreshedEvent> {
     public static void main(String[] args) {
-        SpringApplication.run(SpringDataJpaHibernateApplication.class, args);
-    }
-
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+        // SpringApplication.run(SpringDataJpaHibernateApplication.class, args);
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().configure().build();
         Metadata metadata = new MetadataSources(serviceRegistry).buildMetadata();
         // 工具类
@@ -28,5 +24,10 @@ public class SpringDataJpaHibernateApplication implements ApplicationListener<Co
         // 输出建表语句
         // 会根据hbm文件将实体类对应的数据表全部删除再创建表
         export.create(EnumSet.of(TargetType.STDOUT), metadata);
+    }
+
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+
     }
 }
