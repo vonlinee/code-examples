@@ -97,7 +97,7 @@ public class ConverterConfiguration {
         SqlTypeConverter result = (SqlTypeConverter) _convertersPerPath.get(table.getName() + "/" + column.getName());
 
         if (result == null) {
-            result = (SqlTypeConverter) _convertersPerType.get(new Integer(column.getTypeCode()));
+            result = (SqlTypeConverter) _convertersPerType.get(new Integer(column.getJdbcTypeCode()));
         }
         return result;
     }

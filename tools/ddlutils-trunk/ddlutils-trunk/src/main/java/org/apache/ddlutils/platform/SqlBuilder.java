@@ -929,7 +929,7 @@ public abstract class SqlBuilder {
         StringBuilder result = new StringBuilder();
 
         // TODO: Handle binary types (BINARY, VARBINARY, LONGVARBINARY, BLOB)
-        switch (column.getTypeCode()) {
+        switch (column.getJdbcTypeCode()) {
             case Types.DATE:
                 result.append(getPlatformInfo().getValueQuoteToken());
                 if (!(value instanceof String) && (getValueDateFormat() != null)) {
@@ -1141,7 +1141,7 @@ public abstract class SqlBuilder {
             print(" ");
             writeColumnNotNullableStmt();
         } else if (platformInfo.isNullAsDefaultValueRequired() &&
-                platformInfo.hasNullDefault(column.getTypeCode())) {
+                platformInfo.hasNullDefault(column.getJdbcTypeCode())) {
             print(" ");
             writeColumnNullableStmt();
         }
@@ -1192,7 +1192,7 @@ public abstract class SqlBuilder {
      * @return The native type
      */
     protected String getNativeType(Column column) {
-        String nativeType = getPlatformInfo().getNativeType(column.getTypeCode());
+        String nativeType = getPlatformInfo().getNativeType(column.getJdbcTypeCode());
         return nativeType == null ? column.getType() : nativeType;
     }
 
@@ -1220,12 +1220,12 @@ public abstract class SqlBuilder {
         Object sizeSpec = column.getSize();
 
         if (sizeSpec == null) {
-            sizeSpec = getPlatformInfo().getDefaultSize(column.getTypeCode());
+            sizeSpec = getPlatformInfo().getDefaultSize(column.getJdbcTypeCode());
         }
         if (sizeSpec != null) {
-            if (getPlatformInfo().hasSize(column.getTypeCode())) {
+            if (getPlatformInfo().hasSize(column.getJdbcTypeCode())) {
                 result.append(sizeSpec);
-            } else if (getPlatformInfo().hasPrecisionAndScale(column.getTypeCode())) {
+            } else if (getPlatformInfo().hasPrecisionAndScale(column.getJdbcTypeCode())) {
                 result.append(column.getSizeAsInt());
                 result.append(",");
                 result.append(column.getScale());
@@ -1279,11 +1279,11 @@ public abstract class SqlBuilder {
         Object parsedDefault = column.getParsedDefaultValue();
         if (parsedDefault != null) {
             if (!getPlatformInfo().isDefaultValuesForLongTypesSupported() &&
-                    ((column.getTypeCode() == Types.LONGVARBINARY) || (column.getTypeCode() == Types.LONGVARCHAR))) {
+                    ((column.getJdbcTypeCode() == Types.LONGVARBINARY) || (column.getJdbcTypeCode() == Types.LONGVARCHAR))) {
                 throw new ModelException("The platform does not support default values for LONGVARCHAR or LONGVARBINARY columns");
             }
             // we write empty default value strings only if the type is not a numeric or date/time type
-            if (isValidDefaultValue(column.getDefaultValue(), column.getTypeCode())) {
+            if (isValidDefaultValue(column.getDefaultValue(), column.getJdbcTypeCode())) {
                 print(" DEFAULT ");
                 writeColumnDefaultValue(table, column);
             }
@@ -1299,7 +1299,7 @@ public abstract class SqlBuilder {
      * @param column The column
      */
     protected void writeColumnDefaultValue(Table table, Column column) throws IOException {
-        printDefaultValue(getNativeDefaultValue(column), column.getTypeCode());
+        printDefaultValue(getNativeDefaultValue(column), column.getJdbcTypeCode());
     }
 
     /**
@@ -1370,12 +1370,12 @@ public abstract class SqlBuilder {
         String desiredDefault = desiredColumn.getDefaultValue();
         String currentDefault = currentColumn.getDefaultValue();
         boolean defaultsEqual = (desiredDefault == null) || desiredDefault.equals(currentDefault);
-        boolean sizeMatters = getPlatformInfo().hasSize(currentColumn.getTypeCode()) &&
+        boolean sizeMatters = getPlatformInfo().hasSize(currentColumn.getJdbcTypeCode()) &&
                 (desiredColumn.getSize() != null);
 
         // We're comparing the jdbc type that corresponds to the native type for the
         // desired type, in order to avoid repeated altering of a perfectly valid column
-        return (getPlatformInfo().getTargetJdbcType(desiredColumn.getTypeCode()) != currentColumn.getTypeCode()) ||
+        return (getPlatformInfo().getTargetJdbcType(desiredColumn.getJdbcTypeCode()) != currentColumn.getJdbcTypeCode()) ||
                 (desiredColumn.isRequired() != currentColumn.isRequired()) ||
                 (sizeMatters && !StringUtils.equals(desiredColumn.getSize(), currentColumn.getSize())) ||
                 !defaultsEqual;

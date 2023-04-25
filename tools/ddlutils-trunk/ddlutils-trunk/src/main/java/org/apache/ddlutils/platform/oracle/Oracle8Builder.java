@@ -249,21 +249,21 @@ public class Oracle8Builder extends SqlBuilder {
      * {@inheritDoc}
      */
     protected String getNativeDefaultValue(Column column) {
-        if ((column.getTypeCode() == Types.BIT) || (column.getTypeCode() == Types.BOOLEAN)) {
-            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getTypeCode(), Types.SMALLINT);
+        if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
+            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getJdbcTypeCode(), Types.SMALLINT);
         }
         // Oracle does not accept ISO formats, so we have to convert an ISO spec if we find one
         // But these are the only formats that we make sure work, every other format has to be database-dependent
         // and thus the user has to ensure that it is correct
-        else if (column.getTypeCode() == Types.DATE) {
+        else if (column.getJdbcTypeCode() == Types.DATE) {
             if (_isoDatePattern.matcher(column.getDefaultValue()).matches()) {
                 return "TO_DATE('" + column.getDefaultValue() + "', 'YYYY-MM-DD')";
             }
-        } else if (column.getTypeCode() == Types.TIME) {
+        } else if (column.getJdbcTypeCode() == Types.TIME) {
             if (_isoTimePattern.matcher(column.getDefaultValue()).matches()) {
                 return "TO_DATE('" + column.getDefaultValue() + "', 'HH24:MI:SS')";
             }
-        } else if (column.getTypeCode() == Types.TIMESTAMP) {
+        } else if (column.getJdbcTypeCode() == Types.TIMESTAMP) {
             if (_isoTimestampPattern.matcher(column.getDefaultValue()).matches()) {
                 return "TO_DATE('" + column.getDefaultValue() + "', 'YYYY-MM-DD HH24:MI:SS')";
             }
@@ -352,7 +352,7 @@ public class Oracle8Builder extends SqlBuilder {
      * {@inheritDoc}
      */
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
-        boolean sizeChanged = TypeMap.isTextType(targetColumn.getTypeCode()) &&
+        boolean sizeChanged = TypeMap.isTextType(targetColumn.getJdbcTypeCode()) &&
                 ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn) &&
                 !StringUtilsExt.isEmpty(targetColumn.getSize());
 

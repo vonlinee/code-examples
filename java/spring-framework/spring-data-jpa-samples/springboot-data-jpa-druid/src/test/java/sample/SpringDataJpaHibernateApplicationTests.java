@@ -1,10 +1,10 @@
-package sample.spring.jpa;
+package sample;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import sample.spring.jpa.entity.Person;
-import sample.spring.jpa.repository.PersonRepository;
+import sample.repository.PersonRepository;
+import sample.entity.Person;
 
 @SpringBootTest
 class SpringDataJpaHibernateApplicationTests {

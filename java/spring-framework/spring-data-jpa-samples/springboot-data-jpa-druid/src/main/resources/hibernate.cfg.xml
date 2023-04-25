@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <!--配置数据库连接驱动基本信息-->
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.url"><!-- &amp;是XML文件中&的表示形式 -->
+      jdbc:mysql://localhost/mysql_learn?useSSL=false&amp;characterEncoding=utf8
+    </property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password">123456</property>
+    <!--数据库方言，指定数据库类型-->
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <!--是否在控制台打印sql以及是否对sql格式化-->
+    <property name="show_sql">true</property>
+    <property name="format_sql">true</property>
+    <!--数据库表生成策略-->
+    <property name="hibernate.hbm2ddl.auto">create</property>
+    <!--添加ORM映射文件，使用目录而不是包名-->
+    <mapping resource="model.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

@@ -197,7 +197,7 @@ public class PostgreSqlPlatform extends GenericDialect {
      * {@inheritDoc}
      */
     protected void setObject(PreparedStatement statement, int sqlIndex, DynaBean dynaBean, SqlDynaProperty property) throws SQLException {
-        int typeCode = property.getColumn().getTypeCode();
+        int typeCode = property.getColumn().getJdbcTypeCode();
         Object value = dynaBean.get(property.getName());
 
         // PostgreSQL doesn't like setNull for BYTEA columns

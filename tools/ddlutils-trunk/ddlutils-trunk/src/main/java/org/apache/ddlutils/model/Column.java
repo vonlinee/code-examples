@@ -64,11 +64,11 @@ public class Column implements SchemaObject, Serializable {
     /**
      * The JDBC type code, one of the constants in {@link java.sql.Types}.
      */
-    private int typeCode;
+    private int jdbcTypeCode;
     /**
      * The name of the JDBC type.
      */
-    private String _type;
+    private String jdbcTypeName;
     /**
      * The size of the column for JDBC types that require/support this.
      */
@@ -81,6 +81,12 @@ public class Column implements SchemaObject, Serializable {
      * The scale of the column for JDBC types that require/support this.
      */
     private int _scale;
+
+    /**
+     * The precision of the column for JDBC types that require/support this.
+     */
+    private int precision;
+
     /**
      * The default value.
      */
@@ -192,21 +198,21 @@ public class Column implements SchemaObject, Serializable {
      * JDBC type of the column.
      * @return The type code
      */
-    public int getTypeCode() {
-        return typeCode;
+    public int getJdbcTypeCode() {
+        return jdbcTypeCode;
     }
 
     /**
      * Sets the code (one of the constants in {@link java.sql.Types}) of the
      * JDBC type of the column.
-     * @param typeCode The type code
+     * @param jdbcTypeCode The type code
      */
-    public void setTypeCode(int typeCode) {
-        _type = TypeMap.getJdbcTypeName(typeCode);
-        if (_type == null) {
-            throw new ModelException("Unknown JDBC type code " + typeCode);
+    public void setJdbcTypeCode(int jdbcTypeCode) {
+        jdbcTypeName = TypeMap.getJdbcTypeName(jdbcTypeCode);
+        if (jdbcTypeName == null) {
+            throw new ModelException("Unknown JDBC type code " + jdbcTypeCode);
         }
-        this.typeCode = typeCode;
+        this.jdbcTypeCode = jdbcTypeCode;
     }
 
     /**
@@ -214,7 +220,7 @@ public class Column implements SchemaObject, Serializable {
      * @return The type
      */
     public String getType() {
-        return _type;
+        return jdbcTypeName;
     }
 
     /**
@@ -227,10 +233,10 @@ public class Column implements SchemaObject, Serializable {
         if (typeCode == null) {
             throw new ModelException("Unknown JDBC type " + type);
         } else {
-            this.typeCode = typeCode;
+            this.jdbcTypeCode = typeCode;
             // we get the corresponding string value from the TypeMap in order
             // to detect extension types which we don't want in the model
-            _type = TypeMap.getJdbcTypeName(this.typeCode);
+            jdbcTypeName = TypeMap.getJdbcTypeName(this.jdbcTypeCode);
         }
     }
 
@@ -239,7 +245,7 @@ public class Column implements SchemaObject, Serializable {
      * @return <code>true</code> if this column is of a numeric type
      */
     public boolean isOfNumericType() {
-        return TypeMap.isNumericType(getTypeCode());
+        return TypeMap.isNumericType(getJdbcTypeCode());
     }
 
     /**
@@ -247,7 +253,7 @@ public class Column implements SchemaObject, Serializable {
      * @return <code>true</code> if this column is of a text type
      */
     public boolean isOfTextType() {
-        return TypeMap.isTextType(getTypeCode());
+        return TypeMap.isTextType(getJdbcTypeCode());
     }
 
     /**
@@ -255,7 +261,7 @@ public class Column implements SchemaObject, Serializable {
      * @return <code>true</code> if this column is of a binary type
      */
     public boolean isOfBinaryType() {
-        return TypeMap.isBinaryType(getTypeCode());
+        return TypeMap.isBinaryType(getJdbcTypeCode());
     }
 
     /**
@@ -263,7 +269,7 @@ public class Column implements SchemaObject, Serializable {
      * @return <code>true</code> if this column is of a special type
      */
     public boolean isOfSpecialType() {
-        return TypeMap.isSpecialType(getTypeCode());
+        return TypeMap.isSpecialType(getJdbcTypeCode());
     }
 
     /**
@@ -381,7 +387,7 @@ public class Column implements SchemaObject, Serializable {
     public Object getParsedDefaultValue() {
         if ((_defaultValue != null) && (_defaultValue.length() > 0)) {
             try {
-                switch (typeCode) {
+                switch (jdbcTypeCode) {
                     case Types.TINYINT:
                     case Types.SMALLINT:
                         return new Short(_defaultValue);
@@ -422,13 +428,13 @@ public class Column implements SchemaObject, Serializable {
         if (_primaryKey != column._primaryKey) return false;
         if (_required != column._required) return false;
         if (_autoIncrement != column._autoIncrement) return false;
-        if (typeCode != column.typeCode) return false;
+        if (jdbcTypeCode != column.jdbcTypeCode) return false;
         if (_scale != column._scale) return false;
         if (!Objects.equals(_name, column._name)) return false;
         if (!Objects.equals(_javaName, column._javaName)) return false;
         if (!Objects.equals(_description, column._description))
             return false;
-        if (!Objects.equals(_type, column._type)) return false;
+        if (!Objects.equals(jdbcTypeName, column.jdbcTypeName)) return false;
         if (!Objects.equals(_size, column._size)) return false;
         if (!Objects.equals(_sizeAsInt, column._sizeAsInt)) return false;
         return Objects.equals(_defaultValue, column._defaultValue);
@@ -436,7 +442,7 @@ public class Column implements SchemaObject, Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(_name, _javaName, _description, _primaryKey, _required, _autoIncrement, typeCode, _type, _size, _sizeAsInt, _scale, _defaultValue);
+        return Objects.hash(_name, _javaName, _description, _primaryKey, _required, _autoIncrement, jdbcTypeCode, jdbcTypeName, _size, _sizeAsInt, _scale, _defaultValue);
     }
 
     /**
@@ -451,6 +457,6 @@ public class Column implements SchemaObject, Serializable {
      * @return The string representation
      */
     public String toVerboseString() {
-        return "Column [name=" + getName() + "; javaName=" + getJavaName() + "; type=" + getType() + "; typeCode=" + getTypeCode() + "; size=" + getSize() + "; required=" + isRequired() + "; primaryKey=" + isPrimaryKey() + "; autoIncrement=" + isAutoIncrement() + "; defaultValue=" + getDefaultValue() + "; precisionRadix=" + getPrecisionRadix() + "; scale=" + getScale() + "]";
+        return "Column [name=" + getName() + "; javaName=" + getJavaName() + "; type=" + getType() + "; typeCode=" + getJdbcTypeCode() + "; size=" + getSize() + "; required=" + isRequired() + "; primaryKey=" + isPrimaryKey() + "; autoIncrement=" + isAutoIncrement() + "; defaultValue=" + getDefaultValue() + "; precisionRadix=" + getPrecisionRadix() + "; scale=" + getScale() + "]";
     }
 }

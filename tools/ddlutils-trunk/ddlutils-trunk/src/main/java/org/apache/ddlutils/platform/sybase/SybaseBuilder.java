@@ -138,8 +138,8 @@ public class SybaseBuilder extends SqlBuilder {
      * {@inheritDoc}
      */
     protected String getNativeDefaultValue(Column column) {
-        if ((column.getTypeCode() == Types.BIT) || (column.getTypeCode() == Types.BOOLEAN)) {
-            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getTypeCode(), Types.SMALLINT);
+        if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
+            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getJdbcTypeCode(), Types.SMALLINT);
         } else {
             return super.getNativeDefaultValue(column);
         }
@@ -400,8 +400,8 @@ public class SybaseBuilder extends SqlBuilder {
         print("REPLACE ");
         printIdentifier(getColumnName(column));
         print(" DEFAULT ");
-        if (isValidDefaultValue(newDefaultValue, column.getTypeCode())) {
-            printDefaultValue(newDefaultValue, column.getTypeCode());
+        if (isValidDefaultValue(newDefaultValue, column.getJdbcTypeCode())) {
+            printDefaultValue(newDefaultValue, column.getJdbcTypeCode());
         } else {
             print("NULL");
         }

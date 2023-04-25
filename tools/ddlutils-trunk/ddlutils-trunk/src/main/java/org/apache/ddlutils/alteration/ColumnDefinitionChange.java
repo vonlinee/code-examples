@@ -72,9 +72,9 @@ public class ColumnDefinitionChange extends ColumnChangeImplBase {
      * @return <code>true</code> if the jdbc types differ
      */
     public static boolean isTypeChanged(PlatformInfo platformInfo, Column sourceColumn, Column targetColumn) {
-        int targetTypeCode = platformInfo.getTargetJdbcType(targetColumn.getTypeCode());
+        int targetTypeCode = platformInfo.getTargetJdbcType(targetColumn.getJdbcTypeCode());
 
-        return targetTypeCode != sourceColumn.getTypeCode();
+        return targetTypeCode != sourceColumn.getJdbcTypeCode();
     }
 
     /**
@@ -86,7 +86,7 @@ public class ColumnDefinitionChange extends ColumnChangeImplBase {
      * @return <code>true</code> if the sizes or precisions/scales differ
      */
     public static boolean isSizeChanged(PlatformInfo platformInfo, Column sourceColumn, Column targetColumn) {
-        int targetTypeCode = platformInfo.getTargetJdbcType(targetColumn.getTypeCode());
+        int targetTypeCode = platformInfo.getTargetJdbcType(targetColumn.getJdbcTypeCode());
         boolean sizeMatters = platformInfo.hasSize(targetTypeCode);
         boolean scaleMatters = platformInfo.hasPrecisionAndScale(targetTypeCode);
 
@@ -114,7 +114,7 @@ public class ColumnDefinitionChange extends ColumnChangeImplBase {
      * @return <code>true</code> if the size of the target column is smaller
      */
     public static boolean isSizeReduced(PlatformInfo platformInfo, Column sourceColumn, Column targetColumn) {
-        int targetTypeCode = platformInfo.getTargetJdbcType(targetColumn.getTypeCode());
+        int targetTypeCode = platformInfo.getTargetJdbcType(targetColumn.getJdbcTypeCode());
         boolean sizeMatters = platformInfo.hasSize(targetTypeCode);
         boolean scaleMatters = platformInfo.hasPrecisionAndScale(targetTypeCode);
 
@@ -178,7 +178,7 @@ public class ColumnDefinitionChange extends ColumnChangeImplBase {
     public void apply(Database model, boolean caseSensitive) {
         Column column = findChangedColumn(model, caseSensitive);
 
-        column.setTypeCode(_newColumnDef.getTypeCode());
+        column.setJdbcTypeCode(_newColumnDef.getJdbcTypeCode());
         column.setSize(_newColumnDef.getSize());
         column.setAutoIncrement(_newColumnDef.isAutoIncrement());
         column.setRequired(_newColumnDef.isRequired());

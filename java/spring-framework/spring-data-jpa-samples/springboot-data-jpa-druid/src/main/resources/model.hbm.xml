@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class name="test.entity.Model" table="t_model">
+    <meta attribute="class-description">描述信息</meta>
+    <!--关联主键-->
+    <id name="id" type="java.lang.Integer" column="id">
+      <!--指定主键的生成方式:native指用数据库本地方式-->
+      <generator class="native"/>
+    </id>
+    <!--关联其他字段-->
+    <property name="name" column="name" type="java.lang.String"/>
+    <property name="birthday" column="birthday" type="java.util.Date"/>
+  </class>
+</hibernate-mapping>

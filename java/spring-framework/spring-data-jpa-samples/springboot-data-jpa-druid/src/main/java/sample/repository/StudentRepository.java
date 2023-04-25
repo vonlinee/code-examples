@@ -1,7 +1,7 @@
-package sample.spring.jpa.repository;
+package sample.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import sample.spring.jpa.entity.Student;
+import sample.entity.Student;
 
 public interface StudentRepository extends CrudRepository<Student, String> {
 }

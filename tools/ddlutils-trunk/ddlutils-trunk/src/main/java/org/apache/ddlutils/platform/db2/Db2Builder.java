@@ -48,8 +48,8 @@ public class Db2Builder extends SqlBuilder {
      * {@inheritDoc}
      */
     protected String getNativeDefaultValue(Column column) {
-        if ((column.getTypeCode() == Types.BIT) || (column.getTypeCode() == Types.BOOLEAN)) {
-            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getTypeCode(), Types.SMALLINT);
+        if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
+            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getJdbcTypeCode(), Types.SMALLINT);
         } else {
             return super.getNativeDefaultValue(column);
         }
@@ -121,12 +121,12 @@ public class Db2Builder extends SqlBuilder {
 
             // DB2 has the limitation that it cannot convert numeric values
             // to VARCHAR, though it can convert them to CHAR
-            if (TypeMap.isNumericType(sourceColumn.getTypeCode()) &&
+            if (TypeMap.isNumericType(sourceColumn.getJdbcTypeCode()) &&
                     "VARCHAR".equalsIgnoreCase(targetNativeType)) {
                 Object sizeSpec = targetColumn.getSize();
 
                 if (sizeSpec == null) {
-                    sizeSpec = getPlatformInfo().getDefaultSize(targetColumn.getTypeCode());
+                    sizeSpec = getPlatformInfo().getDefaultSize(targetColumn.getJdbcTypeCode());
                 }
                 type = "CHAR(" + sizeSpec.toString() + ")";
             }

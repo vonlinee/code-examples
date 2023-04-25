@@ -147,7 +147,7 @@ public class InterbaseModelReader extends JdbcModelReader {
 
                     // CLOBs are returned by the driver as VARCHAR
                     if (!rs.wasNull() && (dbType == 261) && (blobSubType == 1)) {
-                        column.setTypeCode(Types.CLOB);
+                        column.setJdbcTypeCode(Types.CLOB);
                     }
                 }
             }
@@ -206,13 +206,13 @@ public class InterbaseModelReader extends JdbcModelReader {
         Column[] columns = table.getColumns();
 
         for (int idx = 0; idx < columns.length; idx++) {
-            if (columns[idx].getTypeCode() == Types.FLOAT) {
-                columns[idx].setTypeCode(Types.REAL);
-            } else if ((columns[idx].getTypeCode() == Types.NUMERIC) || (columns[idx].getTypeCode() == Types.DECIMAL)) {
-                if ((columns[idx].getTypeCode() == Types.NUMERIC) && (columns[idx].getSizeAsInt() == 18) && (columns[idx].getScale() == 0)) {
-                    columns[idx].setTypeCode(Types.BIGINT);
+            if (columns[idx].getJdbcTypeCode() == Types.FLOAT) {
+                columns[idx].setJdbcTypeCode(Types.REAL);
+            } else if ((columns[idx].getJdbcTypeCode() == Types.NUMERIC) || (columns[idx].getJdbcTypeCode() == Types.DECIMAL)) {
+                if ((columns[idx].getJdbcTypeCode() == Types.NUMERIC) && (columns[idx].getSizeAsInt() == 18) && (columns[idx].getScale() == 0)) {
+                    columns[idx].setJdbcTypeCode(Types.BIGINT);
                 }
-            } else if (TypeMap.isTextType(columns[idx].getTypeCode())) {
+            } else if (TypeMap.isTextType(columns[idx].getJdbcTypeCode())) {
                 columns[idx].setDefaultValue(unescape(columns[idx].getDefaultValue(), "'", "''"));
             }
         }

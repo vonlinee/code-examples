@@ -128,7 +128,7 @@ public class MSSqlBuilder extends SqlBuilder {
 
         StringBuffer result = new StringBuffer();
 
-        switch (column.getTypeCode()) {
+        switch (column.getJdbcTypeCode()) {
             case Types.REAL:
             case Types.NUMERIC:
             case Types.FLOAT:
@@ -171,8 +171,8 @@ public class MSSqlBuilder extends SqlBuilder {
      */
     protected String getNativeDefaultValue(Column column) {
         // Sql Server wants BIT default values as 0 or 1
-        if ((column.getTypeCode() == Types.BIT) || (column.getTypeCode() == Types.BOOLEAN)) {
-            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getTypeCode(), Types.SMALLINT);
+        if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
+            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getJdbcTypeCode(), Types.SMALLINT);
         } else {
             return super.getNativeDefaultValue(column);
         }
@@ -477,7 +477,7 @@ public class MSSqlBuilder extends SqlBuilder {
         boolean typeChanged = ColumnDefinitionChange.isTypeChanged(getPlatformInfo(), sourceColumn, targetColumn);
 
         if (sizeChanged || typeChanged) {
-            if (TypeMap.isTextType(targetColumn.getTypeCode()) && sizeChanged &&
+            if (TypeMap.isTextType(targetColumn.getJdbcTypeCode()) && sizeChanged &&
                     (targetColumn.getSize() != null) && (sourceColumn.getSizeAsInt() > targetColumn.getSizeAsInt())) {
                 print("SUBSTRING(CAST(");
                 printIdentifier(getColumnName(sourceColumn));

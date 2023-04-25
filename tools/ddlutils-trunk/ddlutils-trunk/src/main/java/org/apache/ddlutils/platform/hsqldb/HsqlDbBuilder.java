@@ -115,7 +115,7 @@ public class HsqlDbBuilder extends SqlBuilder {
             print(" ");
             writeColumnNotNullableStmt();
         } else if (getPlatformInfo().isNullAsDefaultValueRequired() &&
-                getPlatformInfo().hasNullDefault(column.getTypeCode())) {
+                getPlatformInfo().hasNullDefault(column.getJdbcTypeCode())) {
             print(" ");
             writeColumnNullableStmt();
         }
@@ -136,7 +136,7 @@ public class HsqlDbBuilder extends SqlBuilder {
         boolean typeChanged = ColumnDefinitionChange.isTypeChanged(getPlatformInfo(), sourceColumn, targetColumn);
 
         if (sizeChanged || typeChanged) {
-            boolean needSubstr = TypeMap.isTextType(targetColumn.getTypeCode()) && sizeChanged && (sourceColumn.getSizeAsInt() > targetColumn.getSizeAsInt());
+            boolean needSubstr = TypeMap.isTextType(targetColumn.getJdbcTypeCode()) && sizeChanged && (sourceColumn.getSizeAsInt() > targetColumn.getSizeAsInt());
 
             if (needSubstr) {
                 print("SUBSTR(");

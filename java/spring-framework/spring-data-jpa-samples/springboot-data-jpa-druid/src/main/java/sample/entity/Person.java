@@ -1,12 +1,8 @@
-package sample.spring.jpa.entity;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+package sample.entity;
 
 import lombok.Data;
+
+import javax.persistence.*;
 
 @Data
 @Entity

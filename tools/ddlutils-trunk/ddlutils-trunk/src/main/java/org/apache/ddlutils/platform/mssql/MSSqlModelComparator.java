@@ -240,9 +240,9 @@ public class MSSqlModelComparator extends ModelComparator {
             Column sourceColumn = sourceTable.findColumn(targetColumn.getName(), isCaseSensitive());
 
             if (sourceColumn != null) {
-                int targetTypeCode = getPlatformInfo().getTargetJdbcType(targetColumn.getTypeCode());
+                int targetTypeCode = getPlatformInfo().getTargetJdbcType(targetColumn.getJdbcTypeCode());
 
-                if ((targetTypeCode != sourceColumn.getTypeCode()) ||
+                if ((targetTypeCode != sourceColumn.getJdbcTypeCode()) ||
                         ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn)) {
                     result.add(targetColumn);
                 }

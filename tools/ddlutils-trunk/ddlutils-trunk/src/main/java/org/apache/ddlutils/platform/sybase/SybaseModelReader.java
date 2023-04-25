@@ -84,11 +84,11 @@ public class SybaseModelReader extends JdbcModelReader {
     protected Column readColumn(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
-        if ((column.getTypeCode() == Types.DECIMAL) && (column.getSizeAsInt() == 19) && (column.getScale() == 0)) {
+        if ((column.getJdbcTypeCode() == Types.DECIMAL) && (column.getSizeAsInt() == 19) && (column.getScale() == 0)) {
             // Back-mapping to BIGINT
-            column.setTypeCode(Types.BIGINT);
+            column.setJdbcTypeCode(Types.BIGINT);
         } else if (column.getDefaultValue() != null) {
-            if (column.getTypeCode() == Types.TIMESTAMP) {
+            if (column.getJdbcTypeCode() == Types.TIMESTAMP) {
                 // Sybase maintains the default values for DATE/TIME jdbc types, so we have to
                 // migrate the default value to TIMESTAMP
                 Matcher matcher = _isoDatePattern.matcher(column.getDefaultValue());
@@ -105,7 +105,7 @@ public class SybaseModelReader extends JdbcModelReader {
                 if (timestamp != null) {
                     column.setDefaultValue(timestamp.toString());
                 }
-            } else if (TypeMap.isTextType(column.getTypeCode())) {
+            } else if (TypeMap.isTextType(column.getJdbcTypeCode())) {
                 column.setDefaultValue(unescape(column.getDefaultValue(), "'", "''"));
             }
         }

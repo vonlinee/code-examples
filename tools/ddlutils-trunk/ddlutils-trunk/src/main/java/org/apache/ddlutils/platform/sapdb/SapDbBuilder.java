@@ -178,13 +178,13 @@ public class SapDbBuilder extends SqlBuilder {
 
         boolean hasDefault = column.getParsedDefaultValue() != null;
 
-        if (isValidDefaultValue(newDefaultValue, column.getTypeCode())) {
+        if (isValidDefaultValue(newDefaultValue, column.getJdbcTypeCode())) {
             if (hasDefault) {
                 print(" ALTER DEFAULT ");
             } else {
                 print(" ADD DEFAULT ");
             }
-            printDefaultValue(newDefaultValue, column.getTypeCode());
+            printDefaultValue(newDefaultValue, column.getJdbcTypeCode());
         } else if (hasDefault) {
             print(" DROP DEFAULT");
         }
@@ -195,8 +195,8 @@ public class SapDbBuilder extends SqlBuilder {
      * {@inheritDoc}
      */
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
-        boolean charSizeChanged = TypeMap.isTextType(targetColumn.getTypeCode()) &&
-                TypeMap.isTextType(targetColumn.getTypeCode()) &&
+        boolean charSizeChanged = TypeMap.isTextType(targetColumn.getJdbcTypeCode()) &&
+                TypeMap.isTextType(targetColumn.getJdbcTypeCode()) &&
                 ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn) &&
                 !StringUtilsExt.isEmpty(targetColumn.getSize());
 

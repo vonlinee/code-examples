@@ -66,7 +66,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
     protected Column readColumn(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
-        if (TypeMap.isTextType(column.getTypeCode()) &&
+        if (TypeMap.isTextType(column.getJdbcTypeCode()) &&
                 (column.getDefaultValue() != null)) {
             column.setDefaultValue(unescape(column.getDefaultValue(), "'", "''"));
         }

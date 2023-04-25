@@ -71,7 +71,7 @@ public class MySqlModelReader extends JdbcModelReader {
 
         // MySQL converts illegal date/time/timestamp values to "0000-00-00 00:00:00", but this
         // is an illegal ISO value, so we replace it with NULL
-        if ((column.getTypeCode() == Types.TIMESTAMP) &&
+        if ((column.getJdbcTypeCode() == Types.TIMESTAMP) &&
                 "0000-00-00 00:00:00".equals(column.getDefaultValue())) {
             column.setDefaultValue(null);
         }

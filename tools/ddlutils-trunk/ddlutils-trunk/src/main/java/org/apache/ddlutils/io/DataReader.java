@@ -423,7 +423,7 @@ public class DataReader {
      */
     private void setColumnValue(DynaBean bean, Table table, Column column, String value) throws DdlUtilsXMLException {
         SqlTypeConverter converter = _converterConf.getRegisteredConverter(table, column);
-        Object propValue = (converter != null ? converter.convertFromString(value, column.getTypeCode()) : value);
+        Object propValue = (converter != null ? converter.convertFromString(value, column.getJdbcTypeCode()) : value);
 
         try {
             PropertyUtils.setProperty(bean, column.getName(), propValue);

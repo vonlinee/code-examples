@@ -715,13 +715,13 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
 
             for (int columnIdx = 0; columnIdx < table.getColumnCount(); columnIdx++) {
                 Column column = table.getColumn(columnIdx);
-                int origType = column.getTypeCode();
+                int origType = column.getJdbcTypeCode();
                 int targetType = getPlatformInfo().getTargetJdbcType(origType);
 
                 // we adjust the column types if the native type would back-map to a
                 // different jdbc type
                 if (targetType != origType) {
-                    column.setTypeCode(targetType);
+                    column.setJdbcTypeCode(targetType);
                     // we should also adapt the default value
                     if (column.getDefaultValue() != null) {
                         DefaultValueHelper helper = getPlatform().getSqlBuilder().getDefaultValueHelper();
@@ -742,7 +742,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
                 // is a primary key column
                 if (getPlatformInfo().isSyntheticDefaultValueForRequiredReturned() &&
                         (column.getDefaultValue() == null) && column.isRequired() && !column.isAutoIncrement()) {
-                    switch (column.getTypeCode()) {
+                    switch (column.getJdbcTypeCode()) {
                         case Types.TINYINT:
                         case Types.SMALLINT:
                         case Types.INTEGER:
@@ -903,7 +903,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
             SqlDynaClass dynaClass = (SqlDynaClass) ((SqlDynaBean) dynaBean).getDynaClass();
             Column column = ((SqlDynaProperty) dynaClass.getDynaProperty(attrName)).getColumn();
 
-            if (TypeMap.isBinaryType(column.getTypeCode())) {
+            if (TypeMap.isBinaryType(column.getJdbcTypeCode())) {
                 value = new BinaryObjectsHelper().deserialize((byte[]) value);
             }
         }
@@ -1051,25 +1051,25 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
                 expected.getType(),
                 actual.getType());
         assertEquals("Type code not the same for column " + actual.getName() + ".",
-                expected.getTypeCode(),
-                actual.getTypeCode());
+                expected.getJdbcTypeCode(),
+                actual.getJdbcTypeCode());
         assertEquals("Parsed default values do not match for column " + actual.getName() + ".",
                 expected.getParsedDefaultValue(),
                 actual.getParsedDefaultValue());
 
         // comparing the size makes only sense for types where it is relevant
-        if ((expected.getTypeCode() == Types.NUMERIC) ||
-                (expected.getTypeCode() == Types.DECIMAL)) {
+        if ((expected.getJdbcTypeCode() == Types.NUMERIC) ||
+                (expected.getJdbcTypeCode() == Types.DECIMAL)) {
             assertEquals("Precision not the same for column " + actual.getName() + ".",
                     expected.getSizeAsInt(),
                     actual.getSizeAsInt());
             assertEquals("Scale not the same for column " + actual.getName() + ".",
                     expected.getScale(),
                     actual.getScale());
-        } else if ((expected.getTypeCode() == Types.CHAR) ||
-                (expected.getTypeCode() == Types.VARCHAR) ||
-                (expected.getTypeCode() == Types.BINARY) ||
-                (expected.getTypeCode() == Types.VARBINARY)) {
+        } else if ((expected.getJdbcTypeCode() == Types.CHAR) ||
+                (expected.getJdbcTypeCode() == Types.VARCHAR) ||
+                (expected.getJdbcTypeCode() == Types.BINARY) ||
+                (expected.getJdbcTypeCode() == Types.VARBINARY)) {
             assertEquals("Size not the same for column " + actual.getName() + ".",
                     expected.getSize(),
                     actual.getSize());

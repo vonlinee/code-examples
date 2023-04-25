@@ -101,9 +101,9 @@ public class FirebirdModelReader extends JdbcModelReader {
     protected Column readColumn(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
-        if (column.getTypeCode() == Types.FLOAT) {
-            column.setTypeCode(Types.REAL);
-        } else if (TypeMap.isTextType(column.getTypeCode())) {
+        if (column.getJdbcTypeCode() == Types.FLOAT) {
+            column.setJdbcTypeCode(Types.REAL);
+        } else if (TypeMap.isTextType(column.getJdbcTypeCode())) {
             column.setDefaultValue(unescape(column.getDefaultValue(), "'", "''"));
         }
         return column;

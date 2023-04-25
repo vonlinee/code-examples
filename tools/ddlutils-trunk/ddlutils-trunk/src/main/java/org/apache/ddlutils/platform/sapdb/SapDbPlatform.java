@@ -150,7 +150,7 @@ public class SapDbPlatform extends GenericDialect {
                     Column newColumn = colChange.getNewColumn();
 
                     // we can however handle the change if only the default value or the required status was changed
-                    return ((curColumn.getTypeCode() == newColumn.getTypeCode()) &&
+                    return ((curColumn.getJdbcTypeCode() == newColumn.getJdbcTypeCode()) &&
                             !ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), curColumn, newColumn) &&
                             (curColumn.isAutoIncrement() == newColumn.isAutoIncrement()));
                 } else {

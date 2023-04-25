@@ -59,13 +59,13 @@ public class MaxDbModelReader extends JdbcModelReader {
                 column.setDefaultValue(null);
             }
         }
-        if (column.getTypeCode() == Types.DECIMAL) {
+        if (column.getJdbcTypeCode() == Types.DECIMAL) {
             // need to use COLUMN_SIZE for precision instead of NUM_PREC_RADIX
             column.setPrecisionRadix(column.getSizeAsInt());
 
             // We also perform back-mapping to BIGINT
             if ((column.getSizeAsInt() == 38) && (column.getScale() == 0)) {
-                column.setTypeCode(Types.BIGINT);
+                column.setJdbcTypeCode(Types.BIGINT);
             }
         }
         return column;

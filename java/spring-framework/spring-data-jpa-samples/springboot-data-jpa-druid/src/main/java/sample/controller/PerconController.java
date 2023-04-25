@@ -1,12 +1,12 @@
-package sample.spring.jpa.controller;
+package sample.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sample.spring.jpa.entity.Person;
-import sample.spring.jpa.repository.PersonRepository;
+import sample.repository.PersonRepository;
+import sample.entity.Person;
 
 @RestController
 @RequestMapping(value = "person")

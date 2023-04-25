@@ -113,7 +113,7 @@ public class TestDatabaseIO extends TestCase {
                               Column column) {
         assertEquals(name, column.getName());
         assertEquals(TypeMap.getJdbcTypeName(typeCode), column.getType());
-        assertEquals(typeCode, column.getTypeCode());
+        assertEquals(typeCode, column.getJdbcTypeCode());
         assertEquals(size, column.getSizeAsInt());
         assertEquals(size, column.getPrecisionRadix());
         assertEquals(scale, column.getScale());

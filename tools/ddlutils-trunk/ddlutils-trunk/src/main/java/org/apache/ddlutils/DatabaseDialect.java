@@ -22,8 +22,8 @@ package org.apache.ddlutils;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.JdbcModelReader;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.SqlBuilder;
 
 import javax.sql.DataSource;
@@ -1101,4 +1101,42 @@ public interface DatabaseDialect {
      * @throws DatabaseOperationException If an error occurred during reading the model
      */
     Database readModelFromDatabase(Connection connection, String name, String catalog, String schema, String[] tableTypes) throws DatabaseOperationException;
+
+
+    /**
+     * The character specific to this dialect used to begin a quoted identifier.
+     * @return The dialect's specific open quote character.
+     */
+    default char openQuote() {
+        return '"';
+    }
+
+    /**
+     * The character specific to this dialect used to close a quoted identifier.
+     * @return The dialect's specific close quote character.
+     */
+    default char closeQuote() {
+        return '"';
+    }
+
+    /**
+     * Apply dialect-specific quoting.
+     * <p/>
+     * By default, the incoming value is checked to see if its first character
+     * is the back-tick (`).  If so, the dialect specific quoting is applied.
+     * @param name The value to be quoted.
+     * @return The quoted (or unmodified, if not starting with back-tick) value.
+     * @see #openQuote()
+     * @see #closeQuote()
+     */
+    default String quote(String name) {
+        if (name == null) {
+            return null;
+        }
+        if (name.charAt(0) == '`') {
+            return openQuote() + name.substring(1, name.length() - 1) + closeQuote();
+        } else {
+            return name;
+        }
+    }
 }

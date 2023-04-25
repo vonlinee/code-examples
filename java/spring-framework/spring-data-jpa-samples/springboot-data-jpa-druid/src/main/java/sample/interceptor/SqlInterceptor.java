@@ -1,4 +1,4 @@
-package sample.spring.jpa.interceptor;
+package sample.interceptor;
 
 import org.hibernate.resource.jdbc.spi.StatementInspector;
 

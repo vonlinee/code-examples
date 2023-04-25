@@ -62,8 +62,8 @@ public class InterbaseBuilder extends SqlBuilder {
      * {@inheritDoc}
      */
     protected String getNativeDefaultValue(Column column) {
-        if ((column.getTypeCode() == Types.BIT) || (column.getTypeCode() == Types.BOOLEAN)) {
-            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getTypeCode(), Types.SMALLINT);
+        if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
+            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getJdbcTypeCode(), Types.SMALLINT);
         } else {
             return super.getNativeDefaultValue(column);
         }

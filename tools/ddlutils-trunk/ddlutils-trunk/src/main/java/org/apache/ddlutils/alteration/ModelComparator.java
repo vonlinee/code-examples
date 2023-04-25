@@ -748,11 +748,11 @@ public class ModelComparator {
                                                     Column targetColumn) {
         if (ColumnDefinitionChange.isChanged(getPlatformInfo(), sourceColumn, targetColumn)) {
             Column newColumnDef = _cloneHelper.clone(sourceColumn, true);
-            int targetTypeCode = _platformInfo.getTargetJdbcType(targetColumn.getTypeCode());
+            int targetTypeCode = _platformInfo.getTargetJdbcType(targetColumn.getJdbcTypeCode());
             boolean sizeMatters = _platformInfo.hasSize(targetTypeCode);
             boolean scaleMatters = _platformInfo.hasPrecisionAndScale(targetTypeCode);
 
-            newColumnDef.setTypeCode(targetColumn.getTypeCode());
+            newColumnDef.setJdbcTypeCode(targetColumn.getJdbcTypeCode());
             newColumnDef.setSize(sizeMatters || scaleMatters ? targetColumn.getSize() : null);
             newColumnDef.setAutoIncrement(targetColumn.isAutoIncrement());
             newColumnDef.setRequired(targetColumn.isRequired());

@@ -106,7 +106,7 @@ public class CloneHelper {
         result.setPrimaryKey(clonePrimaryKeyStatus ? source.isPrimaryKey() : false);
         result.setRequired(source.isRequired());
         result.setAutoIncrement(source.isAutoIncrement());
-        result.setTypeCode(source.getTypeCode());
+        result.setJdbcTypeCode(source.getJdbcTypeCode());
         result.setSize(source.getSize());
         result.setDefaultValue(source.getDefaultValue());
 

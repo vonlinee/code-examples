@@ -1,7 +1,7 @@
-package sample.spring.jpa.repository;
+package sample.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import sample.spring.jpa.entity.Person;
+import sample.entity.Person;
 
 public interface PersonRepository extends JpaRepository<Person, Long> {
 

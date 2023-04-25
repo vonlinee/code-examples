@@ -215,7 +215,7 @@ public class MySqlBuilder extends SqlBuilder {
         if (sizeChanged || typeChanged) {
             String targetNativeType = getNativeType(targetColumn);
 
-            switch (targetColumn.getTypeCode()) {
+            switch (targetColumn.getJdbcTypeCode()) {
                 case Types.BIT:
                 case Types.BOOLEAN:
                 case Types.TINYINT:
@@ -251,7 +251,7 @@ public class MySqlBuilder extends SqlBuilder {
             }
 
             print("CAST(");
-            if (TypeMap.isTextType(sourceColumn.getTypeCode()) && TypeMap.isTextType(targetColumn.getTypeCode()) && sizeChanged) {
+            if (TypeMap.isTextType(sourceColumn.getJdbcTypeCode()) && TypeMap.isTextType(targetColumn.getJdbcTypeCode()) && sizeChanged) {
                 print("LEFT(");
                 printIdentifier(getColumnName(sourceColumn));
                 print(",");

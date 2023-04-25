@@ -690,7 +690,7 @@ public class JdbcModelReader {
 
         column.setName((String) values.get("COLUMN_NAME"));
         column.setDefaultValue((String) values.get("COLUMN_DEF"));
-        column.setTypeCode(((Integer) values.get("DATA_TYPE")).intValue());
+        column.setJdbcTypeCode(((Integer) values.get("DATA_TYPE")).intValue());
 
         Integer precision = (Integer) values.get("NUM_PREC_RADIX");
 
@@ -701,7 +701,7 @@ public class JdbcModelReader {
         String size = (String) values.get("COLUMN_SIZE");
 
         if (size == null) {
-            size = (String) _defaultSizes.get(new Integer(column.getTypeCode()));
+            size = (String) _defaultSizes.get(new Integer(column.getJdbcTypeCode()));
         }
         // we're setting the size after the precision and radix in case
         // the database prefers to return them in the size value

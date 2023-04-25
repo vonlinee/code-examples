@@ -91,20 +91,20 @@ public class PostgreSqlModelReader extends JdbcModelReader {
                 // PostgreSQL reports BYTEA and TEXT as BINARY(-1) and VARCHAR(-1) respectively
                 // Since we cannot currently use the Blob/Clob interface with BYTEA, we instead
                 // map them to LONGVARBINARY/LONGVARCHAR
-                if (column.getTypeCode() == Types.BINARY) {
-                    column.setTypeCode(Types.LONGVARBINARY);
-                } else if (column.getTypeCode() == Types.VARCHAR) {
-                    column.setTypeCode(Types.LONGVARCHAR);
+                if (column.getJdbcTypeCode() == Types.BINARY) {
+                    column.setJdbcTypeCode(Types.LONGVARBINARY);
+                } else if (column.getJdbcTypeCode() == Types.VARCHAR) {
+                    column.setJdbcTypeCode(Types.LONGVARCHAR);
                 }
             }
             // fix issue DDLUTILS-165 as postgresql-8.2-504-jdbc3.jar seems to return Integer.MAX_VALUE
             // on columns defined as TEXT.
             else if (column.getSizeAsInt() == Integer.MAX_VALUE) {
                 column.setSize(null);
-                if (column.getTypeCode() == Types.VARCHAR) {
-                    column.setTypeCode(Types.LONGVARCHAR);
-                } else if (column.getTypeCode() == Types.BINARY) {
-                    column.setTypeCode(Types.LONGVARBINARY);
+                if (column.getJdbcTypeCode() == Types.VARCHAR) {
+                    column.setJdbcTypeCode(Types.LONGVARCHAR);
+                } else if (column.getJdbcTypeCode() == Types.BINARY) {
+                    column.setJdbcTypeCode(Types.LONGVARBINARY);
                 }
             }
         }
@@ -120,7 +120,7 @@ public class PostgreSqlModelReader extends JdbcModelReader {
             } else {
                 // PostgreSQL returns default values in the forms "-9000000000000000000::bigint" or
                 // "'some value'::character varying" or "'2000-01-01'::date"
-                switch (column.getTypeCode()) {
+                switch (column.getJdbcTypeCode()) {
                     case Types.INTEGER:
                     case Types.BIGINT:
                     case Types.DECIMAL:
@@ -136,7 +136,7 @@ public class PostgreSqlModelReader extends JdbcModelReader {
                         defaultValue = extractDelimitedDefaultValue(defaultValue);
                         break;
                 }
-                if (TypeMap.isTextType(column.getTypeCode())) {
+                if (TypeMap.isTextType(column.getJdbcTypeCode())) {
                     // We assume escaping via double quote (see also the backslash_quote setting:
                     // http://www.postgresql.org/docs/7.4/interactive/runtime-config.html#RUNTIME-CONFIG-COMPATIBLE)
                     defaultValue = unescape(defaultValue, "'", "''");

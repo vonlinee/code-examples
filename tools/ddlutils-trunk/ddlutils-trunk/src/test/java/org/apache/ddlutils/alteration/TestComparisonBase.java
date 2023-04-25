@@ -102,7 +102,7 @@ public abstract class TestComparisonBase extends TestBase {
         assertEquals(name,
                 column.getName());
         assertEquals(typeCode,
-                column.getTypeCode());
+                column.getJdbcTypeCode());
         assertEquals(sizeSpec,
                 column.getSize());
         assertEquals(defaultValue,

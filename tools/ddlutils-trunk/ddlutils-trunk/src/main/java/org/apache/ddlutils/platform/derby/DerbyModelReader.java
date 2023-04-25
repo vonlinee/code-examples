@@ -54,7 +54,7 @@ public class DerbyModelReader extends JdbcModelReader {
             if ("GENERATED_BY_DEFAULT".equals(defaultValue) || defaultValue.startsWith("AUTOINCREMENT:")) {
                 column.setDefaultValue(null);
                 column.setAutoIncrement(true);
-            } else if (TypeMap.isTextType(column.getTypeCode())) {
+            } else if (TypeMap.isTextType(column.getJdbcTypeCode())) {
                 column.setDefaultValue(unescape(defaultValue, "'", "''"));
             }
         }

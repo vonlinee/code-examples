@@ -59,10 +59,10 @@ public class SapDbModelReader extends JdbcModelReader {
                 column.setDefaultValue(null);
             }
         }
-        if (column.getTypeCode() == Types.DECIMAL) {
+        if (column.getJdbcTypeCode() == Types.DECIMAL) {
             // We also perform back-mapping to BIGINT
             if ((column.getSizeAsInt() == 38) && (column.getScale() == 0)) {
-                column.setTypeCode(Types.BIGINT);
+                column.setJdbcTypeCode(Types.BIGINT);
             }
         }
         return column;

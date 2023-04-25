@@ -132,7 +132,7 @@ public class DataWriter extends PrettyPrintingXmlWriter {
                     valueAsText = value.toString();
                 }
             } else {
-                valueAsText = converter.convertToString(value, column.getTypeCode());
+                valueAsText = converter.convertToString(value, column.getJdbcTypeCode());
             }
             if (valueAsText != null) {
                 columnWriters.add(new ColumnXmlWriter(column, valueAsText));

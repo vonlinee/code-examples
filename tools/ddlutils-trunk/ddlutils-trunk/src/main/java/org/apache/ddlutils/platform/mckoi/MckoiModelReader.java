@@ -121,7 +121,7 @@ public class MckoiModelReader extends JdbcModelReader {
                     defaultValue.toLowerCase().startsWith("uniquekey('")) {
                 column.setDefaultValue(null);
                 column.setAutoIncrement(true);
-            } else if (TypeMap.isTextType(column.getTypeCode())) {
+            } else if (TypeMap.isTextType(column.getJdbcTypeCode())) {
                 column.setDefaultValue(unescape(column.getDefaultValue(), "'", "\\'"));
             }
         }

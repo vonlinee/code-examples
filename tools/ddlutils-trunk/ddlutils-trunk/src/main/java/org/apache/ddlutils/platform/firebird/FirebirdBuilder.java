@@ -153,8 +153,8 @@ public class FirebirdBuilder extends SqlBuilder {
      * {@inheritDoc}
      */
     protected String getNativeDefaultValue(Column column) {
-        if ((column.getTypeCode() == Types.BIT) || (column.getTypeCode() == Types.BOOLEAN)) {
-            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getTypeCode(), Types.SMALLINT);
+        if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
+            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getJdbcTypeCode(), Types.SMALLINT);
         } else {
             return super.getNativeDefaultValue(column);
         }
@@ -249,7 +249,7 @@ public class FirebirdBuilder extends SqlBuilder {
         boolean typeChanged = ColumnDefinitionChange.isTypeChanged(getPlatformInfo(), sourceColumn, targetColumn);
 
         if (sizeChanged || typeChanged) {
-            boolean needSubstr = TypeMap.isTextType(targetColumn.getTypeCode()) && sizeChanged &&
+            boolean needSubstr = TypeMap.isTextType(targetColumn.getJdbcTypeCode()) && sizeChanged &&
                     (targetColumn.getSize() != null) && (sourceColumn.getSizeAsInt() > targetColumn.getSizeAsInt());
 
             if (needSubstr) {

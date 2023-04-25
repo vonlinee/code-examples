@@ -103,56 +103,56 @@ public class Oracle8ModelReader extends JdbcModelReader {
             // Oracle pads the default value with spaces
             column.setDefaultValue(column.getDefaultValue().trim());
         }
-        if (column.getTypeCode() == Types.DECIMAL) {
+        if (column.getJdbcTypeCode() == Types.DECIMAL) {
             // We're back-mapping the NUMBER columns returned by Oracle
             // Note that the JDBC driver returns DECIMAL for these NUMBER columns
             switch (column.getSizeAsInt()) {
                 case 1:
                     if (column.getScale() == 0) {
-                        column.setTypeCode(Types.BIT);
+                        column.setJdbcTypeCode(Types.BIT);
                     }
                     break;
                 case 3:
                     if (column.getScale() == 0) {
-                        column.setTypeCode(Types.TINYINT);
+                        column.setJdbcTypeCode(Types.TINYINT);
                     }
                     break;
                 case 5:
                     if (column.getScale() == 0) {
-                        column.setTypeCode(Types.SMALLINT);
+                        column.setJdbcTypeCode(Types.SMALLINT);
                     }
                     break;
                 case 18:
-                    column.setTypeCode(Types.REAL);
+                    column.setJdbcTypeCode(Types.REAL);
                     break;
                 case 22:
                     if (column.getScale() == 0) {
-                        column.setTypeCode(Types.INTEGER);
+                        column.setJdbcTypeCode(Types.INTEGER);
                     }
                     break;
                 case 38:
                     if (column.getScale() == 0) {
-                        column.setTypeCode(Types.BIGINT);
+                        column.setJdbcTypeCode(Types.BIGINT);
                     } else {
-                        column.setTypeCode(Types.DOUBLE);
+                        column.setJdbcTypeCode(Types.DOUBLE);
                     }
                     break;
             }
-        } else if (column.getTypeCode() == Types.FLOAT) {
+        } else if (column.getJdbcTypeCode() == Types.FLOAT) {
             // Same for REAL, FLOAT, DOUBLE PRECISION, which all back-map to FLOAT but with
             // different sizes (63 for REAL, 126 for FLOAT/DOUBLE PRECISION)
             switch (column.getSizeAsInt()) {
                 case 63:
-                    column.setTypeCode(Types.REAL);
+                    column.setJdbcTypeCode(Types.REAL);
                     break;
                 case 126:
-                    column.setTypeCode(Types.DOUBLE);
+                    column.setJdbcTypeCode(Types.DOUBLE);
                     break;
             }
-        } else if ((column.getTypeCode() == Types.DATE) || (column.getTypeCode() == Types.TIMESTAMP)) {
+        } else if ((column.getJdbcTypeCode() == Types.DATE) || (column.getJdbcTypeCode() == Types.TIMESTAMP)) {
             // Oracle has only one DATE/TIME type, so we can't know which it is and thus map
             // it back to TIMESTAMP
-            column.setTypeCode(Types.TIMESTAMP);
+            column.setJdbcTypeCode(Types.TIMESTAMP);
 
             // we also reverse the ISO-format adaptation, and adjust the default value to timestamp
             if (column.getDefaultValue() != null) {
@@ -182,7 +182,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
                     column.setDefaultValue(timestamp.toString());
                 }
             }
-        } else if (TypeMap.isTextType(column.getTypeCode())) {
+        } else if (TypeMap.isTextType(column.getJdbcTypeCode())) {
             column.setDefaultValue(unescape(column.getDefaultValue(), "'", "''"));
         }
         return column;

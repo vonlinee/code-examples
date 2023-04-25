@@ -1,4 +1,4 @@
-package sample.spring.jpa.utils;
+package sample.utils;
 
 import java.util.Map;
 

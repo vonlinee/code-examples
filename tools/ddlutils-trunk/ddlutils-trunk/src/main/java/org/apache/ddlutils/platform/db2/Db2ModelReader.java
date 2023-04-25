@@ -101,7 +101,7 @@ public class Db2ModelReader extends JdbcModelReader {
         Column column = super.readColumn(metaData, values);
 
         if (column.getDefaultValue() != null) {
-            if (column.getTypeCode() == Types.TIME) {
+            if (column.getJdbcTypeCode() == Types.TIME) {
                 Matcher matcher = _db2TimePattern.matcher(column.getDefaultValue());
 
                 // Db2 returns "HH24.MI.SS"
@@ -121,7 +121,7 @@ public class Db2ModelReader extends JdbcModelReader {
 
                     column.setDefaultValue(newDefault.toString());
                 }
-            } else if (column.getTypeCode() == Types.TIMESTAMP) {
+            } else if (column.getJdbcTypeCode() == Types.TIMESTAMP) {
                 Matcher matcher = _db2TimestampPattern.matcher(column.getDefaultValue());
 
                 // Db2 returns "YYYY-MM-DD-HH24.MI.SS.FF"
@@ -148,7 +148,7 @@ public class Db2ModelReader extends JdbcModelReader {
 
                     column.setDefaultValue(newDefault.toString());
                 }
-            } else if (TypeMap.isTextType(column.getTypeCode())) {
+            } else if (TypeMap.isTextType(column.getJdbcTypeCode())) {
                 column.setDefaultValue(unescape(column.getDefaultValue(), "'", "''"));
             }
         }

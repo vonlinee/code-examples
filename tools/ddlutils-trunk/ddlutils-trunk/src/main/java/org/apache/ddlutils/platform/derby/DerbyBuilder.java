@@ -47,8 +47,8 @@ public class DerbyBuilder extends CloudscapeBuilder {
      * {@inheritDoc}
      */
     protected String getNativeDefaultValue(Column column) {
-        if ((column.getTypeCode() == Types.BIT) || (column.getTypeCode() == Types.BOOLEAN)) {
-            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getTypeCode(), Types.SMALLINT);
+        if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
+            return getDefaultValueHelper().convert(column.getDefaultValue(), column.getJdbcTypeCode(), Types.SMALLINT);
         } else {
             return super.getNativeDefaultValue(column);
         }
@@ -82,7 +82,7 @@ public class DerbyBuilder extends CloudscapeBuilder {
 
             // Derby currently has the limitation that it cannot convert numeric values
             // to VARCHAR, though it can convert them to CHAR
-            if (TypeMap.isNumericType(sourceColumn.getTypeCode()) &&
+            if (TypeMap.isNumericType(sourceColumn.getJdbcTypeCode()) &&
                     "VARCHAR".equalsIgnoreCase(targetNativeType)) {
                 targetNativeType = "CHAR";
             }

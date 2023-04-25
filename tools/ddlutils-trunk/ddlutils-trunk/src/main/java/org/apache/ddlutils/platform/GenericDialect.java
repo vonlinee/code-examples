@@ -2314,7 +2314,7 @@ public abstract class GenericDialect extends JdbcSupport implements DatabaseDial
             for (int columnIdx = 0; columnIdx < table.getColumnCount(); columnIdx++) {
                 Column column = table.getColumn(columnIdx);
 
-                if (TypeMap.isTextType(column.getTypeCode()) || TypeMap.isDateTimeType(column.getTypeCode())) {
+                if (TypeMap.isTextType(column.getJdbcTypeCode()) || TypeMap.isDateTimeType(column.getJdbcTypeCode())) {
                     String defaultValue = column.getDefaultValue();
 
                     if ((defaultValue != null) && (defaultValue.length() >= 2) && defaultValue.startsWith("'") && defaultValue.endsWith("'")) {
@@ -2349,7 +2349,7 @@ public abstract class GenericDialect extends JdbcSupport implements DatabaseDial
      * @param property  The property of the bean, which also defines the corresponding column
      */
     protected void setObject(PreparedStatement statement, int sqlIndex, DynaBean dynaBean, SqlDynaProperty property) throws SQLException {
-        int typeCode = property.getColumn().getTypeCode();
+        int typeCode = property.getColumn().getJdbcTypeCode();
         Object value = dynaBean.get(property.getName());
 
         setStatementParameterValue(statement, sqlIndex, typeCode, value);
@@ -2411,7 +2411,7 @@ public abstract class GenericDialect extends JdbcSupport implements DatabaseDial
         Object value = null;
 
         if (column != null) {
-            int originalJdbcType = column.getTypeCode();
+            int originalJdbcType = column.getJdbcTypeCode();
             int targetJdbcType = getPlatformInfo().getTargetJdbcType(originalJdbcType);
             int jdbcType = originalJdbcType;
 
@@ -2441,7 +2441,7 @@ public abstract class GenericDialect extends JdbcSupport implements DatabaseDial
      * @return The value
      */
     protected Object getObjectFromResultSet(ResultSet resultSet, Column column, int idx) throws SQLException {
-        int originalJdbcType = column.getTypeCode();
+        int originalJdbcType = column.getJdbcTypeCode();
         int targetJdbcType = getPlatformInfo().getTargetJdbcType(originalJdbcType);
         int jdbcType = originalJdbcType;
         Object value = null;

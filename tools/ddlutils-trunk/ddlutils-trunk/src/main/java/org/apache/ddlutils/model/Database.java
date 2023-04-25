@@ -301,7 +301,7 @@ public class Database implements SchemaObject, Serializable {
                 if ((column.getType() == null) || (column.getType().length() == 0)) {
                     throw new ModelException("The column nr. " + idx + " in table " + curTable.getName() + " has no type");
                 }
-                if ((column.getTypeCode() == Types.OTHER) && !"OTHER".equalsIgnoreCase(column.getType())) {
+                if ((column.getJdbcTypeCode() == Types.OTHER) && !"OTHER".equalsIgnoreCase(column.getType())) {
                     throw new ModelException("The column nr. " + idx + " in table " + curTable.getName() + " has an unknown type " + column.getType());
                 }
                 namesOfProcessedColumns.add(column.getName());
