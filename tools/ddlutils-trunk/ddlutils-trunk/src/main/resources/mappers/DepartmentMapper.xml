@@ -79,4 +79,69 @@
     `DEPART_ID`
     , `DEPART_NO`, `DEPART_NAME`, `TELE_PHONE`
   </sql>
+
+  <select id="listCloudServiceStatus" resultType="com.lancoo.cloudresource.domain.vo.CloudServiceStatusVO">
+    SELECT * FROM (
+    SELECT resource_base.*,
+    acc.provider, acc.account,
+    DATEDIFF(resource_base.expire_time, now()) as left_expire_days
+    FROM resource_base
+    LEFT JOIN account_info AS acc ON resource_base.account_id = acc.id
+    LEFT JOIN project_product_resource ppr ON resource_base.id = ppr.resource_id
+    LEFT JOIN product prod ON prod.id = ppr.product_id
+    LEFT JOIN project p ON p.id = ppr.project_id
+    WHERE 1 = 1
+    <if test="param.resType != null and param.resType != ''">
+      AND resource_base.table_name = #{param.resType}
+    </if>
+    <if test="param.resBelongType != null">
+      AND resource_base.belong_type = #{param.resBelongType}
+    </if>
+    <if test="param.provider != null and param.provider != ''">
+      AND INSTR(acc.provider, #{param.provider}) <![CDATA[>]]> 0
+    </if>
+    <if test="param.productDutyPerson != null and param.productDutyPerson != ''">
+      AND INSTR(prod.owner_name, #{param.productDutyPerson}) <![CDATA[>]]> 0
+    </if>
+    <if test="param.expireTimeStart != null">
+      AND resource_base.expire_time <![CDATA[>=]]> #{param.expireTimeStart}
+    </if>
+    <if test="param.expireTimeEnd != null">
+      AND resource_base.expire_time <![CDATA[<=]]> #{param.expireTimeEnd}
+    </if>
+    <if test="param.contractUsername != null and param.contractUsername != ''">
+      AND INSTR(resource_base.contract_username, #{param.contractUsername}) <![CDATA[>]]> 0
+    </if>
+    <if test="param.contractSerialNumber != null and param.contractSerialNumber != ''">
+      AND INSTR(resource_base.contract_serial_number, #{param.contractSerialNumber}) <![CDATA[>]]> 0
+    </if>
+    <if test="param.startTimeStart != null">
+      AND resource_base.start_time <![CDATA[>=]]> #{param.startTimeStart}
+    </if>
+    <if test="param.startTimeEnd != null">
+      AND resource_base.start_time <![CDATA[<=]]> #{param.startTimeEnd}
+    </if>
+    <if test="param.resName != null and param.resName != ''">
+      AND INSTR(resource_base.resource_name, #{param.resName}) <![CDATA[>]]> 0
+    </if>
+    ) A
+    <where>
+      <if test="param.leftExpireDays != null">
+        AND A.left_expire_days <![CDATA[<=]]> #{param.leftExpireDays}
+      </if>
+    </where>
+    ORDER BY
+    <choose>
+      <when test="param.startTimeOrder != null and param.startTimeOrder == 'asc'">
+        A.start_time ASC,
+      </when>
+      <otherwise>A.start_time DESC,</otherwise>
+    </choose>
+    <choose>
+      <when test="param.expireTimeOrder != null and param.expireTimeOrder == 'asc'">
+        A.expire_time ASC
+      </when>
+      <otherwise>A.expire_time DESC</otherwise>
+    </choose>
+  </select>
 </mapper>
