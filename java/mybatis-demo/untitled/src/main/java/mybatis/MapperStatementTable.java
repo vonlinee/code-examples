@@ -1,18 +1,16 @@
 package mybatis;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.util.Callback;
-import ognl.Ognl;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import javafx.util.StringConverter;
+import mybatis.tree.TreeNode;
+import mybatis.tree.Visitor;
 
 /**
  * Mapper 变量表
@@ -37,51 +35,111 @@ public class MapperStatementTable extends TreeTableView<NamedValue> {
             }
             return new SimpleStringProperty(value.getName());
         });
-        TreeTableColumn<NamedValue, String> col_value = new TreeTableColumn<>("值");
+        TreeTableColumn<NamedValue, Object> col_value = new TreeTableColumn<>("值");
 
-        col_value.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<NamedValue, String>, ObservableValue<String>>() {
+        col_value.setCellValueFactory(param -> {
+            TreeItem<NamedValue> item = param.getValue();
+            if (item == null) {
+                return new SimpleObjectProperty<>();
+            }
+            // 目录节点
+            if (!item.getChildren().isEmpty()) {
+                return new SimpleObjectProperty<>();
+            }
+            NamedValue value = item.getValue();
+            if (value == null) {
+                return new SimpleObjectProperty<>();
+            }
+            if (value.getValue() == null) {
+                return new SimpleObjectProperty<>();
+            }
+            return new SimpleObjectProperty<>(value.getValue());
+        });
+
+        col_value.setCellFactory(new Callback<TreeTableColumn<NamedValue, Object>, TreeTableCell<NamedValue, Object>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<NamedValue, String> param) {
-                TreeItem<NamedValue> item = param.getValue();
-                if (item == null) {
-                    return new SimpleStringProperty();
-                }
-                // 目录节点
-                if (!item.getChildren().isEmpty()) {
-                    return new SimpleStringProperty();
-                }
-                NamedValue value = item.getValue();
-                if (value == null) {
-                    return new SimpleStringProperty();
-                }
-                return new SimpleStringProperty(String.valueOf(value.getValue()));
+            public TreeTableCell<NamedValue, Object> call(TreeTableColumn<NamedValue, Object> param) {
+                TextFieldTreeTableCell<NamedValue, Object> cell = new TextFieldTreeTableCell<NamedValue, Object>(new StringConverter<Object>() {
+                    @Override
+                    public String toString(Object object) {
+                        if (object == null) {
+                            return null;
+                        }
+                        return object.toString();
+                    }
+
+                    @Override
+                    public Object fromString(String string) {
+                        return string;
+                    }
+                }) {
+                    @Override
+                    public void startEdit() {
+                        super.startEdit();
+                    }
+                };
+                cell.setEditable(true);
+                return cell;
+            }
+        });
+        col_value.setEditable(true);
+
+        col_value.setOnEditCommit(event -> {
+            Object newValue = event.getNewValue();
+            TreeItem<NamedValue> rowValue = event.getRowValue();
+            NamedValue value = rowValue.getValue();
+            // 手动绑定数据
+            if (value != null) {
+                value.setValue(newValue);
             }
         });
 
-        col_value.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
-        col_value.setEditable(true);
-
         setRoot(root = new TreeItem<>());
-
-        TreeItem<NamedValue> name = new TreeItem<>(new NamedValue("name", 1));
-        name.getChildren().add(new TreeItem<>(new NamedValue("1", 1)));
-        name.getChildren().add(new TreeItem<>(new NamedValue("2", 1)));
-        name.getChildren().add(new TreeItem<>(new NamedValue("3", 1)));
-        name.getChildren().add(new TreeItem<>(new NamedValue("4", 1)));
-        root.getChildren().add(name);
-        root.getChildren().add(new TreeItem<>(new NamedValue("name", 1)));
 
         getColumns().add(col_name);
         getColumns().add(col_value);
     }
 
-    public void addItems(Collection<String> collection) {
-        Map<String, String> map = new HashMap<>();
-        for (String value : collection) {
-            String[] fragments = value.split("\\.");
-            for (String fragment : fragments) {
+    public <T> void addItems(TreeNode<T> root) {
+        // 去掉根节点
+        for (TreeNode<T> child : root.getChildren()) {
+            child.accept(new MyVisitor<>(this.root));
+        }
+    }
 
+    public static class MyVisitor<T> implements Visitor<T> {
+
+        TreeItem<NamedValue> parentItem;
+
+        public MyVisitor(TreeItem<NamedValue> root) {
+            this.parentItem = root;
+        }
+
+        @Override
+        public Visitor<T> visitTree(TreeNode<T> tree) {
+            return new MyVisitor<>(this.parentItem);
+        }
+
+        /**
+         * 当前节点
+         * @param parent 父节点
+         * @param data   当前节点的数据
+         */
+        @Override
+        public void visitData(TreeNode<T> parent, T data) {
+            // 当前节点
+            TreeItem<NamedValue> current = new TreeItem<>(new NamedValue(String.valueOf(data), null));
+            this.parentItem.getChildren().add(current);
+            // 默认展开
+            current.setExpanded(true);
+            if (parent.hasChildren()) {
+                // 向子树遍历
+                this.parentItem = current;
             }
         }
+    }
+
+    public void clear() {
+        this.root.getChildren().clear();
     }
 }

@@ -11,15 +11,8 @@
 
   <select id="selectList" parameterType="map" resultMap="BaseResultMap">
     select *
-    from department ${name1}
-    <where>
-      <if test="name == null">
-        1 = 2
-      </if>
-    </where>
-    <foreach collection="list" item="i">
-      #{i}
-    </foreach>
+    from department
+    where dept_id = ${param.deptId}
   </select>
 
   <select id="listCloudServiceStatus" resultType="int">

@@ -1,74 +1,70 @@
 package mybatis.tree;
 
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.util.LinkedList;
 import java.util.List;
 
-/**
- * 每个节点都会携带一个值
- */
-public class TreeNode {
-
-    private Object value;
+public class TreeNode<T> implements Visitable<T> {
+    // LinkedHashSet保持插入顺序
+    private List<TreeNode<T>> children = new LinkedList<>();
+    private T data;
 
     /**
      * 父节点
      */
-    private TreeNode parent;
+    private TreeNode<T> parent;
 
-    /**
-     * 每个节点的值都可以不同
-     */
-    private List<TreeNode> children;
-
-    public TreeNode(Object value) {
-        this.value = value;
-    }
-
-    public TreeNode(Object value, TreeNode parent) {
-        this.value = value;
-        this.parent = parent;
-    }
-
-    public List<TreeNode> getChildren() {
-        if (children == null) {
-            children = new ArrayList<>();
-        }
-        return children;
-    }
-
-    public void setParent(TreeNode parent) {
-        this.parent = parent;
-    }
-
-    public TreeNode getParent() {
-        return parent;
-    }
-
-    /**
-     * 获取此节点的值
-     * @param <V> 期望的值类型
-     * @return 当前Node的值
-     * @throws ClassCastException 类型转换错误
-     */
-    @SuppressWarnings("unchecked")
-    public <V> V getValue() {
-        return (V) value;
-    }
-
-    public void setValue(Object value) {
-        this.value = value;
-    }
-
-    public void addChild(TreeNode... children) {
-        final List<TreeNode> childrenNodes = getChildren();
-        for (TreeNode child : children) {
-            child.setParent(this);
-            childrenNodes.add(child);
-        }
+    public TreeNode(T data) {
+        this.data = data;
     }
 
     @Override
-    public String toString() {
-        return String.valueOf(this.value);
+    public void accept(Visitor<T> visitor) {
+        // 当前节点
+        visitor.visitData(this, data);
+        // 子节点
+        visitChildren(visitor);
+    }
+
+    protected void visitChildren(Visitor<T> visitor) {
+        for (TreeNode<T> child : children) {
+            // 遍历完一颗子树，产生一个新的Visitor
+            Visitor<T> newVisitor = visitor.visitTree(child);
+            child.accept(newVisitor);
+        }
+    }
+
+    public TreeNode<T> addChild(T data) {
+        for (TreeNode<T> child : children) {
+            if (child.data.equals(data)) {
+                return child;
+            }
+        }
+        return addChild(new TreeNode<>(data));
+    }
+
+    public TreeNode<T> addChild(TreeNode<T> child) {
+        children.add(child);
+        return child;
+    }
+
+    public List<TreeNode<T>> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<TreeNode<T>> children) {
+        this.children = children;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public boolean hasChildren() {
+        return !this.children.isEmpty();
     }
 }
