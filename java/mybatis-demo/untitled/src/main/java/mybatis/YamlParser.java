@@ -81,7 +81,7 @@ public class YamlParser {
     }
 
     private static Yaml createYaml() {
-        return new Yaml(new Constructor());
+        return new Yaml();
     }
 
     @SuppressWarnings("unchecked")
