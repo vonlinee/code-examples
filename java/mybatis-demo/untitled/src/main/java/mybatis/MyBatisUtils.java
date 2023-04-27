@@ -1,5 +1,8 @@
 package mybatis;
 
+import mybatis.entity.Department;
+import mybatis.mapper.DepartmentMapper;
+import mybatis.tree.TreeNode;
 import ognl.*;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -8,6 +11,7 @@ import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.parsing.XPathParser;
 import org.apache.ibatis.scripting.xmltags.*;
 import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
@@ -18,34 +22,67 @@ import java.util.stream.Collectors;
 
 public class MyBatisUtils {
 
-    public static void parseXml(String xml) {
+    public static ParseResult parseXml(String xml) {
         // 直接获取XML中的节点
         XPathParser xPathParser = new XPathParser(xml, false, null, new IgnoreDTDEntityResolver());
         XNode selectNode = xPathParser.evalNode("select");
-
         Configuration configuration = new Configuration();
         MyXmlStatemtnBuilder statementParser = new MyXmlStatemtnBuilder(configuration, selectNode);
         // 解析结果会放到 Configuration里
         statementParser.parseStatementNode();
-
         Collection<MappedStatement> mappedStatements = configuration.getMappedStatements();
-
         // MyBatis会存在重复的两个 MappedStatement，但是ID不一样
         // StrictMap的put方法
         List<MappedStatement> list = mappedStatements.stream().distinct().collect(Collectors.toList());
 
-        for (MappedStatement mappedStatement : list) {
-            Set<String> ognlVar = getOgnlVar(mappedStatement);
+        MappedStatement mappedStatement = list.get(0);
+        Set<String> ognlVar = getOgnlVar(mappedStatement);
+        return new ParseResult(tree(ognlVar), mappedStatement);
+    }
 
+    public static TreeNode<String> tree(Set<String> ognlVar) {
+        TreeNode<String> forest = new TreeNode<>("root");
+        TreeNode<String> current = forest;
+        for (String expression : ognlVar) {
+            TreeNode<String> root = current;
+            for (String data : expression.split("\\.")) {
+                current = current.addChild(data);
+            }
+            current = root;
         }
+        return forest;
     }
 
     public static void main(String[] args) throws IOException, OgnlException {
-        test2();
+        test3();
     }
 
-    public static void test2() {
-        parseXml("  <select id=\"listCloudServiceStatus\" resultType=\"com.lancoo.cloudresource.domain.vo.CloudServiceStatusVO\">\n" +
+    public static void test3() {
+        // 1.指定MyBatis主配置文件位置
+        String resource = "mybatis-config.xml";
+        // 2.加载配置文件
+        InputStream inputStream = null;
+        try {
+            inputStream = Resources.getResourceAsStream(resource);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 解析XML
+        SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(inputStream);
+        Configuration configuration = factory.getConfiguration();
+
+        SqlSession sqlSession = factory.openSession();
+
+        DepartmentMapper mapper = sqlSession.getMapper(DepartmentMapper.class);
+
+        Map<String, Object> map = new HashMap<>();
+        List<Department> list = mapper.selectList(map);
+
+        System.out.println(list);
+    }
+
+    public static ParseResult test2() {
+        return parseXml("  <select id=\"listCloudServiceStatus\" resultType=\"com.lancoo.cloudresource.domain.vo.CloudServiceStatusVO\">\n" +
                 "    SELECT * FROM (\n" +
                 "    SELECT resource_base.*,\n" +
                 "    acc.provider, acc.account,\n" +
@@ -133,11 +170,8 @@ public class MyBatisUtils {
             SqlNode rootNode = (SqlNode) ReflectionUtils.getValue(dss, "rootSqlNode");
             HashSet<String> result = new HashSet<>();
             searchExpressions(rootNode, result);
-            System.out.println(result);
         }
-
         Collection<MappedStatement> mappedStatements = configuration.getMappedStatements();
-
         System.out.println(mappedStatements);
     }
 

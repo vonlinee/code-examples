@@ -1,16 +1,27 @@
 package mybatis.tree;
 
+import com.alibaba.fastjson2.JSON;
+
+import java.util.Arrays;
+
 public class Main {
 
     public static void main(String[] args) {
+        test2();
 
-        TreeNode node = new TreeNode("A");
+    }
 
-        TreeNode node1 = new TreeNode("A1");
-        TreeNode node2 = new TreeNode("A2");
+    public static void test2() {
+        TreeNode<String> forest = new TreeNode<>("root");
+        TreeNode<String> current = forest;
+        for (String tree : Arrays.asList("user.name", "user.hooby.1")) {
+            TreeNode<String> root = current;
+            for (String data : tree.split("\\.")) {
+                current = current.addChild(data);
+            }
+            current = root;
+        }
 
-        node.addChild(node1, node2);
-
-        System.out.println(node);
+        System.out.println(JSON.toJSONString(forest));
     }
 }

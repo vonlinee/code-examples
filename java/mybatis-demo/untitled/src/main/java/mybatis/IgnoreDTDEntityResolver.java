@@ -7,6 +7,9 @@ import org.xml.sax.SAXException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+/**
+ * 忽略DTD验证
+ */
 public class IgnoreDTDEntityResolver implements EntityResolver {
 
     @Override
