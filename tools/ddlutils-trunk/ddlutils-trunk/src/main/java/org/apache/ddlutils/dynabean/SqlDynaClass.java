@@ -21,7 +21,7 @@ public class SqlDynaClass extends BasicDynaClass {
     /**
      * The table for which this dyna class is defined.
      */
-    private Table table;
+    private final Table table;
     /**
      * The primary key dyna properties.
      */
@@ -81,7 +81,7 @@ public class SqlDynaClass extends BasicDynaClass {
      * @return The properties
      */
     public SqlDynaProperty[] getSqlDynaProperties() {
-        DynaProperty[] props = getDynaProperties();
+        SqlDynaProperty[] props = (SqlDynaProperty[]) getDynaProperties();
         SqlDynaProperty[] result = new SqlDynaProperty[props.length];
         System.arraycopy(props, 0, result, 0, props.length);
         return result;
@@ -127,11 +127,9 @@ public class SqlDynaClass extends BasicDynaClass {
         List<SqlDynaProperty> pkProps = new ArrayList<>();
         List<SqlDynaProperty> nonPkProps = new ArrayList<>();
         DynaProperty[] properties = getDynaProperties();
-
-        for (int idx = 0; idx < properties.length; idx++) {
-            if (properties[idx] instanceof SqlDynaProperty) {
-                SqlDynaProperty sqlProperty = (SqlDynaProperty) properties[idx];
-
+        for (DynaProperty property : properties) {
+            if (property instanceof SqlDynaProperty) {
+                SqlDynaProperty sqlProperty = (SqlDynaProperty) property;
                 if (sqlProperty.isPrimaryKey()) {
                     pkProps.add(sqlProperty);
                 } else {

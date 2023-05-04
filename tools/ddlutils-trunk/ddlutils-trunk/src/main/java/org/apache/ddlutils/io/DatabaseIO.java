@@ -8,10 +8,12 @@ import org.xml.sax.InputSource;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.util.function.Consumer;
 
 /**
  * This class provides functions to read and write database models from/to XML.
@@ -364,25 +366,23 @@ public class DatabaseIO {
      * @param table     The table
      */
     private void readTableSubElements(XMLStreamReader xmlReader, Table table) throws XMLStreamException, IOException {
-        int eventType = XMLStreamReader.START_ELEMENT;
-        while (eventType != XMLStreamReader.END_ELEMENT) {
+        int eventType = XMLStreamConstants.START_ELEMENT;
+        while (eventType != XMLStreamConstants.END_ELEMENT) {
             eventType = xmlReader.next();
-            if (eventType == XMLStreamReader.START_ELEMENT) {
-                continue;
-            }
-            System.out.println(eventType);
-            QName elemQName = xmlReader.getName();
-            if (isQnameEquals(elemQName, QNAME_ELEMENT_COLUMN)) {
-                // column
-                table.addColumn(readColumnElement(xmlReader));
-            } else if (isQnameEquals(elemQName, QNAME_ELEMENT_FOREIGN_KEY)) {
-                table.addForeignKey(readForeignKeyElement(xmlReader));
-            } else if (isQnameEquals(elemQName, QNAME_ELEMENT_INDEX)) {
-                table.addIndex(readIndexElement(xmlReader));
-            } else if (isQnameEquals(elemQName, QNAME_ELEMENT_UNIQUE)) {
-                table.addIndex(readUniqueElement(xmlReader));
-            } else {
-                readOverElement(xmlReader);
+            if (eventType == XMLStreamConstants.START_ELEMENT) {
+                QName elemQName = xmlReader.getName();
+                if (isQnameEquals(elemQName, QNAME_ELEMENT_COLUMN)) {
+                    // column
+                    table.addColumn(readColumnElement(xmlReader));
+                } else if (isQnameEquals(elemQName, QNAME_ELEMENT_FOREIGN_KEY)) {
+                    table.addForeignKey(readForeignKeyElement(xmlReader));
+                } else if (isQnameEquals(elemQName, QNAME_ELEMENT_INDEX)) {
+                    table.addIndex(readIndexElement(xmlReader));
+                } else if (isQnameEquals(elemQName, QNAME_ELEMENT_UNIQUE)) {
+                    table.addIndex(readUniqueElement(xmlReader));
+                } else {
+                    readOverElement(xmlReader);
+                }
             }
         }
     }
@@ -560,7 +560,6 @@ public class DatabaseIO {
             eventType = xmlReader.next();
             if (eventType == XMLStreamReader.START_ELEMENT) {
                 QName elemQName = xmlReader.getName();
-
                 if (isQnameEquals(elemQName, QNAME_ELEMENT_UNIQUE_COLUMN)) {
                     index.addColumn(readIndexColumnElement(xmlReader));
                 } else {

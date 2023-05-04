@@ -28,9 +28,9 @@ import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
-import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
 import org.apache.ddlutils.platform.GenericDatabasePlatform;
+import org.apache.ddlutils.platform.SqlBuildContext;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -72,7 +72,6 @@ public class SybasePlatform extends GenericDatabasePlatform {
      */
     public SybasePlatform() {
         PlatformInfo info = getPlatformInfo();
-
         info.setMaxIdentifierLength(28);
         info.setNullAsDefaultValueRequired(true);
         info.setIdentityColumnAutomaticallyRequired(true);
@@ -118,6 +117,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return DATABASENAME;
     }
@@ -146,6 +146,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected Object extractColumnValue(ResultSet resultSet, String columnName, int columnIdx, int jdbcType) throws DatabaseOperationException, SQLException {
         boolean useIdx = (columnName == null);
 
@@ -158,7 +159,6 @@ public class SybasePlatform extends GenericDatabasePlatform {
                 byte[] buf = new byte[65536];
                 byte[] result = new byte[0];
                 int len;
-
                 try {
                     do {
                         len = stream.read(buf);
@@ -186,6 +186,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void setStatementParameterValue(PreparedStatement statement, int sqlIndex, int typeCode, Object value) throws SQLException {
         if ((typeCode == Types.BLOB) || (typeCode == Types.LONGVARBINARY)) {
             // jConnect doesn't like the BLOB type, but works without problems with LONGVARBINARY
@@ -210,6 +211,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List fetch(Database model, String sql, Collection parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.fetch(model, sql, parameters, queryHints, start, end);
@@ -218,6 +220,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List fetch(Database model, String sql, Table[] queryHints, int start, int end) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.fetch(model, sql, queryHints, start, end);
@@ -226,6 +229,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Iterator query(Database model, String sql, Collection parameters, Table[] queryHints) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.query(model, sql, parameters, queryHints);
@@ -234,11 +238,11 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Iterator query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.query(model, sql, queryHints);
     }
-
 
     /**
      * Determines whether we need to use identity override mode for the given table.
@@ -254,6 +258,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void beforeInsert(Connection connection, Table table) throws SQLException {
         if (useIdentityOverrideFor(table)) {
             SybaseBuilder builder = (SybaseBuilder) getSqlBuilder();
@@ -272,6 +277,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void afterInsert(Connection connection, Table table) throws SQLException {
         if (useIdentityOverrideFor(table)) {
             SybaseBuilder builder = (SybaseBuilder) getSqlBuilder();
@@ -290,6 +296,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void beforeUpdate(Connection connection, Table table) throws SQLException {
         beforeInsert(connection, table);
     }
@@ -297,6 +304,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void afterUpdate(Connection connection, Table table) throws SQLException {
         afterInsert(connection, table);
     }
@@ -304,6 +312,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected ModelComparator getModelComparator() {
         ModelComparator comparator = super.getModelComparator();
 
@@ -315,6 +324,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
             protected boolean isSupported(Table intermediateTable, TableChange change) {
@@ -348,6 +358,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected Database processChanges(Database model, Collection changes, SqlBuildContext params) throws IOException, DdlUtilsException {
         if (!changes.isEmpty()) {
             ((SybaseBuilder) getSqlBuilder()).turnOnQuotation();

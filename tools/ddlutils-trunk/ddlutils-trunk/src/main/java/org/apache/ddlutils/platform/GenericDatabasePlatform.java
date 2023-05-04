@@ -24,6 +24,8 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
+import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 
 /**
  * Base class for platform implementations.
@@ -1351,7 +1353,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List fetch(Database model, String sql, int start, int end) throws DatabaseOperationException {
+    public List<DynaBean> fetch(Database model, String sql, int start, int end) throws DatabaseOperationException {
         return fetch(model, sql, (Table[]) null, start, end);
     }
 
@@ -1359,11 +1361,11 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List fetch(Database model, String sql, Table[] queryHints, int start, int end) throws DatabaseOperationException {
+    public List<DynaBean> fetch(Database model, String sql, Table[] queryHints, int start, int end) throws DatabaseOperationException {
         Connection connection = borrowConnection();
         Statement statement = null;
-        ResultSet resultSet = null;
-        List result = new ArrayList();
+        ResultSet resultSet;
+        List<DynaBean> result = new ArrayList<>();
 
         try {
             statement = connection.createStatement();
@@ -1420,15 +1422,15 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     public List fetch(Database model, String sql, Collection parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException {
         Connection connection = borrowConnection();
         PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        List result = new ArrayList();
+        ResultSet resultSet;
+        List<DynaBean> result = new ArrayList<>();
 
         try {
             statement = connection.prepareStatement(sql);
 
             int paramIdx = 1;
 
-            for (Iterator iter = parameters.iterator(); iter.hasNext(); paramIdx++) {
+            for (Iterator<?> iter = parameters.iterator(); iter.hasNext(); paramIdx++) {
                 Object arg = iter.next();
 
                 if (arg instanceof BigDecimal) {
@@ -1470,7 +1472,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     protected String createInsertSql(Database model, SqlDynaClass dynaClass, SqlDynaProperty[] properties, DynaBean bean) {
         Table table = model.findTable(dynaClass.getTableName());
-        HashMap columnValues = toColumnValues(properties, bean);
+        HashMap<String, Object> columnValues = toColumnValues(properties, bean);
 
         return _builder.getInsertSql(table, columnValues, bean == null);
     }
@@ -1513,29 +1515,21 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     private SqlDynaProperty[] getPropertiesForInsertion(Database model, SqlDynaClass dynaClass, final DynaBean bean) {
         SqlDynaProperty[] properties = dynaClass.getSqlDynaProperties();
-
-        Collection result = CollectionUtils.select(Arrays.asList(properties), new Predicate() {
-            @Override
-            public boolean evaluate(Object input) {
-                SqlDynaProperty prop = (SqlDynaProperty) input;
-
-                if (bean.get(prop.getName()) != null) {
-                    // we ignore properties for which a value is present in the bean
-                    // only if they are identity and identity override is off or
-                    // the platform does not allow the override of the auto-increment
-                    // specification
-                    return !prop.getColumn()
-                            .isAutoIncrement() || (isIdentityOverrideOn() && getPlatformInfo().isIdentityOverrideAllowed());
-                } else {
-                    // we also return properties without a value in the bean
-                    // if they ain't auto-increment and don't have a default value
-                    // in this case, a NULL is inserted
-                    return !prop.getColumn().isAutoIncrement() && (prop.getColumn().getDefaultValue() == null);
-                }
+        return Arrays.stream(properties).filter(input -> {
+            if (bean.get(input.getName()) != null) {
+                // we ignore properties for which a value is present in the bean
+                // only if they are identity and identity override is off or
+                // the platform does not allow the override of the auto-increment
+                // specification
+                return !input.getColumn()
+                        .isAutoIncrement() || (isIdentityOverrideOn() && getPlatformInfo().isIdentityOverrideAllowed());
+            } else {
+                // we also return properties without a value in the bean
+                // if they ain't auto-increment and don't have a default value
+                // in this case, a NULL is inserted
+                return !input.getColumn().isAutoIncrement() && (input.getColumn().getDefaultValue() == null);
             }
-        });
-
-        return (SqlDynaProperty[]) result.toArray(new SqlDynaProperty[0]);
+        }).toArray(SqlDynaProperty[]::new);
     }
 
     /**
@@ -1549,25 +1543,20 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     private Column[] getRelevantIdentityColumns(Database model, SqlDynaClass dynaClass, final DynaBean bean) {
         SqlDynaProperty[] properties = dynaClass.getSqlDynaProperties();
 
-        Collection relevantProperties = CollectionUtils.select(Arrays.asList(properties), new Predicate() {
-            @Override
-            public boolean evaluate(Object input) {
-                SqlDynaProperty prop = (SqlDynaProperty) input;
-
-                // we only want those identity columns that were really specified by the DB
-                // if the platform allows specification of values for identity columns
-                // in INSERT/UPDATE statements, then we need to filter the corresponding
-                // columns out
-                return prop.getColumn()
-                        .isAutoIncrement() && (!isIdentityOverrideOn() || !getPlatformInfo().isIdentityOverrideAllowed() || (bean.get(prop.getName()) == null));
-            }
-        });
+        Collection<SqlDynaProperty> relevantProperties = Arrays.stream(properties).filter(input -> {
+            // we only want those identity columns that were really specified by the DB
+            // if the platform allows specification of values for identity columns
+            // in INSERT/UPDATE statements, then we need to filter the corresponding
+            // columns out
+            return input.getColumn()
+                    .isAutoIncrement() && (!isIdentityOverrideOn() || !getPlatformInfo().isIdentityOverrideAllowed() || (bean.get(input.getName()) == null));
+        }).collect(Collectors.toList());
 
         Column[] columns = new Column[relevantProperties.size()];
         int idx = 0;
 
-        for (Iterator propIt = relevantProperties.iterator(); propIt.hasNext(); idx++) {
-            columns[idx] = ((SqlDynaProperty) propIt.next()).getColumn();
+        for (Iterator<SqlDynaProperty> propIt = relevantProperties.iterator(); propIt.hasNext(); idx++) {
+            columns[idx] = propIt.next().getColumn();
         }
         return columns;
     }
@@ -1658,11 +1647,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
 
                     PropertyUtils.setProperty(dynaBean, autoIncrColumns[idx].getName(), value);
                 }
-            } catch (NoSuchMethodException ex) {
-                // Can't happen because we're using dyna beans
-            } catch (IllegalAccessException ex) {
-                // Can't happen because we're using dyna beans
-            } catch (InvocationTargetException ex) {
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ex) {
                 // Can't happen because we're using dyna beans
             } catch (SQLException ex) {
                 throw new DatabaseOperationException("Error while retrieving the identity column value(s) from the database", ex);
@@ -1704,15 +1689,14 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
-    public void insert(Connection connection, Database model, Collection dynaBeans) throws DatabaseOperationException {
+    public void insert(Connection connection, Database model, Collection<DynaBean> dynaBeans) throws DatabaseOperationException {
         SqlDynaClass dynaClass = null;
         SqlDynaProperty[] properties = null;
         PreparedStatement statement = null;
         int addedStmts = 0;
         boolean identityWarningPrinted = false;
 
-        for (Iterator it = dynaBeans.iterator(); it.hasNext(); ) {
-            DynaBean dynaBean = (DynaBean) it.next();
+        for (DynaBean dynaBean : dynaBeans) {
             SqlDynaClass curDynaClass = model.getDynaClassFor(dynaBean);
 
             if (curDynaClass != dynaClass) {
@@ -1748,6 +1732,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
                 for (int idx = 0; idx < properties.length; idx++) {
                     setObject(statement, idx + 1, dynaBean, properties[idx]);
                 }
+                assert statement != null;
                 statement.addBatch();
                 addedStmts++;
             } catch (SQLException ex) {
@@ -1797,8 +1782,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
                 }
             } catch (SQLException ex) {
                 if (ex instanceof BatchUpdateException) {
-                    SQLException sqlEx = ((BatchUpdateException) ex).getNextException();
-
+                    SQLException sqlEx = ex.getNextException();
                     throw new DatabaseOperationException("Error while inserting into the database", sqlEx);
                 } else {
                     throw new DatabaseOperationException("Error while inserting into the database", ex);
@@ -1810,6 +1794,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void insert(Database model, Collection dynaBeans) throws DatabaseOperationException {
         Connection connection = borrowConnection();
         try {
@@ -1850,7 +1835,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     protected String createUpdateSql(Database model, SqlDynaClass dynaClass, SqlDynaProperty[] primaryKeys, SqlDynaProperty[] properties, DynaBean bean) {
         Table table = model.findTable(dynaClass.getTableName());
-        HashMap columnValues = toColumnValues(properties, bean);
+        HashMap<String, Object> columnValues = toColumnValues(properties, bean);
 
         columnValues.putAll(toColumnValues(primaryKeys, bean));
 
@@ -1871,8 +1856,8 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     protected String createUpdateSql(Database model, SqlDynaClass dynaClass, SqlDynaProperty[] primaryKeys, SqlDynaProperty[] properties, DynaBean oldBean, DynaBean newBean) {
         Table table = model.findTable(dynaClass.getTableName());
-        HashMap oldColumnValues = toColumnValues(primaryKeys, oldBean);
-        HashMap newColumnValues = toColumnValues(properties, newBean);
+        HashMap<String, Object> oldColumnValues = toColumnValues(primaryKeys, oldBean);
+        HashMap<String, Object> newColumnValues = toColumnValues(properties, newBean);
 
         if (primaryKeys.length == 0) {
             _log.info("Cannot update instances of type " + dynaClass + " because it has no primary keys");
@@ -2151,7 +2136,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     protected String createDeleteSql(Database model, SqlDynaClass dynaClass, SqlDynaProperty[] primaryKeys, DynaBean bean) {
         Table table = model.findTable(dynaClass.getTableName());
-        HashMap pkValues = toColumnValues(primaryKeys, bean);
+        HashMap<String, Object> pkValues = toColumnValues(primaryKeys, bean);
 
         return _builder.getDeleteSql(table, pkValues, bean == null);
     }
@@ -2310,11 +2295,11 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * @param bean       The bean
      * @return The values indexed by the column names
      */
-    protected HashMap toColumnValues(SqlDynaProperty[] properties, DynaBean bean) {
-        HashMap result = new HashMap();
+    protected HashMap<String, Object> toColumnValues(SqlDynaProperty[] properties, DynaBean bean) {
+        HashMap<String, Object> result = new HashMap<>();
 
-        for (int idx = 0; idx < properties.length; idx++) {
-            result.put(properties[idx].getName(), bean == null ? null : bean.get(properties[idx].getName()));
+        for (SqlDynaProperty property : properties) {
+            result.put(property.getName(), bean == null ? null : bean.get(property.getName()));
         }
         return result;
     }

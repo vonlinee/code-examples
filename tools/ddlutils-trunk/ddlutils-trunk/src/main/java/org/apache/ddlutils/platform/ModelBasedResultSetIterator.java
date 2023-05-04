@@ -42,7 +42,7 @@ public class ModelBasedResultSetIterator implements Iterator<DynaBean> {
     /**
      * Maps column names to properties.
      */
-    private Map<String, String> _columnsToProperties = new LinkedHashMap<>();
+    private final Map<String, String> _columnsToProperties = new LinkedHashMap<>();
     /**
      * Whether the next call to hasNext or next needs advancement.
      */
@@ -110,7 +110,7 @@ public class ModelBasedResultSetIterator implements Iterator<DynaBean> {
             if (table == null) {
                 // not enough info in the meta data of the result set, lets try the
                 // user-supplied query hints
-                table = (Table) _preparedQueryHints.get(_caseSensitive ? columnName : columnName.toLowerCase());
+                table = _preparedQueryHints.get(_caseSensitive ? columnName : columnName.toLowerCase());
                 tableOfColumn = (table == null ? null : table.getName());
             }
             if (tableName == null) {
@@ -285,7 +285,7 @@ public class ModelBasedResultSetIterator implements Iterator<DynaBean> {
      * {@inheritDoc}
      */
     @Override
-    protected void finalize() throws Throwable {
+    protected void finalize() throws Throwable{
         cleanUp();
     }
 
