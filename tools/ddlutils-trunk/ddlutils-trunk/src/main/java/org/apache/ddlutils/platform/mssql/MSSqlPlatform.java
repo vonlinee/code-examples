@@ -29,7 +29,7 @@ import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.GenericDialect;
+import org.apache.ddlutils.platform.GenericDatabasePlatform;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -41,7 +41,7 @@ import java.util.Collection;
  * The platform implementation for the Microsoft SQL Server database.
  * @version $Revision: 231306 $
  */
-public class MSSqlPlatform extends GenericDialect {
+public class MSSqlPlatform extends GenericDatabasePlatform {
     /**
      * Database name of this platform.
      */

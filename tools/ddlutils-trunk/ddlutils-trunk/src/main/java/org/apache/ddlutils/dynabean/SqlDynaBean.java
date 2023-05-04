@@ -1,24 +1,5 @@
 package org.apache.ddlutils.dynabean;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.beanutils.BasicDynaBean;
 import org.apache.commons.beanutils.DynaClass;
 import org.apache.commons.beanutils.DynaProperty;
@@ -45,8 +26,9 @@ public class SqlDynaBean extends BasicDynaBean {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         DynaClass type = getDynaClass();
         DynaProperty[] props = type.getDynaProperties();
 
@@ -66,6 +48,7 @@ public class SqlDynaBean extends BasicDynaBean {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int hashCode() {
         return toString().hashCode();
     }
@@ -73,6 +56,7 @@ public class SqlDynaBean extends BasicDynaBean {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof SqlDynaBean) {
             SqlDynaBean other = (SqlDynaBean) obj;
@@ -81,9 +65,9 @@ public class SqlDynaBean extends BasicDynaBean {
             if (dynaClass.equals(other.getDynaClass())) {
                 DynaProperty[] props = dynaClass.getDynaProperties();
 
-                for (int idx = 0; idx < props.length; idx++) {
-                    Object value = get(props[idx].getName());
-                    Object otherValue = other.get(props[idx].getName());
+                for (DynaProperty prop : props) {
+                    Object value = get(prop.getName());
+                    Object otherValue = other.get(prop.getName());
 
                     if (value == null) {
                         if (otherValue != null) {

@@ -1,27 +1,9 @@
 package org.apache.ddlutils;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.platform.SqlBuilder;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -34,38 +16,48 @@ public abstract class TestPlatformBase extends TestBase {
     /**
      * The tested platform.
      */
-    private DatabaseDialect _platform;
+    private DatabasePlatform platform;
     /**
      * The writer that the builder of the platform writes to.
      */
-    private StringWriter _writer;
+    private StringWriter writer;
 
     /**
+     * when run test method, this method will be the first to run
      * {@inheritDoc}
      */
+    @Override
     protected void setUp() throws Exception {
-        _writer = new StringWriter();
-        _platform = PlatformFactory.createNewPlatformInstance(getDatabaseName());
-        _platform.getSqlBuilder().setWriter(_writer);
-        if (_platform.getPlatformInfo().isDelimitedIdentifiersSupported()) {
-            _platform.setDelimitedIdentifierModeOn(true);
+        writer = new StringWriter();
+        String databaseName = getDatabaseName();
+        if (!StringUtils.hasText(databaseName)) {
+            throw new RuntimeException("database name is empty");
+        }
+        platform = PlatformFactory.createNewPlatformInstance(databaseName);
+        if (platform == null) {
+            throw new RuntimeException("platform is null");
+        }
+        platform.getSqlBuilder().setWriter(writer);
+        if (platform.getPlatformInfo().isDelimitedIdentifiersSupported()) {
+            platform.setDelimitedIdentifierModeOn(true);
         }
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void tearDown() throws Exception {
-        _platform = null;
-        _writer = null;
+        platform = null;
+        writer = null;
     }
 
     /**
      * Returns the tested platform.
      * @return The platform
      */
-    protected DatabaseDialect getPlatform() {
-        return _platform;
+    protected DatabasePlatform getPlatform() {
+        return platform;
     }
 
     /**
@@ -89,7 +81,7 @@ public abstract class TestPlatformBase extends TestBase {
      * @return The output
      */
     protected String getBuilderOutput() {
-        return _writer.toString();
+        return writer.toString();
     }
 
     /**
@@ -105,9 +97,8 @@ public abstract class TestPlatformBase extends TestBase {
      */
     protected String getDatabaseCreationSql(String schema) throws IOException {
         Database testDb = parseDatabaseFromString(schema);
-
         // we're turning the comment creation off to make testing easier
-        DatabaseDialect platform = getPlatform();
+        DatabasePlatform platform = getPlatform();
         platform.setSqlCommentsOn(false);
         platform.getSqlBuilder().createTables(testDb, null, true);
         return getBuilderOutput();

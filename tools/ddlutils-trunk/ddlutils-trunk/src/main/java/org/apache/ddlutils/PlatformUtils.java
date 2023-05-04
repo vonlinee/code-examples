@@ -1,24 +1,5 @@
 package org.apache.ddlutils;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.platform.axion.AxionPlatform;
 import org.apache.ddlutils.platform.cloudscape.CloudscapePlatform;
 import org.apache.ddlutils.platform.db2.Db2Platform;
@@ -39,7 +20,6 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -47,7 +27,6 @@ import java.util.Map;
  * @version $Revision: 279421 $
  */
 public class PlatformUtils {
-    // Extended drivers that support more than one database
 
     /**
      * The DataDirect Connect DB2 jdbc driver.
@@ -299,22 +278,19 @@ public class PlatformUtils {
      * Tries to determine the database type for the given data source. Note that this will establish
      * a connection to the database.
      * @param dataSource The data source
-     * @param username   The user name to use for connecting to the database
+     * @param username   The username to use for connecting to the database
      * @param password   The password to use for connecting to the database
      * @return The database type or <code>null</code> if the database type couldn't be determined
      */
     public String determineDatabaseType(DataSource dataSource, String username, String password) throws DatabaseOperationException {
         Connection connection = null;
-
         try {
             if (username != null) {
                 connection = dataSource.getConnection(username, password);
             } else {
                 connection = dataSource.getConnection();
             }
-
             DatabaseMetaData metaData = connection.getMetaData();
-
             return determineDatabaseType(metaData.getDriverName(), metaData.getURL());
         } catch (SQLException ex) {
             throw new DatabaseOperationException("Error while reading the database metadata: " + ex.getMessage(), ex);

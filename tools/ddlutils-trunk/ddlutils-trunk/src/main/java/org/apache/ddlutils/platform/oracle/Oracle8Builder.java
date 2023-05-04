@@ -19,8 +19,8 @@ package org.apache.ddlutils.platform.oracle;
  * under the License.
  */
 
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
-import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
@@ -54,7 +54,7 @@ public class Oracle8Builder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public Oracle8Builder(DatabaseDialect platform) {
+    public Oracle8Builder(DatabasePlatform platform) {
         super(platform);
         addEscapedCharSequence("'", "''");
 

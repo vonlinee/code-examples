@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.postgresql;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
@@ -39,7 +39,7 @@ public class PostgreSqlBuilder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public PostgreSqlBuilder(DatabaseDialect platform) {
+    public PostgreSqlBuilder(DatabasePlatform platform) {
         super(platform);
         // we need to handle the backslash first otherwise the other
         // already escaped sequences would be affected

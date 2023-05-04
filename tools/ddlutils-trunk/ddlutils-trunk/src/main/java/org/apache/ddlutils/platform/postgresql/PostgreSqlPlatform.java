@@ -29,7 +29,7 @@ import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.GenericDialect;
+import org.apache.ddlutils.platform.GenericDatabasePlatform;
 
 import java.io.IOException;
 import java.sql.*;
@@ -40,7 +40,7 @@ import java.util.Map;
  * The platform implementation for PostgresSql.
  * @version $Revision: 231306 $
  */
-public class PostgreSqlPlatform extends GenericDialect {
+public class PostgreSqlPlatform extends GenericDatabasePlatform {
     /**
      * Database name of this platform.
      */

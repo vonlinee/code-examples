@@ -27,7 +27,7 @@ import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.GenericDialect;
+import org.apache.ddlutils.platform.GenericDatabasePlatform;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -45,7 +45,7 @@ import java.util.List;
  * The platform implementation for the Interbase database.
  * @version $Revision: 231306 $
  */
-public class InterbasePlatform extends GenericDialect {
+public class InterbasePlatform extends GenericDatabasePlatform {
     /**
      * Database name of this platform.
      */

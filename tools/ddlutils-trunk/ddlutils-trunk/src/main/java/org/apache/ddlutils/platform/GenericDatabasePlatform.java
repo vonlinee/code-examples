@@ -1,24 +1,5 @@
 package org.apache.ddlutils.platform;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -26,8 +7,8 @@ import org.apache.commons.collections.Predicate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.DatabaseOperationException;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
-import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
@@ -48,7 +29,7 @@ import java.util.*;
  * Base class for platform implementations.
  * @version $Revision: 231110 $
  */
-public abstract class GenericDialect extends JdbcSupport implements DatabaseDialect {
+public abstract class GenericDatabasePlatform extends JdbcSupport implements DatabasePlatform {
 
     /**
      * The default name for models read from the database, if no name as given.
@@ -172,7 +153,7 @@ public abstract class GenericDialect extends JdbcSupport implements DatabaseDial
     @Override
     public void setSqlCommentsOn(boolean sqlCommentsOn) {
         if (!getPlatformInfo().isSqlCommentsSupported() && sqlCommentsOn) {
-            throw new DdlUtilsException("DatabaseDialect " + getName() + " does not support SQL comments");
+            throw new DdlUtilsException("DatabasePlatform " + getName() + " does not support SQL comments");
         }
         _sqlCommentsOn = sqlCommentsOn;
     }
@@ -191,7 +172,7 @@ public abstract class GenericDialect extends JdbcSupport implements DatabaseDial
     @Override
     public void setDelimitedIdentifierModeOn(boolean delimitedIdentifierModeOn) {
         if (!getPlatformInfo().isDelimitedIdentifiersSupported() && delimitedIdentifierModeOn) {
-            throw new DdlUtilsException("DatabaseDialect " + getName() + " does not support delimited identifier");
+            throw new DdlUtilsException("DatabasePlatform " + getName() + " does not support delimited identifier");
         }
         _delimitedIdentifierModeOn = delimitedIdentifierModeOn;
     }
@@ -1272,7 +1253,7 @@ public abstract class GenericDialect extends JdbcSupport implements DatabaseDial
      * {@inheritDoc}
      */
     @Override
-    public Iterator query(Database model, String sql) throws DatabaseOperationException {
+    public Iterator<DynaBean> query(Database model, String sql) throws DatabaseOperationException {
         return query(model, sql, (Table[]) null);
     }
 
@@ -1288,12 +1269,11 @@ public abstract class GenericDialect extends JdbcSupport implements DatabaseDial
      * {@inheritDoc}
      */
     @Override
-    public Iterator query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
+    public Iterator<DynaBean> query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
         Connection connection = borrowConnection();
         Statement statement = null;
-        ResultSet resultSet = null;
-        Iterator answer = null;
-
+        ResultSet resultSet;
+        Iterator<DynaBean> answer = null;
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
@@ -1504,7 +1484,6 @@ public abstract class GenericDialect extends JdbcSupport implements DatabaseDial
      */
     protected String createSelectLastInsertIdSql(Database model, SqlDynaClass dynaClass) {
         Table table = model.findTable(dynaClass.getTableName());
-
         return _builder.getSelectLastIdentityValues(table);
     }
 

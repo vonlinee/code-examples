@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.db2;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Index;
@@ -39,7 +39,7 @@ public class Db2Builder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public Db2Builder(DatabaseDialect platform) {
+    public Db2Builder(DatabasePlatform platform) {
         super(platform);
         addEscapedCharSequence("'", "''");
     }

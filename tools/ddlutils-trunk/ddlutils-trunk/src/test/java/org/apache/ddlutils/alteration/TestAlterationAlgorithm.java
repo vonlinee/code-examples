@@ -19,7 +19,7 @@ package org.apache.ddlutils.alteration;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.TestBase;
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
@@ -35,7 +35,7 @@ public class TestAlterationAlgorithm extends TestBase {
     /**
      * The tested platform.
      */
-    private DatabaseDialect _platform;
+    private DatabasePlatform _platform;
 
     /**
      * {@inheritDoc}

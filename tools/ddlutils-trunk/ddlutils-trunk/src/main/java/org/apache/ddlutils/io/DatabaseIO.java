@@ -1,29 +1,9 @@
 package org.apache.ddlutils.io;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.IOUtils;
-import org.apache.ddlutils.util.StringUtils;
 import org.xml.sax.InputSource;
 
 import javax.xml.namespace.QName;
@@ -191,15 +171,6 @@ public class DatabaseIO {
     }
 
     /**
-     * Specifies whether the internal dtd is to be used.
-     * @param useInternalDtd Whether to use the internal dtd
-     * @deprecated Switched to XML schema, and the internal XML schema should always be used
-     */
-    public void setUseInternalDtd(boolean useInternalDtd) {
-        _useInternalDtd = useInternalDtd;
-    }
-
-    /**
      * Reads the database model contained in the specified file.
      * @param filename The model file name
      * @return The database model
@@ -250,6 +221,8 @@ public class DatabaseIO {
         }
     }
 
+    ModelValidator modelValidator = new ModelValidator();
+
     /**
      * Reads the database model given by the reader. Note that this method does not close the
      * given reader.
@@ -260,12 +233,11 @@ public class DatabaseIO {
         try {
             if (_validateXml) {
                 String tmpXml = IOUtils.readString(reader);
-                new ModelValidator().validate(new StreamSource(new StringReader(tmpXml)));
-                XMLStreamReader xmlStreamReader = getXMLInputFactory().createXMLStreamReader(new StringReader(tmpXml));
-                return read(xmlStreamReader);
-            } else {
-                return read(getXMLInputFactory().createXMLStreamReader(reader));
+                modelValidator.validate(new StreamSource(new StringReader(tmpXml)));
+                reader = new StringReader(tmpXml);
             }
+            XMLStreamReader xmlStreamReader = getXMLInputFactory().createXMLStreamReader(reader);
+            return read(xmlStreamReader);
         } catch (XMLStreamException | IOException ex) {
             throw new DdlUtilsXMLException(ex);
         }
@@ -298,7 +270,6 @@ public class DatabaseIO {
      */
     private Database read(XMLStreamReader xmlReader) throws DdlUtilsXMLException {
         Database model = null;
-
         try {
             while (xmlReader.getEventType() != XMLStreamReader.START_ELEMENT) {
                 if (xmlReader.next() == XMLStreamReader.END_DOCUMENT) {
@@ -387,12 +358,10 @@ public class DatabaseIO {
      */
     private void readTableSubElements(XMLStreamReader xmlReader, Table table) throws XMLStreamException, IOException {
         int eventType = XMLStreamReader.START_ELEMENT;
-
         while (eventType != XMLStreamReader.END_ELEMENT) {
             eventType = xmlReader.next();
             if (eventType == XMLStreamReader.START_ELEMENT) {
                 QName elemQName = xmlReader.getName();
-
                 if (isQnameEquals(elemQName, QNAME_ELEMENT_COLUMN)) {
                     table.addColumn(readColumnElement(xmlReader));
                 } else if (isQnameEquals(elemQName, QNAME_ELEMENT_FOREIGN_KEY)) {
@@ -413,9 +382,8 @@ public class DatabaseIO {
      * @param xmlReader The reader
      * @return The column object
      */
-    private Column readColumnElement(XMLStreamReader xmlReader) throws XMLStreamException, IOException {
+    private Column readColumnElement(XMLStreamReader xmlReader) throws XMLStreamException {
         Column column = new Column();
-
         for (int idx = 0; idx < xmlReader.getAttributeCount(); idx++) {
             QName attrQName = xmlReader.getAttributeName(idx);
             if (isQnameEquals(attrQName, QNAME_ATTRIBUTE_NAME)) {
@@ -425,6 +393,7 @@ public class DatabaseIO {
             } else if (isQnameEquals(attrQName, QNAME_ATTRIBUTE_REQUIRED)) {
                 column.setRequired(getAttributeValueAsBoolean(xmlReader, idx));
             } else if (isQnameEquals(attrQName, QNAME_ATTRIBUTE_TYPE)) {
+                // column data type
                 column.setType(xmlReader.getAttributeValue(idx));
             } else if (isQnameEquals(attrQName, QNAME_ATTRIBUTE_SIZE)) {
                 column.setSize(getAttributeValueBeingNullAware(xmlReader, idx));
@@ -449,10 +418,8 @@ public class DatabaseIO {
      */
     private ForeignKey readForeignKeyElement(XMLStreamReader xmlReader) throws XMLStreamException, IOException {
         ForeignKey foreignKey = new ForeignKey();
-
         for (int idx = 0; idx < xmlReader.getAttributeCount(); idx++) {
             QName attrQName = xmlReader.getAttributeName(idx);
-
             if (isQnameEquals(attrQName, QNAME_ATTRIBUTE_FOREIGN_TABLE)) {
                 foreignKey.setForeignTableName(xmlReader.getAttributeValue(idx));
             } else if (isQnameEquals(attrQName, QNAME_ATTRIBUTE_NAME)) {
@@ -476,12 +443,10 @@ public class DatabaseIO {
      */
     private void readReferenceElements(XMLStreamReader xmlReader, ForeignKey foreignKey) throws XMLStreamException, IOException {
         int eventType = XMLStreamReader.START_ELEMENT;
-
         while (eventType != XMLStreamReader.END_ELEMENT) {
             eventType = xmlReader.next();
             if (eventType == XMLStreamReader.START_ELEMENT) {
                 QName elemQName = xmlReader.getName();
-
                 if (isQnameEquals(elemQName, QNAME_ELEMENT_REFERENCE)) {
                     foreignKey.addReference(readReferenceElement(xmlReader));
                 } else {
@@ -496,12 +461,10 @@ public class DatabaseIO {
      * @param xmlReader The reader
      * @return The reference object
      */
-    private Reference readReferenceElement(XMLStreamReader xmlReader) throws XMLStreamException, IOException {
+    private Reference readReferenceElement(XMLStreamReader xmlReader) throws XMLStreamException {
         Reference reference = new Reference();
-
         for (int idx = 0; idx < xmlReader.getAttributeCount(); idx++) {
             QName attrQName = xmlReader.getAttributeName(idx);
-
             if (isQnameEquals(attrQName, QNAME_ATTRIBUTE_LOCAL)) {
                 reference.setLocalColumnName(xmlReader.getAttributeValue(idx));
             } else if (isQnameEquals(attrQName, QNAME_ATTRIBUTE_FOREIGN)) {
@@ -628,11 +591,11 @@ public class DatabaseIO {
      * @return <code>true</code> if they are the same
      */
     private boolean isQnameEquals(QName curElemQName, QName qName) {
-        if (StringUtils.isEmpty(curElemQName.getNamespaceURI())) {
+        String namespaceURI = curElemQName.getNamespaceURI();
+        if (namespaceURI == null || namespaceURI.isEmpty()) {
             return qName.getLocalPart().equals(curElemQName.getLocalPart());
-        } else {
-            return qName.equals(curElemQName);
         }
+        return qName.equals(curElemQName);
     }
 
     /**

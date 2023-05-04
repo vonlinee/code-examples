@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.mysql;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.ForeignKey;
 import org.apache.ddlutils.model.Index;
@@ -40,7 +40,7 @@ public class MySqlModelReader extends JdbcModelReader {
      * Creates a new model reader for MySql databases.
      * @param platform The platform that this model reader belongs to
      */
-    public MySqlModelReader(DatabaseDialect platform) {
+    public MySqlModelReader(DatabasePlatform platform) {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);

@@ -27,7 +27,7 @@ import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.GenericDialect;
+import org.apache.ddlutils.platform.GenericDatabasePlatform;
 import org.apache.ddlutils.util.StringUtilsExt;
 
 import java.io.IOException;
@@ -37,7 +37,7 @@ import java.sql.Types;
  * The DB2 platform implementation.
  * @version $Revision: 231306 $
  */
-public class Db2Platform extends GenericDialect {
+public class Db2Platform extends GenericDatabasePlatform {
     /**
      * Database name of this platform.
      */

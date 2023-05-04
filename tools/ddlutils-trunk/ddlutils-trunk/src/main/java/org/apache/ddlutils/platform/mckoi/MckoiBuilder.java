@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.mckoi;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
@@ -37,7 +37,7 @@ public class MckoiBuilder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public MckoiBuilder(DatabaseDialect platform) {
+    public MckoiBuilder(DatabasePlatform platform) {
         super(platform);
         // we need to handle the backslash first otherwise the other
         // already escaped sequence would be affected

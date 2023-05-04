@@ -12,7 +12,9 @@
   <select id="selectList" parameterType="map" resultMap="BaseResultMap">
     select *
     from department
-    where dept_id = ${param.deptId}
+    <if test="param.condition != null">
+      where dept_id = ${param.deptId}
+    </if>
   </select>
 
   <select id="listCloudServiceStatus" resultType="int">

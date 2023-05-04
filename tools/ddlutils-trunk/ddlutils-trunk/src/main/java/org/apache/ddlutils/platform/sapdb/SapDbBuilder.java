@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.sapdb;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
@@ -36,7 +36,7 @@ public class SapDbBuilder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public SapDbBuilder(DatabaseDialect platform) {
+    public SapDbBuilder(DatabasePlatform platform) {
         super(platform);
         addEscapedCharSequence("'", "''");
     }

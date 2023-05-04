@@ -20,7 +20,7 @@ package org.apache.ddlutils.task;
  */
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.CloneHelper;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.ModelHelper;
@@ -86,7 +86,7 @@ public class DropTablesCommand extends DatabaseCommand {
             throw new BuildException("No database specified.");
         }
 
-        DatabaseDialect platform = getPlatform();
+        DatabasePlatform platform = getPlatform();
         Database targetModel = new Database();
 
         if ((_tableNames != null) || (_tableNameRegExp != null)) {

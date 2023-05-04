@@ -20,7 +20,7 @@ package org.apache.ddlutils.io;
  */
 
 import org.apache.commons.collections.map.ListOrderedMap;
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
@@ -238,7 +238,7 @@ public class DatabaseDataIO {
      * @param path        The path of the output file
      * @param xmlEncoding The encoding to use for the XML
      */
-    public void writeDataToXML(DatabaseDialect platform, String path, String xmlEncoding) throws DdlUtilsException {
+    public void writeDataToXML(DatabasePlatform platform, String path, String xmlEncoding) throws DdlUtilsException {
         writeDataToXML(platform, getConfiguredDataWriter(path, xmlEncoding));
     }
 
@@ -250,7 +250,7 @@ public class DatabaseDataIO {
      * @param path        The path of the output file
      * @param xmlEncoding The encoding to use for the XML
      */
-    public void writeDataToXML(DatabaseDialect platform, Database model, String path, String xmlEncoding) {
+    public void writeDataToXML(DatabasePlatform platform, Database model, String path, String xmlEncoding) {
         writeDataToXML(platform, model, getConfiguredDataWriter(path, xmlEncoding));
     }
 
@@ -261,7 +261,7 @@ public class DatabaseDataIO {
      * @param output      The output stream
      * @param xmlEncoding The encoding to use for the XML
      */
-    public void writeDataToXML(DatabaseDialect platform, OutputStream output, String xmlEncoding) {
+    public void writeDataToXML(DatabasePlatform platform, OutputStream output, String xmlEncoding) {
         writeDataToXML(platform, getConfiguredDataWriter(output, xmlEncoding));
     }
 
@@ -273,7 +273,7 @@ public class DatabaseDataIO {
      * @param output      The output stream
      * @param xmlEncoding The encoding to use for the XML
      */
-    public void writeDataToXML(DatabaseDialect platform, Database model, OutputStream output, String xmlEncoding) {
+    public void writeDataToXML(DatabasePlatform platform, Database model, OutputStream output, String xmlEncoding) {
         writeDataToXML(platform, model, getConfiguredDataWriter(output, xmlEncoding));
     }
 
@@ -284,7 +284,7 @@ public class DatabaseDataIO {
      * @param output      The output writer (which needs to be openend with the specified encoding)
      * @param xmlEncoding The encoding to use for the XML
      */
-    public void writeDataToXML(DatabaseDialect platform, Writer output, String xmlEncoding) {
+    public void writeDataToXML(DatabasePlatform platform, Writer output, String xmlEncoding) {
         writeDataToXML(platform, getConfiguredDataWriter(output, xmlEncoding));
     }
 
@@ -296,7 +296,7 @@ public class DatabaseDataIO {
      * @param output      The output writer (which needs to be openend with the specified encoding)
      * @param xmlEncoding The encoding to use for the XML
      */
-    public void writeDataToXML(DatabaseDialect platform, Database model, Writer output, String xmlEncoding) {
+    public void writeDataToXML(DatabasePlatform platform, Database model, Writer output, String xmlEncoding) {
         writeDataToXML(platform, model, getConfiguredDataWriter(output, xmlEncoding));
     }
 
@@ -306,7 +306,7 @@ public class DatabaseDataIO {
      * @param platform The platform; needs to be connected to a live database
      * @param writer   The data writer
      */
-    public void writeDataToXML(DatabaseDialect platform, DataWriter writer) {
+    public void writeDataToXML(DatabasePlatform platform, DataWriter writer) {
         writeDataToXML(platform, platform.readModelFromDatabase("unnamed"), writer);
     }
 
@@ -317,7 +317,7 @@ public class DatabaseDataIO {
      * @param model    The model for which to retrieve and write the data
      * @param writer   The data writer
      */
-    public void writeDataToXML(DatabaseDialect platform, Database model, DataWriter writer) {
+    public void writeDataToXML(DatabasePlatform platform, Database model, DataWriter writer) {
         registerConverters(writer.getConverterConfiguration());
 
         // TODO: An advanced algorithm could be employed here that writes individual
@@ -398,7 +398,7 @@ public class DatabaseDataIO {
      * @param table    The table
      * @param writer   The data writer
      */
-    private void writeDataForTableToXML(DatabaseDialect platform, Database model, Table table, DataWriter writer) {
+    private void writeDataForTableToXML(DatabasePlatform platform, Database model, Table table, DataWriter writer) {
         Table[] tables = {table};
         StringBuffer query = new StringBuffer();
 
@@ -462,7 +462,7 @@ public class DatabaseDataIO {
      * @param model    The model
      * @return The data reader
      */
-    public DataReader getConfiguredDataReader(DatabaseDialect platform, Database model) throws DdlUtilsException {
+    public DataReader getConfiguredDataReader(DatabasePlatform platform, Database model) throws DdlUtilsException {
         DataToDatabaseSink sink = new DataToDatabaseSink(platform, model);
         DataReader reader = new DataReader();
 
@@ -485,7 +485,7 @@ public class DatabaseDataIO {
      * @param platform The platform, must be connected to a live database
      * @param files    The XML data files
      */
-    public void writeDataToDatabase(DatabaseDialect platform, String[] files) throws DdlUtilsException {
+    public void writeDataToDatabase(DatabasePlatform platform, String[] files) throws DdlUtilsException {
         writeDataToDatabase(platform, platform.readModelFromDatabase("unnamed"), files);
     }
 
@@ -495,7 +495,7 @@ public class DatabaseDataIO {
      * @param platform The platform, must be connected to a live database
      * @param inputs   The input streams for the XML data
      */
-    public void writeDataToDatabase(DatabaseDialect platform, InputStream[] inputs) throws DdlUtilsException {
+    public void writeDataToDatabase(DatabasePlatform platform, InputStream[] inputs) throws DdlUtilsException {
         writeDataToDatabase(platform, platform.readModelFromDatabase("unnamed"), inputs);
     }
 
@@ -505,7 +505,7 @@ public class DatabaseDataIO {
      * @param platform The platform, must be connected to a live database
      * @param inputs   The input readers for the XML data
      */
-    public void writeDataToDatabase(DatabaseDialect platform, Reader[] inputs) throws DdlUtilsException {
+    public void writeDataToDatabase(DatabasePlatform platform, Reader[] inputs) throws DdlUtilsException {
         writeDataToDatabase(platform, platform.readModelFromDatabase("unnamed"), inputs);
     }
 
@@ -516,7 +516,7 @@ public class DatabaseDataIO {
      * @param model    The model to which to constrain the written data
      * @param files    The XML data files
      */
-    public void writeDataToDatabase(DatabaseDialect platform, Database model, String[] files) throws DdlUtilsException {
+    public void writeDataToDatabase(DatabasePlatform platform, Database model, String[] files) throws DdlUtilsException {
         DataReader dataReader = getConfiguredDataReader(platform, model);
 
         dataReader.getSink().start();
@@ -533,7 +533,7 @@ public class DatabaseDataIO {
      * @param model    The model to which to constrain the written data
      * @param inputs   The input streams for the XML data
      */
-    public void writeDataToDatabase(DatabaseDialect platform, Database model, InputStream[] inputs) throws DdlUtilsException {
+    public void writeDataToDatabase(DatabasePlatform platform, Database model, InputStream[] inputs) throws DdlUtilsException {
         DataReader dataReader = getConfiguredDataReader(platform, model);
 
         dataReader.getSink().start();
@@ -550,7 +550,7 @@ public class DatabaseDataIO {
      * @param model    The model to which to constrain the written data
      * @param inputs   The input readers for the XML data
      */
-    public void writeDataToDatabase(DatabaseDialect platform, Database model, Reader[] inputs) throws DdlUtilsException {
+    public void writeDataToDatabase(DatabasePlatform platform, Database model, Reader[] inputs) throws DdlUtilsException {
         DataReader dataReader = getConfiguredDataReader(platform, model);
 
         dataReader.getSink().start();

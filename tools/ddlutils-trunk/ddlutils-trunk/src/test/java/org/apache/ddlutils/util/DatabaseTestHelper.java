@@ -24,7 +24,7 @@ import junit.framework.AssertionFailedError;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
@@ -51,7 +51,7 @@ public class DatabaseTestHelper extends Assert {
      * @param origDbPlatform   The first platform
      * @param testedDbPlatform The second platform
      */
-    public void assertHasSameData(Database model, DatabaseDialect origDbPlatform, DatabaseDialect testedDbPlatform) {
+    public void assertHasSameData(Database model, DatabasePlatform origDbPlatform, DatabasePlatform testedDbPlatform) {
         assertHasSameData(null, model, origDbPlatform, testedDbPlatform);
     }
 
@@ -65,7 +65,7 @@ public class DatabaseTestHelper extends Assert {
      * @param origDbPlatform   The first platform
      * @param testedDbPlatform The second platform
      */
-    public void assertHasSameData(String failureMsg, Database model, DatabaseDialect origDbPlatform, DatabaseDialect testedDbPlatform) {
+    public void assertHasSameData(String failureMsg, Database model, DatabasePlatform origDbPlatform, DatabasePlatform testedDbPlatform) {
         boolean hasError = false;
 
         for (int idx = 0; idx < model.getTableCount(); idx++) {
@@ -128,7 +128,7 @@ public class DatabaseTestHelper extends Assert {
      * @param whereValues    The optional column value that make up the WHERE clause
      * @return The query string
      */
-    private String buildQueryString(DatabaseDialect targetPlatform, Table table, Column[] whereCols, DynaBean whereValues) {
+    private String buildQueryString(DatabasePlatform targetPlatform, Table table, Column[] whereCols, DynaBean whereValues) {
         StringBuffer result = new StringBuffer();
 
         result.append("SELECT * FROM ");

@@ -182,7 +182,6 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
         Database model = null;
 
         reader.setValidateXml(_validateXml);
-        reader.setUseInternalDtd(_useInternalDtd);
         if ((_singleSchemaFile != null) && !_fileSets.isEmpty()) {
             throw new BuildException("Please use either the schemafile attribute or the sub fileset element, but not both");
         }

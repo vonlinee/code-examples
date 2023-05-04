@@ -20,7 +20,7 @@ package org.apache.ddlutils.platform.interbase;
  */
 
 import org.apache.commons.collections.map.ListOrderedMap;
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
@@ -37,7 +37,7 @@ public class InterbaseModelReader extends JdbcModelReader {
      * Creates a new model reader for Interbase databases.
      * @param platform The platform that this model reader belongs to
      */
-    public InterbaseModelReader(DatabaseDialect platform) {
+    public InterbaseModelReader(DatabasePlatform platform) {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);

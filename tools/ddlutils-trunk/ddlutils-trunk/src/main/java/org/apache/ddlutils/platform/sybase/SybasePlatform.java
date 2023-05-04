@@ -30,7 +30,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.GenericDialect;
+import org.apache.ddlutils.platform.GenericDatabasePlatform;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -44,7 +44,7 @@ import java.util.List;
  * The platform implementation for Sybase.
  * @version $Revision: 231306 $
  */
-public class SybasePlatform extends GenericDialect {
+public class SybasePlatform extends GenericDatabasePlatform {
     /**
      * Database name of this platform.
      */

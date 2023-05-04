@@ -1,24 +1,5 @@
 package org.apache.ddlutils;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.model.CascadeActionEnum;
@@ -218,16 +199,16 @@ public class PlatformInfo {
     private String _sqlCommandDelimiter = ";";
 
     /**
-     * Contains non-default mappings from jdbc to native types.
+     * Contains non-default mappings from jdbc types to native types.
      * key: JDBC type code
      * value: native type name
      */
-    private final HashMap<Integer, String> _nativeTypes = new HashMap<>();
+    private final HashMap<Integer, String> nativeTypes = new HashMap<>();
 
     /**
      * Contains the jdbc types corresponding to the native types for non-default mappings.
      */
-    private final HashMap<Integer, Integer> _targetJdbcTypes = new HashMap<>();
+    private final HashMap<Integer, Integer> targetJdbcTypes = new HashMap<>();
 
     /**
      * Contains those JDBC types whose corresponding native types have a null value as the default value.
@@ -406,7 +387,7 @@ public class PlatformInfo {
     }
 
     /**
-     * Specifies whether foreign key constraints are embedded in the create
+     * Specifies whether foreign key constraints are embedded in the creation
      * table clause or as seperate alter table statements.
      * @param foreignKeysEmbedded Whether fk constraints are embedded
      */
@@ -908,7 +889,7 @@ public class PlatformInfo {
      * @return The native type or <code>null</code> if there isn't one defined
      */
     public String getNativeType(int typeCode) {
-        return _nativeTypes.get(typeCode);
+        return nativeTypes.get(typeCode);
     }
 
     /**
@@ -921,7 +902,7 @@ public class PlatformInfo {
      * @return The target jdbc type
      */
     public int getTargetJdbcType(int typeCode) {
-        Integer targetJdbcType = (Integer) _targetJdbcTypes.get(typeCode);
+        Integer targetJdbcType = (Integer) targetJdbcTypes.get(typeCode);
         return targetJdbcType == null ? typeCode : targetJdbcType;
     }
 
@@ -931,7 +912,7 @@ public class PlatformInfo {
      * @param nativeType   The native type
      */
     public void addNativeTypeMapping(int jdbcTypeCode, String nativeType) {
-        _nativeTypes.put(jdbcTypeCode, nativeType);
+        nativeTypes.put(jdbcTypeCode, nativeType);
     }
 
     /**
@@ -943,7 +924,7 @@ public class PlatformInfo {
      */
     public void addNativeTypeMapping(int jdbcTypeCode, String nativeType, int targetJdbcTypeCode) {
         addNativeTypeMapping(jdbcTypeCode, nativeType);
-        _targetJdbcTypes.put(jdbcTypeCode, targetJdbcTypeCode);
+        targetJdbcTypes.put(jdbcTypeCode, targetJdbcTypeCode);
     }
 
     /**
@@ -959,9 +940,7 @@ public class PlatformInfo {
     public void addNativeTypeMapping(String jdbcTypeName, String nativeType) {
         try {
             Field constant = Types.class.getField(jdbcTypeName);
-            if (constant != null) {
-                addNativeTypeMapping(constant.getInt(null), nativeType);
-            }
+            addNativeTypeMapping(constant.getInt(null), nativeType);
         } catch (Exception ex) {
             // ignore -> won't be defined
             _log.warn("Cannot add native type mapping for undefined jdbc type " + jdbcTypeName, ex);
@@ -984,9 +963,7 @@ public class PlatformInfo {
         try {
             Field sourceType = Types.class.getField(jdbcTypeName);
             Field targetType = Types.class.getField(targetJdbcTypeName);
-            if ((sourceType != null) && (targetType != null)) {
-                addNativeTypeMapping(sourceType.getInt(null), nativeType, targetType.getInt(null));
-            }
+            addNativeTypeMapping(sourceType.getInt(null), nativeType, targetType.getInt(null));
         } catch (Exception ex) {
             // ignore -> won't be defined
             _log.warn("Cannot add native type mapping for undefined jdbc type " + jdbcTypeName + ", target jdbc type " + targetJdbcTypeName, ex);

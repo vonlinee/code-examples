@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.axion;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Index;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
@@ -38,7 +38,7 @@ public class AxionModelReader extends JdbcModelReader {
      * Creates a new model reader for Axion databases.
      * @param platform The platform that this model reader belongs to
      */
-    public AxionModelReader(DatabaseDialect platform) {
+    public AxionModelReader(DatabasePlatform platform) {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);

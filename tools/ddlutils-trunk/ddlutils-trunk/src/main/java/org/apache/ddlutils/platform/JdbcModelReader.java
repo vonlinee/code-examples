@@ -23,7 +23,7 @@ import org.apache.commons.collections.map.ListOrderedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
 
@@ -65,7 +65,7 @@ public class JdbcModelReader {
     /**
      * The platform that this model reader belongs to.
      */
-    private DatabaseDialect _platform;
+    private DatabasePlatform _platform;
     /**
      * Contains default column sizes (minimum sizes that a JDBC-compliant db must support).
      */
@@ -99,7 +99,7 @@ public class JdbcModelReader {
      * Creates a new model reader instance.
      * @param platform The plaftform this builder belongs to
      */
-    public JdbcModelReader(DatabaseDialect platform) {
+    public JdbcModelReader(DatabasePlatform platform) {
         _platform = platform;
 
         _defaultSizes.put(new Integer(Types.CHAR), "254");
@@ -135,7 +135,7 @@ public class JdbcModelReader {
      * Returns the platform that this model reader belongs to.
      * @return The platform
      */
-    public DatabaseDialect getPlatform() {
+    public DatabasePlatform getPlatform() {
         return _platform;
     }
 

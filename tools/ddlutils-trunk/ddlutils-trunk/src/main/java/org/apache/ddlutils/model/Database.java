@@ -44,7 +44,8 @@ public class Database implements SchemaObject, Serializable {
     /**
      * The tables.
      */
-    private final List<Table> _tables = new ArrayList<>();
+    private final List<Table> tables = new ArrayList<>();
+
     /**
      * The name of the database model.
      */
@@ -161,7 +162,7 @@ public class Database implements SchemaObject, Serializable {
      * @return The number of tables
      */
     public int getTableCount() {
-        return _tables.size();
+        return tables.size();
     }
 
     /**
@@ -169,7 +170,7 @@ public class Database implements SchemaObject, Serializable {
      * @return The tables
      */
     public Table[] getTables() {
-        return _tables.toArray(new Table[0]);
+        return tables.toArray(new Table[0]);
     }
 
     /**
@@ -178,7 +179,7 @@ public class Database implements SchemaObject, Serializable {
      * @return The table
      */
     public Table getTable(int idx) {
-        return _tables.get(idx);
+        return tables.get(idx);
     }
 
     /**
@@ -187,7 +188,7 @@ public class Database implements SchemaObject, Serializable {
      */
     public void addTable(Table table) {
         if (table != null) {
-            _tables.add(table);
+            tables.add(table);
         }
     }
 
@@ -198,7 +199,7 @@ public class Database implements SchemaObject, Serializable {
      */
     public void addTable(int idx, Table table) {
         if (table != null) {
-            _tables.add(idx, table);
+            tables.add(idx, table);
         }
     }
 
@@ -218,7 +219,7 @@ public class Database implements SchemaObject, Serializable {
      */
     public void removeTable(Table table) {
         if (table != null) {
-            _tables.remove(table);
+            tables.remove(table);
         }
     }
 
@@ -227,7 +228,7 @@ public class Database implements SchemaObject, Serializable {
      * @param idx The index of the table to remove
      */
     public void removeTable(int idx) {
-        _tables.remove(idx);
+        tables.remove(idx);
     }
 
     /**
@@ -235,7 +236,7 @@ public class Database implements SchemaObject, Serializable {
      * @param tables The tables to remove
      */
     public void removeTables(Table[] tables) {
-        _tables.removeAll(Arrays.asList(tables));
+        this.tables.removeAll(Arrays.asList(tables));
     }
 
     /**
@@ -244,9 +245,9 @@ public class Database implements SchemaObject, Serializable {
      * @param tables The tables to keep
      */
     public void removeAllTablesExcept(Table[] tables) {
-        ArrayList<Table> allTables = new ArrayList<>(_tables);
+        ArrayList<Table> allTables = new ArrayList<>(this.tables);
         allTables.removeAll(Arrays.asList(tables));
-        _tables.removeAll(allTables);
+        this.tables.removeAll(allTables);
     }
 
     // Helper methods
@@ -272,7 +273,7 @@ public class Database implements SchemaObject, Serializable {
             throw new ModelException("The database model has no name");
         }
 
-        for (Iterator<Table> tableIt = _tables.iterator(); tableIt.hasNext(); tableIdx++) {
+        for (Iterator<Table> tableIt = tables.iterator(); tableIt.hasNext(); tableIdx++) {
             Table curTable = tableIt.next();
 
             if ((curTable.getName() == null) || (curTable.getName().length() == 0)) {
@@ -405,7 +406,7 @@ public class Database implements SchemaObject, Serializable {
      * @return The table or <code>null</code> if there is no such table
      */
     public Table findTable(String name, boolean caseSensitive) {
-        for (Table table : _tables) {
+        for (Table table : tables) {
             if (caseSensitive) {
                 if (table.getName().equals(name)) {
                     return table;
@@ -451,7 +452,7 @@ public class Database implements SchemaObject, Serializable {
 
         if (tableNameRegExp != null) {
             Pattern pattern = Pattern.compile(tableNameRegExp);
-            for (Table table : _tables) {
+            for (Table table : this.tables) {
                 String tableName = table.getName();
 
                 if (!caseSensitive) {
@@ -522,7 +523,7 @@ public class Database implements SchemaObject, Serializable {
         if (obj instanceof Database) {
             Database other = (Database) obj;
             // Note that this compares case-sensitive
-            return Objects.equals(_name, other._name) && Objects.equals(_tables, other._tables);
+            return Objects.equals(_name, other._name) && Objects.equals(tables, other.tables);
         }
         return false;
     }
@@ -532,7 +533,7 @@ public class Database implements SchemaObject, Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(this._tables);
+        return Objects.hash(this.tables);
     }
 
     /**

@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.sybase;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
 import org.apache.ddlutils.util.StringUtilsExt;
@@ -38,7 +38,7 @@ public class SybaseBuilder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public SybaseBuilder(DatabaseDialect platform) {
+    public SybaseBuilder(DatabasePlatform platform) {
         super(platform);
         addEscapedCharSequence("'", "''");
     }

@@ -20,7 +20,7 @@ package org.apache.ddlutils.platform.oracle;
  */
 
 import org.apache.commons.collections.map.ListOrderedMap;
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Table;
@@ -58,7 +58,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
      * Creates a new model reader for Oracle 8 databases.
      * @param platform The platform that this model reader belongs to
      */
-    public Oracle8ModelReader(DatabaseDialect platform) {
+    public Oracle8ModelReader(DatabasePlatform platform) {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);

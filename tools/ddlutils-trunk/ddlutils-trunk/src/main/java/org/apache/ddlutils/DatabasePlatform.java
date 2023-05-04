@@ -19,7 +19,7 @@ import java.util.Map;
  * and manipulations. It also contains an sql builder that is specific to this platform.
  * @version $Revision: 231110 $
  */
-public interface DatabaseDialect {
+public interface DatabasePlatform {
 
     String QUOTE_START = "`";
     String QUOTE_END = "`";
@@ -789,7 +789,7 @@ public interface DatabaseDialect {
      * @param parameters The parameter values
      * @return The dyna beans resulting from the query
      */
-    List fetch(Database model, String sql, Collection parameters) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Collection parameters) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -800,7 +800,7 @@ public interface DatabaseDialect {
      * @param queryHints The tables that are queried (optional)
      * @return The dyna beans resulting from the query
      */
-    List fetch(Database model, String sql, Table[] queryHints) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Table[] queryHints) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -813,7 +813,7 @@ public interface DatabaseDialect {
      * @param queryHints The tables that are queried (optional)
      * @return The dyna beans resulting from the query
      */
-    List fetch(Database model, String sql, Collection parameters, Table[] queryHints) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Collection parameters, Table[] queryHints) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -828,7 +828,7 @@ public interface DatabaseDialect {
      * @param end   Row number to stop at (inclusively; -1 for last row)
      * @return The dyna beans resulting from the query
      */
-    List fetch(Database model, String sql, int start, int end) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, int start, int end) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -844,7 +844,7 @@ public interface DatabaseDialect {
      * @param end        Row number to stop at (inclusively; -1 for last row)
      * @return The dyna beans resulting from the query
      */
-    List fetch(Database model, String sql, Collection parameters, int start, int end) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Collection parameters, int start, int end) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -860,7 +860,7 @@ public interface DatabaseDialect {
      * @param end        Row number to stop at (inclusively; -1 for last row)
      * @return The dyna beans resulting from the query
      */
-    List fetch(Database model, String sql, Table[] queryHints, int start, int end) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Table[] queryHints, int start, int end) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -877,7 +877,7 @@ public interface DatabaseDialect {
      * @param end        Row number to stop at (inclusively; -1 for last row)
      * @return The dyna beans resulting from the query
      */
-    List fetch(Database model, String sql, Collection parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Collection parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException;
 
     /**
      * Determines whether the given dyna bean is stored in the database. Note that this checks only

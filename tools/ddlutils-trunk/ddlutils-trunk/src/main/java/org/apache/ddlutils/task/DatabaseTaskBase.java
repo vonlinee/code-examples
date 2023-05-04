@@ -22,7 +22,7 @@ package org.apache.ddlutils.task;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Database;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -251,7 +251,7 @@ public abstract class DatabaseTaskBase extends Task {
      * Creates the platform for the configured database.
      * @return The platform
      */
-    protected DatabaseDialect getPlatform() {
+    protected DatabasePlatform getPlatform() {
         return _platformConf.getPlatform();
     }
 

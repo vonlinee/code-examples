@@ -1,24 +1,5 @@
 package org.apache.ddlutils.dynabean;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import junit.framework.Test;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
@@ -36,6 +17,7 @@ import java.util.List;
  * @version $Revision: 289996 $
  */
 public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
+
     /**
      * Parameterized test case pattern.
      * @return The tests
@@ -52,9 +34,8 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
     private String asIdentifier(String name) {
         if (getPlatform().isDelimitedIdentifierModeOn()) {
             return getPlatformInfo().getDelimiterToken() + name + getPlatformInfo().getDelimiterToken();
-        } else {
-            return name;
         }
+        return name;
     }
 
     /**
@@ -84,29 +65,28 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
 
         assertTrue(it.hasNext());
         // we call the method a second time to assert that the result set does not get advanced twice
-        assertTrue(it.hasNext());
 
-        DynaBean bean = (DynaBean) it.next();
+        DynaBean bean = it.next();
 
-        assertEquals(new Integer(1),
+        assertEquals(1,
                 getPropertyValue(bean, "TheId"));
         assertEquals("Text 1",
                 getPropertyValue(bean, "TheText"));
 
         assertTrue(it.hasNext());
 
-        bean = (DynaBean) it.next();
+        bean = it.next();
 
-        assertEquals(new Integer(2),
+        assertEquals(2,
                 getPropertyValue(bean, "TheId"));
         assertEquals("Text 2",
                 getPropertyValue(bean, "TheText"));
 
         assertTrue(it.hasNext());
 
-        bean = (DynaBean) it.next();
+        bean = it.next();
 
-        assertEquals(new Integer(3),
+        assertEquals(3,
                 getPropertyValue(bean, "TheId"));
         assertEquals("Text 3",
                 getPropertyValue(bean, "TheText"));
@@ -136,30 +116,30 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
                         "  <TestTable TheId='3' TheText='Text 3'/>" +
                         "</data>");
 
-        List beans = getPlatform().fetch(getModel(),
+        List<DynaBean> beans = getPlatform().fetch(getModel(),
                 "SELECT * FROM " + asIdentifier("TestTable"),
                 new Table[]{getModel().getTable(0)});
 
         assertEquals(3,
                 beans.size());
 
-        DynaBean bean = (DynaBean) beans.get(0);
+        DynaBean bean = beans.get(0);
 
-        assertEquals(new Integer(1),
+        assertEquals(1,
                 getPropertyValue(bean, "TheId"));
         assertEquals("Text 1",
                 getPropertyValue(bean, "TheText"));
 
-        bean = (DynaBean) beans.get(1);
+        bean = beans.get(1);
 
-        assertEquals(new Integer(2),
+        assertEquals(2,
                 getPropertyValue(bean, "TheId"));
         assertEquals("Text 2",
                 getPropertyValue(bean, "TheText"));
 
-        bean = (DynaBean) beans.get(2);
+        bean = beans.get(2);
 
-        assertEquals(new Integer(3),
+        assertEquals(3,
                 getPropertyValue(bean, "TheId"));
         assertEquals("Text 3",
                 getPropertyValue(bean, "TheText"));
@@ -225,14 +205,14 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
             assertNotNull(id3);
         }
 
-        List beans = getPlatform().fetch(getModel(),
+        List<DynaBean> beans = getPlatform().fetch(getModel(),
                 "SELECT * FROM " + asIdentifier("TestTable"),
                 new Table[]{getModel().getTable(0)});
 
         assertEquals(3,
                 beans.size());
 
-        bean = (DynaBean) beans.get(0);
+        bean = beans.get(0);
         if (getPlatformInfo().isLastIdentityValueReadable()) {
             assertEquals(id1,
                     getPropertyValue(bean, "TheId"));
@@ -252,7 +232,7 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
         assertEquals("Text 2",
                 getPropertyValue(bean, "TheText"));
 
-        bean = (DynaBean) beans.get(2);
+        bean = beans.get(2);
         if (getPlatformInfo().isLastIdentityValueReadable()) {
             assertEquals(id3,
                     getPropertyValue(bean, "TheId"));
@@ -290,30 +270,28 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
                         "  <TestTable2 Id='3' Avalue='Text 3'/>" +
                         "</data>");
 
-        StringBuffer sql = new StringBuffer();
-
-        sql.append("SELECT ");
-        sql.append(asIdentifier("Id1"));
-        sql.append(",");
-        sql.append(asIdentifier("Avalue"));
-        sql.append(" FROM ");
-        sql.append(asIdentifier("TestTable1"));
-        sql.append(",");
-        sql.append(asIdentifier("TestTable2"));
-        sql.append(" WHERE ");
-        sql.append(asIdentifier("Id2"));
-        sql.append("=");
-        sql.append(asIdentifier("Id"));
+        String sql = "SELECT " +
+                asIdentifier("Id1") +
+                "," +
+                asIdentifier("Avalue") +
+                " FROM " +
+                asIdentifier("TestTable1") +
+                "," +
+                asIdentifier("TestTable2") +
+                " WHERE " +
+                asIdentifier("Id2") +
+                "=" +
+                asIdentifier("Id");
 
         ModelBasedResultSetIterator it = (ModelBasedResultSetIterator) getPlatform().query(getModel(),
-                sql.toString(),
+                sql,
                 new Table[]{getModel().getTable(0), getModel().getTable(1)});
 
         assertTrue(it.hasNext());
 
-        DynaBean bean = (DynaBean) it.next();
+        DynaBean bean = it.next();
 
-        assertEquals(new Integer(2),
+        assertEquals(2,
                 getPropertyValue(bean, "Id1"));
         assertEquals("Text 3",
                 getPropertyValue(bean, "Avalue"));
@@ -338,24 +316,22 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
         SqlDynaClass dynaClass = SqlDynaClass.newInstance(getModel().getTable(0));
         DynaBean dynaBean = new SqlDynaBean(dynaClass);
 
-        dynaBean.set("TheId", new Integer(1));
+        dynaBean.set("TheId", 1);
         dynaBean.set("TheText", "Text 1");
 
         getPlatform().insert(getModel(), dynaBean);
 
-        List beans = getPlatform().fetch(getModel(),
+        List<DynaBean> beans = getPlatform().fetch(getModel(),
                 "SELECT * FROM " + asIdentifier("TestTable"),
                 new Table[]{getModel().getTable(0)});
 
         assertEquals(1,
                 beans.size());
 
-        DynaBean bean = (DynaBean) beans.get(0);
+        DynaBean bean = beans.get(0);
 
-        assertEquals(new Integer(1),
-                getPropertyValue(bean, "TheId"));
-        assertEquals("Text 1",
-                getPropertyValue(bean, "TheText"));
+        assertEquals(1, getPropertyValue(bean, "TheId"));
+        assertEquals("Text 1", getPropertyValue(bean, "TheText"));
     }
 
     /**
@@ -376,14 +352,14 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
         DynaBean dynaBean2 = new SqlDynaBean(dynaClass);
         DynaBean dynaBean3 = new SqlDynaBean(dynaClass);
 
-        dynaBean1.set("TheId", new Integer(1));
+        dynaBean1.set("TheId", 1);
         dynaBean1.set("TheText", "Text 1");
-        dynaBean2.set("TheId", new Integer(2));
+        dynaBean2.set("TheId", 2);
         dynaBean2.set("TheText", "Text 2");
-        dynaBean3.set("TheId", new Integer(3));
+        dynaBean3.set("TheId", 3);
         dynaBean3.set("TheText", "Text 3");
 
-        List dynaBeans = new ArrayList();
+        List<DynaBean> dynaBeans = new ArrayList<>();
 
         dynaBeans.add(dynaBean1);
         dynaBeans.add(dynaBean2);
@@ -391,7 +367,7 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
 
         getPlatform().insert(getModel(), dynaBeans);
 
-        List beans = getPlatform().fetch(getModel(),
+        List<DynaBean> beans = getPlatform().fetch(getModel(),
                 "SELECT * FROM " + asIdentifier("TestTable"),
                 new Table[]{getModel().getTable(0)});
 
@@ -400,24 +376,22 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
 
         DynaBean bean = (DynaBean) beans.get(0);
 
-        assertEquals(new Integer(1),
+        assertEquals(1,
                 getPropertyValue(bean, "TheId"));
         assertEquals("Text 1",
                 getPropertyValue(bean, "TheText"));
 
-        bean = (DynaBean) beans.get(1);
+        bean = beans.get(1);
 
-        assertEquals(new Integer(2),
+        assertEquals(2,
                 getPropertyValue(bean, "TheId"));
         assertEquals("Text 2",
                 getPropertyValue(bean, "TheText"));
 
-        bean = (DynaBean) beans.get(2);
+        bean = beans.get(2);
 
-        assertEquals(new Integer(3),
-                getPropertyValue(bean, "TheId"));
-        assertEquals("Text 3",
-                getPropertyValue(bean, "TheText"));
+        assertEquals(3, getPropertyValue(bean, "TheId"));
+        assertEquals("Text 3", getPropertyValue(bean, "TheText"));
     }
 
     /**
@@ -442,12 +416,12 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
         SqlDynaClass dynaClass = SqlDynaClass.newInstance(getModel().getTable(0));
         DynaBean dynaBean = new SqlDynaBean(dynaClass);
 
-        dynaBean.set("TheId", new Integer(1));
+        dynaBean.set("TheId", 1);
         dynaBean.set("TheText", "Text 10");
 
         getPlatform().update(getModel(), dynaBean);
 
-        List beans = getPlatform().fetch(getModel(),
+        List<DynaBean> beans = getPlatform().fetch(getModel(),
                 "SELECT * FROM " + asIdentifier("TestTable"),
                 new Table[]{getModel().getTable(0)});
 
@@ -456,10 +430,8 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
 
         DynaBean bean = (DynaBean) beans.get(0);
 
-        assertEquals(new Integer(1),
-                getPropertyValue(bean, "TheId"));
-        assertEquals("Text 10",
-                getPropertyValue(bean, "TheText"));
+        assertEquals(1, getPropertyValue(bean, "TheId"));
+        assertEquals("Text 10", getPropertyValue(bean, "TheText"));
     }
 
     /**
@@ -487,11 +459,11 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
         DynaBean dynaBean2 = new SqlDynaBean(dynaClass);
         DynaBean dynaBean3 = new SqlDynaBean(dynaClass);
 
-        dynaBean1.set("TheId", new Integer(1));
+        dynaBean1.set("TheId", 1);
         dynaBean1.set("TheText", "Text 1");
-        dynaBean2.set("TheId", new Integer(2));
+        dynaBean2.set("TheId", 2);
         dynaBean2.set("TheText", "Text 2");
-        dynaBean3.set("TheId", new Integer(3));
+        dynaBean3.set("TheId", 3);
         dynaBean3.set("TheText", "Text 30");
 
         assertTrue(getPlatform().exists(getModel(), dynaBean1));
@@ -516,21 +488,20 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
         SqlDynaClass dynaClass = SqlDynaClass.newInstance(getModel().getTable(0));
         DynaBean dynaBean = new SqlDynaBean(dynaClass);
 
-        dynaBean.set("TheId", new Integer(1));
+        dynaBean.set("TheId", 1);
         dynaBean.set("TheText", "Text 1");
 
         getPlatform().store(getModel(), dynaBean);
 
-        List beans = getPlatform().fetch(getModel(),
+        List<DynaBean> beans = getPlatform().fetch(getModel(),
                 "SELECT * FROM " + asIdentifier("TestTable"),
                 new Table[]{getModel().getTable(0)});
 
+        assertEquals(1, beans.size());
+
+        DynaBean bean = beans.get(0);
+
         assertEquals(1,
-                beans.size());
-
-        DynaBean bean = (DynaBean) beans.get(0);
-
-        assertEquals(new Integer(1),
                 getPropertyValue(bean, "TheId"));
         assertEquals("Text 1",
                 getPropertyValue(bean, "TheText"));
@@ -558,23 +529,20 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
         SqlDynaClass dynaClass = SqlDynaClass.newInstance(getModel().getTable(0));
         DynaBean dynaBean = new SqlDynaBean(dynaClass);
 
-        dynaBean.set("TheId", new Integer(1));
+        dynaBean.set("TheId", 1);
         dynaBean.set("TheText", "Text 10");
 
         getPlatform().store(getModel(), dynaBean);
 
-        List beans = getPlatform().fetch(getModel(),
+        List<DynaBean> beans = getPlatform().fetch(getModel(),
                 "SELECT * FROM " + asIdentifier("TestTable"),
                 new Table[]{getModel().getTable(0)});
 
-        assertEquals(1,
-                beans.size());
+        assertEquals(1, beans.size());
 
-        DynaBean bean = (DynaBean) beans.get(0);
+        DynaBean bean = beans.get(0);
 
-        assertEquals(new Integer(1),
-                getPropertyValue(bean, "TheId"));
-        assertEquals("Text 10",
-                getPropertyValue(bean, "TheText"));
+        assertEquals(1, getPropertyValue(bean, "TheId"));
+        assertEquals("Text 10", getPropertyValue(bean, "TheText"));
     }
 }

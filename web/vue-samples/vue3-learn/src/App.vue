@@ -1,46 +1,46 @@
 <template>
   <div>
-    {{ student.age }}
+    {{ ref1 }}
   </div>
-
   <button @click="show">年龄</button>
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+// import { shallowRef } from "vue";
 
-import { onBeforeMount, onMounted } from "vue";
 
 export default {
   name: "App",
   components: {},
   setup() {
-    onBeforeMount(() => {
-      console.log("V3 beforeMount!");
-    });
 
-    let m = reactive({
-      name: "ll",
-      age: 23,
-    });
 
-    console.log(m)
-
-    onMounted(() => {
-      console.log("V3 mounted!");
-    });
-
-    let student = ref({
-      name: "zs",
-      age: 20,
-    });
-    function show() {
-      student.value.age++;
+    let targetObject = {
+      name: 'zs',
+      info: {
+        first_name: "wl"
+      }
     }
 
+    let handler = {
+      get: function (target, propKey, receiver) {
+        console.log(`getting ${propKey}!`);
+        return Reflect.get(target, propKey, receiver);
+      },
+      set: function (target, propKey, value, receiver) {
+        console.log(`setting ${propKey}!`);
+        return Reflect.set(target, propKey, value, receiver);
+      }
+    }
+
+    let proxy = new Proxy(targetObject, handler);
+
+    console.log(proxy);
+
+    proxy.info.first_name = 'sdd'
+
     return {
-      student,
-      show,
+
     };
   },
 };

@@ -229,15 +229,13 @@ public class Column implements SchemaObject, Serializable {
      */
     public void setType(String type) {
         Integer typeCode = TypeMap.getJdbcTypeCode(type);
-
         if (typeCode == null) {
             throw new ModelException("Unknown JDBC type " + type);
-        } else {
-            this.jdbcTypeCode = typeCode;
-            // we get the corresponding string value from the TypeMap in order
-            // to detect extension types which we don't want in the model
-            jdbcTypeName = TypeMap.getJdbcTypeName(this.jdbcTypeCode);
         }
+        this.jdbcTypeCode = typeCode;
+        // we get the corresponding string value from the TypeMap in order
+        // to detect extension types which we don't want in the model
+        jdbcTypeName = TypeMap.getJdbcTypeName(typeCode);
     }
 
     /**
@@ -289,13 +287,12 @@ public class Column implements SchemaObject, Serializable {
     public void setSize(String size) {
         if (size != null) {
             int pos = size.indexOf(",");
-
             _size = size;
             if (pos < 0) {
                 _scale = 0;
                 _sizeAsInt = new Integer(_size.trim());
             } else {
-                _sizeAsInt = new Integer(size.substring(0, pos).trim());
+                _sizeAsInt = Integer.valueOf(size.substring(0, pos).trim());
                 _scale = Integer.parseInt(size.substring(pos + 1).trim());
             }
         } else {

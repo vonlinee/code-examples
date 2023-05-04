@@ -76,7 +76,10 @@ public class MyBatisUtils {
         DepartmentMapper mapper = sqlSession.getMapper(DepartmentMapper.class);
 
         Map<String, Object> map = new HashMap<>();
+        map.put("deptId", "12");
+        map.put("condition", "12");
         List<Department> list = mapper.selectList(map);
+
 
         System.out.println(list);
     }

@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.maxdb;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
@@ -37,7 +37,7 @@ public class MaxDbModelReader extends JdbcModelReader {
      * Creates a new model reader for MaxDb databases.
      * @param platform The platform that this model reader belongs to
      */
-    public MaxDbModelReader(DatabaseDialect platform) {
+    public MaxDbModelReader(DatabasePlatform platform) {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);

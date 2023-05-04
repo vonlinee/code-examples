@@ -20,11 +20,11 @@ package org.apache.ddlutils.platform;
  */
 
 /**
- * DatabaseDialect implementation that makes the base functionality available without
+ * DatabasePlatform implementation that makes the base functionality available without
  * overriding anything.
  * @version $Revision: $
  */
-public class TestPlatform extends GenericDialect {
+public class TestPlatform extends GenericDatabasePlatform {
     /**
      * Creates a new test platform instance.
      */

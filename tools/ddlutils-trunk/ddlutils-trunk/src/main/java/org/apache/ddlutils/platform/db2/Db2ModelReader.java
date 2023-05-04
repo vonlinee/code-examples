@@ -19,8 +19,8 @@ package org.apache.ddlutils.platform.db2;
  * under the License.
  */
 
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
-import org.apache.ddlutils.DatabaseDialect;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Index;
 import org.apache.ddlutils.model.Table;
@@ -60,7 +60,7 @@ public class Db2ModelReader extends JdbcModelReader {
      * Creates a new model reader for Db2 databases.
      * @param platform The platform that this model reader belongs to
      */
-    public Db2ModelReader(DatabaseDialect platform) {
+    public Db2ModelReader(DatabasePlatform platform) {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);

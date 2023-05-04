@@ -1,27 +1,8 @@
 package org.apache.ddlutils.platform;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
@@ -67,7 +48,7 @@ public abstract class SqlBuilder {
     /**
      * The platform that this builder belongs to.
      */
-    private DatabaseDialect _platform;
+    private final DatabasePlatform platform;
     /**
      * The current Writer used to output the SQL to.
      */
@@ -97,29 +78,24 @@ public abstract class SqlBuilder {
      */
     private final DefaultValueHelper _defaultValueHelper = new DefaultValueHelper();
     /**
-     * 与普通的map相比，ListOrderedMap的key可保持原有顺序
      * The character sequences that need escaping.
      */
     private final Map<String, String> _charSequencesToEscape = new HashMap<>();
-
-    //
-    // Configuration
-    //                
 
     /**
      * Creates a new sql builder.
      * @param platform The plaftform this builder belongs to
      */
-    public SqlBuilder(DatabaseDialect platform) {
-        _platform = platform;
+    public SqlBuilder(DatabasePlatform platform) {
+        this.platform = platform;
     }
 
     /**
      * Returns the platform object.
      * @return The platform
      */
-    public DatabaseDialect getPlatform() {
-        return _platform;
+    public DatabasePlatform getPlatform() {
+        return platform;
     }
 
     /**
@@ -127,7 +103,7 @@ public abstract class SqlBuilder {
      * @return The info object
      */
     public PlatformInfo getPlatformInfo() {
-        return _platform.getPlatformInfo();
+        return platform.getPlatformInfo();
     }
 
     /**
@@ -503,7 +479,7 @@ public abstract class SqlBuilder {
             Index index = table.getIndex(idx);
 
             if (!index.isUnique() && !getPlatformInfo().isIndicesSupported()) {
-                throw new ModelException("DatabaseDialect does not support non-unique indices");
+                throw new ModelException("DatabasePlatform does not support non-unique indices");
             }
             createIndex(table, index);
         }

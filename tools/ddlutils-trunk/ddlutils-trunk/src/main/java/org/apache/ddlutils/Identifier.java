@@ -127,7 +127,7 @@ public class Identifier implements Comparable<Identifier> {
      * @return if quoted, identifier name enclosed in dialect-specific open- and
      * end-quotes; otherwise, the unquoted identifier.
      */
-    public String render(DatabaseDialect dialect) {
+    public String render(DatabasePlatform dialect) {
         return isQuoted
                 ? dialect.openQuote() + getText() + dialect.closeQuote()
                 : getText();

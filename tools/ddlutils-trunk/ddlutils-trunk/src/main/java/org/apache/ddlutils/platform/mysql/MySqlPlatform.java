@@ -25,9 +25,9 @@ import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.GenericDialect;
+import org.apache.ddlutils.platform.GenericDatabasePlatform;
+import org.apache.ddlutils.platform.SqlBuildContext;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -36,7 +36,7 @@ import java.sql.Types;
  * The platform implementation for MySQL.
  * @version $Revision: 231306 $
  */
-public class MySqlPlatform extends GenericDialect {
+public class MySqlPlatform extends GenericDatabasePlatform {
     /**
      * Database name of this platform.
      */
@@ -99,7 +99,6 @@ public class MySqlPlatform extends GenericDialect {
         info.addNativeTypeMapping(Types.STRUCT, "LONGBLOB", Types.LONGVARBINARY);
         // Since TIMESTAMP is not a stable datatype yet, and does not support a higher precision
         // than DATETIME (year to seconds) as of MySQL 5, we map the JDBC type here to DATETIME
-        // TODO: Make this configurable
         info.addNativeTypeMapping(Types.TIMESTAMP, "DATETIME");
         // In MySql, TINYINT has only a range of -128 to 127
         info.addNativeTypeMapping(Types.TINYINT, "SMALLINT", Types.SMALLINT);
@@ -112,7 +111,6 @@ public class MySqlPlatform extends GenericDialect {
         setSqlBuilder(new MySqlBuilder(this));
         setModelReader(new MySqlModelReader(this));
     }
-
 
 
     /**

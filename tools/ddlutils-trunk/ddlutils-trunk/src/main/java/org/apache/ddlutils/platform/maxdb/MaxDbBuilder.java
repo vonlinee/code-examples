@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.maxdb;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.ForeignKey;
 import org.apache.ddlutils.model.Table;
@@ -36,7 +36,7 @@ public class MaxDbBuilder extends SapDbBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public MaxDbBuilder(DatabaseDialect platform) {
+    public MaxDbBuilder(DatabasePlatform platform) {
         super(platform);
     }
 

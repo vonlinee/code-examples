@@ -1,6 +1,6 @@
 package org.apache.ddlutils.platform.mysql;
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.ForeignKey;
@@ -23,7 +23,7 @@ public class MySqlBuilder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public MySqlBuilder(DatabaseDialect platform) {
+    public MySqlBuilder(DatabasePlatform platform) {
         super(platform);
         // we need to handle the backslash first otherwise the other
         // already escaped sequences would be affected

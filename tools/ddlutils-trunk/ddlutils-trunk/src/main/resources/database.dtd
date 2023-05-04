@@ -40,11 +40,11 @@ define the schema, such as tables, foreign key relationships, indexes and so for
                               <br><b>Note: This attribute is ignored by DdlUtils.</b>
 @attr defaultJavaType         Whether jdbc types are mapped to primitive types such as <code>int</code>
                               (if possible) by default, or to reference types such as
-                              <code>java.lang.Integer</code>. 
+                              <code>java.lang.Integer</code>.
                               <br><b>Note: This attribute is ignored by DdlUtils.</b>
-@attr package                 The package of the Java classes generated from this schema. 
+@attr package                 The package of the Java classes generated from this schema.
                               <br><b>Note: This attribute is ignored by DdlUtils.</b>
-@attr baseClass               The base class for the Java classes generated from this schema. 
+@attr baseClass               The base class for the Java classes generated from this schema.
                               <br><b>Note: This attribute is ignored by DdlUtils.</b>
 @attr basePeer                Sorry, no documentation available.
                               <br><b>Note: This attribute is ignored by DdlUtils.</b>
@@ -85,15 +85,15 @@ Sorry, no documentation available
   filename CDATA #REQUIRED
 >
 
-<!-- 
+<!--
 Defines a table in the database schema.
 -->
 <!ELEMENT table (column+, (foreign-key | index | unique | id-method-parameter)*)>
-<!-- 
+<!--
 @attr name             The name of this table.
 @attr javaName         The name of the Java class generated from this table.
                        <br><b>Note: This attribute is ignored by DdlUtils.</b>
-@attr idMethod         Defines how values for identity columns are generated. See 
+@attr idMethod         Defines how values for identity columns are generated. See
                        <code>database.defaultIdMethod</code> for more info.
                        <br><b>Note: This attribute is ignored by DdlUtils.</b>
 @attr skipSql          Sorry, no documentation available.
@@ -108,7 +108,7 @@ Defines a table in the database schema.
                        <br><b>Note: This attribute is ignored by DdlUtils.</b>
 @attr interface        Sorry, no documentation available.
                        <br><b>Note: This attribute is ignored by DdlUtils.</b>
-@attr javaNamingMethod How the name of the corresponding java class is generated. See 
+@attr javaNamingMethod How the name of the corresponding java class is generated. See
                        <code>database.defaultJavaNamingMethod</code> for more info. Use
                        <code>nochange</code> if the default naming method shall be used.
                        <br><b>Note: This attribute is ignored by DdlUtils.</b>
@@ -163,7 +163,7 @@ Defines a column in a table.
                        to a type native to the database.
 @attr javaType         Whether the jdbc type is mapped to a primitive type such as
                        <code>int</code> (if possible), or to a reference type such as
-                       <code>java.lang.Integer</code>. 
+                       <code>java.lang.Integer</code>.
                        <br><b>Note: This attribute is ignored by DdlUtils.</b>
 @attr size             The JDBC size specification of the column. This is type specific.
                        For types that have a length (such as VARCHAR), specify a single
@@ -180,7 +180,7 @@ Defines a column in a table.
                        <br><b>Note: This attribute is ignored by DdlUtils.</b>
 @attr inputValidator   Sorry, no documentation available.
                        <br><b>Note: This attribute is ignored by DdlUtils.</b>
-@attr javaNamingMethod How the name of the corresponding java field is generated. See 
+@attr javaNamingMethod How the name of the corresponding java field is generated. See
                        <code>database.defaultJavaNamingMethod</code> for more info. Use
                        <code>nochange</code> if the default naming method shall be used.
                        <br><b>Note: This attribute is ignored by DdlUtils.</b>
@@ -205,6 +205,7 @@ Defines a column in a table.
   inputValidator   CDATA #IMPLIED
   javaNamingMethod (nochange | underscore | javaname) #IMPLIED
   description      CDATA #IMPLIED
+  defaultValue     CDATA #IMPLIED
 >
 
 <!--
@@ -233,13 +234,13 @@ to another table.
 <!ELEMENT foreign-key (reference+)>
 <!--
 @attr foreignTable The name of the foreign table
-@attr name         The name of this foreign key. Even though you can leave it empty, 
+@attr name         The name of this foreign key. Even though you can leave it empty,
                    we suggest that you always supply a meaningful name for foreign keys.
 @attr onUpdate     Specifies the action to perform when the value in the referenced column
                    in the foreign table is changed:
                    <dl>
                    <dt>cascade</dt><dd>Change the value of the local column accordingly.</dd>
-                   <dt>setnull</dt><dd>Set the local column to <code>NULL</code> which 
+                   <dt>setnull</dt><dd>Set the local column to <code>NULL</code> which
                    effectively removes this specific foreign key relationship.</dd>
                    <dt>restrict</dt><dd>Different databases may interpret this value
                    differently, but usually it is synonymous with <code>none</code>.</dd>
@@ -249,7 +250,7 @@ to another table.
                    table is deleted:
                    <dl>
                    <dt>cascade</dt><dd>Delete the local row.</dd>
-                   <dt>setnull</dt><dd>Set the local column to <code>NULL</code> which 
+                   <dt>setnull</dt><dd>Set the local column to <code>NULL</code> which
                    effectively removes this specific foreign key relationship.</dd>
                    <dt>setdefault</dt><dd>Set the local column to its default value.</dd>
                    <dt>restrict</dt><dd>Different databases may interpret this value

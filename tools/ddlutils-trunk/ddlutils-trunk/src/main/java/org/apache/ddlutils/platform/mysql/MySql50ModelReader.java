@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.mysql;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 
@@ -35,7 +35,7 @@ public class MySql50ModelReader extends MySqlModelReader {
      * Creates a new model reader for MySql 5 databases.
      * @param platform The platform that this model reader belongs to
      */
-    public MySql50ModelReader(DatabaseDialect platform) {
+    public MySql50ModelReader(DatabasePlatform platform) {
         super(platform);
     }
 

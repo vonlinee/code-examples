@@ -76,7 +76,7 @@ because we first need to create a platform instance via the data source pointing
 to the database::
 
 	import javax.sql.DataSource;
-	import org.apache.ddlutils.DatabaseDialect;
+	import org.apache.ddlutils.DatabasePlatform;
 	import org.apache.ddlutils.PlatformFactory;
 	import org.apache.ddlutils.model.Database;
 
@@ -106,7 +106,7 @@ Both types of modification differ only in how the SQL is created, the general pr
 is the same: create the sql and execute it::
 
 	import javax.sql.DataSource;
-	import org.apache.ddlutils.DatabaseDialect;
+	import org.apache.ddlutils.DatabasePlatform;
 	import org.apache.ddlutils.PlatformFactory;
 	import org.apache.ddlutils.model.Database;
 
@@ -143,7 +143,7 @@ are then created which can be inserted by DdlUtils into the database::
 
 	import javax.sql.DataSource;
 	import org.apache.commons.beanutils.DynaBean;
-	import org.apache.ddlutils.DatabaseDialect;
+	import org.apache.ddlutils.DatabasePlatform;
 	import org.apache.ddlutils.PlatformFactory;
 	import org.apache.ddlutils.model.Database;
 
@@ -179,7 +179,7 @@ to stdout::
 	import java.util.Iterator;
 	import javax.sql.DataSource;
 	import org.apache.commons.beanutils.DynaBean;
-	import org.apache.ddlutils.DatabaseDialect;
+	import org.apache.ddlutils.DatabasePlatform;
 	import org.apache.ddlutils.PlatformFactory;
 	import org.apache.ddlutils.model.Database;
 	import org.apache.ddlutils.model.Table;
@@ -230,7 +230,7 @@ on the safe side, then you could write the above statement like this::
 	import java.util.Iterator;
 	import javax.sql.DataSource;
 	import org.apache.commons.beanutils.DynaBean;
-	import org.apache.ddlutils.DatabaseDialect;
+	import org.apache.ddlutils.DatabasePlatform;
 	import org.apache.ddlutils.PlatformFactory;
 	import org.apache.ddlutils.model.Database;
 	import org.apache.ddlutils.model.Table;

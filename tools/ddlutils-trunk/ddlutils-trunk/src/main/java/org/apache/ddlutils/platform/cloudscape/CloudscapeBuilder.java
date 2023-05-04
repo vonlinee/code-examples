@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.cloudscape;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuilder;
@@ -35,7 +35,7 @@ public class CloudscapeBuilder extends SqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public CloudscapeBuilder(DatabaseDialect platform) {
+    public CloudscapeBuilder(DatabasePlatform platform) {
         super(platform);
         addEscapedCharSequence("'", "''");
     }

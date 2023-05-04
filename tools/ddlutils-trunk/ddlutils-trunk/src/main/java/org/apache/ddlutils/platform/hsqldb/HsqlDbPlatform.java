@@ -27,7 +27,7 @@ import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.GenericDialect;
+import org.apache.ddlutils.platform.GenericDatabasePlatform;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -39,7 +39,7 @@ import java.sql.Types;
  * The platform implementation for the HsqlDb database.
  * @version $Revision: 231306 $
  */
-public class HsqlDbPlatform extends GenericDialect {
+public class HsqlDbPlatform extends GenericDatabasePlatform {
     /**
      * Database name of this platform.
      */

@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.mysql;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Table;
 
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class MySql50Builder extends MySqlBuilder {
      * Creates a new builder instance.
      * @param platform The plaftform this builder belongs to
      */
-    public MySql50Builder(DatabaseDialect platform) {
+    public MySql50Builder(DatabasePlatform platform) {
         super(platform);
     }
 

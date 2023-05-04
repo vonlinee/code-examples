@@ -190,7 +190,6 @@ public abstract class TypeMap {
     public static int[] getSuportedJdbcTypes() {
         int[] typeCodes = new int[_typeCodeToTypeName.size()];
         int idx = 0;
-
         for (Iterator<Integer> it = _typeCodeToTypeName.keySet().iterator(); it.hasNext(); idx++) {
             typeCodes[idx] = it.next();
         }

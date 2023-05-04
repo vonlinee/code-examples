@@ -1,24 +1,5 @@
 package org.apache.ddlutils.dynabean;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.DynaClass;
@@ -37,18 +18,18 @@ public class DynaClassCache {
     /**
      * A cache of the SqlDynaClasses per table name.
      */
-    private Map _dynaClassCache = new HashMap();
+    private final Map<String, SqlDynaClass> _dynaClassCache = new HashMap<>();
 
     /**
      * Creates a new dyna bean instance for the given table.
      * @param table The table
      * @return The new empty dyna bean
      */
-    public DynaBean createNewInstance(Table table) throws SqlDynaException {
+    public DynaBean createNewInstance(Table table) throws RuntimeException {
         try {
             return getDynaClass(table).newInstance();
         } catch (InstantiationException | IllegalAccessException ex) {
-            throw new SqlDynaException("Could not create a new dyna bean for table " + table.getName(), ex);
+            throw new RuntimeException("Could not create a new dyna bean for table " + table.getName(), ex);
         }
     }
 
@@ -71,9 +52,7 @@ public class DynaClassCache {
         try {
             // copy all the properties from the source
             BeanUtils.copyProperties(answer, source);
-        } catch (InvocationTargetException ex) {
-            throw new SqlDynaException("Could not populate the bean", ex);
-        } catch (IllegalAccessException ex) {
+        } catch (InvocationTargetException | IllegalAccessException ex) {
             throw new SqlDynaException("Could not populate the bean", ex);
         }
 
@@ -87,10 +66,10 @@ public class DynaClassCache {
      * @return The <code>SqlDynaClass</code> for the indicated table
      */
     public SqlDynaClass getDynaClass(Table table) {
-        SqlDynaClass answer = (SqlDynaClass) _dynaClassCache.get(table.getName());
+        SqlDynaClass answer = _dynaClassCache.get(table.getName());
 
         if (answer == null) {
-            answer = createDynaClass(table);
+            answer = SqlDynaClass.newInstance(table);
             _dynaClassCache.put(table.getName(), answer);
         }
         return answer;
@@ -110,14 +89,5 @@ public class DynaClassCache {
             // TODO: we could autogenerate an SqlDynaClass here ?
             throw new SqlDynaException("The dyna bean is not an instance of a SqlDynaClass");
         }
-    }
-
-    /**
-     * Creates a new {@link SqlDynaClass} instance for the given table based on the table definition.
-     * @param table The table
-     * @return The new dyna class
-     */
-    private SqlDynaClass createDynaClass(Table table) {
-        return SqlDynaClass.newInstance(table);
     }
 }

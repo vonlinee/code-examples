@@ -1,24 +1,5 @@
 package org.apache.ddlutils.dynabean;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.beanutils.BasicDynaClass;
 import org.apache.commons.beanutils.DynaProperty;
 import org.apache.ddlutils.model.Table;
@@ -40,7 +21,7 @@ public class SqlDynaClass extends BasicDynaClass {
     /**
      * The table for which this dyna class is defined.
      */
-    private Table _table;
+    private Table table;
     /**
      * The primary key dyna properties.
      */
@@ -55,9 +36,9 @@ public class SqlDynaClass extends BasicDynaClass {
      * @param table      The table
      * @param properties The dyna properties
      */
-    public SqlDynaClass(Table table, SqlDynaProperty[] properties) {
+    SqlDynaClass(Table table, SqlDynaProperty[] properties) {
         super(table.getName(), SqlDynaBean.class, properties);
-        _table = table;
+        this.table = table;
     }
 
     /**
@@ -68,13 +49,10 @@ public class SqlDynaClass extends BasicDynaClass {
      */
     public static SqlDynaClass newInstance(Table table) {
         List<SqlDynaProperty> properties = new ArrayList<>();
-
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             properties.add(new SqlDynaProperty(table.getColumn(idx)));
         }
-
         SqlDynaProperty[] array = new SqlDynaProperty[properties.size()];
-
         properties.toArray(array);
         return new SqlDynaClass(table, array);
     }
@@ -84,7 +62,7 @@ public class SqlDynaClass extends BasicDynaClass {
      * @return The table
      */
     public Table getTable() {
-        return _table;
+        return table;
     }
 
     // Helper methods

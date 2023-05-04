@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.derby;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
@@ -36,7 +36,7 @@ public class DerbyModelReader extends JdbcModelReader {
      * Creates a new model reader for Derby databases.
      * @param platform The platform that this model reader belongs to
      */
-    public DerbyModelReader(DatabaseDialect platform) {
+    public DerbyModelReader(DatabasePlatform platform) {
         super(platform);
     }
 

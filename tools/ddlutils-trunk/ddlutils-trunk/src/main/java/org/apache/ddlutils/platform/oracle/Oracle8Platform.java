@@ -19,7 +19,7 @@ package org.apache.ddlutils.platform.oracle;
  * under the License.
  */
 
-import org.apache.ddlutils.DatabaseDialect;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.CascadeActionEnum;
@@ -28,7 +28,7 @@ import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.GenericDialect;
+import org.apache.ddlutils.platform.GenericDatabasePlatform;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -37,11 +37,11 @@ import java.util.Map;
 /**
  * The platform for Oracle 8.
  * <p>
- * TODO: We might support the {@link DatabaseDialect#createDatabase(String, String, String, String, Map)}
+ * TODO: We might support the {@link DatabasePlatform#createDatabase(String, String, String, String, Map)}
  *       functionality via "CREATE SCHEMA"/"CREATE USER" or "CREATE TABLESPACE" ?
  * @version $Revision: 231306 $
  */
-public class Oracle8Platform extends GenericDialect {
+public class Oracle8Platform extends GenericDatabasePlatform {
     /**
      * Database name of this platform.
      */
