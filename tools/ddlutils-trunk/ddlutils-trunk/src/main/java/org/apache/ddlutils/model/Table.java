@@ -59,15 +59,15 @@ public class Table implements SchemaObject, Serializable {
     /**
      * The columns in this table.
      */
-    private List<Column> _columns = new ArrayList<>();
+    private final List<Column> _columns = new ArrayList<>();
     /**
      * The foreign keys associated to this table.
      */
-    private List<ForeignKey> _foreignKeys = new ArrayList<>();
+    private final List<ForeignKey> _foreignKeys = new ArrayList<>();
     /**
      * The indices applied to this table.
      */
-    private ArrayList<Index> _indices = new ArrayList<>();
+    private final ArrayList<Index> _indices = new ArrayList<>();
 
     /**
      * Returns the catalog of this table as read from the database.
@@ -172,7 +172,7 @@ public class Table implements SchemaObject, Serializable {
      * @return The columns
      */
     public Column[] getColumns() {
-        return (Column[]) _columns.toArray(new Column[_columns.size()]);
+        return _columns.toArray(new Column[0]);
     }
 
     /**
@@ -216,10 +216,8 @@ public class Table implements SchemaObject, Serializable {
      * Adds the given columns.
      * @param columns The columns
      */
-    public void addColumns(Collection columns) {
-        for (Iterator it = columns.iterator(); it.hasNext(); ) {
-            addColumn((Column) it.next());
-        }
+    public void addColumns(Collection<Column> columns) {
+        _columns.addAll(columns);
     }
 
     /**
@@ -263,7 +261,7 @@ public class Table implements SchemaObject, Serializable {
      * @return The foreign key
      */
     public ForeignKey getForeignKey(int idx) {
-        return (ForeignKey) _foreignKeys.get(idx);
+        return _foreignKeys.get(idx);
     }
 
     /**
@@ -271,7 +269,7 @@ public class Table implements SchemaObject, Serializable {
      * @return The foreign keys
      */
     public ForeignKey[] getForeignKeys() {
-        return (ForeignKey[]) _foreignKeys.toArray(new ForeignKey[_foreignKeys.size()]);
+        return _foreignKeys.toArray(new ForeignKey[0]);
     }
 
     /**
@@ -299,9 +297,9 @@ public class Table implements SchemaObject, Serializable {
      * Adds the given foreign keys.
      * @param foreignKeys The foreign keys
      */
-    public void addForeignKeys(Collection foreignKeys) {
-        for (Iterator it = foreignKeys.iterator(); it.hasNext(); ) {
-            addForeignKey((ForeignKey) it.next());
+    public void addForeignKeys(Collection<ForeignKey> foreignKeys) {
+        for (Iterator<ForeignKey> it = foreignKeys.iterator(); it.hasNext(); ) {
+            addForeignKey(it.next());
         }
     }
 
@@ -525,8 +523,7 @@ public class Table implements SchemaObject, Serializable {
         for (int idx = 0; idx < getIndexCount(); idx++) {
             Index index = getIndex(idx);
 
-            if ((caseSensitive && name.equals(index.getName())) ||
-                    (!caseSensitive && name.equalsIgnoreCase(index.getName()))) {
+            if ((caseSensitive && name.equals(index.getName())) || (!caseSensitive && name.equalsIgnoreCase(index.getName()))) {
                 return index;
             }
         }
@@ -560,8 +557,7 @@ public class Table implements SchemaObject, Serializable {
         for (int idx = 0; idx < getForeignKeyCount(); idx++) {
             ForeignKey foreignKey = getForeignKey(idx);
 
-            if ((caseSensitive && name.equals(foreignKey.getName())) ||
-                    (!caseSensitive && name.equalsIgnoreCase(foreignKey.getName()))) {
+            if ((caseSensitive && name.equals(foreignKey.getName())) || (!caseSensitive && name.equalsIgnoreCase(foreignKey.getName()))) {
                 return foreignKey;
             }
         }
@@ -594,8 +590,7 @@ public class Table implements SchemaObject, Serializable {
         for (int idx = 0; idx < getForeignKeyCount(); idx++) {
             ForeignKey fk = getForeignKey(idx);
 
-            if ((caseSensitive && fk.equals(key)) ||
-                    (!caseSensitive && fk.equalsIgnoreCase(key))) {
+            if ((caseSensitive && fk.equals(key)) || (!caseSensitive && fk.equalsIgnoreCase(key))) {
                 return fk;
             }
         }
@@ -683,17 +678,14 @@ public class Table implements SchemaObject, Serializable {
     public void sortForeignKeys(final boolean caseSensitive) {
         if (!_foreignKeys.isEmpty()) {
             final Collator collator = Collator.getInstance();
-            Collections.sort(_foreignKeys, new Comparator<ForeignKey>() {
-                @Override
-                public int compare(ForeignKey obj1, ForeignKey obj2) {
-                    String fk1Name = obj1.getName();
-                    String fk2Name = obj2.getName();
-                    if (!caseSensitive) {
-                        fk1Name = (fk1Name != null ? fk1Name.toLowerCase() : null);
-                        fk2Name = (fk2Name != null ? fk2Name.toLowerCase() : null);
-                    }
-                    return collator.compare(fk1Name, fk2Name);
+            _foreignKeys.sort((obj1, obj2) -> {
+                String fk1Name = obj1.getName();
+                String fk2Name = obj2.getName();
+                if (!caseSensitive) {
+                    fk1Name = (fk1Name != null ? fk1Name.toLowerCase() : null);
+                    fk2Name = (fk2Name != null ? fk2Name.toLowerCase() : null);
                 }
+                return collator.compare(fk1Name, fk2Name);
             });
         }
     }
@@ -701,46 +693,36 @@ public class Table implements SchemaObject, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Table) {
             Table other = (Table) obj;
             // Note that this compares case sensitive
             // TODO: For now we ignore catalog and schema (type should be irrelevant anyways)
-            return new EqualsBuilder().append(name, other.name)
-                    .append(_columns, other._columns)
+            return new EqualsBuilder().append(name, other.name).append(_columns, other._columns)
                     .append(new HashSet<>(_foreignKeys), new HashSet<>(other._foreignKeys))
-                    .append(new HashSet<>(_indices), new HashSet<>(other._indices))
-                    .isEquals();
-        } else {
-            return false;
+                    .append(new HashSet<>(_indices), new HashSet<>(other._indices)).isEquals();
         }
+        return false;
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public int hashCode() {
         // TODO: For now we ignore catalog and schema (type should be irrelevant anyways)
-        return new HashCodeBuilder(17, 37).append(name)
-                .append(_columns)
-                .append(new HashSet<>(_foreignKeys))
-                .append(new HashSet<>(_indices))
-                .toHashCode();
+        return new HashCodeBuilder(17, 37).append(name).append(_columns).append(new HashSet<>(_foreignKeys))
+                .append(new HashSet<>(_indices)).toHashCode();
     }
+
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString() {
-        StringBuffer result = new StringBuffer();
-
-        result.append("Table [name=");
-        result.append(getName());
-        result.append("; ");
-        result.append(getColumnCount());
-        result.append(" columns]");
-
-        return result.toString();
+        return "Table [name=" + getName() + "; " + getColumnCount() + " columns]";
     }
 
     /**
@@ -748,7 +730,7 @@ public class Table implements SchemaObject, Serializable {
      * @return The string representation
      */
     public String toVerboseString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         result.append("Table [name=");
         result.append(getName());

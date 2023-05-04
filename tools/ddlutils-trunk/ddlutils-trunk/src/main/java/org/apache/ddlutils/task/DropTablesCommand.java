@@ -1,24 +1,5 @@
 package org.apache.ddlutils.task;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.CloneHelper;
@@ -30,7 +11,7 @@ import org.apache.tools.ant.BuildException;
 /**
  * Sub task for dropping tables.
  * @version $Revision: $
- * @ant.task name="dropTables"
+ * ant.task name="dropTables"
  */
 public class DropTablesCommand extends DatabaseCommand {
     /**
@@ -47,9 +28,9 @@ public class DropTablesCommand extends DatabaseCommand {
      * comma via '\,' if it is part of the table name. Please note that table names are
      * not trimmed which means that whitespace characters should only be present in
      * this string if they are actually part of the table name (i.e. in delimited
-     * identifer mode).
+     * identifier mode).
      * @param tableNameList The comma-separated list of table names
-     * @ant.not-required If no table filter is specified, then all tables will be dropped.
+     *                      If no table filter is specified, then all tables will be dropped.
      */
     public void setTables(String tableNameList) {
         _tableNames = new TaskHelper().parseCommaSeparatedStringList(tableNameList);
@@ -57,22 +38,14 @@ public class DropTablesCommand extends DatabaseCommand {
 
     /**
      * Sets the regular expression matching the names of the tables to be removed.
-     * For case insensitive matching, an uppercase name can be assumed. If no
-     * regular expressionis specified
+     * For case-insensitive matching, an uppercase name can be assumed. If no
+     * regular expressions specified
      * @param tableNameRegExp The regular expression; see {@link java.util.regex.Pattern}
      *                        for details
-     * @ant.not-required If no table filter is specified, then all tables will be dropped.
+     *                        If no table filter is specified, then all tables will be dropped.
      */
     public void setTableFilter(String tableNameRegExp) {
         _tableNameRegExp = tableNameRegExp;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isRequiringModel() {
-        return true;
     }
 
     /**

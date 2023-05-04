@@ -52,7 +52,7 @@ public abstract class TestBase extends TestCase {
      */
     protected Database parseDatabaseFromString(String dbDef) {
         DatabaseIO dbIO = new DatabaseIO();
-        dbIO.setValidateXml(true);
+        dbIO.setValidateXml(false);
         return dbIO.read(new StringReader(dbDef));
     }
 

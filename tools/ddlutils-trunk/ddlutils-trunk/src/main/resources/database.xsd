@@ -31,12 +31,12 @@
     <xsd:documentation>
       This is the XML Schema for basic database schemas as used by the
       DB projects like DdlUtils, OJB and Torque.
-    
+
       The instance documents may indicate the published version of
       the schema using the xsi:schemaLocation attribute for the OJB
       namespace with the following location:
-    
-      http://db.apache.org/schemas/database.xsd
+
+      https://db.apache.org/schemas/database.xsd
     </xsd:documentation>
   </xsd:annotation>
 
@@ -75,7 +75,6 @@
       <xsd:enumeration value="TINYINT"/>
       <xsd:enumeration value="VARBINARY"/>
       <xsd:enumeration value="VARCHAR"/>
-
       <xsd:enumeration value="BOOLEANINT"/>
       <xsd:enumeration value="BOOLEANCHAR"/>
     </xsd:restriction>

@@ -211,9 +211,7 @@ public class TestMySqlPlatform extends TestPlatformBase {
         Database testDb = parseDatabaseFromString(schema);
         SqlBuildContext params = new SqlBuildContext();
 
-        params.addParameter(testDb.getTable(0),
-                "ROW_FORMAT",
-                "COMPRESSED");
+        params.addParameter(testDb.getTable(0), "ROW_FORMAT", "COMPRESSED");
         params.addParameter(null,
                 "ENGINE",
                 "INNODB");
@@ -258,8 +256,6 @@ public class TestMySqlPlatform extends TestPlatformBase {
 
         assert is != null;
         Database database = io.read(new InputStreamReader(is));
-
-        System.out.println(database);
 
         getPlatform().getSqlBuilder().createTables(database);
 

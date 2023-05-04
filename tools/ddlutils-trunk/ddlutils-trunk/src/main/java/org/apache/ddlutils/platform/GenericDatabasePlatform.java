@@ -1186,8 +1186,8 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
         // non-autoincrement have been added
         boolean canMigrateData = true;
 
-        for (Iterator it = change.getOriginalChanges().iterator(); canMigrateData && it.hasNext(); ) {
-            TableChange curChange = (TableChange) it.next();
+        for (Iterator<TableChange> it = change.getOriginalChanges().iterator(); canMigrateData && it.hasNext(); ) {
+            TableChange curChange = it.next();
 
             if (curChange instanceof AddColumnChange) {
                 AddColumnChange addColumnChange = (AddColumnChange) curChange;

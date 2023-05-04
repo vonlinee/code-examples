@@ -171,6 +171,13 @@ public class DatabaseIO {
     }
 
     /**
+     * use internal dtd is default set to true
+     */
+    public void setUseInternalDtd(boolean useInternalDtd) {
+        this._useInternalDtd = useInternalDtd;
+    }
+
+    /**
      * Reads the database model contained in the specified file.
      * @param filename The model file name
      * @return The database model
@@ -361,18 +368,21 @@ public class DatabaseIO {
         while (eventType != XMLStreamReader.END_ELEMENT) {
             eventType = xmlReader.next();
             if (eventType == XMLStreamReader.START_ELEMENT) {
-                QName elemQName = xmlReader.getName();
-                if (isQnameEquals(elemQName, QNAME_ELEMENT_COLUMN)) {
-                    table.addColumn(readColumnElement(xmlReader));
-                } else if (isQnameEquals(elemQName, QNAME_ELEMENT_FOREIGN_KEY)) {
-                    table.addForeignKey(readForeignKeyElement(xmlReader));
-                } else if (isQnameEquals(elemQName, QNAME_ELEMENT_INDEX)) {
-                    table.addIndex(readIndexElement(xmlReader));
-                } else if (isQnameEquals(elemQName, QNAME_ELEMENT_UNIQUE)) {
-                    table.addIndex(readUniqueElement(xmlReader));
-                } else {
-                    readOverElement(xmlReader);
-                }
+                continue;
+            }
+            System.out.println(eventType);
+            QName elemQName = xmlReader.getName();
+            if (isQnameEquals(elemQName, QNAME_ELEMENT_COLUMN)) {
+                // column
+                table.addColumn(readColumnElement(xmlReader));
+            } else if (isQnameEquals(elemQName, QNAME_ELEMENT_FOREIGN_KEY)) {
+                table.addForeignKey(readForeignKeyElement(xmlReader));
+            } else if (isQnameEquals(elemQName, QNAME_ELEMENT_INDEX)) {
+                table.addIndex(readIndexElement(xmlReader));
+            } else if (isQnameEquals(elemQName, QNAME_ELEMENT_UNIQUE)) {
+                table.addIndex(readUniqueElement(xmlReader));
+            } else {
+                readOverElement(xmlReader);
             }
         }
     }
@@ -385,7 +395,7 @@ public class DatabaseIO {
     private Column readColumnElement(XMLStreamReader xmlReader) throws XMLStreamException {
         Column column = new Column();
         for (int idx = 0; idx < xmlReader.getAttributeCount(); idx++) {
-            QName attrQName = xmlReader.getAttributeName(idx);
+            final QName attrQName = xmlReader.getAttributeName(idx);
             if (isQnameEquals(attrQName, QNAME_ATTRIBUTE_NAME)) {
                 column.setName(xmlReader.getAttributeValue(idx));
             } else if (isQnameEquals(attrQName, QNAME_ATTRIBUTE_PRIMARY_KEY)) {
@@ -496,7 +506,7 @@ public class DatabaseIO {
     }
 
     /**
-     * Reads an unique index element from the XML stream reader.
+     * Reads a unique index element from the XML stream reader.
      * @param xmlReader The reader
      * @return The unique index object
      */
@@ -546,7 +556,6 @@ public class DatabaseIO {
      */
     private void readUniqueColumnElements(XMLStreamReader xmlReader, Index index) throws XMLStreamException, IOException {
         int eventType = XMLStreamReader.START_ELEMENT;
-
         while (eventType != XMLStreamReader.END_ELEMENT) {
             eventType = xmlReader.next();
             if (eventType == XMLStreamReader.START_ELEMENT) {
@@ -583,7 +592,7 @@ public class DatabaseIO {
     }
 
     /**
-     * Compares the given qnames. This specifically ignores the namespace
+     * Compares the given Qname instances. This specifically ignores the namespace
      * uri of the other qname if the namespace of the current element is
      * empty.
      * @param curElemQName The qname of the current element

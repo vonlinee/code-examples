@@ -46,13 +46,9 @@ public final class SqlBuildContext {
      */
     public void addParameter(Table table, String paramName, String paramValue) {
         String key = (table == null ? null : table.getName());
-        Map<String, Object> params = _parametersPerTable.get(key);
-        if (params == null) {
-            // we're using a list orderered map to retain the order
-            // change: not using a orderd list
-            params = new HashMap<>();
-            _parametersPerTable.put(key, params);
-        }
+        // we're using a list orderered map to retain the order
+        // change: not using a orderd list
+        Map<String, Object> params = _parametersPerTable.computeIfAbsent(key, k -> new HashMap<>());
         params.put(paramName, paramValue);
     }
 }

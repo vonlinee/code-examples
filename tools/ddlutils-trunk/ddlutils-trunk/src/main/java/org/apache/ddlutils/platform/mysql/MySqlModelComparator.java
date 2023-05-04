@@ -83,7 +83,7 @@ public class MySqlModelComparator extends ModelComparator {
                                  Database targetModel, Table targetTable) {
         // we need to drop and recreate foreign keys that reference columns whose data type will be changed (but not size)
         List changes = super.compareTables(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable);
-        Set columnNames = new HashSet();
+        Set<String> columnNames = new HashSet<>();
 
         for (Iterator it = changes.iterator(); it.hasNext(); ) {
             Object change = it.next();
@@ -112,8 +112,8 @@ public class MySqlModelComparator extends ModelComparator {
      * @param columnNames       The names of the columns to look for
      * @return The additional changes
      */
-    private List getForeignKeyRecreationChanges(Table intermediateTable, Table targetTable, Set columnNames) {
-        List newChanges = new ArrayList();
+    private List<TableChange> getForeignKeyRecreationChanges(Table intermediateTable, Table targetTable, Set<String> columnNames) {
+        List<TableChange> newChanges = new ArrayList<>();
 
         for (int fkIdx = 0; fkIdx < targetTable.getForeignKeyCount(); fkIdx++) {
             ForeignKey targetFk = targetTable.getForeignKey(fkIdx);
@@ -123,8 +123,8 @@ public class MySqlModelComparator extends ModelComparator {
                 for (int refIdx = 0; refIdx < intermediateFk.getReferenceCount(); refIdx++) {
                     Reference ref = intermediateFk.getReference(refIdx);
 
-                    for (Iterator colNameIt = columnNames.iterator(); colNameIt.hasNext(); ) {
-                        if (StringUtilsExt.equals(ref.getLocalColumnName(), (String) colNameIt.next(), isCaseSensitive())) {
+                    for (String columnName : columnNames) {
+                        if (StringUtilsExt.equals(ref.getLocalColumnName(), columnName, isCaseSensitive())) {
                             newChanges.add(new RemoveForeignKeyChange(intermediateTable.getName(), intermediateFk));
                             newChanges.add(new AddForeignKeyChange(intermediateTable.getName(), intermediateFk));
                         }

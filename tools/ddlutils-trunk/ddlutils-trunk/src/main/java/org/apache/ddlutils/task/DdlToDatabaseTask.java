@@ -27,7 +27,6 @@ import org.apache.tools.ant.types.FileSet;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Task for performing operations on a live database. Sub tasks e.g. create the
@@ -60,7 +59,7 @@ import java.util.Iterator;
  * This Ant build file snippet essentially creates a database, creates tables, foreign keys
  * etc. int it and then writes data into the newly created tables.
  * @version $Revision: 289996 $
- * @ant.task name="ddlToDatabase"
+ * ant.task name="ddlToDatabase"
  */
 public class DdlToDatabaseTask extends DatabaseTaskBase {
     /**
@@ -70,7 +69,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
     /**
      * The input files.
      */
-    private ArrayList _fileSets = new ArrayList();
+    private final ArrayList<FileSet> _fileSets = new ArrayList<>();
     /**
      * Whether XML input files are validated against the internal or an external DTD.
      */
@@ -82,10 +81,10 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
 
     /**
      * Specifies whether DdlUtils shall use the embedded DTD for validating the schema XML (if
-     * it matches <code>http://db.apache.org/torque/dtd/database.dtd</code>). This is
+     * it matches <code><a href="http://db.apache.org/torque/dtd/database.dtd">...</a></code>). This is
      * especially useful in environments where no web access is possible or desired.
      * @param useInternalDtd <code>true</code> if input files are to be validated against the internal DTD
-     * @ant.not-required Default is <code>true</code>.
+     * ant.not-required Default is <code>true</code>.
      */
     public void setUseInternalDtd(boolean useInternalDtd) {
         _useInternalDtd = useInternalDtd;
@@ -94,7 +93,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
     /**
      * Specifies whether XML input files should be validated against the DTD at all.
      * @param validateXml <code>true</code> if input files are to be validated
-     * @ant.not-required Default is <code>false</code> meaning that the XML is not validated at all.
+     * ant.not-required Default is <code>false</code> meaning that the XML is not validated at all.
      */
     public void setValidateXml(boolean validateXml) {
         _validateXml = validateXml;
@@ -112,7 +111,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
      * Defines the single file that contains the database file. You can use this instead of embedded
      * <code>fileset</code> elements if you only have one schema file.
      * @param schemaFile The schema
-     * @ant.not-required Use either this or one or more embedded fileset elements.
+     * ant.not-required Use either this or one or more embedded fileset elements.
      */
     public void setSchemaFile(File schemaFile) {
         _singleSchemaFile = schemaFile;
@@ -177,6 +176,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected Database readModel() {
         DatabaseIO reader = new DatabaseIO();
         Database model = null;
@@ -188,8 +188,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
         if (_singleSchemaFile != null) {
             model = readSingleSchemaFile(reader, _singleSchemaFile);
         } else {
-            for (Iterator it = _fileSets.iterator(); it.hasNext(); ) {
-                FileSet fileSet = (FileSet) it.next();
+            for (FileSet fileSet : _fileSets) {
                 File fileSetDir = fileSet.getDir(getProject());
                 DirectoryScanner scanner = fileSet.getDirectoryScanner(getProject());
                 String[] files = scanner.getIncludedFiles();

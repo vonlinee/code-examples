@@ -182,8 +182,7 @@ public abstract class SqlBuilder {
                 language = localeStr;
             }
             if (language != null) {
-                Locale locale = null;
-
+                Locale locale;
                 if (variant != null) {
                     locale = new Locale(language, country, variant);
                 } else if (country != null) {
@@ -336,6 +335,7 @@ public abstract class SqlBuilder {
         }
         for (int idx = 0; idx < database.getTableCount(); idx++) {
             Table table = database.getTable(idx);
+            // table comment
             writeTableComment(table);
             // output table
             createTable(database,
@@ -354,7 +354,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void createTemporaryTable(Database database, Table table, Map parameters) throws IOException {
+    protected void createTemporaryTable(Database database, Table table, Map<String, Object> parameters) throws IOException {
         createTable(database, table, parameters);
     }
 
@@ -746,8 +746,8 @@ public abstract class SqlBuilder {
      *                        prepared statement (both for the pk values and the object values)
      * @return The update sql
      */
-    public String getUpdateSql(Table table, Map columnValues, boolean genPlaceholders) {
-        StringBuffer buffer = new StringBuffer("UPDATE ");
+    public String getUpdateSql(Table table, Map<String, ?> columnValues, boolean genPlaceholders) {
+        StringBuilder buffer = new StringBuilder("UPDATE ");
         boolean addSep = false;
 
         buffer.append(getDelimitedIdentifier(getTableName(table)));
@@ -912,7 +912,7 @@ public abstract class SqlBuilder {
                     // TODO: Can the format method handle java.sql.Date properly ?
                     result.append(getValueDateFormat().format(value));
                 } else {
-                    result.append(value.toString());
+                    result.append(value);
                 }
                 result.append(getPlatformInfo().getValueQuoteToken());
                 break;
@@ -942,7 +942,7 @@ public abstract class SqlBuilder {
                 if (!(value instanceof String) && (getValueNumberFormat() != null)) {
                     result.append(getValueNumberFormat().format(value));
                 } else {
-                    result.append(value.toString());
+                    result.append(value);
                 }
                 result.append(getPlatformInfo().getValueQuoteToken());
                 break;
@@ -1398,7 +1398,7 @@ public abstract class SqlBuilder {
      * @return The constraint name
      */
     public String getConstraintName(String prefix, Table table, String secondPart, String suffix) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         if (prefix != null) {
             result.append(prefix);

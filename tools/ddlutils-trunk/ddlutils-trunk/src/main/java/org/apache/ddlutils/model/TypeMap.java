@@ -225,16 +225,9 @@ public abstract class TypeMap {
      */
     protected static void registerJdbcType(int typeCode, String typeName, JdbcTypeCategoryEnum category) {
         Integer typeId = typeCode;
-
         _typeNameToTypeCode.put(typeName.toUpperCase(), typeId);
         _typeCodeToTypeName.put(typeId, typeName.toUpperCase());
-
-        Set<Integer> typesInCategory = _typesPerCategory.get(category);
-
-        if (typesInCategory == null) {
-            typesInCategory = new HashSet<>();
-            _typesPerCategory.put(category, typesInCategory);
-        }
+        Set<Integer> typesInCategory = _typesPerCategory.computeIfAbsent(category, k -> new HashSet<>());
         typesInCategory.add(typeId);
     }
 
