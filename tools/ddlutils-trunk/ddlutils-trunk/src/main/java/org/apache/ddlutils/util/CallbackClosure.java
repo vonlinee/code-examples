@@ -56,7 +56,7 @@ public class CallbackClosure implements Closure {
     /**
      * The cached callbacks.
      */
-    private Map _callbacks = new HashMap();
+    private Map<Class<?>, ?> _callbacks = new HashMap<>();
 
     /**
      * Creates a new closure object.
@@ -97,7 +97,7 @@ public class CallbackClosure implements Closure {
             }
         }
 
-        Class type = callee.getClass();
+        Class<?> type = callee.getClass();
 
         // we're caching the callbacks
         do {
@@ -106,7 +106,7 @@ public class CallbackClosure implements Closure {
             if (methods != null) {
                 for (int idx = 0; idx < methods.length; idx++) {
                     Method method = methods[idx];
-                    Class[] paramTypes = methods[idx].getParameterTypes();
+                    Class<?>[] paramTypes = methods[idx].getParameterTypes();
 
                     method.setAccessible(true);
                     if (method.getName().equals(callbackName) && typesMatch(paramTypes)) {

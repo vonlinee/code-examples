@@ -8,6 +8,7 @@ import org.xml.sax.InputSource;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
@@ -364,10 +365,10 @@ public class DatabaseIO {
      * @param table     The table
      */
     private void readTableSubElements(XMLStreamReader xmlReader, Table table) throws XMLStreamException, IOException {
-        int eventType = XMLStreamReader.START_ELEMENT;
-        while (eventType != XMLStreamReader.END_ELEMENT) {
+        int eventType = XMLStreamConstants.START_ELEMENT;
+        while (eventType != XMLStreamConstants.END_ELEMENT) {
             eventType = xmlReader.next();
-            if (eventType == XMLStreamReader.START_ELEMENT) {
+            if (eventType == XMLStreamConstants.START_ELEMENT) {
                 continue;
             }
             System.out.println(eventType);
