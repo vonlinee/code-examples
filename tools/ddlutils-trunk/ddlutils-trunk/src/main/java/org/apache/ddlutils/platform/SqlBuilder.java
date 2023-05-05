@@ -28,7 +28,7 @@ import java.util.Map;
  * <p>
  * An implementation of this class can always delegate down to some templating technology such as Velocity if
  * it requires. Though often that can be quite complex when attempting to reuse code across many databases.
- * Hopefully only a small amount code needs to be changed on a per database basis.
+ * Hopefully only a small amount code needs to be changed on a per-database basis.
  * @version $Revision$
  */
 public abstract class SqlBuilder {
@@ -544,7 +544,7 @@ public abstract class SqlBuilder {
     }
 
     /**
-     * Writes a single foreign key constraint using a alter table statement.
+     * Writes a single foreign key constraint using an alter table statement.
      * @param database   The database model
      * @param table      The table
      * @param foreignKey The foreign key
@@ -685,7 +685,7 @@ public abstract class SqlBuilder {
      *                        prepared statement
      * @return The insertion sql
      */
-    public String getInsertSql(Table table, Map columnValues, boolean genPlaceholders) {
+    public String getInsertSql(Table table, Map<String, Object> columnValues, boolean genPlaceholders) {
         StringBuilder buffer = new StringBuilder("INSERT INTO ");
         boolean addComma = false;
 
@@ -800,7 +800,7 @@ public abstract class SqlBuilder {
      *                        prepared statement (both for the pk values and the object values)
      * @return The update sql
      */
-    public String getUpdateSql(Table table, Map oldColumnValues, Map newColumnValues, boolean genPlaceholders) {
+    public String getUpdateSql(Table table, Map<String, Object>  oldColumnValues, Map<String, Object>  newColumnValues, boolean genPlaceholders) {
         StringBuilder buffer = new StringBuilder("UPDATE ");
         boolean addSep = false;
 
@@ -849,7 +849,7 @@ public abstract class SqlBuilder {
     /**
      * Creates the SQL for deleting an object from the specified table. Depending on
      * the value of <code>genPlaceholders</code>, the generated SQL will contain
-     * prepared statement place holders or concrete values. Only those primary key
+     * prepared statement placeholders or concrete values. Only those primary key
      * columns wil be used that are present in the given map. If the map is null or
      * completely empty, then the SQL will not have a WHERE clause. The SQL will contain
      * the columns in the order defined in the table.
@@ -1081,7 +1081,7 @@ public abstract class SqlBuilder {
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             printIndent();
             writeColumn(table, table.getColumn(idx));
-            // 每一列的分隔符
+            // the delimiter at line end
             if (idx < table.getColumnCount() - 1) {
                 println(",");
             }
@@ -1321,7 +1321,7 @@ public abstract class SqlBuilder {
     /**
      * Compares the current column in the database with the desired one.
      * Type, nullability, size, scale, default value, and precision radix are
-     * the attributes checked.  Currently default values are compared, and
+     * the attributes checked.  Currently, default values are compared, and
      * null and empty string are considered equal.
      * @param currentColumn The current column as it is in the database
      * @param desiredColumn The desired column
@@ -1460,7 +1460,7 @@ public abstract class SqlBuilder {
     }
 
     /**
-     * Writes the indexes embedded within the create table statement.
+     * Writes the indexes embedded within the creation table statement.
      * @param table The table
      */
     protected void writeEmbeddedIndicesStmt(Table table) throws IOException {
@@ -1526,7 +1526,7 @@ public abstract class SqlBuilder {
 
 
     /**
-     * Writes the foreign key constraints inside a create table () clause.
+     * Writes the foreign key constraints inside a creation table () clause.
      * @param database The database model
      * @param table    The table
      */

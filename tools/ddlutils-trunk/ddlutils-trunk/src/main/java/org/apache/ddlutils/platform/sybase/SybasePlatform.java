@@ -19,6 +19,7 @@ package org.apache.ddlutils.platform.sybase;
  * under the License.
  */
 
+import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.DdlUtilsException;
@@ -39,6 +40,7 @@ import java.sql.*;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The platform implementation for Sybase.
@@ -230,7 +232,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
      * {@inheritDoc}
      */
     @Override
-    public Iterator query(Database model, String sql, Collection parameters, Table[] queryHints) throws DatabaseOperationException {
+    public Iterator<DynaBean> query(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.query(model, sql, parameters, queryHints);
     }
@@ -239,7 +241,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
      * {@inheritDoc}
      */
     @Override
-    public Iterator query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
+    public Iterator<DynaBean> query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.query(model, sql, queryHints);
     }
@@ -327,6 +329,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
+            @Override
             protected boolean isSupported(Table intermediateTable, TableChange change) {
                 if ((change instanceof RemoveColumnChange) ||
                         (change instanceof AddPrimaryKeyChange) ||
@@ -359,11 +362,10 @@ public class SybasePlatform extends GenericDatabasePlatform {
      * {@inheritDoc}
      */
     @Override
-    protected Database processChanges(Database model, Collection changes, SqlBuildContext params) throws IOException, DdlUtilsException {
+    protected Database processChanges(Database model, Collection<ModelChange> changes, SqlBuildContext params) throws IOException, DdlUtilsException {
         if (!changes.isEmpty()) {
             ((SybaseBuilder) getSqlBuilder()).turnOnQuotation();
         }
-
         return super.processChanges(model, changes, params);
     }
 

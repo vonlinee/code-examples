@@ -1,6 +1,7 @@
 package org.apache.ddlutils;
 
 import org.apache.commons.beanutils.DynaBean;
+import org.apache.ddlutils.alteration.ModelChange;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.JdbcModelReader;
@@ -260,7 +261,7 @@ public interface DatabasePlatform {
      * @param password            The password for creating the database
      * @param parameters          Additional parameters relevant to database creation (which are platform specific)
      */
-    void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map parameters) throws DatabaseOperationException, UnsupportedOperationException;
+    void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map<String, String> parameters) throws DatabaseOperationException, UnsupportedOperationException;
 
     /**
      * Drops the database specified by the given parameters. Please note that this method does not
@@ -396,7 +397,7 @@ public interface DatabasePlatform {
      * @param desiredModel The desired model
      * @return The list of changes, adjusted to the platform and sorted for execution
      */
-    List getChanges(Database currentModel, Database desiredModel);
+    List<ModelChange> getChanges(Database currentModel, Database desiredModel);
 
     /**
      * Alters the database schema so that it match the given model.
@@ -739,7 +740,7 @@ public interface DatabasePlatform {
      * @param sql   The sql query to perform
      * @return An iterator for the dyna beans resulting from the query
      */
-    Iterator query(Database model, String sql) throws DatabaseOperationException;
+    Iterator<DynaBean> query(Database model, String sql) throws DatabaseOperationException;
 
     /**
      * Performs the given parameterized SQL query returning an iterator over the results.
@@ -748,7 +749,7 @@ public interface DatabasePlatform {
      * @param parameters The query parameter values
      * @return An iterator for the dyna beans resulting from the query
      */
-    Iterator query(Database model, String sql, Collection parameters) throws DatabaseOperationException;
+    Iterator<DynaBean> query(Database model, String sql, Collection<?> parameters) throws DatabaseOperationException;
 
     /**
      * Performs the given SQL query returning an iterator over the results.
@@ -757,7 +758,7 @@ public interface DatabasePlatform {
      * @param queryHints The tables that are queried (optional)
      * @return An iterator for the dyna beans resulting from the query
      */
-    Iterator query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException;
+    Iterator<DynaBean> query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException;
 
     /**
      * Performs the given parameterized SQL query returning an iterator over the results.
@@ -767,7 +768,7 @@ public interface DatabasePlatform {
      * @param queryHints The tables that are queried (optional)
      * @return An iterator for the dyna beans resulting from the query
      */
-    Iterator query(Database model, String sql, Collection parameters, Table[] queryHints) throws DatabaseOperationException;
+    Iterator<DynaBean> query(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -777,7 +778,7 @@ public interface DatabasePlatform {
      * @param sql   The sql query
      * @return The dyna beans resulting from the query
      */
-    List fetch(Database model, String sql) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -789,7 +790,7 @@ public interface DatabasePlatform {
      * @param parameters The parameter values
      * @return The dyna beans resulting from the query
      */
-    List<DynaBean> fetch(Database model, String sql, Collection parameters) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Collection<Map<String, String>> parameters) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -813,7 +814,7 @@ public interface DatabasePlatform {
      * @param queryHints The tables that are queried (optional)
      * @return The dyna beans resulting from the query
      */
-    List<DynaBean> fetch(Database model, String sql, Collection parameters, Table[] queryHints) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Collection<Map<String, String>> parameters, Table[] queryHints) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -844,7 +845,7 @@ public interface DatabasePlatform {
      * @param end        Row number to stop at (inclusively; -1 for last row)
      * @return The dyna beans resulting from the query
      */
-    List<DynaBean> fetch(Database model, String sql, Collection parameters, int start, int end) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Collection<Map<String, String>> parameters, int start, int end) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -877,7 +878,7 @@ public interface DatabasePlatform {
      * @param end        Row number to stop at (inclusively; -1 for last row)
      * @return The dyna beans resulting from the query
      */
-    List<DynaBean> fetch(Database model, String sql, Collection parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Collection<Map<String, String>> parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException;
 
     /**
      * Determines whether the given dyna bean is stored in the database. Note that this checks only
@@ -949,7 +950,7 @@ public interface DatabasePlatform {
      * @param model     The database model to use
      * @param dynaBeans The beans to insert
      */
-    void insert(Database model, Collection<?> dynaBeans) throws DatabaseOperationException;
+    void insert(Database model, Collection<DynaBean> dynaBeans) throws DatabaseOperationException;
 
     /**
      * Inserts the given beans. Note that a batch insert is used for subsequent beans of the same type.

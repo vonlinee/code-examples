@@ -1,24 +1,5 @@
 package org.apache.ddlutils.platform;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -32,15 +13,15 @@ public class MetaDataColumnDescriptor {
     /**
      * The name of the column.
      */
-    private String _columnName;
+    private String columnName;
     /**
      * The jdbc type to read from the result set.
      */
-    private int _jdbcType;
+    private int jdbcType;
     /**
      * The default value if the column is not present in the result set.
      */
-    private Object _defaultValue;
+    private Object defaultValue;
 
     /**
      * Creates a new descriptor instance.
@@ -60,9 +41,9 @@ public class MetaDataColumnDescriptor {
      * @param defaultValue The default value if the column is not present in the result set
      */
     public MetaDataColumnDescriptor(String columnName, int jdbcType, Object defaultValue) {
-        _columnName = columnName.toUpperCase();
-        _jdbcType = jdbcType;
-        _defaultValue = defaultValue;
+        this.columnName = columnName.toUpperCase();
+        this.jdbcType = jdbcType;
+        this.defaultValue = defaultValue;
     }
 
     /**
@@ -70,7 +51,7 @@ public class MetaDataColumnDescriptor {
      * @return The name
      */
     public String getName() {
-        return _columnName;
+        return columnName;
     }
 
     /**
@@ -78,7 +59,7 @@ public class MetaDataColumnDescriptor {
      * @return The default value
      */
     public Object getDefaultValue() {
-        return _defaultValue;
+        return defaultValue;
     }
 
     /**
@@ -86,7 +67,7 @@ public class MetaDataColumnDescriptor {
      * @return The jdbc type
      */
     public int getJdbcType() {
-        return _jdbcType;
+        return jdbcType;
     }
 
     /**
@@ -95,21 +76,20 @@ public class MetaDataColumnDescriptor {
      * @return The column value or the default value if the column is not present in the result set
      */
     public Object readColumn(ResultSet resultSet) throws SQLException {
-        Object result = null;
-
+        Object result;
         try {
-            switch (_jdbcType) {
+            switch (jdbcType) {
                 case Types.BIT:
-                    result = new Boolean(resultSet.getBoolean(_columnName));
+                    result = resultSet.getBoolean(columnName);
                     break;
                 case Types.INTEGER:
-                    result = new Integer(resultSet.getInt(_columnName));
+                    result = resultSet.getInt(columnName);
                     break;
                 case Types.TINYINT:
-                    result = new Short(resultSet.getShort(_columnName));
+                    result = resultSet.getShort(columnName);
                     break;
                 default:
-                    result = resultSet.getString(_columnName);
+                    result = resultSet.getString(columnName);
                     break;
             }
             if (resultSet.wasNull()) {
@@ -119,7 +99,7 @@ public class MetaDataColumnDescriptor {
             if (isColumnInResultSet(resultSet)) {
                 throw ex;
             } else {
-                result = _defaultValue;
+                result = defaultValue;
             }
         }
         return result;
@@ -134,7 +114,7 @@ public class MetaDataColumnDescriptor {
         ResultSetMetaData metaData = resultSet.getMetaData();
 
         for (int idx = 1; idx <= metaData.getColumnCount(); idx++) {
-            if (_columnName.equals(metaData.getColumnName(idx).toUpperCase())) {
+            if (columnName.equals(metaData.getColumnName(idx).toUpperCase())) {
                 return true;
             }
         }

@@ -11,27 +11,29 @@ public abstract class TableChangeImplBase implements TableChange {
     /**
      * The name of the affected table.
      */
-    private String _tableName;
+    private final String tableName;
 
     /**
      * Creates a new change object.
      * @param tableName The table's name
      */
     public TableChangeImplBase(String tableName) {
-        _tableName = tableName;
+        this.tableName = tableName;
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getChangedTable() {
-        return _tableName;
+        return tableName;
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Table findChangedTable(Database model, boolean caseSensitive) {
-        return model.findTable(_tableName, caseSensitive);
+        return model.findTable(tableName, caseSensitive);
     }
 }

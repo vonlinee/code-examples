@@ -99,6 +99,7 @@ public abstract class TestPlatformBase extends TestBase {
         Database testDb = parseDatabaseFromString(schema);
         // we're turning the comment creation off to make testing easier
         DatabasePlatform platform = getPlatform();
+        // disable the comment
         platform.setSqlCommentsOn(false);
         platform.getSqlBuilder().createTables(testDb, null, true);
         return getBuilderOutput();

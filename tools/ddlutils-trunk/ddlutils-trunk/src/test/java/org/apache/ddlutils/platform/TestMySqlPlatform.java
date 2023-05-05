@@ -63,8 +63,6 @@ public class TestMySqlPlatform extends TestPlatformBase {
                         "    `COL_VARCHAR`         VARCHAR(15) NULL\n" +
                         ");\n",
                 getColumnTestDatabaseCreationSql());
-
-
     }
 
     /**

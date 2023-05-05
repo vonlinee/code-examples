@@ -25,10 +25,10 @@ import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
 import org.apache.ddlutils.platform.GenericDatabasePlatform;
-import org.apache.ddlutils.util.StringUtilsExt;
+import org.apache.ddlutils.platform.SqlBuildContext;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -147,7 +147,7 @@ public class Db2Platform extends GenericDatabasePlatform {
                     // DB2 cannot add IDENTITY columns, and required columns need a default value
                     return (addColumnChange.getNextColumn() == null) &&
                             !addColumnChange.getNewColumn().isAutoIncrement() &&
-                            (!addColumnChange.getNewColumn().isRequired() || !StringUtilsExt.isEmpty(addColumnChange
+                            (!addColumnChange.getNewColumn().isRequired() || !StringUtils.isEmpty(addColumnChange
                                     .getNewColumn().getDefaultValue()));
                 } else {
                     return false;

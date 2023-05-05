@@ -3,6 +3,7 @@ package org.apache.ddlutils.platform.axion;
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.platform.GenericDatabasePlatform;
+import org.apache.ddlutils.util.IOUtils;
 
 import java.sql.*;
 import java.util.Map;
@@ -52,6 +53,7 @@ public class AxionPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return DATABASENAME;
     }
@@ -59,6 +61,7 @@ public class AxionPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // Axion will create the database automatically when connecting for the first time
         if (JDBC_DRIVER.equals(jdbcDriverClassName)) {
@@ -72,12 +75,7 @@ public class AxionPlatform extends GenericDatabasePlatform {
             } catch (Exception ex) {
                 throw new DatabaseOperationException("Error while trying to create a database", ex);
             } finally {
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (SQLException ex) {
-                    }
-                }
+                IOUtils.closeQuitely(connection);
             }
         } else {
             throw new UnsupportedOperationException("Unable to create a Axion database via the driver " + jdbcDriverClassName);
@@ -87,20 +85,16 @@ public class AxionPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected Object extractColumnValue(ResultSet resultSet, String columnName, int columnIdx, int jdbcType) throws SQLException {
         boolean useIdx = (columnName == null);
-        Object value = null;
+        Object value;
 
-        switch (jdbcType) {
-            case Types.BIGINT:
-                // The Axion JDBC driver does not support reading BIGINT values directly
-                String strValue = useIdx ? resultSet.getString(columnIdx) : resultSet.getString(columnName);
-
-                value = resultSet.wasNull() ? null : new Long(strValue);
-                break;
-            default:
-                value = super.extractColumnValue(resultSet, columnName, columnIdx, jdbcType);
-                break;
+        if (jdbcType == Types.BIGINT) {// The Axion JDBC driver does not support reading BIGINT values directly
+            String strValue = useIdx ? resultSet.getString(columnIdx) : resultSet.getString(columnName);
+            value = resultSet.wasNull() ? null : new Long(strValue);
+        } else {
+            value = super.extractColumnValue(resultSet, columnName, columnIdx, jdbcType);
         }
         return value;
     }

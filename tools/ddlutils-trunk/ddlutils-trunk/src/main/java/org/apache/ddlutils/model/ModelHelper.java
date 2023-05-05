@@ -2,7 +2,6 @@ package org.apache.ddlutils.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -11,7 +10,7 @@ import java.util.List;
  */
 public class ModelHelper {
     /**
-     * Determines whether one of the tables in the list has a foreign key to a table outside of the list,
+     * Determines whether one of the tables in the list has a foreign key to a table outside the list,
      * or a table outside the list has a foreign key to one of the tables in the list.
      * @param model  The database model
      * @param tables The tables
@@ -36,7 +35,7 @@ public class ModelHelper {
     }
 
     /**
-     * Removes all foreign keys from the tables in the list to tables outside of the list,
+     * Removes all foreign keys from the tables in the list to tables outside the list,
      * or from tables outside the list to tables in the list.
      * @param model  The database model
      * @param tables The tables

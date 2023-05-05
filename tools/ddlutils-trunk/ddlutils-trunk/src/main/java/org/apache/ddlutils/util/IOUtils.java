@@ -22,6 +22,21 @@ public class IOUtils {
         }
     }
 
+    public static void closeQuitely(AutoCloseable... closeable) {
+        if (closeable == null) {
+            return;
+        }
+        for (AutoCloseable target : closeable) {
+            if (target != null) {
+                try {
+                    target.close();
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+        }
+    }
+
     public static String readString(Reader reader) throws IOException {
         StringBuilder sb = new StringBuilder();
         char[] buf = new char[4096];

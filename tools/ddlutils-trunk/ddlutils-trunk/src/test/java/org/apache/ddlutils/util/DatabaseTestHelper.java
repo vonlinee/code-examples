@@ -1,24 +1,5 @@
 package org.apache.ddlutils.util;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 import org.apache.commons.beanutils.DynaBean;
@@ -72,9 +53,9 @@ public class DatabaseTestHelper extends Assert {
             Table table = model.getTable(idx);
             Column[] pkCols = table.getPrimaryKeyColumns();
 
-            for (Iterator it = origDbPlatform.query(model, buildQueryString(origDbPlatform, table, null, null), new Table[]{table}); it.hasNext(); ) {
-                DynaBean obj = (DynaBean) it.next();
-                Collection result = testedDbPlatform.fetch(model, buildQueryString(origDbPlatform, table, pkCols, obj), new Table[]{table});
+            for (Iterator<DynaBean> it = origDbPlatform.query(model, buildQueryString(origDbPlatform, table, null, null), new Table[]{table}); it.hasNext(); ) {
+                DynaBean obj = it.next();
+                Collection<DynaBean> result = testedDbPlatform.fetch(model, buildQueryString(origDbPlatform, table, pkCols, obj), new Table[]{table});
 
                 if (result.isEmpty()) {
                     if (_log.isDebugEnabled()) {
@@ -87,27 +68,27 @@ public class DatabaseTestHelper extends Assert {
                     if (_log.isDebugEnabled()) {
                         hasError = true;
 
-                        StringBuffer debugMsg = new StringBuffer();
+                        StringBuilder debugMsg = new StringBuilder();
 
                         debugMsg.append("Row ");
                         debugMsg.append(obj.toString());
                         debugMsg.append(" is present more than once in the second database:\n");
-                        for (Iterator resultIt = result.iterator(); resultIt.hasNext(); ) {
+                        for (DynaBean dynaBean : result) {
                             debugMsg.append("  ");
-                            debugMsg.append(resultIt.next().toString());
+                            debugMsg.append(dynaBean.toString());
                         }
                         _log.debug(debugMsg.toString());
                     } else {
                         throw new AssertionFailedError(failureMsg);
                     }
                 } else {
-                    DynaBean otherObj = (DynaBean) result.iterator().next();
+                    DynaBean otherObj = result.iterator().next();
 
                     if (!obj.equals(otherObj)) {
                         if (_log.isDebugEnabled()) {
                             hasError = true;
 
-                            _log.debug("Row " + obj.toString() + " is different in the second database: " + otherObj.toString());
+                            _log.debug("Row " + obj + " is different in the second database: " + otherObj.toString());
                         } else {
                             throw new AssertionFailedError(failureMsg);
                         }
@@ -129,7 +110,7 @@ public class DatabaseTestHelper extends Assert {
      * @return The query string
      */
     private String buildQueryString(DatabasePlatform targetPlatform, Table table, Column[] whereCols, DynaBean whereValues) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         result.append("SELECT * FROM ");
         if (targetPlatform.isDelimitedIdentifierModeOn()) {

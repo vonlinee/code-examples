@@ -1,16 +1,10 @@
 package org.apache.ddlutils.model;
 
-import org.apache.commons.lang.enums.ValuedEnum;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Represents the different categories of jdbc types.
  * @version $Revision: $
  */
-public class JdbcTypeCategoryEnum extends ValuedEnum {
+public class JdbcTypeCategoryEnum {
     /**
      * The integer value for the enum value for numeric jdbc types.
      */
@@ -66,56 +60,28 @@ public class JdbcTypeCategoryEnum extends ValuedEnum {
      */
     private static final long serialVersionUID = -2695615907467866410L;
 
+
+    /**
+     * The string representation of the Enum.
+     */
+    private final String name;
+    private final int value;
+
     /**
      * Creates a new enum object.
      * @param defaultTextRep The textual representation
      * @param value          The corresponding integer value
      */
     private JdbcTypeCategoryEnum(String defaultTextRep, int value) {
-        super(defaultTextRep, value);
+        this.name = defaultTextRep;
+        this.value = value;
     }
 
-    /**
-     * Returns the enum value that corresponds to the given textual
-     * representation.
-     * @param defaultTextRep The textual representation
-     * @return The enum value
-     */
-    public static JdbcTypeCategoryEnum getEnum(String defaultTextRep) {
-        return (JdbcTypeCategoryEnum) getEnum(JdbcTypeCategoryEnum.class, defaultTextRep);
+    public String getName() {
+        return name;
     }
 
-    /**
-     * Returns the enum value that corresponds to the given integer
-     * representation.
-     * @param intValue The integer value
-     * @return The enum value
-     */
-    public static JdbcTypeCategoryEnum getEnum(int intValue) {
-        return (JdbcTypeCategoryEnum) getEnum(JdbcTypeCategoryEnum.class, intValue);
-    }
-
-    /**
-     * Returns the map of enum values.
-     * @return The map of enum values
-     */
-    public static Map getEnumMap() {
-        return getEnumMap(JdbcTypeCategoryEnum.class);
-    }
-
-    /**
-     * Returns a list of all enum values.
-     * @return The list of enum values
-     */
-    public static List getEnumList() {
-        return getEnumList(JdbcTypeCategoryEnum.class);
-    }
-
-    /**
-     * Returns an iterator of all enum values.
-     * @return The iterator
-     */
-    public static Iterator iterator() {
-        return iterator(JdbcTypeCategoryEnum.class);
+    public int getValue() {
+        return value;
     }
 }

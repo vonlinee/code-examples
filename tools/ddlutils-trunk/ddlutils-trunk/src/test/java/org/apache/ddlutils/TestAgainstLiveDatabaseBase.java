@@ -19,7 +19,7 @@ import org.apache.ddlutils.platform.DefaultValueHelper;
 import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.firebird.FirebirdPlatform;
 import org.apache.ddlutils.platform.interbase.InterbasePlatform;
-import org.apache.ddlutils.util.StringUtilsExt;
+import org.apache.ddlutils.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -91,8 +91,8 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
     private boolean _useDelimitedIdentifiers;
 
     /**
-     * Creates the test suite for the given test class which must be a sub class of
-     * {@link RoundtripTestBase}. If the platform supports it, it will be tested
+     * Creates the test suite for the given test class which must be a subclass of
+     * RoundtripTestBase. If the platform supports it, it will be tested
      * with both delimited and undelimited identifiers.
      * @param testedClass The tested class
      * @return The tests
@@ -456,7 +456,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
 
     /**
      * Updates the row in the designated table.
-     * @param tableName    The name of the table (case insensitive)
+     * @param tableName    The name of the table (case-insensitive)
      * @param oldBean      The bean representing the current row
      * @param columnValues The values for the columns in order of definition
      * @return The dyna bean for the new row
@@ -498,7 +498,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      * @return The statement
      */
     protected String getSelectQueryForAllString(Table table, String orderColumn) {
-        StringBuffer query = new StringBuffer();
+        StringBuilder query = new StringBuilder();
 
         query.append("SELECT * FROM ");
         if (getPlatform().isDelimitedIdentifierModeOn()) {
@@ -591,16 +591,14 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
             stmt = connection.createStatement();
 
             ResultSet rs = stmt.executeQuery("SELECT RDB$GENERATOR_NAME FROM RDB$GENERATORS WHERE RDB$GENERATOR_NAME NOT LIKE '%$%'");
-            List names = new ArrayList();
+            List<String> names = new ArrayList<>();
 
             while (rs.next()) {
                 names.add(rs.getString(1));
             }
             rs.close();
 
-            for (Iterator it = names.iterator(); it.hasNext(); ) {
-                String name = (String) it.next();
-
+            for (String name : names) {
                 if (name.toLowerCase().startsWith("gen_")) {
                     hasGenerators = true;
                     stmt.execute("DROP GENERATOR " + name);
@@ -633,16 +631,14 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
             stmt = connection.createStatement();
 
             ResultSet rs = stmt.executeQuery("SELECT * FROM RDB$TRIGGERS WHERE RDB$SYSTEM_FLAG IS NULL OR RDB$SYSTEM_FLAG = 0");
-            List names = new ArrayList();
+            List<String> names = new ArrayList<>();
 
             while (rs.next()) {
                 names.add(rs.getString(1));
             }
             rs.close();
 
-            for (Iterator it = names.iterator(); it.hasNext(); ) {
-                String name = (String) it.next();
-
+            for (String name : names) {
                 if (name.toLowerCase().startsWith("trg_")) {
                     hasTriggers = true;
                     stmt.execute("DROP TRIGGER " + name);
@@ -789,9 +785,9 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
         } else {
             DynaProperty[] props = bean.getDynaClass().getDynaProperties();
 
-            for (int idx = 0; idx < props.length; idx++) {
-                if (propName.equalsIgnoreCase(props[idx].getName())) {
-                    return bean.get(props[idx].getName());
+            for (DynaProperty prop : props) {
+                if (propName.equalsIgnoreCase(prop.getName())) {
+                    return bean.get(prop.getName());
                 }
             }
             throw new IllegalArgumentException("The bean has no property with the name " + propName);
@@ -873,7 +869,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
         Object value = dynaBean.get(attrName);
 
         if ((value instanceof byte[]) && !(expected instanceof byte[]) && (dynaBean instanceof SqlDynaBean)) {
-            SqlDynaClass dynaClass = (SqlDynaClass) ((SqlDynaBean) dynaBean).getDynaClass();
+            SqlDynaClass dynaClass = (SqlDynaClass) dynaBean.getDynaClass();
             Column column = ((SqlDynaProperty) dynaClass.getDynaProperty(attrName)).getColumn();
 
             if (TypeMap.isBinaryType(column.getJdbcTypeCode())) {
@@ -907,12 +903,12 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
 
             dbIo.write(expected, writer);
 
-            getLog().error("Expected model:\n" + writer.toString());
+            getLog().error("Expected model:\n" + writer);
 
             writer = new StringWriter();
             dbIo.write(actual, writer);
 
-            getLog().error("Actual model:\n" + writer.toString());
+            getLog().error("Actual model:\n" + writer);
 
             if (ex instanceof Error) {
                 throw (Error) ex;
@@ -955,7 +951,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
                 String actualName = getPlatform().getSqlBuilder()
                         .shortenName(actualFk.getName(), getSqlBuilder().getMaxForeignKeyNameLength());
 
-                if (StringUtilsExt.equals(expectedName, actualName, caseSensitive)) {
+                if (StringUtils.equals(expectedName, actualName, caseSensitive)) {
                     assertEquals(expectedFk, actualFk, caseSensitive);
                 }
             }

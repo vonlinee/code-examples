@@ -352,7 +352,6 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     @Override
     public void shutdownDatabase() throws DatabaseOperationException {
         Connection connection = borrowConnection();
-
         try {
             shutdownDatabase(connection);
         } finally {
@@ -372,7 +371,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map parameters) throws DatabaseOperationException, UnsupportedOperationException {
+    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map<String, String> parameters) throws DatabaseOperationException, UnsupportedOperationException {
         throw new UnsupportedOperationException("Database creation is not supported for the database platform " + getName());
     }
 
@@ -538,9 +537,8 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List getChanges(Database currentModel, Database desiredModel) {
-        List changes = getModelComparator().compare(currentModel, desiredModel);
-
+    public List<ModelChange> getChanges(Database currentModel, Database desiredModel) {
+        List<ModelChange> changes = getModelComparator().compare(currentModel, desiredModel);
         return sortChanges(changes);
     }
 
@@ -550,7 +548,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * @param changes The original changes
      * @return The sorted changes - this can be the original list object or a new one
      */
-    protected List sortChanges(List changes) {
+    protected List<ModelChange> sortChanges(List<ModelChange> changes) {
         final Map<Class<?>, Integer> typeOrder = new HashMap<>();
 
         typeOrder.put(RemoveForeignKeyChange.class, 0);
@@ -643,6 +641,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void alterTables(Connection connection, Database desiredModel, boolean continueOnError) throws DatabaseOperationException {
         Database currentModel = readModelFromDatabase(connection, desiredModel.getName());
 
@@ -652,6 +651,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void alterTables(Connection connection, Database desiredModel, SqlBuildContext params, boolean continueOnError) throws DatabaseOperationException {
         Database currentModel = readModelFromDatabase(connection, desiredModel.getName());
 
@@ -661,6 +661,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void alterTables(Connection connection, String catalog, String schema, String[] tableTypes, Database desiredModel, boolean continueOnError) throws DatabaseOperationException {
         Database currentModel = readModelFromDatabase(connection, desiredModel.getName(), catalog, schema, tableTypes);
 
@@ -670,6 +671,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void alterTables(Connection connection, String catalog, String schema, String[] tableTypes, Database desiredModel, SqlBuildContext params, boolean continueOnError) throws DatabaseOperationException {
         Database currentModel = readModelFromDatabase(connection, desiredModel.getName(), catalog, schema, tableTypes);
 
@@ -679,6 +681,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAlterTablesSql(Database desiredModel) throws DatabaseOperationException {
         Connection connection = borrowConnection();
 
@@ -694,6 +697,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAlterTablesSql(Database desiredModel, SqlBuildContext params) throws DatabaseOperationException {
         Connection connection = borrowConnection();
 
@@ -709,6 +713,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAlterTablesSql(String catalog, String schema, String[] tableTypes, Database desiredModel) throws DatabaseOperationException {
         Connection connection = borrowConnection();
 
@@ -724,6 +729,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAlterTablesSql(String catalog, String schema, String[] tableTypes, Database desiredModel, SqlBuildContext params) throws DatabaseOperationException {
         Connection connection = borrowConnection();
 
@@ -739,6 +745,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAlterTablesSql(Connection connection, Database desiredModel) throws DatabaseOperationException {
         Database currentModel = readModelFromDatabase(connection, desiredModel.getName());
 
@@ -748,6 +755,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAlterTablesSql(Connection connection, Database desiredModel, SqlBuildContext params) throws DatabaseOperationException {
         Database currentModel = readModelFromDatabase(connection, desiredModel.getName());
 
@@ -757,6 +765,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAlterTablesSql(Connection connection, String catalog, String schema, String[] tableTypes, Database desiredModel) throws DatabaseOperationException {
         Database currentModel = readModelFromDatabase(connection, desiredModel.getName(), catalog, schema, tableTypes);
 
@@ -766,6 +775,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAlterTablesSql(Connection connection, String catalog, String schema, String[] tableTypes, Database desiredModel, SqlBuildContext params) throws DatabaseOperationException {
         Database currentModel = readModelFromDatabase(connection, desiredModel.getName(), catalog, schema, tableTypes);
 
@@ -775,6 +785,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAlterModelSql(Database currentModel, Database desiredModel) throws DatabaseOperationException {
         return getAlterModelSql(currentModel, desiredModel, null);
     }
@@ -782,10 +793,10 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAlterModelSql(Database currentModel, Database desiredModel, SqlBuildContext params) throws DatabaseOperationException {
-        List changes = getChanges(currentModel, desiredModel);
+        List<ModelChange> changes = getChanges(currentModel, desiredModel);
         String sql = null;
-
         try {
             StringWriter buffer = new StringWriter();
 
@@ -801,9 +812,9 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void alterModel(Database currentModel, Database desiredModel, boolean continueOnError) throws DatabaseOperationException {
         Connection connection = borrowConnection();
-
         try {
             alterModel(connection, currentModel, desiredModel, continueOnError);
         } finally {
@@ -953,11 +964,11 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      *                tables, the parameters won't be applied
      * @return The changed database model
      */
-    protected Database processChanges(Database model, Collection changes, SqlBuildContext params) throws IOException, DdlUtilsException {
+    protected Database processChanges(Database model, Collection<ModelChange> changes, SqlBuildContext params) throws IOException, DdlUtilsException {
         Database currentModel = new CloneHelper().clone(model);
 
-        for (Iterator it = changes.iterator(); it.hasNext(); ) {
-            invokeChangeHandler(currentModel, params, (ModelChange) it.next());
+        for (ModelChange change : changes) {
+            invokeChangeHandler(currentModel, params, change);
         }
         return currentModel;
     }
@@ -1046,12 +1057,10 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     protected ForeignKey findChangedForeignKey(Database currentModel, ForeignKeyChange change) throws ModelException {
         ForeignKey fk = change.findChangedForeignKey(currentModel, getPlatformInfo().isDelimitedIdentifiersSupported());
-
         if (fk == null) {
             throw new ModelException("Could not find the foreign key to change in table " + change.getChangedTable() + " in the given model");
-        } else {
-            return fk;
         }
+        return fk;
     }
 
     /**
@@ -1133,7 +1142,6 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     public void processChange(Database currentModel, SqlBuildContext params, RemoveIndexChange change) throws IOException, ModelException {
         Table changedTable = findChangedTable(currentModel, change);
         Index changedIndex = findChangedIndex(currentModel, change);
-
         getSqlBuilder().dropIndex(changedTable, changedIndex);
         change.apply(currentModel, isDelimitedIdentifierModeOn());
     }
@@ -1242,7 +1250,6 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
             // TODO: clone PK status ?
             table.addColumn(cloneHelper.clone(targetTable.getColumn(idx), true));
         }
-
         return table;
     }
 
@@ -1258,7 +1265,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public Iterator query(Database model, String sql, Collection parameters) throws DatabaseOperationException {
+    public Iterator<DynaBean> query(Database model, String sql, Collection<?> parameters) throws DatabaseOperationException {
         return query(model, sql, parameters, null);
     }
 
@@ -1292,20 +1299,16 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public Iterator query(Database model, String sql, Collection parameters, Table[] queryHints) throws DatabaseOperationException {
+    public Iterator<DynaBean> query(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException {
         Connection connection = borrowConnection();
         PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        Iterator answer = null;
-
+        ResultSet resultSet;
+        Iterator<DynaBean> answer = null;
         try {
             statement = connection.prepareStatement(sql);
-
             int paramIdx = 1;
-
-            for (Iterator iter = parameters.iterator(); iter.hasNext(); paramIdx++) {
+            for (Iterator<?> iter = parameters.iterator(); iter.hasNext(); paramIdx++) {
                 Object arg = iter.next();
-
                 if (arg instanceof BigDecimal) {
                     // to avoid scale problems because setObject assumes a scale of 0
                     statement.setBigDecimal(paramIdx, (BigDecimal) arg);
@@ -1332,7 +1335,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List fetch(Database model, String sql) throws DatabaseOperationException {
+    public List<DynaBean> fetch(Database model, String sql) throws DatabaseOperationException {
         return fetch(model, sql, (Table[]) null, 0, -1);
     }
 
@@ -1340,7 +1343,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List fetch(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
+    public List<DynaBean> fetch(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
         return fetch(model, sql, queryHints, 0, -1);
     }
 
@@ -1390,7 +1393,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List fetch(Database model, String sql, Collection parameters) throws DatabaseOperationException {
+    public List<DynaBean> fetch(Database model, String sql, Collection parameters) throws DatabaseOperationException {
         return fetch(model, sql, parameters, null, 0, -1);
     }
 
@@ -1398,7 +1401,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List fetch(Database model, String sql, Collection parameters, int start, int end) throws DatabaseOperationException {
+    public List<DynaBean> fetch(Database model, String sql, Collection parameters, int start, int end) throws DatabaseOperationException {
         return fetch(model, sql, parameters, null, start, end);
     }
 
@@ -1406,7 +1409,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List fetch(Database model, String sql, Collection parameters, Table[] queryHints) throws DatabaseOperationException {
+    public List<DynaBean> fetch(Database model, String sql, Collection parameters, Table[] queryHints) throws DatabaseOperationException {
         return fetch(model, sql, parameters, queryHints, 0, -1);
     }
 
@@ -1414,7 +1417,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List fetch(Database model, String sql, Collection parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException {
+    public List<DynaBean> fetch(Database model, String sql, Collection parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException {
         Connection connection = borrowConnection();
         PreparedStatement statement = null;
         ResultSet resultSet;
@@ -1670,6 +1673,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void insert(Database model, DynaBean dynaBean) throws DatabaseOperationException {
         Connection connection = borrowConnection();
 
@@ -1683,6 +1687,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void insert(Connection connection, Database model, Collection<DynaBean> dynaBeans) throws DatabaseOperationException {
         SqlDynaClass dynaClass = null;
         SqlDynaProperty[] properties = null;
@@ -1789,7 +1794,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public void insert(Database model, Collection dynaBeans) throws DatabaseOperationException {
+    public void insert(Database model, Collection<DynaBean> dynaBeans) throws DatabaseOperationException {
         Connection connection = borrowConnection();
         try {
             insert(connection, model, dynaBeans);
@@ -1864,6 +1869,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUpdateSql(Database model, DynaBean dynaBean) {
         SqlDynaClass dynaClass = model.getDynaClassFor(dynaBean);
         SqlDynaProperty[] primaryKeys = dynaClass.getPrimaryKeyProperties();
@@ -1880,6 +1886,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUpdateSql(Database model, DynaBean oldDynaBean, DynaBean newDynaBean) {
         SqlDynaClass dynaClass = model.getDynaClassFor(oldDynaBean);
         SqlDynaProperty[] primaryKeys = dynaClass.getPrimaryKeyProperties();
@@ -1896,6 +1903,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void update(Connection connection, Database model, DynaBean dynaBean) throws DatabaseOperationException {
         SqlDynaClass dynaClass = model.getDynaClassFor(dynaBean);
         SqlDynaProperty[] primaryKeys = dynaClass.getPrimaryKeyProperties();
@@ -1919,11 +1927,11 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
 
             int sqlIndex = 1;
 
-            for (int idx = 0; idx < properties.length; idx++) {
-                setObject(statement, sqlIndex++, dynaBean, properties[idx]);
+            for (SqlDynaProperty property : properties) {
+                setObject(statement, sqlIndex++, dynaBean, property);
             }
-            for (int idx = 0; idx < primaryKeys.length; idx++) {
-                setObject(statement, sqlIndex++, dynaBean, primaryKeys[idx]);
+            for (SqlDynaProperty primaryKey : primaryKeys) {
+                setObject(statement, sqlIndex++, dynaBean, primaryKey);
             }
 
             int count = statement.executeUpdate();
@@ -1943,6 +1951,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void update(Database model, DynaBean dynaBean) throws DatabaseOperationException {
         Connection connection = borrowConnection();
 
@@ -1956,6 +1965,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void update(Connection connection, Database model, DynaBean oldDynaBean, DynaBean newDynaBean) throws DatabaseOperationException {
         SqlDynaClass dynaClass = model.getDynaClassFor(oldDynaBean);
         SqlDynaProperty[] primaryKeys = dynaClass.getPrimaryKeyProperties();
@@ -1982,11 +1992,11 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
 
             int sqlIndex = 1;
 
-            for (int idx = 0; idx < properties.length; idx++) {
-                setObject(statement, sqlIndex++, newDynaBean, properties[idx]);
+            for (SqlDynaProperty property : properties) {
+                setObject(statement, sqlIndex++, newDynaBean, property);
             }
-            for (int idx = 0; idx < primaryKeys.length; idx++) {
-                setObject(statement, sqlIndex++, oldDynaBean, primaryKeys[idx]);
+            for (SqlDynaProperty primaryKey : primaryKeys) {
+                setObject(statement, sqlIndex++, oldDynaBean, primaryKey);
             }
 
             int count = statement.executeUpdate();
@@ -2006,6 +2016,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void update(Database model, DynaBean oldDynaBean, DynaBean newDynaBean) throws DatabaseOperationException {
         Connection connection = borrowConnection();
 
@@ -2051,6 +2062,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean exists(Connection connection, Database model, DynaBean dynaBean) {
         SqlDynaClass dynaClass = model.getDynaClassFor(dynaBean);
         SqlDynaProperty[] primaryKeys = dynaClass.getPrimaryKeyProperties();
@@ -2062,7 +2074,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
         PreparedStatement stmt = null;
 
         try {
-            StringBuffer sql = new StringBuffer();
+            StringBuilder sql = new StringBuilder();
 
             sql.append("SELECT * FROM ");
             sql.append(builder.getDelimitedIdentifier(dynaClass.getTable().getName()));
@@ -2097,6 +2109,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void store(Database model, DynaBean dynaBean) throws DatabaseOperationException {
         Connection connection = borrowConnection();
 
@@ -2110,6 +2123,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void store(Connection connection, Database model, DynaBean dynaBean) throws DatabaseOperationException {
         if (exists(connection, model, dynaBean)) {
             update(connection, model, dynaBean);
@@ -2138,6 +2152,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDeleteSql(Database model, DynaBean dynaBean) {
         SqlDynaClass dynaClass = model.getDynaClassFor(dynaBean);
         SqlDynaProperty[] primaryKeys = dynaClass.getPrimaryKeyProperties();
@@ -2166,6 +2181,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete(Connection connection, Database model, DynaBean dynaBean) throws DatabaseOperationException {
         PreparedStatement statement = null;
 
@@ -2205,6 +2221,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Database readModelFromDatabase(String name) throws DatabaseOperationException {
         Connection connection = borrowConnection();
 
@@ -2218,6 +2235,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Database readModelFromDatabase(Connection connection, String name) throws DatabaseOperationException {
         try {
             Database model = getModelReader().getDatabase(connection, name);
@@ -2232,6 +2250,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Database readModelFromDatabase(String name, String catalog, String schema, String[] tableTypes) throws DatabaseOperationException {
         Connection connection = borrowConnection();
         try {
@@ -2244,6 +2263,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Database readModelFromDatabase(Connection connection, String name, String catalog, String schema, String[] tableTypes) throws DatabaseOperationException {
         try {
             JdbcModelReader reader = getModelReader();
@@ -2330,22 +2350,22 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
         } else if (value instanceof byte[]) {
             statement.setBytes(sqlIndex, (byte[]) value);
         } else if (value instanceof Boolean) {
-            statement.setBoolean(sqlIndex, ((Boolean) value).booleanValue());
+            statement.setBoolean(sqlIndex, (Boolean) value);
         } else if (value instanceof Byte) {
-            statement.setByte(sqlIndex, ((Byte) value).byteValue());
+            statement.setByte(sqlIndex, (Byte) value);
         } else if (value instanceof Short) {
-            statement.setShort(sqlIndex, ((Short) value).shortValue());
+            statement.setShort(sqlIndex, (Short) value);
         } else if (value instanceof Integer) {
-            statement.setInt(sqlIndex, ((Integer) value).intValue());
+            statement.setInt(sqlIndex, (Integer) value);
         } else if (value instanceof Long) {
-            statement.setLong(sqlIndex, ((Long) value).longValue());
+            statement.setLong(sqlIndex, (Long) value);
         } else if (value instanceof BigDecimal) {
             // setObject assumes a scale of 0, so we rather use the typed setter
             statement.setBigDecimal(sqlIndex, (BigDecimal) value);
         } else if (value instanceof Float) {
-            statement.setFloat(sqlIndex, ((Float) value).floatValue());
+            statement.setFloat(sqlIndex, (Float) value);
         } else if (value instanceof Double) {
-            statement.setDouble(sqlIndex, ((Double) value).doubleValue());
+            statement.setDouble(sqlIndex, (Double) value);
         } else {
             statement.setObject(sqlIndex, value, typeCode);
         }

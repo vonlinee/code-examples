@@ -20,9 +20,10 @@ package org.apache.ddlutils.io;
  */
 
 import org.apache.commons.beanutils.DynaBean;
-import org.apache.commons.collections.set.ListOrderedSet;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Represents an object waiting for insertion into the database. Is used by the
@@ -34,15 +35,15 @@ public class WaitingObject {
     /**
      * The object that is waiting for insertion.
      */
-    private DynaBean _obj;
+    private final DynaBean _obj;
     /**
      * The original identity of the waiting object.
      */
-    private Identity _objIdentity;
+    private final Identity _objIdentity;
     /**
      * The identities of the waited-for objects.
      */
-    private ListOrderedSet _waitedForIdentites = new ListOrderedSet();
+    private final List<Identity> _waitedForIdentites = new LinkedList<>();
 
     /**
      * Creates a new <code>WaitingObject</code> instance for the given object.
@@ -74,7 +75,7 @@ public class WaitingObject {
      * Returns the identities of the object that this object is waiting for.
      * @return The identities
      */
-    public Iterator getPendingFKs() {
+    public Iterator<Identity> getPendingFKs() {
         return _waitedForIdentites.iterator();
     }
 
@@ -88,7 +89,7 @@ public class WaitingObject {
         int idx = _waitedForIdentites.indexOf(fkIdentity);
 
         if (idx >= 0) {
-            result = (Identity) _waitedForIdentites.get(idx);
+            result = _waitedForIdentites.get(idx);
             _waitedForIdentites.remove(idx);
         }
         return result;
@@ -106,12 +107,10 @@ public class WaitingObject {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString() {
-        StringBuffer result = new StringBuffer();
-
-        result.append(_objIdentity);
-        result.append(" waiting for ");
-        result.append(_waitedForIdentites.toString());
-        return result.toString();
+        return _objIdentity +
+                " waiting for " +
+                _waitedForIdentites.toString();
     }
 }

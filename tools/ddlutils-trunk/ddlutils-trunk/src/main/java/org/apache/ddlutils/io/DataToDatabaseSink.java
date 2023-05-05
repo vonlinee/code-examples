@@ -22,8 +22,8 @@ package org.apache.ddlutils.io;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DatabaseOperationException;
+import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
 import org.apache.ddlutils.model.*;
 
@@ -53,11 +53,11 @@ public class DataToDatabaseSink implements DataSink {
     /**
      * The database model.
      */
-    private Database _model;
+    private final Database model;
     /**
      * The connection to the database.
      */
-    private Connection _connection;
+    private Connection connection;
     /**
      * Whether to stop when an error has occurred while inserting a bean into the database.
      */
@@ -73,31 +73,31 @@ public class DataToDatabaseSink implements DataSink {
     /**
      * The queued objects for batch insertion.
      */
-    private ArrayList _batchQueue = new ArrayList();
+    private final ArrayList<DynaBean> _batchQueue = new ArrayList<>();
     /**
      * The number of beans to insert in one batch.
      */
-    private int _batchSize = 1024;
+    private int batchSize = 1024;
     /**
      * Stores the tables that are target of a foreign key.
      */
-    private HashSet _fkTables = new HashSet();
+    private final HashSet<Table> _fkTables = new HashSet<>();
     /**
      * Contains the tables that have a self-referencing foreign key to a (partially) identity primary key.
      */
-    private HashSet _tablesWithSelfIdentityReference = new HashSet();
+    private final HashSet<Table> _tablesWithSelfIdentityReference = new HashSet<>();
     /**
      * Contains the tables that have a self-referencing foreign key that is required.
      */
-    private HashSet _tablesWithRequiredSelfReference = new HashSet();
+    private final HashSet<Table> _tablesWithRequiredSelfReference = new HashSet<>();
     /**
      * Maps original to processed identities.
      */
-    private HashMap _identityMap = new HashMap();
+    private final HashMap<Identity, Identity> _identityMap = new HashMap<>();
     /**
      * Stores the objects that are waiting for other objects to be inserted.
      */
-    private ArrayList _waitingObjects = new ArrayList();
+    private final ArrayList<WaitingObject> _waitingObjects = new ArrayList<>();
 
     /**
      * Creates a new sink instance.
@@ -106,7 +106,7 @@ public class DataToDatabaseSink implements DataSink {
      */
     public DataToDatabaseSink(DatabasePlatform platform, Database model) {
         _platform = platform;
-        _model = model;
+        this.model = model;
         for (int tableIdx = 0; tableIdx < model.getTableCount(); tableIdx++) {
             Table table = model.getTable(tableIdx);
             ForeignKey selfRefFk = table.getSelfReferencingForeignKey();
@@ -114,8 +114,8 @@ public class DataToDatabaseSink implements DataSink {
             if (selfRefFk != null) {
                 Column[] pkColumns = table.getPrimaryKeyColumns();
 
-                for (int idx = 0; idx < pkColumns.length; idx++) {
-                    if (pkColumns[idx].isAutoIncrement()) {
+                for (Column pkColumn : pkColumns) {
+                    if (pkColumn.isAutoIncrement()) {
                         _tablesWithSelfIdentityReference.add(table);
                         break;
                     }
@@ -191,7 +191,7 @@ public class DataToDatabaseSink implements DataSink {
      * @return The number of beans
      */
     public int getBatchSize() {
-        return _batchSize;
+        return batchSize;
     }
 
     /**
@@ -199,32 +199,31 @@ public class DataToDatabaseSink implements DataSink {
      * @param batchSize The number of beans
      */
     public void setBatchSize(int batchSize) {
-        _batchSize = batchSize;
+        this.batchSize = batchSize;
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void end() throws DataSinkException {
         purgeBatchQueue();
-        if (_connection != null) {
+        if (connection != null) {
             try {
-                _connection.close();
+                connection.close();
             } catch (SQLException ex) {
                 throw new DataSinkException(ex);
             }
         }
         if (!_waitingObjects.isEmpty()) {
             if (_log.isDebugEnabled()) {
-                for (Iterator it = _waitingObjects.iterator(); it.hasNext(); ) {
-                    WaitingObject obj = (WaitingObject) it.next();
-                    Table table = _model.getDynaClassFor(obj.getObject()).getTable();
+                for (WaitingObject obj : _waitingObjects) {
+                    Table table = model.getDynaClassFor(obj.getObject()).getTable();
                     Identity objId = buildIdentityFromPKs(table, obj.getObject());
 
                     _log.debug("Row " + objId + " is still not written because it depends on these yet unwritten rows");
-                    for (Iterator fkIt = obj.getPendingFKs(); fkIt.hasNext(); ) {
-                        Identity pendingFkId = (Identity) fkIt.next();
-
+                    for (Iterator<Identity> fkIt = obj.getPendingFKs(); fkIt.hasNext(); ) {
+                        Identity pendingFkId = fkIt.next();
                         _log.debug("  " + pendingFkId);
                     }
 
@@ -241,12 +240,13 @@ public class DataToDatabaseSink implements DataSink {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void start() throws DataSinkException {
         _fkTables.clear();
         _waitingObjects.clear();
         if (_ensureFkOrder) {
-            for (int tableIdx = 0; tableIdx < _model.getTableCount(); tableIdx++) {
-                Table table = _model.getTable(tableIdx);
+            for (int tableIdx = 0; tableIdx < model.getTableCount(); tableIdx++) {
+                Table table = model.getTable(tableIdx);
 
                 for (int fkIdx = 0; fkIdx < table.getForeignKeyCount(); fkIdx++) {
                     ForeignKey curFk = table.getForeignKey(fkIdx);
@@ -256,7 +256,7 @@ public class DataToDatabaseSink implements DataSink {
             }
         }
         try {
-            _connection = _platform.borrowConnection();
+            connection = _platform.borrowConnection();
         } catch (DatabaseOperationException ex) {
             throw new DataSinkException(ex);
         }
@@ -265,8 +265,9 @@ public class DataToDatabaseSink implements DataSink {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addBean(DynaBean bean) throws DataSinkException {
-        Table table = _model.getDynaClassFor(bean).getTable();
+        Table table = model.getDynaClassFor(bean).getTable();
         Identity origIdentity = buildIdentityFromPKs(table, bean);
 
         if (_ensureFkOrder && (table.getForeignKeyCount() > 0)) {
@@ -288,12 +289,12 @@ public class DataToDatabaseSink implements DataSink {
             }
             if (waitingObj.hasPendingFKs()) {
                 if (_log.isDebugEnabled()) {
-                    StringBuffer msg = new StringBuffer();
+                    StringBuilder msg = new StringBuilder();
 
                     msg.append("Defering insertion of row ");
-                    msg.append(buildIdentityFromPKs(table, bean).toString());
+                    msg.append(buildIdentityFromPKs(table, bean));
                     msg.append(" because it is waiting for:");
-                    for (Iterator it = waitingObj.getPendingFKs(); it.hasNext(); ) {
+                    for (Iterator<Identity> it = waitingObj.getPendingFKs(); it.hasNext(); ) {
                         msg.append("\n  ");
                         msg.append(it.next().toString());
                     }
@@ -312,23 +313,23 @@ public class DataToDatabaseSink implements DataSink {
 
         if (_ensureFkOrder && _fkTables.contains(table)) {
             Identity newIdentity = buildIdentityFromPKs(table, bean);
-            ArrayList finishedObjs = new ArrayList();
+            ArrayList<DynaBean> finishedObjs = new ArrayList<>();
 
             _identityMap.put(origIdentity, newIdentity);
 
-            // we're doing multiple passes so that we can insert as much objects in
+            // we're doing multiple passes so that we can insert as many objects in
             // one go as possible
-            ArrayList identitiesToCheck = new ArrayList();
+            ArrayList<Identity> identitiesToCheck = new ArrayList<>();
 
             identitiesToCheck.add(origIdentity);
             while (!identitiesToCheck.isEmpty() && !_waitingObjects.isEmpty()) {
-                Identity curIdentity = (Identity) identitiesToCheck.get(0);
-                Identity curNewIdentity = (Identity) _identityMap.get(curIdentity);
+                Identity curIdentity = identitiesToCheck.get(0);
+                Identity curNewIdentity = _identityMap.get(curIdentity);
 
                 identitiesToCheck.remove(0);
                 finishedObjs.clear();
-                for (Iterator waitingObjIt = _waitingObjects.iterator(); waitingObjIt.hasNext(); ) {
-                    WaitingObject waitingObj = (WaitingObject) waitingObjIt.next();
+                for (Iterator<WaitingObject> waitingObjIt = _waitingObjects.iterator(); waitingObjIt.hasNext(); ) {
+                    WaitingObject waitingObj = waitingObjIt.next();
                     Identity fkIdentity = waitingObj.removePendingFK(curIdentity);
 
                     if (fkIdentity != null) {
@@ -340,9 +341,8 @@ public class DataToDatabaseSink implements DataSink {
                         finishedObjs.add(waitingObj.getObject());
                     }
                 }
-                for (Iterator finishedObjIt = finishedObjs.iterator(); finishedObjIt.hasNext(); ) {
-                    DynaBean finishedObj = (DynaBean) finishedObjIt.next();
-                    Table tableForObj = _model.getDynaClassFor(finishedObj).getTable();
+                for (DynaBean finishedObj : finishedObjs) {
+                    Table tableForObj = model.getDynaClassFor(finishedObj).getTable();
                     Identity objIdentity = buildIdentityFromPKs(tableForObj, finishedObj);
 
                     insertBeanIntoDatabase(tableForObj, finishedObj);
@@ -367,7 +367,7 @@ public class DataToDatabaseSink implements DataSink {
     private void insertBeanIntoDatabase(Table table, DynaBean bean) throws DataSinkException {
         if (_useBatchMode) {
             _batchQueue.add(bean);
-            if (_batchQueue.size() >= _batchSize) {
+            if (_batchQueue.size() >= batchSize) {
                 purgeBatchQueue();
             }
         } else {
@@ -381,16 +381,16 @@ public class DataToDatabaseSink implements DataSink {
     private void purgeBatchQueue() throws DataSinkException {
         if (!_batchQueue.isEmpty()) {
             try {
-                _platform.insert(_connection, _model, _batchQueue);
-                if (!_connection.getAutoCommit()) {
-                    _connection.commit();
+                _platform.insert(connection, model, _batchQueue);
+                if (!connection.getAutoCommit()) {
+                    connection.commit();
                 }
                 if (_log.isDebugEnabled()) {
                     _log.debug("Inserted " + _batchQueue.size() + " rows in batch mode ");
                 }
             } catch (Exception ex) {
                 if (_haltOnErrors) {
-                    _platform.returnConnection(_connection);
+                    _platform.returnConnection(connection);
                     throw new DataSinkException(ex);
                 } else {
                     _log.warn("Exception while inserting " + _batchQueue.size() + " rows via batch mode into the database", ex);
@@ -432,7 +432,7 @@ public class DataToDatabaseSink implements DataSink {
             if (needTwoStepInsert) {
                 // we first insert the bean without the fk, then in the second step we update the bean
                 // with the row with the identity pk values
-                ArrayList fkValues = new ArrayList();
+                ArrayList<Object> fkValues = new ArrayList<>();
 
                 for (int idx = 0; idx < selfRefFk.getReferenceCount(); idx++) {
                     String columnName = selfRefFk.getReference(idx).getLocalColumnName();
@@ -440,20 +440,20 @@ public class DataToDatabaseSink implements DataSink {
                     fkValues.add(bean.get(columnName));
                     bean.set(columnName, null);
                 }
-                _platform.insert(_connection, _model, bean);
+                _platform.insert(connection, model, bean);
                 for (int idx = 0; idx < selfRefFk.getReferenceCount(); idx++) {
                     bean.set(selfRefFk.getReference(idx).getLocalColumnName(), fkValues.get(idx));
                 }
-                _platform.update(_connection, _model, bean);
+                _platform.update(connection, model, bean);
             } else {
-                _platform.insert(_connection, _model, bean);
+                _platform.insert(connection, model, bean);
             }
-            if (!_connection.getAutoCommit()) {
-                _connection.commit();
+            if (!connection.getAutoCommit()) {
+                connection.commit();
             }
         } catch (Exception ex) {
             if (_haltOnErrors) {
-                _platform.returnConnection(_connection);
+                _platform.returnConnection(connection);
                 throw new DataSinkException(ex);
             } else {
                 _log.warn("Exception while inserting a row into the database", ex);
@@ -472,7 +472,7 @@ public class DataToDatabaseSink implements DataSink {
         if ((fk.getName() != null) && (fk.getName().length() > 0)) {
             return fk.getName();
         } else {
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
 
             result.append(owningTable.getName());
             result.append("[");
@@ -507,8 +507,8 @@ public class DataToDatabaseSink implements DataSink {
         Identity identity = new Identity(table);
         Column[] pkColumns = table.getPrimaryKeyColumns();
 
-        for (int idx = 0; idx < pkColumns.length; idx++) {
-            identity.setColumnValue(pkColumns[idx].getName(), bean.get(pkColumns[idx].getName()));
+        for (Column pkColumn : pkColumns) {
+            identity.setColumnValue(pkColumn.getName(), bean.get(pkColumn.getName()));
         }
         return identity;
     }

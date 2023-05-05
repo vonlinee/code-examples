@@ -22,7 +22,7 @@ package org.apache.ddlutils.platform.mysql;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.*;
-import org.apache.ddlutils.util.StringUtilsExt;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.util.*;
 
@@ -124,7 +124,7 @@ public class MySqlModelComparator extends ModelComparator {
                     Reference ref = intermediateFk.getReference(refIdx);
 
                     for (String columnName : columnNames) {
-                        if (StringUtilsExt.equals(ref.getLocalColumnName(), columnName, isCaseSensitive())) {
+                        if (StringUtils.equals(ref.getLocalColumnName(), columnName, isCaseSensitive())) {
                             newChanges.add(new RemoveForeignKeyChange(intermediateTable.getName(), intermediateFk));
                             newChanges.add(new AddForeignKeyChange(intermediateTable.getName(), intermediateFk));
                         }

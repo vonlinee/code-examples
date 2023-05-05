@@ -206,7 +206,7 @@ public class Db2ModelReader extends JdbcModelReader {
             try {
                 pkData = metaData.getPrimaryKeys(metaData.escapeForSearch(table.getName()));
                 while (pkData.next()) {
-                    Map values = readColumns(pkData, getColumnsForPK());
+                    Map<String, Object> values = readColumns(pkData, getColumnsForPK());
 
                     pkNames.add(values.get("PK_NAME"));
                 }

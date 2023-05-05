@@ -23,7 +23,7 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
-import org.apache.ddlutils.util.StringUtilsExt;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.io.IOException;
 
@@ -95,18 +95,17 @@ public class SapDbBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSelectLastIdentityValues(Table table) {
-        StringBuffer result = new StringBuffer();
-
-        result.append("SELECT ");
-        result.append(getDelimitedIdentifier(getTableName(table)));
-        result.append(".CURRVAL FROM DUAL");
-        return result.toString();
+        return "SELECT " +
+                getDelimitedIdentifier(getTableName(table)) +
+                ".CURRVAL FROM DUAL";
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addColumn(Database model, Table table, Column newColumn) throws IOException {
         print("ALTER TABLE ");
         printlnIdentifier(getTableName(table));
@@ -198,7 +197,7 @@ public class SapDbBuilder extends SqlBuilder {
         boolean charSizeChanged = TypeMap.isTextType(targetColumn.getJdbcTypeCode()) &&
                 TypeMap.isTextType(targetColumn.getJdbcTypeCode()) &&
                 ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn) &&
-                !StringUtilsExt.isEmpty(targetColumn.getSize());
+                !StringUtils.isEmpty(targetColumn.getSize());
 
         if (charSizeChanged) {
             print("SUBSTR(");

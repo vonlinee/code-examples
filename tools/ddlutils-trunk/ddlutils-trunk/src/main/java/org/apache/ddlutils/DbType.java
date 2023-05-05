@@ -3,6 +3,7 @@ package org.apache.ddlutils;
 public enum DbType {
 
     DB2("DB2", "", ""),
+    PostgreSql("PostgreSql", "org.postgresql.Driver", "postgresql"),
     DERBY("Derby", "", "");
 
     final String dbTypeName;

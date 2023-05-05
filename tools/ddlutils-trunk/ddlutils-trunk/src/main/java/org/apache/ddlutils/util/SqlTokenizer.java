@@ -11,11 +11,11 @@ public class SqlTokenizer {
     /**
      * The SQL to tokenize.
      */
-    private String _sql;
+    private final String sql;
     /**
      * The index of the last character in the string.
      */
-    private int _lastCharIdx;
+    private final int lastCharIdx;
     /**
      * The last delimiter position in the string.
      */
@@ -34,8 +34,8 @@ public class SqlTokenizer {
      * @param sql The sql text
      */
     public SqlTokenizer(String sql) {
-        _sql = sql;
-        _lastCharIdx = sql.length() - 1;
+        this.sql = sql;
+        lastCharIdx = sql.length() - 1;
     }
 
     /**
@@ -47,17 +47,17 @@ public class SqlTokenizer {
             return false;
         } else {
             if (_nextDelimiterPos <= _lastDelimiterPos) {
-                _nextDelimiterPos = _sql.indexOf(';', _lastDelimiterPos + 1);
-                while ((_nextDelimiterPos >= 0) && (_nextDelimiterPos < _lastCharIdx)) {
-                    char nextChar = _sql.charAt(_nextDelimiterPos + 1);
+                _nextDelimiterPos = sql.indexOf(';', _lastDelimiterPos + 1);
+                while ((_nextDelimiterPos >= 0) && (_nextDelimiterPos < lastCharIdx)) {
+                    char nextChar = sql.charAt(_nextDelimiterPos + 1);
 
                     if ((nextChar == '\r') || (nextChar == '\n')) {
                         break;
                     }
-                    _nextDelimiterPos = _sql.indexOf(';', _nextDelimiterPos + 1);
+                    _nextDelimiterPos = sql.indexOf(';', _nextDelimiterPos + 1);
                 }
             }
-            return (_nextDelimiterPos >= 0) || (_lastDelimiterPos < _lastCharIdx);
+            return (_nextDelimiterPos >= 0) || (_lastDelimiterPos < lastCharIdx);
         }
     }
 
@@ -70,10 +70,10 @@ public class SqlTokenizer {
 
         if (hasMoreStatements()) {
             if (_nextDelimiterPos >= 0) {
-                result = _sql.substring(_lastDelimiterPos + 1, _nextDelimiterPos);
+                result = sql.substring(_lastDelimiterPos + 1, _nextDelimiterPos);
                 _lastDelimiterPos = _nextDelimiterPos;
             } else {
-                result = _sql.substring(_lastDelimiterPos + 1);
+                result = sql.substring(_lastDelimiterPos + 1);
                 _finished = true;
             }
         }

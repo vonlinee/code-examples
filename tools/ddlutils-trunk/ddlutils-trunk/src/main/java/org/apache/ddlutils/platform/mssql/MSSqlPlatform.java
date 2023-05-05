@@ -1,24 +1,5 @@
 package org.apache.ddlutils.platform.mssql;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.PlatformInfo;
@@ -27,9 +8,9 @@ import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
 import org.apache.ddlutils.platform.GenericDatabasePlatform;
+import org.apache.ddlutils.platform.SqlBuildContext;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -126,9 +107,7 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
      * @return <code>true</code> if identity override mode is needed
      */
     private boolean useIdentityOverrideFor(Table table) {
-        return isIdentityOverrideOn() &&
-                getPlatformInfo().isIdentityOverrideAllowed() &&
-                (table.getAutoIncrementColumns().length > 0);
+        return isIdentityOverrideOn() && getPlatformInfo().isIdentityOverrideAllowed() && (table.getAutoIncrementColumns().length > 0);
     }
 
     /**
@@ -180,20 +159,17 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
             protected boolean isSupported(Table intermediateTable, TableChange change) {
-                if ((change instanceof RemoveColumnChange) ||
-                        (change instanceof AddPrimaryKeyChange) ||
-                        (change instanceof PrimaryKeyChange) ||
-                        (change instanceof RemovePrimaryKeyChange)) {
+                if ((change instanceof RemoveColumnChange) || (change instanceof AddPrimaryKeyChange) || (change instanceof PrimaryKeyChange) || (change instanceof RemovePrimaryKeyChange)) {
                     return true;
                 } else if (change instanceof AddColumnChange) {
                     AddColumnChange addColumnChange = (AddColumnChange) change;
 
-                    // Sql Server can only add not insert columns, and the cannot be requird unless also
+                    // Sql Server can only add not insert columns, and they cannot be requird unless also
                     // auto increment or with a DEFAULT value
-                    return (addColumnChange.getNextColumn() == null) &&
-                            (!addColumnChange.getNewColumn().isRequired() ||
-                                    addColumnChange.getNewColumn().isAutoIncrement() ||
-                                    !StringUtils.isEmpty(addColumnChange.getNewColumn().getDefaultValue()));
+                    return (addColumnChange.getNextColumn() == null) && (!addColumnChange.getNewColumn()
+                            .isRequired() || addColumnChange.getNewColumn()
+                            .isAutoIncrement() || !StringUtils.isEmpty(addColumnChange.getNewColumn()
+                            .getDefaultValue()));
                 } else if (change instanceof ColumnDefinitionChange) {
                     ColumnDefinitionChange colDefChange = (ColumnDefinitionChange) change;
                     Column curColumn = intermediateTable.findColumn(colDefChange.getChangedColumn(), isDelimitedIdentifierModeOn());
@@ -201,9 +177,8 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
 
                     // Sql Server has no way of adding or removing an IDENTITY constraint
                     // Also, Sql Server cannot handle reducing the size (even with the CAST in place)
-                    return (curColumn.isAutoIncrement() == colDefChange.getNewColumn().isAutoIncrement()) &&
-                            (curColumn.isRequired() || (curColumn.isRequired() == newColumn.isRequired())) &&
-                            !ColumnDefinitionChange.isSizeReduced(getPlatformInfo(), curColumn, newColumn);
+                    return (curColumn.isAutoIncrement() == colDefChange.getNewColumn()
+                            .isAutoIncrement()) && (curColumn.isRequired() || (curColumn.isRequired() == newColumn.isRequired())) && !ColumnDefinitionChange.isSizeReduced(getPlatformInfo(), curColumn, newColumn);
                 } else {
                     return false;
                 }
@@ -214,7 +189,8 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
-    protected Database processChanges(Database model, Collection changes, SqlBuildContext params) throws IOException, DdlUtilsException {
+    @Override
+    protected Database processChanges(Database model, Collection<ModelChange> changes, SqlBuildContext params) throws IOException, DdlUtilsException {
         if (!changes.isEmpty()) {
             ((MSSqlBuilder) getSqlBuilder()).turnOnQuotation();
         }
@@ -228,9 +204,7 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
      *                     tables, the parameters won't be applied
      * @param change       The change object
      */
-    public void processChange(Database currentModel,
-                              SqlBuildContext params,
-                              RemoveColumnChange change) throws IOException {
+    public void processChange(Database currentModel, SqlBuildContext params, RemoveColumnChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column removedColumn = changedTable.findColumn(change.getChangedColumn(), isDelimitedIdentifierModeOn());
 
@@ -245,9 +219,7 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
      *                     tables, the parameters won't be applied
      * @param change       The change object
      */
-    public void processChange(Database currentModel,
-                              SqlBuildContext params,
-                              RemovePrimaryKeyChange change) throws IOException {
+    public void processChange(Database currentModel, SqlBuildContext params, RemovePrimaryKeyChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
 
         ((MSSqlBuilder) getSqlBuilder()).dropPrimaryKey(changedTable);
@@ -261,9 +233,7 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
      *                     tables, the parameters won't be applied
      * @param change       The change object
      */
-    public void processChange(Database currentModel,
-                              SqlBuildContext params,
-                              ColumnDefinitionChange change) throws IOException {
+    public void processChange(Database currentModel, SqlBuildContext params, ColumnDefinitionChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         Column changedColumn = changedTable.findColumn(change.getChangedColumn(), isDelimitedIdentifierModeOn());
 
@@ -277,9 +247,7 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
      *                     tables, the parameters won't be applied
      * @param change       The change object
      */
-    public void processChange(Database currentModel,
-                              SqlBuildContext params,
-                              PrimaryKeyChange change) throws IOException {
+    public void processChange(Database currentModel, SqlBuildContext params, PrimaryKeyChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
         String[] newPKColumnNames = change.getNewPrimaryKeyColumns();
         Column[] newPKColumns = new Column[newPKColumnNames.length];

@@ -22,7 +22,7 @@ package org.apache.ddlutils.platform.sybase;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
-import org.apache.ddlutils.util.StringUtilsExt;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -252,7 +252,7 @@ public class SybaseBuilder extends SqlBuilder {
     public void turnOnQuotation() throws IOException {
         String quotationStmt = getQuotationOnStatement();
 
-        if (!StringUtilsExt.isEmpty(quotationStmt)) {
+        if (!StringUtils.isEmpty(quotationStmt)) {
             print(quotationStmt);
             printEndOfStatement();
         }

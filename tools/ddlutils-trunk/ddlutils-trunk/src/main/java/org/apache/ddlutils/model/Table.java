@@ -298,8 +298,8 @@ public class Table implements SchemaObject, Serializable {
      * @param foreignKeys The foreign keys
      */
     public void addForeignKeys(Collection<ForeignKey> foreignKeys) {
-        for (Iterator<ForeignKey> it = foreignKeys.iterator(); it.hasNext(); ) {
-            addForeignKey(it.next());
+        for (ForeignKey foreignKey : foreignKeys) {
+            addForeignKey(foreignKey);
         }
     }
 

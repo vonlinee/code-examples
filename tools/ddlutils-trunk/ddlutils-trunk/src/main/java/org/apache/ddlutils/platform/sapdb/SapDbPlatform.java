@@ -28,7 +28,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
 import org.apache.ddlutils.platform.GenericDatabasePlatform;
-import org.apache.ddlutils.util.StringUtilsExt;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -140,7 +140,7 @@ public class SapDbPlatform extends GenericDatabasePlatform {
                     // a default value or be IDENTITY
                     return (addColumnChange.getNextColumn() == null) &&
                             (!addColumnChange.getNewColumn().isRequired() ||
-                                    !StringUtilsExt.isEmpty(addColumnChange.getNewColumn().getDefaultValue()));
+                                    !StringUtils.isEmpty(addColumnChange.getNewColumn().getDefaultValue()));
                 } else if (change instanceof ColumnDefinitionChange) {
                     ColumnDefinitionChange colChange = (ColumnDefinitionChange) change;
 
@@ -229,7 +229,7 @@ public class SapDbPlatform extends GenericDatabasePlatform {
         Table changedTable = findChangedTable(currentModel, change);
         Column changedColumn = changedTable.findColumn(change.getChangedColumn(), isDelimitedIdentifierModeOn());
 
-        if (!StringUtilsExt.equals(changedColumn.getDefaultValue(), change.getNewColumn().getDefaultValue())) {
+        if (!StringUtils.equals(changedColumn.getDefaultValue(), change.getNewColumn().getDefaultValue())) {
             ((SapDbBuilder) getSqlBuilder()).changeColumnDefaultValue(changedTable,
                     changedColumn,
                     change.getNewColumn().getDefaultValue());

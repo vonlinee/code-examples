@@ -28,7 +28,7 @@ import org.apache.tools.ant.BuildException;
 /**
  * Encloses the platform configuration for the Ant tasks.
  * @version $Revision: 329426 $
- * @ant.type ignore="true"
+ * ant.type ignore="true"
  */
 public class PlatformConfiguration {
     /**
@@ -188,10 +188,8 @@ public class PlatformConfiguration {
                 if (_dataSource == null) {
                     throw new BuildException("No database specified.");
                 }
-                if (_databaseType == null) {
-                    _databaseType = new PlatformUtils().determineDatabaseType(_dataSource.getDriverClassName(),
-                            _dataSource.getUrl());
-                }
+                _databaseType = PlatformUtils.determineDatabaseType(_dataSource.getDriverClassName(),
+                        _dataSource.getUrl());
                 if (_databaseType == null) {
                     _databaseType = new PlatformUtils().determineDatabaseType(_dataSource);
                 }

@@ -10,6 +10,7 @@ import java.util.List;
  * @version $Revision: $
  */
 public interface TableDefinitionChangesPredicate {
+
     /**
      * Evaluates the given list of table changes and determines whether they are supported.
      * @param intermediateTable The current table object which has certain non-table-definition

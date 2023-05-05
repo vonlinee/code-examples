@@ -173,18 +173,15 @@ public class PlatformUtils {
     /**
      * Maps the sub-protocl part of a jdbc connection url to a OJB platform name.
      */
-    private final HashMap<String, String> jdbcSubProtocolToPlatform = new HashMap<>();
+    private static final HashMap<String, String> jdbcSubProtocolToPlatform = new HashMap<>();
     /**
      * Maps the jdbc driver name to a OJB platform name.
      */
-    private final HashMap<String, String> jdbcDriverToPlatform = new HashMap<>();
+    private static final HashMap<String, String> jdbcDriverToPlatform = new HashMap<>();
 
-    /**
-     * Creates a new instance.
-     */
-    public PlatformUtils() {
+    static {
         // Note that currently Sapdb and MaxDB have equal subprotocols and
-        // drivers so we have no means to distinguish them
+        // drivers, so we have no means to distinguish them
         jdbcSubProtocolToPlatform.put(AxionPlatform.JDBC_SUBPROTOCOL, AxionPlatform.DATABASENAME);
         jdbcSubProtocolToPlatform.put(CloudscapePlatform.JDBC_SUBPROTOCOL_1, CloudscapePlatform.DATABASENAME);
         jdbcSubProtocolToPlatform.put(CloudscapePlatform.JDBC_SUBPROTOCOL_2, CloudscapePlatform.DATABASENAME);
@@ -232,6 +229,7 @@ public class PlatformUtils {
         jdbcSubProtocolToPlatform.put(PlatformUtils.JDBC_SUBPROTOCOL_INET_SYBASE_POOLED_2, SybasePlatform.DATABASENAME);
         jdbcSubProtocolToPlatform.put(PlatformUtils.JDBC_SUBPROTOCOL_JTDS_SYBASE, SybasePlatform.DATABASENAME);
 
+        // jdbc driver class name -> platform name
         jdbcDriverToPlatform.put(AxionPlatform.JDBC_DRIVER, AxionPlatform.DATABASENAME);
         jdbcDriverToPlatform.put(Db2Platform.JDBC_DRIVER, Db2Platform.DATABASENAME);
         jdbcDriverToPlatform.put(Db2Platform.JDBC_DRIVER_OLD1, Db2Platform.DATABASENAME);
@@ -282,36 +280,31 @@ public class PlatformUtils {
      * @param password   The password to use for connecting to the database
      * @return The database type or <code>null</code> if the database type couldn't be determined
      */
-    public String determineDatabaseType(DataSource dataSource, String username, String password) throws DatabaseOperationException {
-        Connection connection = null;
-        try {
-            if (username != null) {
-                connection = dataSource.getConnection(username, password);
-            } else {
-                connection = dataSource.getConnection();
+    public static String determineDatabaseType(DataSource dataSource, String username, String password) throws DatabaseOperationException {
+        if (username != null) {
+            try (Connection connection = dataSource.getConnection(username, password)) {
+                DatabaseMetaData metaData = connection.getMetaData();
+                return determineDatabaseType(metaData.getDriverName(), metaData.getURL());
+            } catch (SQLException ex) {
+                throw new DatabaseOperationException("Error while reading the database metadata: " + ex.getMessage(), ex);
             }
-            DatabaseMetaData metaData = connection.getMetaData();
-            return determineDatabaseType(metaData.getDriverName(), metaData.getURL());
-        } catch (SQLException ex) {
-            throw new DatabaseOperationException("Error while reading the database metadata: " + ex.getMessage(), ex);
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException ex) {
-                    // we ignore this one
-                }
+        } else {
+            try (Connection connection = dataSource.getConnection()) {
+                DatabaseMetaData metaData = connection.getMetaData();
+                return determineDatabaseType(metaData.getDriverName(), metaData.getURL());
+            } catch (SQLException ex) {
+                throw new DatabaseOperationException("Error while reading the database metadata: " + ex.getMessage(), ex);
             }
         }
     }
 
     /**
      * Tries to determine the database type for the given jdbc driver and connection url.
-     * @param driverName        The fully qualified name of the JDBC driver
+     * @param driverName        The fully qualified class name of the JDBC driver class
      * @param jdbcConnectionUrl The connection url
-     * @return The database type or <code>null</code> if the database type couldn't be determined
+     * @return The database type name or <code>null</code> if the database type couldn't be determined
      */
-    public String determineDatabaseType(String driverName, String jdbcConnectionUrl) {
+    public static String determineDatabaseType(String driverName, String jdbcConnectionUrl) {
         if (jdbcDriverToPlatform.containsKey(driverName)) {
             return jdbcDriverToPlatform.get(driverName);
         }

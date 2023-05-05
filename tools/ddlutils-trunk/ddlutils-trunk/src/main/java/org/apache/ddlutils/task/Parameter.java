@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
  * A parameter consists of a name-value pair and an optional list of platforms for which the
  * parameter shall be used.
  * @version $Revision: 231306 $
- * @ant.type name="parameter"
+ * ant.type name="parameter"
  */
 public class Parameter {
     /**
@@ -39,7 +39,7 @@ public class Parameter {
      * Specifies the name of the parameter. See the database support documentation
      * for details on the parameters supported by the individual platforms.
      * @param name The name
-     * @ant.required
+     *             ant. Required
      */
     public void setName(String name) {
         _name = name;
@@ -56,7 +56,7 @@ public class Parameter {
     /**
      * Specifies the parameter value.
      * @param value The value
-     * @ant.not-required If none is given, <code>null</code> is used.
+     *              ant.not-required If none is given, <code>null</code> is used.
      */
     public void setValue(String value) {
         _value = value;
@@ -67,7 +67,7 @@ public class Parameter {
      * shall be used (see the <code>databaseType</code> attribute of the tasks for possible values).
      * For every platform not in this list, the parameter is ignored.
      * @param platforms The platforms
-     * @ant.not-required If not specified then the parameter is processed for every platform.
+     *                  ant.not-required If not specified then the parameter is processed for every platform.
      */
     public void setPlatforms(String platforms) {
         _platforms.clear();

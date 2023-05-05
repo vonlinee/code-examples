@@ -24,6 +24,7 @@ import org.apache.ddlutils.platform.sybase.SybasePlatform;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A factory of {@link DatabasePlatform} instances based on a case- * insensitive database name. Note that this is a convenience class as the platforms
@@ -74,7 +75,8 @@ public class PlatformFactory {
      * @return The platform or <code>null</code> if the database is not supported
      */
     public static synchronized DatabasePlatform createNewPlatformInstance(String jdbcDriver, String jdbcConnectionUrl) throws RuntimeException {
-        return createNewPlatformInstance(new PlatformUtils().determineDatabaseType(jdbcDriver, jdbcConnectionUrl));
+        String dbTypeName = PlatformUtils.determineDatabaseType(jdbcDriver, jdbcConnectionUrl);
+        return createNewPlatformInstance(Objects.requireNonNull(dbTypeName));
     }
 
     /**
@@ -87,7 +89,6 @@ public class PlatformFactory {
      */
     public static synchronized DatabasePlatform createNewPlatformInstance(DataSource dataSource) throws DdlUtilsException {
         DatabasePlatform platform = createNewPlatformInstance(new PlatformUtils().determineDatabaseType(dataSource));
-
         platform.setDataSource(dataSource);
         return platform;
     }
@@ -103,8 +104,7 @@ public class PlatformFactory {
      * @return The platform or <code>null</code> if the database is not supported
      */
     public static synchronized DatabasePlatform createNewPlatformInstance(DataSource dataSource, String username, String password) throws DdlUtilsException {
-        DatabasePlatform platform = createNewPlatformInstance(new PlatformUtils().determineDatabaseType(dataSource, username, password));
-
+        DatabasePlatform platform = createNewPlatformInstance(PlatformUtils.determineDatabaseType(dataSource, username, password));
         platform.setDataSource(dataSource);
         platform.setUsername(username);
         platform.setPassword(password);
