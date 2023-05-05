@@ -2,8 +2,6 @@ package org.apache.ddlutils.platform;
 
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.DatabaseOperationException;
@@ -24,7 +22,6 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
-import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
 /**
@@ -50,45 +47,46 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * The sql builder for this platform.
      */
-    private SqlBuilder _builder;
+    private SqlBuilder builder;
     /**
      * The model reader for this platform.
      */
-    private JdbcModelReader _modelReader;
+    private JdbcModelReader modelReader;
     /**
      * Whether script mode is on.
      */
-    private boolean _scriptModeOn;
+    private boolean scriptModeOn;
     /**
      * Whether SQL comments are generated or not.
      */
-    private boolean _sqlCommentsOn = true;
+    private boolean sqlCommentsOn = true;
     /**
      * Whether delimited identifiers are used or not.
      */
-    private boolean _delimitedIdentifierModeOn;
+    private boolean delimitedIdentifierModeOn;
     /**
      * Whether identity override is enabled.
      */
-    private boolean _identityOverrideOn;
+    private boolean identityOverrideOn;
     /**
      * Whether read foreign keys shall be sorted alphabetically.
      */
-    private boolean _foreignKeysSorted;
+    private boolean foreignKeysSorted;
     /**
      * Whether to use the default ON UPDATE action if the specified one is unsupported.
      */
-    private boolean _useDefaultOnUpdateActionIfUnsupported = true;
+    private boolean useDefaultOnUpdateActionIfUnsupported = true;
     /**
      * Whether to use the default ON DELETE action if the specified one is unsupported.
      */
-    private boolean _useDefaultOnDeleteActionIfUnsupported = true;
+    private boolean useDefaultOnDeleteActionIfUnsupported = true;
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public SqlBuilder getSqlBuilder() {
-        return _builder;
+        return builder;
     }
 
     /**
@@ -96,17 +94,18 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * @param builder The sql builder
      */
     protected void setSqlBuilder(SqlBuilder builder) {
-        _builder = builder;
+        this.builder = builder;
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public JdbcModelReader getModelReader() {
-        if (_modelReader == null) {
-            _modelReader = new JdbcModelReader(this);
+        if (modelReader == null) {
+            modelReader = new JdbcModelReader(this);
         }
-        return _modelReader;
+        return modelReader;
     }
 
     /**
@@ -114,7 +113,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * @param modelReader The model reader
      */
     protected void setModelReader(JdbcModelReader modelReader) {
-        _modelReader = modelReader;
+        this.modelReader = modelReader;
     }
 
     /**
@@ -130,7 +129,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     @Override
     public boolean isScriptModeOn() {
-        return _scriptModeOn;
+        return scriptModeOn;
     }
 
     /**
@@ -138,7 +137,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     @Override
     public void setScriptModeOn(boolean scriptModeOn) {
-        _scriptModeOn = scriptModeOn;
+        this.scriptModeOn = scriptModeOn;
     }
 
     /**
@@ -146,7 +145,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     @Override
     public boolean isSqlCommentsOn() {
-        return _sqlCommentsOn;
+        return sqlCommentsOn;
     }
 
     /**
@@ -157,7 +156,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
         if (!getPlatformInfo().isSqlCommentsSupported() && sqlCommentsOn) {
             throw new DdlUtilsException("DatabasePlatform " + getName() + " does not support SQL comments");
         }
-        _sqlCommentsOn = sqlCommentsOn;
+        this.sqlCommentsOn = sqlCommentsOn;
     }
 
     /**
@@ -165,7 +164,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     @Override
     public boolean isDelimitedIdentifierModeOn() {
-        return _delimitedIdentifierModeOn;
+        return delimitedIdentifierModeOn;
     }
 
     /**
@@ -176,7 +175,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
         if (!getPlatformInfo().isDelimitedIdentifiersSupported() && delimitedIdentifierModeOn) {
             throw new DdlUtilsException("DatabasePlatform " + getName() + " does not support delimited identifier");
         }
-        _delimitedIdentifierModeOn = delimitedIdentifierModeOn;
+        this.delimitedIdentifierModeOn = delimitedIdentifierModeOn;
     }
 
     /**
@@ -184,7 +183,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     @Override
     public boolean isIdentityOverrideOn() {
-        return _identityOverrideOn;
+        return identityOverrideOn;
     }
 
     /**
@@ -192,7 +191,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     @Override
     public void setIdentityOverrideOn(boolean identityOverrideOn) {
-        _identityOverrideOn = identityOverrideOn;
+        this.identityOverrideOn = identityOverrideOn;
     }
 
     /**
@@ -200,7 +199,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     @Override
     public boolean isForeignKeysSorted() {
-        return _foreignKeysSorted;
+        return foreignKeysSorted;
     }
 
     /**
@@ -208,7 +207,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     @Override
     public void setForeignKeysSorted(boolean foreignKeysSorted) {
-        _foreignKeysSorted = foreignKeysSorted;
+        this.foreignKeysSorted = foreignKeysSorted;
     }
 
     /**
@@ -216,7 +215,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     @Override
     public boolean isDefaultOnUpdateActionUsedIfUnsupported() {
-        return _useDefaultOnUpdateActionIfUnsupported;
+        return useDefaultOnUpdateActionIfUnsupported;
     }
 
     /**
@@ -224,7 +223,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     @Override
     public void setDefaultOnUpdateActionUsedIfUnsupported(boolean useDefault) {
-        _useDefaultOnUpdateActionIfUnsupported = useDefault;
+        useDefaultOnUpdateActionIfUnsupported = useDefault;
     }
 
     /**
@@ -232,7 +231,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     @Override
     public boolean isDefaultOnDeleteActionUsedIfUnsupported() {
-        return _useDefaultOnDeleteActionIfUnsupported;
+        return useDefaultOnDeleteActionIfUnsupported;
     }
 
     /**
@@ -240,7 +239,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     @Override
     public void setDefaultOnDeleteActionUsedIfUnsupported(boolean useDefault) {
-        _useDefaultOnDeleteActionIfUnsupported = useDefault;
+        useDefaultOnDeleteActionIfUnsupported = useDefault;
     }
 
     /**
@@ -258,7 +257,6 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     protected void logWarnings(Connection connection) throws SQLException {
         SQLWarning warning = connection.getWarnings();
-
         while (warning != null) {
             getLog().warn(warning.getLocalizedMessage(), warning.getCause());
             warning = warning.getNextWarning();
@@ -570,19 +568,16 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
         typeOrder.put(AddIndexChange.class, 8);
         typeOrder.put(AddForeignKeyChange.class, 9);
 
-        Collections.sort(changes, new Comparator() {
-            @Override
-            public int compare(Object objA, Object objB) {
-                Integer orderValueA = (Integer) typeOrder.get(objA.getClass());
-                Integer orderValueB = (Integer) typeOrder.get(objB.getClass());
+        changes.sort((objA, objB) -> {
+            Integer orderValueA = typeOrder.get(objA.getClass());
+            Integer orderValueB = typeOrder.get(objB.getClass());
 
-                if (orderValueA == null) {
-                    return (orderValueB == null ? 0 : 1);
-                } else if (orderValueB == null) {
-                    return -1;
-                } else {
-                    return orderValueA.compareTo(orderValueB);
-                }
+            if (orderValueA == null) {
+                return (orderValueB == null ? 0 : 1);
+            } else if (orderValueB == null) {
+                return -1;
+            } else {
+                return orderValueA.compareTo(orderValueB);
             }
         });
         return changes;
@@ -976,7 +971,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * @param change       The change object
      */
     private void invokeChangeHandler(Database currentModel, SqlBuildContext params, ModelChange change) throws IOException {
-        Class curClass = getClass();
+        Class<?> curClass = getClass();
 
         // find the handler for the change
         while ((curClass != null) && !Object.class.equals(curClass)) {
@@ -984,13 +979,13 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
                 Method method = null;
 
                 try {
-                    method = curClass.getDeclaredMethod("processChange", new Class[]{Database.class, SqlBuildContext.class, change.getClass()});
+                    method = curClass.getDeclaredMethod("processChange", Database.class, SqlBuildContext.class, change.getClass());
                 } catch (NoSuchMethodException ex) {
                     // we actually expect this one
                 }
 
                 if (method != null) {
-                    method.invoke(this, new Object[]{currentModel, params, change});
+                    method.invoke(this, currentModel, params, change);
                     return;
                 } else {
                     curClass = curClass.getSuperclass();
@@ -1117,11 +1112,11 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * Processes a change representing the addition of an index.
      * @param currentModel The current database schema
-     * @param params       The parameters used in the creation of new tables. Note that for existing
+     * @param context      The parameters used in the creation of new tables. Note that for existing
      *                     tables, the parameters won't be applied
      * @param change       The change object
      */
-    public void processChange(Database currentModel, SqlBuildContext params, AddIndexChange change) throws IOException {
+    public void processChange(Database currentModel, SqlBuildContext context, AddIndexChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
 
         getSqlBuilder().createIndex(changedTable, change.getNewIndex());
@@ -1473,8 +1468,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     protected String createInsertSql(Database model, SqlDynaClass dynaClass, SqlDynaProperty[] properties, DynaBean bean) {
         Table table = model.findTable(dynaClass.getTableName());
         HashMap<String, Object> columnValues = toColumnValues(properties, bean);
-
-        return _builder.getInsertSql(table, columnValues, bean == null);
+        return builder.getInsertSql(table, columnValues, bean == null);
     }
 
     /**
@@ -1486,7 +1480,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     protected String createSelectLastInsertIdSql(Database model, SqlDynaClass dynaClass) {
         Table table = model.findTable(dynaClass.getTableName());
-        return _builder.getSelectLastIdentityValues(table);
+        return builder.getSelectLastIdentityValues(table);
     }
 
     /**
@@ -1839,7 +1833,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
 
         columnValues.putAll(toColumnValues(primaryKeys, bean));
 
-        return _builder.getUpdateSql(table, columnValues, bean == null);
+        return builder.getUpdateSql(table, columnValues, bean == null);
     }
 
     /**
@@ -1863,7 +1857,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
             _log.info("Cannot update instances of type " + dynaClass + " because it has no primary keys");
             return null;
         } else {
-            return _builder.getUpdateSql(table, oldColumnValues, newColumnValues, newBean == null);
+            return builder.getUpdateSql(table, oldColumnValues, newColumnValues, newBean == null);
         }
     }
 
@@ -2071,7 +2065,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
             StringBuffer sql = new StringBuffer();
 
             sql.append("SELECT * FROM ");
-            sql.append(_builder.getDelimitedIdentifier(dynaClass.getTable().getName()));
+            sql.append(builder.getDelimitedIdentifier(dynaClass.getTable().getName()));
             sql.append(" WHERE ");
 
             for (int idx = 0; idx < primaryKeys.length; idx++) {
@@ -2080,7 +2074,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
                 if (idx > 0) {
                     sql.append(" AND ");
                 }
-                sql.append(_builder.getDelimitedIdentifier(key));
+                sql.append(builder.getDelimitedIdentifier(key));
                 sql.append("=?");
             }
 
@@ -2138,7 +2132,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
         Table table = model.findTable(dynaClass.getTableName());
         HashMap<String, Object> pkValues = toColumnValues(primaryKeys, bean);
 
-        return _builder.getDeleteSql(table, pkValues, bean == null);
+        return builder.getDeleteSql(table, pkValues, bean == null);
     }
 
     /**
@@ -2452,22 +2446,22 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
                 break;
             case Types.BIT:
             case Types.BOOLEAN:
-                value = new Boolean(useIdx ? resultSet.getBoolean(columnIdx) : resultSet.getBoolean(columnName));
+                value = useIdx ? resultSet.getBoolean(columnIdx) : resultSet.getBoolean(columnName);
                 break;
             case Types.TINYINT:
             case Types.SMALLINT:
             case Types.INTEGER:
-                value = new Integer(useIdx ? resultSet.getInt(columnIdx) : resultSet.getInt(columnName));
+                value = useIdx ? resultSet.getInt(columnIdx) : resultSet.getInt(columnName);
                 break;
             case Types.BIGINT:
-                value = new Long(useIdx ? resultSet.getLong(columnIdx) : resultSet.getLong(columnName));
+                value = useIdx ? resultSet.getLong(columnIdx) : resultSet.getLong(columnName);
                 break;
             case Types.REAL:
-                value = new Float(useIdx ? resultSet.getFloat(columnIdx) : resultSet.getFloat(columnName));
+                value = useIdx ? resultSet.getFloat(columnIdx) : resultSet.getFloat(columnName);
                 break;
             case Types.FLOAT:
             case Types.DOUBLE:
-                value = new Double(useIdx ? resultSet.getDouble(columnIdx) : resultSet.getDouble(columnName));
+                value = useIdx ? resultSet.getDouble(columnIdx) : resultSet.getDouble(columnName);
                 break;
             case Types.BINARY:
             case Types.VARBINARY:
@@ -2499,7 +2493,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
                         // thus we do the safe thing and handle it ourselves
                         value = "";
                     } else {
-                        value = clob.getSubString(1l, (int) length);
+                        value = clob.getSubString(1L, (int) length);
                     }
                 }
                 break;
@@ -2519,7 +2513,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
                         // thus we do the safe thing and handle it ourselves
                         value = new byte[0];
                     } else {
-                        value = blob.getBytes(1l, (int) length);
+                        value = blob.getBytes(1L, (int) length);
                     }
                 }
                 break;

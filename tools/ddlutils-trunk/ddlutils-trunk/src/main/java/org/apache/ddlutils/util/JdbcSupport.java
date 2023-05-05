@@ -24,19 +24,19 @@ public abstract class JdbcSupport {
     /**
      * The data source.
      */
-    private DataSource _dataSource;
+    private DataSource dataSource;
     /**
      * The username for accessing the database.
      */
-    private String _username;
+    private String username;
     /**
      * The password for accessing the database.
      */
-    private String _password;
+    private String password;
     /**
      * The names of the currently borrowed connections (for debugging).
      */
-    private final HashSet<String> _openConnectionNames = new HashSet<>();
+    private final HashSet<String> openConnectionNames = new HashSet<>();
 
     // Properties
     //-------------------------------------------------------------------------                
@@ -46,7 +46,7 @@ public abstract class JdbcSupport {
      * @return The data source
      */
     public DataSource getDataSource() {
-        return _dataSource;
+        return dataSource;
     }
 
     /**
@@ -54,7 +54,7 @@ public abstract class JdbcSupport {
      * @param dataSource The data source
      */
     public void setDataSource(DataSource dataSource) {
-        _dataSource = dataSource;
+        this.dataSource = dataSource;
     }
 
     /**
@@ -62,7 +62,7 @@ public abstract class JdbcSupport {
      * @return The username
      */
     public String getUsername() {
-        return _username;
+        return username;
     }
 
     /**
@@ -70,7 +70,7 @@ public abstract class JdbcSupport {
      * @param username The username
      */
     public void setUsername(String username) {
-        _username = username;
+        this.username = username;
     }
 
     /**
@@ -78,7 +78,7 @@ public abstract class JdbcSupport {
      * @return The password
      */
     public String getPassword() {
-        return _password;
+        return password;
     }
 
     /**
@@ -86,7 +86,7 @@ public abstract class JdbcSupport {
      * @param password The password
      */
     public void setPassword(String password) {
-        _password = password;
+        this.password = password;
     }
 
     // Implementation methods    
@@ -99,16 +99,15 @@ public abstract class JdbcSupport {
     public Connection borrowConnection() throws DatabaseOperationException {
         try {
             Connection connection;
-            if (_username == null) {
+            if (username == null) {
                 connection = getDataSource().getConnection();
             } else {
-                connection = getDataSource().getConnection(_username, _password);
+                connection = getDataSource().getConnection(username, password);
             }
             if (_log.isDebugEnabled()) {
                 String connName = connection.toString();
-
                 _log.debug("Borrowed connection " + connName + " from data source");
-                _openConnectionNames.add(connName);
+                openConnectionNames.add(connName);
             }
             return connection;
         } catch (SQLException ex) {
@@ -126,17 +125,17 @@ public abstract class JdbcSupport {
                 if (_log.isDebugEnabled()) {
                     String connName = connection.toString();
 
-                    _openConnectionNames.remove(connName);
+                    openConnectionNames.remove(connName);
 
                     StringBuilder logMsg = new StringBuilder();
 
                     logMsg.append("Returning connection ");
                     logMsg.append(connName);
                     logMsg.append(" to data source.\nRemaining connections:");
-                    if (_openConnectionNames.isEmpty()) {
+                    if (openConnectionNames.isEmpty()) {
                         logMsg.append(" None");
                     } else {
-                        for (String openConnectionName : _openConnectionNames) {
+                        for (String openConnectionName : openConnectionNames) {
                             logMsg.append("\n    ");
                             logMsg.append(openConnectionName);
                         }

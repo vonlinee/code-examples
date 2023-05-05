@@ -1,34 +1,16 @@
 package org.apache.ddlutils.util;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-import org.apache.commons.collections.Closure;
 import org.apache.ddlutils.DdlUtilsException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 /**
+ * 参考：org.apache.commons.collections.Closure
  * A closure that determines a callback for the type of the object and calls it.
  * Note that inheritance is also taken into account. I.e. if the object is of
  * type B which is a subtype of A, and there is only a callback for type A,
@@ -36,19 +18,19 @@ import java.util.Map;
  * then only this callback for type B will be invoked and not the one for type A.
  * @version $Revision: $
  */
-public class CallbackClosure implements Closure {
+public class CallbackClosure {
     /**
      * The object on which the callbacks will be invoked.
      */
-    private Object _callee;
+    private final Object _callee;
     /**
      * The parameter types.
      */
-    private Class[] _parameterTypes;
+    private final Class<?>[] _parameterTypes;
     /**
      * The parameters.
      */
-    private Object[] _parameters;
+    private final Object[] _parameters;
     /**
      * The position of the callback parameter type.
      */
@@ -56,7 +38,7 @@ public class CallbackClosure implements Closure {
     /**
      * The cached callbacks.
      */
-    private Map<Class<?>, ?> _callbacks = new HashMap<>();
+    private final Map<Class<?>, Method> _callbacks = new HashMap<>();
 
     /**
      * Creates a new closure object.
@@ -70,7 +52,7 @@ public class CallbackClosure implements Closure {
      *                       will be ignored. Can be <code>null</code> if no parameter types
      *                       where given
      */
-    public CallbackClosure(Object callee, String callbackName, Class[] parameterTypes, Object[] parameters) {
+    public CallbackClosure(Object callee, String callbackName, Class<?>[] parameterTypes, Object[] parameters) {
         _callee = callee;
 
         if ((parameterTypes == null) || (parameterTypes.length == 0)) {
@@ -103,17 +85,11 @@ public class CallbackClosure implements Closure {
         do {
             Method[] methods = type.getDeclaredMethods();
 
-            if (methods != null) {
-                for (int idx = 0; idx < methods.length; idx++) {
-                    Method method = methods[idx];
-                    Class<?>[] paramTypes = methods[idx].getParameterTypes();
-
-                    method.setAccessible(true);
-                    if (method.getName().equals(callbackName) && typesMatch(paramTypes)) {
-                        if (_callbacks.get(paramTypes[_callbackTypePos]) == null) {
-                            _callbacks.put(paramTypes[_callbackTypePos], methods[idx]);
-                        }
-                    }
+            for (Method method : methods) {
+                Class<?>[] paramTypes = method.getParameterTypes();
+                method.setAccessible(true);
+                if (method.getName().equals(callbackName) && typesMatch(paramTypes)) {
+                    _callbacks.putIfAbsent(paramTypes[_callbackTypePos], method);
                 }
             }
             type = type.getSuperclass();
@@ -126,7 +102,7 @@ public class CallbackClosure implements Closure {
      * @param methodParamTypes The method parameter types
      * @return <code>true</code> if the parameter types match
      */
-    private boolean typesMatch(Class[] methodParamTypes) {
+    private boolean typesMatch(Class<?>[] methodParamTypes) {
         if ((methodParamTypes == null) || (_parameterTypes.length != methodParamTypes.length)) {
             return false;
         }
@@ -142,13 +118,11 @@ public class CallbackClosure implements Closure {
      * {@inheritDoc}
      */
     public void execute(Object obj) throws DdlUtilsException {
-        LinkedList queue = new LinkedList();
-
+        LinkedList<Class<?>> queue = new LinkedList<>();
         queue.add(obj.getClass());
         while (!queue.isEmpty()) {
-            Class type = (Class) queue.removeFirst();
-            Method callback = (Method) _callbacks.get(type);
-
+            Class<?> type = queue.removeFirst();
+            Method callback = _callbacks.get(type);
             if (callback != null) {
                 try {
                     _parameters[_callbackTypePos] = obj;
@@ -163,14 +137,8 @@ public class CallbackClosure implements Closure {
             if ((type.getSuperclass() != null) && !type.getSuperclass().equals(Object.class)) {
                 queue.add(type.getSuperclass());
             }
-
-            Class[] baseInterfaces = type.getInterfaces();
-
-            if (baseInterfaces != null) {
-                for (int idx = 0; idx < baseInterfaces.length; idx++) {
-                    queue.add(baseInterfaces[idx]);
-                }
-            }
+            Class<?>[] baseInterfaces = type.getInterfaces();
+            Collections.addAll(queue, baseInterfaces);
         }
     }
 }

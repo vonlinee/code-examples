@@ -31,7 +31,6 @@ import org.apache.ddlutils.platform.cloudscape.CloudscapePlatform;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Iterator;
 import java.util.Map;
@@ -63,7 +62,6 @@ public class DerbyPlatform extends CloudscapePlatform {
      */
     public DerbyPlatform() {
         super();
-
         PlatformInfo info = getPlatformInfo();
 
         info.addNativeTypeMapping(Types.DOUBLE, "DOUBLE");
@@ -71,8 +69,7 @@ public class DerbyPlatform extends CloudscapePlatform {
         info.setSupportedOnUpdateActions(new CascadeActionEnum[]{CascadeActionEnum.NONE, CascadeActionEnum.RESTRICT});
         info.setDefaultOnUpdateAction(CascadeActionEnum.NONE);
         info.addEquivalentOnUpdateActions(CascadeActionEnum.NONE, CascadeActionEnum.RESTRICT);
-        info.setSupportedOnDeleteActions(new CascadeActionEnum[]{CascadeActionEnum.NONE, CascadeActionEnum.RESTRICT,
-                CascadeActionEnum.CASCADE, CascadeActionEnum.SET_NULL});
+        info.setSupportedOnDeleteActions(new CascadeActionEnum[]{CascadeActionEnum.NONE, CascadeActionEnum.RESTRICT, CascadeActionEnum.CASCADE, CascadeActionEnum.SET_NULL});
         info.setDefaultOnDeleteAction(CascadeActionEnum.NONE);
 
         setSqlBuilder(new DerbyBuilder(this));
@@ -82,6 +79,7 @@ public class DerbyPlatform extends CloudscapePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return DATABASENAME;
     }
@@ -89,19 +87,17 @@ public class DerbyPlatform extends CloudscapePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // For Derby, you create databases by simply appending ";create=true" to the connection url
-        if (JDBC_DRIVER.equals(jdbcDriverClassName) ||
-                JDBC_DRIVER_EMBEDDED.equals(jdbcDriverClassName)) {
-            StringBuffer creationUrl = new StringBuffer();
-            Connection connection = null;
+        if (JDBC_DRIVER.equals(jdbcDriverClassName) || JDBC_DRIVER_EMBEDDED.equals(jdbcDriverClassName)) {
+            StringBuilder creationUrl = new StringBuilder();
 
             creationUrl.append(connectionUrl);
             creationUrl.append(";create=true");
             if ((parameters != null) && !parameters.isEmpty()) {
-                for (Iterator it = parameters.entrySet().iterator(); it.hasNext(); ) {
-                    Map.Entry entry = (Map.Entry) it.next();
-
+                for (Iterator<Map.Entry<?, ?>> it = parameters.entrySet().iterator(); it.hasNext(); ) {
+                    Map.Entry entry = it.next();
                     // no need to specify create twice (and create=false wouldn't help anyway)
                     if (!"create".equalsIgnoreCase(entry.getKey().toString())) {
                         creationUrl.append(";");
@@ -113,23 +109,15 @@ public class DerbyPlatform extends CloudscapePlatform {
                     }
                 }
             }
-            if (getLog().isDebugEnabled()) {
-                getLog().debug("About to create database using this URL: " + creationUrl.toString());
-            }
             try {
                 Class.forName(jdbcDriverClassName);
-
-                connection = DriverManager.getConnection(creationUrl.toString(), username, password);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            try (Connection connection = DriverManager.getConnection(creationUrl.toString(), username, password)) {
                 logWarnings(connection);
             } catch (Exception ex) {
                 throw new DatabaseOperationException("Error while trying to create a database", ex);
-            } finally {
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (SQLException ex) {
-                    }
-                }
             }
         } else {
             throw new UnsupportedOperationException("Unable to create a Derby database via the driver " + jdbcDriverClassName);
@@ -139,12 +127,14 @@ public class DerbyPlatform extends CloudscapePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
+            @Override
             protected boolean isSupported(Table intermediateTable, TableChange change) {
                 // Derby cannot add IDENTITY columns
-                if ((change instanceof AddColumnChange) &&
-                        ((AddColumnChange) change).getNewColumn().isAutoIncrement()) {
+                if ((change instanceof AddColumnChange) && ((AddColumnChange) change).getNewColumn()
+                        .isAutoIncrement()) {
                     return false;
                 } else {
                     return super.isSupported(intermediateTable, change);

@@ -16,7 +16,7 @@ public final class SqlBuildContext {
     /**
      * The parameter maps keyed by the tables.
      */
-    private final Map<String, Map<String, Object>> _parametersPerTable = new HashMap<>();
+    private final Map<String, Map<String, Object>> parametersPerTable = new HashMap<>();
 
     /**
      * Returns the parameters for the given table.
@@ -26,8 +26,8 @@ public final class SqlBuildContext {
     public Map<String, Object> getParametersFor(Table table) {
         Map<String, Object> result = new HashMap<>();
         // the null location of the map contains global param
-        Map<String, Object> globalParams = _parametersPerTable.get(null);
-        Map<String, Object> tableParams = _parametersPerTable.get(table.getName());
+        Map<String, Object> globalParams = parametersPerTable.get(null);
+        Map<String, Object> tableParams = parametersPerTable.get(table.getName());
 
         if (globalParams != null) {
             result.putAll(globalParams);
@@ -46,9 +46,9 @@ public final class SqlBuildContext {
      */
     public void addParameter(Table table, String paramName, String paramValue) {
         String key = (table == null ? null : table.getName());
-        // we're using a list orderered map to retain the order
-        // change: not using a orderd list
-        Map<String, Object> params = _parametersPerTable.computeIfAbsent(key, k -> new HashMap<>());
+        // we're using a list ordered map to retain the order
+        // change: not using an ordered list
+        Map<String, Object> params = parametersPerTable.computeIfAbsent(key, k -> new HashMap<>());
         params.put(paramName, paramValue);
     }
 }

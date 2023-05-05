@@ -13,7 +13,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
-import java.util.function.Consumer;
 
 /**
  * This class provides functions to read and write database models from/to XML.
@@ -134,25 +133,20 @@ public class DatabaseIO {
     public static final QName QNAME_ATTRIBUTE_VERSION = new QName(DDLUTILS_NAMESPACE, "version");
 
     /**
-     * The log.
-     */
-    private final Log _log = LogFactory.getLog(DatabaseIO.class);
-
-    /**
      * Whether to validate the XML.
      */
-    private boolean _validateXml = true;
+    private boolean validateXml = true;
     /**
      * Whether to use the internal dtd that comes with DdlUtils.
      */
-    private boolean _useInternalDtd = true;
+    private boolean useInternalDtd = true;
 
     /**
      * Returns whether XML is validated upon reading it.
      * @return <code>true</code> if read XML is validated
      */
     public boolean isValidateXml() {
-        return _validateXml;
+        return validateXml;
     }
 
     /**
@@ -160,7 +154,7 @@ public class DatabaseIO {
      * @param validateXml <code>true</code> if read XML shall be validated
      */
     public void setValidateXml(boolean validateXml) {
-        _validateXml = validateXml;
+        this.validateXml = validateXml;
     }
 
     /**
@@ -169,14 +163,14 @@ public class DatabaseIO {
      * @deprecated Switched to XML schema, and the internal XML schema should always be used
      */
     public boolean isUseInternalDtd() {
-        return _useInternalDtd;
+        return useInternalDtd;
     }
 
     /**
      * use internal dtd is default set to true
      */
     public void setUseInternalDtd(boolean useInternalDtd) {
-        this._useInternalDtd = useInternalDtd;
+        this.useInternalDtd = useInternalDtd;
     }
 
     /**
@@ -195,22 +189,14 @@ public class DatabaseIO {
      */
     public Database read(File file) throws DdlUtilsXMLException {
         FileReader reader = null;
-
-        if (_validateXml) {
+        if (validateXml) {
             try {
                 reader = new FileReader(file);
                 new ModelValidator().validate(new StreamSource(reader));
             } catch (IOException ex) {
                 throw new DdlUtilsXMLException(ex);
             } finally {
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (IOException ex) {
-                        _log.warn("Could not close reader for file " + file.getAbsolutePath());
-                    }
-                    reader = null;
-                }
+                IOUtils.closeQuitely(reader);
             }
         }
 
@@ -220,13 +206,7 @@ public class DatabaseIO {
         } catch (XMLStreamException | IOException ex) {
             throw new DdlUtilsXMLException(ex);
         } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException ex) {
-                    _log.warn("Could not close reader for file " + file.getAbsolutePath());
-                }
-            }
+            IOUtils.closeQuitely(reader);
         }
     }
 
@@ -240,7 +220,7 @@ public class DatabaseIO {
      */
     public Database read(Reader reader) throws DdlUtilsXMLException {
         try {
-            if (_validateXml) {
+            if (validateXml) {
                 String tmpXml = IOUtils.readString(reader);
                 modelValidator.validate(new StreamSource(new StringReader(tmpXml)));
                 reader = new StringReader(tmpXml);
@@ -370,23 +350,6 @@ public class DatabaseIO {
         while (eventType != XMLStreamConstants.END_ELEMENT) {
             eventType = xmlReader.next();
             if (eventType == XMLStreamConstants.START_ELEMENT) {
-<<<<<<< HEAD
-                continue;
-            }
-            System.out.println(eventType);
-            QName elemQName = xmlReader.getName();
-            if (isQnameEquals(elemQName, QNAME_ELEMENT_COLUMN)) {
-                // column
-                table.addColumn(readColumnElement(xmlReader));
-            } else if (isQnameEquals(elemQName, QNAME_ELEMENT_FOREIGN_KEY)) {
-                table.addForeignKey(readForeignKeyElement(xmlReader));
-            } else if (isQnameEquals(elemQName, QNAME_ELEMENT_INDEX)) {
-                table.addIndex(readIndexElement(xmlReader));
-            } else if (isQnameEquals(elemQName, QNAME_ELEMENT_UNIQUE)) {
-                table.addIndex(readUniqueElement(xmlReader));
-            } else {
-                readOverElement(xmlReader);
-=======
                 QName elemQName = xmlReader.getName();
                 if (isQnameEquals(elemQName, QNAME_ELEMENT_COLUMN)) {
                     // column
@@ -400,7 +363,6 @@ public class DatabaseIO {
                 } else {
                     readOverElement(xmlReader);
                 }
->>>>>>> 3bcaca7a6a5ac6492ed88742e5fe61e1a366ff09
             }
         }
     }
@@ -551,12 +513,10 @@ public class DatabaseIO {
      */
     private void readIndexColumnElements(XMLStreamReader xmlReader, Index index) throws XMLStreamException, IOException {
         int eventType = XMLStreamReader.START_ELEMENT;
-
         while (eventType != XMLStreamReader.END_ELEMENT) {
             eventType = xmlReader.next();
             if (eventType == XMLStreamReader.START_ELEMENT) {
                 QName elemQName = xmlReader.getName();
-
                 if (isQnameEquals(elemQName, QNAME_ELEMENT_INDEX_COLUMN)) {
                     index.addColumn(readIndexColumnElement(xmlReader));
                 } else {

@@ -22,7 +22,6 @@ package org.apache.ddlutils.model;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.ddlutils.util.StringUtils;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 
 /**
@@ -50,8 +49,8 @@ public class UniqueIndex extends GenericIndex {
     @Override
     public Index copy() throws ModelException {
         UniqueIndex result = new UniqueIndex();
-        result._name = _name;
-        result._columns = (ArrayList<IndexColumn>) _columns.clone();
+        result.name = name;
+        result.columns = (ArrayList<IndexColumn>) columns.clone();
         return result;
     }
 
@@ -62,8 +61,8 @@ public class UniqueIndex extends GenericIndex {
         if (obj instanceof UniqueIndex) {
             UniqueIndex other = (UniqueIndex) obj;
 
-            return new EqualsBuilder().append(_name, other._name)
-                    .append(_columns, other._columns)
+            return new EqualsBuilder().append(name, other.name)
+                    .append(columns, other.columns)
                     .isEquals();
         } else {
             return false;
@@ -77,8 +76,8 @@ public class UniqueIndex extends GenericIndex {
     public boolean equalsIgnoreCase(Index other) {
         if (other instanceof UniqueIndex) {
             UniqueIndex otherIndex = (UniqueIndex) other;
-            boolean checkName = StringUtils.hasText(_name, otherIndex._name);
-            if ((!checkName || _name.equalsIgnoreCase(otherIndex._name)) &&
+            boolean checkName = StringUtils.hasText(name, otherIndex.name);
+            if ((!checkName || name.equalsIgnoreCase(otherIndex.name)) &&
                     (getColumnCount() == otherIndex.getColumnCount())) {
                 for (int idx = 0; idx < getColumnCount(); idx++) {
                     if (!getColumn(idx).equalsIgnoreCase(otherIndex.getColumn(idx))) {
@@ -96,7 +95,7 @@ public class UniqueIndex extends GenericIndex {
      */
     @Override
     public int hashCode() {
-        return _columns.hashCode();
+        return columns.hashCode();
     }
 
     /**

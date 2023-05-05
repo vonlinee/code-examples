@@ -52,35 +52,35 @@ public abstract class SqlBuilder {
     /**
      * The current Writer used to output the SQL to.
      */
-    private Writer _writer;
+    private Writer writer;
     /**
      * The indentation used to indent commands.
      */
-    private String _indent = "    ";
+    private String indent = "    ";
     /**
      * An optional locale specification for number and date formatting.
      */
-    private String _valueLocale;
+    private String valueLocale;
     /**
      * The date formatter.
      */
-    private DateFormat _valueDateFormat;
+    private DateFormat valueDateFormat;
     /**
      * The date time formatter.
      */
-    private DateFormat _valueTimeFormat;
+    private DateFormat valueTimeFormat;
     /**
      * The number formatter.
      */
-    private NumberFormat _valueNumberFormat;
+    private NumberFormat valueNumberFormat;
     /**
      * Helper object for dealing with default values.
      */
-    private final DefaultValueHelper _defaultValueHelper = new DefaultValueHelper();
+    private final DefaultValueHelper defaultValueHelper = new DefaultValueHelper();
     /**
      * The character sequences that need escaping.
      */
-    private final Map<String, String> _charSequencesToEscape = new HashMap<>();
+    private final Map<String, String> charSequencesToEscape = new HashMap<>();
 
     /**
      * Creates a new sql builder.
@@ -111,7 +111,7 @@ public abstract class SqlBuilder {
      * @return The writer
      */
     public Writer getWriter() {
-        return _writer;
+        return writer;
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class SqlBuilder {
      * @param writer The writer
      */
     public void setWriter(Writer writer) {
-        _writer = writer;
+        this.writer = writer;
     }
 
     /**
@@ -127,7 +127,7 @@ public abstract class SqlBuilder {
      * @return The default value helper
      */
     public DefaultValueHelper getDefaultValueHelper() {
-        return _defaultValueHelper;
+        return defaultValueHelper;
     }
 
     /**
@@ -135,7 +135,7 @@ public abstract class SqlBuilder {
      * @return The indentation string
      */
     public String getIndent() {
-        return _indent;
+        return indent;
     }
 
     /**
@@ -143,7 +143,7 @@ public abstract class SqlBuilder {
      * @param indent The indentation string
      */
     public void setIndent(String indent) {
-        _indent = indent;
+        this.indent = indent;
     }
 
     /**
@@ -153,7 +153,7 @@ public abstract class SqlBuilder {
      * @return The locale or <code>null</code> if default formatting is used
      */
     public String getValueLocale() {
-        return _valueLocale;
+        return valueLocale;
     }
 
     /**
@@ -166,7 +166,7 @@ public abstract class SqlBuilder {
     public void setValueLocale(String localeStr) {
         if (localeStr != null) {
             int sepPos = localeStr.indexOf('_');
-            String language = null;
+            String language;
             String country = null;
             String variant = null;
 
@@ -181,24 +181,21 @@ public abstract class SqlBuilder {
             } else {
                 language = localeStr;
             }
-            if (language != null) {
-                Locale locale;
-                if (variant != null) {
-                    locale = new Locale(language, country, variant);
-                } else if (country != null) {
-                    locale = new Locale(language, country);
-                } else {
-                    locale = new Locale(language);
-                }
-
-                _valueLocale = localeStr;
-                setValueDateFormat(DateFormat.getDateInstance(DateFormat.SHORT, locale));
-                setValueTimeFormat(DateFormat.getTimeInstance(DateFormat.SHORT, locale));
-                setValueNumberFormat(NumberFormat.getNumberInstance(locale));
-                return;
+            Locale locale;
+            if (variant != null) {
+                locale = new Locale(language, country, variant);
+            } else if (country != null) {
+                locale = new Locale(language, country);
+            } else {
+                locale = new Locale(language);
             }
+            valueLocale = localeStr;
+            setValueDateFormat(DateFormat.getDateInstance(DateFormat.SHORT, locale));
+            setValueTimeFormat(DateFormat.getTimeInstance(DateFormat.SHORT, locale));
+            setValueNumberFormat(NumberFormat.getNumberInstance(locale));
+            return;
         }
-        _valueLocale = null;
+        valueLocale = null;
         setValueDateFormat(null);
         setValueTimeFormat(null);
         setValueNumberFormat(null);
@@ -209,7 +206,7 @@ public abstract class SqlBuilder {
      * @return The date format object or null if no locale is set
      */
     protected DateFormat getValueDateFormat() {
-        return _valueDateFormat;
+        return valueDateFormat;
     }
 
     /**
@@ -217,7 +214,7 @@ public abstract class SqlBuilder {
      * @param format The date format object
      */
     protected void setValueDateFormat(DateFormat format) {
-        _valueDateFormat = format;
+        valueDateFormat = format;
     }
 
     /**
@@ -225,7 +222,7 @@ public abstract class SqlBuilder {
      * @return The time format object or null if no locale is set
      */
     protected DateFormat getValueTimeFormat() {
-        return _valueTimeFormat;
+        return valueTimeFormat;
     }
 
     /**
@@ -233,7 +230,7 @@ public abstract class SqlBuilder {
      * @param format The time format object
      */
     protected void setValueTimeFormat(DateFormat format) {
-        _valueTimeFormat = format;
+        valueTimeFormat = format;
     }
 
     /**
@@ -241,7 +238,7 @@ public abstract class SqlBuilder {
      * @return The number format object or null if no locale is set
      */
     protected NumberFormat getValueNumberFormat() {
-        return _valueNumberFormat;
+        return valueNumberFormat;
     }
 
     /**
@@ -250,7 +247,7 @@ public abstract class SqlBuilder {
      * @param format The number format object
      */
     protected void setValueNumberFormat(NumberFormat format) {
-        _valueNumberFormat = format;
+        valueNumberFormat = format;
     }
 
     /**
@@ -259,7 +256,7 @@ public abstract class SqlBuilder {
      * @param escapedVersion The escaped version
      */
     protected void addEscapedCharSequence(String charSequence, String escapedVersion) {
-        _charSequencesToEscape.put(charSequence, escapedVersion);
+        charSequencesToEscape.put(charSequence, escapedVersion);
     }
 
     /**
@@ -1226,7 +1223,7 @@ public abstract class SqlBuilder {
      */
     protected String escapeStringValue(String value) {
         String result = value;
-        for (Map.Entry<String, String> entry : _charSequencesToEscape.entrySet()) {
+        for (Map.Entry<String, String> entry : charSequencesToEscape.entrySet()) {
             result = StringUtils.replace(result, entry.getKey(), entry.getValue());
         }
         return result;
@@ -1720,7 +1717,7 @@ public abstract class SqlBuilder {
      * @param text The text to print
      */
     protected void print(String text) throws IOException {
-        _writer.write(text);
+        writer.write(text);
     }
 
     /**
