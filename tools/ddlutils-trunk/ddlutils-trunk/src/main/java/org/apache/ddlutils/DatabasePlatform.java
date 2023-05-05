@@ -961,7 +961,7 @@ public interface DatabasePlatform {
      * @param model      The database model to use
      * @param dynaBeans  The beans
      */
-    void insert(Connection connection, Database model, Collection dynaBeans) throws DatabaseOperationException;
+    void insert(Connection connection, Database model, Collection<DynaBean> dynaBeans) throws DatabaseOperationException;
 
     /**
      * Returns the sql for updating the given bean in the database. Note that this method can not be used to

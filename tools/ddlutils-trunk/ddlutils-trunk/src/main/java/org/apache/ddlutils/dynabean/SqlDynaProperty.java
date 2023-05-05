@@ -19,7 +19,7 @@ public class SqlDynaProperty extends DynaProperty {
     /**
      * The column for which this dyna property is defined.
      */
-    private Column _column;
+    private Column column;
 
     /**
      * Creates a property instance for the given column that accepts any data type.
@@ -27,17 +27,7 @@ public class SqlDynaProperty extends DynaProperty {
      */
     public SqlDynaProperty(Column column) {
         super(column.getName());
-        _column = column;
-    }
-
-    /**
-     * Creates a property instance for the given column that only accepts the given type.
-     * @param column The column
-     * @param type   The type of the property
-     */
-    public SqlDynaProperty(Column column, Class type) {
-        super(column.getName(), type);
-        _column = column;
+        this.column = column;
     }
 
     /**
@@ -45,7 +35,7 @@ public class SqlDynaProperty extends DynaProperty {
      * @return The column
      */
     public Column getColumn() {
-        return _column;
+        return column;
     }
 
     // Helper methods
@@ -58,5 +48,4 @@ public class SqlDynaProperty extends DynaProperty {
     public boolean isPrimaryKey() {
         return getColumn().isPrimaryKey();
     }
-
 }
