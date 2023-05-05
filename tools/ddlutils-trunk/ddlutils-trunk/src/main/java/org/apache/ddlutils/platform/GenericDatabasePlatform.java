@@ -1040,7 +1040,6 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      */
     protected Index findChangedIndex(Database currentModel, IndexChange change) throws ModelException {
         Index index = change.findChangedIndex(currentModel, getPlatformInfo().isDelimitedIdentifiersSupported());
-
         if (index == null) {
             throw new ModelException("Could not find the index to change in table " + change.getChangedTable() + " in the given model");
         } else {
@@ -1393,7 +1392,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List<DynaBean> fetch(Database model, String sql, Collection parameters) throws DatabaseOperationException {
+    public List<DynaBean> fetch(Database model, String sql, Collection<?> parameters) throws DatabaseOperationException {
         return fetch(model, sql, parameters, null, 0, -1);
     }
 
@@ -1401,7 +1400,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List<DynaBean> fetch(Database model, String sql, Collection parameters, int start, int end) throws DatabaseOperationException {
+    public List<DynaBean> fetch(Database model, String sql, Collection<?> parameters, int start, int end) throws DatabaseOperationException {
         return fetch(model, sql, parameters, null, start, end);
     }
 
@@ -1409,7 +1408,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List<DynaBean> fetch(Database model, String sql, Collection parameters, Table[] queryHints) throws DatabaseOperationException {
+    public List<DynaBean> fetch(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException {
         return fetch(model, sql, parameters, queryHints, 0, -1);
     }
 
@@ -1417,12 +1416,12 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * {@inheritDoc}
      */
     @Override
-    public List<DynaBean> fetch(Database model, String sql, Collection parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException {
+    public List<DynaBean> fetch(Database model, String sql, Collection<?> parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException {
         Connection connection = borrowConnection();
-        PreparedStatement statement = null;
+
         ResultSet resultSet;
         List<DynaBean> result = new ArrayList<>();
-
+        PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sql);
 
@@ -1430,7 +1429,6 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
 
             for (Iterator<?> iter = parameters.iterator(); iter.hasNext(); paramIdx++) {
                 Object arg = iter.next();
-
                 if (arg instanceof BigDecimal) {
                     // to avoid scale problems because setObject assumes a scale of 0
                     statement.setBigDecimal(paramIdx, (BigDecimal) arg);
@@ -2549,7 +2547,6 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
         }
         return resultSet.wasNull() ? null : value;
     }
-
 
     /**
      * Creates an iterator over the given result set.

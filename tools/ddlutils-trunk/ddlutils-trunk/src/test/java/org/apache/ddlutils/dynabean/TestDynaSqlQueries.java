@@ -4,26 +4,30 @@ import junit.framework.Test;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.io.DatabaseIO;
-import org.apache.ddlutils.io.TestAlteration;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.ModelBasedResultSetIterator;
 import org.apache.ddlutils.platform.sybase.SybasePlatform;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
- * Tests the sql querying.
+ * Tests the sql querying. get DynaBean result
+ * driver jar
  * @version $Revision: 289996 $
  */
 public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
 
     /**
      * Parameterized test case pattern.
+     * load properties file
      * @return The tests
      */
     public static Test suite() throws Exception {
-        return getTests(TestAlteration.class);
+        // Note: swhen run test, modify the param as current class ( current file)
+        return getTests(TestDynaSqlQueries.class);
     }
 
     /**
@@ -42,6 +46,17 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
      * Tests a simple SELECT query.
      */
     public void testSimpleQuery() throws Exception {
+        System.setProperty("jdbc.properties.file", "jdbc.properties.mysql57");
+        Properties props = readTestProperties();
+        DataSource dataSource = initDataSourceFromProperties(props);
+        String databaseName = determineDatabaseName(props, dataSource);
+
+        setTestProperties(props);
+        setDataSource(dataSource);
+        setDatabaseName(databaseName);
+
+        getPlatform().setDataSource(dataSource);
+
         createDatabase(
                 "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
                         "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='ddlutils'>\n" +
@@ -246,7 +261,7 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
     /**
      * Tests a more complicated SELECT query that leads to a JOIN in the database.
      */
-    public void testJoinQuery() throws Exception {
+    public void testJoinQuery() {
         createDatabase(
                 "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
                         "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='ddlutils'>\n" +
@@ -274,8 +289,7 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
                 asIdentifier("Id1") +
                 "," +
                 asIdentifier("Avalue") +
-                " FROM " +
-                asIdentifier("TestTable1") +
+                " FROM " + asIdentifier("TestTable1") +
                 "," +
                 asIdentifier("TestTable2") +
                 " WHERE " +
@@ -291,10 +305,8 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
 
         DynaBean bean = it.next();
 
-        assertEquals(2,
-                getPropertyValue(bean, "Id1"));
-        assertEquals("Text 3",
-                getPropertyValue(bean, "Avalue"));
+        assertEquals(2, getPropertyValue(bean, "Id1"));
+        assertEquals("Text 3", getPropertyValue(bean, "Avalue"));
 
         assertFalse(it.hasNext());
         assertFalse(it.isConnectionOpen());

@@ -23,7 +23,7 @@ public abstract class TestPlatformBase extends TestBase {
     private StringWriter writer;
 
     /**
-     * when run test method, this method will be the first to run
+     * when run any test method, this method will be the first to run
      * {@inheritDoc}
      */
     @Override

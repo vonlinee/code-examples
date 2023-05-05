@@ -790,7 +790,7 @@ public interface DatabasePlatform {
      * @param parameters The parameter values
      * @return The dyna beans resulting from the query
      */
-    List<DynaBean> fetch(Database model, String sql, Collection<Map<String, String>> parameters) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Collection<?> parameters) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -814,7 +814,7 @@ public interface DatabasePlatform {
      * @param queryHints The tables that are queried (optional)
      * @return The dyna beans resulting from the query
      */
-    List<DynaBean> fetch(Database model, String sql, Collection<Map<String, String>> parameters, Table[] queryHints) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -845,7 +845,7 @@ public interface DatabasePlatform {
      * @param end        Row number to stop at (inclusively; -1 for last row)
      * @return The dyna beans resulting from the query
      */
-    List<DynaBean> fetch(Database model, String sql, Collection<Map<String, String>> parameters, int start, int end) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Collection<?> parameters, int start, int end) throws DatabaseOperationException;
 
     /**
      * Queries for a list of dyna beans representing rows of the given query.
@@ -878,7 +878,7 @@ public interface DatabasePlatform {
      * @param end        Row number to stop at (inclusively; -1 for last row)
      * @return The dyna beans resulting from the query
      */
-    List<DynaBean> fetch(Database model, String sql, Collection<Map<String, String>> parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException;
+    List<DynaBean> fetch(Database model, String sql, Collection<?> parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException;
 
     /**
      * Determines whether the given dyna bean is stored in the database. Note that this checks only

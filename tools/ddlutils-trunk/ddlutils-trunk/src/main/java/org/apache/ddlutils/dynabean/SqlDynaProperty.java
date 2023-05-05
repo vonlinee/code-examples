@@ -19,7 +19,7 @@ public class SqlDynaProperty extends DynaProperty {
     /**
      * The column for which this dyna property is defined.
      */
-    private Column column;
+    private final Column column;
 
     /**
      * Creates a property instance for the given column that accepts any data type.

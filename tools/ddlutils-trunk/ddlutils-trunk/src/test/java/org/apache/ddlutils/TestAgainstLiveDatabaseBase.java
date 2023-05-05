@@ -6,7 +6,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.DynaProperty;
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.dynabean.SqlDynaBean;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
 import org.apache.ddlutils.dynabean.SqlDynaProperty;
@@ -22,14 +21,11 @@ import org.apache.ddlutils.platform.interbase.InterbasePlatform;
 import org.apache.ddlutils.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -72,7 +68,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
     /**
      * The test properties as defined by an external properties file.
      */
-    private Properties _testProps;
+    private Properties testProps;
     /**
      * The data source to test against.
      */
@@ -146,7 +142,6 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
         } catch (Exception ex) {
             throw new DdlUtilsException(ex);
         }
-
         return suite;
     }
 
@@ -159,30 +154,15 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
         if (propFile == null) {
             return null;
         }
-        InputStream propStream = null;
-
-        try {
-            propStream = TestAgainstLiveDatabaseBase.class.getResourceAsStream(propFile);
-
+        try (InputStream propStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(propFile)) {
             if (propStream == null) {
-                propStream = Files.newInputStream(Paths.get(propFile));
+                throw new RuntimeException("File not existed => " + propFile);
             }
-
             Properties props = new Properties();
-
             props.load(propStream);
             return props;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
-        } finally {
-            if (propStream != null) {
-                try {
-                    propStream.close();
-                } catch (IOException ex) {
-                    LogFactory.getLog(TestAgainstLiveDatabaseBase.class)
-                            .error("Could not close the stream used to read the test jdbc properties", ex);
-                }
-            }
         }
     }
 
@@ -191,18 +171,16 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      * @param props The properties to initialize from
      * @return The data source object
      */
-    private static DataSource initDataSourceFromProperties(Properties props) {
+    protected static DataSource initDataSourceFromProperties(Properties props) {
         if (props == null) {
             return null;
         }
-
         try {
             String dataSourceClass = props.getProperty(DATASOURCE_PROPERTY_PREFIX + "class", BasicDataSource.class.getName());
             DataSource dataSource = (DataSource) Class.forName(dataSourceClass).newInstance();
 
             for (Map.Entry<Object, Object> entry : props.entrySet()) {
                 String propName = (String) entry.getKey();
-
                 if (propName.startsWith(DATASOURCE_PROPERTY_PREFIX) && !propName.equals(DATASOURCE_PROPERTY_PREFIX + "class")) {
                     BeanUtils.setProperty(dataSource, propName.substring(DATASOURCE_PROPERTY_PREFIX.length()), entry.getValue());
                 }
@@ -220,7 +198,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      * @param dataSource The data source
      * @return The name of the platform
      */
-    private static String determineDatabaseName(Properties props, DataSource dataSource) {
+    protected static String determineDatabaseName(Properties props, DataSource dataSource) {
         String platformName = props.getProperty(DDLUTILS_PLATFORM_PROPERTY);
 
         if (platformName == null) {
@@ -238,15 +216,15 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      * @return The properties
      */
     protected Properties getTestProperties() {
-        return _testProps;
+        return testProps;
     }
 
     /**
      * Sets the test properties.
      * @param props The properties
      */
-    private void setTestProperties(Properties props) {
-        _testProps = props;
+    public void setTestProperties(Properties props) {
+        testProps = props;
     }
 
     /**
@@ -256,7 +234,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      */
     protected SqlBuildContext getTableCreationParameters(Database model) {
         SqlBuildContext params = new SqlBuildContext();
-        for (Map.Entry<Object, Object> entry : _testProps.entrySet()) {
+        for (Map.Entry<Object, Object> entry : testProps.entrySet()) {
             String name = (String) entry.getKey();
             String value = (String) entry.getValue();
             if (name.startsWith(DDLUTILS_TABLE_CREATION_PREFIX)) {
@@ -297,7 +275,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      * Sets the data source.
      * @param dataSource The data source
      */
-    private void setDataSource(DataSource dataSource) {
+    public void setDataSource(DataSource dataSource) {
         _dataSource = dataSource;
     }
 
@@ -313,7 +291,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      * Sets the database name.
      * @param databaseName The name of the database
      */
-    private void setDatabaseName(String databaseName) {
+    public void setDatabaseName(String databaseName) {
         _databaseName = databaseName;
     }
 
@@ -330,7 +308,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      */
     @Override
     protected void setUp() throws Exception {
-        setDatabaseName("testdb");
+        setDatabaseName("mysql");
         super.setUp();
         DatabasePlatform platform = getPlatform();
         platform.setDataSource(getDataSource());
@@ -784,7 +762,6 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
             return bean.get(propName);
         } else {
             DynaProperty[] props = bean.getDynaClass().getDynaProperties();
-
             for (DynaProperty prop : props) {
                 if (propName.equalsIgnoreCase(prop.getName())) {
                     return bean.get(prop.getName());

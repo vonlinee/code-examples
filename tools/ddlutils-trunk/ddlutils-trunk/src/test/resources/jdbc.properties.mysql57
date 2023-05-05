@@ -21,7 +21,7 @@
 # class configured via the datasource.class property
 
 # Use this property if ddlutils does not recognize the platform from the settings
-#ddlutils.platform=MySql
+ddlutils.platform=MySql5
 
 #
 # Using the plain DBCP datasource
@@ -29,7 +29,8 @@
 
 datasource.class=org.apache.commons.dbcp.BasicDataSource
 datasource.driverClassName=com.mysql.jdbc.Driver
-datasource.url=jdbc:mysql://localhost/ddlutils
+# useSSL=false disable ssl validation
+datasource.url=jdbc:mysql://localhost:3306/ddlutils?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
 datasource.username=root
 datasource.password=123456
 

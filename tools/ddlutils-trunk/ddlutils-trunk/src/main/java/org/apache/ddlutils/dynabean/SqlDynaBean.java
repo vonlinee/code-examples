@@ -61,14 +61,11 @@ public class SqlDynaBean extends BasicDynaBean {
         if (obj instanceof SqlDynaBean) {
             SqlDynaBean other = (SqlDynaBean) obj;
             DynaClass dynaClass = getDynaClass();
-
             if (dynaClass.equals(other.getDynaClass())) {
                 DynaProperty[] props = dynaClass.getDynaProperties();
-
                 for (DynaProperty prop : props) {
                     Object value = get(prop.getName());
                     Object otherValue = other.get(prop.getName());
-
                     if (value == null) {
                         if (otherValue != null) {
                             return false;

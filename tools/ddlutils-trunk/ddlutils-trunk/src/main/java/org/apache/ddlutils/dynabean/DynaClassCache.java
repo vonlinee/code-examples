@@ -46,16 +46,14 @@ public class DynaClassCache {
      * @return A new dyna bean bound to the given table and containing all the properties from
      * the source object
      */
-    public DynaBean copy(Table table, Object source) throws SqlDynaException {
+    public DynaBean copy(Table table, Object source) {
         DynaBean answer = createNewInstance(table);
-
         try {
             // copy all the properties from the source
             BeanUtils.copyProperties(answer, source);
         } catch (InvocationTargetException | IllegalAccessException ex) {
-            throw new SqlDynaException("Could not populate the bean", ex);
+            throw new RuntimeException("Could not populate the bean", ex);
         }
-
         return answer;
     }
 
@@ -80,14 +78,12 @@ public class DynaClassCache {
      * @param dynaBean The bean
      * @return The dyna bean class
      */
-    public SqlDynaClass getDynaClass(DynaBean dynaBean) throws SqlDynaException {
+    public SqlDynaClass getDynaClass(DynaBean dynaBean) {
         DynaClass dynaClass = dynaBean.getDynaClass();
-
         if (dynaClass instanceof SqlDynaClass) {
             return (SqlDynaClass) dynaClass;
-        } else {
-            // TODO: we could autogenerate an SqlDynaClass here ?
-            throw new SqlDynaException("The dyna bean is not an instance of a SqlDynaClass");
         }
+        // TODO: we could autogenerate an SqlDynaClass here ?
+        throw new RuntimeException("The dyna bean is not an instance of a SqlDynaClass");
     }
 }

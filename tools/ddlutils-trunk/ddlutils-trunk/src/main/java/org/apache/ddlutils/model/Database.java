@@ -3,7 +3,6 @@ package org.apache.ddlutils.model;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.ddlutils.dynabean.DynaClassCache;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
-import org.apache.ddlutils.dynabean.SqlDynaException;
 
 import java.io.Serializable;
 import java.sql.Types;
@@ -492,7 +491,7 @@ public class Database implements SchemaObject, Serializable {
      * @param table The table to create the bean for
      * @return The new dyna bean
      */
-    public DynaBean createDynaBeanFor(Table table) throws SqlDynaException {
+    public DynaBean createDynaBeanFor(Table table) {
         return getDynaClassCache().createNewInstance(table);
     }
 
