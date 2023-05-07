@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Conatains information about the database platform such as supported features and native type mappings.
+ * Contains information about the database platform such as supported features and native type mappings.
  * @version $Revision: 289996 $
  */
 public class PlatformInfo {
@@ -325,7 +325,7 @@ public class PlatformInfo {
     // properties influencing the specification of table constraints
 
     /**
-     * Determines whether primary key constraints are embedded in the create
+     * Determines whether primary key constraints are embedded in the creation
      * table clause or as seperate alter table statements. The default is
      * embedded pks.
      * @return <code>true</code> if pk constraints are embedded
@@ -335,8 +335,8 @@ public class PlatformInfo {
     }
 
     /**
-     * Specifies whether the primary key constraints are embedded in the create
-     * table clause or as seperate alter table statements.
+     * Specifies whether the primary key constraints are embedded in the creation
+     * table clause or as separate alter table statements.
      * @param primaryKeyEmbedded Whether pk constraints are embedded
      */
     public void setPrimaryKeyEmbedded(boolean primaryKeyEmbedded) {
@@ -361,7 +361,7 @@ public class PlatformInfo {
 
     /**
      * Determines whether primary key can contain identity and non-identity columns at the same time.
-     * @return <code>true</code> if idenity and non-identity columns can be mixed in the pk
+     * @return <code>true</code> if identity and non-identity columns can be mixed in the pk
      */
     public boolean isMixingIdentityAndNormalPrimaryKeyColumnsSupported() {
         return _mixingIdentityAndNormalPrimaryKeyColumnsSupported;
@@ -377,8 +377,8 @@ public class PlatformInfo {
     }
 
     /**
-     * Determines whether foreign key constraints are embedded in the create
-     * table clause or as seperate alter table statements. Per default,
+     * Determines whether foreign key constraints are embedded in the creation
+     * table clause or as separate alter table statements. Per default,
      * foreign keys are external.
      * @return <code>true</code> if fk constraints are embedded
      */
@@ -388,7 +388,7 @@ public class PlatformInfo {
 
     /**
      * Specifies whether foreign key constraints are embedded in the creation
-     * table clause or as seperate alter table statements.
+     * table clause or as separate alter table statements.
      * @param foreignKeysEmbedded Whether fk constraints are embedded
      */
     public void setForeignKeysEmbedded(boolean foreignKeysEmbedded) {
@@ -428,7 +428,7 @@ public class PlatformInfo {
     }
 
     /**
-     * Determines whether the indices are embedded in the create table clause
+     * Determines whether the indices are embedded in the creation table clause
      * or as seperate statements. Per default, indices are external.
      * @return <code>true</code> if indices are embedded
      */
@@ -437,7 +437,7 @@ public class PlatformInfo {
     }
 
     /**
-     * Specifies whether indices are embedded in the create table clause or
+     * Specifies whether indices are embedded in the creation table clause or
      * as seperate alter table statements.
      * @param indicesEmbedded Whether indices are embedded
      */
@@ -816,7 +816,7 @@ public class PlatformInfo {
     }
 
     /**
-     * Returns the text that is used for for quoting values (e.g. text) when
+     * Returns the text that is used for quoting values (e.g. text) when
      * printing default values and in generates insert/update/delete statements.
      * Per default, this is a single quotation character (').
      * @return The quote text
