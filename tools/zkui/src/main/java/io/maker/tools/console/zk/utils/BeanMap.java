@@ -30,12 +30,4 @@ public class BeanMap extends HashMap<String, Object> implements Map<String, Obje
         return (T) put(name, value);
     }
 
-    public static void main(String[] args) {
-        BeanMap map = new BeanMap(10);
-        map.put("name", "孙允珠");
-        map.put("age", 23);
-        map.put("bornDate", new Date());
-
-        System.out.println(map);
-    }
 }
