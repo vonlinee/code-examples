@@ -10,11 +10,10 @@
   <description>TiwulFX provides JavaFX custom components specially designed to work with java POJO object.</description>
   <packaging>pom</packaging>
   <version>3.4</version>
-  <url>http://tiwulfx.panemu.com</url>
 
   <modules>
     <module>tiwulfx-core</module>
-    <module>samples</module>
+    <module>tiwulfx-samples</module>
   </modules>
 
   <licenses>

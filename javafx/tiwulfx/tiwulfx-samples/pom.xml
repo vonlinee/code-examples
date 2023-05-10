@@ -21,7 +21,12 @@
     <module>detachable-tab</module>
     <module>custom-graphicFactory</module>
     <module>advanced-demo</module>
+    <module>fxml-samples</module>
   </modules>
+
+  <properties>
+    <javafx.version>11</javafx.version>
+  </properties>
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -30,4 +35,27 @@
   <description>TiwulFX provides JavaFX custom components specially designed to work with java POJO object.</description>
   <packaging>pom</packaging>
   <version>3.4</version>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-base</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-graphics</artifactId>
+      <version>17.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+  </dependencies>
 </project>
