@@ -1,0 +1,49 @@
+#app-title {
+	-fx-font-family: "Arial";
+	-fx-font-size: 30;
+	-fx-text-fill: rgb(255, 255, 255, 0.8);
+	-fx-effect: dropshadow( one-pass-box , rgb(0, 0, 0, 0.6), 0, 0.0 , 1 , 3 );
+	-fx-font-weight: bold;
+}
+#sub-title {
+	-fx-font-family: "Arial";
+	-fx-font-size: 15;
+	-fx-text-fill: rgb(255, 255, 255, 0.8);
+	-fx-effect: dropshadow( one-pass-box , rgb(0, 0, 0, 0.6), 0, 0.0 , 1 , 1 );
+	-fx-font-weight: bold;
+}
+
+.top-panel {
+	-fx-background-image: url("/tiwulfx/samples/detachabletab/CoarseGrid.png");
+	-fx-background-repeat: repeat;
+	-fx-background-color:#747d88;
+}
+
+#btn-new-tab {
+    -fx-padding: 8 15 15 15;
+    -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
+    -fx-background-radius: 8;
+    -fx-background-color: 
+        linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50% 50%, radius 100%, #d86e3a, #c54e2c);
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );
+    -fx-font-weight: bold;
+    -fx-font-size: 1.1em;
+}
+#btn-new-tab:hover {
+    -fx-background-color: 
+        linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50% 50%, radius 100%, #ea7f4b, #c54e2c);
+}
+#btn-new-tab:pressed {
+    -fx-padding: 10 15 13 15;
+    -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
+}
+#btn-new-tab Text {
+    -fx-fill: white;
+    -fx-effect: dropshadow( gaussian , #a30000 , 0,0,0,2 );
+}

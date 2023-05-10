@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <parent>
+    <groupId>com.panemu</groupId>
+    <artifactId>tiwulfx</artifactId>
+    <version>3.4</version>
+  </parent>
+
+  <modules>
+    <module>typeahead</module>
+    <module>table-basic</module>
+    <module>shared</module>
+    <module>save-config</module>
+    <module>numberfield</module>
+    <module>message-dialog</module>
+    <module>lookupfield</module>
+    <module>localization</module>
+    <module>error-handler</module>
+    <module>detachable-tab</module>
+    <module>custom-graphicFactory</module>
+    <module>advanced-demo</module>
+  </modules>
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>tiwulfx-samples</artifactId>
+  <name>tiwulfx</name>
+  <description>TiwulFX provides JavaFX custom components specially designed to work with java POJO object.</description>
+  <packaging>pom</packaging>
+  <version>3.4</version>
+</project>

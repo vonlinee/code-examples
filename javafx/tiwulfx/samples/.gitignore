@@ -1,0 +1,9 @@
+/shared/target/
+/table-basic/target/
+/table-basic/database/
+/error-handler/target/
+/intl/target/
+/localization/target/
+/custom-graphicFactory/target/
+/detachable-tab/target/
+/save-config/target/

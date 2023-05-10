@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import com.panemu.tiwulfx.table.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="568.0" prefWidth="600.0" type="StackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+      <VBox>
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <TextFlow>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="This is an example of configuration save. The order of columns, width, and sorting are restored in the next run. To activate this feature, ensure the TableControl has " />
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="configurationID">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" property set. Also set the application ID by calling " />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TiwulFXUtil.setApplicationId(String);">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </TextFlow>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="BASELINE_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Label text="Configuration File" />
+                  <TextField fx:id="txtConfigFile" editable="false" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
+               </padding>
+            </HBox>
+      		<TableControl fx:id="tblData" VBox.vgrow="ALWAYS">
+      			<columns>
+      				<NumberColumn fx:id="clmId" numberType="java.lang.Integer" prefWidth="75.0" propertyName="id" text="ID" />
+      				<TextColumn prefWidth="150.0" propertyName="name" text="Name" />
+      				<TextColumn prefWidth="250.0" propertyName="email" text="Email" />
+      				
+      			</columns>
+      		</TableControl>
+            <TitledPane animated="false" text="Developer's configuration">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                           <children>
+                              <Label text="dev.config" />
+                              <TextField fx:id="txtConfigItem" />
+                              <Button fx:id="btnSave" mnemonicParsing="false" text="Save To Config File" />
+                           </children>
+                        </HBox>
+                        <Button fx:id="btnRead" mnemonicParsing="false" text="Read dev.config value" />
+                     </children>
+                  </VBox>
+               </content>
+            </TitledPane>
+         </children>
+      </VBox>
+	</children>
+</fx:root>

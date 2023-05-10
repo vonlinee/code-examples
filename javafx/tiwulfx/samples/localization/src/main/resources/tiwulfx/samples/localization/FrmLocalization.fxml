@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" type="StackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<VBox>
+			<children>
+				<HBox prefHeight="30.0" prefWidth="200.0">
+					<children>
+						<TextFlow>
+							<children>
+								<Text fx:id="txtOnly" strokeType="OUTSIDE" strokeWidth="0.0" />
+							</children>
+						</TextFlow>
+					</children>
+				</HBox>
+				<Label fx:id="lblOnly1" layoutX="10.0" layoutY="25.0" />
+				<Label fx:id="lblOnly2" layoutX="10.0" layoutY="25.0" />
+				<Label fx:id="lblOnly3" layoutX="10.0" layoutY="25.0" />
+			
+				<HBox prefHeight="30.0" prefWidth="200.0">
+					<children>
+						<TextFlow>
+							<children>
+								<Text fx:id="txtOverride" strokeType="OUTSIDE" strokeWidth="0.0" />
+							</children>
+						</TextFlow>
+					</children>
+					<padding>
+						<Insets top="20.0" />
+					</padding>
+				</HBox>
+				<Label fx:id="lblOverride1" layoutX="10.0" layoutY="25.0" />
+				<Label fx:id="lblOverride2" layoutX="10.0" layoutY="25.0" />
+				<Label fx:id="lblOverride3" layoutX="10.0" layoutY="25.0" />
+
+				<HBox prefHeight="30.0" prefWidth="200.0">
+					<children>
+						<TextFlow>
+							<children>
+								<Text fx:id="txtUseDefault" strokeType="OUTSIDE" strokeWidth="0.0" />
+							</children>
+						</TextFlow>
+					</children>
+					<padding>
+						<Insets top="20.0" />
+					</padding>
+				</HBox>
+				<Label fx:id="lblUseDefault1" layoutX="10.0" layoutY="25.0" />
+				<Label fx:id="lblUseDefault2" layoutX="10.0" layoutY="25.0" />
+				<Label fx:id="lblUseDefault3" layoutX="10.0" layoutY="25.0" />
+			
+			</children>
+<padding>
+<Insets left="10.0" top="10.0" />
+</padding>
+		</VBox>
+	</children>
+</fx:root>
