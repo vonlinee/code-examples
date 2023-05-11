@@ -5,7 +5,8 @@ import com.panemu.tiwulfx.control.sidemenu.SideMenuCategory;
 import com.panemu.tiwulfx.control.sidemenu.SideMenuItem;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.TreeCell;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -33,11 +34,16 @@ public class SideMenuApplication extends Application {
         smCat.addMainMenuItem(smItem1, smItem6, smItem2, smItemText, smItemDate, smItemSynch, smItem5);
         sideMenu.addMenuItems(smCat, smItem3, smItem4);
 
+        Menu menu = new Menu();
+
+        MenuBar menuBar = new MenuBar();
+
+        SideBar sideBar = new SideBar();
 
         BorderPane borderPane = new BorderPane();
 
         borderPane.setLeft(sideMenu);
-
+        borderPane.setCenter(sideBar);
         Scene scene = new Scene(borderPane);
 
         primaryStage.setScene(scene);

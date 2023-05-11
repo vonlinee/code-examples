@@ -219,6 +219,7 @@ public class SideMenu extends VBox {
             pane.setText(menu.getLabel());
             VBox content = new VBox();
             content.setPadding(new Insets(0, 0, 0, 20));
+
             content.setSpacing(2);
             pane.setContent(content);
             for (SideMenuItem child : ((SideMenuCategory) menu).getMenuItems()) {
@@ -282,8 +283,6 @@ public class SideMenu extends VBox {
                     }
                 }
             });
-
-
             container.getChildren().add(pane);
         }
     }
