@@ -106,8 +106,8 @@ public abstract class TableController<R> {
 	 */
 	public boolean canDelete(TableControl<R> table) {
 		MessageDialog.Answer answer = MessageDialogBuilder.confirmation()
-				  .message(TiwulFXUtil.getLiteral("msg.delete.confirmation"))
-				  .title(TiwulFXUtil.getLiteral("msg.delete.confirmation.title"))
+				  .message(TiwulFXUtil.getString("msg.delete.confirmation"))
+				  .title(TiwulFXUtil.getString("msg.delete.confirmation.title"))
 				  .defaultAnswer(MessageDialog.Answer.NO)
 				  .yesOkButtonText("delete.confirmation.delete")
 				  .noButtonText("delete.confirmation.dont-delete")

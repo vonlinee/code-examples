@@ -1,22 +1,17 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2013 Amrullah .
- */
 package com.panemu.tiwulfx.control.sidemenu;
 
-
 /**
- *
- * @author Amrullah 
+ * @author Amrullah
  */
 public class SideMenuItem {
+
     private String imageStyle;
     private String label;
     private String actionName;
-    
+
     private boolean isPane;
     private String frmClass;
-    
+
     public SideMenuItem(String imageStyle, String label, String actionName) {
         this.imageStyle = imageStyle;
         this.label = label;
@@ -47,20 +42,19 @@ public class SideMenuItem {
         this.actionName = actionName;
     }
 
-	public boolean isPane() {
-		return isPane;
-	}
+    public boolean isPane() {
+        return isPane;
+    }
 
-	public void setPane(boolean isPane) {
-		this.isPane = isPane;
-	}
+    public void setPane(boolean isPane) {
+        this.isPane = isPane;
+    }
 
-	public String getFrmClass() {
-		return frmClass;
-	}
+    public String getFrmClass() {
+        return frmClass;
+    }
 
-	public void setFrmClass(String frmClass) {
-		this.frmClass = frmClass;
-	}
-
+    public void setFrmClass(String frmClass) {
+        this.frmClass = frmClass;
+    }
 }

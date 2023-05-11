@@ -1,18 +1,8 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
-import com.panemu.tiwulfx.control.LookupField;
 import com.panemu.tiwulfx.control.LookupFieldController;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
@@ -21,6 +11,12 @@ import javafx.scene.control.TextField;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.apache.commons.beanutils.PropertyUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *

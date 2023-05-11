@@ -22,19 +22,17 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 /**
- *
  * @author amrullah
  */
 class CustomTableView<R> extends TableView<R> {
-	
-	private TableColumn<R,?> selectedColumn;
 
-	public TableColumn<R, ?> getSelectedColumn() {
-		return selectedColumn;
-	}
+    private TableColumn<R, ?> selectedColumn;
 
-	public void setSelectedColumn(TableColumn<R, ?> selectedColumn) {
-		this.selectedColumn = selectedColumn;
-	}
-	
+    public TableColumn<R, ?> getSelectedColumn() {
+        return selectedColumn;
+    }
+
+    public void setSelectedColumn(TableColumn<R, ?> selectedColumn) {
+        this.selectedColumn = selectedColumn;
+    }
 }

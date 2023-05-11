@@ -63,9 +63,9 @@ public class FrmEnglish extends StackPane {
 
 	private void init() {
 		txtOnly.setText("Only available in Default (English)");
-		lblOnly1.setText(TiwulFXUtil.getLiteral("default1"));
-		lblOnly2.setText(TiwulFXUtil.getLiteral("default2"));
-		lblOnly3.setText(TiwulFXUtil.getLiteral("default3"));
+		lblOnly1.setText(TiwulFXUtil.getString("default1"));
+		lblOnly2.setText(TiwulFXUtil.getString("default2"));
+		lblOnly3.setText(TiwulFXUtil.getString("default3"));
 	}
 
 }

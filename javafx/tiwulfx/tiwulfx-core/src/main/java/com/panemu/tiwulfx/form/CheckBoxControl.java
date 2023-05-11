@@ -24,8 +24,8 @@ import javafx.util.StringConverter;
 public class CheckBoxControl extends BaseControl<Boolean, CheckBox> {
 
     private CheckBox checkBox;
-    private StringProperty trueLabel = new SimpleStringProperty(TiwulFXUtil.getLiteral("label.true"));
-    private StringProperty falseLabel = new SimpleStringProperty(TiwulFXUtil.getLiteral("label.false"));
+    private StringProperty trueLabel = new SimpleStringProperty(TiwulFXUtil.getString("label.true"));
+    private StringProperty falseLabel = new SimpleStringProperty(TiwulFXUtil.getString("label.false"));
     private StringProperty nullLabel = new SimpleStringProperty(TiwulFXUtil.DEFAULT_NULL_LABEL);
     /**
      * It holds the value of this control. If

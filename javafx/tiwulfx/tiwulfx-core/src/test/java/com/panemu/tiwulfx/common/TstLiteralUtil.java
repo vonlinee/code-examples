@@ -42,37 +42,37 @@ public class TstLiteralUtil {
 	
 	@Test
 	public void hello() {
-		assertEquals(TiwulFXUtil.getLiteral("max.record"), "Max Record");
+		assertEquals(TiwulFXUtil.getString("max.record"), "Max Record");
 	}
 	
 	@Test public void testIndonesia() {
 		Locale loc = new Locale("in", "ID");
 		TiwulFXUtil.setLocale(loc);
 		TiwulFXUtil.addLiteralBundle("com.panemu.test.res.test-literal");
-		assertEquals(TiwulFXUtil.getLiteral("add.record"), "Tambah Data");
-		assertEquals(TiwulFXUtil.getLiteral("max.record"), "Max Record");
-		assertEquals(TiwulFXUtil.getLiteral("s1"), "Kata Pertama");
-		assertEquals(TiwulFXUtil.getLiteral("s2"), "Kata Kedua");
-		assertEquals(TiwulFXUtil.getLiteral("s3"), "Third String");
+		assertEquals(TiwulFXUtil.getString("add.record"), "Tambah Data");
+		assertEquals(TiwulFXUtil.getString("max.record"), "Max Record");
+		assertEquals(TiwulFXUtil.getString("s1"), "Kata Pertama");
+		assertEquals(TiwulFXUtil.getString("s2"), "Kata Kedua");
+		assertEquals(TiwulFXUtil.getString("s3"), "Third String");
 	}
 	
 	@Test public void testDefault() {
 		TiwulFXUtil.addLiteralBundle("com.panemu.test.res.test-literal");
-		assertEquals(TiwulFXUtil.getLiteral("add.record"), "Create new record");
-		assertEquals(TiwulFXUtil.getLiteral("max.record"), "Max Record");
-		assertEquals(TiwulFXUtil.getLiteral("s1"), "First String");
-		assertEquals(TiwulFXUtil.getLiteral("s2"), "Second String");
-		assertEquals(TiwulFXUtil.getLiteral("s3"), "Third String");
+		assertEquals(TiwulFXUtil.getString("add.record"), "Create new record");
+		assertEquals(TiwulFXUtil.getString("max.record"), "Max Record");
+		assertEquals(TiwulFXUtil.getString("s1"), "First String");
+		assertEquals(TiwulFXUtil.getString("s2"), "Second String");
+		assertEquals(TiwulFXUtil.getString("s3"), "Third String");
 	}
 	
 	@Test public void testArabic() {
 		Locale loc = new Locale("ar", "SA");
 		TiwulFXUtil.setLocale(loc);
 		TiwulFXUtil.addLiteralBundle("com.panemu.test.res.test-literal");
-		assertEquals(TiwulFXUtil.getLiteral("add.record"), "Create new record");
-		assertEquals(TiwulFXUtil.getLiteral("max.record"), "Max Record");
-		assertEquals(TiwulFXUtil.getLiteral("s1"), "الكلمة الأولى");
-		assertEquals(TiwulFXUtil.getLiteral("s2"), "Second String");
-		assertEquals(TiwulFXUtil.getLiteral("s3"), "Third String");
+		assertEquals(TiwulFXUtil.getString("add.record"), "Create new record");
+		assertEquals(TiwulFXUtil.getString("max.record"), "Max Record");
+		assertEquals(TiwulFXUtil.getString("s1"), "الكلمة الأولى");
+		assertEquals(TiwulFXUtil.getString("s2"), "Second String");
+		assertEquals(TiwulFXUtil.getString("s3"), "Third String");
 	}
 }

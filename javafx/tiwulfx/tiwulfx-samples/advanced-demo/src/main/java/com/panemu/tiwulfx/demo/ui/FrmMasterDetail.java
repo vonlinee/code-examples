@@ -100,11 +100,11 @@ public class FrmMasterDetail extends VBox {
 
 		CheckBoxColumn<Person> clmAlive = new CheckBoxColumn<>("alive");
 		clmAlive.setRequired(false);
-		clmAlive.setLabel(TiwulFXUtil.getLiteral("alive.true"), TiwulFXUtil.getLiteral("alive.false"), TiwulFXUtil.getLiteral("alive.null"));
+		clmAlive.setLabel(TiwulFXUtil.getString("alive.true"), TiwulFXUtil.getString("alive.false"), TiwulFXUtil.getString("alive.null"));
 
 		LookupColumn<Person, Insurance> clmInsurance = new LookupColumn<>("insurance", "code", 75);
 		clmInsurance.setLookupController(insuranceLookupController);
-		clmInsurance.setText(TiwulFXUtil.getLiteral("insurance"));
+		clmInsurance.setText(TiwulFXUtil.getString("insurance"));
 		clmInsurance.setSortable(false);//the dao haven't support sorting for join table yet
 
 		NumberColumn<Person, Integer> clmVisit = new NumberColumn<>("visit", Integer.class, 75);

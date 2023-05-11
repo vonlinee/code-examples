@@ -103,7 +103,7 @@ public class FrmPersonMaintenance extends BorderPane {
 		cmbGender.addItem("Male", 'm');
 		cmbGender.addItem("Female", 'f');
 		chkAlive.setRequired(false);
-		chkAlive.setLabel(TiwulFXUtil.getLiteral("alive.true"), TiwulFXUtil.getLiteral("alive.false"), TiwulFXUtil.getLiteral("alive.null"));
+		chkAlive.setLabel(TiwulFXUtil.getString("alive.true"), TiwulFXUtil.getString("alive.false"), TiwulFXUtil.getString("alive.null"));
 
 		lkupInsurance.setController(insuranceLookupController);
 

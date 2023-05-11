@@ -37,7 +37,7 @@ public class FourDigitYearOfDateValidator implements Validator<Date> {
 		 cal.setTime(date);
 		 int year = cal.get(Calendar.YEAR);
 		 if (year > 9999 || year < 0) {
-			 return TiwulFXUtil.getLiteral("invalid.date");
+			 return TiwulFXUtil.getString("invalid.date");
 		 }
 		 
 		 return null;

@@ -22,6 +22,7 @@
     <module>custom-graphicFactory</module>
     <module>advanced-demo</module>
     <module>fxml-samples</module>
+    <module>sidemenu-demo</module>
   </modules>
 
   <properties>
@@ -50,12 +51,18 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-graphics</artifactId>
-      <version>17.0.2</version>
+      <version>${javafx.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>${javafx.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.panemu</groupId>
+      <artifactId>tiwulfx-core</artifactId>
+      <version>3.4</version>
     </dependency>
   </dependencies>
 </project>

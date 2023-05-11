@@ -17,7 +17,7 @@ import javafx.stage.Window;
  * by calling {@link #yesOkButtonText(String)}, {@link #noButtonText(String)}
  * and {@link #cancelButtonText(String)}.
  * <pre>
- * {@code 
+ * {@code
  *     MessageDialog.Answer answer = MessageDialogBuilder.confirmation()
  *               .title("Delete Confirmation")
  *               .message("Are you sure to delete selected record?")
@@ -30,11 +30,10 @@ import javafx.stage.Window;
  *       if (answer == MessageDialog.Answer.YES_OK) {
  *           System.out.println("do something");
  *       }
- * 
+ *
  * }
  * </pre>
- *
- * @author Amrullah 
+ * @author Amrullah
  */
 public class MessageDialogBuilder {
 
@@ -43,14 +42,13 @@ public class MessageDialogBuilder {
     private MessageDialogBuilder(DialogType dialogType) {
         dialog = new MessageDialog(dialogType);
     }
-    
+
     private MessageDialogBuilder(Throwable throwable) {
         dialog = new MessageDialog(throwable);
     }
 
     /**
      * Create {@link DialogType#INFO} dialog
-     *
      * @return
      */
     public static MessageDialogBuilder info() {
@@ -59,7 +57,6 @@ public class MessageDialogBuilder {
 
     /**
      * Create {@link DialogType#WARNING} dialog
-     *
      * @return
      */
     public static MessageDialogBuilder warning() {
@@ -68,16 +65,14 @@ public class MessageDialogBuilder {
 
     /**
      * Create {@link DialogType#ERROR} dialog
-     *
      * @return
      */
     public static MessageDialogBuilder error() {
         return new MessageDialogBuilder(DialogType.ERROR);
     }
-    
+
     /**
      * Create {@link DialogType#ERROR} dialog
-     *
      * @return
      */
     public static MessageDialogBuilder error(Throwable throwable) {
@@ -86,7 +81,6 @@ public class MessageDialogBuilder {
 
     /**
      * Create {@link DialogType#CONFIRM} dialog
-     *
      * @return
      */
     public static MessageDialogBuilder confirmation() {
@@ -95,7 +89,6 @@ public class MessageDialogBuilder {
 
     /**
      * Build and return the dialog
-     *
      * @return
      */
     public MessageDialog build() {
@@ -103,44 +96,44 @@ public class MessageDialogBuilder {
     }
 
     /**
-	  * Set text for YES button.
-     * It will be translated using {@link TiwulFXUtil#getLiteral(java.lang.String)}.
-     * @see MessageDialog#setYesOkButtonText(java.lang.String)
+     * Set text for YES button.
+     * It will be translated using {@link TiwulFXUtil#getString(java.lang.String)}.
      * @param text
      * @return
+     * @see MessageDialog#setYesOkButtonText(java.lang.String)
      */
     public MessageDialogBuilder yesOkButtonText(String text) {
-        dialog.setYesOkButtonText(TiwulFXUtil.getLiteral(text));
+        dialog.setYesOkButtonText(TiwulFXUtil.getString(text));
         return this;
     }
 
     /**
-	  * Set text for NO button.
-     * It will be translated using {@link TiwulFXUtil#getLiteral(java.lang.String)}.
-     * @see MessageDialog#setNoButtonText(java.lang.String)
+     * Set text for NO button.
+     * It will be translated using {@link TiwulFXUtil#getString(java.lang.String)}.
      * @param text
      * @return
+     * @see MessageDialog#setNoButtonText(java.lang.String)
      */
     public MessageDialogBuilder noButtonText(String text) {
-        dialog.setNoButtonText(TiwulFXUtil.getLiteral(text));
+        dialog.setNoButtonText(TiwulFXUtil.getString(text));
         return this;
     }
 
     /**
-	  * Set text for Cancel button.
-     * It will be translated using {@link TiwulFXUtil#getLiteral(java.lang.String)}.
-     * @see MessageDialog#setCancelButtonText(java.lang.String)
+     * Set text for Cancel button.
+     * It will be translated using {@link TiwulFXUtil#getString(java.lang.String)}.
      * @param text
      * @return
+     * @see MessageDialog#setCancelButtonText(java.lang.String)
      */
     public MessageDialogBuilder cancelButtonText(String text) {
-        dialog.setCancelButtonText(TiwulFXUtil.getLiteral(text));
+        dialog.setCancelButtonText(TiwulFXUtil.getString(text));
         return this;
     }
 
     /**
-	  * Set the default answer. The corresponding button will be focused by
-	  * default so if user press enter it is just like he clicks it.
+     * Set the default answer. The corresponding button will be focused by
+     * default so if user press enter it is just like he clicks it.
      * @param answer
      * @return
      */
@@ -150,7 +143,7 @@ public class MessageDialogBuilder {
     }
 
     /**
-	  * Set the answer if user press Escape on keyboard.
+     * Set the answer if user press Escape on keyboard.
      * @param answer
      * @return
      */
@@ -160,7 +153,7 @@ public class MessageDialogBuilder {
     }
 
     /**
-	  * Set the buttons to be displayed.
+     * Set the buttons to be displayed.
      * @param buttonType
      * @return
      */
@@ -170,54 +163,54 @@ public class MessageDialogBuilder {
     }
 
     /**
-     * @see MessageDialog#show(javafx.stage.Window)
      * @param owner nullable. If not null, the message dialog will be displayed on top center of owner, otherwise on the
-	 * center of main screen.
+     *              center of main screen.
      * @return
+     * @see MessageDialog#show(javafx.stage.Window)
      */
     public MessageDialog.Answer show(Window owner) {
         return dialog.show(owner);
     }
 
     /**
-     * It will be translated using {@link TiwulFXUtil#getLiteral(java.lang.String)}.
-     * @see MessageDialog#setTitle(java.lang.String)
+     * It will be translated using {@link TiwulFXUtil#getString(java.lang.String)}.
      * @param text
      * @return
+     * @see MessageDialog#setTitle(java.lang.String)
      */
     public MessageDialogBuilder title(String text) {
-        dialog.setTitle(TiwulFXUtil.getLiteral(text));
+        dialog.setTitle(TiwulFXUtil.getString(text));
         return this;
     }
 
     /**
-     * Set the message text. It will be translated using {@link TiwulFXUtil#getLiteral(java.lang.String)}.
+     * Set the message text. It will be translated using {@link TiwulFXUtil#getString(java.lang.String)}.
      * If the literal is not found, the message will be displayed as is
-     * @see MessageDialog#setMessage(java.lang.String)
      * @param message
      * @return
+     * @see MessageDialog#setMessage(java.lang.String)
      */
     public MessageDialogBuilder message(String message) {
-        dialog.setMessage(TiwulFXUtil.getLiteral(message));
-        return this;
-    }
-    
-    /**
-     * Set the message text. It will be translated using {@link TiwulFXUtil#getLiteral(java.lang.String, java.lang.Object[]) }
-     * @see MessageDialog#setMessage(java.lang.String)
-     * @param message
-     * @param params parameter for translation
-     * @return
-     */
-    public MessageDialogBuilder message(String message, Object... params) {
-        dialog.setMessage(TiwulFXUtil.getLiteral(message, params));
+        dialog.setMessage(TiwulFXUtil.getString(message));
         return this;
     }
 
     /**
-     * @see MessageDialog#setImage(javafx.scene.image.Image)
+     * Set the message text. It will be translated using {@link TiwulFXUtil#getString(java.lang.String, java.lang.Object[]) }
+     * @param message
+     * @param params  parameter for translation
+     * @return
+     * @see MessageDialog#setMessage(java.lang.String)
+     */
+    public MessageDialogBuilder message(String message, Object... params) {
+        dialog.setMessage(TiwulFXUtil.getString(message, params));
+        return this;
+    }
+
+    /**
      * @param image
      * @return
+     * @see MessageDialog#setImage(javafx.scene.image.Image)
      */
     public MessageDialogBuilder image(Image image) {
         dialog.setImage(image);

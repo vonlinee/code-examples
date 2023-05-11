@@ -19,22 +19,18 @@
 package com.panemu.tiwulfx.table;
 
 /**
- *
  * @author amrullah
  */
 public class RecordChange<R, C> {
 
     private R record;
-	private String propertyName;
+    private String propertyName;
     private C oldValue;
     private C newValue;
 
-    public RecordChange() {
-    }
-
     public RecordChange(R record, String propertyName, C oldValue, C newValue) {
         this.record = record;
-		this.propertyName = propertyName;
+        this.propertyName = propertyName;
         this.oldValue = oldValue;
         this.newValue = newValue;
     }
@@ -54,22 +50,21 @@ public class RecordChange<R, C> {
     public void setNewValue(C newValue) {
         this.newValue = newValue;
     }
-    
+
     public R getRecord() {
         return this.record;
     }
-	
-	public String getPropertyName() {
-		return propertyName;
-	}
 
-	public void setPropertyName(String propertyName) {
-		this.propertyName = propertyName;
-	}
+    public String getPropertyName() {
+        return propertyName;
+    }
 
-	@Override
-	public String toString() {
-		return "RecordChange{" + "record=" + record + ", propertyName=" + propertyName + ", oldValue=" + oldValue + ", newValue=" + newValue + '}';
-	}
-	
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
+    }
+
+    @Override
+    public String toString() {
+        return "RecordChange{" + "record=" + record + ", propertyName=" + propertyName + ", oldValue=" + oldValue + ", newValue=" + newValue + '}';
+    }
 }

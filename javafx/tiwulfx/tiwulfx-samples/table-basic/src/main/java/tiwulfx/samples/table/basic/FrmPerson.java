@@ -58,7 +58,6 @@ public class FrmPerson extends StackPane {
 	@FXML private TableControl<Person> tblPerson;
 	@FXML
     private ComboBoxColumn<Person, Character> clmGender;
-
     @FXML
     private TypeAheadColumn<Person, String> clmBirthPlace;
 

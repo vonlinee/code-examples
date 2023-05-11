@@ -329,7 +329,7 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
 		if (required.get()
 				&& (value.get() == null
 				|| (value.get() instanceof String && value.get().toString().trim().length() == 0))) {
-			String msg = TiwulFXUtil.getLiteral("field.mandatory");
+			String msg = TiwulFXUtil.getString("field.mandatory");
 			setInvalid(msg);
 			return false;
 		}

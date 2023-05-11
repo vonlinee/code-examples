@@ -7,31 +7,31 @@ package com.panemu.tiwulfx.common;
 import java.io.Serializable;
 
 /**
- *
  * @author amrullah
  */
 public class TableCriteria<T> implements Serializable {
 
-    public static enum Operator {
+    public enum Operator {
 
-        in("in"), 
-        not_in("not.in"), 
+        in("in"),
+        not_in("not.in"),
         eq("="),
-        ne("<>"), 
-        le("<="), 
-        lt("<"), 
-        ge(">="), 
-        gt(">"), 
+        ne("<>"),
+        le("<="),
+        lt("<"),
+        ge(">="),
+        gt(">"),
         is_null("null"),
-        is_not_null("not.null"), 
+        is_not_null("not.null"),
         like_begin("start.with"),
         like_end("end.with"),
         like_anywhere("contains"),
         ilike_begin("start.with"),
         ilike_end("end.with"),
         ilike_anywhere("contains");
-        private String description;
-        private Operator(String desc) {
+        private final String description;
+
+        Operator(String desc) {
             this.description = desc;
         }
 
@@ -40,6 +40,7 @@ public class TableCriteria<T> implements Serializable {
             return description;
         }
     }
+
     private String attributeName;
     private Operator operator;
     private T value;

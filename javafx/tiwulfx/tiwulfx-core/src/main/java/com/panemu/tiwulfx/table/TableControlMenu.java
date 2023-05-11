@@ -19,8 +19,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 /**
@@ -36,11 +34,11 @@ class TableControlMenu extends MenuButton {
         getStyleClass().add("table-menu");
         setGraphic(TiwulFXUtil.getGraphicFactory().createConfigGraphic());
         final ToggleGroup toggleGroup = new ToggleGroup();
-        final RadioMenuItem normalEditing = new RadioMenuItem(TiwulFXUtil.getLiteral("normal"));
+        final RadioMenuItem normalEditing = new RadioMenuItem(TiwulFXUtil.getString("normal"));
         normalEditing.setUserData(Boolean.FALSE);
         normalEditing.setToggleGroup(toggleGroup);
         normalEditing.setSelected(!tableControl.isAgileEditing());
-        final RadioMenuItem agileEditing = new RadioMenuItem(TiwulFXUtil.getLiteral("agile"));
+        final RadioMenuItem agileEditing = new RadioMenuItem(TiwulFXUtil.getString("agile"));
         agileEditing.setUserData(Boolean.TRUE);
         agileEditing.setToggleGroup(toggleGroup);
         agileEditing.setSelected(tableControl.isAgileEditing());
@@ -54,7 +52,7 @@ class TableControlMenu extends MenuButton {
             }
         });
         
-        LabelSeparatorMenuItem labelEditing = new LabelSeparatorMenuItem(TiwulFXUtil.getLiteral("editing.mode"), false);
+        LabelSeparatorMenuItem labelEditing = new LabelSeparatorMenuItem(TiwulFXUtil.getString("editing.mode"), false);
         this.getItems().addAll(labelEditing, normalEditing, agileEditing);
         
         tableControl.agileEditingProperty().addListener(new ChangeListener<Boolean>() {
@@ -108,13 +106,13 @@ class TableControlMenu extends MenuButton {
 		  hbox .getChildren().add(txtMaxRow);
 		  hbox.setPadding(Insets.EMPTY);
         CustomMenuItem miMaxRecord = new CustomMenuItem(hbox, false);
-        LabelSeparatorMenuItem labelMaxRecord = new LabelSeparatorMenuItem(TiwulFXUtil.getLiteral("max.record"));
+        LabelSeparatorMenuItem labelMaxRecord = new LabelSeparatorMenuItem(TiwulFXUtil.getString("max.record"));
         this.getItems().addAll(labelMaxRecord, miMaxRecord);
     }
     
     private void createMiscMenu() {
-        LabelSeparatorMenuItem labelMaxRecord = new LabelSeparatorMenuItem(TiwulFXUtil.getLiteral("misc"));
-        MenuItem miClearTableCriteria = new MenuItem(TiwulFXUtil.getLiteral("remove.all.filters"));
+        LabelSeparatorMenuItem labelMaxRecord = new LabelSeparatorMenuItem(TiwulFXUtil.getString("misc"));
+        MenuItem miClearTableCriteria = new MenuItem(TiwulFXUtil.getString("remove.all.filters"));
         miClearTableCriteria.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override

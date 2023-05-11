@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,7 +41,7 @@ import java.util.logging.Logger;
 public class LiteralUtil {
 
 	private ResourceBundle literalBundle;
-	private List<String> lstFiles = new ArrayList<>();
+	private final List<String> lstFiles = new ArrayList<>();
 	private final static String DEFAULT_LITERAL = "com.panemu.tiwulfx.res.literal";
 	private Locale locale;
 //	private static Log log = LogFactory.getLog(LiteralUtil.class);
@@ -86,7 +87,7 @@ public class LiteralUtil {
 
 	private ResourceBundle build(String baseName) {
 
-		ResourceBundle.Control cntl = ResourceBundle.Control.getControl(Collections.unmodifiableList(Arrays.asList("java.properties")));
+		ResourceBundle.Control cntl = ResourceBundle.Control.getControl(List.of("java.properties"));
 		List<Locale> lcl = cntl.getCandidateLocales(baseName, locale);
 		boolean found = false;
 		for (int i = lcl.size() - 1; i >= 0; i--) {
@@ -104,7 +105,7 @@ public class LiteralUtil {
 			file = toResourceName(file);
 			try (InputStream is = LiteralUtil.class.getResourceAsStream(file)) {
 				if (is != null) {
-					try (InputStreamReader reader = new InputStreamReader(is, "UTF-8")) {
+					try (InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {
 						literalBundle = new TiwulFXResourceBundle(reader);
 						found = true;
 					}
@@ -143,7 +144,5 @@ public class LiteralUtil {
 				super.setParent(literalBundle);
 			}
 		}
-
 	}
-
 }

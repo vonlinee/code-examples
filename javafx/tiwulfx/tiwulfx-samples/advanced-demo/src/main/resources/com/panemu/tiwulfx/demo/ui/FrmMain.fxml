@@ -3,42 +3,32 @@
 <?import com.panemu.tiwulfx.control.DetachableTabPane?>
 <?import com.panemu.tiwulfx.control.NumberField?>
 <?import com.panemu.tiwulfx.control.sidemenu.SideMenu?>
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
-
-<fx:root prefHeight="500.0" prefWidth="1000.0" type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.211">
-  <children>
-    <HBox alignment="CENTER_LEFT" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0" styleClass="top-panel">
-      <children>
-        <Label text="Generate Records" />
-        <NumberField id="txtNewRecords" fx:id="txtRecordCount" prefWidth="100" promptText="Enter number" />
-        <Button fx:id="btnGenerate" mnemonicParsing="false" text="Go" />
-        <Region prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-        <Label id="app-title" text="TiwulFX Demo 2.0" />
-      </children>
-      <padding>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-      </padding>
-    </HBox>
-    <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-      <children>
-	  <SideMenu fx:id="sideMenu" minWidth="-Infinity" style="" />
-            <SplitPane HBox.hgrow="ALWAYS">
-               <items>
-              <!--<MainMenu fx:id="mainMenu" minWidth="-Infinity" />-->
-              <DetachableTabPane fx:id="tabpane" prefHeight="-1.0" prefWidth="-1.0" tabClosingPolicy="ALL_TABS" />
-               </items>
-            </SplitPane>
-      </children>
-    </HBox>
-  </children>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<fx:root prefHeight="500.0" prefWidth="1000.0" type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1"
+         xmlns="http://javafx.com/javafx/8.0.211">
   <stylesheets>
-    <URL value="@../../../../../tiwulfx-demo.css" />
+    <URL value="@../../../../../tiwulfx-demo.css"/>
   </stylesheets>
+  <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="top-panel">
+    <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+    <Label text="Generate Records"/>
+    <NumberField id="txtNewRecords" fx:id="txtRecordCount" prefWidth="100" promptText="Enter number"/>
+    <Button fx:id="btnGenerate" mnemonicParsing="false" text="Go"/>
+    <Region HBox.hgrow="ALWAYS"/>
+    <Label id="app-title" text="TiwulFX Demo 2.0"/>
+  </HBox>
+  <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+    <SideMenu fx:id="sideMenu" minWidth="-Infinity"/>
+    <SplitPane HBox.hgrow="ALWAYS">
+      <!--<MainMenu fx:id="mainMenu" minWidth="-Infinity" />-->
+      <DetachableTabPane fx:id="tabpane" tabClosingPolicy="ALL_TABS"/>
+    </SplitPane>
+  </HBox>
 </fx:root>

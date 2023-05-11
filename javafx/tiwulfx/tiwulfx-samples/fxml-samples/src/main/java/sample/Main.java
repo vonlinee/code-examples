@@ -20,25 +20,9 @@ public class Main extends Application {
 
         BorderPane root = new BorderPane();
 
-
         final Button btn = new Button("Loading");
-        final StackPane stackPane = new StackPane();
-        stackPane.setStyle("-fx-background-color: red");
-        root.setBottom(stackPane);
-        btn.setOnAction(event -> {
-            region = LoadingUtils.loadingDefault(stackPane);
-            System.out.println(region);
-        });
 
         final Button btnRemove = new Button("Remove");
-        btnRemove.setOnAction(event -> {
-            System.out.println(stackPane.getChildren().size());
-            System.out.println(LoadingUtils.remove(stackPane, region));
-            System.out.println(stackPane.getChildren().size());
-
-            System.out.println(stackPane.getWidth() + " " + stackPane.getHeight());
-        });
-
 
         final Button btn1 = new Button("B1");
 
@@ -49,10 +33,19 @@ public class Main extends Application {
         root.setCenter(tableView);
         final Scene scene = new Scene(root, 600, 500);
 
-        btn1.setOnAction(event -> {
-            Loading loading = new Loading(tableView);
-            System.out.println(loading.getWidth());
+        Loading loading = Loading.wrap(tableView, root, (loading1, pane) -> {
+            pane.setCenter(null);
+            loading1.getChildren().add(tableView);
+            pane.setCenter(loading1);
         });
+
+        btn.setOnAction(event -> loading.show());
+
+        btn1.setOnAction(event -> {
+            System.out.println(root.getChildren().contains(tableView));
+        });
+
+        btnRemove.setOnAction(event -> loading.hide());
 
         primaryStage.setScene(scene);
         primaryStage.show();

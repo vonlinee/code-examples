@@ -64,10 +64,10 @@ public class RowBrowser extends VBox {
 	public RowBrowser() {
 		tblView = new TableView<>();
 		VBox.setVgrow(tblView, Priority.ALWAYS);
-		TableColumn<Record, String> clmLabel = new TableColumn<>(TiwulFXUtil.getLiteral("column"));
+		TableColumn<Record, String> clmLabel = new TableColumn<>(TiwulFXUtil.getString("column"));
 		clmLabel.setPrefWidth(150);
 		clmLabel.setCellValueFactory((TableColumn.CellDataFeatures<Record, String> param) -> param.getValue().label);
-		TableColumn<Record, String> clmValue = new TableColumn<>(TiwulFXUtil.getLiteral("value"));
+		TableColumn<Record, String> clmValue = new TableColumn<>(TiwulFXUtil.getString("value"));
 		clmValue.setCellValueFactory((TableColumn.CellDataFeatures<Record, String> param) -> param.getValue().value);
 		clmValue.setPrefWidth(400);
 		clmValue.setCellFactory((TableColumn<Record, String> param) -> {
@@ -87,7 +87,7 @@ public class RowBrowser extends VBox {
 		this.setPrefWidth(600);
 		this.setSpacing(10);
 		this.setPadding(new Insets(0, 0, 10, 0));
-		Button btnClose = new Button(TiwulFXUtil.getLiteral("close"));
+		Button btnClose = new Button(TiwulFXUtil.getString("close"));
 		
 		btnClose.setOnAction((event) -> {
 			getScene().getWindow().hide();
@@ -132,7 +132,7 @@ public class RowBrowser extends VBox {
 				}
 			});
 			dialogStage.setScene(scene);
-			dialogStage.setTitle(TiwulFXUtil.getLiteral("browse.row"));
+			dialogStage.setTitle(TiwulFXUtil.getString("browse.row"));
 			dialogStage.getIcons().setAll(((Stage) parent).getIcons());
 			dialogStage.getScene().getStylesheets().addAll(parent.getScene().getStylesheets());
 		}
@@ -167,7 +167,7 @@ public class RowBrowser extends VBox {
 	};
 
 	private void createCopyCellMenuItem() {
-		MenuItem mi = new MenuItem(TiwulFXUtil.getLiteral("copy"));
+		MenuItem mi = new MenuItem(TiwulFXUtil.getString("copy"));
 		mi.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN));
 		mi.setOnAction(new EventHandler<ActionEvent>() {
 			@Override

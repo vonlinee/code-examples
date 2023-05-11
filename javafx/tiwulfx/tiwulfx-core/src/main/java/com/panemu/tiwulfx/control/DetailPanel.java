@@ -5,18 +5,18 @@
 package com.panemu.tiwulfx.control;
 
 import com.panemu.tiwulfx.common.ObjectExposer;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.apache.commons.beanutils.PropertyUtils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
- *
  * @author amrullah
  */
 public class DetailPanel extends VBox implements ObjectExposer {
@@ -57,7 +57,7 @@ public class DetailPanel extends VBox implements ObjectExposer {
             lblValue.getStyleClass().add("valueLabel");
             lblValue.setWrapText(true);
             this.getChildren().add(lblValue);
-            
+
             componentMap.put(prop, lblValue);
         }
     }
@@ -76,7 +76,7 @@ public class DetailPanel extends VBox implements ObjectExposer {
                     if (obj.toString().length() == 1) {
                         lblValue.setWrapText(false);
                     }
-                    
+
                     lblValue.setText(obj.toString());
                 } else {
                     lblValue.setText("-- undefined --");

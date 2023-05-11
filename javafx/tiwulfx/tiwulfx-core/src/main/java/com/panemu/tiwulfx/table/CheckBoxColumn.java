@@ -27,8 +27,8 @@ public class CheckBoxColumn<R> extends BaseColumn<R, Boolean> {
 
 	private CheckBox searchInputControl;
 	private SearchMenuItemBase<Boolean> searchMenuItem;
-	private String trueLabel = TiwulFXUtil.getLiteral("label.true");
-	private String falseLabel = TiwulFXUtil.getLiteral("label.false");
+	private String trueLabel = TiwulFXUtil.getString("label.true");
+	private String falseLabel = TiwulFXUtil.getString("label.false");
 
 	public CheckBoxColumn() {
 		this("");

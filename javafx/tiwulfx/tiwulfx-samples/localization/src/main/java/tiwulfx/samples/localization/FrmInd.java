@@ -79,19 +79,19 @@ public class FrmInd extends StackPane {
 
 	private void init() {
 		txtOnly.setText("Hanya Tersedia di Bahasa Indonesia");
-		lblOnly1.setText(TiwulFXUtil.getLiteral("ind1"));
-		lblOnly2.setText(TiwulFXUtil.getLiteral("ind2"));
-		lblOnly3.setText(TiwulFXUtil.getLiteral("ind3"));
+		lblOnly1.setText(TiwulFXUtil.getString("ind1"));
+		lblOnly2.setText(TiwulFXUtil.getString("ind2"));
+		lblOnly3.setText(TiwulFXUtil.getString("ind3"));
 
 		txtOverride.setText("Override Default Literal");
-		lblOverride1.setText(TiwulFXUtil.getLiteral("s1"));
-		lblOverride2.setText(TiwulFXUtil.getLiteral("s2"));
-		lblOverride3.setText(TiwulFXUtil.getLiteral("s3"));
+		lblOverride1.setText(TiwulFXUtil.getString("s1"));
+		lblOverride2.setText(TiwulFXUtil.getString("s2"));
+		lblOverride3.setText(TiwulFXUtil.getString("s3"));
 		
 		txtUseDefault.setText("Use Default Literal (If nothing in literal_in_ID.properties)");
-		lblUseDefault1.setText(TiwulFXUtil.getLiteral("default1"));
-		lblUseDefault2.setText(TiwulFXUtil.getLiteral("default2"));
-		lblUseDefault3.setText(TiwulFXUtil.getLiteral("default3"));
+		lblUseDefault1.setText(TiwulFXUtil.getString("default1"));
+		lblUseDefault2.setText(TiwulFXUtil.getString("default2"));
+		lblUseDefault3.setText(TiwulFXUtil.getString("default3"));
 	}
 
 }

@@ -50,7 +50,6 @@ public class DateEventHandler implements EventHandler<KeyEvent> {
 		} else {
 			this.dateController = dateController;
 		}
-		
 	}
 
 	@Override
