@@ -1,0 +1,22 @@
+.tree-cell {
+    -fx-padding: 0.25em; /* 3 */
+    -fx-indent: 2em;
+}
+
+.tree-cell .label {
+    -fx-padding: 0.0em 0.0em 0.0em 0.25em; /* 0 0 0 3 */
+}
+
+.tree-cell > .tree-disclosure-node {
+    -fx-padding: 4 6 4 8;
+    -fx-background-color: transparent;
+}
+
+.tree-cell > .tree-disclosure-node > .arrow {
+    -fx-background-color: red;
+    -fx-padding: 0.333333em 0.229em 0.333333em 0.229em; /* 4 */
+}
+
+.tree-cell:expanded > .tree-disclosure-node > .arrow {
+    -fx-rotate: 90;
+}

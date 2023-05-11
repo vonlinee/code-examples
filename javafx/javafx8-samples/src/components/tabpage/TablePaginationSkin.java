@@ -5,6 +5,8 @@ import com.sun.javafx.scene.control.skin.PaginationSkin;
 import com.sun.javafx.scene.control.skin.Utils;
 import com.sun.javafx.scene.control.skin.resources.ControlResources;
 import javafx.animation.Interpolator;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
@@ -200,7 +202,7 @@ public class TablePaginationSkin extends BehaviorSkinBase<TablePagination, Table
             });
 
             rightArrowButton.setOnAction(arg0 -> {
-                selectNext();
+                // selectNext();
                 requestLayout();
             });
 
@@ -210,9 +212,9 @@ public class TablePaginationSkin extends BehaviorSkinBase<TablePagination, Table
                 updatePageIndex();
                 if (animate) {
                     currentAnimatedIndex = currentIndex;
-                    animateSwitchPage();
+                    // animateSwitchPage();
                 } else {
-                    createPage(currentStackPane, currentIndex);
+                    // createPage(currentStackPane, currentIndex);
                 }
             });
         }
@@ -476,7 +478,8 @@ public class TablePaginationSkin extends BehaviorSkinBase<TablePagination, Table
             double rightArrowWidth = snapSize(Utils.boundedSize(rightArrowButton.prefWidth(-1), rightArrowButton.minWidth(-1), rightArrowButton.maxWidth(-1)));
             double spacing = snapSize(controlBox.getSpacing());
             double pageInformationWidth = 0;
-            Side side = getPageInformationAlignment();
+            // Side side = getPageInformationAlignment();
+            Side side = Side.LEFT;
             if (Side.LEFT.equals(side) || Side.RIGHT.equals(side)) {
                 pageInformationWidth = snapSize(pageInformation.prefWidth(-1));
             }
@@ -559,15 +562,20 @@ public class TablePaginationSkin extends BehaviorSkinBase<TablePagination, Table
 
             HPos controlBoxHPos = controlBox.getAlignment().getHpos();
             VPos controlBoxVPos = controlBox.getAlignment().getVpos();
-            double controlBoxX = left + Utils.computeXOffset(width, controlBoxWidth, controlBoxHPos);
-            double controlBoxY = top + Utils.computeYOffset(height, controlBoxHeight, controlBoxVPos);
+//            double controlBoxX = left + Utils.computeXOffset(width, controlBoxWidth, controlBoxHPos);
+//            double controlBoxY = top + Utils.computeYOffset(height, controlBoxHeight, controlBoxVPos);
+
+            double controlBoxX = 0;
+            double controlBoxY = 0;
 
             if (isPageInformationVisible()) {
                 Pos p = sideToPos(getPageInformationAlignment());
                 HPos pageInformationHPos = p.getHpos();
                 VPos pageInformationVPos = p.getVpos();
-                double pageInformationX = left + Utils.computeXOffset(width, pageInformationWidth, pageInformationHPos);
-                double pageInformationY = top + Utils.computeYOffset(height, pageInformationHeight, pageInformationVPos);
+//                double pageInformationX = left + Utils.computeXOffset(width, pageInformationWidth, pageInformationHPos);
+//                double pageInformationY = top + Utils.computeYOffset(height, pageInformationHeight, pageInformationVPos);
+                double pageInformationX = 0;
+                double pageInformationY = 0;
 
                 if (Side.TOP.equals(getPageInformationAlignment())) {
                     pageInformationY = top;
@@ -585,6 +593,18 @@ public class TablePaginationSkin extends BehaviorSkinBase<TablePagination, Table
 
             layoutInArea(controlBox, controlBoxX, controlBoxY, controlBoxWidth, controlBoxHeight, 0, controlBoxHPos, controlBoxVPos);
         }
+    }
+
+    private boolean isArrowsVisible() {
+        return false;
+    }
+
+    private boolean isPageInformationVisible() {
+        return false;
+    }
+
+    private Side getPageInformationAlignment() {
+        return null;
     }
 
 
@@ -617,7 +637,7 @@ public class TablePaginationSkin extends BehaviorSkinBase<TablePagination, Table
                 }
             });
 
-            tooltipVisibleProperty().addListener(updateTooltipVisibility);
+            tooltipVisibleProperty().addListener((InvalidationListener) updateTooltipVisibility);
 
             prefHeightProperty().bind(minHeightProperty());
             setAccessibleRole(AccessibleRole.PAGE_ITEM);
@@ -663,7 +683,7 @@ public class TablePaginationSkin extends BehaviorSkinBase<TablePagination, Table
 
         public void release() {
             getSkinnable().getStyleClass().removeListener(updateSkinIndicatorType);
-            tooltipVisibleProperty().removeListener(updateTooltipVisibility);
+            tooltipVisibleProperty().removeListener((InvalidationListener) updateTooltipVisibility);
         }
 
         @Override
@@ -696,5 +716,13 @@ public class TablePaginationSkin extends BehaviorSkinBase<TablePagination, Table
         public Pagination getSkinnable() {
             return new Pagination();
         }
+    }
+
+    private boolean isTooltipVisible() {
+        return false;
+    }
+
+    private Observable tooltipVisibleProperty() {
+        return null;
     }
 }
