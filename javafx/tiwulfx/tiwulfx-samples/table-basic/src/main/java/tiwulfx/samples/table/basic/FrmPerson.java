@@ -55,7 +55,8 @@ import tiwulfx.samples.shared.pojo.Person;
  */
 public class FrmPerson extends StackPane {
 
-	@FXML private TableControl<Person> tblPerson;
+	@FXML
+	public TableControl<Person> tblPerson;
 	@FXML
     private ComboBoxColumn<Person, Character> clmGender;
     @FXML
