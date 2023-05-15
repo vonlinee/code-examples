@@ -13,7 +13,6 @@ import java.util.Calendar;
 
 /**
  * The year view shows the months.
- *
  * @author Christian Schudt
  */
 final class YearView extends DatePane {

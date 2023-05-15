@@ -15,7 +15,6 @@
   <description>TiwulFX provides JavaFX custom components specially designed to work with java POJO object.</description>
   <packaging>jar</packaging>
   <version>3.4</version>
-  <url>http://tiwulfx.panemu.com</url>
   <licenses>
     <license>
       <name>LGPL V.2</name>
@@ -23,21 +22,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  <scm>
-    <connection>scm:git:https://panemu@bitbucket.org/panemu/tiwulfx.git</connection>
-    <developerConnection>scm:git:https://panemu@bitbucket.org/panemu/tiwulfx.git</developerConnection>
-    <url>https://panemu@bitbucket.org/panemu/tiwulfx.git</url>
-  </scm>
-  <developers>
-    <developer>
-      <id>jingglang</id>
-      <name>Amrullah</name>
-      <email>amrullah@panemu.com</email>
-    </developer>
-  </developers>
-  <organization>
-    <name>Panemu</name>
-  </organization>
+
   <profiles>
     <profile>
       <id>java8-doclint-disabled</id>
@@ -104,18 +89,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.7</version>
-        <extensions>true</extensions>
-        <configuration>
-          <serverId>ossrh</serverId>
-          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <autoReleaseAfterClose>true</autoReleaseAfterClose>
-        </configuration>
-      </plugin>
-
     </plugins>
   </build>
 
@@ -124,16 +97,19 @@
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
       <version>11.0.2</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>11.0.2</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-      <version>1.8.3</version>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-graphics</artifactId>
+      <version>11.0.2</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
@@ -146,16 +122,11 @@
       <version>4.10</version>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.8.3</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
 </project>

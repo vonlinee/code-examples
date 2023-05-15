@@ -1,6 +1,7 @@
 package com.panemu.tiwulfx.utils;
 
 import org.apache.commons.beanutils.MethodUtils;
+import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@SuppressWarnings("unchecked")
 public class ClassUtils {
 
     private static final Logger log = Logger.getLogger(ClassUtils.class.getName());
@@ -167,5 +169,84 @@ public class ClassUtils {
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    /**
+     * <p>Return the value of the specified simple property of the specified
+     * bean, with no type conversions.</p>
+     *
+     * <p>For more details see <code>PropertyUtilsBean</code>.</p>
+     * @param bean Bean whose property is to be extracted
+     * @param name Name of the property to be extracted
+     * @return The property value
+     * @throws IllegalAccessException    if the caller does not have
+     *                                   access to the property accessor method
+     * @throws IllegalArgumentException  if <code>bean</code> or
+     *                                   <code>name</code> is null
+     * @throws IllegalArgumentException  if the property name
+     *                                   is nested or indexed
+     * @throws InvocationTargetException if the property accessor method
+     *                                   throws an exception
+     * @throws NoSuchMethodException     if an accessor method for this
+     *                                   propety cannot be found
+     * @see PropertyUtilsBean#getSimpleProperty
+     */
+    public static <T> T getSimpleProperty(Object bean, String name)
+            throws IllegalAccessException, InvocationTargetException,
+            NoSuchMethodException {
+        return (T) PropertyUtils.getSimpleProperty(bean, name);
+    }
+
+
+    /**
+     * <p>Return the value of the (possibly nested) property of the specified
+     * name, for the specified bean, with no type conversions.</p>
+     *
+     * <p>For more details see <code>PropertyUtilsBean</code>.</p>
+     * @param bean Bean whose property is to be extracted
+     * @param name Possibly nested name of the property to be extracted
+     * @return the nested property value
+     * @throws IllegalAccessException    if the caller does not have
+     *                                   access to the property accessor method
+     * @throws IllegalArgumentException  if <code>bean</code> or
+     *                                   <code>name</code> is null
+     * @throws NestedNullException       if a nested reference to a
+     *                                   property returns null
+     * @throws InvocationTargetException if the property accessor method throws an exception
+     * @throws NoSuchMethodException     if an accessor method for this
+     *                                   propety cannot be found
+     * @see PropertyUtilsBean#getNestedProperty
+     */
+    public static <T> T getNestedProperty(Object bean, String name)
+            throws IllegalAccessException, InvocationTargetException,
+            NoSuchMethodException {
+        return (T) PropertyUtils.getNestedProperty(bean, name);
+    }
+
+
+    /**
+     * <p>Set the value of the specified property of the specified bean,
+     * no matter which property reference format is used, with no
+     * type conversions.</p>
+     *
+     * <p>For more details see <code>PropertyUtilsBean</code>.</p>
+     * @param bean  Bean whose property is to be modified
+     * @param name  Possibly indexed and/or nested name of the property
+     *              to be modified
+     * @param value Value to which this property is to be set
+     * @throws IllegalAccessException    if the caller does not have
+     *                                   access to the property accessor method
+     * @throws IllegalArgumentException  if <code>bean</code> or
+     *                                   <code>name</code> is null
+     * @throws InvocationTargetException if the property accessor method
+     *                                   throws an exception
+     * @throws NoSuchMethodException     if an accessor method for this
+     *                                   propety cannot be found
+     * @see PropertyUtilsBean#setProperty
+     */
+    public static void setProperty(Object bean, String name, Object value)
+            throws IllegalAccessException, InvocationTargetException,
+            NoSuchMethodException {
+        PropertyUtils.setProperty(bean, name, value);
     }
 }

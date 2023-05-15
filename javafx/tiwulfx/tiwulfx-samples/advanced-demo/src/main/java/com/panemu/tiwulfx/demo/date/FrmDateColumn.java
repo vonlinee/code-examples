@@ -61,7 +61,7 @@ public class FrmDateColumn extends VBox {
     private LocalDateColumn clmLocalDateDDMMYYYY;
     @FXML
     private TableControl<DatePojo> tblDate;
-    private List<DatePojo> lstRecord = new ArrayList<>();
+    private final List<DatePojo> lstRecord = new ArrayList<>();
 
     public FrmDateColumn() {
         FXMLLoader fxmlLoader = new FXMLLoader(FrmDateColumn.class.getResource("FrmDateColumn.fxml"));
@@ -73,7 +73,6 @@ public class FrmDateColumn extends VBox {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-
         init();
     }
 

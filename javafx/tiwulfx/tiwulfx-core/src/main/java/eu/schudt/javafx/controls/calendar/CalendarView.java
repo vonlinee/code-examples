@@ -4,6 +4,8 @@ import com.panemu.tiwulfx.control.DateFieldController;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,12 +20,9 @@ import javafx.scene.layout.VBox;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 
 /**
  * A calendar control
- *
  * @author Christian Schudt
  */
 public class CalendarView extends VBox {
@@ -43,9 +42,8 @@ public class CalendarView extends VBox {
      * Initializes a calendar with the given locale.
      * E.g. if the locale is en-US, the calendar starts the days on Sunday.
      * If it is de-DE the calendar starts the days on Monday.
-     * 
+     * <p>
      * Note that the Java implementation only knows {@link java.util.GregorianCalendar} and sun.util.BuddhistCalendar.
-     *
      * @param locale The locale.
      */
     public CalendarView(final Locale locale) {
@@ -62,13 +60,12 @@ public class CalendarView extends VBox {
 
     /**
      * Initializes the control with the given locale and the given calendar.
-     * 
+     * <p>
      * This way, you can pass a custom calendar (e.g. you could implement the Hijri Calendar for the arabic world).
      * Or you can use an American style calendar (starting with Sunday as first day of the week)
      * together with another language.
-     * 
+     * <p>
      * The locale determines the date format.
-     *
      * @param locale   The locale.
      * @param calendar The calendar
      */
@@ -137,17 +134,17 @@ public class CalendarView extends VBox {
                 }
             }
         });
-		  
-		  controllerProperty.addListener(new ChangeListener<DateFieldController>() {
 
-			  @Override
-			  public void changed(ObservableValue<? extends DateFieldController> ov, DateFieldController t, DateFieldController t1) {
-				  if (t1 != null) {
-					  boolean enable = t1.isEnabled(new Date());
-					  todayButton.setDisable(!enable);
-				  }
-			  }
-		  });
+        controllerProperty.addListener(new ChangeListener<DateFieldController>() {
+
+            @Override
+            public void changed(ObservableValue<? extends DateFieldController> ov, DateFieldController t, DateFieldController t1) {
+                if (t1 != null) {
+                    boolean enable = t1.isEnabled(new Date());
+                    todayButton.setDisable(!enable);
+                }
+            }
+        });
     }
 
     private HBox todayButtonBox;
@@ -155,7 +152,6 @@ public class CalendarView extends VBox {
 
     /**
      * Gets or sets the locale.
-     *
      * @return The property.
      */
     public ObjectProperty<Locale> localeProperty() {
@@ -175,7 +171,6 @@ public class CalendarView extends VBox {
 
     /**
      * Gets or sets the calendar.
-     *
      * @return The property.
      */
     public ObjectProperty<Calendar> calendarProperty() {
@@ -196,7 +191,6 @@ public class CalendarView extends VBox {
     /**
      * Gets the list of disabled week days.
      * E.g. if you add <code>Calendar.WEDNESDAY</code>, Wednesday will be disabled.
-     *
      * @return The list.
      */
     public ObservableList<Integer> getDisabledWeekdays() {
@@ -205,24 +199,23 @@ public class CalendarView extends VBox {
 
     private ObservableList<Integer> disabledWeekdays = FXCollections.observableArrayList();
 
-	private ObjectProperty<DateFieldController> controllerProperty = new SimpleObjectProperty<>();
+    private ObjectProperty<DateFieldController> controllerProperty = new SimpleObjectProperty<>();
 
-	public ObjectProperty<DateFieldController> controllerProperty() {
-		return controllerProperty;
-	}
+    public ObjectProperty<DateFieldController> controllerProperty() {
+        return controllerProperty;
+    }
 
-	public DateFieldController getController() {
-		return controllerProperty.get();
-	}
+    public DateFieldController getController() {
+        return controllerProperty.get();
+    }
 
-	public void setController(DateFieldController dateFieldController) {
-		this.controllerProperty.set(dateFieldController);
-	}
+    public void setController(DateFieldController dateFieldController) {
+        this.controllerProperty.set(dateFieldController);
+    }
 
-	 
+
     /**
      * Gets the selected date.
-     *
      * @return The property.
      */
     public ReadOnlyObjectProperty<Date> selectedDateProperty() {
@@ -238,7 +231,6 @@ public class CalendarView extends VBox {
 
     /**
      * Indicates, whether the today button should be shown.
-     *
      * @return The property.
      */
     public BooleanProperty showTodayButtonProperty() {
@@ -257,7 +249,6 @@ public class CalendarView extends VBox {
 
     /**
      * The text of the today button
-     *
      * @return The property.
      */
     public StringProperty todayButtonTextProperty() {
@@ -277,7 +268,6 @@ public class CalendarView extends VBox {
 
     /**
      * Indicates, whether the week numbers are shown.
-     *
      * @return The property.
      */
     public BooleanProperty showWeeksProperty() {

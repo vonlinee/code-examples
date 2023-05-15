@@ -130,7 +130,7 @@ public class FrmPersonTable extends VBox {
         txtInformation.setPrefRowCount(6);
     }
 
-    private LookupFieldController<Insurance> insuranceLookupController = new LookupFieldController<Insurance>(Insurance.class) {
+    private final LookupFieldController<Insurance> insuranceLookupController = new LookupFieldController<Insurance>(Insurance.class) {
         @Override
         public String[] getColumns() {
             return new String[]{

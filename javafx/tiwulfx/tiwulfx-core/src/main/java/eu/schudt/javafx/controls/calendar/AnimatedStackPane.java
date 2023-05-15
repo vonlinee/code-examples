@@ -16,7 +16,6 @@ import java.util.Date;
 
 /**
  * The StackPane which manages two {@link DatePane}, which are necessary for the animation.
- *
  * @author Christian Schudt
  */
 final class AnimatedStackPane extends StackPane {
@@ -72,7 +71,6 @@ final class AnimatedStackPane extends StackPane {
 
     /**
      * Slides the panes from left to right or vice versa.
-     *
      * @param direction The direction, either 1 (moves to right) or -1 (moves to left).
      * @param oldDate   The date, which the {@link #animatePane} gets set.
      */

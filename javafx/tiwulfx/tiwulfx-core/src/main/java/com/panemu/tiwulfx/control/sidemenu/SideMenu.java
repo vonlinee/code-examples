@@ -120,7 +120,7 @@ public class SideMenu extends VBox {
             infoBox.setId("side-menu-popup");
             infoBox.setFillWidth(true);
             infoBox.setMinWidth(USE_PREF_SIZE);
-//            infoBox.setPrefWidth(350);
+            infoBox.setPrefWidth(350);
             infoName = new Label();
             infoName.setId("side-menu-popup-header");
             infoName.setMinHeight(USE_PREF_SIZE);
@@ -151,7 +151,6 @@ public class SideMenu extends VBox {
                     armed.set(false);
                 }
             });
-
         }
         return popup;
     }

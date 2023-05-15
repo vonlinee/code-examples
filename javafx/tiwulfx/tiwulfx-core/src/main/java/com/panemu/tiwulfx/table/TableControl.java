@@ -19,6 +19,7 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -117,8 +118,6 @@ public class TableControl<R> extends VBox {
 
     /**
      * UI component in TableControl which their visibility could be manipulated
-     * @see #setVisibleComponents(boolean,
-     * com.panemu.tiwulfx.table.TableControl.Component[])
      */
     public enum Component {
         BUTTON_RELOAD,
@@ -168,15 +167,12 @@ public class TableControl<R> extends VBox {
             }
         });
 
-        tblView.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ESCAPE) {
-                    directEdit = false;
-                } else if (event.getCode() == KeyCode.ENTER && mode.get() == Mode.READ) {
-                    Object selectedItem = getSelectionModel().getSelectedItem();
-                    getController().doubleClick((R) selectedItem);
-                }
+        tblView.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                directEdit = false;
+            } else if (event.getCode() == KeyCode.ENTER && mode.get() == Mode.READ) {
+                Object selectedItem = getSelectionModel().getSelectedItem();
+                getController().doubleClick((R) selectedItem);
             }
         });
 
@@ -330,6 +326,39 @@ public class TableControl<R> extends VBox {
         return btn;
     }
 
+    static class ToolBarButtonHandler implements EventHandler<ActionEvent> {
+
+        TableControl<?> tableControl;
+
+        private Button btnAdd;
+        private Button btnEdit;
+        private Button btnDelete;
+        private Button btnReload;
+        private Button btnSave;
+        private Button btnExport;
+
+        public ToolBarButtonHandler(TableControl<?> tableControl) {
+            this.tableControl = tableControl;
+        }
+
+        @Override
+        public void handle(ActionEvent event) {
+            if (event.getSource() == btnAdd) {
+                tableControl.insert();
+            } else if (event.getSource() == btnDelete) {
+                tableControl.delete();
+            } else if (event.getSource() == btnEdit) {
+                tableControl.edit();
+            } else if (event.getSource() == btnExport) {
+                tableControl.export();
+            } else if (event.getSource() == btnReload) {
+                tableControl.reload();
+            } else if (event.getSource() == btnSave) {
+                tableControl.save();
+            }
+        }
+    }
+
     private final EventHandler<ActionEvent> paginationHandler = new EventHandler<>() {
         @Override
         public void handle(ActionEvent event) {
@@ -357,16 +386,16 @@ public class TableControl<R> extends VBox {
     }
 
     private void setToolTips() {
-        TiwulFXUtil.setToolTip(btnAdd, "add.record");
-        TiwulFXUtil.setToolTip(btnDelete, "delete.record");
-        TiwulFXUtil.setToolTip(btnEdit, "edit.record");
-        TiwulFXUtil.setToolTip(btnFirstPage, "go.to.first.page");
-        TiwulFXUtil.setToolTip(btnLastPage, "go.to.last.page");
-        TiwulFXUtil.setToolTip(btnNextPage, "go.to.next.page");
-        TiwulFXUtil.setToolTip(btnPrevPage, "go.to.prev.page");
-        TiwulFXUtil.setToolTip(btnReload, "reload.records");
-        TiwulFXUtil.setToolTip(btnExport, "export.records");
-        TiwulFXUtil.setToolTip(btnSave, "save.record");
+//        TiwulFXUtil.setToolTip(btnAdd, "add.record");
+//        TiwulFXUtil.setToolTip(btnDelete, "delete.record");
+//        TiwulFXUtil.setToolTip(btnEdit, "edit.record");
+//        TiwulFXUtil.setToolTip(btnFirstPage, "go.to.first.page");
+//        TiwulFXUtil.setToolTip(btnLastPage, "go.to.last.page");
+//        TiwulFXUtil.setToolTip(btnNextPage, "go.to.next.page");
+//        TiwulFXUtil.setToolTip(btnPrevPage, "go.to.prev.page");
+//        TiwulFXUtil.setToolTip(btnReload, "reload.records");
+//        TiwulFXUtil.setToolTip(btnExport, "export.records");
+//        TiwulFXUtil.setToolTip(btnSave, "save.record");
     }
 
     /**
@@ -605,8 +634,7 @@ public class TableControl<R> extends VBox {
             if (focusModel == null) {
                 return null;
             }
-            @SuppressWarnings("unchecked")
-            TablePosition<S, T> focusedCell = (TablePosition<S, T>) focusModel.getFocusedCell();
+            @SuppressWarnings("unchecked") TablePosition<S, T> focusedCell = (TablePosition<S, T>) focusModel.getFocusedCell();
             if (focusedCell == null) {
                 return null;
             }
@@ -622,7 +650,7 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * Force the table to repaint specified row.It propagate the call to {@link TableControlRow#refresh()}.
+     * Force the table to repaint specified row.It propagates the call to {@link TableControlRow#refresh()}.
      * @param record specified record to refresh.
      */
     public void refresh(R record) {
@@ -966,16 +994,13 @@ public class TableControl<R> extends VBox {
             cell.updateTableColumn(col);
             cell.updateTableView(tblView);
             cell.updateIndex(row);
-
+            cell.setPadding(new Insets(padding));
             if ((cell.getText() != null && !cell.getText().isEmpty()) || cell.getGraphic() != null) {
                 getChildren().add(cell);
-//				cell.impl_processCSS(false);
                 maxWidth = Math.max(maxWidth, cell.prefWidth(-1));
                 getChildren().remove(cell);
             }
         }
-
-//		col.impl_setWidth(maxWidth + padding);
     }
 
     public TableControl() {
@@ -1482,11 +1507,25 @@ public class TableControl<R> extends VBox {
         return tblView.getItems();
     }
 
+    /**
+     * 如果visible为true，则判断是否包含control
+     * @param parent
+     * @param control
+     * @param visible
+     */
     private void setOrNot(ToolBar parent, Node control, boolean visible) {
         if (!visible) {
             parent.getItems().remove(control);
         } else if (!parent.getItems().contains(control)) {
             parent.getItems().add(control);
+        }
+    }
+
+    private void setOrNot(Pane parent, Node control, boolean visiable) {
+        if (!visiable) {
+            parent.getChildren().remove(control);
+        } else if (!parent.getChildren().contains(control)) {
+            parent.getChildren().add(control);
         }
     }
 
@@ -1519,8 +1558,8 @@ public class TableControl<R> extends VBox {
 
     /**
      * Set UI component visibility.
-     * @param visible  visible
-     * @param controls controls
+     * @param visible  预期可见状态
+     * @param controls 控件列表
      */
     public void setVisibleComponents(boolean visible, TableControl.Component... controls) {
         for (Component comp : controls) {
@@ -1548,18 +1587,10 @@ public class TableControl<R> extends VBox {
                     setOrNot(toolbar, btnSave, visible);
                     break;
                 case FOOTER:
-                    if (!visible) {
-                        this.getChildren().remove(footer);
-                    } else if (!this.getChildren().contains(footer)) {
-                        this.getChildren().add(footer);
-                    }
+                    setOrNot(this, footer, visible);
                     break;
                 case TOOLBAR:
-                    if (!visible) {
-                        this.getChildren().remove(toolbar);
-                    } else if (!this.getChildren().contains(toolbar)) {
-                        this.getChildren().add(0, toolbar);
-                    }
+                    setOrNot(this, toolbar, visible);
                     break;
             }
         }

@@ -30,9 +30,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * @author panemu
- */
 public class FrmLog extends VBox {
 
     @FXML
