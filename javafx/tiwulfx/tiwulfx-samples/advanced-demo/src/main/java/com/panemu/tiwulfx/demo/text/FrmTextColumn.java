@@ -29,122 +29,122 @@ import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TableData;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableController;
+import com.panemu.tiwulfx.table.TableOperation;
 import com.panemu.tiwulfx.table.TextColumn;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author panemu
  */
 public class FrmTextColumn extends VBox {
 
-	@FXML
-	private TextColumn clmMaxLength;
-	@FXML
-	private TextColumn clmCapitalize;
-	@FXML
-	private TextColumn clmMaxCapitalize;
-	@FXML
-	private TableControl<TextColumnPojo> tblTextColumn;
-	private List<TextColumnPojo> lstColumns = new ArrayList<>();
+    @FXML
+    private TextColumn clmMaxLength;
+    @FXML
+    private TextColumn clmCapitalize;
+    @FXML
+    private TextColumn clmMaxCapitalize;
+    @FXML
+    private TableControl<TextColumnPojo> tblTextColumn;
+    private List<TextColumnPojo> lstColumns = new ArrayList<>();
 
-	public FrmTextColumn() {
-		FXMLLoader fxmlLoader = new FXMLLoader(FrmTextColumn.class.getResource("FrmTextColumn.fxml"));
-		fxmlLoader.setRoot(this);
-		fxmlLoader.setController(this);
-		fxmlLoader.setResources(TiwulFXUtil.getLiteralBundle());
-		try {
-			fxmlLoader.load();
-		} catch (IOException exception) {
-			throw new RuntimeException(exception);
-		}
-		init();
-	}
+    public FrmTextColumn() {
+        FXMLLoader fxmlLoader = new FXMLLoader(FrmTextColumn.class.getResource("FrmTextColumn.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
+        fxmlLoader.setResources(TiwulFXUtil.getLiteralBundle());
+        try {
+            fxmlLoader.load();
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+        init();
+    }
 
-	private void init() {
-		String max = "check";
-		String cap = "CAPITALIZE";
-		String maxCap = "MXCAP";
+    private void init() {
+        String max = "check";
+        String cap = "CAPITALIZE";
+        String maxCap = "MXCAP";
 
-		clmMaxLength.setMaxLength(5);
-		clmCapitalize.setCapitalize(true);
-		clmMaxCapitalize.setMaxLength(5);
-		clmMaxCapitalize.setCapitalize(true);
-		lstColumns.add(new TextColumnPojo(max, cap, maxCap));
+        clmMaxLength.setMaxLength(5);
+        clmCapitalize.setCapitalize(true);
+        clmMaxCapitalize.setMaxLength(5);
+        clmMaxCapitalize.setCapitalize(true);
+        lstColumns.add(new TextColumnPojo(max, cap, maxCap));
 //		lstColumns.add(new TextColumnPojo(new String(), new String(), new String()));
-		tblTextColumn.setRecordClass(TextColumnPojo.class);
-		tblTextColumn.setController(controller);
-		tblTextColumn.setVisibleComponents(false, TableControl.Component.FOOTER);
-	}
-	
-	private TableController<TextColumnPojo> controller = new TableController<TextColumnPojo>() {
-		@Override
-		public TableData<TextColumnPojo> loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
-			return new TableData<>(lstColumns, false, lstColumns.size());
-		}
+        tblTextColumn.setRecordClass(TextColumnPojo.class);
+        tblTextColumn.setController(controller);
+        tblTextColumn.setVisibleComponents(false, TableControl.Component.FOOTER);
+    }
 
-		@Override
-		public List<TextColumnPojo> update(List<TextColumnPojo> records) {
-			return records;
-		}
+    private TableOperation<TextColumnPojo> controller = new TableOperation<TextColumnPojo>() {
+        @Override
+        public <C> TableData<TextColumnPojo> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
+            return new TableData<>(lstColumns, false, lstColumns.size());
+        }
 
-		@Override
-		public List<TextColumnPojo> insert(List<TextColumnPojo> newRecords) {
-			lstColumns.addAll(newRecords);
-			return newRecords;
-		}
-	};
-	
-	public void reload() {
-		tblTextColumn.reloadFirstPage();
-	}
+        @Override
+        public List<TextColumnPojo> update(List<TextColumnPojo> records) {
+            return records;
+        }
 
-	public static class TextColumnPojo {
-		private String maxLength;
-		private String capitalize;
-		private String maxCapitalize;
+        @Override
+        public List<TextColumnPojo> insert(List<TextColumnPojo> newRecords) {
+            lstColumns.addAll(newRecords);
+            return newRecords;
+        }
+    };
 
-		public TextColumnPojo() {
-		}
-		
-		
-		public TextColumnPojo(String maxLength, String capitalize, String maxCapitalize) {
-			this.maxLength = maxLength;
-			this.capitalize = capitalize;
-			this.maxCapitalize = maxCapitalize;
-		}
+    public void reload() {
+        tblTextColumn.reloadFirstPage();
+    }
 
-		public String getMaxLength() {
-			return maxLength;
-		}
+    public static class TextColumnPojo {
+        private String maxLength;
+        private String capitalize;
+        private String maxCapitalize;
 
-		public void setMaxLength(String maxLength) {
-			this.maxLength = maxLength;
-		}
+        public TextColumnPojo() {
+        }
 
-		public String getCapitalize() {
-			return capitalize;
-		}
 
-		public void setCapitalize(String capitalize) {
+        public TextColumnPojo(String maxLength, String capitalize, String maxCapitalize) {
+            this.maxLength = maxLength;
+            this.capitalize = capitalize;
+            this.maxCapitalize = maxCapitalize;
+        }
+
+        public String getMaxLength() {
+            return maxLength;
+        }
+
+        public void setMaxLength(String maxLength) {
+            this.maxLength = maxLength;
+        }
+
+        public String getCapitalize() {
+            return capitalize;
+        }
+
+        public void setCapitalize(String capitalize) {
 //			capitalize.setCapitalize(true);
-			this.capitalize = capitalize;
-		}
+            this.capitalize = capitalize;
+        }
 
-		public String getMaxCapitalize() {
-			return maxCapitalize;
-		}
+        public String getMaxCapitalize() {
+            return maxCapitalize;
+        }
 
-		public void setMaxCapitalize(String maxCapitalize) {
-			this.maxCapitalize = maxCapitalize;
-		}
+        public void setMaxCapitalize(String maxCapitalize) {
+            this.maxCapitalize = maxCapitalize;
+        }
 
-	}
+    }
 }

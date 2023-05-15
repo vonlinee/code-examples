@@ -25,28 +25,17 @@
  */
 package tiwulfx.samples.shared.pojo;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 /**
- *
  * @author Amrullah <amrullah@panemu.com>
  */
 @Entity
 @Table(name = "insurance")
 @NamedQueries({
-    @NamedQuery(name = "Insurance.findAll", query = "SELECT i FROM Insurance i")})
+        @NamedQuery(name = "Insurance.findAll", query = "SELECT i FROM Insurance i")})
 public class Insurance implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -60,11 +49,8 @@ public class Insurance implements Serializable {
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
-    @OneToMany(mappedBy = "insurance", fetch= FetchType.LAZY)
+    @OneToMany(mappedBy = "insurance", fetch = FetchType.LAZY)
     private List<Person> personList;
-
-    public Insurance() {
-    }
 
     public Insurance(Integer id) {
         this.id = id;
@@ -74,6 +60,10 @@ public class Insurance implements Serializable {
         this.id = id;
         this.code = code;
         this.name = name;
+    }
+
+    public Insurance() {
+
     }
 
     public Integer getId() {
@@ -108,10 +98,8 @@ public class Insurance implements Serializable {
         this.personList = personList;
     }
 
-
     @Override
     public String toString() {
         return "com.panemu.tiwulfx.demo.pojo.Insurance[ id=" + id + " ]";
     }
-    
 }

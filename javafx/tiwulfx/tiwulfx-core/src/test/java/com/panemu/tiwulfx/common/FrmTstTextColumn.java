@@ -18,22 +18,18 @@
  */
 package com.panemu.tiwulfx.common;
 
-import com.panemu.tiwulfx.control.TypeAheadField;
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableController;
+import com.panemu.tiwulfx.table.TableOperation;
 import com.panemu.tiwulfx.table.TextColumn;
 import com.panemu.tiwulfx.table.TypeAheadColumn;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 /**
  *
@@ -52,7 +48,7 @@ public class FrmTstTextColumn extends Application {
 		for (int i = 0; i < 15; i++) {
 			clmCmb.addItem("OPTION " + i, "option" + i);
 		}
-		tbl.setController(new TableController<Record>() {
+		tbl.setController(new TableOperation<Record>() {
 
 			@Override
 			public TableData<Record> loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {

@@ -14,7 +14,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.PopupControl;
+import javafx.scene.control.TableColumn;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -53,12 +56,12 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
     private String propertyName;
     private final SimpleObjectProperty<TableCriteria> tableCriteria = new SimpleObjectProperty<>();
     private C searchValue;
-    private Node filterImage = TiwulFXUtil.getGraphicFactory().createFilterGraphic();
+    private final Node filterImage = TiwulFXUtil.getGraphicFactory().createFilterGraphic();
     private Pos alignment = Pos.BASELINE_LEFT;
-    private ObservableMap<R, String> mapInvalid = FXCollections.observableHashMap();
-    private List<Validator<C>> lstValidator = new ArrayList<>();
+    private final ObservableMap<R, String> mapInvalid = FXCollections.observableHashMap();
+    private final List<Validator<C>> lstValidator = new ArrayList<>();
     private String nullLabel = TiwulFXUtil.DEFAULT_NULL_LABEL;
-    private Map<R, RecordChange<R, C>> mapChangedRecord = new HashMap<>();
+    private final Map<R, RecordChange<R, C>> mapChangedRecord = new HashMap<>();
 
     private StringConverter<C> stringConverter = new StringConverter<C>() {
 
@@ -79,7 +82,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
 
     TableCriteria<C> createSearchCriteria(TableCriteria.Operator operator, C value) {
-        return new TableCriteria(propertyName, operator, value);
+        return new TableCriteria<>(propertyName, operator, value);
     }
 
     /**
@@ -117,6 +120,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
             private SimpleObjectProperty<C> propertyValue;
 
             @Override
+            @SuppressWarnings("unchecked")
             public ObservableValue<C> call(CellDataFeatures<R, C> param) {
                 /**
                  * This code is adapted from {@link javafx.scene.control.cell.PropertyValueFactory#getCellDataReflectively(java.lang.Object)}
@@ -209,7 +213,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
     /**
      * Get Search Menu Item that is displayed in Table context menu
-     * @return
+     * @return MenuItem
      */
     MenuItem getSearchMenuItem() {
         return null;
@@ -363,7 +367,6 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
             setInvalid(record, msg);
             return false;
         }
-
         //do not trim
         if (value instanceof String && ((String) value).length() == 0) {
             value = null;
@@ -394,34 +397,19 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
             final HBox pnl = new HBox();
             pnl.getChildren().add(errorLabel);
             pnl.getStyleClass().add("error-popup");
-            popup.setSkin(new Skin() {
-                @Override
-                public Skinnable getSkinnable() {
-                    return null;
-                }
-
-                @Override
-                public Node getNode() {
-                    return pnl;
-                }
-
-                @Override
-                public void dispose() {
-                }
-            });
             popup.setHideOnEscape(true);
         }
         errorLabel.setText(msg);
         return popup;
     }
 
-    private List<EditCommitListener<R, C>> lstEditCommitListener = new ArrayList<EditCommitListener<R, C>>();
+    private final List<EditCommitListener<R, C>> lstEditCommitListener = new ArrayList<EditCommitListener<R, C>>();
 
     /**
      * Register a listener to editCommit event. The {@link TableColumn#setOnEditCommit(javafx.event.EventHandler) TableColumn.setOnEditCommit()}
      * doesn't work properly with TiwulFX's TableControl because there is no way to get
      * the old value.
-     * @param listener
+     * @param listener EditCommitListener
      */
     public void addEditCommitListener(EditCommitListener<R, C> listener) {
         if (!lstEditCommitListener.contains(listener)) {
@@ -431,14 +419,14 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
     /**
      * Remove a listener of editCommit event.
-     * @param listener
+     * @param listener EditCommitListener
      */
     public void removeEditCommitListener(EditCommitListener<R, C> listener) {
         lstEditCommitListener.remove(listener);
     }
 
     private void fireEditCommitChangeEvent(R record, C oldValue, C newValue) {
-        for (EditCommitListener listener : lstEditCommitListener) {
+        for (EditCommitListener<R, C> listener : lstEditCommitListener) {
             listener.editCommited(this, record, oldValue, newValue);
         }
     }
@@ -457,14 +445,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
          * is assigned to the record after this method call ends (See TableControl oneditcommit).
          * In order the event is fired after the newValue is assigned, run the event in Platform.runLater
          */
-        Platform.runLater(new Runnable() {
-
-            @Override
-            public void run() {
-                fireEditCommitChangeEvent(record, oldValue, newValue);
-            }
-        });
-
+        Platform.runLater(() -> fireEditCommitChangeEvent(record, oldValue, newValue));
     }
 
 //    public void revertRecordChange(R record) {
@@ -487,7 +468,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
         return mapChangedRecord;
     }
 
-    private List<CellEditorListener<R, C>> lstValueChangeListener = new ArrayList<CellEditorListener<R, C>>();
+    private final List<CellEditorListener<R, C>> lstValueChangeListener = new ArrayList<CellEditorListener<R, C>>();
 
     protected List<CellEditorListener<R, C>> getCellEditorListeners() {
         return lstValueChangeListener;

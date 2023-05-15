@@ -1,14 +1,11 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.common;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author amrullah
+ * 表格数据
+ * @param <T> 表格数据类型
  */
 public class TableData<T> implements Serializable {
 
@@ -40,5 +37,13 @@ public class TableData<T> implements Serializable {
 
     public long getTotalRows() {
         return totalRows;
+    }
+
+    public void setHasMoreRows(boolean moreRows) {
+        this.moreRows = moreRows;
+    }
+
+    public boolean hasMoreRows() {
+        return moreRows;
     }
 }
