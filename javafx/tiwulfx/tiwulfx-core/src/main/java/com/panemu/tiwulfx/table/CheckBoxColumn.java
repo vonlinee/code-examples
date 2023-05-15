@@ -68,7 +68,7 @@ public class CheckBoxColumn<R> extends BaseColumn<R, Boolean> {
 				}
 			});
 
-			searchMenuItem = new SearchMenuItemBase<Boolean>(this) {
+			searchMenuItem = new SearchMenuItemBase<>(this) {
 				@Override
 				protected Node getInputControl() {
 					return searchInputControl;

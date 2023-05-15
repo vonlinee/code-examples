@@ -12,7 +12,6 @@ import java.io.Serializable;
 public class TableCriteria<T> implements Serializable {
 
     public enum Operator {
-
         in("in"),
         not_in("not.in"),
         eq("="),

@@ -19,7 +19,6 @@
 package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.control.LookupField;
-import com.panemu.tiwulfx.control.skin.LookupFieldSkin;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -124,6 +123,6 @@ public class LookupTableCell<R, C> extends BaseCell<R, C> {
 	 * cell that display particular property of currently selected lookup object
 	 */
 	private void forceUpdateRow() {
-		((TableRowControl) getTableRow()).refreshLookupSiblings(column.getPropertyName());
+		((TableControlRow) getTableRow()).refreshLookupSiblings(column.getPropertyName());
 	}
 }

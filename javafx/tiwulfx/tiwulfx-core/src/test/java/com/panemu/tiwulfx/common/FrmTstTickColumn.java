@@ -19,15 +19,12 @@
 package com.panemu.tiwulfx.common;
 
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableController;
+import com.panemu.tiwulfx.table.TableOperation;
 import com.panemu.tiwulfx.table.TickColumn;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.StackPane;
@@ -43,7 +40,7 @@ public class FrmTstTickColumn extends Application {
 	public void start(Stage primaryStage) {
 		TableControl<Record> tbl = new TableControl<>(Record.class);
 		TickColumn<Record> clm = new TickColumn<>();
-		tbl.setController(new TableController<Record>() {
+		tbl.setController(new TableOperation<Record>() {
 
 			@Override
 			public TableData<Record> loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {

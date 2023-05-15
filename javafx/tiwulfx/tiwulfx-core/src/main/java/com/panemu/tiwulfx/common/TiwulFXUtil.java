@@ -83,10 +83,7 @@ public class TiwulFXUtil {
     private static String configFileName = "conf.properties";
     private static final LiteralUtil literalUtil = new LiteralUtil(loc);
     private static GraphicFactory graphicFactory = new GraphicFactory();
-    /**
-     * Default number of rows displayed in {@link com.panemu.tiwulfx.table.TableControl TableControl}. Default is 500
-     */
-    public static int DEFAULT_TABLE_MAX_ROW = 500;
+
 
     private static ExceptionHandlerFactory exceptionHandlerFactory = new DefaultExceptionHandlerFactory();
 
@@ -186,8 +183,8 @@ public class TiwulFXUtil {
 
     /**
      * Get language translation of <code>key</code> based on current Locale
-     * @param key
-     * @return
+     * @param key string key
+     * @return local string
      * @see #setLocale(java.util.Locale)
      */
     public static String getString(String key) {

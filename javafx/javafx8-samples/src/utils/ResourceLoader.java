@@ -17,19 +17,18 @@ public class ResourceLoader {
     private static String ROOT = "";
 
     /**
-     * 从本地文件路径加载资源，而不是类路径
-     * @param res
-     * @return
+     * 从本地Maven项目文件路径加载资源，而不是类路径
+     * @param res 以包名开头，如果是maven子模块，则需要加上模块名称
+     * @return 资源URL
      */
-    public static URL loadFromLocalProject(String res) {
+    public static URL urlOfLocalMavenProject(String res) {
         final String absolutePath = new File("").getAbsolutePath();
         final File file = new File(absolutePath, "src/" + res);
         try {
             return file.toURI().toURL();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("加载失败", e);
         }
-        return null;
     }
 
     /**

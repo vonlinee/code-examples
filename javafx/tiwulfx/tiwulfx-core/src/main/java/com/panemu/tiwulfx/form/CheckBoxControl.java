@@ -1,37 +1,25 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.form;
 
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.CheckBox;
 import javafx.util.StringConverter;
 
-/**
- *
- * @author Amrullah 
- */
 public class CheckBoxControl extends BaseControl<Boolean, CheckBox> {
 
     private CheckBox checkBox;
-    private StringProperty trueLabel = new SimpleStringProperty(TiwulFXUtil.getString("label.true"));
-    private StringProperty falseLabel = new SimpleStringProperty(TiwulFXUtil.getString("label.false"));
-    private StringProperty nullLabel = new SimpleStringProperty(TiwulFXUtil.DEFAULT_NULL_LABEL);
+    private final StringProperty trueLabel = new SimpleStringProperty(TiwulFXUtil.getString("label.true"));
+    private final StringProperty falseLabel = new SimpleStringProperty(TiwulFXUtil.getString("label.false"));
+    private final StringProperty nullLabel = new SimpleStringProperty(TiwulFXUtil.DEFAULT_NULL_LABEL);
     /**
      * It holds the value of this control. If
-     * {@link #setAllowIndeterminate(boolean)} is set to true, the value of this
+     * #setAllowIndeterminate(boolean) is set to true, the value of this
      * control will be null when its state is indeterminate. This property is
-     * instantiated in {@link #bindValuePropertyWithControl()}
+     * instantiated in #bindValuePropertyWithControl()
      */
     private ObjectProperty<Boolean> checkboxValue;
 
@@ -106,7 +94,7 @@ public class CheckBoxControl extends BaseControl<Boolean, CheckBox> {
     /**
      * See {@link CheckBox#setIndeterminate(boolean)}. To allow checkbox
      * to have indeterminate state, call {@link #setRequired(boolean)} to false.
-     * @param bln 
+     * @param bln
      */
     public final void setIndeterminate(boolean bln) {
         checkBox.setIndeterminate(bln);
@@ -119,7 +107,7 @@ public class CheckBoxControl extends BaseControl<Boolean, CheckBox> {
     /**
      * If not required, the checkbox will support 3 states: true, false, null
      * otherwise it will support only true and false.
-     * @param required 
+     * @param required
      */
     @Override
     public void setRequired(boolean required) {
@@ -149,6 +137,7 @@ public class CheckBoxControl extends BaseControl<Boolean, CheckBox> {
         this.falseLabel.set(falseLabel);
         this.nullLabel.set(nullLabel);
     }
+
     private StringConverter<Boolean> conf = new StringConverter<Boolean>() {
         @Override
         public String toString(Boolean value) {
@@ -175,29 +164,29 @@ public class CheckBoxControl extends BaseControl<Boolean, CheckBox> {
         }
     };
 
-	public final StringProperty textProperty() {
-		return checkBox.textProperty();
-	}
+    public final StringProperty textProperty() {
+        return checkBox.textProperty();
+    }
 
-	public final void setText(String string) {
-		checkBox.setText(string);
-	}
+    public final void setText(String string) {
+        checkBox.setText(string);
+    }
 
-	public final String getText() {
-		return checkBox.getText();
-	}
+    public final String getText() {
+        return checkBox.getText();
+    }
 
-	public final void setMnemonicParsing(boolean bln) {
-		checkBox.setMnemonicParsing(bln);
-	}
+    public final void setMnemonicParsing(boolean bln) {
+        checkBox.setMnemonicParsing(bln);
+    }
 
-	public final boolean isMnemonicParsing() {
-		return checkBox.isMnemonicParsing();
-	}
+    public final boolean isMnemonicParsing() {
+        return checkBox.isMnemonicParsing();
+    }
 
-	public final BooleanProperty mnemonicParsingProperty() {
-		return checkBox.mnemonicParsingProperty();
-	}
-	
-	
+    public final BooleanProperty mnemonicParsingProperty() {
+        return checkBox.mnemonicParsingProperty();
+    }
+
+
 }

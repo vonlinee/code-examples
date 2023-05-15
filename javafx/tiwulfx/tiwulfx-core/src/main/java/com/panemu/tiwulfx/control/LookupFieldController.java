@@ -9,8 +9,8 @@ import com.panemu.tiwulfx.common.TableData;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.table.*;
 import com.panemu.tiwulfx.table.TableControl.Component;
+import com.panemu.tiwulfx.utils.ClassUtils;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -29,11 +29,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
-import org.apache.commons.beanutils.PropertyUtils;
 
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -70,18 +68,18 @@ public abstract class LookupFieldController<T> {
     /**
      * This method is published to serve data displayed on Lookup's suggestion list. Eventually it will call
      * {@link #loadData(int, java.util.List, java.util.List, java.util.List, int)}
-     * @param propertyName
-     * @param key
-     * @param operator
-     * @return
+     * @param propertyName propertyName
+     * @param key          key
+     * @param operator     operator
+     * @return List<T>
      */
     public List<T> loadDataForPopup(String propertyName, String key, TableCriteria.Operator operator) {
-        List<TableCriteria> lstCriteria = new ArrayList<>();
+        List<TableCriteria<Object>> lstCriteria = new ArrayList<>();
         if (key != null && !key.isEmpty()) {
-            lstCriteria.add(new TableCriteria(propertyName, operator, key));
+            lstCriteria.add(new TableCriteria<>(propertyName, operator, key));
         }
-        TableData data = loadData(0, lstCriteria, Arrays.asList(propertyName), Arrays.asList(SortType.ASCENDING), TiwulFXUtil.DEFAULT_LOOKUP_SUGGESTION_ITEMS);
-        return (List<T>) data.getRows();
+        TableData<T> data = loadData(0, lstCriteria, List.of(propertyName), List.of(SortType.ASCENDING), TiwulFXUtil.DEFAULT_LOOKUP_SUGGESTION_ITEMS);
+        return data.getRows();
     }
 
     /**
@@ -103,14 +101,15 @@ public abstract class LookupFieldController<T> {
      * @param searchCriteria searchCriteria (nullable)
      * @return selected object or the initialValue
      */
+    @SuppressWarnings("unchecked")
     public T show(final Window stage, T initialValue, String propertyName, String searchCriteria) {
         if (dialogStage == null) {
-            PropertyDescriptor[] props = PropertyUtils.getPropertyDescriptors(recordClass);
+            PropertyDescriptor[] props = ClassUtils.getPropertyDescriptors(recordClass);
             lookupWindow = new LookupWindow();
             for (String clm : getColumns()) {
                 for (PropertyDescriptor prop : props) {
                     if (prop.getName().equals(clm)) {
-                        Class type = prop.getPropertyType();
+                        Class<?> type = prop.getPropertyType();
                         if (type.equals(Boolean.class)) {
                             lookupWindow.table.addColumn(new CheckBoxColumn<T>(clm));
                         } else if (type.equals(String.class)) {
@@ -118,21 +117,19 @@ public abstract class LookupFieldController<T> {
                         } else if (type.equals(Date.class)) {
                             lookupWindow.table.addColumn(new LocalDateColumn<T>(clm));
                         } else if (Number.class.isAssignableFrom(type)) {
-
                             if (Long.class.isAssignableFrom(type)) {
-                                lookupWindow.table.addColumn(new NumberColumn<T, Long>(clm, type));
+                                lookupWindow.table.addColumn(new NumberColumn<>(clm, (Class<? extends Number>) type));
                             } else {
-                                lookupWindow.table.addColumn(new NumberColumn<T, Double>(clm, type));
+                                lookupWindow.table.addColumn(new NumberColumn<>(clm, (Class<? extends Number>) type));
                             }
                         } else {
-                            TableColumn column = new TableColumn();
-                            column.setCellValueFactory(new PropertyValueFactory(clm));
+                            TableColumn<T, ?> column = new TableColumn<>();
+                            column.setCellValueFactory(new PropertyValueFactory<>(clm));
                             lookupWindow.table.addColumn(column);
                         }
                         break;
                     }
                 }
-
             }
             dialogStage = new Stage();
             if (stage instanceof Stage) {
@@ -154,15 +151,14 @@ public abstract class LookupFieldController<T> {
             initCallback(lookupWindow, lookupWindow.table);
         }
 
-        for (TableColumn column : lookupWindow.table.getTableView().getColumns()) {
-            if (column instanceof BaseColumn && ((BaseColumn) column).getPropertyName().equals(propertyName)) {
+        for (TableColumn<T, ?> column : lookupWindow.table.getTableView().getColumns()) {
+            if (column instanceof BaseColumn && ((BaseColumn<T, ?>) column).getPropertyName().equals(propertyName)) {
                 if (searchCriteria != null && !searchCriteria.isEmpty()) {
-                    TableCriteria tc = new TableCriteria(propertyName, TableCriteria.Operator.ilike_anywhere, searchCriteria);
-                    ((BaseColumn) column).setTableCriteria(tc);
+                    TableCriteria<?> tc = new TableCriteria<>(propertyName, TableCriteria.Operator.ilike_anywhere, searchCriteria);
+                    ((BaseColumn<T, ?>) column).setTableCriteria(tc);
                 } else {
-                    ((BaseColumn) column).setTableCriteria(null);
+                    ((BaseColumn<T, ?>) column).setTableCriteria(null);
                 }
-
                 break;
             }
         }
@@ -179,7 +175,6 @@ public abstract class LookupFieldController<T> {
                 public void run() {
                     dialogStage.setX(stage.getX() + stage.getWidth() / 2 - dialogStage.getWidth() / 2);
                     dialogStage.setY(stage.getY() + stage.getHeight() / 2 - dialogStage.getHeight() / 2);
-
                     //set the opacity back to fully opaque
                     dialogStage.setOpacity(1);
                 }
@@ -231,12 +226,21 @@ public abstract class LookupFieldController<T> {
         });
     }
 
-    protected abstract TableData loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<SortType> sortingTypes, int maxResult);
+    /**
+     * load data from db
+     * @param startIndex      开始索引
+     * @param filteredColumns 过滤列
+     * @param sortedColumns   排序列
+     * @param sortingTypes    排序类型
+     * @param maxResult       最大结果数
+     * @return 表格数据
+     */
+    protected abstract <C> TableData<T> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<SortType> sortingTypes, int maxResult);
 
-    private class LookupTableController extends TableController<T> {
+    private class LookupTableController extends TableOperation<T> {
 
         @Override
-        public TableData loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<SortType> sortingTypes, int maxResult) {
+        public <C> TableData<T> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<SortType> sortingTypes, int maxResult) {
             return LookupFieldController.this.loadData(startIndex, filteredColumns, sortedColumns, sortingTypes, maxResult);
         }
 
@@ -253,7 +257,6 @@ public abstract class LookupFieldController<T> {
 
         public LookupWindow() {
             addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-
                 @Override
                 public void handle(KeyEvent event) {
                     if (event.getCode() == KeyCode.ESCAPE) {
@@ -265,7 +268,6 @@ public abstract class LookupFieldController<T> {
             pnlButton.setAlignment(Pos.CENTER);
             pnlButton.setPadding(new Insets(10));
             pnlButton.getChildren().add(button);
-
             getChildren().addAll(table, pnlButton);
             VBox.setVgrow(table, Priority.ALWAYS);
             table.setController(new LookupTableController());
@@ -274,12 +276,7 @@ public abstract class LookupFieldController<T> {
                     Component.BUTTON_EXPORT,
                     Component.BUTTON_INSERT,
                     Component.BUTTON_SAVE);
-            button.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent t) {
-                    select();
-                }
-            });
+            button.setOnAction(t -> select());
         }
     }
 }

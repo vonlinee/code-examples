@@ -1,45 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.panemu.tiwulfx.table.CheckBoxColumn?>
-<?import com.panemu.tiwulfx.table.ComboBoxColumn?>
-<?import com.panemu.tiwulfx.table.DateColumn?>
-<?import com.panemu.tiwulfx.table.LookupColumn?>
-<?import com.panemu.tiwulfx.table.NumberColumn?>
-<?import com.panemu.tiwulfx.table.TableControl?>
-<?import com.panemu.tiwulfx.table.TextColumn?>
-<?import com.panemu.tiwulfx.table.TickColumn?>
-<?import com.panemu.tiwulfx.table.TypeAheadColumn?>
+<?import com.panemu.tiwulfx.table.*?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.VBox?>
-
-<fx:root id="AnchorPane" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
-  <children>
-      <TextArea fx:id="txtInformation" editable="false" prefRowCount="2" prefWidth="200.0" wrapText="true" />
-    <TableControl fx:id="tblPerson" agileEditing="true" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-      <columns>
-			<TickColumn fx:id="clmTick" />
-        <TextColumn fx:id="clmName" prefWidth="150.0" propertyName="name" required="true" text="%name" />
-        <TextColumn fx:id="clmEmail" prefWidth="250.0" propertyName="email" required="true" text="%email" />
-        <DateColumn propertyName="birthDate" text="%birthDate" />
-        <TypeAheadColumn fx:id="clmBirthPlace" propertyName="birthPlace" required="true" sorted="true" text="%birthPlace" />
-        <ComboBoxColumn fx:id="clmGender" propertyName="gender" required="true" text="%gender" />
-        <CheckBoxColumn falseLabel="%alive.false" nullLabel="%alive.null" propertyName="alive" text="%alive" trueLabel="%alive.true" />
-        <TableColumn text="Insurance">
-          <columns>
-            <NumberColumn fx:id="clmInsuranceId" editable="false" propertyName="insurance.id" text="%insurance.id" />
-            <TableColumn text="Description">
-              <columns>
-                <LookupColumn fx:id="clmInsurance" lookupPropertyName="code" propertyName="insurance" text="%insurance.code" />
-                <TextColumn editable="false" prefWidth="200.0" propertyName="insurance.name" text="%insurance.name" />
-              </columns>
-            </TableColumn>
-          </columns>
-        </TableColumn>
-        <NumberColumn fx:id="clmVisit" prefWidth="75.0" propertyName="visit" text="%visit" />
-        <NumberColumn alignment="CENTER" prefWidth="75.0" propertyName="weight" text="%weight" />
-        <NumberColumn fx:id="clmVersion" editable="false" prefWidth="50.0" propertyName="version" text="%version" />
-      </columns>
-    </TableControl>
-  </children>
+<fx:root id="AnchorPane" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/10.0.1"
+         xmlns:fx="http://javafx.com/fxml/1">
+  <TextArea fx:id="txtInformation" editable="false" prefRowCount="2" prefWidth="200.0" wrapText="true"/>
+  <TableControl fx:id="tblPerson" agileEditing="true" VBox.vgrow="ALWAYS">
+    <columns>
+      <TickColumn fx:id="clmTick"/>
+      <TextColumn fx:id="clmName" prefWidth="150.0" propertyName="name" required="true" text="%name"/>
+      <TextColumn fx:id="clmEmail" prefWidth="250.0" propertyName="email" required="true" text="%email"/>
+      <DateColumn propertyName="birthDate" text="%birthDate"/>
+      <TypeAheadColumn fx:id="clmBirthPlace" propertyName="birthPlace" required="true" sorted="true"
+                       text="%birthPlace"/>
+      <ComboBoxColumn fx:id="clmGender" propertyName="gender" required="true" text="%gender"/>
+      <CheckBoxColumn falseLabel="%alive.false" nullLabel="%alive.null" propertyName="alive" text="%alive"
+                      trueLabel="%alive.true"/>
+      <TableColumn text="Insurance">
+        <columns>
+          <NumberColumn fx:id="clmInsuranceId" editable="false" propertyName="insurance.id" text="%insurance.id"/>
+          <TableColumn text="Description">
+            <columns>
+              <LookupColumn fx:id="clmInsurance" lookupPropertyName="code" propertyName="insurance"
+                            text="%insurance.code"/>
+              <TextColumn editable="false" prefWidth="200.0" propertyName="insurance.name" text="%insurance.name"/>
+            </columns>
+          </TableColumn>
+        </columns>
+      </TableColumn>
+      <NumberColumn fx:id="clmVisit" prefWidth="75.0" propertyName="visit" text="%visit"/>
+      <NumberColumn alignment="CENTER" prefWidth="75.0" propertyName="weight" text="%weight"/>
+      <NumberColumn fx:id="clmVersion" editable="false" prefWidth="50.0" propertyName="version" text="%version"/>
+    </columns>
+  </TableControl>
 </fx:root>

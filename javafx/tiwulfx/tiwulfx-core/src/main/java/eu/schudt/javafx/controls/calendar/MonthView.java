@@ -18,7 +18,6 @@ import java.util.Date;
 
 /**
  * Responsible for displaying the days of a month.
- *
  * @author Christian Schudt
  */
 final class MonthView extends DatePane {
@@ -39,7 +38,6 @@ final class MonthView extends DatePane {
 
     /**
      * Constructs the month view.
-     *
      * @param calendarView The calendar view.
      */
     public MonthView(final CalendarView calendarView) {
@@ -209,9 +207,9 @@ final class MonthView extends DatePane {
 
                 boolean disabled = calendarView.getDisabledWeekdays().contains(calendar.get(Calendar.DAY_OF_WEEK));
 
-                if (calendarView.getController()!= null) {
-						 disabled = !calendarView.getController().isEnabled(currentDate);
-					 }
+                if (calendarView.getController() != null) {
+                    disabled = !calendarView.getController().isEnabled(currentDate);
+                }
 
                 control.setDisable(disabled);
 

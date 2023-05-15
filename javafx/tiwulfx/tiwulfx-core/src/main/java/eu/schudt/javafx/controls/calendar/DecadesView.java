@@ -10,13 +10,11 @@ import java.util.Calendar;
 
 /**
  * Shows the years of several decades.
- *
  * @author Christian Schudt
  */
 final class DecadesView extends DatePane {
 
     private static final String CSS_CALENDAR_DECADES_VIEW = "calendar-decades-view";
-
 
     private final static int NUMBER_OF_DECADES = 2;
 
@@ -43,15 +41,15 @@ final class DecadesView extends DatePane {
 
             button.getStyleClass().add("calendar-year-button");
             button.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    if (calendarView.currentlyViewing.get() == Calendar.ERA) {
-                        calendar.set(Calendar.YEAR, (Integer) button.getUserData());
-                        calendarView.currentlyViewing.set(Calendar.YEAR);
-                        calendarView.calendarDate.set(calendar.getTime());
-                    }
-                }
-            }
+                                   @Override
+                                   public void handle(ActionEvent actionEvent) {
+                                       if (calendarView.currentlyViewing.get() == Calendar.ERA) {
+                                           calendar.set(Calendar.YEAR, (Integer) button.getUserData());
+                                           calendarView.currentlyViewing.set(Calendar.YEAR);
+                                           calendarView.calendarDate.set(calendar.getTime());
+                                       }
+                                   }
+                               }
 
             );
             int rowIndex = i % 5;

@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -118,7 +119,7 @@ public class MessageDialog extends StackPane {
         }
     }
 
-    private Button btnYes = new Button();
+    private final Button btnYes = new Button();
     private Button btnNo = new Button();
     private Button btnCancel = new Button();
     private ObjectProperty<ButtonType> buttonType = new SimpleObjectProperty<>();
@@ -140,7 +141,6 @@ public class MessageDialog extends StackPane {
 
     public MessageDialog(Throwable throwable) {
         this(DialogType.ERROR, throwable);
-
     }
 
     public MessageDialog(DialogType dialogType) {
@@ -148,9 +148,8 @@ public class MessageDialog extends StackPane {
     }
 
     private MessageDialog(DialogType dialogType, Throwable throwable) {
-
         getStyleClass().addAll("dialog");
-//        setEffect(new DropShadow());
+        setEffect(new DropShadow());
         lblTitle = new Label();
         lblTitle.getStyleClass().add("title");
 
@@ -158,20 +157,14 @@ public class MessageDialog extends StackPane {
         pnlTitle.getChildren().add(lblTitle);
         pnlTitle.getStyleClass().add("header");
 
-        pnlTitle.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                dragOffsetX = mouseEvent.getSceneX();
-                dragOffsetY = mouseEvent.getSceneY();
-            }
+        pnlTitle.setOnMousePressed(mouseEvent -> {
+            dragOffsetX = mouseEvent.getSceneX();
+            dragOffsetY = mouseEvent.getSceneY();
         });
-        pnlTitle.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (getCursor().equals(Cursor.DEFAULT)) {
-                    stage.setX(mouseEvent.getScreenX() - dragOffsetX);
-                    stage.setY(mouseEvent.getScreenY() - dragOffsetY);
-                }
+        pnlTitle.setOnMouseDragged(mouseEvent -> {
+            if (getCursor().equals(Cursor.DEFAULT)) {
+                stage.setX(mouseEvent.getScreenX() - dragOffsetX);
+                stage.setY(mouseEvent.getScreenY() - dragOffsetY);
             }
         });
 
@@ -255,16 +248,13 @@ public class MessageDialog extends StackPane {
                 break;
         }
         imageView.setImage(image);
-
         initButtonBehaviors();
-
         initResizeRoutine();
-
     }
 
     /**
      * Change default image
-     * @param image
+     * @param image Image
      */
     public void setImage(Image image) {
         imageView.setImage(image);
@@ -272,7 +262,7 @@ public class MessageDialog extends StackPane {
 
     /**
      * Set the title of dialog
-     * @param title
+     * @param title String
      */
     public void setTitle(String title) {
         lblTitle.setText(title);
@@ -284,7 +274,7 @@ public class MessageDialog extends StackPane {
 
     /**
      * Set the message displayed in the dialog
-     * @param message
+     * @param message String
      */
     public void setMessage(String message) {
         lblMessage.setText(message);
