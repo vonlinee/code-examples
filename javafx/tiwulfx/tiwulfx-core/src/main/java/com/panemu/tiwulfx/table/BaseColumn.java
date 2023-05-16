@@ -155,6 +155,14 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
         return this.stringConverter;
     }
 
+    public String getCellDataAsString(R rowItem) {
+        StringConverter<C> converter = getStringConverter();
+        if (converter == null) {
+            return "";
+        }
+        return converter.toString(getCellData(rowItem));
+    }
+
     public void setStringConverter(StringConverter<C> stringConverter) {
         this.stringConverter = stringConverter;
     }

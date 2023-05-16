@@ -22,8 +22,8 @@ import java.util.List;
 
 public class RowBrowser extends VBox {
 
-    private TableView<Record> tblView;
-    private ContextMenu cm;
+    private final TableView<Record> tblView;
+    private final ContextMenu cm;
 
     public RowBrowser() {
         tblView = new TableView<>();
@@ -75,8 +75,6 @@ public class RowBrowser extends VBox {
                 copyCell();
                 event.consume();
             }
-            return;
-
         }
     };
 
@@ -105,7 +103,7 @@ public class RowBrowser extends VBox {
 
     public void close() {
         if (!Platform.isFxApplicationThread()) {
-            Platform.runLater(() -> close());
+            Platform.runLater(this::close);
             return;
         }
         if (getScene() != null && getScene().getWindow() != null) {

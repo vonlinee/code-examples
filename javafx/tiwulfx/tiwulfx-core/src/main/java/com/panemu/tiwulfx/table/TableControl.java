@@ -45,13 +45,6 @@ public class TableControl<R> extends VBox {
      */
     public static int DEFAULT_TABLE_MAX_ROW = 500;
 
-    private Button btnAdd;
-    private Button btnEdit;
-    private Button btnDelete;
-    private Button btnReload;
-    private Button btnSave;
-    private Button btnExport;
-
     // pagination buttons
     private Button btnFirstPage;
     private Button btnLastPage;
@@ -70,7 +63,6 @@ public class TableControl<R> extends VBox {
     private Region spacer;
     private HBox paginationBox;
     private ToolBar toolbar;
-    private StackPane footer;
     private TableOperation<R> controller;
     private final SimpleIntegerProperty startIndex = new SimpleIntegerProperty(0);
     private final StartIndexChangeListener startIndexChangeListener = new StartIndexChangeListener();
@@ -215,12 +207,27 @@ public class TableControl<R> extends VBox {
     }
 
     private void initControls() {
-        btnAdd = buildButton(TiwulFXUtil.getGraphicFactory().createAddGraphic());
-        btnDelete = buildButton(TiwulFXUtil.getGraphicFactory().createDeleteGraphic());
-        btnEdit = buildButton(TiwulFXUtil.getGraphicFactory().createEditGraphic());
-        btnExport = buildButton(TiwulFXUtil.getGraphicFactory().createExportGraphic());
-        btnReload = buildButton(TiwulFXUtil.getGraphicFactory().createReloadGraphic());
-        btnSave = buildButton(TiwulFXUtil.getGraphicFactory().createSaveGraphic());
+        Button btnAdd = buildButton(TiwulFXUtil.getGraphicFactory().createAddGraphic());
+        Button btnDelete = buildButton(TiwulFXUtil.getGraphicFactory().createDeleteGraphic());
+        Button btnEdit = buildButton(TiwulFXUtil.getGraphicFactory().createEditGraphic());
+        Button btnExport = buildButton(TiwulFXUtil.getGraphicFactory().createExportGraphic());
+        Button btnReload = buildButton(TiwulFXUtil.getGraphicFactory().createReloadGraphic());
+        Button btnSave = buildButton(TiwulFXUtil.getGraphicFactory().createSaveGraphic());
+
+        toolBarButtonHandler.btnAdd = btnAdd;
+        toolBarButtonHandler.btnDelete = btnDelete;
+        toolBarButtonHandler.btnEdit = btnEdit;
+        toolBarButtonHandler.btnExport = btnExport;
+        toolBarButtonHandler.btnReload = btnReload;
+        toolBarButtonHandler.btnSave = btnSave;
+
+        btnAdd.setOnAction(toolBarButtonHandler);
+        btnDelete.setOnAction(toolBarButtonHandler);
+        btnEdit.setOnAction(toolBarButtonHandler);
+        btnExport.setOnAction(toolBarButtonHandler);
+        btnReload.setOnAction(toolBarButtonHandler);
+        btnSave.setOnAction(toolBarButtonHandler);
+
 
         btnAdd.disableProperty().bind(mode.isEqualTo(Mode.EDIT));
         btnEdit.disableProperty().bind(mode.isNotEqualTo(Mode.READ));
@@ -273,16 +280,18 @@ public class TableControl<R> extends VBox {
         cmbPage.getStyleClass().addAll("combo-page");
         cmbPage.setPrefWidth(75);
 
-        paginationBox = new HBox();
+        paginationBox = new PaginationControl();
         paginationBox.setAlignment(Pos.CENTER);
         paginationBox.getChildren().addAll(btnFirstPage, btnPrevPage, cmbPage, btnNextPage, btnLastPage);
+
+
 
         spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         toolbar = new ToolBar(btnReload, btnAdd, btnEdit, btnSave, btnDelete, btnExport, spacer, paginationBox);
         toolbar.getStyleClass().add("table-toolbar");
 
-        footer = new StackPane();
+        StackPane footer = new StackPane();
         footer.getStyleClass().add("table-footer");
         lblRowIndex = new Label();
         lblTotalRow = new Label();
@@ -300,6 +309,11 @@ public class TableControl<R> extends VBox {
 
         footer.getChildren().addAll(lblRowIndex, lblTotalRow, menuButton, progressIndicator);
 
+        toolBarButtonHandler.toolbar = toolbar;
+        toolBarButtonHandler.footer = footer;
+        toolBarButtonHandler.spacer = spacer;
+        toolBarButtonHandler.paginationBox = paginationBox;
+
         VBox.setVgrow(tblView, Priority.ALWAYS);
         getChildren().addAll(toolbar, tblView, footer);
     }
@@ -308,34 +322,57 @@ public class TableControl<R> extends VBox {
         Button btn = new Button();
         btn.setGraphic(graphic);
         btn.getStyleClass().add("flat-button");
-        btn.setOnAction(event -> {
-            if (event.getSource() == btnAdd) {
-                insert();
-            } else if (event.getSource() == btnDelete) {
-                delete();
-            } else if (event.getSource() == btnEdit) {
-                edit();
-            } else if (event.getSource() == btnExport) {
-                export();
-            } else if (event.getSource() == btnReload) {
-                reload();
-            } else if (event.getSource() == btnSave) {
-                save();
-            }
-        });
         return btn;
     }
+
+    PaginationControl paginationControl;
+
+    /**
+     * 分页控制
+     * @see javafx.scene.control.skin.PaginationSkin.NavigationControl
+     * @see TableControl#paginationBox
+     */
+    static class PaginationControl extends HBox {
+
+        // pagination buttons
+        private Button btnFirstPage;
+        private Button btnLastPage;
+        private Button btnNextPage;
+        private Button btnPrevPage;
+
+        private void toggleButtons(int startIndex, boolean moreRows) {
+            boolean firstPage = startIndex == 0;
+            btnFirstPage.setDisable(firstPage);
+            btnPrevPage.setDisable(firstPage);
+            btnNextPage.setDisable(!moreRows);
+            btnLastPage.setDisable(!moreRows);
+        }
+    }
+
+    /**
+     * 工具栏按钮事件处理
+     * @see TableControl#initControls()
+     */
+    private final ToolBarButtonHandler toolBarButtonHandler = new ToolBarButtonHandler(this);
 
     static class ToolBarButtonHandler implements EventHandler<ActionEvent> {
 
         TableControl<?> tableControl;
 
-        private Button btnAdd;
-        private Button btnEdit;
-        private Button btnDelete;
-        private Button btnReload;
-        private Button btnSave;
-        private Button btnExport;
+        public Button btnAdd;
+        public Button btnEdit;
+        public Button btnDelete;
+        public Button btnReload;
+        public Button btnSave;
+        public Button btnExport;
+
+        // 工具栏
+        public ToolBar toolbar;
+        public StackPane footer;
+
+        // 分页
+        public Region spacer;
+        public HBox paginationBox;
 
         public ToolBarButtonHandler(TableControl<?> tableControl) {
             this.tableControl = tableControl;
@@ -357,6 +394,69 @@ public class TableControl<R> extends VBox {
                 tableControl.save();
             }
         }
+
+
+        /**
+         * 如果visible为true，则判断是否包含control
+         * @param parent
+         * @param control
+         * @param visible
+         */
+        public void setOrNot(ToolBar parent, Node control, boolean visible) {
+            if (!visible) {
+                parent.getItems().remove(control);
+            } else if (!parent.getItems().contains(control)) {
+                parent.getItems().add(control);
+            }
+        }
+
+        public void setOrNot(Pane parent, Node control, boolean visiable) {
+            if (!visiable) {
+                parent.getChildren().remove(control);
+            } else if (!parent.getChildren().contains(control)) {
+                parent.getChildren().add(control);
+            }
+        }
+
+        /**
+         * Set UI component visibility.
+         * @param visible  预期可见状态
+         * @param controls 控件列表
+         */
+        public void setVisibleComponents(boolean visible, TableControl.Component... controls) {
+            for (Component comp : controls) {
+                switch (comp) {
+                    case BUTTON_DELETE:
+                        setOrNot(toolbar, btnDelete, visible);
+                        break;
+                    case BUTTON_EDIT:
+                        setOrNot(toolbar, btnEdit, visible);
+                        break;
+                    case BUTTON_INSERT:
+                        setOrNot(toolbar, btnAdd, visible);
+                        break;
+                    case BUTTON_EXPORT:
+                        setOrNot(toolbar, btnExport, visible);
+                        break;
+                    case BUTTON_PAGINATION:
+                        setOrNot(toolbar, spacer, visible);
+                        setOrNot(toolbar, paginationBox, visible);
+                        break;
+                    case BUTTON_RELOAD:
+                        setOrNot(toolbar, btnReload, visible);
+                        break;
+                    case BUTTON_SAVE:
+                        setOrNot(toolbar, btnSave, visible);
+                        break;
+                    case FOOTER:
+                        setOrNot(tableControl, footer, visible);
+                        break;
+                    case TOOLBAR:
+                        setOrNot(tableControl, toolbar, visible);
+                        break;
+                }
+            }
+        }
     }
 
     private final EventHandler<ActionEvent> paginationHandler = new EventHandler<>() {
@@ -365,15 +465,17 @@ public class TableControl<R> extends VBox {
             if (event.getSource() == btnFirstPage) {
                 reloadFirstPage();
             } else if (event.getSource() == btnPrevPage) {
-                prevPageFired(event);
+                cmbPage.getSelectionModel().selectPrevious();
             } else if (event.getSource() == btnNextPage) {
-                nextPageFired(event);
+                cmbPage.getSelectionModel().selectNext();
             } else if (event.getSource() == btnLastPage) {
-                lastPageFired(event);
+                cmbPage.getSelectionModel().selectLast();
             } else if (event.getSource() == cmbPage) {
                 pageChangeFired(event);
             }
         }
+
+
     };
 
     /**
@@ -905,14 +1007,13 @@ public class TableControl<R> extends VBox {
         List<TableColumn<R, ?>> lstColumn = getLeafColumns();
         List<RowBrowser.Record> lstRecord = new ArrayList<>();
         for (TableColumn<R, ?> tableColumn : lstColumn) {
-            RowBrowser.Record rcd = null;
+            RowBrowser.Record rcd;
+            String stringVal;
             if (tableColumn instanceof BaseColumn) {
-                String stringVal = ((BaseColumn) tableColumn).getStringConverter()
-                        .toString(((BaseColumn) tableColumn).getCellData(selectedRow));
+                stringVal = ((BaseColumn<R, ?>) tableColumn).getCellDataAsString(selectedRow);
                 rcd = new RowBrowser.Record(tableColumn.getText(), stringVal);
             } else {
-                String stringVal = tableColumn.getCellData(selectedRow) == null ? "" : tableColumn
-                        .getCellData(selectedRow).toString();
+                stringVal = String.valueOf(tableColumn.getCellData(selectedRow));
                 rcd = new RowBrowser.Record(tableColumn.getText(), stringVal);
             }
             lstRecord.add(rcd);
@@ -1199,11 +1300,7 @@ public class TableControl<R> extends VBox {
     }
 
     private void toggleButtons(boolean moreRows) {
-        boolean firstPage = startIndex.get() == 0;
-        btnFirstPage.setDisable(firstPage);
-        btnPrevPage.setDisable(firstPage);
-        btnNextPage.setDisable(!moreRows);
-        btnLastPage.setDisable(!moreRows);
+        paginationControl.toggleButtons(startIndex.get(), moreRows);
     }
 
     /**
@@ -1220,21 +1317,10 @@ public class TableControl<R> extends VBox {
         }
     }
 
-    private void lastPageFired(ActionEvent event) {
-        cmbPage.getSelectionModel().selectLast();
-    }
-
-    private void prevPageFired(ActionEvent event) {
-        cmbPage.getSelectionModel().selectPrevious();
-    }
-
-    private void nextPageFired(ActionEvent event) {
-        cmbPage.getSelectionModel().selectNext();
-    }
-
     private void pageChangeFired(ActionEvent event) {
         if (cmbPage.getValue() != null) {
-            page = Integer.valueOf(String.valueOf(cmbPage.getValue()));//since the combobox is editable, it might have String value
+            // since the combobox is editable, it might have String value
+            page = Integer.valueOf(String.valueOf(cmbPage.getValue()));
             page = page - 1;
             startIndex.set(page * maxResult.get());
         }
@@ -1507,27 +1593,6 @@ public class TableControl<R> extends VBox {
         return tblView.getItems();
     }
 
-    /**
-     * 如果visible为true，则判断是否包含control
-     * @param parent
-     * @param control
-     * @param visible
-     */
-    private void setOrNot(ToolBar parent, Node control, boolean visible) {
-        if (!visible) {
-            parent.getItems().remove(control);
-        } else if (!parent.getItems().contains(control)) {
-            parent.getItems().add(control);
-        }
-    }
-
-    private void setOrNot(Pane parent, Node control, boolean visiable) {
-        if (!visiable) {
-            parent.getChildren().remove(control);
-        } else if (!parent.getChildren().contains(control)) {
-            parent.getChildren().add(control);
-        }
-    }
 
     /**
      * Add button to toolbar. The button's style is set by this method. Make
@@ -1562,38 +1627,7 @@ public class TableControl<R> extends VBox {
      * @param controls 控件列表
      */
     public void setVisibleComponents(boolean visible, TableControl.Component... controls) {
-        for (Component comp : controls) {
-            switch (comp) {
-                case BUTTON_DELETE:
-                    setOrNot(toolbar, btnDelete, visible);
-                    break;
-                case BUTTON_EDIT:
-                    setOrNot(toolbar, btnEdit, visible);
-                    break;
-                case BUTTON_INSERT:
-                    setOrNot(toolbar, btnAdd, visible);
-                    break;
-                case BUTTON_EXPORT:
-                    setOrNot(toolbar, btnExport, visible);
-                    break;
-                case BUTTON_PAGINATION:
-                    setOrNot(toolbar, spacer, visible);
-                    setOrNot(toolbar, paginationBox, visible);
-                    break;
-                case BUTTON_RELOAD:
-                    setOrNot(toolbar, btnReload, visible);
-                    break;
-                case BUTTON_SAVE:
-                    setOrNot(toolbar, btnSave, visible);
-                    break;
-                case FOOTER:
-                    setOrNot(this, footer, visible);
-                    break;
-                case TOOLBAR:
-                    setOrNot(this, toolbar, visible);
-                    break;
-            }
-        }
+        toolBarButtonHandler.setVisibleComponents(visible, controls);
     }
 
     public Mode getMode() {
@@ -1668,17 +1702,22 @@ public class TableControl<R> extends VBox {
         if (vol.getTotalRows() % maxResult.get() != 0) {
             page++;
         }
-        cmbPage.setDisable(page == 0);
         startIndex.removeListener(startIndexChangeListener);
+
+        cmbPage.setDisable(page == 0);
         cmbPage.getItems().clear();
         for (int i = 1; i <= page; i++) {
             cmbPage.getItems().add(i);
         }
-        cmbPage.getSelectionModel().select((int) (startIndex.get() / maxResult.get()));
+        cmbPage.getSelectionModel().select(startIndex.get() / maxResult.get());
+
+
         startIndex.addListener(startIndexChangeListener);
         toggleButtons(vol.isMoreRows());
         mode.set(Mode.READ);
         clearChange();
+
+        // 自适应列
         if (fitColumnAfterReload) {
             for (TableColumn<R, ?> clm : tblView.getColumns()) {
                 resizeToFit(clm, -1);
