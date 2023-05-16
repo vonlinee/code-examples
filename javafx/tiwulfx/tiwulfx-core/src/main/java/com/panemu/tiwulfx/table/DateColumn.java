@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DateColumn<R> extends BaseColumn<R, Date> {
+public class DateColumn<R> extends CustomTableColumn<R, Date> {
 
     private DateField searchInputControl;
     private SearchMenuItemBase<Date> searchMenuItem;

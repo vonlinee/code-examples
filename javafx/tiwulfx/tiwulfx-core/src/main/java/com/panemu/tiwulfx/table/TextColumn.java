@@ -4,7 +4,6 @@
  */
 package com.panemu.tiwulfx.table;
 
-import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TableCriteria.Operator;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ import javafx.util.StringConverter;
  *
  * @author amrullah
  */
-public class TextColumn<R extends Object> extends BaseColumn<R, String> {
+public class TextColumn<R extends Object> extends CustomTableColumn<R, String> {
 
 	private TextField searchInputControl = new TextField();
 	private boolean emptyStringAsNull = TiwulFXUtil.DEFAULT_EMPTY_STRING_AS_NULL;

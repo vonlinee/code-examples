@@ -30,10 +30,10 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
     private Control control;
     private StringConverter<C> stringConverter;
     private static final PseudoClass PSEUDO_CLASS_INVALID = PseudoClass.getPseudoClass("invalid");
-    private final BaseColumn<R, C> column;
+    private final CustomTableColumn<R, C> column;
     private boolean focusListenerAttached = false;
 
-    public BaseCell(final BaseColumn<R, C> column) {
+    public BaseCell(final CustomTableColumn<R, C> column) {
         this.stringConverter = column.getStringConverter();
         contentDisplayProperty().addListener(new ChangeListener<ContentDisplay>() {
 
@@ -60,8 +60,8 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
             public void handle(MouseEvent event) {
                 if (event.getEventType() == MouseEvent.MOUSE_EXITED || event.getEventType() == MouseEvent.MOUSE_MOVED) {
                     TableColumn<R, C> clm = getTableColumn();
-                    if (clm instanceof BaseColumn && !((BaseColumn) clm).isValid(getTableRow().getItem())) {
-                        BaseColumn<R, C> baseColumn = (BaseColumn<R, C>) clm;
+                    if (clm instanceof CustomTableColumn && !((CustomTableColumn) clm).isValid(getTableRow().getItem())) {
+                        CustomTableColumn<R, C> baseColumn = (CustomTableColumn<R, C>) clm;
                         PopupControl popup = baseColumn.getPopup((R) getTableRow().getItem());
                         if (event.getEventType() == MouseEvent.MOUSE_MOVED
                                 && !popup.isShowing()) {
@@ -238,7 +238,7 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
         try {
             return stringConverter.toString(value);
         } catch (ClassCastException ex) {
-            String propertyName = getTableColumn() instanceof BaseColumn ? ((BaseColumn) getTableColumn()).getPropertyName() : "unknown";
+            String propertyName = getTableColumn() instanceof CustomTableColumn ? ((CustomTableColumn) getTableColumn()).getPropertyName() : "unknown";
             if (getTableRow() != null && getTableRow().getItem() != null) {
                 propertyName = getTableRow().getItem().getClass().getName() + "." + propertyName;
             }

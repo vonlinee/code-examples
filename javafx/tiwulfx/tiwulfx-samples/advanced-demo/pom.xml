@@ -14,7 +14,6 @@
   <name>advanced-demo</name>
 
   <packaging>jar</packaging>
-  <version>3.2</version>
 
   <organization>
     <!-- Used as the 'Vendor' for JNLP generation -->

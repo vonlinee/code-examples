@@ -25,8 +25,7 @@ public class MainApp extends Application {
         root.setCenter(frmPerson);
         root.setTop(toolBar);
 
-        final Button button =
-                new Button();
+        final Button button = new Button();
 
         button.setOnAction(event -> {
             frmPerson.tblPerson.setVisibleComponents(false, TableControl.Component.BUTTON_EDIT);

@@ -24,7 +24,7 @@ import javafx.util.StringConverter;
  *
  * @author Amrullah 
  */
-public class ComboBoxColumn<R, C> extends BaseColumn<R, C> {
+public class ComboBoxColumn<R, C> extends CustomTableColumn<R, C> {
 
 	private ObservableMap<String, C> itemMap = FXCollections.observableMap(new LinkedHashMap<String, C>());
 	private ComboBox<C> searchInputControl = new ComboBox<>();

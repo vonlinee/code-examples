@@ -42,19 +42,19 @@ import java.util.Map;
  * Please refer to {@link TextColumn} and {@link ComboBoxColumn} source code to
  * get reference on building your own column.
  * <p>
- * Column that doesn't extend BaseColumn, i.e: {@link TickColumn} will be
+ * Column that doesn't extend CustomTableColumn, i.e: {@link TickColumn} will be
  * skipped by export-to-excel and paste routine
  * @param <R> Record data type
  * @param <C> Column data type
  * @author amrullah
  */
-public class BaseColumn<R, C> extends TableColumn<R, C> {
+public class CustomTableColumn<R, C> extends TableColumn<R, C> {
 
     /**
      * used to get/set object method using introspection
      */
     private String propertyName;
-    private final SimpleObjectProperty<TableCriteria> tableCriteria = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<TableCriteria<C>> tableCriteria = new SimpleObjectProperty<>();
     private C searchValue;
     private final Node filterImage = TiwulFXUtil.getGraphicFactory().createFilterGraphic();
     private Pos alignment = Pos.BASELINE_LEFT;
@@ -76,7 +76,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
         @Override
         public C fromString(String string) {
-            throw new UnsupportedOperationException(BaseColumn.class.getName() + ". The implementation class of BaseColum should provide string converter by calling setStringConverter() in constructor.");
+            throw new UnsupportedOperationException(CustomTableColumn.class.getName() + ". The implementation class of BaseColum should provide string converter by calling setStringConverter() in constructor.");
         }
     };
 
@@ -90,7 +90,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
      *                     using introspection
      * @param prefWidth    preferred column width
      */
-    public BaseColumn(String propertyName, double prefWidth) {
+    public CustomTableColumn(String propertyName, double prefWidth) {
         this(propertyName, prefWidth, TiwulFXUtil.getString(propertyName));
     }
 
@@ -101,7 +101,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
      * @param columnHeader column header text. Default equals propertyName. This
      *                     text is localized
      */
-    public BaseColumn(String propertyName, double prefWidth, String columnHeader) {
+    public CustomTableColumn(String propertyName, double prefWidth, String columnHeader) {
         super(columnHeader);
         setPrefWidth(prefWidth);
         this.propertyName = propertyName;
@@ -110,9 +110,9 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
             @Override
             public void invalidated(Observable observable) {
                 if (tableCriteria.get() != null) {
-                    BaseColumn.this.setGraphic(filterImage);
+                    CustomTableColumn.this.setGraphic(filterImage);
                 } else {
-                    BaseColumn.this.setGraphic(null);
+                    CustomTableColumn.this.setGraphic(null);
                 }
             }
         });
@@ -169,9 +169,9 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
     /**
      * Property that holds applied criteria to column
-     * @return
+     * @return tableCriteria
      */
-    public SimpleObjectProperty<TableCriteria> tableCriteriaProperty() {
+    public SimpleObjectProperty<TableCriteria<C>> tableCriteriaProperty() {
         return tableCriteria;
     }
 
@@ -185,10 +185,10 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
     /**
      * Get criteria applied to this column
-     * @return
+     * @return tableCriteria
      * @see #tableCriteriaProperty()
      */
-    public TableCriteria getTableCriteria() {
+    public TableCriteria<C> getTableCriteria() {
         return tableCriteria.get();
     }
 
@@ -203,13 +203,13 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
      * @param crit
      * @see TableControl#setReloadOnCriteriaChange(boolean)
      */
-    public void setTableCriteria(TableCriteria crit) {
+    public void setTableCriteria(TableCriteria<C> crit) {
         tableCriteria.set(crit);
     }
 
     /**
      * Gets propertyName passed in constructor
-     * @return
+     * @return 属性名称
      */
     public String getPropertyName() {
         return propertyName;

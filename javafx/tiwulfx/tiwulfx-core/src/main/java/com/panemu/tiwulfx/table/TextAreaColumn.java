@@ -34,7 +34,7 @@ import javafx.util.StringConverter;
  *
  * @author astri
  */
-public class TextAreaColumn<R extends Object> extends BaseColumn<R, String> {
+public class TextAreaColumn<R extends Object> extends CustomTableColumn<R, String> {
 
         private TextField searchInputControl = new TextField();
 	private boolean emptyStringAsNull = TiwulFXUtil.DEFAULT_EMPTY_STRING_AS_NULL;

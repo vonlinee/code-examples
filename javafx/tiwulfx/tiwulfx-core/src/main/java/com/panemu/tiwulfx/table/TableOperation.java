@@ -128,8 +128,8 @@ public abstract class TableOperation<R> {
             List<SortType> lstSortedType = new ArrayList<>();
 
             for (TableColumn<R, ?> tc : tblView.getTableView().getSortOrder()) {
-                if (tc instanceof BaseColumn) {
-                    lstSortedColumn.add(((BaseColumn) tc).getPropertyName());
+                if (tc instanceof CustomTableColumn) {
+                    lstSortedColumn.add(((CustomTableColumn) tc).getPropertyName());
                     lstSortedType.add(tc.getSortType());
                 } else if (tc != null && tc.getCellValueFactory() instanceof PropertyValueFactory) {
                     PropertyValueFactory valFactory = (PropertyValueFactory) tc.getCellValueFactory();
@@ -189,15 +189,15 @@ public abstract class TableOperation<R> {
      * Callback method designed to execute validation. This method is called
      * after user click Save button before calling {@link #update} and
      * {@link #insert}. By default, this method triggers
-     * {@link BaseColumn#validate} and returns Boolean.True
+     * {@link CustomTableColumn#validate} and returns Boolean.True
      * @param changedRecords changedRecords
      * @return false if there is invalid value
      */
     public boolean validate(TableControl<R> tbl, List<R> changedRecords) {
         boolean result = true;
         for (TableColumn clm : tbl.getLeafColumns()) {
-            if (clm instanceof BaseColumn) {
-                BaseColumn baseColumn = (BaseColumn) clm;
+            if (clm instanceof CustomTableColumn) {
+                CustomTableColumn baseColumn = (CustomTableColumn) clm;
                 for (R record : changedRecords) {
                     boolean isValid = baseColumn.validate(record);
                     if (!isValid) {

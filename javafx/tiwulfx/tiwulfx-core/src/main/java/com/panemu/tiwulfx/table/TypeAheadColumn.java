@@ -22,7 +22,7 @@ import java.util.Set;
 /**
  * @author amrullah
  */
-public class TypeAheadColumn<R, C> extends BaseColumn<R, C> {
+public class TypeAheadColumn<R, C> extends CustomTableColumn<R, C> {
     private final ObservableMap<String, C> itemMap = FXCollections.observableMap(new LinkedHashMap<>());
 
     private final TypeAheadField<C> searchInputControl = new TypeAheadField<>();

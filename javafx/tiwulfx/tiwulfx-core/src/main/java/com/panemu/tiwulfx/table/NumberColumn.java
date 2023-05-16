@@ -30,7 +30,7 @@ import java.util.List;
  * column for number
  * @author amrullah
  */
-public class NumberColumn<R, C extends Number> extends BaseColumn<R, C> {
+public class NumberColumn<R, C extends Number> extends CustomTableColumn<R, C> {
 
     private boolean grouping = true;
     private int maxLength = 10;

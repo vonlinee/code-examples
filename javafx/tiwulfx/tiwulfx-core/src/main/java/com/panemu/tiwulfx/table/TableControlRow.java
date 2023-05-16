@@ -111,8 +111,8 @@ public class TableControlRow<R> extends TableRow<R> {
     public void refreshLookupSiblings(String propertyName) {
         for (Node node : getChildrenUnmodifiable()) {
             TableCell cell = (TableCell) node;
-            if (cell.getTableColumn() instanceof BaseColumn) {
-                BaseColumn baseColumn = (BaseColumn) cell.getTableColumn();
+            if (cell.getTableColumn() instanceof CustomTableColumn) {
+                CustomTableColumn baseColumn = (CustomTableColumn) cell.getTableColumn();
                 if (baseColumn.getPropertyName().startsWith(propertyName) && !baseColumn.getPropertyName()
                         .equals(propertyName)) {
                     ObservableValue currentObservableValue = baseColumn.getCellObservableValue(cell.getIndex());
