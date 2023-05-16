@@ -43,7 +43,7 @@ public class FrmTstTickColumn extends Application {
 		tbl.setController(new TableOperation<Record>() {
 
 			@Override
-			public TableData<Record> loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
+			public <C> TableData<Record> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
 				List<Record> lst = new ArrayList<>();
 				for (int i = 0; i < 10; i++) {
 					lst.add(new Record());

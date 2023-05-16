@@ -81,7 +81,8 @@ public class FrmTextColumn extends VBox {
 //		lstColumns.add(new TextColumnPojo(new String(), new String(), new String()));
         tblTextColumn.setRecordClass(TextColumnPojo.class);
         tblTextColumn.setController(controller);
-        tblTextColumn.setVisibleComponents(false, TableControl.Component.FOOTER);
+
+        tblTextColumn.setFooterVisiablity(false);
     }
 
     private TableOperation<TextColumnPojo> controller = new TableOperation<TextColumnPojo>() {
