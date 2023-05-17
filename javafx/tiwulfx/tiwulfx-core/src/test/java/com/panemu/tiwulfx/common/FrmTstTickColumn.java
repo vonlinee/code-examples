@@ -51,7 +51,7 @@ public class FrmTstTickColumn extends Application {
 				return new TableData<>(lst, false, lst.size());
 			}
 		});
-		tbl.fillColumnsRecursively().add(clm);
+		tbl.getColumns().add(clm);
 		ToggleButton btn = new ToggleButton("Disable Tick");
 		clm.editableProperty().bind(btn.selectedProperty().not());
 		tbl.addNode(btn);

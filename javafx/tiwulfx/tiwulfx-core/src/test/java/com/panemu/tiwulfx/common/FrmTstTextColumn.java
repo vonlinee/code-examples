@@ -71,7 +71,7 @@ public class FrmTstTextColumn extends Application {
 		TableColumn<Record, String> clmOri = new TableColumn<>("Ori");
 		clmOri.setCellValueFactory(new PropertyValueFactory<>("name"));
 //		tbl.getColumns().addAll(clm, clm2);
-		tbl.fillColumnsRecursively().addAll(clm, clmCmb, clmOri);
+		tbl.getColumns().addAll(clm, clmCmb, clmOri);
 		tbl.reloadFirstPage();
 		tbl.setConfigurationID("FrmTstTextColumn");
 		StackPane root = new StackPane();

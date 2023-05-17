@@ -208,10 +208,10 @@ public class TableControlRow<R> extends TableRow<R> {
             }
         }
     };
-    private final ChangeListener<Boolean> agileChangeListener = new ChangeListener<Boolean>() {
+    private final ChangeListener<Boolean> agileChangeListener = new ChangeListener<>() {
         @Override
         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-            if (tableControl.modeProperty().get() == TableControl.Mode.READ) {
+            if (tableControl.getMode() == TableControl.Mode.READ) {
                 return;
             }
             if (tableControl.getSelectionModel().getSelectedIndex() == getIndex()) {
