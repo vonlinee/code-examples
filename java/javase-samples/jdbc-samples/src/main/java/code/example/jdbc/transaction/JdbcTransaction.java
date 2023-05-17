@@ -1,7 +1,6 @@
 package code.example.jdbc.transaction;
 
 import code.example.jdbc.utils.JdbcUtils;
-import com.mysql.jdbc.JDBC4Connection;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -16,12 +15,5 @@ public class JdbcTransaction {
         String sql = "";
         connection.setAutoCommit(false);
 
-        JDBC4Connection conn = (JDBC4Connection) connection;
-
-        try {
-            conn.commit();
-        } catch (Exception exception) {
-            conn.rollback();
-        }
     }
 }

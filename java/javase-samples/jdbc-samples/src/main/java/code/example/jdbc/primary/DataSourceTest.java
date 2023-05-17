@@ -7,7 +7,7 @@ public class DataSourceTest {
 
 	public static void main(String[] args) {
 		for (int i = 0; i < 10000; i++) {
-			new Thread(() -> method()).start();
+			new Thread(DataSourceTest::method).start();
 		}
 	}
 

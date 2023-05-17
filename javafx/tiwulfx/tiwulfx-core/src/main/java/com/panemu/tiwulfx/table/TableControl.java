@@ -1190,6 +1190,10 @@ public class TableControl<R> extends VBox {
         this.controller = controller;
     }
 
+    /**
+     * 初始化表的一列
+     * @param clm 列
+     */
     @SuppressWarnings("unchecked")
     private void initColumn(TableColumn<R, ?> clm) {
         List<TableColumn<R, ?>> lstColumn = new ArrayList<>();
