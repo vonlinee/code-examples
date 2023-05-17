@@ -50,7 +50,10 @@ public class TableControl<R> extends VBox {
      */
     public static int DEFAULT_TABLE_MAX_ROW = 500;
 
-    private final CustomTableView<R> tblView = new CustomTableView<>();
+    /**
+     * JavaFX TableView
+     */
+    private final CustomTableView<R> tblView;
     private PaginationControl paginationControl;
 
     private TableToolBar tableToolBar;
@@ -64,6 +67,10 @@ public class TableControl<R> extends VBox {
 
     private Class<R> recordClass;
     private boolean reloadOnCriteriaChange = true;
+
+    /**
+     * 编辑模式
+     */
     private boolean directEdit = false;
     private boolean fitColumnAfterReload = false;
     private long totalRows = 0;
@@ -71,9 +78,10 @@ public class TableControl<R> extends VBox {
     private int lastColumnIndex = 0;
 
     /**
-     * Table Columns
+     * 接管JavaFX TableView的列，后续所有操作直接操作此值，不通过
+     * tblView.getColumns操作
      */
-    private final ObservableList<TableColumn<R, ?>> columns = tblView.getColumns();
+    private final ObservableList<TableColumn<R, ?>> columns;
 
     private final TableControlService service = new TableControlService();
 
@@ -114,11 +122,45 @@ public class TableControl<R> extends VBox {
     }
 
     public TableControl(Class<R> recordClass) {
+
+        this.tblView = new CustomTableView<>();
+        this.columns = tblView.getColumns();
+
         this.recordClass = recordClass;
         this.getStyleClass().add("table-control");
 
         initControls();
 
+        initializeJavaFXTableView();
+
+        mode.addListener((ov, t, t1) -> {
+            if (t1 == Mode.READ) {
+                directEdit = false;
+            }
+        });
+
+        cm = new ContextMenu();
+        createCopyCellMenuItem();
+        cm.setAutoHide(true);
+        setToolTips();
+
+        columns.addListener(new ListChangeListener<>() {
+            @Override
+            public void onChanged(ListChangeListener.Change<? extends TableColumn<R, ?>> change) {
+                while (change.next()) {
+                    if (change.wasAdded()) {
+                        for (TableColumn<R, ?> column : change.getAddedSubList()) {
+                            initColumn(column);
+                        }
+                    }
+                    lastColumnIndex = getLeafColumns().size() - 1;
+                }
+            }
+        });
+        attachWindowVisibilityListener();
+    }
+
+    private void initializeJavaFXTableView() {
         // 表格任一列的顺序改变后重新加载数据
         tblView.getSortOrder().addListener((ListChangeListener<TableColumn<R, ?>>) change -> {
             if (stageShown) {
@@ -129,11 +171,7 @@ public class TableControl<R> extends VBox {
 
         tblView.editableProperty().bind(mode.isNotEqualTo(Mode.READ));
         tblView.getSelectionModel().cellSelectionEnabledProperty().bind(tblView.editableProperty());
-        mode.addListener((ov, t, t1) -> {
-            if (t1 == Mode.READ) {
-                directEdit = false;
-            }
-        });
+
 
         // 更新行号
         tblView.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -161,35 +199,13 @@ public class TableControl<R> extends VBox {
                 getController().doubleClick(TableViewHelper.getSelectedItem(tblView));
             }
         });
-
         // Define policy for TAB key press
         tblView.addEventFilter(KeyEvent.KEY_PRESSED, tableKeyListener);
         // In INSERT mode, only inserted row that is focusable
         tblView.getFocusModel().focusedCellProperty().addListener(tableFocusListener);
-
         tblView.setOnMouseReleased(tableRightClickListener);
-
-        cm = new ContextMenu();
-        createCopyCellMenuItem();
-        cm.setAutoHide(true);
-        setToolTips();
         // create custom row factory that can intercept double click on grid row
         tblView.setRowFactory(param -> new TableControlRow<>(TableControl.this));
-
-        columns.addListener(new ListChangeListener<>() {
-            @Override
-            public void onChanged(ListChangeListener.Change<? extends TableColumn<R, ?>> change) {
-                while (change.next()) {
-                    if (change.wasAdded()) {
-                        for (TableColumn<R, ?> column : change.getAddedSubList()) {
-                            initColumn(column);
-                        }
-                    }
-                    lastColumnIndex = getLeafColumns().size() - 1;
-                }
-            }
-        });
-        attachWindowVisibilityListener();
     }
 
     TablePaneFooter footer;
@@ -578,6 +594,21 @@ public class TableControl<R> extends VBox {
 
     public BooleanProperty agileEditingProperty() {
         return agileEditing;
+    }
+
+
+    static class TableKeyHandler implements EventHandler<KeyEvent> {
+
+        final TableControl<?> tableControl;
+
+        public TableKeyHandler(TableControl<?> tableControl) {
+            this.tableControl = tableControl;
+        }
+
+        @Override
+        public void handle(KeyEvent event) {
+
+        }
     }
 
     /**
@@ -1221,13 +1252,13 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-<<<<<<< HEAD
+     * <<<<<<< HEAD
      * 初始化表的一列
      * @param clm 列
-=======
-     * 初始化表格的某一列
+     *            =======
+     *            初始化表格的某一列
      * @param clm TableColumn
->>>>>>> 37d5b15bf993fbde274881f18619d1ee23e4955f
+     *            >>>>>>> 37d5b15bf993fbde274881f18619d1ee23e4955f
      */
     @SuppressWarnings("unchecked")
     private void initColumn(TableColumn<R, ?> clm) {
@@ -1355,8 +1386,7 @@ public class TableControl<R> extends VBox {
         lstColumns = getColumnsRecursively(lstColumns);
         for (TableColumn<R, ?> clm : lstColumns) {
             if (clm instanceof CustomTableColumn) {
-                @SuppressWarnings("unchecked")
-                CustomTableColumn<R, ?> customColumn = (CustomTableColumn<R, ?>) clm;
+                @SuppressWarnings("unchecked") CustomTableColumn<R, ?> customColumn = (CustomTableColumn<R, ?>) clm;
                 if (customColumn.getTableCriteria() != null) {
                     final TableCriteria<?> tableCriteria = customColumn.getTableCriteria();
                     lstCriteria.add(tableCriteria);
@@ -1788,6 +1818,9 @@ public class TableControl<R> extends VBox {
         return controller.isRecordEditable(item);
     }
 
+    /**
+     * TODO 明确此变量的含义
+     */
     private boolean resettingRecords = false;
 
     /**

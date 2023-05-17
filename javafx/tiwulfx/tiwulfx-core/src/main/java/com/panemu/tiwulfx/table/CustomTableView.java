@@ -5,6 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+/**
+ * 封装JavaFX TableView
+ * @param <R>
+ */
 public class CustomTableView<R> extends TableView<R> {
 
     private TableColumn<R, ?> selectedColumn;
