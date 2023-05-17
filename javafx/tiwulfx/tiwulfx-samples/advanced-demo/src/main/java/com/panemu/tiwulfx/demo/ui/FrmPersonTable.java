@@ -113,7 +113,7 @@ public class FrmPersonTable extends VBox {
         clmVisit.addEditCommitListener(new EditCommitListener<Person, Integer>() {
 
             @Override
-            public void editCommited(BaseColumn<Person, Integer> column, Person record, Integer oldValue, Integer newValue) {
+            public void editCommited(CustomTableColumn<Person, Integer> column, Person record, Integer oldValue, Integer newValue) {
                 // This will update the progress bar
                 System.out.println("visit: " + record.getVisit());
                 tblPerson.refresh(record);

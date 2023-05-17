@@ -25,7 +25,7 @@ import javafx.util.StringConverter;
  *
  * @author amrullah
  */
-public class LocalDateColumn<R> extends BaseColumn<R, LocalDate> {
+public class LocalDateColumn<R> extends CustomTableColumn<R, LocalDate> {
 
 	private DatePicker searchInputControl = new DatePicker();
 	private SearchMenuItemBase<LocalDate> searchMenuItem = new SearchMenuItemBase<LocalDate>(this) {

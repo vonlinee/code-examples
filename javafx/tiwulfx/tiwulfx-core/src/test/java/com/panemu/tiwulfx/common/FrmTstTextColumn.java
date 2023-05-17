@@ -48,14 +48,14 @@ public class FrmTstTextColumn extends Application {
 		for (int i = 0; i < 15; i++) {
 			clmCmb.addItem("OPTION " + i, "option" + i);
 		}
-		tbl.setController(new TableOperation<Record>() {
+		tbl.setController(new TableOperation<>() {
 
 			@Override
-			public TableData<Record> loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
+			public <C> TableData<Record> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
 				List<Record> lst = new ArrayList<>();
-				
+
 				for (int i = 0; i < 3; i++) {
-					lst.add(new Record("Name " + i +"\nLorem ipsum dolor sit amet", "option" + i));
+					lst.add(new Record("Name " + i + "\nLorem ipsum dolor sit amet", "option" + i));
 					clmCmb.addItem("OPTION " + i, "option" + i);
 				}
 				return new TableData<>(lst, false, lst.size());
@@ -65,7 +65,7 @@ public class FrmTstTextColumn extends Application {
 			public List<Record> update(List<Record> records) {
 				return records;
 			}
-			
+
 		});
 		
 		TableColumn<Record, String> clmOri = new TableColumn<>("Ori");

@@ -116,7 +116,7 @@ public class FrmData extends StackPane {
 	private class CntlRecord extends TableOperation<RecordPojo> {
 
 		@Override
-		public TableData<RecordPojo> loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
+		public TableData<RecordPojo> loadData(int startIndex, List<TableCriteria<?>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
 			RecordPojo person = new RecordPojo();
 			person.setId(1);
 			person.setName("Allie Mckenzie");

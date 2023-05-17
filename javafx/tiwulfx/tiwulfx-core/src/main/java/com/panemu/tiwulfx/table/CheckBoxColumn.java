@@ -23,7 +23,7 @@ import javafx.util.StringConverter;
  *
  * @author amrullah
  */
-public class CheckBoxColumn<R> extends BaseColumn<R, Boolean> {
+public class CheckBoxColumn<R> extends CustomTableColumn<R, Boolean> {
 
 	private CheckBox searchInputControl;
 	private SearchMenuItemBase<Boolean> searchMenuItem;

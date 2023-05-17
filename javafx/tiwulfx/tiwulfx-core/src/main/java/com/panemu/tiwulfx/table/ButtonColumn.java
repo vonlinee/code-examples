@@ -8,7 +8,7 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
 import javafx.util.StringConverter;
 
-public class ButtonColumn<R> extends BaseColumn<R, String> {
+public class ButtonColumn<R> extends CustomTableColumn<R, String> {
 
     public ButtonColumn(String propertyName) {
         this(propertyName, 100);

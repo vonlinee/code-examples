@@ -1,13 +1,9 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.common;
 
 import java.io.Serializable;
 
 /**
- * @author amrullah
+ * @param <T> 列数据类型
  */
 public class TableCriteria<T> implements Serializable {
 

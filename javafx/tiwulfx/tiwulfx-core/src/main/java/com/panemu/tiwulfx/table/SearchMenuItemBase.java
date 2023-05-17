@@ -35,7 +35,7 @@ public abstract class SearchMenuItemBase<C> extends SeparatorMenuItem {
 
     private final ChoiceBox<TableCriteria.Operator> operatorChoice = new ChoiceBox<>();
     private TableCriteria<C> searchCriteria;
-    private BaseColumn column;
+    private CustomTableColumn column;
     private Button btnRemove = new Button(TiwulFXUtil.getString("remove.filter"));
 
     protected abstract Node getInputControl();
@@ -63,7 +63,7 @@ public abstract class SearchMenuItemBase<C> extends SeparatorMenuItem {
         }
     };
 
-    public SearchMenuItemBase(final BaseColumn column) {
+    public SearchMenuItemBase(final CustomTableColumn column) {
         this.column = column;
         setHideOnClick(false);
         operatorChoice.setConverter(operatorConverter);

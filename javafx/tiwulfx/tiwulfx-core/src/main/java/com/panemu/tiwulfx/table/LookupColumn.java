@@ -22,7 +22,7 @@ import java.util.Map;
  *
  * @author Amrullah 
  */
-public class LookupColumn<R, C> extends BaseColumn<R, C> {
+public class LookupColumn<R, C> extends CustomTableColumn<R, C> {
 
 	private TextField searchInputControl;
 	private SearchMenuItemBase<C> searchMenuItem;

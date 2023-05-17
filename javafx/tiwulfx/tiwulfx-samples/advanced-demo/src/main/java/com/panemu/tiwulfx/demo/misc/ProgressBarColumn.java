@@ -4,7 +4,7 @@
  */
 package com.panemu.tiwulfx.demo.misc;
 
-import com.panemu.tiwulfx.table.BaseColumn;
+import com.panemu.tiwulfx.table.CustomTableColumn;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ContentDisplay;
@@ -17,7 +17,7 @@ import javafx.util.Callback;
  *
  * @author Amrullah <amrullah@panemu.com>
  */
-public class ProgressBarColumn<S, T extends Number> extends BaseColumn<S, T> {
+public class ProgressBarColumn<S, T extends Number> extends CustomTableColumn<S, T> {
 
     public ProgressBarColumn(String propertyName) {
         this(propertyName, 100);
