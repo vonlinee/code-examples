@@ -29,7 +29,7 @@ import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TableData;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableOperation;
+import com.panemu.tiwulfx.table.TableBehaviourBase;
 import com.panemu.tiwulfx.table.TextColumn;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -85,7 +85,7 @@ public class FrmTextColumn extends VBox {
         tblTextColumn.setFooterVisibility(false);
     }
 
-    private TableOperation<TextColumnPojo> controller = new TableOperation<TextColumnPojo>() {
+    private TableBehaviourBase<TextColumnPojo> controller = new TableBehaviourBase<TextColumnPojo>() {
         @Override
         public <C> TableData<TextColumnPojo> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
             return new TableData<>(lstColumns, false, lstColumns.size());

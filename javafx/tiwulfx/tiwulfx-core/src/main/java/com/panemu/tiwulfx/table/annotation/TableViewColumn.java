@@ -20,5 +20,11 @@ public @interface TableViewColumn {
      * max height
      * @return max height
      */
-    double maxHeight() default -1;
+    double maxHeight() default -1.0;
+
+    /**
+     * pref width
+     * @return pref width
+     */
+    double prefWidth() default -1.0;
 }

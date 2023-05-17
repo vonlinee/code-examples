@@ -128,7 +128,7 @@ public class FrmPerson extends StackPane implements Initializable {
         System.out.println(this);
     }
 
-    private static class CntlPerson extends TableOperation<Person> {
+    private static class CntlPerson extends TableBehaviourBase<Person> {
 
         private final DaoBase<Person> dao = new DaoBase<>(Person.class);
 

@@ -16,9 +16,7 @@ public class MainApp1 extends Application {
         DataGenerator.createWithTestData(1000);
         TiwulFXUtil.addLiteralBundle("tiwulfx.samples.shared.translation");
 
-        TableControl<Person> table = new TableControl<>();
-
-        table.getColumns().add(new TableColumn<>("name"));
+        TableControl<Person> table = new TableControl<>(Person.class);
 
         Scene scene = new Scene(table);
         TiwulFXUtil.setTiwulFXStyleSheet(scene);

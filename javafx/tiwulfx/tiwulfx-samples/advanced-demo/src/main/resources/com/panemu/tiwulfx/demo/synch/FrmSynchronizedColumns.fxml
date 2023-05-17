@@ -11,11 +11,11 @@
 	<children>
       <TextArea editable="false" prefRowCount="2" prefWidth="200.0" text="This form is an example of synchronized TypeAheadColumns. The options in the Country column depends on selected Continent. The options in Province columns depends on selected Country." wrapText="true" VBox.vgrow="NEVER" />
 		<TableControl fx:id="tblSynchColumn" agileEditing="true" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-			<columns>
+			<fillColumnsRecursivly>
 				<TypeAheadColumn fx:id="clmContinent" prefWidth="150.0" propertyName="continent" text="%continent" />
 				<TypeAheadColumn fx:id="clmCountry" prefWidth="150.0" propertyName="country" text="%country" />
 				<TypeAheadColumn fx:id="clmProvince" prefWidth="250.0" propertyName="province" text="%province" />
-			</columns>
+			</fillColumnsRecursivly>
 		</TableControl>
 	</children>
 </fx:root>

@@ -6,6 +6,7 @@ import com.panemu.tiwulfx.common.TableData;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.dialog.MessageDialog;
 import com.panemu.tiwulfx.dialog.MessageDialogBuilder;
+import com.panemu.tiwulfx.utils.ClassUtils;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.SortType;
@@ -13,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,7 +24,14 @@ import java.util.List;
  * {@link TableControl}
  * @author amrullah
  */
-public abstract class TableOperation<R> {
+public abstract class TableBehaviourBase<R> {
+
+    public R newItem(Class<R> recordType) {
+        if (recordType != null) {
+            return ClassUtils.newInstance(recordType);
+        }
+        return null;
+    }
 
     /**
      * Method that will be called from TableControl {@link TableControl#reload() reload} method to retrieve data.
@@ -33,7 +42,9 @@ public abstract class TableOperation<R> {
      * @param maxResult       max records to retrieve. Used for pagination.
      * @return table data, the list of record object
      */
-    public abstract <C> TableData<R> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<SortType> sortingOrders, int maxResult);
+    public <C> TableData<R> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<SortType> sortingOrders, int maxResult) {
+        return new TableData<>(Collections.emptyList(), false, 0);
+    }
 
     /**
      * Override this method to implement insert routine. This method is called
@@ -42,7 +53,7 @@ public abstract class TableOperation<R> {
      * @return
      */
     public List<R> insert(List<R> newRecords) {
-        throw new UnsupportedOperationException("Insert method is not supported");
+        return newRecords;
     }
 
     /**
@@ -52,7 +63,7 @@ public abstract class TableOperation<R> {
      * version number should increase by 1
      */
     public List<R> update(List<R> records) {
-        throw new UnsupportedOperationException("Update method is not supported");
+        return records;
     }
 
     /**
@@ -60,7 +71,7 @@ public abstract class TableOperation<R> {
      * @param records records
      */
     public void delete(List<R> records) {
-        throw new UnsupportedOperationException("delete method is not supported");
+
     }
 
     /**

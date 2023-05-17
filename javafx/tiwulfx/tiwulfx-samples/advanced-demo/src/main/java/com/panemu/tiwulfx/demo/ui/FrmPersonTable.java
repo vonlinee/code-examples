@@ -98,7 +98,7 @@ public class FrmPersonTable extends VBox {
         ProgressBarColumn<Person, Integer> clmProgress = new ProgressBarColumn<>("visit");
         clmProgress.setEditable(false);
         clmProgress.setMax(5000);
-        tblPerson.getColumns().add(9, clmProgress);
+        tblPerson.fillColumnsRecursively().add(9, clmProgress);
         MenuItem ctxMenu = new MenuItem("Get Ticked");
         ctxMenu.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -161,7 +161,7 @@ public class FrmPersonTable extends VBox {
         this.tblPerson.reloadFirstPage();
     }
 
-    private TableOperation<Person> controller = new TableOperation<Person>() {
+    private TableBehaviourBase<Person> controller = new TableBehaviourBase<Person>() {
 
         private DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
 

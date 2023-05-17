@@ -91,19 +91,22 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
      * @param prefWidth    preferred column width
      */
     public CustomTableColumn(String propertyName, double prefWidth) {
-        this(propertyName, prefWidth, TiwulFXUtil.getString(propertyName));
+        this(propertyName, TiwulFXUtil.getString(propertyName));
+        setPrefWidth(prefWidth);
+    }
+
+    public CustomTableColumn(String propertyName) {
+        this(propertyName, TiwulFXUtil.getString(propertyName));
     }
 
     /**
      * @param propertyName java bean property name to be used for get/set method
      *                     using introspection
-     * @param prefWidth    preferred column width
      * @param columnHeader column header text. Default equals propertyName. This
      *                     text is localized
      */
-    public CustomTableColumn(String propertyName, double prefWidth, String columnHeader) {
+    public CustomTableColumn(String propertyName, String columnHeader) {
         super(columnHeader);
-        setPrefWidth(prefWidth);
         this.propertyName = propertyName;
 //        setCellValueFactory(new PropertyValueFactory<S, T>(propertyName));
         tableCriteria.addListener(new InvalidationListener() {

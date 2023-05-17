@@ -98,9 +98,9 @@ public class MainApp extends Application {
 			@Override
 			protected void initCallback(VBox container, TableControl<Option> table) {
 				super.initCallback(container, table);
-				table.getColumns().get(0).setText("Value");
-				table.getColumns().get(1).setText("Label");
-				table.getColumns().get(1).setPrefWidth(300);
+				table.fillColumnsRecursively().get(0).setText("Value");
+				table.fillColumnsRecursively().get(1).setText("Label");
+				table.fillColumnsRecursively().get(1).setPrefWidth(300);
 			}
 			
 			

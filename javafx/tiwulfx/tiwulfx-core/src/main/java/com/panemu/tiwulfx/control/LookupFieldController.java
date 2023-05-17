@@ -238,7 +238,7 @@ public abstract class LookupFieldController<T> {
      */
     protected abstract <C> TableData<T> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<SortType> sortingTypes, int maxResult);
 
-    private class LookupTableController extends TableOperation<T> {
+    private class LookupTableController extends TableBehaviourBase<T> {
 
         @Override
         public <C> TableData<T> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<SortType> sortingTypes, int maxResult) {

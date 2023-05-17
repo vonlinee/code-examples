@@ -24,12 +24,12 @@
                </padding>
             </HBox>
       		<TableControl fx:id="tblData">
-      			<columns>
+      			<fillColumnsRecursivly>
       				<NumberColumn fx:id="clmId" numberType="java.lang.Integer" prefWidth="75.0" propertyName="id" text="ID" />
       				<TextColumn prefWidth="150.0" propertyName="name" text="Name" />
       				<TextColumn prefWidth="250.0" propertyName="email" text="Email" />
       				
-      			</columns>
+      			</fillColumnsRecursivly>
       		</TableControl>
          </children>
       </VBox>

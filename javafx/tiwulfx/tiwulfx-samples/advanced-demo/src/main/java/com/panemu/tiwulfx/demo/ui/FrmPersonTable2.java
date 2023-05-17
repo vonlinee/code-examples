@@ -144,7 +144,7 @@ public class FrmPersonTable2 extends VBox {
         txtInformation.setText("This form provide an implementation example of editing or inserting records in a separate form.");
     }
 
-    private final TableOperation<Person> controller = new TableOperation<>() {
+    private final TableBehaviourBase<Person> controller = new TableBehaviourBase<>() {
 
         private final DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
         private Stage dialogStage;// = new Stage();

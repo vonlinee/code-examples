@@ -31,7 +31,7 @@ import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.table.DateColumn;
 import com.panemu.tiwulfx.table.LocalDateColumn;
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableOperation;
+import com.panemu.tiwulfx.table.TableBehaviourBase;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
@@ -94,7 +94,7 @@ public class FrmDateColumn extends VBox {
         tblDate.setController(controller);
     }
 
-    private TableOperation<DatePojo> controller = new TableOperation<DatePojo>() {
+    private TableBehaviourBase<DatePojo> controller = new TableBehaviourBase<DatePojo>() {
 
         @Override
         public <C> TableData<DatePojo> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {

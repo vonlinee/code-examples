@@ -25,6 +25,8 @@
  */
 package tiwulfx.samples.shared.pojo;
 
+import com.panemu.tiwulfx.table.annotation.TableViewColumn;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -38,17 +40,24 @@ import java.util.Date;
         @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p")})
 public class Person implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
+
+    /**
+     * ID
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableViewColumn(name = "ID")
     @Column(name = "id", unique = true, nullable = false)
-
     private Integer id;
+
     @Column(name = "alive")
     private Boolean alive;
     @Column(name = "birth_date")
+    @TableViewColumn(name = "生日")
     @Temporal(TemporalType.DATE)
     private Date birthDate;
     @Column(name = "birth_place")
+    @TableViewColumn(name = "出生地")
     private String birthPlace;
     @Column(name = "email", nullable = false, unique = true)
     private String email;

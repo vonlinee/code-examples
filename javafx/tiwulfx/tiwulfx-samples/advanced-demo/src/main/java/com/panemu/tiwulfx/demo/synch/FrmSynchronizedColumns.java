@@ -30,7 +30,7 @@ import com.panemu.tiwulfx.common.TableData;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.table.CellEditorListener;
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableOperation;
+import com.panemu.tiwulfx.table.TableBehaviourBase;
 import com.panemu.tiwulfx.table.TypeAheadColumn;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -178,7 +178,7 @@ public class FrmSynchronizedColumns extends VBox {
 		tblSynchColumn.reloadFirstPage();
 	}
 	
-	private TableOperation<SynchColumnPojo> controller = new TableOperation<>() {
+	private TableBehaviourBase<SynchColumnPojo> controller = new TableBehaviourBase<>() {
 		@Override
 		public <C> TableData<SynchColumnPojo> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
 			return new TableData<>(lstColumns, false, lstColumns.size());

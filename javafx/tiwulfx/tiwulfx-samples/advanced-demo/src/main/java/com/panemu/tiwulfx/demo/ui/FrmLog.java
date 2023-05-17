@@ -168,7 +168,7 @@ public class FrmLog extends VBox {
         tblPerson.reloadFirstPage();
     }
 
-    private TableOperation<Person> controller = new TableOperation<Person>() {
+    private TableBehaviourBase<Person> controller = new TableBehaviourBase<Person>() {
 
         private DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
 

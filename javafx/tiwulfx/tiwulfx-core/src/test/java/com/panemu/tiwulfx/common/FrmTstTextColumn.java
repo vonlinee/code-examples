@@ -19,7 +19,7 @@
 package com.panemu.tiwulfx.common;
 
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableOperation;
+import com.panemu.tiwulfx.table.TableBehaviourBase;
 import com.panemu.tiwulfx.table.TextColumn;
 import com.panemu.tiwulfx.table.TypeAheadColumn;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class FrmTstTextColumn extends Application {
 		for (int i = 0; i < 15; i++) {
 			clmCmb.addItem("OPTION " + i, "option" + i);
 		}
-		tbl.setController(new TableOperation<>() {
+		tbl.setController(new TableBehaviourBase<>() {
 
 			@Override
 			public <C> TableData<Record> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
@@ -71,7 +71,7 @@ public class FrmTstTextColumn extends Application {
 		TableColumn<Record, String> clmOri = new TableColumn<>("Ori");
 		clmOri.setCellValueFactory(new PropertyValueFactory<>("name"));
 //		tbl.getColumns().addAll(clm, clm2);
-		tbl.getColumns().addAll(clm, clmCmb, clmOri);
+		tbl.fillColumnsRecursively().addAll(clm, clmCmb, clmOri);
 		tbl.reloadFirstPage();
 		tbl.setConfigurationID("FrmTstTextColumn");
 		StackPane root = new StackPane();

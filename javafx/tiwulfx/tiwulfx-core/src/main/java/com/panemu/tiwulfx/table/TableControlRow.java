@@ -8,12 +8,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WeakChangeListener;
 import javafx.css.PseudoClass;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 
 import java.lang.reflect.Method;
 import java.util.logging.Level;
@@ -26,24 +24,21 @@ import java.util.logging.Logger;
 public class TableControlRow<R> extends TableRow<R> {
 
     private boolean selected;
-    private final TableControl<R> tblView;
+    private final TableControl<R> tableControl;
     private static final PseudoClass PSEUDO_CLASS_CHANGED = PseudoClass.getPseudoClass("changed");
     private final Logger logger = Logger.getLogger(TableRow.class.getName());
 
     public TableControlRow(final TableControl<R> tblView) {
         super();
         this.setAlignment(Pos.CENTER_LEFT);
-        this.tblView = tblView;
+        this.tableControl = tblView;
         attachScrollListener();
-        this.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (event.getButton().equals(MouseButton.PRIMARY)
-                        && event.getClickCount() == 2
-                        && TableControlRow.this.getIndex() < tblView.getRecords().size()) {
-                    Object selectedItem = tblView.getSelectionModel().getSelectedItem();
-                    tblView.getController().doubleClick((R) selectedItem);
-                }
+        this.setOnMouseClicked(event -> {
+            if (event.getButton().equals(MouseButton.PRIMARY)
+                    && event.getClickCount() == 2
+                    && TableControlRow.this.getIndex() < tblView.getRecords().size()) {
+                Object selectedItem = tblView.getSelectionModel().getSelectedItem();
+                tblView.getController().doubleClick((R) selectedItem);
             }
         });
 
@@ -69,23 +64,23 @@ public class TableControlRow<R> extends TableRow<R> {
      */
     private void attachScrollListener() {
         this.itemProperty().addListener((ObservableValue<? extends R> observable, R oldValue, R newValue) -> {
-            pseudoClassStateChanged(PSEUDO_CLASS_CHANGED, tblView.getChangedRecords()
+            pseudoClassStateChanged(PSEUDO_CLASS_CHANGED, tableControl.getChangedRecords()
                     .contains(TableControlRow.this.getItem()));
-            if (tblView.getMode() == TableControl.Mode.READ || !tblView.isAgileEditing()) {
+            if (tableControl.getMode() == TableControl.Mode.READ || !tableControl.isAgileEditing()) {
                 return;
             }
             // The previously selected row might have different row Index after it is scrolled back.
             if (selected) {
-                selected = newValue == tblView.getSelectionModel().getSelectedItem();
-                if (selected && tblView.isRecordEditable(getItem())) {
+                selected = newValue == tableControl.getSelectionModel().getSelectedItem();
+                if (selected && tableControl.isRecordEditable(getItem())) {
                     setCellContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 } else {
                     setCellContentDisplay(ContentDisplay.TEXT_ONLY);
                 }
 
-            } else if (newValue == tblView.getSelectionModel().getSelectedItem()) {
+            } else if (newValue == tableControl.getSelectionModel().getSelectedItem()) {
                 selected = true;
-                if (tblView.isRecordEditable(getItem())) {
+                if (tableControl.isRecordEditable(getItem())) {
                     setCellContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 }
             }
@@ -159,7 +154,7 @@ public class TableControlRow<R> extends TableRow<R> {
     private ChangeListener<TablePosition<R, ?>> editingCellListener = new ChangeListener<TablePosition<R, ?>>() {
         @Override
         public void changed(ObservableValue<? extends TablePosition<R, ?>> observable, TablePosition<R, ?> oldValue, TablePosition<R, ?> newValue) {
-            if ((newValue == null || newValue.getRow() == -1) && !tblView.isAgileEditing()) {
+            if ((newValue == null || newValue.getRow() == -1) && !tableControl.isAgileEditing()) {
                 setCellContentDisplay(ContentDisplay.TEXT_ONLY);
             }
         }
@@ -172,7 +167,7 @@ public class TableControlRow<R> extends TableRow<R> {
         @Override
         public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
             int idx = getIndex();
-            if (!tblView.getTableView().isEditable() || (!t.equals(idx) && !t1.equals(idx))) {
+            if (!tableControl.getTableView().isEditable() || (!t.equals(idx) && !t1.equals(idx))) {
                 return; //nothing to do with me (i am a TableRowControl instance)
             }
             /**
@@ -183,11 +178,11 @@ public class TableControlRow<R> extends TableRow<R> {
              */
             boolean isRecordEditable = true;
             if (!selected) {
-                isRecordEditable = tblView.isRecordEditable(getItem());
+                isRecordEditable = tableControl.isRecordEditable(getItem());
                 TableControlRow.this.setEditable(isRecordEditable);
             }
 
-            if (tblView.isAgileEditing()) {
+            if (tableControl.isAgileEditing()) {
                 if (t.equals(getIndex()) && selected) {
                     setCellContentDisplay(ContentDisplay.TEXT_ONLY);
                     selected = false;
@@ -216,13 +211,13 @@ public class TableControlRow<R> extends TableRow<R> {
     private final ChangeListener<Boolean> agileChangeListener = new ChangeListener<Boolean>() {
         @Override
         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-            if (tblView.modeProperty().get() == TableControl.Mode.READ) {
+            if (tableControl.modeProperty().get() == TableControl.Mode.READ) {
                 return;
             }
-            if (tblView.getSelectionModel().getSelectedIndex() == getIndex()) {
+            if (tableControl.getSelectionModel().getSelectedIndex() == getIndex()) {
                 if (newValue) {
                     selected = true;
-                    if (tblView.isRecordEditable(getItem())) {
+                    if (tableControl.isRecordEditable(getItem())) {
                         setCellContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                     }
                 } else {

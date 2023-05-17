@@ -12,14 +12,14 @@
   <children>
       <TextArea editable="false" prefRowCount="2" prefWidth="200.0" text="Usage of LocalDateColumn for java.time.LocalDate and DateColumn for java.util.Date. Press Up or Down keyboard arrow to change date, Ctrl Up/Down to change month, Ctrl + Shift + Up/Down to change year. Also the footer of this table is hidden." wrapText="true" VBox.vgrow="NEVER" />
     <TableControl fx:id="tblDate" agileEditing="true" configurationID="date-form-example" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-      <columns>
+      <fillColumnsRecursivly>
         <DateColumn prefWidth="100" propertyName="dateDefault" text="%dateDefault" />
         <LocalDateColumn prefWidth="125" propertyName="localDateDefault" text="%localDateDefault" />
         <DateColumn fx:id="clmDateYYYYMMDD" prefWidth="125" propertyName="date_yyyyMMdd" text="%date_yyyyMMdd" />
         <LocalDateColumn fx:id="clmLocalDateYYYYMMDD" prefWidth="150" propertyName="localDate_yyyyMMdd" text="%localDate_yyyyMMdd" />
         <DateColumn fx:id="clmDateDDMMYYYY" prefWidth="150" propertyName="date_ddMMyyyy" text="%date_ddMMyyyy" />
         <LocalDateColumn fx:id="clmLocalDateDDMMYYYY" prefWidth="150" propertyName="localDate_ddMMyyyy" text="%localDate_ddMMyyyy" />
-      </columns>
+      </fillColumnsRecursivly>
     </TableControl>
   </children>
 </fx:root>

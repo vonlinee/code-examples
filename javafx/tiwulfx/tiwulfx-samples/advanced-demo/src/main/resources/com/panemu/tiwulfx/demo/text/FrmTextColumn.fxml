@@ -11,11 +11,11 @@
 	<children>
       <TextArea editable="false" prefRowCount="2" prefWidth="200.0" text="TextColumn provides a convenience way to limit maximum characters length and to auto capitalize entered text. Also the footer of this table is hidden." wrapText="true" />
 		<TableControl fx:id="tblTextColumn" agileEditing="true" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-			<columns>
+			<fillColumnsRecursivly>
 				<TextColumn fx:id="clmMaxLength" prefWidth="150.0" propertyName="maxLength" text="%maxLength" />
 				<TextColumn fx:id="clmCapitalize" prefWidth="150.0" propertyName="capitalize" text="%capitalize" />
 				<TextColumn fx:id="clmMaxCapitalize" prefWidth="250.0" propertyName="maxCapitalize" text="%maxCapitalize" />
-			</columns>
+			</fillColumnsRecursivly>
 		</TableControl>
 	</children>
 </fx:root>

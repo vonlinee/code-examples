@@ -8,7 +8,7 @@
          xmlns:fx="http://javafx.com/fxml/1">
   <TextArea fx:id="txtInformation" editable="false" prefRowCount="2" prefWidth="200.0" wrapText="true"/>
   <TableControl fx:id="tblPerson" agileEditing="true" VBox.vgrow="ALWAYS">
-    <columns>
+    <fillColumnsRecursivly>
       <TickColumn fx:id="clmTick"/>
       <TextColumn fx:id="clmName" prefWidth="150.0" propertyName="name" required="true" text="%name"/>
       <TextColumn fx:id="clmEmail" prefWidth="250.0" propertyName="email" required="true" text="%email"/>
@@ -33,6 +33,6 @@
       <NumberColumn fx:id="clmVisit" prefWidth="75.0" propertyName="visit" text="%visit"/>
       <NumberColumn alignment="CENTER" prefWidth="75.0" propertyName="weight" text="%weight"/>
       <NumberColumn fx:id="clmVersion" editable="false" prefWidth="50.0" propertyName="version" text="%version"/>
-    </columns>
+    </fillColumnsRecursivly>
   </TableControl>
 </fx:root>

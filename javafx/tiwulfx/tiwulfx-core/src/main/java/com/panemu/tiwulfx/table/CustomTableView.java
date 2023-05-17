@@ -3,6 +3,7 @@ package com.panemu.tiwulfx.table;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 
 /**
@@ -43,5 +44,21 @@ public class CustomTableView<R> extends TableView<R> {
             columns.add((CustomTableColumn<R, C>) column);
         }
         return columns;
+    }
+
+    public final int getSelectedIndex() {
+        return getSelectionModel().getSelectedIndex();
+    }
+
+    public final void clearSelection() {
+        getSelectionModel().clearSelection();
+    }
+
+    public final void edit(TablePosition newValue) {
+        edit(newValue.getRow(), newValue.getTableColumn());
+    }
+
+    public final boolean hasSelectedCells() {
+        return !getSelectionModel().getSelectedCells().isEmpty();
     }
 }

@@ -19,7 +19,7 @@
 package com.panemu.tiwulfx.common;
 
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableOperation;
+import com.panemu.tiwulfx.table.TableBehaviourBase;
 import com.panemu.tiwulfx.table.TickColumn;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class FrmTstTickColumn extends Application {
 	public void start(Stage primaryStage) {
 		TableControl<Record> tbl = new TableControl<>(Record.class);
 		TickColumn<Record> clm = new TickColumn<>();
-		tbl.setController(new TableOperation<Record>() {
+		tbl.setController(new TableBehaviourBase<Record>() {
 
 			@Override
 			public <C> TableData<Record> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
@@ -51,7 +51,7 @@ public class FrmTstTickColumn extends Application {
 				return new TableData<>(lst, false, lst.size());
 			}
 		});
-		tbl.getColumns().add(clm);
+		tbl.fillColumnsRecursively().add(clm);
 		ToggleButton btn = new ToggleButton("Disable Tick");
 		clm.editableProperty().bind(btn.selectedProperty().not());
 		tbl.addNode(btn);

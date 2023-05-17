@@ -112,7 +112,7 @@ public class FrmMasterDetail extends VBox {
 
     }
 
-    private TableOperation<Insurance> cntlInsurance = new TableOperation<>() {
+    private TableBehaviourBase<Insurance> cntlInsurance = new TableBehaviourBase<>() {
         @Override
         public <C> TableData loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<SortType> sortingOrders, int maxResult) {
             return daoInsurance.fetch(startIndex, filteredColumns, sortedColumns, sortingOrders, maxResult);
@@ -149,7 +149,7 @@ public class FrmMasterDetail extends VBox {
         }
     };
 
-    private TableOperation<Person> cntlPerson = new TableOperation<>() {
+    private TableBehaviourBase<Person> cntlPerson = new TableBehaviourBase<>() {
         private DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
 
         @Override
