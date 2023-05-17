@@ -152,7 +152,8 @@ public abstract class LookupFieldController<T> {
         }
 
         for (TableColumn<T, ?> column : lookupWindow.table.getTableView().getColumns()) {
-            if (column instanceof CustomTableColumn && ((CustomTableColumn<T, ?>) column).getPropertyName().equals(propertyName)) {
+            if (column instanceof CustomTableColumn && ((CustomTableColumn<T, ?>) column).getPropertyName()
+                    .equals(propertyName)) {
                 if (searchCriteria != null && !searchCriteria.isEmpty()) {
                     TableCriteria<Object> tc = new TableCriteria<>(propertyName, TableCriteria.Operator.ilike_anywhere, searchCriteria);
                     ((CustomTableColumn<T, Object>) column).setTableCriteria(tc);

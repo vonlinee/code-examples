@@ -10,7 +10,6 @@ import javafx.beans.Observable;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -59,7 +58,11 @@ public class TableControl<R> extends VBox {
     private TableToolBar tableToolBar;
     private TableOperation<R> controller;
     private final SimpleIntegerProperty startIndex = new SimpleIntegerProperty(0);
-    private final StartIndexChangeListener startIndexChangeListener = new StartIndexChangeListener();
+
+    /**
+     * start index
+     */
+    private final ChangeListener<Number> startIndexChangeListener = (ov, t, t1) -> reload();
     private final InvalidationListener sortTypeChangeListener = new SortTypeChangeListener();
     private final ReadOnlyObjectWrapper<Mode> mode = new ReadOnlyObjectWrapper<>(null);
     private final ObservableList<R> lstChangedRow = FXCollections.observableArrayList();
@@ -82,6 +85,7 @@ public class TableControl<R> extends VBox {
      * tblView.getColumns操作
      */
     private final ObservableList<TableColumn<R, ?>> columns;
+    public final ObservableList<R> items;
 
     private final TableControlService service = new TableControlService();
 
@@ -107,6 +111,10 @@ public class TableControl<R> extends VBox {
         READ
     }
 
+    public final boolean isEditing() {
+        return Mode.EDIT == getMode();
+    }
+
     /**
      * UI component in TableControl which their visibility could be manipulated
      */
@@ -125,13 +133,14 @@ public class TableControl<R> extends VBox {
 
         this.tblView = new CustomTableView<>();
         this.columns = tblView.getColumns();
+        this.items = tblView.getItems();
 
         this.recordClass = recordClass;
         this.getStyleClass().add("table-control");
 
         initControls();
 
-        initializeJavaFXTableView();
+        initTableView();
 
         mode.addListener((ov, t, t1) -> {
             if (t1 == Mode.READ) {
@@ -142,25 +151,21 @@ public class TableControl<R> extends VBox {
         cm = new ContextMenu();
         createCopyCellMenuItem();
         cm.setAutoHide(true);
-        setToolTips();
 
-        columns.addListener(new ListChangeListener<>() {
-            @Override
-            public void onChanged(ListChangeListener.Change<? extends TableColumn<R, ?>> change) {
-                while (change.next()) {
-                    if (change.wasAdded()) {
-                        for (TableColumn<R, ?> column : change.getAddedSubList()) {
-                            initColumn(column);
-                        }
+        columns.addListener((ListChangeListener<TableColumn<R, ?>>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (TableColumn<R, ?> column : change.getAddedSubList()) {
+                        initTableColumn(column);
                     }
-                    lastColumnIndex = getLeafColumns().size() - 1;
                 }
+                lastColumnIndex = getLeafColumns().size() - 1;
             }
         });
         attachWindowVisibilityListener();
     }
 
-    private void initializeJavaFXTableView() {
+    private void initTableView() {
         // 表格任一列的顺序改变后重新加载数据
         tblView.getSortOrder().addListener((ListChangeListener<TableColumn<R, ?>>) change -> {
             if (stageShown) {
@@ -172,23 +177,14 @@ public class TableControl<R> extends VBox {
         tblView.editableProperty().bind(mode.isNotEqualTo(Mode.READ));
         tblView.getSelectionModel().cellSelectionEnabledProperty().bind(tblView.editableProperty());
 
-
         // 更新行号
-        tblView.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
-                int rowNum = page * maxResult.get() + t1.intValue() + 1;
-                footer.updateRowNum(rowNum);
-            }
-        });
+        tblView.getSelectionModel().selectedIndexProperty()
+                .addListener((ov, t, t1) -> footer.updateRowNum(page * maxResult.get() + t1.intValue() + 1));
 
         /* 点击单元格进行编辑 */
-        tblView.getFocusModel().focusedCellProperty().addListener(new ChangeListener<TablePosition>() {
-            @Override
-            public void changed(ObservableValue<? extends TablePosition> observable, TablePosition oldValue, TablePosition newValue) {
-                if (!resettingRecords && tblView.isEditable() && directEdit && agileEditing.get()) {
-                    TableViewHelper.edit(newValue);
-                }
+        tblView.getFocusModel().focusedCellProperty().addListener((observable, oldValue, newValue) -> {
+            if (!resettingRecords && tblView.isEditable() && directEdit && agileEditing.get()) {
+                TableViewHelper.edit(newValue);
             }
         });
 
@@ -201,18 +197,69 @@ public class TableControl<R> extends VBox {
         });
         // Define policy for TAB key press
         tblView.addEventFilter(KeyEvent.KEY_PRESSED, tableKeyListener);
-        // In INSERT mode, only inserted row that is focusable
-        tblView.getFocusModel().focusedCellProperty().addListener(tableFocusListener);
-        tblView.setOnMouseReleased(tableRightClickListener);
+        /*
+          In INSERT mode, only inserted row that is focusable
+          Prevent moving focus to not-inserted-row in INSERT mode
+         */
+        tblView.getFocusModel().focusedCellProperty().addListener((observable, oldValue, newValue) -> {
+            if (!Mode.INSERT.equals(mode.get()) || newValue.getRow() == -1 || oldValue.getRow() == -1) {
+                return;
+            }
+            Platform.runLater(() -> {
+                R oldRow = items.get(oldValue.getRow());
+                R newRow = items.get(newValue.getRow());
+                if (lstChangedRow.contains(oldRow) && !lstChangedRow.contains(newRow)) {
+                    tblView.getFocusModel().focus(oldValue);
+                    tblView.getSelectionModel().select(oldValue.getRow(), oldValue.getTableColumn());
+                }
+            });
+        });
+        tblView.setOnMouseReleased(event -> {
+            if (cm.isShowing()) {
+                cm.hide();
+            }
+            if (event.getButton().equals(MouseButton.SECONDARY)) {
+                if (!TableViewHelper.hasSelectedCells(tblView)) {
+                    return;
+                }
+                final TablePosition<R, ?> pos = TableViewHelper.getSelectedPosition(tblView, 0);
+                TableColumn<R, ?> column = null;
+                if (pos != null) {
+                    column = pos.getTableColumn();
+                }
+                if (column == null) {
+                    column = tblView.getSelectedColumn();
+                }
+                if (searchMenuItem != null) {
+                    cm.getItems().remove(searchMenuItem);
+                }
+                cm.getItems().remove(getPasteMenuItem());
+                if (column instanceof CustomTableColumn) {
+                    CustomTableColumn<R, Object> clm = (CustomTableColumn<R, Object>) column;
+                    int row = tblView.getSelectionModel().getSelectedIndex();
+                    clm.setDefaultSearchValue(column.getCellData(row));
+                    searchMenuItem = clm.getSearchMenuItem();
+                    if (searchMenuItem != null && clm.isFilterable()) {
+                        cm.getItems().add(0, searchMenuItem);
+                    }
+                    if (mode.get() != Mode.READ && !hasEditingCell() && Clipboard.getSystemClipboard().hasString()) {
+                        if (!cm.getItems().contains(getPasteMenuItem())) {
+                            cm.getItems().add(getPasteMenuItem());
+                        }
+                    }
+                }
+                cm.show(tblView, event.getScreenX(), event.getScreenY());
+            }
+        });
         // create custom row factory that can intercept double click on grid row
         tblView.setRowFactory(param -> new TableControlRow<>(TableControl.this));
     }
 
-    TablePaneFooter footer;
+    private TablePaneFooter footer;
 
     /**
      * FXML中会使用此方法
-     * @return
+     * @return 所有列，一般是CustomTableColumn及其子类
      */
     public final ObservableList<TableColumn<R, ?>> getColumns() {
         return columns;
@@ -243,10 +290,10 @@ public class TableControl<R> extends VBox {
      */
     static class TablePaneFooter extends StackPane {
 
-        private Label lblRowIndex;
-        private Label lblTotalRow;
-        private MenuButton menuButton;
-        private ProgressBar progressIndicator;
+        private final Label lblRowIndex;
+        private final Label lblTotalRow;
+        private final MenuButton menuButton;
+        private final ProgressBar progressIndicator;
 
         public TablePaneFooter(TableControl<?> tableControl) {
             this.getStyleClass().add("table-footer");
@@ -304,7 +351,7 @@ public class TableControl<R> extends VBox {
      * @see TableControl#initControls()
      */
     static class TableToolBar extends ToolBar implements EventHandler<ActionEvent> {
-        TableControl<?> tableControl;
+        final TableControl<?> tableControl;
         public Button btnAdd;
         public Button btnEdit;
         public Button btnDelete;
@@ -313,7 +360,7 @@ public class TableControl<R> extends VBox {
         public Button btnExport;
         public Region spacer;
         // 分页
-        private PaginationControl paginationControl;
+        private final PaginationControl paginationControl;
 
         public TableToolBar(TableControl<?> tableControl, PaginationControl paginationControl) {
             this.tableControl = tableControl;
@@ -358,6 +405,13 @@ public class TableControl<R> extends VBox {
             spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
 
+            TiwulFXUtil.setToolTip(btnAdd, "add.record");
+            TiwulFXUtil.setToolTip(btnDelete, "delete.record");
+            TiwulFXUtil.setToolTip(btnEdit, "edit.record");
+            TiwulFXUtil.setToolTip(btnReload, "reload.records");
+            TiwulFXUtil.setToolTip(btnExport, "export.records");
+            TiwulFXUtil.setToolTip(btnSave, "save.record");
+
             this.getItems()
                     .addAll(btnReload, btnAdd, btnEdit, btnSave, btnDelete, btnExport, spacer, paginationControl);
         }
@@ -397,9 +451,9 @@ public class TableControl<R> extends VBox {
 
         /**
          * 如果visible为true，则判断是否包含control
-         * @param parent
-         * @param control
-         * @param visible
+         * @param parent  父节点
+         * @param control Control
+         * @param visible 是否可见
          */
         public void setOrNot(ToolBar parent, Node control, boolean visible) {
             if (!visible) {
@@ -409,8 +463,8 @@ public class TableControl<R> extends VBox {
             }
         }
 
-        public void setOrNot(Pane parent, Node control, boolean visiable) {
-            if (!visiable) {
+        public void setOrNot(Pane parent, Node control, boolean visible) {
+            if (!visible) {
                 parent.getChildren().remove(control);
             } else if (!parent.getChildren().contains(control)) {
                 parent.getChildren().add(control);
@@ -471,34 +525,31 @@ public class TableControl<R> extends VBox {
          * pageNum input
          */
         private final ComboBox<Integer> cmbPage;
-        private final TableControl<?> tableControl;
-
-        private final EventHandler<ActionEvent> paginationHandler = new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if (event.getSource() == btnFirstPage) {
-                    tableControl.reloadFirstPage();
-                } else if (event.getSource() == btnPrevPage) {
-                    cmbPage.getSelectionModel().selectPrevious();
-                } else if (event.getSource() == btnNextPage) {
-                    cmbPage.getSelectionModel().selectNext();
-                } else if (event.getSource() == btnLastPage) {
-                    cmbPage.getSelectionModel().selectLast();
-                } else if (event.getSource() == cmbPage) {
-                    Integer value = cmbPage.getValue();
-                    if (value != null) {
-                        tableControl.pageChangeFired(event, value);
-                    }
-                }
-            }
-        };
 
         public PaginationControl(TableControl<?> tableControl) {
-            this.tableControl = tableControl;
             this.setAlignment(Pos.CENTER);
 
             btnFirstPage = new Button();
             btnFirstPage.setGraphic(TiwulFXUtil.getGraphicFactory().createPageFirstGraphic());
+            final EventHandler<ActionEvent> paginationHandler = new EventHandler<>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    if (event.getSource() == btnFirstPage) {
+                        tableControl.reloadFirstPage();
+                    } else if (event.getSource() == btnPrevPage) {
+                        cmbPage.getSelectionModel().selectPrevious();
+                    } else if (event.getSource() == btnNextPage) {
+                        cmbPage.getSelectionModel().selectNext();
+                    } else if (event.getSource() == btnLastPage) {
+                        cmbPage.getSelectionModel().selectLast();
+                    } else if (event.getSource() == cmbPage) {
+                        Integer value = cmbPage.getValue();
+                        if (value != null) {
+                            tableControl.pageChangeFired(event, value);
+                        }
+                    }
+                }
+            };
             btnFirstPage.setOnAction(paginationHandler);
             btnFirstPage.setDisable(true);
             btnFirstPage.setFocusTraversable(false);
@@ -533,6 +584,11 @@ public class TableControl<R> extends VBox {
             cmbPage.getStyleClass().addAll("combo-page");
             cmbPage.setPrefWidth(75);
 
+            TiwulFXUtil.setToolTip(btnFirstPage, "go.to.first.page");
+            TiwulFXUtil.setToolTip(btnLastPage, "go.to.last.page");
+            TiwulFXUtil.setToolTip(btnNextPage, "go.to.next.page");
+            TiwulFXUtil.setToolTip(btnPrevPage, "go.to.prev.page");
+
             this.getChildren().addAll(btnFirstPage, btnPrevPage, cmbPage, btnNextPage, btnLastPage);
         }
 
@@ -558,28 +614,6 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * Set selection mode
-     * @param mode SelectionMode
-     * @see javafx.scene.control.SelectionMode
-     */
-    public void setSelectionMode(SelectionMode mode) {
-        tblView.getSelectionModel().setSelectionMode(mode);
-    }
-
-    private void setToolTips() {
-//        TiwulFXUtil.setToolTip(btnAdd, "add.record");
-//        TiwulFXUtil.setToolTip(btnDelete, "delete.record");
-//        TiwulFXUtil.setToolTip(btnEdit, "edit.record");
-//        TiwulFXUtil.setToolTip(btnFirstPage, "go.to.first.page");
-//        TiwulFXUtil.setToolTip(btnLastPage, "go.to.last.page");
-//        TiwulFXUtil.setToolTip(btnNextPage, "go.to.next.page");
-//        TiwulFXUtil.setToolTip(btnPrevPage, "go.to.prev.page");
-//        TiwulFXUtil.setToolTip(btnReload, "reload.records");
-//        TiwulFXUtil.setToolTip(btnExport, "export.records");
-//        TiwulFXUtil.setToolTip(btnSave, "save.record");
-    }
-
-    /**
      * 快速编辑模式
      */
     private final BooleanProperty agileEditing = new SimpleBooleanProperty(true);
@@ -596,26 +630,11 @@ public class TableControl<R> extends VBox {
         return agileEditing;
     }
 
-
-    static class TableKeyHandler implements EventHandler<KeyEvent> {
-
-        final TableControl<?> tableControl;
-
-        public TableKeyHandler(TableControl<?> tableControl) {
-            this.tableControl = tableControl;
-        }
-
-        @Override
-        public void handle(KeyEvent event) {
-
-        }
-    }
-
     /**
      * Move focus to the next cell if user pressing TAB and the mode is
      * EDIT/INSERT
      */
-    private EventHandler<KeyEvent> tableKeyListener = new EventHandler<>() {
+    private final EventHandler<KeyEvent> tableKeyListener = new EventHandler<>() {
         @Override
         public void handle(KeyEvent event) {
             if (mode.get() == Mode.READ) {
@@ -643,8 +662,7 @@ public class TableControl<R> extends VBox {
                     if (tblView.getSelectionModel().getSelectedCells().get(0).getColumn() == lastColumnIndex) {
                         showRow(tblView.getSelectionModel().getSelectedIndex() + 1);
                         tblView.getSelectionModel()
-                                .select(tblView.getSelectionModel().getSelectedIndex() + 1, tblView.getColumns()
-                                        .get(0));
+                                .select(tblView.getSelectionModel().getSelectedIndex() + 1, columns.get(0));
                     } else {
                         tblView.getSelectionModel().selectRightCell();
                     }
@@ -652,10 +670,12 @@ public class TableControl<R> extends VBox {
                 horizontalScroller.run();
                 event.consume();
             } else if (event.getCode() == KeyCode.ENTER && !event.isControlDown() && !event.isAltDown() && !event.isShiftDown()) {
+                // 编辑模式下，Enter可从移动的单元格向下移
                 if (agileEditing.get()) {
                     if (directEdit) {
                         showRow(tblView.getSelectionModel().getSelectedIndex() + 1);
-                        if (tblView.getSelectionModel().getSelectedIndex() == tblView.getItems().size() - 1) {
+                        // 末尾
+                        if (tblView.getSelectionModel().getSelectedIndex() == items.size() - 1) {
                             //it will trigger cell's commit edit for the most bottom row
                             tblView.getSelectionModel().selectAboveCell();
                         }
@@ -698,7 +718,7 @@ public class TableControl<R> extends VBox {
      * list if the record doesn't exist in the list. Avoid adding record to
      * {@link #getChangedRecords()} to avoid adding the same record multiple
      * times.
-     * @param record
+     * @param record 单条记录
      */
     public void markAsChanged(R record) {
         if (!lstChangedRow.contains(record)) {
@@ -743,8 +763,8 @@ public class TableControl<R> extends VBox {
                         break;
                     }
                     R item = null;
-                    if (rowIndex < tblView.getItems().size()) {
-                        item = tblView.getItems().get(rowIndex);
+                    if (rowIndex < items.size()) {
+                        item = items.get(rowIndex);
                     } else if (mode.get() == Mode.EDIT) {
                         /*
                           Will ensure the content display to TEXT_ONLY because
@@ -759,14 +779,14 @@ public class TableControl<R> extends VBox {
                         if (mode.get() == Mode.INSERT) {
                             //means that selected row is not new row. Let's create new row
                             createNewRow(rowIndex);
-                            item = tblView.getItems().get(rowIndex);
+                            item = items.get(rowIndex);
                         } else {
                             lstChangedRow.add(item);
                         }
                     }
 
                     showRow(rowIndex);
-                    // Handle multicolumn paste
+                    // Handle multi column paste
                     String[] stringCellValues = line.split("\t");
                     TableColumn toFillColumn = startColumn;
                     tblView.getSelectionModel().select(rowIndex, toFillColumn);
@@ -807,9 +827,9 @@ public class TableControl<R> extends VBox {
 
                 refresh();
 
-                /**
-                 * Will ensure the content display to TEXT_ONLY because there is
-                 * no way to update cell editors value (in agile editing mode)
+                /*
+                  Will ensure the content display to TEXT_ONLY because there is
+                  no way to update cell editors value (in agile editing mode)
                  */
                 tblView.getSelectionModel().clearSelection();
             }
@@ -820,9 +840,9 @@ public class TableControl<R> extends VBox {
      * TableView工具类
      * JavaFX 的 TableView API使用过程中很多地方使用类型强制转换，使用此工具类来集中这些转换操作
      */
+    @SuppressWarnings(value = {"rawtypes", "unchecked"})
     static class TableViewHelper {
 
-        @SuppressWarnings(value = {"unchecked", "rawtypes"})
         public static <S> void edit(TableView<S> tableView, int row, TableColumn column) {
             tableView.edit(row, column);
         }
@@ -830,7 +850,6 @@ public class TableControl<R> extends VBox {
         /**
          * TableView.TableViewFocusModel.focusedCellProperty()
          */
-        @SuppressWarnings(value = {"rawtypes", "unchecked"})
         public static void edit(TablePosition position) {
             position.getTableView().edit(position.getRow(), position.getTableColumn());
         }
@@ -847,19 +866,17 @@ public class TableControl<R> extends VBox {
             if (focusModel == null) {
                 return null;
             }
-            @SuppressWarnings("unchecked") TablePosition<S, T> focusedCell = (TablePosition<S, T>) focusModel.getFocusedCell();
+            TablePosition<S, T> focusedCell = (TablePosition<S, T>) focusModel.getFocusedCell();
             if (focusedCell == null) {
                 return null;
             }
             return focusedCell.getTableColumn();
         }
 
-        @SuppressWarnings("unchecked")
         public static <S, T> TableColumn<S, T> getSelectedColumn(TableView<S> tblView, int index) {
             return tblView.getSelectionModel().getSelectedCells().get(index).getTableColumn();
         }
 
-        @SuppressWarnings("unchecked")
         public static <S, T> TablePosition<S, T> getSelectedPosition(TableView<S> tblView, int index) {
             return tblView.getSelectionModel().getSelectedCells().get(index);
         }
@@ -867,6 +884,64 @@ public class TableControl<R> extends VBox {
         public static <R> R getSelectedItem(TableView<R> tblView) {
             return tblView.getSelectionModel().getSelectedItem();
         }
+
+        public static <R, T> TableCell<R, T> callCellFactory(TableColumn<R, ?> column) {
+            Callback cellFactory = column.getCellFactory();
+            if (cellFactory == null) {
+                return null;
+            }
+            return (TableCell<R, T>) cellFactory.call(column);
+        }
+
+        public static <S> boolean hasSelectedCells(TableView<S> tableView) {
+            return !tableView.getSelectionModel().getSelectedCells().isEmpty();
+        }
+
+        /**
+         * 获取TablePosition
+         * @param index 索引
+         * @param <T>   单元格数据类型
+         * @return TablePosition
+         */
+        public static <S, T> TablePosition<S, T> getSelectedTablePosition(TableView<S> tableView, int index) {
+            return tableView.getSelectionModel().getSelectedCells().get(index);
+        }
+
+        /**
+         * @see TableView#getSelectionModel() getSelectionItems()
+         */
+        public static <R> ObservableList<R> getSelectedItems(TableView<R> tableView) {
+            return tableView.getSelectionModel().getSelectedItems();
+        }
+
+        /**
+         * 单元格的值的值是否被更新
+         * @param cellEditEvent 单元格编辑事件
+         * @param <R>           行数据类型
+         * @param <C>           列数据类型
+         * @return 单元格的值是否更改
+         */
+        public static <R, C> boolean isCellValueUpdated(CellEditEvent<R, C> cellEditEvent) {
+            C oldValue = cellEditEvent.getOldValue();
+            C newValue = cellEditEvent.getNewValue();
+            if (oldValue == null && newValue == null) {
+                return false;
+            }
+            return !Objects.equals(oldValue, newValue);
+        }
+
+        /**
+         * 单元格编辑位置是否有效
+         * 测试是否会出现返回false的情况
+         * @param t   CellEditEvent
+         * @param <R> 行数据类型
+         * @param <C> 列数据类型
+         * @return 单元格编辑位置是否有效
+         */
+        public static <R, C> boolean isCellEditPositionValid(CellEditEvent<R, C> t) {
+            return t.getTablePosition().getRow() < t.getTableView().getItems().size();
+        }
+
     }
 
     /**
@@ -937,8 +1012,7 @@ public class TableControl<R> extends VBox {
             // right edge of the table
             double pos = scrollBar.getValue();
             double max = scrollBar.getMax();
-            double newPos = pos;
-
+            double newPos;
             if (start < pos && start >= 0) {
                 newPos = start;
             } else {
@@ -946,7 +1020,7 @@ public class TableControl<R> extends VBox {
                 newPos = Math.min(pos + delta, max);
             }
             // FIXME we should add API in VirtualFlow so we don't end up going
-            // direct to the hbar.
+            // direct to the bar.
             // actually shift the flow - this will result in the header moving
             // as well
             scrollBar.setValue(newPos);
@@ -969,92 +1043,15 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * @see TableView#getSelectionModel() getSelectionItems()
-     */
-    public ObservableList<R> getSelectedItems() {
-        return tblView.getSelectionModel().getSelectedItems();
-    }
-
-    /**
      * @see TableView#getSelectionModel()
      */
     public TableView.TableViewSelectionModel<R> getSelectionModel() {
         return tblView.getSelectionModel();
     }
 
-    /**
-     * Prevent moving focus to not-inserted-row in INSERT mode
-     */
-    @SuppressWarnings("rawtypes")
-    private ChangeListener<TablePosition> tableFocusListener = (observable, oldValue, newValue) -> {
-        if (!Mode.INSERT.equals(mode.get()) || newValue.getRow() == -1 || oldValue.getRow() == -1) {
-            return;
-        }
-        Platform.runLater(() -> {
-            R oldRow = tblView.getItems().get(oldValue.getRow());
-            R newRow = tblView.getItems().get(newValue.getRow());
-            if (lstChangedRow.contains(oldRow) && !lstChangedRow.contains(newRow)) {
-                tblView.getFocusModel().focus(oldValue);
-                tblView.getSelectionModel().select(oldValue.getRow(), oldValue.getTableColumn());
-            }
-        });
-    };
-
     // 菜单
     private final ContextMenu cm;
     private MenuItem searchMenuItem;
-    @SuppressWarnings("rawtypes")
-    private EventHandler<MouseEvent> tableRightClickListener = new EventHandler<>() {
-        @Override
-        public void handle(MouseEvent event) {
-            if (cm.isShowing()) {
-                cm.hide();
-            }
-            if (event.getButton().equals(MouseButton.SECONDARY)) {
-                if (tblView.getSelectionModel().getSelectedCells().isEmpty()) {
-                    return;
-                }
-                TablePosition<R, ?> pos = TableViewHelper.getSelectedPosition(tblView, 0);
-                TableColumn<R, ?> column = null;
-                if (pos != null) {
-                    column = pos.getTableColumn();
-                }
-                if (column == null) {
-                    column = tblView.getSelectedColumn();
-                }
-                if (searchMenuItem != null) {
-                    cm.getItems().remove(searchMenuItem);
-                }
-                cm.getItems().remove(getPasteMenuItem());
-                if (column instanceof CustomTableColumn) {
-                    CustomTableColumn clm = (CustomTableColumn) column;
-                    int row = tblView.getSelectionModel().getSelectedIndex();
-                    clm.setDefaultSearchValue(column.getCellData(row));
-                    searchMenuItem = clm.getSearchMenuItem();
-                    if (searchMenuItem != null && clm.isFilterable()) {
-                        cm.getItems().add(0, searchMenuItem);
-                    }
-                    if (mode.get() != Mode.READ && !hasEditingCell() && Clipboard.getSystemClipboard().hasString()) {
-                        if (!cm.getItems().contains(getPasteMenuItem())) {
-                            cm.getItems().add(getPasteMenuItem());
-                        }
-                    }
-                }
-                cm.show(tblView, event.getScreenX(), event.getScreenY());
-            }
-        }
-    };
-
-    /**
-     * 获取TablePosition
-     * @param index 索引
-     * @param <T>   单元格数据类型
-     * @return TablePosition
-     */
-    @SuppressWarnings("unchecked")
-    private <T> TablePosition<R, T> getSelectedTablePosition(int index) {
-        return tblView.getSelectionModel().getSelectedCells().get(index);
-    }
 
     private void copyCell() {
         R selectedRow = getSelectedItem();
@@ -1087,27 +1084,32 @@ public class TableControl<R> extends VBox {
         clipboard.setContent(content);
     }
 
+    /**
+     * copy row
+     */
+    @SuppressWarnings("rawtypes")
     private void copyRow() {
         R selectedRow = getSelectedItem();
         if (selectedRow == null) {
             return;
         }
-        String textToCopy = "";
+        StringBuilder textToCopy = new StringBuilder();
         for (TableColumn clm : getLeafColumns()) {
             if (clm instanceof CustomTableColumn) {
                 CustomTableColumn bc = (CustomTableColumn) clm;
-                textToCopy = textToCopy + bc.convertToString(bc.getCellData(selectedRow)) + "\t";
+                Object cellData = bc.getCellData(selectedRow);
+                textToCopy.append(bc.convertToString(cellData)).append("\t");
             } else {
                 Object cellValue = clm.getCellData(selectedRow);
-                textToCopy = textToCopy + String.valueOf(cellValue) + "\t";
+                textToCopy.append(cellValue).append("\t");
             }
         }
-        if (textToCopy.endsWith("\t")) {
-            textToCopy = textToCopy.substring(0, textToCopy.length() - 1);
+        if (textToCopy.toString().endsWith("\t")) {
+            textToCopy = new StringBuilder(textToCopy.substring(0, textToCopy.length() - 1));
         }
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent content = new ClipboardContent();
-        content.putString(textToCopy);
+        content.putString(textToCopy.toString());
         clipboard.setContent(content);
     }
 
@@ -1133,20 +1135,17 @@ public class TableControl<R> extends VBox {
             String stringVal;
             if (tableColumn instanceof CustomTableColumn) {
                 stringVal = ((CustomTableColumn<R, ?>) tableColumn).getCellDataAsString(selectedRow);
-                rcd = new RowBrowser.Record(tableColumn.getText(), stringVal);
             } else {
                 stringVal = String.valueOf(tableColumn.getCellData(selectedRow));
-                rcd = new RowBrowser.Record(tableColumn.getText(), stringVal);
             }
+            rcd = new RowBrowser.Record(tableColumn.getText(), stringVal);
             lstRecord.add(rcd);
         }
         RowBrowser rb = new RowBrowser();
         lstRowBrowser.add(rb);
         rb.setRecords(lstRecord);
         rb.show(getScene().getWindow());
-        rb.getScene().getWindow().addEventHandler(WindowEvent.WINDOW_HIDDEN, (e) -> {
-            lstRowBrowser.remove(rb);
-        });
+        rb.getScene().getWindow().addEventHandler(WindowEvent.WINDOW_HIDDEN, (e) -> lstRowBrowser.remove(rb));
     }
 
     public void closeRowBrowsers() {
@@ -1160,7 +1159,7 @@ public class TableControl<R> extends VBox {
      * @param menuItem menuItem
      * @see #removeContextMenuItem(javafx.scene.control.MenuItem)
      */
-    public void addContextMenuItem(MenuItem menuItem) {
+    public final void addContextMenuItem(MenuItem menuItem) {
         cm.getItems().add(menuItem);
     }
 
@@ -1189,20 +1188,13 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * TODO
-     * @param col
-     * @param maxRows
+     * @param col TableColumn
      */
-    protected void resizeToFit(TableColumn<R, ?> col, int maxRows) {
-        List<?> items = tblView.getItems();
+    protected void resizeToFit(TableColumn<R, ?> col) {
         if (items == null || items.isEmpty()) {
             return;
         }
-        Callback cellFactory = col.getCellFactory();
-        if (cellFactory == null) {
-            return;
-        }
-        TableCell cell = (TableCell) cellFactory.call(col);
+        TableCell<R, ?> cell = TableViewHelper.callCellFactory(col);
         if (cell == null) {
             return;
         }
@@ -1216,7 +1208,7 @@ public class TableControl<R> extends VBox {
             Region r = (Region) n;
             padding = r.getInsets().getLeft() + r.getInsets().getRight();
         }
-        int rows = maxRows == -1 ? items.size() : Math.min(items.size(), maxRows);
+        final int rows = items.size();
         double maxWidth = 0;
         for (int row = 0; row < rows; row++) {
             cell.updateTableColumn(col);
@@ -1252,49 +1244,37 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * <<<<<<< HEAD
      * 初始化表的一列
      * @param clm 列
-     *            =======
-     *            初始化表格的某一列
-     * @param clm TableColumn
-     *            >>>>>>> 37d5b15bf993fbde274881f18619d1ee23e4955f
      */
     @SuppressWarnings("unchecked")
-    private void initColumn(TableColumn<R, ?> clm) {
+    private void initTableColumn(TableColumn<R, ?> clm) {
         List<TableColumn<R, ?>> lstColumn = new ArrayList<>();
         lstColumn.add(clm);
         lstColumn = getColumnsRecursively(lstColumn);
         for (TableColumn<R, ?> column : lstColumn) {
             if (column instanceof CustomTableColumn) {
                 final CustomTableColumn<R, Object> baseColumn = (CustomTableColumn<R, Object>) column;
-                baseColumn.tableCriteriaProperty().addListener(tableCriteriaListener);
-                baseColumn.sortTypeProperty().addListener(sortTypeChangeListener);
-                baseColumn.addEventHandler(TableColumn.editCommitEvent(), new EventHandler<TableColumn.CellEditEvent<R, Object>>() {
-                    @Override
-                    public void handle(CellEditEvent<R, Object> t) {
-                        if (t.getTablePosition() == null || t.getTableView() == null) {
-                            return;
-                        }
-                        if (!(t.getTablePosition().getRow() < t.getTableView().getItems().size())) {
-                            return;
-                        }
-                        R persistentObj = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                        if ((t.getNewValue() == null && t.getOldValue() == null) || (t.getNewValue() != null && t
-                                .getNewValue().equals(t.getOldValue()))) {
-                            return;
-                        }
-                        if (mode.get()
-                                .equals(Mode.EDIT) && t.getOldValue() != t.getNewValue() && (t.getOldValue() == null || !t
-                                .getOldValue().equals(t.getNewValue()))) {
-                            if (!lstChangedRow.contains(persistentObj)) {
-                                lstChangedRow.add(persistentObj);
-                            }
-                            baseColumn.addRecordChange(persistentObj, t.getOldValue(), t.getNewValue());
-                        }
-                        ClassUtils.setSimpleProperty(persistentObj, baseColumn.getPropertyName(), t.getNewValue());
-                        baseColumn.validate(persistentObj);
+                baseColumn.tableCriteriaProperty().addListener(observable -> {
+                    if (reloadOnCriteriaChange) {
+                        reloadFirstPage();
                     }
+                });
+                // 监听排序
+                baseColumn.sortTypeProperty().addListener(sortTypeChangeListener);
+                baseColumn.addEventHandler(TableColumn.editCommitEvent(), (EventHandler<CellEditEvent<R, Object>>) t -> {
+                    if (!TableViewHelper.isCellEditPositionValid(t) || !TableViewHelper.isCellValueUpdated(t)) {
+                        return;
+                    }
+                    R persistentObj = t.getTableView().getItems().get(t.getTablePosition().getRow());
+                    if (isEditing()) {
+                        if (!lstChangedRow.contains(persistentObj)) {
+                            lstChangedRow.add(persistentObj);
+                        }
+                        baseColumn.addRecordChange(persistentObj, t.getOldValue(), t.getNewValue());
+                    }
+                    ClassUtils.setSimpleProperty(persistentObj, baseColumn.getPropertyName(), t.getNewValue());
+                    baseColumn.validate(persistentObj);
                 });
             }
         }
@@ -1307,7 +1287,7 @@ public class TableControl<R> extends VBox {
      */
     @SafeVarargs
     public final void addColumn(TableColumn<R, ?>... columns) {
-        tblView.getColumns().addAll(columns);
+        this.columns.addAll(columns);
     }
 
     /**
@@ -1321,11 +1301,7 @@ public class TableControl<R> extends VBox {
             if (column.getColumns().isEmpty()) {
                 newColumns.add(column);
             } else {
-                /**
-                 * Should be in new arraylist to avoid
-                 * java.lang.IllegalArgumentException: Children: duplicate
-                 * children added
-                 */
+                /* Should be in new arraylist to avoid java.lang.IllegalArgumentException: Children: duplicate children added */
                 newColumns.addAll(getColumnsRecursively(new ArrayList<>(column.getColumns())));
             }
         }
@@ -1366,19 +1342,17 @@ public class TableControl<R> extends VBox {
      * Reload data on current page. This method is called when pressing reload button.
      * @see #reloadFirstPage()
      */
+    @SuppressWarnings("rawtypes")
     public void reload() {
         if (!lstChangedRow.isEmpty()) {
             if (!controller.revertConfirmation(this, lstChangedRow.size())) {
                 return;
             }
         }
+
         lstCriteria.clear();
 
         List<TableCriteria<Object>> list = new ArrayList<>();
-
-        for (TableCriteria<?> item : lstCriteria) {
-            list.add((TableCriteria<Object>) item);
-        }
 
         // Should be in new arraylist to avoid
         // java.lang.IllegalArgumentException: Children: duplicate children added
@@ -1386,14 +1360,13 @@ public class TableControl<R> extends VBox {
         lstColumns = getColumnsRecursively(lstColumns);
         for (TableColumn<R, ?> clm : lstColumns) {
             if (clm instanceof CustomTableColumn) {
-                @SuppressWarnings("unchecked") CustomTableColumn<R, ?> customColumn = (CustomTableColumn<R, ?>) clm;
+                CustomTableColumn<R, ?> customColumn = (CustomTableColumn<R, ?>) clm;
                 if (customColumn.getTableCriteria() != null) {
                     final TableCriteria<?> tableCriteria = customColumn.getTableCriteria();
                     lstCriteria.add(tableCriteria);
                 }
             }
         }
-
 
         // 排序的列
         List<String> lstSortedColumn = new ArrayList<>();
@@ -1464,6 +1437,9 @@ public class TableControl<R> extends VBox {
     }
 
     private void pageChangeFired(ActionEvent event, int pageNum) {
+        if (event.isConsumed()) {
+            return;
+        }
         // since the combobox is editable, it might have String value
         page = Integer.valueOf(String.valueOf(pageNum));
         page = page - 1;
@@ -1477,10 +1453,10 @@ public class TableControl<R> extends VBox {
      */
     private void createNewRow(int rowIndex) {
         R newRecord = ClassUtils.newInstance(recordClass);
-        if (tblView.getItems().size() == 0) {
+        if (items.size() == 0) {
             rowIndex = 0;
         }
-        tblView.getItems().add(rowIndex, newRecord);
+        items.add(rowIndex, newRecord);
         lstChangedRow.add(newRecord);
     }
 
@@ -1499,21 +1475,19 @@ public class TableControl<R> extends VBox {
         }
 
         int selectedRow = tblView.getSelectionModel().getSelectedIndex() + 1;
-        if (tblView.getItems().size() == 0) {
+        if (items.size() == 0) {
             selectedRow = 0;
         }
 
-        tblView.getItems().add(selectedRow, newRecord);
+        items.add(selectedRow, newRecord);
         lstChangedRow.add(newRecord);
         final int row = selectedRow;
         mode.set(Mode.INSERT);
 
-        /**
-         * Force the table to layout before selecting the newly added row.
-         * Without this call, the selection will land on existing row at
-         * specified index because the new row is not yet actually added to the
-         * table. It makes the editor controls are not displayed in agileEditing
-         * mode.
+        /*
+         Force the table to layout before selecting the newly added row. Without this call, the selection
+         will land on existing row at specified index because the new row is not yet actually added to the
+         table. It makes the editor controls are not displayed in agileEditing mode.
          */
         tblView.layout();
         tblView.requestFocus();
@@ -1525,10 +1499,8 @@ public class TableControl<R> extends VBox {
      * Save changes. This method is called when pressing save button
      */
     public void save() {
-        /**
-         * In case there is a cell being edited, call clearSelection() to trigger
-         * commitEdit() in the edited cell.
-         */
+        // In case there is a cell being edited, call clearSelection() to trigger
+        // commitEdit() in the edited cell.
         tblView.getSelectionModel().clearSelection();
         try {
             if (lstChangedRow.isEmpty()) {
@@ -1569,23 +1541,20 @@ public class TableControl<R> extends VBox {
      * It will delete selected record(s)
      */
     public void delete() {
-        /**
-         * Delete row that is not yet persisted in database.
-         */
+        // Delete row that is not yet persisted in database.
         if (mode.get() == Mode.INSERT) {
-            @SuppressWarnings("unchecked") TablePosition<R, ?> selectedCell = tblView.getSelectionModel()
-                    .getSelectedCells().get(0);
+            TablePosition<R, ?> selectedCell = tblView.getSelectionModel().getSelectedCells().get(0);
             int selectedRow = selectedCell.getRow();
             lstChangedRow.removeAll(tblView.getSelectionModel().getSelectedItems());
             tblView.getSelectionModel()
                     .clearSelection();// it is needed if agile editing is enabled to trigger content display change later
-            tblView.getItems().remove(selectedRow);
-            tblView.layout();//relayout first before set selection. Without this, cell contend display won't be set propertly
+            items.remove(selectedRow);
+            tblView.layout();//relayout first before set selection. Without this, cell contend display won't be set property
             tblView.requestFocus();
-            if (selectedRow == tblView.getItems().size()) {
+            if (selectedRow == items.size()) {
                 selectedRow--;
             }
-            if (lstChangedRow.contains(tblView.getItems().get(selectedRow))) {
+            if (lstChangedRow.contains(items.get(selectedRow))) {
                 tblView.getSelectionModel().select(selectedRow, selectedCell.getTableColumn());
             } else {
                 tblView.getSelectionModel().select(selectedRow - 1, selectedCell.getTableColumn());
@@ -1593,9 +1562,7 @@ public class TableControl<R> extends VBox {
             return;
         }
 
-        /**
-         * Delete persistence record.
-         */
+        // Delete persistence record.
         try {
             if (!controller.canDelete(this)) {
                 return;
@@ -1634,10 +1601,9 @@ public class TableControl<R> extends VBox {
     /**
      * 嵌套两层的泛型无法强制转换
      * TODO 找更好的解决办法
-     * @param list
+     * @param list List<TableCriteria<?>>
      * @param <C>  @return List<TableCriteria<C>>
      */
-    @SuppressWarnings("unchecked")
     private <C> List<TableCriteria<C>> genericMove(List<TableCriteria<?>> list) {
         List<TableCriteria<C>> result = new ArrayList<>();
         for (TableCriteria<?> tableCriteria : list) {
@@ -1646,32 +1612,15 @@ public class TableControl<R> extends VBox {
         return result;
     }
 
-    /**
-     * start index change
-     */
-    private class StartIndexChangeListener implements ChangeListener<Number> {
-
-        @Override
-        public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
-            reload();
-        }
-    }
-
-    private final InvalidationListener tableCriteriaListener = observable -> {
-        if (reloadOnCriteriaChange) {
-            reloadFirstPage();
-        }
-    };
-
     private class SortTypeChangeListener implements InvalidationListener {
 
         @Override
         public void invalidated(Observable o) {
-            /**
-             * If the column is not in sortOrder list, just ignore. It avoids
-             * intermittent duplicate reload() calling
+            /*
+              If the column is not in sortOrder list, just ignore. It avoids
+              intermittent duplicate reload() calling
              */
-            @SuppressWarnings("unchecked") TableColumn<R, Object> col = (TableColumn<R, Object>) ((SimpleObjectProperty<Object>) o).getBean();
+            TableColumn<R, Object> col = (TableColumn<R, Object>) ((SimpleObjectProperty<Object>) o).getBean();
             if (!tblView.getSortOrder().contains(col) || !stageShown) {
                 return;
             }
@@ -1703,14 +1652,6 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * @return Class object set on {@link #setRecordClass(java.lang.Class) }
-     * @see #setRecordClass(java.lang.Class)
-     */
-    public Class<R> getRecordClass() {
-        return recordClass;
-    }
-
-    /**
      * Set the class of object that will be displayed in the table.
      * @param recordClass the record class for table row
      */
@@ -1720,13 +1661,6 @@ public class TableControl<R> extends VBox {
 
     public void setFitColumnAfterReload(boolean fitColumnAfterReload) {
         this.fitColumnAfterReload = fitColumnAfterReload;
-    }
-
-    /**
-     * @return @see #setReloadOnCriteriaChange(boolean)
-     */
-    public boolean isReloadOnCriteriaChange() {
-        return reloadOnCriteriaChange;
     }
 
     /**
@@ -1745,7 +1679,7 @@ public class TableControl<R> extends VBox {
      * {@link TableView#getItems()}
      */
     public ObservableList<R> getRecords() {
-        return tblView.getItems();
+        return items;
     }
 
 
@@ -1779,8 +1713,8 @@ public class TableControl<R> extends VBox {
         tableToolBar.setVisibleComponents(visible, controls);
     }
 
-    public void setFooterVisiablity(boolean visiable) {
-        tableToolBar.setOrNot(this, footer, visiable);
+    public void setFooterVisibility(boolean visible) {
+        tableToolBar.setOrNot(this, footer, visible);
     }
 
     public Mode getMode() {
@@ -1840,17 +1774,17 @@ public class TableControl<R> extends VBox {
         }
 
         if (hasEditingCell()) {
-            /**
-             * Trigger cancelEdit if there is cell being edited. Otherwise,
-             * ArrayIndexOutOfBound exception happens since tblView items are
-             * cleared (see next lines) but setOnEditCommit listener is executed.
+            /*
+               Trigger cancelEdit if there is cell being edited. Otherwise,
+               ArrayIndexOutOfBound exception happens since tblView items are
+               cleared (see next lines) but setOnEditCommit listener is executed.
              */
             tblView.edit(-1, tblView.getColumns().get(0));
         }
 
         //clear items and add with objects that has just been retrieved
         resettingRecords = true;
-        tblView.getItems().setAll(vol.getRows());
+        items.setAll(vol.getRows());
         if (selectedIndex < vol.getRows().size()) {
             tblView.getSelectionModel().select(selectedIndex, selectedColumn);
         } else {
@@ -1875,7 +1809,7 @@ public class TableControl<R> extends VBox {
         // 自适应列
         if (fitColumnAfterReload) {
             for (TableColumn<R, ?> clm : tblView.getColumns()) {
-                resizeToFit(clm, -1);
+                resizeToFit(clm);
             }
         }
 
@@ -1891,16 +1825,16 @@ public class TableControl<R> extends VBox {
 
     private void postSaveAction(List<R> lstResult, Mode prevMode) {
         mode.set(Mode.READ);
-        /**
-         * In case objects in lstResult differ with original object. Ex: In SOA
-         * architecture, sent objects always differ with received object due to
-         * serialization.
+        /*
+            In case objects in lstResult differ with original object. Ex: In SOA
+            architecture, sent objects always differ with received object due to
+            serialization.
          */
         int i = 0;
         for (R row : lstChangedRow) {
-            int index = tblView.getItems().indexOf(row);
-            tblView.getItems().remove(index);
-            tblView.getItems().add(index, lstResult.get(i));
+            int index = items.indexOf(row);
+            items.remove(index);
+            items.add(index, lstResult.get(i));
             i++;
         }
 
@@ -1913,11 +1847,11 @@ public class TableControl<R> extends VBox {
     }
 
     private void postDeleteAction(List<R> lstDeleted, int selectedRow) {
-        tblView.getItems().removeAll(lstDeleted);
+        items.removeAll(lstDeleted);
         /* select a row */
-        if (!tblView.getItems().isEmpty()) {
-            if (selectedRow >= tblView.getItems().size()) {
-                tblView.getSelectionModel().select(tblView.getItems().size() - 1);
+        if (!items.isEmpty()) {
+            if (selectedRow >= items.size()) {
+                tblView.getSelectionModel().select(items.size() - 1);
             } else {
                 tblView.getSelectionModel().select(selectedRow);
             }
@@ -1939,7 +1873,7 @@ public class TableControl<R> extends VBox {
             for (TableColumn<R, ?> column : columns) {
                 int oriIndex = lstTableColumnsOriginalOrder.indexOf(column);
                 int newIndex = columns.indexOf(column);
-                mapProperties.put(configurationID + "." + oriIndex + ".pos", newIndex + "");
+                mapProperties.put(configurationID + "." + oriIndex + ".pos", String.valueOf(newIndex));
             }
             try {
                 TiwulFXUtil.writeProperties(mapProperties);
@@ -1963,7 +1897,7 @@ public class TableControl<R> extends VBox {
         this.sceneProperty().addListener((ov, t, scene) -> {
             if (scene != null) {
                 /*
-                  This method could be executed again if this table is inside a detachabletabpane.
+                  This method could be executed again if this table is inside a detachable tab pane.
                  */
                 if (stageShown) return;
                 stageShown = true;
@@ -1987,7 +1921,7 @@ public class TableControl<R> extends VBox {
                             if (suppressWidthConfigListener) return;
                             int clmIdx = lstTableColumnsOriginalOrder.indexOf(clm);
                             try {
-                                TiwulFXUtil.writeProperties(configurationID + "." + clmIdx + ".width", newValue + "");
+                                TiwulFXUtil.writeProperties(configurationID + "." + clmIdx + ".width", String.valueOf(newValue));
                             } catch (Exception ex) {
                                 logger.log(Level.WARNING, "Unable to save column width information. Column index: " + clmIdx, ex);
                             }
@@ -2087,8 +2021,7 @@ public class TableControl<R> extends VBox {
                 String stringWidth = TiwulFXUtil.readProperty(configurationID + "." + i + ".width");
                 if (stringWidth != null && !stringWidth.isBlank()) {
                     try {
-                        double dwidth = Double.parseDouble(stringWidth);
-                        lstTableColumnsOriginalOrder.get(i).setPrefWidth(dwidth);
+                        lstTableColumnsOriginalOrder.get(i).setPrefWidth(Double.parseDouble(stringWidth));
                     } catch (Exception ex) {
                         logger.warning("Invalid column width configuration: " + configurationID + "." + i + ".width");
                     }
@@ -2153,17 +2086,9 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * Get configuration ID.
-     * @see #setConfigurationID(java.lang.String) for detailed explanation
-     */
-    public String getConfigurationID() {
-        return configurationID;
-    }
-
-    /**
      * If it is set, the columns position, width and sorting information will be saved to a configuration file
      * located in a folder inside user's home directory. Call {@link TiwulFXUtil#setApplicationId(java.lang.String, java.lang.String)}
-     * to set the folder name. The configurationID must be unique across all TableControl in an application but it is
+     * to set the folder name. The configurationID must be unique across all TableControl in an application, but it is
      * not enforced.
      * @param configurationID must be unique across all TableControls in an application
      * @see TiwulFXUtil#setApplicationId(java.lang.String, java.lang.String)
@@ -2294,6 +2219,7 @@ public class TableControl<R> extends VBox {
         }
 
         @Override
+        @SuppressWarnings("rawtypes")
         protected Task createTask() {
             if (actionCode == 0) {
                 return new DataLoadTask(lstSortedColumn, sortingOrders);
@@ -2313,8 +2239,8 @@ public class TableControl<R> extends VBox {
      */
     private class DataLoadTask extends Task<TableData<R>> {
 
-        private List<String> lstSortedColumn;
-        private List<SortType> sortingOrders;
+        private final List<String> lstSortedColumn;
+        private final List<SortType> sortingOrders;
 
         public DataLoadTask(List<String> sortedColumns, List<SortType> sortingOrders) {
             this.lstSortedColumn = sortedColumns;
@@ -2324,22 +2250,20 @@ public class TableControl<R> extends VBox {
         }
 
         @Override
-        protected TableData<R> call() throws Exception {
+        protected TableData<R> call() {
             return controller.loadData(startIndex.get(), genericMove(lstCriteria), lstSortedColumn, sortingOrders, maxResult.get());
         }
     }
 
     private class SaveTask extends Task<List<R>> {
-        private Mode prevMode;
 
         public SaveTask(Mode prevMode) {
-            this.prevMode = prevMode;
             setOnFailed((WorkerStateEvent event) -> handleException(getException()));
             setOnSucceeded((WorkerStateEvent event) -> postSaveAction(getValue(), prevMode));
         }
 
         @Override
-        protected List<R> call() throws Exception {
+        protected List<R> call() {
             List<R> lstResult = new ArrayList<>();
             if (mode.get().equals(Mode.EDIT)) {
                 lstResult = controller.update(lstChangedRow);
@@ -2363,7 +2287,7 @@ public class TableControl<R> extends VBox {
         }
 
         @Override
-        protected Void call() throws Exception {
+        protected Void call() {
             controller.delete(lstToDelete);
             return null;
         }
@@ -2377,7 +2301,7 @@ public class TableControl<R> extends VBox {
         }
 
         @Override
-        protected Void call() throws Exception {
+        protected Void call() {
             if (exportMode == ExportMode.ALL_PAGES) {
                 controller.exportToExcel("Override TableController.exportToExcel to reset the title.", maxResult.get(), TableControl.this, genericMove(lstCriteria));
             } else {

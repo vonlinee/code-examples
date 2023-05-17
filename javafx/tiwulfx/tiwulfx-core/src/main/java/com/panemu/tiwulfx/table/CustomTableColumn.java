@@ -97,7 +97,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     /**
      * @param propertyName java bean property name to be used for get/set method
      *                     using introspection
-     * @param prefWidth    preferred collumn width
+     * @param prefWidth    preferred column width
      * @param columnHeader column header text. Default equals propertyName. This
      *                     text is localized
      */
@@ -122,9 +122,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
             @Override
             @SuppressWarnings("unchecked")
             public ObservableValue<C> call(CellDataFeatures<R, C> param) {
-                /**
-                 * This code is adapted from {@link javafx.scene.control.cell.PropertyValueFactory#getCellDataReflectively(java.lang.Object)}
-                 */
+                // This code is adapted from {@link javafx.scene.control.cell.PropertyValueFactory#getCellDataReflectively(java.lang.Object)}
                 try {
                     Object cellValue;
                     if (getPropertyName().contains(".")) {
@@ -137,12 +135,10 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
                 } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                     throw new RuntimeException(ex);
                 } catch (Exception ex) {
-                    /**
-                     * Ideally it catches
-                     * org.apache.commons.beanutils.NestedNullException. However
-                     * we need to import apachec bean utils library in FXML file
-                     * to be able to display it in Scene Builder. So, I decided
-                     * to catch Exception to avoid the import.
+                    /*
+                       Ideally it catches org.apache.commons.beanutils.NestedNullException. However,
+                       we need to import attaches bean utils library in FXML file to be able to display it in Scene Builder.
+                       So, I decided to catch Exception to avoid the import.
                      */
                     return new SimpleObjectProperty<>(null);
                 }
@@ -196,15 +192,15 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
      * Set criteria to be applied to column. If you are going to set criteria to
      * multiple columns, it is encouraged to call {@link TableControl#setReloadOnCriteriaChange(boolean)
      * }
-     * and pass FALSE as parameter. It will disable autoreload on criteria
+     * and pass FALSE as parameter. It will disable autoload on criteria
      * change. After assign all criteria, call
      * {@link TableControl#reloadFirstPage()}. You might want to set {@link TableControl#setReloadOnCriteriaChange(boolean)
      * } back to true after that.
-     * @param crit
+     * @param criteria
      * @see TableControl#setReloadOnCriteriaChange(boolean)
      */
-    public void setTableCriteria(TableCriteria<C> crit) {
-        tableCriteria.set(crit);
+    public void setTableCriteria(TableCriteria<C> criteria) {
+        tableCriteria.set(criteria);
     }
 
     /**
@@ -245,20 +241,20 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
 
     /**
      * Sets cell alignment
-     * @param alignment
+     * @param alignment alignment
      */
     public void setAlignment(Pos alignment) {
         this.alignment = alignment;
     }
 
-    private BooleanProperty filterable = new SimpleBooleanProperty(true);
+    private final BooleanProperty filterable = new SimpleBooleanProperty(true);
 
     public BooleanProperty filterableProperty() {
         return filterable;
     }
 
     /**
-     * Specifies whether right clicking the column will show menu item to do
+     * Specifies whether right-clicking the column will show menu item to do
      * filtering. If filterable is true, search menu item will be displayed in
      * context menu.
      */
@@ -270,12 +266,12 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
         return this.filterable.get();
     }
 
-    private BooleanProperty required = new SimpleBooleanProperty(false);
+    private final BooleanProperty required = new SimpleBooleanProperty(false);
 
     /**
      * Set the field to required and cannot null. Some columns implementation
      * provide empty value that user can select if the column is not required.
-     * @param required
+     * @param required required
      */
     public void setRequired(boolean required) {
         this.required.set(required);
@@ -290,10 +286,9 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     }
 
     /**
-     * Convert
-     * <code>stringValue</code> to value that is acceptable by this column.
-     * @param stringValue
-     * @return
+     * Convert <code>stringValue</code> to value that is acceptable by this column.
+     * @param stringValue stringValue
+     * @return 列数据类型
      */
     public final C convertFromString(String stringValue) {
         return stringConverter.fromString(stringValue);
@@ -302,8 +297,8 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     /**
      * Convert
      * <code>value</code> to String as represented in TableControl
-     * @param value
-     * @return
+     * @param value value
+     * @return String
      */
     public final String convertToString(C value) {
         return stringConverter.toString(value);
@@ -340,7 +335,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     /**
      * Get a Record-InvalidErrorMessage map that is managed by calls to {@link #setValid(java.lang.Object)}
      * and {@link #setInvalid(java.lang.Object, java.lang.String)}
-     * @return
+     * @return ObservableMap
      */
     public ObservableMap<R, String> getInvalidRecordMap() {
         return mapInvalid;
@@ -450,7 +445,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
 
         /**
          * At this point, the value of the record is still the oldValue. The newValue
-         * is assigned to the record after this method call ends (See TableControl oneditcommit).
+         * is assigned to the record after this method call ends (See TableControl onEditCommit).
          * In order the event is fired after the newValue is assigned, run the event in Platform.runLater
          */
         Platform.runLater(() -> fireEditCommitChangeEvent(record, oldValue, newValue));
@@ -476,7 +471,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
         return mapChangedRecord;
     }
 
-    private final List<CellEditorListener<R, C>> lstValueChangeListener = new ArrayList<CellEditorListener<R, C>>();
+    private final List<CellEditorListener<R, C>> lstValueChangeListener = new ArrayList<>();
 
     protected List<CellEditorListener<R, C>> getCellEditorListeners() {
         return lstValueChangeListener;

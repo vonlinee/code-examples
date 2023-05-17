@@ -82,7 +82,7 @@ public class FrmTextColumn extends VBox {
         tblTextColumn.setRecordClass(TextColumnPojo.class);
         tblTextColumn.setController(controller);
 
-        tblTextColumn.setFooterVisiablity(false);
+        tblTextColumn.setFooterVisibility(false);
     }
 
     private TableOperation<TextColumnPojo> controller = new TableOperation<TextColumnPojo>() {
