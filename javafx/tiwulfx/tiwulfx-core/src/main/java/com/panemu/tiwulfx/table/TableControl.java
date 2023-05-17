@@ -46,11 +46,6 @@ import java.util.logging.Logger;
 public class TableControl<R> extends VBox {
 
     /**
-     * Default number of rows displayed in {@link com.panemu.tiwulfx.table.TableControl TableControl}. Default is 500
-     */
-    public static int DEFAULT_TABLE_MAX_ROW = 500;
-
-    /**
      * JavaFX TableView
      */
     private final CustomTableView<R> tableView;
@@ -70,16 +65,17 @@ public class TableControl<R> extends VBox {
     private final List<TableCriteria<?>> lstCriteria = new ArrayList<>();
 
     private Class<R> recordClass;
-    private boolean reloadOnCriteriaChange = true;
 
     /**
      * 编辑模式
      */
     private boolean directEdit = false;
     private boolean fitColumnAfterReload = false;
+    private boolean reloadOnCriteriaChange = true;
+
     private long totalRows = 0;
     private Integer page = 0;
-    private final IntegerProperty pageSize = new SimpleIntegerProperty(DEFAULT_TABLE_MAX_ROW);
+    private final IntegerProperty pageSize = new SimpleIntegerProperty(100);
     private int lastColumnIndex = 0;
 
     /**
