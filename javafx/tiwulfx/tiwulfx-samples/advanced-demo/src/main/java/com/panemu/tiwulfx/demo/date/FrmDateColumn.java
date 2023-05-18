@@ -91,7 +91,7 @@ public class FrmDateColumn extends VBox {
         tblDate.setFooterVisibility(false);
 
         tblDate.setRecordClass(DatePojo.class);
-        tblDate.setController(controller);
+        tblDate.setBehaviour(controller);
     }
 
     private TableBehaviourBase<DatePojo> controller = new TableBehaviourBase<DatePojo>() {

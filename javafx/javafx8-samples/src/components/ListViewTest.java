@@ -126,7 +126,6 @@ public class ListViewTest extends Application {
         primaryStage.setWidth(500);
         primaryStage.show();
         listview.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 index = newValue.intValue();

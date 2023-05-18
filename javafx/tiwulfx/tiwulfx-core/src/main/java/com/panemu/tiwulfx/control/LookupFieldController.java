@@ -271,7 +271,7 @@ public abstract class LookupFieldController<T> {
             pnlButton.getChildren().add(button);
             getChildren().addAll(table, pnlButton);
             VBox.setVgrow(table, Priority.ALWAYS);
-            table.setController(new LookupTableController());
+            table.setBehaviour(new LookupTableController());
             table.setVisibleComponents(false, Component.BUTTON_DELETE,
                     Component.BUTTON_EDIT,
                     Component.BUTTON_EXPORT,

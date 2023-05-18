@@ -6,6 +6,7 @@ import com.panemu.tiwulfx.common.TableData;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.dialog.MessageDialog;
 import com.panemu.tiwulfx.dialog.MessageDialogBuilder;
+import com.panemu.tiwulfx.table.annotation.TableViewColumn;
 import com.panemu.tiwulfx.utils.ClassUtils;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
@@ -13,8 +14,11 @@ import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +30,49 @@ import java.util.List;
  */
 public abstract class TableBehaviourBase<R> {
 
+    /**
+     * 初始化表格
+     * @param recordClass 数据模型
+     * @param tableView   表格
+     */
+    public void initTableView(Class<R> recordClass, CustomTableView<R> tableView) {
+        final Field[] declaredFields = recordClass.getDeclaredFields();
+        final List<CustomTableColumn<R, ?>> columnsToBeAdd = new ArrayList<>();
+        for (Field declaredField : declaredFields) {
+            final TableViewColumn tvc = declaredField.getAnnotation(TableViewColumn.class);
+            if (tvc == null) {
+                continue;
+            }
+            final Class<?> type = declaredField.getType();
+            final String propertyName = declaredField.getName();
+            // 根据数据类型推断选择使用什么列
+            CustomTableColumn<R, ?> column;
+            if (Number.class.isAssignableFrom(type)) {
+                column = new NumberColumn<>(propertyName, type);
+            } else if (type == String.class) {
+                column = new TextColumn<>(propertyName);
+            } else if (type == LocalDate.class) {
+                column = new LocalDateColumn<>(propertyName);
+            } else if (type == Date.class) {
+                column = new DateColumn<>(propertyName);
+            } else {
+                column = new ObjectColumn<>(propertyName);
+            }
+            final double prefWidth = tvc.prefWidth();
+            if (prefWidth != -1) {
+                column.setPrefWidth(prefWidth);
+            }
+            column.setText(tvc.name());
+            columnsToBeAdd.add(column);
+        }
+        tableView.getColumns().addAll(columnsToBeAdd);
+    }
+
+    /**
+     * 新建一条空记录
+     * @param recordType 记录类型
+     * @return 空记录，一半是空对象
+     */
     public R newItem(Class<R> recordType) {
         if (recordType != null) {
             return ClassUtils.newInstance(recordType);

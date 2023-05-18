@@ -1,15 +1,16 @@
 package scenegraph.node.parent.control.label;
 
-import application.SampleApplication;
+import application.TestApplication;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
-public class TestLabelApp extends SampleApplication {
+public class TestLabelApp extends TestApplication {
 
 	@Override
-	public Parent createRoot() {
+	public Parent createRoot(Stage stage) {
 
 		Label label = new Label("1111111111");
 		

@@ -1,6 +1,6 @@
 package canvas;
 
-import application.SampleApplication;
+import application.TestApplication;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -43,6 +43,6 @@ public class TestCanvasApplication extends Application {
 	}
 	
 	public static void main(String[] args) {
-		Application.launch(SampleApplication.class, args);
+		Application.launch(TestApplication.class, args);
 	}
 }

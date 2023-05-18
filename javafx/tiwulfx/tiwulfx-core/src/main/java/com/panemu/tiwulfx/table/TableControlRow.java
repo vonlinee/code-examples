@@ -38,7 +38,7 @@ public class TableControlRow<R> extends TableRow<R> {
                     && event.getClickCount() == 2
                     && TableControlRow.this.getIndex() < tblView.getRecords().size()) {
                 Object selectedItem = tblView.getSelectionModel().getSelectedItem();
-                tblView.getController().doubleClick((R) selectedItem);
+                tblView.getBehaviour().doubleClick((R) selectedItem);
             }
         });
 

@@ -1,6 +1,6 @@
 package scenegraph.node.parent.control;
 
-import application.SampleApplication;
+import application.TestApplication;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -9,11 +9,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
 
-public class TextFieldSample extends SampleApplication {
+public class TextFieldSample extends TestApplication {
 
 	@Override
-	public Parent createRoot() {
+	public Parent createRoot(Stage stage) {
 		
 		FlowPane flowPane = new FlowPane();
 		

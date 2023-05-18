@@ -3,7 +3,6 @@ package com.panemu.tiwulfx.table;
 import com.panemu.tiwulfx.common.*;
 import com.panemu.tiwulfx.dialog.MessageDialog;
 import com.panemu.tiwulfx.dialog.MessageDialogBuilder;
-import com.panemu.tiwulfx.table.annotation.TableViewColumn;
 import com.panemu.tiwulfx.utils.ClassUtils;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -33,7 +32,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,7 +50,7 @@ public class TableControl<R> extends VBox {
     private PaginationControl paginationControl;
 
     private TableToolBar tableToolBar;
-    private TableBehaviourBase<R> controller;
+    private TableBehaviourBase<R> behaviour;
 
     /**
      * start index
@@ -140,7 +138,9 @@ public class TableControl<R> extends VBox {
     }
 
     public TableControl(Class<R> recordClass) {
-
+        if (this.behaviour == null) {
+            this.behaviour = new DefaultTableControlBehavior<>();
+        }
         this.tableView = new CustomTableView<>();
         this.columns = tableView.getColumns();
         this.items = tableView.getItems();
@@ -174,39 +174,9 @@ public class TableControl<R> extends VBox {
         });
         attachWindowVisibilityListener();
 
-        if (this.controller == null) {
-            this.controller = new TableBehaviourBase<>() {
-            };
-        }
-
         if (recordClass != null) {
-            initColumns(recordClass);
+            behaviour.initTableView(recordClass, tableView);
         }
-    }
-
-    /**
-     * TODO 可以自定义获取列定义的方式
-     * @param recordClass 实体类
-     */
-    private void initColumns(Class<R> recordClass) {
-        final Field[] declaredFields = recordClass.getDeclaredFields();
-        final List<CustomTableColumn<R, ?>> columnsToBeAdd = new ArrayList<>();
-        for (Field declaredField : declaredFields) {
-            final TableViewColumn tvc = declaredField.getAnnotation(TableViewColumn.class);
-            if (tvc == null) {
-                continue;
-            }
-            tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            // 根据数据类型推断选择使用什么列
-            final TextColumn<R> column = new TextColumn<>(declaredField.getName());
-            final double prefWidth = tvc.prefWidth();
-            if (prefWidth != -1) {
-                column.setPrefWidth(prefWidth);
-            }
-            column.setText(tvc.name());
-            columnsToBeAdd.add(column);
-        }
-        columns.addAll(columnsToBeAdd);
     }
 
     private void initTableView() {
@@ -236,7 +206,7 @@ public class TableControl<R> extends VBox {
             if (event.getCode() == KeyCode.ESCAPE) {
                 directEdit = false;
             } else if (event.getCode() == KeyCode.ENTER && mode.get() == Mode.READ) {
-                getController().doubleClick(TableViewHelper.getSelectedItem(tableView));
+                getBehaviour().doubleClick(TableViewHelper.getSelectedItem(tableView));
             }
         });
         // Define policy for TAB key press
@@ -1169,18 +1139,18 @@ public class TableControl<R> extends VBox {
 
     /**
      * @return Object set from
-     * {@link #setController(TableBehaviourBase)}
+     * {@link #setBehaviour(TableBehaviourBase)}
      */
-    public TableBehaviourBase<R> getController() {
-        return controller;
+    public final TableBehaviourBase<R> getBehaviour() {
+        return behaviour;
     }
 
     /**
      * Set object responsible to fetch, insert, delete and update data
-     * @param controller controller
+     * @param behaviour controller
      */
-    public final void setController(TableBehaviourBase<R> controller) {
-        this.controller = controller;
+    public final void setBehaviour(TableBehaviourBase<R> behaviour) {
+        this.behaviour = Objects.requireNonNull(behaviour, "behaviour instance cannot be null");
     }
 
     /**
@@ -1288,7 +1258,7 @@ public class TableControl<R> extends VBox {
     @SuppressWarnings("rawtypes")
     public void reload() {
         if (!changedRows.isEmpty()) {
-            if (!controller.revertConfirmation(this, changedRows.size())) {
+            if (!behaviour.revertConfirmation(this, changedRows.size())) {
                 return;
             }
         }
@@ -1330,7 +1300,7 @@ public class TableControl<R> extends VBox {
         if (useBackgroundTaskToLoad) {
             service.runLoadInBackground(lstSortedColumn, lstSortedType);
         } else {
-            TableData<R> vol = controller.loadData(startIndex.get(), list, lstSortedColumn, lstSortedType, pageSize.get());
+            TableData<R> vol = behaviour.loadData(startIndex.get(), list, lstSortedColumn, lstSortedType, pageSize.get());
             postLoadAction(vol);
         }
     }
@@ -1408,8 +1378,8 @@ public class TableControl<R> extends VBox {
      * selected. This method is called when pressing insert button
      */
     public void insert() {
-        R newRecord = controller.newItem(recordClass);
-        newRecord = controller.preInsert(newRecord);
+        R newRecord = behaviour.newItem(recordClass);
+        newRecord = behaviour.preInsert(newRecord);
         if (newRecord == null) {
             return;
         }
@@ -1449,7 +1419,7 @@ public class TableControl<R> extends VBox {
                 setOperationMode(Mode.READ);
                 return;
             }
-            if (!controller.validate(this, changedRows)) {
+            if (!behaviour.validate(this, changedRows)) {
                 return;
             }
             Mode prevMode = mode.get();
@@ -1458,9 +1428,9 @@ public class TableControl<R> extends VBox {
             } else {
                 List<R> lstResult = new ArrayList<>();
                 if (mode.get().equals(Mode.EDIT)) {
-                    lstResult = controller.update(changedRows);
+                    lstResult = behaviour.update(changedRows);
                 } else if (mode.get().equals(Mode.INSERT)) {
-                    lstResult = controller.insert(changedRows);
+                    lstResult = behaviour.insert(changedRows);
                 }
                 postSaveAction(lstResult, prevMode);
             }
@@ -1477,7 +1447,7 @@ public class TableControl<R> extends VBox {
      * Edit table. This method is called when pressing edit button.
      */
     public void edit() {
-        if (controller.canEdit(tableView.getSelectionModel().getSelectedItem())) {
+        if (behaviour.canEdit(tableView.getSelectionModel().getSelectedItem())) {
             setOperationMode(Mode.EDIT);
         }
     }
@@ -1510,7 +1480,7 @@ public class TableControl<R> extends VBox {
 
         // Delete persistence record.
         try {
-            if (!controller.canDelete(this)) {
+            if (!behaviour.canDelete(this)) {
                 return;
             }
             int selectedRow = tableView.getSelectionModel().getSelectedIndex();
@@ -1519,7 +1489,7 @@ public class TableControl<R> extends VBox {
             if (useBackgroundTaskToDelete) {
                 service.runDeleteInBackground(lstToDelete, selectedRow);
             } else {
-                controller.delete(lstToDelete);
+                behaviour.delete(lstToDelete);
                 postDeleteAction(lstToDelete, selectedRow);
             }
 
@@ -1537,9 +1507,9 @@ public class TableControl<R> extends VBox {
             service.runExportInBackground();
         } else {
             if (exportMode == ExportMode.ALL_PAGES) {
-                controller.exportToExcel("Override TableController.exportToExcel to reset the title.", pageSize.get(), TableControl.this, genericMove(lstCriteria));
+                behaviour.exportToExcel("Override TableController.exportToExcel to reset the title.", pageSize.get(), TableControl.this, genericMove(lstCriteria));
             } else {
-                controller.exportToExcelCurrentPage("Override TableController.exportToExcelCurrentPage to reset the title.", TableControl.this);
+                behaviour.exportToExcelCurrentPage("Override TableController.exportToExcelCurrentPage to reset the title.", TableControl.this);
             }
         }
     }
@@ -1692,7 +1662,7 @@ public class TableControl<R> extends VBox {
         if (mode.get() == Mode.INSERT) {
             return true;
         }
-        return controller.isRecordEditable(item);
+        return behaviour.isRecordEditable(item);
     }
 
     /**
@@ -1758,7 +1728,7 @@ public class TableControl<R> extends VBox {
                 ((CustomTableColumn<R, ?>) clm).getInvalidRecordMap().clear();
             }
         }
-        controller.postLoadData();
+        behaviour.postLoadData();
     }
 
     private void postSaveAction(List<R> lstResult, Mode prevMode) {
@@ -1781,7 +1751,7 @@ public class TableControl<R> extends VBox {
          properties bound to the cells are not javaFX property object.
          */
         clearChange();
-        controller.postSave(prevMode);
+        behaviour.postSave(prevMode);
     }
 
     private void postDeleteAction(List<R> lstDeleted, int selectedRow) {
@@ -2188,7 +2158,7 @@ public class TableControl<R> extends VBox {
 
         @Override
         protected TableData<R> call() {
-            return controller.loadData(startIndex.get(), genericMove(lstCriteria), lstSortedColumn, sortingOrders, pageSize.get());
+            return behaviour.loadData(startIndex.get(), genericMove(lstCriteria), lstSortedColumn, sortingOrders, pageSize.get());
         }
     }
 
@@ -2203,9 +2173,9 @@ public class TableControl<R> extends VBox {
         protected List<R> call() {
             List<R> lstResult = new ArrayList<>();
             if (mode.get().equals(Mode.EDIT)) {
-                lstResult = controller.update(changedRows);
+                lstResult = behaviour.update(changedRows);
             } else if (mode.get().equals(Mode.INSERT)) {
-                lstResult = controller.insert(changedRows);
+                lstResult = behaviour.insert(changedRows);
             }
             return lstResult;
         }
@@ -2225,7 +2195,7 @@ public class TableControl<R> extends VBox {
 
         @Override
         protected Void call() {
-            controller.delete(lstToDelete);
+            behaviour.delete(lstToDelete);
             return null;
         }
 
@@ -2240,9 +2210,9 @@ public class TableControl<R> extends VBox {
         @Override
         protected Void call() {
             if (exportMode == ExportMode.ALL_PAGES) {
-                controller.exportToExcel("Override TableController.exportToExcel to reset the title.", pageSize.get(), TableControl.this, genericMove(lstCriteria));
+                behaviour.exportToExcel("Override TableController.exportToExcel to reset the title.", pageSize.get(), TableControl.this, genericMove(lstCriteria));
             } else {
-                controller.exportToExcelCurrentPage("Override TableController.exportToExcelCurrentPage to reset the title.", TableControl.this);
+                behaviour.exportToExcelCurrentPage("Override TableController.exportToExcelCurrentPage to reset the title.", TableControl.this);
             }
             return null;
         }

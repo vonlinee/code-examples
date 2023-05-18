@@ -1,14 +1,15 @@
 package scenegraph.node.parent.control.treetableview;
 
-import application.SampleApplication;
+import application.TestApplication;
 import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
+import javafx.stage.Stage;
 
-public class TextFieldSample extends SampleApplication {
+public class TextFieldSample extends TestApplication {
 
 	@Override
-	public Parent createRoot() {
+	public Parent createRoot(Stage stage) {
 		
 		TreeTableView<String> treeTableView = new TreeTableView<>();
 		

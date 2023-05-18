@@ -35,8 +35,8 @@ public class NumberColumn<R, C extends Number> extends CustomTableColumn<R, C> {
     private boolean grouping = true;
     private int maxLength = 10;
     private int digitBehindDecimal;
-    private ObjectProperty<Class<C>> clazzProperty = new SimpleObjectProperty<>();
-    private NumberField<C> searchInputControl = new NumberField<>(null);
+    private final ObjectProperty<Class<C>> clazzProperty = new SimpleObjectProperty<>();
+    private final NumberField<C> searchInputControl = new NumberField<>(null);
     protected String pattern = "###,###";
     private String zeroDigit = "";
     private final BooleanProperty negativeAllowed = new SimpleBooleanProperty(TiwulFXUtil.DEFAULT_NEGATIVE_ALLOWED);
@@ -67,19 +67,23 @@ public class NumberColumn<R, C extends Number> extends CustomTableColumn<R, C> {
         }
     };
 
-    @SuppressWarnings("unchecked")
     public NumberColumn() {
-        this("", (Class<C>) Double.class);
+        this(null, Double.class, 100);
     }
 
-    public NumberColumn(String propertyName, Class<C> clazz) {
+    public NumberColumn(String propertyName) {
+        this(propertyName, Double.class, 100);
+    }
+
+    public NumberColumn(String propertyName, Class<?> clazz) {
         this(propertyName, clazz, 100);
     }
 
-    public NumberColumn(String propertyName, Class<C> clazz, double prefWidth) {
+    @SuppressWarnings("unchecked")
+    public NumberColumn(String propertyName, Class<?> clazz, double prefWidth) {
         super(propertyName, prefWidth);
         setAlignment(Pos.BASELINE_RIGHT);
-        this.clazzProperty.set(clazz);
+        this.clazzProperty.set((Class<C>) clazz);
         Callback<TableColumn<R, C>, TableCell<R, C>> cellFactory =
                 new Callback<TableColumn<R, C>, TableCell<R, C>>() {
                     @Override

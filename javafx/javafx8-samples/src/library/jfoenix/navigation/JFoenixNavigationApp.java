@@ -1,6 +1,5 @@
 package library.jfoenix.navigation;
 
-import application.SampleApplication;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
@@ -14,11 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import library.jfoenix.navigation.main.ColorChangeCallback;
-import utils.FXColor;
-import utils.FXStyle;
 
 public class JFoenixNavigationApp extends Application {
 

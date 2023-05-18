@@ -61,7 +61,7 @@ public class FrmData extends StackPane {
 	}
 
 	private void init() {
-		tblData.setController(new CntlRecord());
+		tblData.setBehaviour(new CntlRecord());
 		tblData.setRecordClass(RecordPojo.class);
 	}
 

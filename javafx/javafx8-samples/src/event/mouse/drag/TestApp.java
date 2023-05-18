@@ -1,16 +1,17 @@
 package event.mouse.drag;
 
-import application.SampleApplication;
+import application.TestApplication;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 
-public class TestApp extends SampleApplication {
+public class TestApp extends TestApplication {
 
 	@Override
-	public Parent createRoot() {
+	public Parent createRoot(Stage stage) {
 		Button node = new Button("Button");
         // 提示用户该结点可点击
         node.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> node.setCursor(Cursor.HAND));

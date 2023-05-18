@@ -1,6 +1,6 @@
 package scenegraph.dialog.alert;
 
-import application.SampleApplication;
+import application.TestApplication;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -8,11 +8,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 
-public class TestAlertApp extends SampleApplication {
+public class TestAlertApp extends TestApplication {
 
 	@Override
-	public Parent createRoot() {
+	public Parent createRoot(Stage stage) {
 		Button btn = new Button("Alert");
 		btn.setOnAction(event -> {
 			

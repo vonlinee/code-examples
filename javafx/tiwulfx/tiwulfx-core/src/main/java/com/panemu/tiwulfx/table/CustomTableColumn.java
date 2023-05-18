@@ -7,9 +7,7 @@ import com.panemu.tiwulfx.utils.ClassUtils;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -53,7 +51,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     /**
      * used to get/set object method using introspection
      */
-    private String propertyName;
+    private StringProperty propertyName;
     private final SimpleObjectProperty<TableCriteria<C>> tableCriteria = new SimpleObjectProperty<>();
     private C searchValue;
     private final Node filterImage = TiwulFXUtil.getGraphicFactory().createFilterGraphic();
@@ -81,7 +79,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     };
 
     TableCriteria<C> createSearchCriteria(TableCriteria.Operator operator, C value) {
-        return new TableCriteria<>(propertyName, operator, value);
+        return new TableCriteria<>(propertyName.get(), operator, value);
     }
 
     /**
@@ -106,7 +104,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
      */
     public CustomTableColumn(String propertyName, String columnHeader) {
         super(columnHeader);
-        this.propertyName = propertyName;
+        this.propertyName = new SimpleStringProperty(propertyName);
 //        setCellValueFactory(new PropertyValueFactory<S, T>(propertyName));
         tableCriteria.addListener(new InvalidationListener() {
             @Override
@@ -208,11 +206,11 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
      * @return 属性名称
      */
     public String getPropertyName() {
-        return propertyName;
+        return propertyName.get();
     }
 
     public void setPropertyName(String propertyName) {
-        this.propertyName = propertyName;
+        this.propertyName.set(propertyName);
     }
 
     /**

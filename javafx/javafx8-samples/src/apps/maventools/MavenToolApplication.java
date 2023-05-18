@@ -27,6 +27,6 @@ public class MavenToolApplication extends Application {
      * 创建根节点
      */
     public Parent createRoot() throws IOException {
-        return FXMLLoader.load(ResourceLoader.load(getClass(), "main.scenegraph.fxml"));
+        return FXMLLoader.load(ResourceLoader.load(getClass(), "main.fxml"));
     }
 }

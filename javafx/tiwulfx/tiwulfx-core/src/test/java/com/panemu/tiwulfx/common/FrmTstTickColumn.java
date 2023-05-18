@@ -40,7 +40,7 @@ public class FrmTstTickColumn extends Application {
 	public void start(Stage primaryStage) {
 		TableControl<Record> tbl = new TableControl<>(Record.class);
 		TickColumn<Record> clm = new TickColumn<>();
-		tbl.setController(new TableBehaviourBase<Record>() {
+		tbl.setBehaviour(new TableBehaviourBase<Record>() {
 
 			@Override
 			public <C> TableData<Record> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {

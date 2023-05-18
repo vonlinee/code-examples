@@ -75,7 +75,7 @@ public class FrmPersonTable extends VBox {
 
     protected void init(boolean showTickColumn) {
         tblPerson.setRecordClass(Person.class);
-        tblPerson.setController(controller);
+        tblPerson.setBehaviour(controller);
         tblPerson.setMaxRecord(50);
 
         for (String location : DataGenerator.birthPlaces) {

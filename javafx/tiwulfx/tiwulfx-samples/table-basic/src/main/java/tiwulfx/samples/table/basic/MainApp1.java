@@ -4,9 +4,7 @@ import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.table.TableControl;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
-import tiwulfx.samples.shared.DataGenerator;
 import tiwulfx.samples.shared.pojo.Person;
 
 public class MainApp1 extends Application {

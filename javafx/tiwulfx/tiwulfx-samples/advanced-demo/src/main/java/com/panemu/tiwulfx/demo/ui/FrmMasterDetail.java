@@ -56,7 +56,7 @@ public class FrmMasterDetail extends VBox {
 
     private void initMasterTable() {
         tblInsurance.setRecordClass(Insurance.class);
-        tblInsurance.setController(cntlInsurance);
+        tblInsurance.setBehaviour(cntlInsurance);
         TextColumn<Insurance> clmCode = new TextColumn<>("code");
         TextColumn<Insurance> clmPackageName = new TextColumn<>("name", 300);
         tblInsurance.addColumn(clmCode, clmPackageName);
@@ -72,7 +72,7 @@ public class FrmMasterDetail extends VBox {
 
     private void initDetailTable() {
         tblPerson.setRecordClass(Person.class);
-        tblPerson.setController(cntlPerson);
+        tblPerson.setBehaviour(cntlPerson);
         tblPerson.setMaxRecord(50);
         tblPerson.getTableView().setTableMenuButtonVisible(true);
         TiwulfxDemo.factory.createEntityManager();

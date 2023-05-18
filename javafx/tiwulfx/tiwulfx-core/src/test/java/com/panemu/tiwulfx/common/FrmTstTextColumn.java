@@ -48,7 +48,7 @@ public class FrmTstTextColumn extends Application {
 		for (int i = 0; i < 15; i++) {
 			clmCmb.addItem("OPTION " + i, "option" + i);
 		}
-		tbl.setController(new TableBehaviourBase<>() {
+		tbl.setBehaviour(new TableBehaviourBase<>() {
 
 			@Override
 			public <C> TableData<Record> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {

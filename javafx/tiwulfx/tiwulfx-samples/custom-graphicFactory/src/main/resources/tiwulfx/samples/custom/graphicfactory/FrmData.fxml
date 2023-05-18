@@ -7,31 +7,30 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" type="StackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-	<children>
-      <VBox>
-         <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <TextFlow>
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="This is an example of custom graphic factory. Using font awesome icon for TableControl menu" />
-                     </children>
-                  </TextFlow>
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </HBox>
-      		<TableControl fx:id="tblData">
-      			<fillColumnsRecursivly>
-      				<NumberColumn fx:id="clmId" numberType="java.lang.Integer" prefWidth="75.0" propertyName="id" text="ID" />
-      				<TextColumn prefWidth="150.0" propertyName="name" text="Name" />
-      				<TextColumn prefWidth="250.0" propertyName="email" text="Email" />
-      				
-      			</fillColumnsRecursivly>
-      		</TableControl>
-         </children>
-      </VBox>
-	</children>
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+         prefWidth="600.0" type="StackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <VBox>
+    <children>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+        <children>
+          <TextFlow>
+            <children>
+              <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                    text="This is an example of custom graphic factory. Using font awesome icon for TableControl menu"/>
+            </children>
+          </TextFlow>
+        </children>
+        <padding>
+          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+      </HBox>
+      <TableControl fx:id="tblData">
+        <columns>
+          <NumberColumn fx:id="clmId" numberType="java.lang.Integer" prefWidth="75.0" propertyName="id" text="ID"/>
+          <TextColumn prefWidth="150.0" propertyName="name" text="Name"/>
+          <TextColumn prefWidth="250.0" propertyName="email" text="Email"/>
+        </columns>
+      </TableControl>
+    </children>
+  </VBox>
 </fx:root>
