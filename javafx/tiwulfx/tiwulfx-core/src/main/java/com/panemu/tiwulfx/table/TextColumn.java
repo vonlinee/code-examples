@@ -20,7 +20,7 @@ import javafx.util.StringConverter;
  *
  * @author amrullah
  */
-public class TextColumn<R extends Object> extends CustomTableColumn<R, String> {
+public class TextColumn<R> extends CustomTableColumn<R, String> {
 
 	private TextField searchInputControl = new TextField();
 	private boolean emptyStringAsNull = TiwulFXUtil.DEFAULT_EMPTY_STRING_AS_NULL;

@@ -90,6 +90,7 @@ public class TableControl<R> extends VBox {
     /**
      * 接管JavaFX TableView的列，后续所有操作直接操作此值，不通过
      * tblView.getColumns操作
+     * {@code tableView.getColumns()}
      */
     private final ObservableList<TableColumn<R, ?>> columns;
     public final ObservableList<R> items;
@@ -189,13 +190,15 @@ public class TableControl<R> extends VBox {
      */
     private void initColumns(Class<R> recordClass) {
         final Field[] declaredFields = recordClass.getDeclaredFields();
-        List<CustomTableColumn<R, Object>> columnsToBeAdd = new ArrayList<>();
+        final List<CustomTableColumn<R, ?>> columnsToBeAdd = new ArrayList<>();
         for (Field declaredField : declaredFields) {
             final TableViewColumn tvc = declaredField.getAnnotation(TableViewColumn.class);
             if (tvc == null) {
                 continue;
             }
-            final CustomTableColumn<R, Object> column = new CustomTableColumn<>(declaredField.getName());
+            tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            // 根据数据类型推断选择使用什么列
+            final TextColumn<R> column = new TextColumn<>(declaredField.getName());
             final double prefWidth = tvc.prefWidth();
             if (prefWidth != -1) {
                 column.setPrefWidth(prefWidth);
@@ -415,7 +418,6 @@ public class TableControl<R> extends VBox {
             btnReload = buildButton(TiwulFXUtil.getGraphicFactory().createReloadGraphic());
             btnSave = buildButton(TiwulFXUtil.getGraphicFactory().createSaveGraphic());
 
-            // TODO
             btnAdd.setOnAction(this);
             btnDelete.setOnAction(this);
             btnEdit.setOnAction(this);
@@ -850,7 +852,8 @@ public class TableControl<R> extends VBox {
                             } catch (Exception ex) {
                                 MessageDialog.Answer answer = MessageDialogBuilder.error(ex)
                                         .message("msg.paste.error", stringCellValue, toFillColumn.getText())
-                                        .buttonType(MessageDialog.ButtonType.YES_NO).yesOkButtonText("continue.pasting")
+                                        .buttonType(MessageDialog.ButtonType.YES_NO)
+                                        .yesOkButtonText("continue.pasting")
                                         .noButtonText("stop").show(getScene().getWindow());
                                 if (answer == MessageDialog.Answer.NO) {
                                     stopPasting = true;
@@ -1199,9 +1202,10 @@ public class TableControl<R> extends VBox {
                 });
                 // 监听排序
                 baseColumn.sortTypeProperty().addListener(sortTypeChangeListener);
-                // 编辑事件
+                // 编辑提交事件
                 baseColumn.addEventHandler(TableColumn.editCommitEvent(), (EventHandler<CellEditEvent<R, Object>>) t -> {
                     if (!TableViewHelper.isCellEditPositionValid(t) || !TableViewHelper.isCellValueUpdated(t)) {
+                        System.out.println("编辑无效");
                         return;
                     }
                     R persistentObj = t.getTableView().getItems().get(t.getTablePosition().getRow());
@@ -1409,14 +1413,14 @@ public class TableControl<R> extends VBox {
         if (newRecord == null) {
             return;
         }
-        int selectedRowIndex = tableView.getSelectionModel().getSelectedIndex() + 1;
+        int selectedRowIndex = tableView.getSelectedIndex() + 1;
         if (items.size() == 0) {
             selectedRowIndex = 0;
         }
         items.add(selectedRowIndex, newRecord);
         changedRows.add(newRecord);
 
-        mode.set(Mode.INSERT);
+        this.setOperationMode(Mode.INSERT);
 
         /*
          Force the table to layout before selecting the newly added row. Without this call, the selection
@@ -1426,9 +1430,11 @@ public class TableControl<R> extends VBox {
         tableView.layout();
         tableView.requestFocus();
 
+        ObservableList<R> records = getRecords();
+
         final int row = selectedRowIndex;
         showRow(row);
-        tableView.getSelectionModel().select(row, tableView.getColumns().get(0));
+        tableView.getSelectionModel().select(row, columns.get(0));
     }
 
     /**
@@ -1616,10 +1622,9 @@ public class TableControl<R> extends VBox {
      * Get displayed record. It is just the same with
      * {@link TableView#getItems()}
      */
-    public ObservableList<R> getRecords() {
+    public final ObservableList<R> getRecords() {
         return items;
     }
-
 
     /**
      * Add button to toolbar. The button's style is set by this method. Make

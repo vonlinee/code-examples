@@ -30,7 +30,7 @@ import javafx.scene.input.KeyEvent;
  *
  * @author Amrullah 
  */
-public class LookupTableCell<R, C> extends BaseCell<R, C> {
+public class LookupTableCell<R, C> extends CustomTableCell<R, C> {
 
 	private LookupField<C> lookupField;
 	private LookupColumn<R, C> column;
@@ -41,17 +41,17 @@ public class LookupTableCell<R, C> extends BaseCell<R, C> {
 	}
 
 	@Override
-	protected void setValueToEditor(C value) {
+	protected void updateCellValue(C value) {
 		lookupField.setValue(value);
 	}
 
 	@Override
-	protected C getValueFromEditor() {
+	protected C getEditedValue() {
 		return lookupField.getValue();
 	}
 
 	@Override
-	protected Control getEditor() {
+	protected Control getEditView() {
 		if (lookupField == null) {
 			lookupField = new LookupField<>();
 			lookupField.setShowSuggestionWaitTime(column.getShowSuggestionWaitTime());

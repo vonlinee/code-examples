@@ -31,7 +31,7 @@ import javafx.scene.input.KeyEvent;
  *
  * @author Amrullah 
  */
-public class ComboBoxTableCell<R, C> extends BaseCell<R, C> {
+public class ComboBoxTableCell<R, C> extends CustomTableCell<R, C> {
 
 	private ComboBox<C> combobox;
 	private ComboBoxColumn<R, C> column;
@@ -42,12 +42,12 @@ public class ComboBoxTableCell<R, C> extends BaseCell<R, C> {
 	}
 
 	@Override
-	protected void setValueToEditor(C value) {
+	protected void updateCellValue(C value) {
 		combobox.setValue(value);
 	}
 
 	@Override
-	protected Control getEditor() {
+	protected Control getEditView() {
 		if (combobox == null) {
 			combobox = new ComboBox<>();
 			if (!column.isRequired()) {
@@ -105,7 +105,7 @@ public class ComboBoxTableCell<R, C> extends BaseCell<R, C> {
 	}
 
 	@Override
-	protected C getValueFromEditor() {
+	protected C getEditedValue() {
 		return combobox.getValue();
 	}
 

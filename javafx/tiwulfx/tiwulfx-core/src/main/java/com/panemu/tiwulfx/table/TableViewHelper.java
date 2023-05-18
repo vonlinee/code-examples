@@ -112,7 +112,9 @@ public class TableViewHelper {
      * @return 单元格编辑位置是否有效
      */
     public static <R, C> boolean isCellEditPositionValid(TableColumn.CellEditEvent<R, C> t) {
+        if (t.getTablePosition() == null || t.getTableView() == null) {
+            return false;
+        }
         return t.getTablePosition().getRow() < t.getTableView().getItems().size();
     }
-
 }

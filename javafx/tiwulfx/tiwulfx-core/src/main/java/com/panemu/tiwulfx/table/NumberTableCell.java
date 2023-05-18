@@ -27,7 +27,7 @@ import javafx.scene.control.Control;
  *
  * @author Amrullah 
  */
-public class NumberTableCell<R, C extends Number> extends BaseCell<R, C> {
+public class NumberTableCell<R, C extends Number> extends CustomTableCell<R, C> {
 
 	private NumberField<C> textField;
 	private NumberColumn<R, C> column;
@@ -38,17 +38,17 @@ public class NumberTableCell<R, C extends Number> extends BaseCell<R, C> {
 	}
 
 	@Override
-	protected void setValueToEditor(C value) {
+	protected void updateCellValue(C value) {
 		textField.setValue(value);
 	}
 
 	@Override
-	protected C getValueFromEditor() {
+	protected C getEditedValue() {
 		return textField.getValue();
 	}
 
 	@Override
-	protected Control getEditor() {
+	protected Control getEditView() {
 		if (textField == null) {
 			textField = new NumberField<>(column.getNumberType());
 			textField.setMaxLength(column.getMaxLength());

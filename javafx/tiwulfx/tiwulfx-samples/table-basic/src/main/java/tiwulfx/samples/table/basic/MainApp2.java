@@ -1,6 +1,5 @@
 package tiwulfx.samples.table.basic;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import javafx.application.Application;

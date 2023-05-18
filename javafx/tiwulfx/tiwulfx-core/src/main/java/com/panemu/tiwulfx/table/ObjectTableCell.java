@@ -29,7 +29,7 @@ import javafx.util.StringConverter;
  *
  * @author Amrullah
  */
-public class ObjectTableCell<R, C> extends BaseCell<R, C> {
+public class ObjectTableCell<R, C> extends CustomTableCell<R, C> {
 
 	private TextField textField;
 	private ObjectColumn<R, C> column;
@@ -42,12 +42,12 @@ public class ObjectTableCell<R, C> extends BaseCell<R, C> {
 	}
 
 	@Override
-	protected void setValueToEditor(C value) {
+	protected void updateCellValue(C value) {
 		textField.setText(converter.toString(value));
 	}
 
 	@Override
-	protected C getValueFromEditor() {
+	protected C getEditedValue() {
 		if (textField.getText() == null
 				  || (column.isEmptyStringAsNull() && textField.getText().trim().isEmpty())) {
 			return null;
@@ -56,7 +56,7 @@ public class ObjectTableCell<R, C> extends BaseCell<R, C> {
 	}
 
 	@Override
-	protected Control getEditor() {
+	protected Control getEditView() {
 		if (textField == null) {
 			textField = new TextField();
 			textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);

@@ -3,6 +3,7 @@ package com.panemu.tiwulfx.table;
 import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.common.Validator;
+import com.panemu.tiwulfx.utils.ClassUtils;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -21,7 +22,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import org.apache.commons.beanutils.PropertyUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -80,7 +80,6 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
         }
     };
 
-
     TableCriteria<C> createSearchCriteria(TableCriteria.Operator operator, C value) {
         return new TableCriteria<>(propertyName, operator, value);
     }
@@ -119,8 +118,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
                 }
             }
         });
-        setCellValueFactory(new Callback<CellDataFeatures<R, C>, ObservableValue<C>>() {
-            private SimpleObjectProperty<C> propertyValue;
+        this.setCellValueFactory(new Callback<CellDataFeatures<R, C>, ObservableValue<C>>() {
 
             @Override
             @SuppressWarnings("unchecked")
@@ -129,12 +127,11 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
                 try {
                     Object cellValue;
                     if (getPropertyName().contains(".")) {
-                        cellValue = PropertyUtils.getNestedProperty(param.getValue(), getPropertyName());
+                        cellValue = ClassUtils.getNestedProperty(param.getValue(), getPropertyName());
                     } else {
-                        cellValue = PropertyUtils.getSimpleProperty(param.getValue(), getPropertyName());
+                        cellValue = ClassUtils.getSimpleProperty(param.getValue(), getPropertyName());
                     }
-                    propertyValue = new SimpleObjectProperty<>((C) cellValue);
-                    return propertyValue;
+                    return new SimpleObjectProperty<>((C) cellValue);
                 } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                     throw new RuntimeException(ex);
                 } catch (Exception ex) {
@@ -328,7 +325,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
      * Check whether specified record's value that displayed in this column is
      * valid. This checks against {@link #getInvalidRecordMap()}. If the record
      * is contained in the map that it is invalid.
-     * @param record
+     * @param record 记录
      * @return true for valid
      */
     public boolean isValid(R record) {
@@ -340,7 +337,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
      * and {@link #setInvalid(java.lang.Object, java.lang.String)}
      * @return ObservableMap
      */
-    public ObservableMap<R, String> getInvalidRecordMap() {
+    public final ObservableMap<R, String> getInvalidRecordMap() {
         return mapInvalid;
     }
 
@@ -348,7 +345,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
      * Add validator. The validator will be called with the same sequence the
      * validators are added to input controls. One validator instance is
      * reusable across columns, but only can be added once in a column.
-     * @param validator
+     * @param validator validator
      */
     public void addValidator(Validator<C> validator) {
         if (!lstValidator.contains(validator)) {
@@ -409,7 +406,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
         return popup;
     }
 
-    private final List<EditCommitListener<R, C>> lstEditCommitListener = new ArrayList<EditCommitListener<R, C>>();
+    private final List<EditCommitListener<R, C>> lstEditCommitListener = new ArrayList<>();
 
     /**
      * Register a listener to editCommit event. The {@link TableColumn#setOnEditCommit(javafx.event.EventHandler) TableColumn.setOnEditCommit()}
@@ -483,7 +480,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     /**
      * Listen to cell editor's value change before it is committed to table cell.
      * To listen to commit event see {@link #addEditCommitListener(com.panemu.tiwulfx.table.EditCommitListener) addEditCommitListener()}
-     * @param selectedValueListener
+     * @param selectedValueListener selectedValueListener
      */
     public void addCellEditorListener(CellEditorListener<R, C> selectedValueListener) {
         if (!lstValueChangeListener.contains(selectedValueListener)) {

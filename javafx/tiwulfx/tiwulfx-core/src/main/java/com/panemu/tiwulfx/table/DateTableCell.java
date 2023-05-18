@@ -19,27 +19,22 @@
 package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.common.LocalDateConverterWithDateFormat;
-import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.control.DateField;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.Date;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.Control;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 /**
  *
  * @author Amrullah 
  */
-public class DateTableCell<R> extends BaseCell<R, Date> {
+public class DateTableCell<R> extends CustomTableCell<R, Date> {
 
 	private DateField datePicker;
 	private DateColumn<R> column;
@@ -51,17 +46,17 @@ public class DateTableCell<R> extends BaseCell<R, Date> {
 	}
 
 	@Override
-	protected void setValueToEditor(Date value) {
+	protected void updateCellValue(Date value) {
 		datePicker.setSelectedDate(value);
 	}
 
 	@Override
-	protected Date getValueFromEditor() {
+	protected Date getEditedValue() {
 		return datePicker.getSelectedDate();
 	}
 
 	@Override
-	protected Control getEditor() {
+	protected Control getEditView() {
 		if (datePicker == null) {
 			datePicker = new DateField();
 			datePicker.setController(column.getController());
@@ -101,7 +96,7 @@ public class DateTableCell<R> extends BaseCell<R, Date> {
 			@Override
 			public void handle(KeyEvent t) {
 				if (t.getCode() == KeyCode.ENTER) {
-					commitEdit(getValueFromEditor());
+					commitEdit(getEditedValue());
 					t.consume();
 				} else if (t.getCode() == KeyCode.ESCAPE) {
 					cancelEdit();

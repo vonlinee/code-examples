@@ -111,7 +111,7 @@ public class TableControlRow<R> extends TableRow<R> {
                 if (baseColumn.getPropertyName().startsWith(propertyName) && !baseColumn.getPropertyName()
                         .equals(propertyName)) {
                     ObservableValue currentObservableValue = baseColumn.getCellObservableValue(cell.getIndex());
-                    ((BaseCell) cell).updateItem(currentObservableValue.getValue(), currentObservableValue == null);
+                    ((CustomTableCell) cell).updateItem(currentObservableValue.getValue(), currentObservableValue == null);
                 }
             }
         }
@@ -132,8 +132,8 @@ public class TableControlRow<R> extends TableRow<R> {
                 if (currentObservableValue == null) {
                     continue;
                 }
-                if (cell instanceof BaseCell) {
-                    ((BaseCell) cell).updateItem(currentObservableValue.getValue(), false);
+                if (cell instanceof CustomTableCell) {
+                    ((CustomTableCell) cell).updateItem(currentObservableValue.getValue(), false);
                 } else {
                     try {
                         Method m = cell.getClass().getDeclaredMethod("updateItem", Object.class, boolean.class);

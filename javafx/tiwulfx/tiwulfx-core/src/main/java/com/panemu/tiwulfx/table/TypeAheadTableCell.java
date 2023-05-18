@@ -32,7 +32,7 @@ import javafx.scene.input.KeyEvent;
  *
  * @author Amrullah 
  */
-public class TypeAheadTableCell<R, C> extends BaseCell<R, C> {
+public class TypeAheadTableCell<R, C> extends CustomTableCell<R, C> {
 
 	private TypeAheadField<C> typeAheadField;
 	private TypeAheadColumn<R, C> column;
@@ -43,18 +43,18 @@ public class TypeAheadTableCell<R, C> extends BaseCell<R, C> {
 	}
 
 	@Override
-	protected void setValueToEditor(C value) {
+	protected void updateCellValue(C value) {
 		typeAheadField.setValue(value);
 	}
 
 	@Override
-	protected C getValueFromEditor() {
+	protected C getEditedValue() {
 		typeAheadField.markInvalidProperty().set(true);
 		return typeAheadField.getValue();
 	}
 
 	@Override
-	protected Control getEditor() {
+	protected Control getEditView() {
 		if (typeAheadField == null) {
 			typeAheadField = new TypeAheadField<>();
 

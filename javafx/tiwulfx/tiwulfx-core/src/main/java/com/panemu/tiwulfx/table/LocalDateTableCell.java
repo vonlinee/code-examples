@@ -36,7 +36,7 @@ import javafx.util.StringConverter;
  *
  * @author Amrullah 
  */
-public class LocalDateTableCell<R> extends BaseCell<R, LocalDate> {
+public class LocalDateTableCell<R> extends CustomTableCell<R, LocalDate> {
 
 	private DatePicker datePicker;
 	private LocalDateColumn<R> column;
@@ -47,7 +47,7 @@ public class LocalDateTableCell<R> extends BaseCell<R, LocalDate> {
 	}
 
 	@Override
-	protected void setValueToEditor(LocalDate value) {
+	protected void updateCellValue(LocalDate value) {
 		/**
 		 * If user type the date instead of using datepicker popup, the date is
 		 * not committed to datePicker until user presses ENTER or the datepicker
@@ -62,7 +62,7 @@ public class LocalDateTableCell<R> extends BaseCell<R, LocalDate> {
 	}
 
 	@Override
-	protected LocalDate getValueFromEditor() {
+	protected LocalDate getEditedValue() {
 		/**
 		 * If user change the date by typing, the new value is committed to the
 		 * DatePicker only if user press ENTER or move focus. Since this method
@@ -83,7 +83,7 @@ public class LocalDateTableCell<R> extends BaseCell<R, LocalDate> {
 	}
 
 	@Override
-	protected Control getEditor() {
+	protected Control getEditView() {
 		if (datePicker == null) {
 			datePicker = new DatePicker();
 			
@@ -130,7 +130,7 @@ public class LocalDateTableCell<R> extends BaseCell<R, LocalDate> {
 			@Override
 			public void handle(KeyEvent t) {
 				if (t.getCode() == KeyCode.ENTER) {
-					commitEdit(getValueFromEditor());
+					commitEdit(getEditedValue());
 					t.consume();
 				} else if (t.getCode() == KeyCode.ESCAPE) {
 					cancelEdit();

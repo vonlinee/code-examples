@@ -10,12 +10,12 @@ import javafx.scene.control.TableView;
  * 封装JavaFX TableView
  * @param <R>
  */
+@SuppressWarnings("unchecked")
 public class CustomTableView<R> extends TableView<R> {
 
     private TableColumn<R, ?> selectedColumn;
 
-    @SuppressWarnings("unchecked")
-    public <C> TableColumn<R, C> getSelectedColumn() {
+    public final <C> TableColumn<R, C> getSelectedColumn() {
         return (TableColumn<R, C>) selectedColumn;
     }
 
@@ -54,8 +54,8 @@ public class CustomTableView<R> extends TableView<R> {
         getSelectionModel().clearSelection();
     }
 
-    public final void edit(TablePosition newValue) {
-        edit(newValue.getRow(), newValue.getTableColumn());
+    public final <C> void edit(TablePosition<R, C> newValue) {
+        this.edit(newValue.getRow(), newValue.getTableColumn());
     }
 
     public final boolean hasSelectedCells() {
