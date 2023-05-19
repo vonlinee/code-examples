@@ -75,9 +75,7 @@ public class CalendarView extends VBox {
         this.calendar.set(calendar);
 
         getStyleClass().add(CSS_CALENDAR);
-
         setMaxWidth(Control.USE_PREF_SIZE);
-
         currentlyViewing.set(Calendar.MONTH);
 
         calendarDate.addListener(new InvalidationListener() {
@@ -87,15 +85,12 @@ public class CalendarView extends VBox {
             }
         });
         this.calendarDate.set(new Date());
-        currentDate.addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
-                Date date = new Date();
-                if (currentDate.get() != null) {
-                    date = currentDate.get();
-                }
-                calendarDate.set(date);
+        currentDate.addListener(observable -> {
+            Date date = new Date();
+            if (currentDate.get() != null) {
+                date = currentDate.get();
             }
+            calendarDate.set(date);
         });
         MainStackPane mainStackPane = new MainStackPane(this);
         VBox.setVgrow(mainStackPane, Priority.ALWAYS);
@@ -158,7 +153,7 @@ public class CalendarView extends VBox {
         return locale;
     }
 
-    private ObjectProperty<Locale> locale = new SimpleObjectProperty<Locale>();
+    private final ObjectProperty<Locale> locale = new SimpleObjectProperty<Locale>();
 
     public Locale getLocale() {
         return locale.get();
@@ -177,7 +172,7 @@ public class CalendarView extends VBox {
         return calendar;
     }
 
-    private ObjectProperty<Calendar> calendar = new SimpleObjectProperty<Calendar>();
+    private final ObjectProperty<Calendar> calendar = new SimpleObjectProperty<Calendar>();
 
     public Calendar getCalendar() {
         return calendar.get();
@@ -197,9 +192,9 @@ public class CalendarView extends VBox {
         return disabledWeekdays;
     }
 
-    private ObservableList<Integer> disabledWeekdays = FXCollections.observableArrayList();
+    private final ObservableList<Integer> disabledWeekdays = FXCollections.observableArrayList();
 
-    private ObjectProperty<DateFieldController> controllerProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<DateFieldController> controllerProperty = new SimpleObjectProperty<>();
 
     public ObjectProperty<DateFieldController> controllerProperty() {
         return controllerProperty;
@@ -222,7 +217,7 @@ public class CalendarView extends VBox {
         return selectedDate;
     }
 
-    private ObjectProperty<Date> currentDate = new SimpleObjectProperty<Date>();
+    private final ObjectProperty<Date> currentDate = new SimpleObjectProperty<Date>();
 
     public ObjectProperty<Date> currentDateProperty() {
         return currentDate;
@@ -237,7 +232,7 @@ public class CalendarView extends VBox {
         return showTodayButton;
     }
 
-    private BooleanProperty showTodayButton = new SimpleBooleanProperty(false);
+    private final BooleanProperty showTodayButton = new SimpleBooleanProperty(false);
 
     public boolean getShowTodayButton() {
         return showTodayButton.get();
@@ -255,7 +250,7 @@ public class CalendarView extends VBox {
         return todayButtonText;
     }
 
-    private StringProperty todayButtonText = new SimpleStringProperty("Today");
+    private final StringProperty todayButtonText = new SimpleStringProperty("Today");
 
     public String getTodayButtonText() {
         return todayButtonText.get();
@@ -274,7 +269,7 @@ public class CalendarView extends VBox {
         return showWeeks;
     }
 
-    private BooleanProperty showWeeks = new SimpleBooleanProperty(false);
+    private final BooleanProperty showWeeks = new SimpleBooleanProperty(false);
 
     public boolean getShowWeeks() {
         return showWeeks.get();

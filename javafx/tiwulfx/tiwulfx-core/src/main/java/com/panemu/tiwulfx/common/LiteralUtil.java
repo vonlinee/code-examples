@@ -86,7 +86,6 @@ public class LiteralUtil {
 	}
 
 	private ResourceBundle build(String baseName) {
-
 		ResourceBundle.Control cntl = ResourceBundle.Control.getControl(List.of("java.properties"));
 		List<Locale> lcl = cntl.getCandidateLocales(baseName, locale);
 		boolean found = false;

@@ -1,102 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.panemu.tiwulfx.form.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.collections.*?>
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-
-<fx:root type="javafx.scene.layout.BorderPane" id="AnchorPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+<fx:root type="javafx.scene.layout.BorderPane" id="AnchorPane" minHeight="-Infinity"
+         minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml/1"
+         xmlns="http://javafx.com/javafx/2.2">
   <center>
-    <Form fx:id="personForm" prefHeight="-1.0" prefWidth="300.0">
-      <children>
-        <GridPane hgap="10.0" prefHeight="-1.0" vgap="10.0">
-          <children>
-            <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0">
-              <GridPane.margin>
-                <Insets fx:id="x1" />
-              </GridPane.margin>
-            </Label>
-            <Label text="Email" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="1" />
-            <Label text="Insurance" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="6" />
-            <Label text="Birth Place" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="2" />
-            <Label text="Birth Date" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="3" />
-            <Label text="Gender" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="4" />
-            <Label text="Alive" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="5" />
-            <Label text="Version" GridPane.columnIndex="0" GridPane.rowIndex="10" />
-            <TextControl fx:id="txtName" prefWidth="200.0" propertyName="name" required="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            <TextControl fx:id="txtEmail" prefWidth="200.0" propertyName="email" required="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ComboBoxControl fx:id="cmbBirthPlace" propertyName="birthPlace" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <DateControl fx:id="txtBirthDate" prefWidth="110.0" propertyName="birthDate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ChoiceBoxControl fx:id="cmbGender" propertyName="gender" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <CheckBoxControl fx:id="chkAlive" propertyName="alive" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <LookupControl fx:id="lkupInsurance" lookupPropertyName="code" propertyName="insurance" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TextControl fx:id="txtInsuranceName" editable="false" prefWidth="200.0" propertyName="insurance.name" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <Label text="Weight" GridPane.columnIndex="0" GridPane.rowIndex="9" />
-            <Label text="Visit" GridPane.columnIndex="0" GridPane.rowIndex="8" />
-            <NumberControl fx:id="txtVisit" prefWidth="100.0" propertyName="visit" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <NumberControl fx:id="txtWeight" prefWidth="100.0" propertyName="weight" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <NumberControl fx:id="txtVersion" editable="false" prefWidth="100.0" propertyName="version" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-          </children>
-          <columnConstraints>
-            <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="-1.0" />
-            <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          </columnConstraints>
-          <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-          </padding>
-          <rowConstraints>
-            <RowConstraints maxHeight="22.0" prefHeight="22.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="22.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="22.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="22.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="22.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="16.0" minHeight="10.0" prefHeight="16.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-1.0" minHeight="10.0" prefHeight="-1.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-1.0" minHeight="10.0" prefHeight="-1.0" vgrow="SOMETIMES" />
-          </rowConstraints>
-        </GridPane>
-      </children>
+    <Form fx:id="personForm" prefWidth="300.0">
+      <GridPane hgap="10.0" vgap="10.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="NEVER" minWidth="10.0"/>
+          <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        </columnConstraints>
+        <padding>
+          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+        <rowConstraints>
+          <RowConstraints maxHeight="22.0" prefHeight="22.0" vgrow="SOMETIMES"/>
+          <RowConstraints maxHeight="22.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES"/>
+          <RowConstraints maxHeight="22.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES"/>
+          <RowConstraints maxHeight="22.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES"/>
+          <RowConstraints maxHeight="22.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES"/>
+          <RowConstraints maxHeight="16.0" minHeight="10.0" prefHeight="16.0" vgrow="SOMETIMES"/>
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+        </rowConstraints>
+        <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0">
+          <GridPane.margin>
+            <Insets fx:id="x1"/>
+          </GridPane.margin>
+        </Label>
+        <Label text="Email" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="1"/>
+        <Label text="Insurance" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="6"/>
+        <Label text="Birth Place" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="2"/>
+        <Label text="Birth Date" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="3"/>
+        <Label text="Gender" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="4"/>
+        <Label text="Alive" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="5"/>
+        <Label text="Version" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+        <TextControl fx:id="txtName" prefWidth="200.0" propertyName="name" required="true" GridPane.columnIndex="1"
+                     GridPane.rowIndex="0"/>
+        <TextControl fx:id="txtEmail" prefWidth="200.0" propertyName="email" required="true"
+                     GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <ComboBoxControl fx:id="cmbBirthPlace" propertyName="birthPlace" GridPane.columnIndex="1"
+                         GridPane.rowIndex="2"/>
+        <DateControl fx:id="txtBirthDate" prefWidth="110.0" propertyName="birthDate" GridPane.columnIndex="1"
+                     GridPane.rowIndex="3"/>
+        <ChoiceBoxControl fx:id="cmbGender" propertyName="gender" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        <CheckBoxControl fx:id="chkAlive" propertyName="alive" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+        <LookupControl fx:id="lkupInsurance" lookupPropertyName="code" propertyName="insurance"
+                       GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+        <TextControl fx:id="txtInsuranceName" editable="false" prefWidth="200.0" propertyName="insurance.name"
+                     GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+        <Label text="Weight" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+        <Label text="Visit" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+        <NumberControl fx:id="txtVisit" prefWidth="100.0" propertyName="visit" GridPane.columnIndex="1"
+                       GridPane.rowIndex="8"/>
+        <NumberControl fx:id="txtWeight" prefWidth="100.0" propertyName="weight" GridPane.columnIndex="1"
+                       GridPane.rowIndex="9"/>
+        <NumberControl fx:id="txtVersion" editable="false" prefWidth="100.0" propertyName="version"
+                       GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+      </GridPane>
     </Form>
   </center>
   <top>
     <ToolBar styleClass="table-toolbar">
-      <items>
-        <Button fx:id="btnAdd" disable="false" mnemonicParsing="false" styleClass="flat-button">
-          <graphic>
-            <ImageView fitHeight="0.0" fitWidth="0.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
-              <image>
-                <Image url="@../../../../../images/add.png" preserveRatio="false" smooth="false" />
-              </image>
-            </ImageView>
-          </graphic>
-        </Button>
-        <Button fx:id="btnEdit" disable="false" mnemonicParsing="false" styleClass="flat-button">
-          <graphic>
-            <ImageView fitHeight="0.0" fitWidth="0.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
-              <image>
-                <Image url="@../../../../../images/edit.png" preserveRatio="false" smooth="false" />
-              </image>
-            </ImageView>
-          </graphic>
-        </Button>
-        <Button fx:id="btnSave" disable="true" mnemonicParsing="false" styleClass="flat-button">
-          <graphic>
-            <ImageView fitHeight="0.0" fitWidth="0.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
-              <image>
-                <Image url="@../../../../../images/save.png" preserveRatio="false" smooth="false" />
-              </image>
-            </ImageView>
-          </graphic>
-        </Button>
-      </items>
+      <Button fx:id="btnAdd" mnemonicParsing="false" styleClass="flat-button">
+        <graphic>
+          <ImageView mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../../../../images/add.png" smooth="false"/>
+          </ImageView>
+        </graphic>
+      </Button>
+      <Button fx:id="btnEdit" mnemonicParsing="false" styleClass="flat-button">
+        <graphic>
+          <ImageView mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../../../../images/edit.png" smooth="false"/>
+          </ImageView>
+        </graphic>
+      </Button>
+      <Button fx:id="btnSave" disable="true" mnemonicParsing="false" styleClass="flat-button">
+        <graphic>
+          <ImageView mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../../../../images/save.png" smooth="false"/>
+          </ImageView>
+        </graphic>
+      </Button>
     </ToolBar>
   </top>
 </fx:root>

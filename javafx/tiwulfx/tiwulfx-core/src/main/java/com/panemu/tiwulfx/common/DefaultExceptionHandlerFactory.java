@@ -33,7 +33,7 @@ public class DefaultExceptionHandlerFactory implements ExceptionHandlerFactory {
 		return new DefaultExceptionHandler();
 	}
 
-	private class DefaultExceptionHandler implements ExceptionHandler {
+	private static class DefaultExceptionHandler implements ExceptionHandler {
 
 		@Override
 		public void handleException(Throwable throwable, Window window) {

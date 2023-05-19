@@ -1,5 +1,11 @@
 package com.panemu.tiwulfx.table;
 
+/**
+ * 行数据变更
+ * @param <R> 行数据类型
+ * @param <C> 列数据类型
+ * @see javafx.scene.control.TextFormatter.Change
+ */
 public class RecordChange<R, C> {
 
     private R record;

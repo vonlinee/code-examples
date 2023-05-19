@@ -5,7 +5,6 @@ import com.panemu.tiwulfx.common.WindowEventListener;
 import com.panemu.tiwulfx.control.DetachableTabPane;
 import com.panemu.tiwulfx.control.NumberField;
 import com.panemu.tiwulfx.control.sidemenu.SideMenu;
-import com.panemu.tiwulfx.control.sidemenu.SideMenuActionHandler;
 import com.panemu.tiwulfx.control.sidemenu.SideMenuCategory;
 import com.panemu.tiwulfx.control.sidemenu.SideMenuItem;
 import com.panemu.tiwulfx.demo.date.FrmDateColumn;
@@ -90,39 +89,35 @@ public class FrmMain extends VBox {
         smCat.addMainMenuItem(smItem1, smItem6, smItem2, smItemText, smItemDate, smItemSynch, smItem5);
         sideMenu.addMenuItems(smCat, smItem3, smItem4);
 
-        sideMenu.setActionHandler(new SideMenuActionHandler() {
-
-            @Override
-            public void executeAction(String actionName) {
-                switch (actionName) {
-                    case "showFrmPersonTable":
-                        showFrmPersonTable();
-                        break;
-                    case "showFrmOddEditablePersonTable":
-                        showFrmOddEditablePersonTable();
-                        break;
-                    case "showFrmPersonTable2":
-                        showFrmPersonTable2();
-                        break;
-                    case "showFrmMasterDetail":
-                        showFrmMasterDetail();
-                        break;
-                    case "showFrmDetachableTabPane":
-                        showFrmDetachableTabPane();
-                        break;
-                    case "showFrmTextColumn":
-                        showFrmTextColumn();
-                        break;
-                    case "showFrmDateColumn":
-                        showFrmDateColumn();
-                        break;
-                    case "showFrmSychronizedColumns":
-                        showFrmSychronizedColumn();
-                        break;
-                    case "showFrmLog":
-                        showFrmLog();
-                        break;
-                }
+        sideMenu.setActionHandler(actionName -> {
+            switch (actionName) {
+                case "showFrmPersonTable":
+                    showFrmPersonTable();
+                    break;
+                case "showFrmOddEditablePersonTable":
+                    showFrmOddEditablePersonTable();
+                    break;
+                case "showFrmPersonTable2":
+                    showFrmPersonTable2();
+                    break;
+                case "showFrmMasterDetail":
+                    showFrmMasterDetail();
+                    break;
+                case "showFrmDetachableTabPane":
+                    showFrmDetachableTabPane();
+                    break;
+                case "showFrmTextColumn":
+                    showFrmTextColumn();
+                    break;
+                case "showFrmDateColumn":
+                    showFrmDateColumn();
+                    break;
+                case "showFrmSychronizedColumns":
+                    showFrmSychronizedColumn();
+                    break;
+                case "showFrmLog":
+                    showFrmLog();
+                    break;
             }
         });
 

@@ -1175,10 +1175,9 @@ public class TableControl<R> extends VBox {
                 // 编辑提交事件
                 baseColumn.addEventHandler(TableColumn.editCommitEvent(), (EventHandler<CellEditEvent<R, Object>>) t -> {
                     if (!TableViewHelper.isCellEditPositionValid(t) || !TableViewHelper.isCellValueUpdated(t)) {
-                        System.out.println("编辑无效");
                         return;
                     }
-                    R persistentObj = t.getTableView().getItems().get(t.getTablePosition().getRow());
+                    R persistentObj = t.getRowValue();
                     if (getMode() == Mode.EDIT) {
                         if (!changedRows.contains(persistentObj)) {
                             changedRows.add(persistentObj);
@@ -1399,9 +1398,6 @@ public class TableControl<R> extends VBox {
          */
         tableView.layout();
         tableView.requestFocus();
-
-        ObservableList<R> records = getRecords();
-
         final int row = selectedRowIndex;
         showRow(row);
         tableView.getSelectionModel().select(row, columns.get(0));
@@ -2000,7 +1996,7 @@ public class TableControl<R> extends VBox {
      * @param configurationID must be unique across all TableControls in an application
      * @see TiwulFXUtil#setApplicationId(java.lang.String, java.lang.String)
      */
-    public void setConfigurationID(String configurationID) {
+    public final void setConfigurationID(String configurationID) {
         this.configurationID = configurationID;
     }
 
@@ -2092,7 +2088,6 @@ public class TableControl<R> extends VBox {
      * 表格数据操作
      */
     class TableControlService extends Service<Object> {
-
         private List<String> lstSortedColumn = new ArrayList<>();
         private List<SortType> sortingOrders = new ArrayList<>();
         private Mode prevMode;

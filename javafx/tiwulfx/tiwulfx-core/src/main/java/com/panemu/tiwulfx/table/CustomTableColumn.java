@@ -51,7 +51,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     /**
      * used to get/set object method using introspection
      */
-    private StringProperty propertyName;
+    private final StringProperty propertyName;
     private final SimpleObjectProperty<TableCriteria<C>> tableCriteria = new SimpleObjectProperty<>();
     private C searchValue;
     private final Node filterImage = TiwulFXUtil.getGraphicFactory().createFilterGraphic();
@@ -59,6 +59,10 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     private final ObservableMap<R, String> mapInvalid = FXCollections.observableHashMap();
     private final List<Validator<C>> lstValidator = new ArrayList<>();
     private String nullLabel = TiwulFXUtil.DEFAULT_NULL_LABEL;
+
+    /**
+     * 记录改变的行
+     */
     private final Map<R, RecordChange<R, C>> mapChangedRecord = new HashMap<>();
 
     private StringConverter<C> stringConverter = new StringConverter<C>() {
@@ -391,8 +395,9 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     private PopupControl popup;
     Label errorLabel = new Label();
 
-    PopupControl getPopup(R record) {
+    public PopupControl getPopup(Object record) {
         String msg = mapInvalid.get(record);
+        System.out.println(msg);
         if (popup == null) {
             popup = new PopupControl();
             final HBox pnl = new HBox();

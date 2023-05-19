@@ -1,7 +1,3 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.common.TableCriteria.Operator;
@@ -28,7 +24,6 @@ import java.util.List;
 
 /**
  * column for number
- * @author amrullah
  */
 public class NumberColumn<R, C extends Number> extends CustomTableColumn<R, C> {
 
@@ -111,7 +106,7 @@ public class NumberColumn<R, C extends Number> extends CustomTableColumn<R, C> {
     }
 
     /**
-     * @return true if the NumberField display thousand separator
+     * @return true if the NumberField display a thousand separator
      */
     public boolean isGrouping() {
         return grouping;
@@ -126,8 +121,8 @@ public class NumberColumn<R, C extends Number> extends CustomTableColumn<R, C> {
     }
 
     /**
-     * Set whether it will use thousand separator or not
-     * @param grouping set it to true to use thousand separator
+     * Set whether it will use a thousand separator or not
+     * @param grouping set it to true to use a thousand separator
      */
     public void setGrouping(boolean grouping) {
         this.grouping = grouping;

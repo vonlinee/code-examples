@@ -168,25 +168,25 @@ public class FrmLog extends VBox {
         tblPerson.reloadFirstPage();
     }
 
-    private TableBehaviourBase<Person> controller = new TableBehaviourBase<Person>() {
+    private final TableBehaviourBase<Person> controller = new TableBehaviourBase<>() {
 
-        private DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
+        private final DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
 
         @Override
         public <C> TableData<Person> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
             boolean join = true;
-//        for (TableCriteria crit : filteredColumns) {
-//            if (crit.getAttributeName().equals("insurance") && crit.getOperator() == Operator.is_null) {
-//                join = false;
-//                break;
-//            }
-//        }
+            for (TableCriteria<?> crit : filteredColumns) {
+                if (crit.getAttributeName()
+                        .equals("insurance") && crit.getOperator() == TableCriteria.Operator.is_null) {
+                    join = false;
+                    break;
+                }
+            }
             List<String> lstJoin = new ArrayList<>();
             if (join) {
                 lstJoin.add("insurance");
             }
-            TableData<Person> result = daoPerson.fetch(startIndex, filteredColumns, sortedColumns, sortingOrders, maxResult, lstJoin);
-            return result;
+            return (TableData<Person>) daoPerson.fetch(startIndex, filteredColumns, sortedColumns, sortingOrders, maxResult, lstJoin);
         }
 
         @Override
@@ -196,9 +196,8 @@ public class FrmLog extends VBox {
 
         @Override
         public List<Person> update(List<Person> records) {
-
             Runnable runnable = () -> {
-                tblPerson.getRecordChangeList().stream().forEach((rc) -> {
+                tblPerson.getRecordChangeList().forEach((rc) -> {
                     txtLog.insertText(0, "Property Name: " + rc.getPropertyName() + ", Old Value: " + rc.getOldValue() + ", New Value: " + rc.getNewValue() + ", Timestamp: " + Calendar
                             .getInstance().getTime() + "\n");
                 });

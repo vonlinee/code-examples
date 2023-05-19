@@ -20,12 +20,12 @@ public class LabelSeparator extends StackPane {
 
     public LabelSeparator(String label, boolean topPading) {
         HBox line = new HBox();
-		 line.getStyleClass().add("line");
-		 line.setMinHeight(2);
-		 line.setPrefHeight(2);
-		 line.setPrefWidth(USE_PREF_SIZE);
-		 line.setMaxHeight(USE_PREF_SIZE);
-		 
+        line.getStyleClass().add("line");
+        line.setMinHeight(2);
+        line.setPrefHeight(2);
+        line.setPrefWidth(USE_PREF_SIZE);
+        line.setMaxHeight(USE_PREF_SIZE);
+
         if (topPading) {
             setPadding(new Insets(10, 0, 0, 0));
         }
