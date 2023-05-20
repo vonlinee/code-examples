@@ -168,7 +168,7 @@ public class FrmLog extends VBox {
         tblPerson.reloadFirstPage();
     }
 
-    private final TableBehaviourBase<Person> controller = new TableBehaviourBase<>() {
+    private final TableControlBehaviour<Person> controller = new TableControlBehaviour<>() {
 
         private final DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
 
@@ -209,7 +209,7 @@ public class FrmLog extends VBox {
         }
 
         @Override
-        public void postSave(TableControl.Mode previousMode) {
+        public void postSave(TableControl.OperationMode previousMode) {
             super.postSave(previousMode); //To change body of generated methods, choose Tools | Templates.
         }
 

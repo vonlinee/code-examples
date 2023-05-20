@@ -1,15 +1,17 @@
 package com.panemu.tiwulfx.table;
 
-import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.WeakInvalidationListener;
 import javafx.css.PseudoClass;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,19 +38,14 @@ public abstract class CustomTableCell<R, C> extends TableCell<R, C> {
     public CustomTableCell(final CustomTableColumn<R, C> column) {
         this.stringConverter = column.getStringConverter();
         contentDisplayProperty().addListener((observable, oldValue, newValue) -> {
-            if (editView == null) {
-                editView = getEditView();
-                attachEnterEscapeEventHandler();
-                setGraphic(editView);
-            }
+            getEditableView();
             attachFocusListener();
             if (newValue == ContentDisplay.GRAPHIC_ONLY) {
                 updateCellValue(getItem());
             }
         });
 
-        CellMouseEventHandler handler = new CellMouseEventHandler();
-        this.setOnMouseExited(handler);
+        this.setOnMouseExited(new CellMouseEventHandler());
 
         this.column = column;
         InvalidationListener invalidRecordListener = observable -> {
@@ -60,7 +57,7 @@ public abstract class CustomTableCell<R, C> extends TableCell<R, C> {
         setAlignment(column.getAlignment());
     }
 
-    static class CellMouseEventHandler implements EventHandler<MouseEvent> {
+    class CellMouseEventHandler implements EventHandler<MouseEvent> {
 
         @Override
         public void handle(MouseEvent event) {
@@ -73,7 +70,8 @@ public abstract class CustomTableCell<R, C> extends TableCell<R, C> {
                     CustomTableColumn<?, ?> baseColumn = (CustomTableColumn<?, ?>) clm;
                     PopupControl popup = baseColumn.getPopup(tableRow.getItem());
                     if (event.getEventType() == MouseEvent.MOUSE_MOVED && !popup.isShowing()) {
-                        tableCell.showPopup(popup);
+                        Point2D p = CustomTableCell.this.localToScene(0.0, 0.0);
+                        tableCell.showPopup(popup, CustomTableCell.this, p);
                     } else if (event.getEventType() == MouseEvent.MOUSE_EXITED && popup.isShowing()) {
                         popup.hide();
                     }
@@ -82,17 +80,16 @@ public abstract class CustomTableCell<R, C> extends TableCell<R, C> {
         }
     }
 
-    private void showPopup(PopupControl popup) {
-        Point2D p = CustomTableCell.this.localToScene(0.0, 0.0);
-        popup.show(CustomTableCell.this, p.getX() + getScene().getX() + getScene().getWindow()
-                .getX(), p.getY() + getScene().getY() + getScene().getWindow()
-                .getY() + CustomTableCell.this.getHeight() - 1);
+    private void showPopup(PopupControl popup, Region owner, Point2D p) {
+        Scene scene = owner.getScene();
+        popup.show(owner, p.getX() + scene.getX() + scene.getWindow()
+                .getX(), p.getY() + scene.getY() + scene.getWindow()
+                .getY() + owner.getHeight() - 1);
     }
 
     /**
      * For the case of TypeAhead, Date and Lookup, the focusable control is the textfield, not the control itself.
-     * This method is to be overridden by TypeAheadTableCell,
-     * DateTableCell and LookupTableCell
+     * This method is to be overridden by TypeAheadTableCell, DateTableCell and LookupTableCell
      * @return the Node of table cell
      */
     @SuppressWarnings("unchecked")
@@ -108,10 +105,9 @@ public abstract class CustomTableCell<R, C> extends TableCell<R, C> {
          * Set cell mode to edit if the editor control receives focus. This is intended to deal with mouse click.
          * This way, commitEdit() will be called if the cell is no longer focused
          */
-        Node focusableControl = getFocusableNode();
-        if (focusableControl == null && isEditable()) {
-            System.out.println(editView);
-        } else if (focusableControl != null) {
+        final Node focusableControl = getFocusableNode();
+        System.out.println("focusableControl => " + focusableControl);
+        if (focusableControl != null) {
             focusableControl.focusedProperty().addListener((observable, oldValue, newValue) -> {
                 if (!CustomTableCell.this.isSelected() && newValue) {
                     getTableView().getSelectionModel().select(getIndex(), getTableColumn());
@@ -127,8 +123,14 @@ public abstract class CustomTableCell<R, C> extends TableCell<R, C> {
         }
     }
 
+    /**
+     * 通过代码方式触发编辑事件
+     */
     private boolean programmaticallyEdited = false;
 
+    /**
+     * 双击触发编辑
+     */
     @Override
     public void startEdit() {
         /**
@@ -140,17 +142,23 @@ public abstract class CustomTableCell<R, C> extends TableCell<R, C> {
         }
         super.startEdit();
         if (!programmaticallyEdited) {
-            if (editView == null) {
-                editView = getEditView();
-                attachEnterEscapeEventHandler();
-                attachFocusListener();
-            }
+            Node editView = getEditableView();
             setGraphic(editView);
+            System.out.println(editView);
+            editView.requestFocus();
             updateCellValue(getItem());
+            // 触发表格的编辑事件
             setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-            // put focus on the textfield so user can directly type on it
-            Platform.runLater(() -> editView.requestFocus());
         }
+    }
+
+    private Node getEditableView() {
+        if (editView == null) {
+            editView = getEditView();
+            attachEnterEscapeEventHandler();
+            attachFocusListener();
+        }
+        return editView;
     }
 
     /**
@@ -217,7 +225,7 @@ public abstract class CustomTableCell<R, C> extends TableCell<R, C> {
         try {
             return stringConverter.toString(value);
         } catch (ClassCastException ex) {
-            String propertyName = getTableColumn() instanceof CustomTableColumn ? ((CustomTableColumn) getTableColumn()).getPropertyName() : "unknown";
+            String propertyName = getTableColumn() instanceof CustomTableColumn ? ((CustomTableColumn<?, ?>) getTableColumn()).getPropertyName() : "unknown";
             if (getTableRow() != null && getTableRow().getItem() != null) {
                 propertyName = getTableRow().getItem().getClass().getName() + "." + propertyName;
             }
@@ -227,12 +235,25 @@ public abstract class CustomTableCell<R, C> extends TableCell<R, C> {
     }
 
     protected void attachEnterEscapeEventHandler() {
-        editView.setOnKeyPressed(t -> {
-            if (t.getCode() == KeyCode.ENTER && !t.isShiftDown()) {
-                commitEdit(getEditedValue());
-            } else if (t.getCode() == KeyCode.ESCAPE) {
-                cancelEdit();
+        editView.setOnKeyPressed(new KeyEventHandler<C>(this));
+    }
+
+    static class KeyEventHandler<C> implements EventHandler<KeyEvent> {
+
+        CustomTableCell<?, C> tableCell;
+
+        public KeyEventHandler(CustomTableCell<?, C> tableCell) {
+            this.tableCell = tableCell;
+        }
+
+        @Override
+        public void handle(KeyEvent event) {
+            // Enter提交编辑
+            if (event.getCode() == KeyCode.ENTER && !event.isShiftDown()) {
+                tableCell.commitEdit(tableCell.getEditedValue());
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                tableCell.cancelEdit();
             }
-        });
+        }
     }
 }

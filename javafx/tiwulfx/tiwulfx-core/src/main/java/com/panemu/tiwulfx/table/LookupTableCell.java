@@ -101,6 +101,6 @@ public class LookupTableCell<R, C> extends CustomTableCell<R, C> {
 	 * cell that display particular property of currently selected lookup object
 	 */
 	private void forceUpdateRow() {
-		((TableControlRow) getTableRow()).refreshLookupSiblings(column.getPropertyName());
+		((TableControlRow<R>) getTableRow()).refreshLookupSiblings(column.getPropertyName());
 	}
 }

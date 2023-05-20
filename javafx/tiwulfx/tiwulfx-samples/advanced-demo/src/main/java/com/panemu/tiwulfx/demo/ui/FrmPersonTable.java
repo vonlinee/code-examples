@@ -161,7 +161,7 @@ public class FrmPersonTable extends VBox {
         this.tblPerson.reloadFirstPage();
     }
 
-    private TableBehaviourBase<Person> controller = new TableBehaviourBase<Person>() {
+    private TableControlBehaviour<Person> controller = new TableControlBehaviour<Person>() {
 
         private DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
 

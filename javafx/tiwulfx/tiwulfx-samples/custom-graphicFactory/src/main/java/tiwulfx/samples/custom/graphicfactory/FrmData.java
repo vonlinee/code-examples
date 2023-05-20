@@ -29,7 +29,7 @@ import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TableData;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableBehaviourBase;
+import com.panemu.tiwulfx.table.TableControlBehaviour;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class FrmData extends StackPane {
 		tblData.reloadFirstPage();
 	}
 
-	private class CntlRecord extends TableBehaviourBase<RecordPojo> {
+	private class CntlRecord extends TableControlBehaviour<RecordPojo> {
 
 		@Override
 		public <C> TableData<RecordPojo> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {

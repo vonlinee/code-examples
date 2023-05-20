@@ -90,7 +90,7 @@ public class DateTableCell<R> extends CustomTableCell<R, Date> {
 	protected void attachEnterEscapeEventHandler() {
 		/**
 		 * Use event filter instead on onKeyPressed because Enter and Escape have
-		 * been consumed by Combobox it self
+		 * been consumed by Combobox itself
 		 */
 		datePicker.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 			@Override

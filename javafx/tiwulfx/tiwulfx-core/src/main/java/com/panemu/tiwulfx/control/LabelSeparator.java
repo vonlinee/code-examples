@@ -1,7 +1,3 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.control;
 
 import javafx.beans.property.StringProperty;
@@ -12,7 +8,7 @@ import javafx.scene.layout.StackPane;
 
 public class LabelSeparator extends StackPane {
 
-    private Label lblText;
+    private final Label lblText;
 
     public LabelSeparator(String label) {
         this(label, true);

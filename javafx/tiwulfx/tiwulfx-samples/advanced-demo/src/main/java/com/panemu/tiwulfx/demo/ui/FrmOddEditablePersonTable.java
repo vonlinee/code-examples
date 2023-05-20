@@ -151,7 +151,7 @@ public class FrmOddEditablePersonTable extends VBox {
         }
     };
 
-    private TableBehaviourBase<Person> controller = new TableBehaviourBase<Person>() {
+    private TableControlBehaviour<Person> controller = new TableControlBehaviour<Person>() {
 
         private DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
 

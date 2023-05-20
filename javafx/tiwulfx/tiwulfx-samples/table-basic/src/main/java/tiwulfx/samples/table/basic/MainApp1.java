@@ -1,14 +1,11 @@
 package tiwulfx.samples.table.basic;
 
 import com.panemu.tiwulfx.common.TiwulFXUtil;
-import com.panemu.tiwulfx.control.DetailPanel;
 import com.panemu.tiwulfx.table.TableControl;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import tiwulfx.samples.shared.pojo.Person;
-
-import java.util.List;
 
 public class MainApp1 extends Application {
 

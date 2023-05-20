@@ -15,7 +15,7 @@ import com.panemu.tiwulfx.demo.pojo.Insurance;
 import com.panemu.tiwulfx.demo.pojo.Person;
 import com.panemu.tiwulfx.dialog.MessageDialogBuilder;
 import com.panemu.tiwulfx.table.*;
-import com.panemu.tiwulfx.table.TableControl.Mode;
+import com.panemu.tiwulfx.table.TableControl.OperationMode;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;
@@ -63,7 +63,7 @@ public class FrmMasterDetail extends VBox {
         tblInsurance.selectedItemProperty().addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
-                if (tblInsurance.getMode() == TableControl.Mode.READ) {
+                if (tblInsurance.getMode() == OperationMode.READ) {
                     tblPerson.reloadFirstPage();
                 }
             }
@@ -112,7 +112,7 @@ public class FrmMasterDetail extends VBox {
 
     }
 
-    private TableBehaviourBase<Insurance> cntlInsurance = new TableBehaviourBase<>() {
+    private TableControlBehaviour<Insurance> cntlInsurance = new TableControlBehaviour<>() {
         @Override
         public <C> TableData loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<SortType> sortingOrders, int maxResult) {
             return daoInsurance.fetch(startIndex, filteredColumns, sortedColumns, sortingOrders, maxResult);
@@ -149,7 +149,7 @@ public class FrmMasterDetail extends VBox {
         }
     };
 
-    private TableBehaviourBase<Person> cntlPerson = new TableBehaviourBase<>() {
+    private TableControlBehaviour<Person> cntlPerson = new TableControlBehaviour<>() {
         private DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
 
         @Override
@@ -189,7 +189,7 @@ public class FrmMasterDetail extends VBox {
         }
 
         @Override
-        public void postSave(Mode previousMode) {
+        public void postSave(OperationMode previousMode) {
             /**
              * If value for "insurance changed, reloading tblPerson will exclude all rows that the insurance is not currently selected insurance.
              */

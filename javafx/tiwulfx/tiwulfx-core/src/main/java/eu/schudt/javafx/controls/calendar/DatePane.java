@@ -26,12 +26,7 @@ abstract class DatePane extends GridPane {
         this.calendarView = calendarView;
 
         // When the date changed, update the days.
-        calendarView.calendarDate.addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
-                updateContent();
-            }
-        });
+        calendarView.calendarDate.addListener(observable -> updateContent());
 
         // Every time the calendar changed, rebuild the pane and update the content.
         calendarView.calendarProperty().addListener(new InvalidationListener() {

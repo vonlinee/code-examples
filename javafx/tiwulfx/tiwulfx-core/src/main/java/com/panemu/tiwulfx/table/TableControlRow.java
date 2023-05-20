@@ -1,8 +1,7 @@
 package com.panemu.tiwulfx.table;
 
+import com.panemu.tiwulfx.utils.EventUtils;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.WeakInvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -11,7 +10,6 @@ import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
 
 import java.lang.reflect.Method;
 import java.util.logging.Level;
@@ -25,50 +23,65 @@ public class TableControlRow<R> extends TableRow<R> {
 
     private boolean selected;
     private final TableControl<R> tableControl;
+
+    /**
+     * row changed
+     */
     private static final PseudoClass PSEUDO_CLASS_CHANGED = PseudoClass.getPseudoClass("changed");
     private final Logger logger = Logger.getLogger(TableRow.class.getName());
 
-    public TableControlRow(final TableControl<R> tblView) {
+    public TableControlRow(final TableControl<R> tableControl) {
         super();
         this.setAlignment(Pos.CENTER_LEFT);
-        this.tableControl = tblView;
+        this.tableControl = tableControl;
         attachScrollListener();
         this.setOnMouseClicked(event -> {
-            if (event.getButton().equals(MouseButton.PRIMARY)
-                    && event.getClickCount() == 2
-                    && TableControlRow.this.getIndex() < tblView.getRecords().size()) {
-                Object selectedItem = tblView.getSelectionModel().getSelectedItem();
-                tblView.getBehaviour().doubleClick((R) selectedItem);
+            if (EventUtils.isPrimaryDoubleClikced(event) && TableControlRow.this.getIndex() < tableControl
+                    .getRecords().size()) {
+                tableControl.getBehaviour().doubleClick(tableControl.getSelectedItem());
             }
         });
-
-        tblView.modeProperty().addListener(new WeakChangeListener<>(modeChangeListener));
-        tblView.getSelectionModel().selectedIndexProperty()
-                .addListener(new WeakChangeListener<>(selectionChangeListener));
-        tblView.editingCellProperty().addListener(new WeakChangeListener<>(editingCellListener));
-        tblView.agileEditingProperty().addListener(new WeakChangeListener<>(agileChangeListener));
-        tblView.getChangedRecords().addListener(new WeakInvalidationListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
-                pseudoClassStateChanged(PSEUDO_CLASS_CHANGED, tblView.getChangedRecords()
-                        .contains(TableControlRow.this.getItem()));
+        /**
+         * Set content display to TEXT_ONLY in READ mode. This listener is relevant
+         * only in agileEditing mode
+         */
+        tableControl.modeProperty().addListener(new WeakChangeListener<>((observable, oldValue, newValue) -> {
+            if (newValue == TableControl.OperationMode.READ && selected) {
+                selected = false;
+                setCellContentDisplay(ContentDisplay.TEXT_ONLY);
             }
         }));
+        tableControl.getSelectionModel().selectedIndexProperty()
+                .addListener(new WeakChangeListener<>(selectionChangeListener));
+        tableControl.editingCellProperty().addListener(new WeakChangeListener<>(editingCellListener));
+        tableControl.agileEditingProperty().addListener(new WeakChangeListener<>(agileChangeListener));
+        tableControl.getChangedRecords()
+                .addListener(new WeakInvalidationListener(observable -> pseudoClassStateChanged(PSEUDO_CLASS_CHANGED, tableControl
+                        .getChangedRecords()
+                        .contains(TableControlRow.this.getItem()))));
     }
 
     /**
-     * Handle row index change caused by scrolling the table. If the table is
+     * 改行的数据实体是否发生更改
+     * @return 是否发生更改
+     */
+    public final boolean isRecordChanged() {
+        return tableControl.getChangedRecords().contains(TableControlRow.this.getItem());
+    }
+
+    /**
+     * handle row index change caused by scrolling the table. If the table is
      * scrolled, the same TableRow object is reused but the position and the
      * item ara changed. This listener change the display content of the row to
      * prevent displaying cell editor controls in the wrong index.
      */
     private void attachScrollListener() {
         this.itemProperty().addListener((ObservableValue<? extends R> observable, R oldValue, R newValue) -> {
-            pseudoClassStateChanged(PSEUDO_CLASS_CHANGED, tableControl.getChangedRecords()
-                    .contains(TableControlRow.this.getItem()));
-            if (tableControl.getMode() == TableControl.Mode.READ || !tableControl.isAgileEditing()) {
+            pseudoClassStateChanged(PSEUDO_CLASS_CHANGED, isRecordChanged());
+            if (tableControl.getMode() == TableControl.OperationMode.READ || !tableControl.isAgileEditing()) {
                 return;
             }
+            // 由于滚动，行索引发生变化，但是改行并没发生变化
             // The previously selected row might have different row Index after it is scrolled back.
             if (selected) {
                 selected = newValue == tableControl.getSelectionModel().getSelectedItem();
@@ -77,7 +90,6 @@ public class TableControlRow<R> extends TableRow<R> {
                 } else {
                     setCellContentDisplay(ContentDisplay.TEXT_ONLY);
                 }
-
             } else if (newValue == tableControl.getSelectionModel().getSelectedItem()) {
                 selected = true;
                 if (tableControl.isRecordEditable(getItem())) {
@@ -87,16 +99,20 @@ public class TableControlRow<R> extends TableRow<R> {
         });
     }
 
+    /**
+     * 展示所有单元格的内容，单元格包含文本和一个Node
+     * @param contentDisplay 内容展示
+     */
     private void setCellContentDisplay(ContentDisplay contentDisplay) {
-        if (this.getChildrenUnmodifiable() == null || this.getChildrenUnmodifiable().size() == 0) {
-            Platform.runLater(() -> {
-                logger.fine("Delaying setting cell content display due to empty children");
-                setCellContentDisplay(contentDisplay);
-            });
+        if (this.getChildrenUnmodifiable().isEmpty()) {
+            Platform.runLater(() -> setCellContentDisplay(contentDisplay));
         } else {
             for (Node node : getChildrenUnmodifiable()) {
-                TableCell cell = (TableCell) node;
+                // 所有节点都是TableCell，注意不一定是CustomTableCell
+                @SuppressWarnings("unchecked")
+                TableCell<R, ?> cell = (TableCell<R, ?>) node;
                 if (cell.getTableColumn().isEditable() || cell.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) {
+                    // 触发CutomTableCell的contentDisplay监听
                     cell.setContentDisplay(contentDisplay);
                 }
             }
@@ -111,7 +127,7 @@ public class TableControlRow<R> extends TableRow<R> {
                 if (baseColumn.getPropertyName().startsWith(propertyName) && !baseColumn.getPropertyName()
                         .equals(propertyName)) {
                     ObservableValue currentObservableValue = baseColumn.getCellObservableValue(cell.getIndex());
-                    ((CustomTableCell) cell).updateItem(currentObservableValue.getValue(), currentObservableValue == null);
+                    ((CustomTableCell) cell).updateItem(currentObservableValue.getValue(), false);
                 }
             }
         }
@@ -151,7 +167,7 @@ public class TableControlRow<R> extends TableRow<R> {
      * If in normal Editing mode (agileEditing == false), when a particular cell
      * is no longer being edited, the content display should change to TEXT_ONLY
      */
-    private ChangeListener<TablePosition<R, ?>> editingCellListener = new ChangeListener<TablePosition<R, ?>>() {
+    private ChangeListener<TablePosition<R, ?>> editingCellListener = new ChangeListener<>() {
         @Override
         public void changed(ObservableValue<? extends TablePosition<R, ?>> observable, TablePosition<R, ?> oldValue, TablePosition<R, ?> newValue) {
             if ((newValue == null || newValue.getRow() == -1) && !tableControl.isAgileEditing()) {
@@ -159,11 +175,12 @@ public class TableControlRow<R> extends TableRow<R> {
             }
         }
     };
+
     /**
      * Flag the row whether it is editable or not.
      * In Agile mode, display cell editors in selected row, if the record is editable.
      */
-    private ChangeListener<Number> selectionChangeListener = new ChangeListener<Number>() {
+    private ChangeListener<Number> selectionChangeListener = new ChangeListener<>() {
         @Override
         public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
             int idx = getIndex();
@@ -181,7 +198,6 @@ public class TableControlRow<R> extends TableRow<R> {
                 isRecordEditable = tableControl.isRecordEditable(getItem());
                 TableControlRow.this.setEditable(isRecordEditable);
             }
-
             if (tableControl.isAgileEditing()) {
                 if (t.equals(getIndex()) && selected) {
                     setCellContentDisplay(ContentDisplay.TEXT_ONLY);
@@ -195,23 +211,11 @@ public class TableControlRow<R> extends TableRow<R> {
             }
         }
     };
-    /**
-     * Set content display to TEXT_ONLY in READ mode. This listener is relevant
-     * only in agileEditing mode
-     */
-    private ChangeListener<TableControl.Mode> modeChangeListener = new ChangeListener<TableControl.Mode>() {
-        @Override
-        public void changed(ObservableValue<? extends TableControl.Mode> observable, TableControl.Mode oldValue, TableControl.Mode newValue) {
-            if (newValue == TableControl.Mode.READ && selected) {
-                selected = false;
-                setCellContentDisplay(ContentDisplay.TEXT_ONLY);
-            }
-        }
-    };
+
     private final ChangeListener<Boolean> agileChangeListener = new ChangeListener<>() {
         @Override
         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-            if (tableControl.getMode() == TableControl.Mode.READ) {
+            if (tableControl.getMode() == TableControl.OperationMode.READ) {
                 return;
             }
             if (tableControl.getSelectionModel().getSelectedIndex() == getIndex()) {

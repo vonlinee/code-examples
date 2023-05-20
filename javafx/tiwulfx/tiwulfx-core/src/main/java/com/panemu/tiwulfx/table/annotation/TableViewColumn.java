@@ -17,14 +17,20 @@ public @interface TableViewColumn {
     String name();
 
     /**
-     * max height
-     * @return max height
-     */
-    double maxHeight() default -1.0;
-
-    /**
-     * pref width
+     * width: min pref max
      * @return pref width
      */
-    double prefWidth() default -1.0;
+    double[] width() default {-1.0, -1.0, -1.0};
+
+    /**
+     * 是否可排序
+     * @return 是否可排序
+     */
+    boolean sortable() default true;
+
+    /**
+     * 是否可过滤
+     * @return 是否可过滤
+     */
+    boolean filterable() default true;
 }

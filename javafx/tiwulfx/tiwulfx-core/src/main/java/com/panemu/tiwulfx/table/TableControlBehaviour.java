@@ -8,10 +8,12 @@ import com.panemu.tiwulfx.dialog.MessageDialog;
 import com.panemu.tiwulfx.dialog.MessageDialogBuilder;
 import com.panemu.tiwulfx.table.annotation.TableViewColumn;
 import com.panemu.tiwulfx.utils.ClassUtils;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -28,7 +30,7 @@ import java.util.List;
  * {@link TableControl}
  * @author amrullah
  */
-public abstract class TableBehaviourBase<R> {
+public abstract class TableControlBehaviour<R> {
 
     /**
      * 初始化表格
@@ -58,9 +60,28 @@ public abstract class TableBehaviourBase<R> {
             } else {
                 column = new ObjectColumn<>(propertyName);
             }
-            final double prefWidth = tvc.prefWidth();
-            if (prefWidth != -1) {
-                column.setPrefWidth(prefWidth);
+            final double[] width = tvc.width();
+            if (width.length == 1) {
+                if (width[0] != -1.0) {
+                    column.setMinWidth(width[0]);
+                }
+            } else if (width.length == 2) {
+                if (width[0] != -1.0) {
+                    column.setMinWidth(width[0]);
+                }
+                if (width[1] != -1.0) {
+                    column.setPrefWidth(width[1]);
+                }
+            } else if (width.length == 3) {
+                if (width[0] != -1.0) {
+                    column.setMinWidth(width[0]);
+                }
+                if (width[1] != -1.0) {
+                    column.setPrefWidth(width[1]);
+                }
+                if (width[2] != -1.0) {
+                    column.setMaxWidth(width[0]);
+                }
             }
             column.setText(tvc.name());
             columnsToBeAdd.add(column);
@@ -172,10 +193,10 @@ public abstract class TableBehaviourBase<R> {
      * Generic export to excel. This method is called by clicking TableControl's
      * Export button. You can override this method to define title in the
      * generated spreadsheet.
-     * @param title
-     * @param maxResult
-     * @param tblView
-     * @param lstCriteria
+     * @param title       标题
+     * @param maxResult   行数
+     * @param tblView     表格
+     * @param lstCriteria 查询条件
      */
     public <C> void exportToExcel(String title, int maxResult, TableControl<R> tblView, List<TableCriteria<C>> lstCriteria) {
         try {
@@ -184,14 +205,16 @@ public abstract class TableBehaviourBase<R> {
             List<R> data = new ArrayList<>();
             List<String> lstSortedColumn = new ArrayList<>();
             List<SortType> lstSortedType = new ArrayList<>();
-
             for (TableColumn<R, ?> tc : tblView.getTableView().getSortOrder()) {
                 if (tc instanceof CustomTableColumn) {
-                    lstSortedColumn.add(((CustomTableColumn) tc).getPropertyName());
+                    lstSortedColumn.add(((CustomTableColumn<?, ?>) tc).getPropertyName());
                     lstSortedType.add(tc.getSortType());
                 } else if (tc != null && tc.getCellValueFactory() instanceof PropertyValueFactory) {
-                    PropertyValueFactory valFactory = (PropertyValueFactory) tc.getCellValueFactory();
-                    lstSortedColumn.add(valFactory.getProperty());
+                    Callback<? extends TableColumn.CellDataFeatures<R, ?>, ? extends ObservableValue<?>> cellValueFactory = tc.getCellValueFactory();
+                    if (cellValueFactory instanceof PropertyValueFactory) {
+                        PropertyValueFactory<? extends TableColumn.CellDataFeatures<R, ?>, ? extends ObservableValue<?>> valueFactory = (PropertyValueFactory<? extends TableColumn.CellDataFeatures<R, ?>, ? extends ObservableValue<?>>) cellValueFactory;
+                        lstSortedColumn.add(valueFactory.getProperty());
+                    }
                     lstSortedType.add(tc.getSortType());
                 }
             }
@@ -236,7 +259,7 @@ public abstract class TableBehaviourBase<R> {
      * Callback method that is called after {@link TableControl#save() }.
      * @param previousMode Could be Mode. INSERT or Mode. EDIT
      */
-    public void postSave(TableControl.Mode previousMode) {
+    public void postSave(TableControl.OperationMode previousMode) {
     }
 
     protected void displayInvalidErrorMessage(TableControl<R> tbl) {

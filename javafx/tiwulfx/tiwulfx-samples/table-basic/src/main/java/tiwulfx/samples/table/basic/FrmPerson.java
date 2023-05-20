@@ -103,9 +103,18 @@ public class FrmPerson extends StackPane implements Initializable {
         System.out.println(this);
     }
 
-    private static class CntlPerson extends TableBehaviourBase<Person> {
+    /**
+     * 控制器
+     */
+    private static class CntlPerson extends TableControlBehaviour<Person> {
 
         private final DaoBase<Person> dao = new DaoBase<>(Person.class);
+
+        @Override
+        public void doubleClick(Person record) {
+            super.doubleClick(record);
+            System.out.println("双击 " + record);
+        }
 
         @Override
         public <C> TableData<Person> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {

@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 封装JavaFX TableView
@@ -60,5 +61,19 @@ public class CustomTableView<R> extends TableView<R> {
 
     public final boolean hasSelectedCells() {
         return !getSelectionModel().getSelectedCells().isEmpty();
+    }
+
+    @Nullable
+    public final <C> TablePosition<R, C> getSelectedPosition(int index) {
+        return getSelectionModel().getSelectedCells().get(index);
+    }
+
+    /**
+     * 选择某个单元格
+     * @param row 行
+     * @param col 列
+     */
+    public final void select(int row, int col) {
+        this.getSelectionModel().select(row, getColumns().get(col));
     }
 }

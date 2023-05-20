@@ -109,7 +109,6 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     public CustomTableColumn(String propertyName, String columnHeader) {
         super(columnHeader);
         this.propertyName = new SimpleStringProperty(propertyName);
-//        setCellValueFactory(new PropertyValueFactory<S, T>(propertyName));
         tableCriteria.addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
@@ -128,6 +127,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
                 // This code is adapted from {@link javafx.scene.control.cell.PropertyValueFactory#getCellDataReflectively(java.lang.Object)}
                 try {
                     Object cellValue;
+                    System.out.println(propertyName);
                     if (getPropertyName().contains(".")) {
                         cellValue = ClassUtils.getNestedProperty(param.getValue(), getPropertyName());
                     } else {

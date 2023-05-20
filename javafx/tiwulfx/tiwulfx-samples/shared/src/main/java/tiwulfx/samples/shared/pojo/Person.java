@@ -166,7 +166,7 @@ public class Person implements Serializable, Cloneable {
 
     @Override
     public String toString() {
-        return "com.panemu.tiwulfx.demo.pojo.Person[ id=" + id + " ]";
+        return "com.panemu.tiwulfx.demo.pojo.Person [id=" + id + "]";
     }
 
     @Override
