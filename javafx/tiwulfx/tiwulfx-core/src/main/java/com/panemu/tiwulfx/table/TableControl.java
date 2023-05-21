@@ -4,7 +4,6 @@ import com.panemu.tiwulfx.common.*;
 import com.panemu.tiwulfx.dialog.MessageDialog;
 import com.panemu.tiwulfx.dialog.MessageDialogBuilder;
 import com.panemu.tiwulfx.utils.ClassUtils;
-import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.BooleanBinding;
@@ -141,12 +140,6 @@ public class TableControl<R> extends VBox {
 
         initTableView(tableView);
 
-        mode.addListener((ov, t, t1) -> {
-            if (t1 == OperationMode.READ) {
-                directEdit = false;
-            }
-        });
-
         cm = new ContextMenu();
         cm.setAutoHide(true);
         createCopyCellMenuItem();
@@ -185,45 +178,23 @@ public class TableControl<R> extends VBox {
         return getMode() == OperationMode.INSERT;
     }
 
+    /**
+     * 初始化表格
+     * @param tableView 表格对象
+     */
     private void initTableView(CustomTableView<R> tableView) {
-        // 表格任一列的顺序改变后重新加载数据
-        tableView.getSortOrder().addListener((ListChangeListener<TableColumn<R, ?>>) change -> {
-            if (stageShown) {
-                reload();
-                resetColumnSortConfig();
-            }
-        });
         // 读模式时表格不可编辑 不手动调用tableView.setEditable();
         tableView.editableProperty().bind(mode.isNotEqualTo(OperationMode.READ));
+        // 开启列选模式
         tableView.getSelectionModel().cellSelectionEnabledProperty().bind(tableView.editableProperty());
         // 更新行号
         tableView.getSelectionModel().selectedIndexProperty()
                 .addListener((ov, t, t1) -> footer.updateRowNum(page * pageSize.get() + t1.intValue() + 1));
-        /* 快速编辑模式下，单击表格的单元格即可进行编辑，不需要双击 */
-        tableView.getFocusModel().focusedCellProperty().addListener((observable, oldValue, newValue) -> {
-            if (tableView.isEditable() && isAgileEditing()) {
-                tableView.edit(newValue);
-            }
-        });
-        // Define policy for TAB key press
-        tableView.addEventFilter(KeyEvent.KEY_PRESSED, tableKeyListener);
-        /*
-          In INSERT mode, only inserted row that is focusable
-          Prevent moving focus to not-inserted-row in INSERT mode
-         */
         // 插入模式下，只有插入的行能获取焦点，此监听器组织焦点移动到位插入的行
         tableView.getFocusModel().focusedCellProperty().addListener((observable, oldValue, newValue) -> {
-            if (!OperationMode.INSERT.equals(mode.get()) || newValue.getRow() == -1 || oldValue.getRow() == -1) {
-                return;
+            if (getMode() == OperationMode.EDIT && isAgileEditing()) {
+                tableView.edit(newValue);
             }
-            Platform.runLater(() -> {
-                R oldRow = items.get(oldValue.getRow());
-                R newRow = items.get(newValue.getRow());
-                if (changedRows.contains(oldRow) && !changedRows.contains(newRow)) {
-                    tableView.getFocusModel().focus(oldValue);
-                    tableView.getSelectionModel().select(oldValue.getRow(), oldValue.getTableColumn());
-                }
-            });
         });
         tableView.setOnMouseReleased(event -> {
             if (cm.isShowing()) {
@@ -233,7 +204,6 @@ public class TableControl<R> extends VBox {
                 if (!tableView.hasSelectedCells()) {
                     return;
                 }
-
                 final TablePosition<R, ?> pos = tableView.getSelectedPosition(0);
                 TableColumn<R, ?> column = null;
                 if (pos != null) {
@@ -644,7 +614,7 @@ public class TableControl<R> extends VBox {
      */
     private final BooleanProperty agileEditing = new SimpleBooleanProperty(true);
 
-    public void setAgileEditing(boolean agileEditing) {
+    public final void setAgileEditing(boolean agileEditing) {
         this.agileEditing.set(agileEditing);
     }
 
@@ -655,70 +625,6 @@ public class TableControl<R> extends VBox {
     public final BooleanProperty agileEditingProperty() {
         return agileEditing;
     }
-
-    /**
-     * Move focus to the next cell if user pressing TAB and the mode is
-     * EDIT/INSERT
-     */
-    private final EventHandler<KeyEvent> tableKeyListener = new EventHandler<>() {
-        @Override
-        public void handle(KeyEvent event) {
-            final int selectedIndex = tableView.getSelectedIndex();
-            if (isReadMode()) {
-                if (event.getCode() == KeyCode.C && event.isControlDown()) {
-                    if (event.isShiftDown()) {
-                        copyRow();
-                    } else {
-                        copyCell();
-                    }
-                    event.consume();
-                } else if (event.getCode() == KeyCode.B && event.isAltDown()) {
-                    browseSelectedRow();
-                }
-            } else if (event.getCode() == KeyCode.TAB) {
-                if (event.isShiftDown()) {
-                    if (tableView.getSelectionModel().getSelectedCells().get(0).getColumn() == 0) {
-                        List<TableColumn<R, ?>> leafColumns = getLeafColumns();
-                        showRow(selectedIndex - 1);
-                        tableView.getSelectionModel()
-                                .select(selectedIndex - 1, leafColumns.get(leafColumns.size() - 1));
-                    } else {
-                        tableView.getSelectionModel().selectLeftCell();
-                    }
-                } else {
-                    if (tableView.getSelectionModel().getSelectedCells().get(0).getColumn() == lastColumnIndex) {
-                        showRow(selectedIndex + 1);
-                        tableView.getSelectionModel().select(selectedIndex + 1, columns.get(0));
-                    } else {
-                        tableView.getSelectionModel().selectRightCell();
-                    }
-                }
-                horizontalScroller.run();
-                event.consume();
-            } else if (event.getCode() == KeyCode.ENTER && !event.isControlDown() && !event.isAltDown() && !event.isShiftDown()) {
-                // 编辑模式下，Enter可从移动的单元格向下移
-                if (isAgileEditing()) {
-                    if (directEdit) {
-                        showRow(tableView.getSelectedIndex() + 1);
-                        // 末尾
-                        if (tableView.getSelectionModel().getSelectedIndex() == items.size() - 1) {
-                            //it will trigger cell's commit edit for the most bottom row
-                            tableView.getSelectionModel().selectAboveCell();
-                        }
-                        tableView.getSelectionModel().selectBelowCell();
-                        event.consume();
-                    } else {
-                        directEdit = true;
-                    }
-                }
-            } else if (event.getCode() == KeyCode.V && event.isControlDown()) {
-                if (!hasEditingCell()) {
-                    paste();
-                    event.consume();
-                }
-            }
-        }
-    };
 
     /**
      * 是否有单元格处于编辑状态中

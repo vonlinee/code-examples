@@ -31,6 +31,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  *
@@ -83,7 +84,7 @@ public class LocalDateTableCell<R> extends CustomTableCell<R, LocalDate> {
 	}
 
 	@Override
-	protected Control getEditView() {
+	protected @NotNull Control getEditView() {
 		if (datePicker == null) {
 			datePicker = new DatePicker();
 			
@@ -116,31 +117,28 @@ public class LocalDateTableCell<R> extends CustomTableCell<R, LocalDate> {
 					}
 				}
 			});
+
+			/**
+			 * Use event filter instead on onKeyPressed because Enter and Escape have
+			 * been consumed by Combobox itself
+			 */
+			datePicker.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+				@Override
+				public void handle(KeyEvent t) {
+					if (t.getCode() == KeyCode.ENTER) {
+						commitEdit(getEditedValue());
+						t.consume();
+					} else if (t.getCode() == KeyCode.ESCAPE) {
+						cancelEdit();
+						/**
+						 * Propagate ESCAPE key press to cell to go to Browsing mode on
+						 * Agile editing only
+						 */
+						LocalDateTableCell.this.fireEvent(t);
+					}
+				}
+			});
 		}
 		return datePicker;
-	}
-
-	@Override
-	protected void attachEnterEscapeEventHandler() {
-		/**
-		 * Use event filter instead on onKeyPressed because Enter and Escape have
-		 * been consumed by Combobox itself
-		 */
-		datePicker.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent t) {
-				if (t.getCode() == KeyCode.ENTER) {
-					commitEdit(getEditedValue());
-					t.consume();
-				} else if (t.getCode() == KeyCode.ESCAPE) {
-					cancelEdit();
-					/**
-					 * Propagate ESCAPE key press to cell to go to Browsing mode on
-					 * Agile editing only
-					 */
-					LocalDateTableCell.this.fireEvent(t);
-				}
-			}
-		});
 	}
 }

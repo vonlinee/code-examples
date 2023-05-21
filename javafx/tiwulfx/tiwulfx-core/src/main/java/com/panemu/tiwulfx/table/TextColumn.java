@@ -27,7 +27,7 @@ public class TextColumn<R> extends CustomTableColumn<R, String> {
     private int maxLength = 0;
     private boolean capitalize = false;
 
-    private SearchMenuItemBase<String> searchMenuItem = new SearchMenuItemBase<String>(this) {
+    private final SearchMenuItemBase<String> searchMenuItem = new SearchMenuItemBase<>(this) {
         @Override
         protected Node getInputControl() {
             searchInputControl.setPromptText("kata kunci");
@@ -75,17 +75,8 @@ public class TextColumn<R> extends CustomTableColumn<R, String> {
 
     public TextColumn(String propertyName, double preferredWidth) {
         super(propertyName, preferredWidth);
-
-        Callback<TableColumn<R, String>, TableCell<R, String>> cellFactory =
-                new Callback<TableColumn<R, String>, TableCell<R, String>>() {
-                    @Override
-                    public TableCell call(TableColumn p) {
-                        return new TextTableCell<R>(TextColumn.this);
-                    }
-                };
-
-        setCellFactory(cellFactory);
         setStringConverter(stringConverter);
+        setCellFactory(p -> new TextTableCell<R>(TextColumn.this));
     }
 
     @Override

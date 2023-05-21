@@ -25,6 +25,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  *
@@ -64,7 +65,7 @@ public class CheckBoxTableCell<R> extends CustomTableCell<R, Boolean> {
 	}
 
 	@Override
-	protected Control getEditView() {
+	protected @NotNull Control getEditView() {
 		if (checkbox == null) {
 			checkbox = new CheckBox();
 			checkbox.setAllowIndeterminate(!column.isRequired());

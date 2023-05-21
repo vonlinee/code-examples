@@ -59,6 +59,11 @@ public class CustomTableView<R> extends TableView<R> {
         getSelectionModel().clearSelection();
     }
 
+    /**
+     * 编辑某个位置的单元格
+     * @param newValue 位置
+     * @param <C>      列数据类型
+     */
     public final <C> void edit(TablePosition<R, C> newValue) {
         this.edit(newValue.getRow(), newValue.getTableColumn());
     }

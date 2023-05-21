@@ -6,7 +6,6 @@ import com.panemu.tiwulfx.common.Validator;
 import com.panemu.tiwulfx.utils.ClassUtils;
 import javafx.application.Platform;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Pos;
@@ -16,7 +15,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.PopupControl;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.HBox;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.lang.reflect.InvocationTargetException;
@@ -114,33 +112,27 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
                 CustomTableColumn.this.setGraphic(null);
             }
         });
-        this.setCellValueFactory(new Callback<CellDataFeatures<R, C>, ObservableValue<C>>() {
-
-            @Override
-            @SuppressWarnings("unchecked")
-            public ObservableValue<C> call(CellDataFeatures<R, C> param) {
-                // This code is adapted from {@link javafx.scene.control.cell.PropertyValueFactory#getCellDataReflectively(java.lang.Object)}
-                try {
-                    Object cellValue;
-                    if (getPropertyName().contains(".")) {
-                        cellValue = ClassUtils.getNestedProperty(param.getValue(), getPropertyName());
-                    } else {
-                        cellValue = ClassUtils.getSimpleProperty(param.getValue(), getPropertyName());
-                    }
-                    return new SimpleObjectProperty<>((C) cellValue);
-                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-                    throw new RuntimeException(ex);
-                } catch (Exception ex) {
-                    /*
-                       Ideally it catches org.apache.commons.beanutils.NestedNullException. However,
-                       we need to import attaches bean utils library in FXML file to be able to display it in Scene Builder.
-                       So, I decided to catch Exception to avoid the import.
-                     */
-                    return new SimpleObjectProperty<>(null);
+        this.setCellValueFactory(param -> {
+            // This code is adapted from {@link javafx.scene.control.cell.PropertyValueFactory#getCellDataReflectively(java.lang.Object)}
+            try {
+                Object cellValue;
+                if (getPropertyName().contains(".")) {
+                    cellValue = ClassUtils.getNestedProperty(param.getValue(), getPropertyName());
+                } else {
+                    cellValue = ClassUtils.getSimpleProperty(param.getValue(), getPropertyName());
                 }
+                return new SimpleObjectProperty<>((C) cellValue);
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+                throw new RuntimeException(ex);
+            } catch (Exception ex) {
+                /*
+                   Ideally it catches org.apache.commons.beanutils.NestedNullException. However,
+                   we need to import attaches bean utils library in FXML file to be able to display it in Scene Builder.
+                   So, I decided to catch Exception to avoid the import.
+                 */
+                return new SimpleObjectProperty<>(null);
             }
         });
-
     }
 
     public StringConverter<C> getStringConverter() {
@@ -219,7 +211,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
         return null;
     }
 
-    void setDefaultSearchValue(C searchValue) {
+    public final void setDefaultSearchValue(C searchValue) {
         this.searchValue = searchValue;
     }
 
@@ -389,7 +381,7 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     private PopupControl popup;
     Label errorLabel = new Label();
 
-    public PopupControl getPopup(Object record) {
+    public PopupControl getPopupControl(Object record) {
         String msg = mapInvalid.get(record);
         if (popup == null) {
             popup = new PopupControl();

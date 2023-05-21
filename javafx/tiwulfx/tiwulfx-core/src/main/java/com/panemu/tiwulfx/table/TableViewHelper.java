@@ -117,4 +117,8 @@ public class TableViewHelper {
         }
         return t.getTablePosition().getRow() < t.getTableView().getItems().size();
     }
+
+    public static boolean isTablePositionValid(TablePosition position) {
+        return position != null && position.getRow() != -1 && position.getColumn() != -1;
+    }
 }

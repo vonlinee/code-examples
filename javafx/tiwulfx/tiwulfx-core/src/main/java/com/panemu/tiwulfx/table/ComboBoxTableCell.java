@@ -26,6 +26,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  *
@@ -47,7 +48,7 @@ public class ComboBoxTableCell<R, C> extends CustomTableCell<R, C> {
 	}
 
 	@Override
-	protected Control getEditView() {
+	protected @NotNull Control getEditView() {
 		if (combobox == null) {
 			combobox = new ComboBox<>();
 			if (!column.isRequired()) {
@@ -100,6 +101,25 @@ public class ComboBoxTableCell<R, C> extends CustomTableCell<R, C> {
 					}
 				}
 			});
+			/**
+			 * Use event filter instead on onKeyPressed because Enter and Escape have
+			 * been consumed by Combobox it self
+			 */
+			combobox.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+				@Override
+				public void handle(KeyEvent t) {
+					if (t.getCode() == KeyCode.ENTER) {
+						commitEdit(combobox.getValue());
+						t.consume();
+					} else if (t.getCode() == KeyCode.ESCAPE) {
+						cancelEdit();
+						/**
+						 * Propagate ESCAPE key press to cell
+						 */
+						ComboBoxTableCell.this.fireEvent(t);
+					}
+				}
+			});
 		}
 		return combobox;
 	}
@@ -107,28 +127,5 @@ public class ComboBoxTableCell<R, C> extends CustomTableCell<R, C> {
 	@Override
 	protected C getEditedValue() {
 		return combobox.getValue();
-	}
-
-	@Override
-	protected void attachEnterEscapeEventHandler() {
-		/**
-		 * Use event filter instead on onKeyPressed because Enter and Escape have
-		 * been consumed by Combobox it self
-		 */
-		combobox.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent t) {
-				if (t.getCode() == KeyCode.ENTER) {
-					commitEdit(combobox.getValue());
-					t.consume();
-				} else if (t.getCode() == KeyCode.ESCAPE) {
-					cancelEdit();
-					/**
-					 * Propagate ESCAPE key press to cell
-					 */
-					ComboBoxTableCell.this.fireEvent(t);
-				}
-			}
-		});
 	}
 }

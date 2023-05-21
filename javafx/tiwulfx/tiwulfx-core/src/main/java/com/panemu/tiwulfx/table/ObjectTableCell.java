@@ -6,6 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
+import org.jetbrains.annotations.NotNull;
 
 public class ObjectTableCell<R, C> extends CustomTableCell<R, C> {
 
@@ -34,7 +35,7 @@ public class ObjectTableCell<R, C> extends CustomTableCell<R, C> {
 	}
 
 	@Override
-	protected Control getEditView() {
+	protected @NotNull Control getEditView() {
 		if (textField == null) {
 			textField = new TextField();
 			textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);

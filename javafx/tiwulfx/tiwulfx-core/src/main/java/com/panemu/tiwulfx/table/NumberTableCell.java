@@ -4,6 +4,7 @@ import com.panemu.tiwulfx.control.NumberField;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Control;
+import org.jetbrains.annotations.NotNull;
 
 public class NumberTableCell<R, C extends Number> extends CustomTableCell<R, C> {
 
@@ -26,7 +27,7 @@ public class NumberTableCell<R, C extends Number> extends CustomTableCell<R, C> 
 	}
 
 	@Override
-	protected Control getEditView() {
+	protected @NotNull Control getEditView() {
 		if (textField == null) {
 			textField = new NumberField<>(column.getNumberType());
 			textField.setMaxLength(column.getMaxLength());

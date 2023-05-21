@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class LookupTableCell<R, C> extends CustomTableCell<R, C> {
 
@@ -29,7 +30,7 @@ public class LookupTableCell<R, C> extends CustomTableCell<R, C> {
 	}
 
 	@Override
-	protected Control getEditView() {
+	protected @NotNull Control getEditView() {
 		if (lookupField == null) {
 			lookupField = new LookupField<>();
 			lookupField.setShowSuggestionWaitTime(column.getShowSuggestionWaitTime());
@@ -62,19 +63,12 @@ public class LookupTableCell<R, C> extends CustomTableCell<R, C> {
 					}
 				}
 			});
-		}
-		return lookupField;
-	}
 
-	@Override
-	protected void attachEnterEscapeEventHandler() {
-		/**
-		 * Use event filter instead on onKeyPressed because Enter and Escape have
-		 * been consumed by lookupField it self
-		 */
-		lookupField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent t) {
+			/**
+			 * Use event filter instead on onKeyPressed because Enter and Escape have
+			 * been consumed by lookupField itself
+			 */
+			lookupField.addEventFilter(KeyEvent.KEY_PRESSED, t -> {
 				if (t.getCode() == KeyCode.ENTER && !t.isControlDown()) {
 					commitEdit(lookupField.getValue());
 				} else if (t.getCode() == KeyCode.ESCAPE) {
@@ -85,9 +79,9 @@ public class LookupTableCell<R, C> extends CustomTableCell<R, C> {
 					 */
 					LookupTableCell.this.fireEvent(t);
 				}
-			}
-		});
-
+			});
+		}
+		return lookupField;
 	}
 
 	@Override

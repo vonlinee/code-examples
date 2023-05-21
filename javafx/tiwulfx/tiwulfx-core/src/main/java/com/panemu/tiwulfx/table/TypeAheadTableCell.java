@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class TypeAheadTableCell<R, C> extends CustomTableCell<R, C> {
 
@@ -32,33 +33,20 @@ public class TypeAheadTableCell<R, C> extends CustomTableCell<R, C> {
 	}
 
 	@Override
-	protected Control getEditView() {
+	protected @NotNull Control getEditView() {
 		if (typeAheadField == null) {
 			typeAheadField = new TypeAheadField<>();
-
 			typeAheadField.setSorted(column.isSorted());
-//			if (!column.isRequired()) {
-//				typeAheadField.getItems().add(null);
-//			}
-
-			typeAheadField.valueProperty().addListener(new ChangeListener<C>() {
-
-				@Override
-				public void changed(ObservableValue<? extends C> ov, C t, C newValue) {
-					for (CellEditorListener<R, C> svl : column.getCellEditorListeners()) {
-						svl.valueChanged(getTableRow().getIndex(), column.getPropertyName(), (R) getTableRow().getItem(), newValue);
-					}
+			typeAheadField.valueProperty().addListener((ov, t, newValue) -> {
+				for (CellEditorListener<R, C> svl : column.getCellEditorListeners()) {
+					svl.valueChanged(getTableRow().getIndex(), column.getPropertyName(), (R) getTableRow().getItem(), newValue);
 				}
 			});
-
-			column.requiredProperty().addListener(new ChangeListener<Boolean>() {
-				@Override
-				public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
-					if (t1) {
-						typeAheadField.getItems().remove(null);
-					} else {
-						typeAheadField.getItems().add(0, null);
-					}
+			column.requiredProperty().addListener((ov, t, t1) -> {
+				if (t1) {
+					typeAheadField.getItems().remove(null);
+				} else {
+					typeAheadField.getItems().add(0, null);
 				}
 			});
 			typeAheadField.getItems().addAll(column.getItemMap().values());
@@ -73,22 +61,12 @@ public class TypeAheadTableCell<R, C> extends CustomTableCell<R, C> {
 					}
 				}
 			});
-
 			typeAheadField.setConverter(column.getStringConverter());
-
-		}
-		return typeAheadField;
-	}
-
-	@Override
-	protected void attachEnterEscapeEventHandler() {
-		/**
-		 * Use event filter instead on onKeyPressed because Enter and Escape have
-		 * been consumed by TypeAhead itself
-		 */
-		typeAheadField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent t) {
+			/**
+			 * Use event filter instead on onKeyPressed because Enter and Escape have
+			 * been consumed by TypeAhead itself
+			 */
+			typeAheadField.addEventFilter(KeyEvent.KEY_PRESSED, t -> {
 				if (t.getCode() == KeyCode.ENTER) {
 					commitEdit(typeAheadField.getValue());
 					t.consume();
@@ -99,7 +77,8 @@ public class TypeAheadTableCell<R, C> extends CustomTableCell<R, C> {
 					 */
 					TypeAheadTableCell.this.fireEvent(t);
 				}
-			}
-		});
+			});
+		}
+		return typeAheadField;
 	}
 }

@@ -10,6 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class TextAreaTableCell<R> extends CustomTableCell<R, String> {
 
@@ -36,7 +37,7 @@ public class TextAreaTableCell<R> extends CustomTableCell<R, String> {
     }
 
     @Override
-    protected Control getEditView() {
+    protected @NotNull Control getEditView() {
         if (textArea == null) {
             textArea = new TextArea();
 
