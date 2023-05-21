@@ -25,10 +25,10 @@ public class MainApp extends Application {
         root.setCenter(frmPerson);
         root.setTop(toolBar);
 
-        final Button button = new Button();
+        final Button button = new Button("A");
 
         button.setOnAction(event -> {
-            frmPerson.tblPerson.setVisibleComponents(false, TableControl.Component.BUTTON_EDIT);
+            frmPerson.tblPerson.setOperationMode(TableControl.OperationMode.READ);
         });
         toolBar.getItems().add(button);
         Scene scene = new Scene(root);

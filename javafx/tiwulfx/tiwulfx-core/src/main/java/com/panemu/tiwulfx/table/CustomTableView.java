@@ -47,6 +47,10 @@ public class CustomTableView<R> extends TableView<R> {
         return columns;
     }
 
+    /**
+     * 单选的行索引，注意并不一定是行号
+     * @return 行索引
+     */
     public final int getSelectedIndex() {
         return getSelectionModel().getSelectedIndex();
     }
@@ -63,9 +67,22 @@ public class CustomTableView<R> extends TableView<R> {
         return !getSelectionModel().getSelectedCells().isEmpty();
     }
 
+    /**
+     * @param index 列索引
+     * @param <C>   列数据类型
+     * @return 选择位置
+     */
     @Nullable
     public final <C> TablePosition<R, C> getSelectedPosition(int index) {
         return getSelectionModel().getSelectedCells().get(index);
+    }
+
+    /**
+     * 单选的数据
+     * @return 行对应的数据对象
+     */
+    public final R getSelectedItem() {
+        return getSelectionModel().getSelectedItem();
     }
 
     /**

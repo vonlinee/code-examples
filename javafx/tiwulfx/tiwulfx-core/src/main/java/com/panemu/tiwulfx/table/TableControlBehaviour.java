@@ -174,10 +174,8 @@ public abstract class TableControlBehaviour<R> {
     public boolean canDelete(TableControl<R> table) {
         MessageDialog.Answer answer = MessageDialogBuilder.confirmation()
                 .message(TiwulFXUtil.getString("msg.delete.confirmation"))
-                .title(TiwulFXUtil.getString("msg.delete.confirmation.title"))
-                .defaultAnswer(MessageDialog.Answer.NO)
-                .yesOkButtonText("delete.confirmation.delete")
-                .noButtonText("delete.confirmation.dont-delete")
+                .title(TiwulFXUtil.getString("msg.delete.confirmation.title")).defaultAnswer(MessageDialog.Answer.NO)
+                .yesOkButtonText("delete.confirmation.delete").noButtonText("delete.confirmation.dont-delete")
                 .show(table.getScene().getWindow());
         return answer.equals(MessageDialog.Answer.YES_OK);
     }
@@ -276,13 +274,12 @@ public abstract class TableControlBehaviour<R> {
      */
     public boolean validate(TableControl<R> tbl, List<R> changedRecords) {
         boolean result = true;
-        for (TableColumn clm : tbl.getLeafColumns()) {
+        for (TableColumn<R, ?> clm : tbl.getLeafColumns()) {
             if (clm instanceof CustomTableColumn) {
-                CustomTableColumn baseColumn = (CustomTableColumn) clm;
+                CustomTableColumn<R, ?> baseColumn = (CustomTableColumn<R, ?>) clm;
                 for (R record : changedRecords) {
-                    boolean isValid = baseColumn.validate(record);
-                    if (!isValid) {
-                        result = isValid;
+                    if (!baseColumn.validate(record)) {
+                        result = false;
                     }
                 }
             }
@@ -304,10 +301,8 @@ public abstract class TableControlBehaviour<R> {
      */
     protected boolean revertConfirmation(TableControl<R> table, int numberOfChangedRows) {
         MessageDialog.Answer answer = MessageDialogBuilder.warning().message("reload.confirmation", numberOfChangedRows)
-                .buttonType(MessageDialog.ButtonType.YES_NO)
-                .yesOkButtonText("revert.then.reload")
-                .noButtonText("cancel.reload")
-                .show(table.getScene().getWindow());
+                .buttonType(MessageDialog.ButtonType.YES_NO).yesOkButtonText("revert.then.reload")
+                .noButtonText("cancel.reload").show(table.getScene().getWindow());
         return answer == MessageDialog.Answer.YES_OK;
     }
 

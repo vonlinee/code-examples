@@ -10,6 +10,7 @@ import javafx.beans.Observable;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -166,7 +167,21 @@ public class TableControl<R> extends VBox {
         }
     }
 
-    public boolean isInserting() {
+    /**
+     * 是否处于读模式
+     * @return 是否处于读模式
+     * @see TableControl#mode
+     */
+    public final boolean isReadMode() {
+        return getMode() == OperationMode.READ;
+    }
+
+    /**
+     * 是否处于插入模式
+     * @return 是否处于插入模式
+     * @see TableControl#mode
+     */
+    public final boolean isInsertMode() {
         return getMode() == OperationMode.INSERT;
     }
 
@@ -196,6 +211,7 @@ public class TableControl<R> extends VBox {
           In INSERT mode, only inserted row that is focusable
           Prevent moving focus to not-inserted-row in INSERT mode
          */
+        // 插入模式下，只有插入的行能获取焦点，此监听器组织焦点移动到位插入的行
         tableView.getFocusModel().focusedCellProperty().addListener((observable, oldValue, newValue) -> {
             if (!OperationMode.INSERT.equals(mode.get()) || newValue.getRow() == -1 || oldValue.getRow() == -1) {
                 return;
@@ -217,7 +233,8 @@ public class TableControl<R> extends VBox {
                 if (!tableView.hasSelectedCells()) {
                     return;
                 }
-                final TablePosition<R, ?> pos = TableViewHelper.getSelectedPosition(tableView, 0);
+
+                final TablePosition<R, ?> pos = tableView.getSelectedPosition(0);
                 TableColumn<R, ?> column = null;
                 if (pos != null) {
                     column = pos.getTableColumn();
@@ -237,8 +254,7 @@ public class TableControl<R> extends VBox {
                     if (searchMenuItem != null && clm.isFilterable()) {
                         cm.getItems().add(0, searchMenuItem);
                     }
-                    if (mode.get() != OperationMode.READ && !hasEditingCell() && Clipboard.getSystemClipboard()
-                            .hasString()) {
+                    if (isReadMode() && !hasEditingCell() && Clipboard.getSystemClipboard().hasString()) {
                         if (!cm.getItems().contains(getPasteMenuItem())) {
                             cm.getItems().add(getPasteMenuItem());
                         }
@@ -247,7 +263,17 @@ public class TableControl<R> extends VBox {
                 cm.show(tableView, event.getScreenX(), event.getScreenY());
             }
         });
-        // create custom row factory that can intercept double click on grid row
+
+        /**
+         * If in normal editing mode (agileEditing == false), when a particular cell
+         * is no longer being edited, the content display should change to TEXT_ONLY
+         */
+        tableView.editingCellProperty().addListener(new WeakChangeListener<>((observable, oldValue, newValue) -> {
+            // TablePosition
+            if ((newValue == null || newValue.getRow() == -1) && !isAgileEditing()) {
+                // TODO
+            }
+        }));
         tableView.setRowFactory(param -> new TableControlRow<>(TableControl.this));
     }
 
@@ -603,7 +629,7 @@ public class TableControl<R> extends VBox {
             }
         }
 
-        public void select(int pageNum) {
+        public final void select(int pageNum) {
             cmbPage.getSelectionModel().select(pageNum);
         }
     }
@@ -637,7 +663,8 @@ public class TableControl<R> extends VBox {
     private final EventHandler<KeyEvent> tableKeyListener = new EventHandler<>() {
         @Override
         public void handle(KeyEvent event) {
-            if (mode.get() == OperationMode.READ) {
+            final int selectedIndex = tableView.getSelectedIndex();
+            if (isReadMode()) {
                 if (event.getCode() == KeyCode.C && event.isControlDown()) {
                     if (event.isShiftDown()) {
                         copyRow();
@@ -652,17 +679,16 @@ public class TableControl<R> extends VBox {
                 if (event.isShiftDown()) {
                     if (tableView.getSelectionModel().getSelectedCells().get(0).getColumn() == 0) {
                         List<TableColumn<R, ?>> leafColumns = getLeafColumns();
-                        showRow(tableView.getSelectionModel().getSelectedIndex() - 1);
-                        tableView.getSelectionModel().select(tableView.getSelectionModel()
-                                .getSelectedIndex() - 1, leafColumns.get(leafColumns.size() - 1));
+                        showRow(selectedIndex - 1);
+                        tableView.getSelectionModel()
+                                .select(selectedIndex - 1, leafColumns.get(leafColumns.size() - 1));
                     } else {
                         tableView.getSelectionModel().selectLeftCell();
                     }
                 } else {
                     if (tableView.getSelectionModel().getSelectedCells().get(0).getColumn() == lastColumnIndex) {
-                        showRow(tableView.getSelectionModel().getSelectedIndex() + 1);
-                        tableView.getSelectionModel()
-                                .select(tableView.getSelectionModel().getSelectedIndex() + 1, columns.get(0));
+                        showRow(selectedIndex + 1);
+                        tableView.getSelectionModel().select(selectedIndex + 1, columns.get(0));
                     } else {
                         tableView.getSelectionModel().selectRightCell();
                     }
@@ -671,9 +697,9 @@ public class TableControl<R> extends VBox {
                 event.consume();
             } else if (event.getCode() == KeyCode.ENTER && !event.isControlDown() && !event.isAltDown() && !event.isShiftDown()) {
                 // 编辑模式下，Enter可从移动的单元格向下移
-                if (agileEditing.get()) {
+                if (isAgileEditing()) {
                     if (directEdit) {
-                        showRow(tableView.getSelectionModel().getSelectedIndex() + 1);
+                        showRow(tableView.getSelectedIndex() + 1);
                         // 末尾
                         if (tableView.getSelectionModel().getSelectedIndex() == items.size() - 1) {
                             //it will trigger cell's commit edit for the most bottom row
@@ -724,7 +750,7 @@ public class TableControl<R> extends VBox {
      * times.
      * @param record 单条记录
      */
-    public void markAsChanged(R record) {
+    public final void markAsChanged(R record) {
         if (!changedRows.contains(record)) {
             changedRows.add(record);
         }
@@ -735,7 +761,7 @@ public class TableControl<R> extends VBox {
      */
     @SuppressWarnings("rawtypes")
     public void paste() {
-        if (mode.get() == OperationMode.READ) {
+        if (isReadMode()) {
             return;
         }
         final Clipboard clipboard = Clipboard.getSystemClipboard();
@@ -830,7 +856,6 @@ public class TableControl<R> extends VBox {
                 }
 
                 refresh();
-
                 /*
                   Will ensure the content display to TEXT_ONLY because there is
                   no way to update cell editors value (in agile editing mode)
@@ -840,11 +865,7 @@ public class TableControl<R> extends VBox {
         }
     }
 
-
-    /**
-     * It calls {@link TableView#refresh()}
-     */
-    public void refresh() {
+    public final void refresh() {
         tableView.refresh();
     }
 
@@ -985,7 +1006,7 @@ public class TableControl<R> extends VBox {
      * copy row
      */
     @SuppressWarnings("rawtypes")
-    private void copyRow() {
+    private final void copyRow() {
         R selectedRow = getSelectedItem();
         if (selectedRow == null) {
             return;
@@ -1396,17 +1417,14 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * Save changes. This method is called when pressing save button
+     * save changes. This method is called when pressing save button
      */
-    public void save() {
-        // In case there is a cell being edited, call clearSelection() to trigger
-        // commitEdit() in the edited cell.
+    public final void save() {
         tableView.getSelectionModel().clearSelection();
+        if (changedRows.isEmpty()) {
+            return;
+        }
         try {
-            if (changedRows.isEmpty()) {
-                setOperationMode(OperationMode.READ);
-                return;
-            }
             if (!behaviour.validate(this, changedRows)) {
                 return;
             }
@@ -1415,7 +1433,7 @@ public class TableControl<R> extends VBox {
                 service.runSaveInBackground(prevMode);
             } else {
                 List<R> lstResult = new ArrayList<>();
-                if (mode.get().equals(OperationMode.EDIT)) {
+                if (prevMode.equals(OperationMode.EDIT)) {
                     lstResult = behaviour.update(changedRows);
                 } else if (mode.get().equals(OperationMode.INSERT)) {
                     lstResult = behaviour.insert(changedRows);
@@ -1432,10 +1450,11 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * Edit table. This method is called when pressing edit button.
+     * Edit table. This method is called when pressing edit button in the toolbar.
      */
-    public void edit() {
-        if (behaviour.canEdit(tableView.getSelectionModel().getSelectedItem())) {
+    public final void edit() {
+        if (behaviour.canEdit(tableView.getSelectedItem())) {
+            // 改为编辑模式，绑定了表格的编辑状态
             setOperationMode(OperationMode.EDIT);
         }
     }
@@ -1696,7 +1715,9 @@ public class TableControl<R> extends VBox {
         paginationControl.select(startIndex.get() / pageSize.get());
 
         toggleButtons(vol.isMoreRows());
-        mode.set(OperationMode.READ);
+
+        setOperationMode(OperationMode.READ);
+
         clearChange();
 
         // 自适应列
@@ -1717,7 +1738,7 @@ public class TableControl<R> extends VBox {
     }
 
     private void postSaveAction(List<R> lstResult, OperationMode prevMode) {
-        mode.set(OperationMode.READ);
+        setOperationMode(OperationMode.READ);
         /*
             In case objects in lstResult differ with original object. Ex: In SOA
             architecture, sent objects always differ with received object due to
@@ -2042,7 +2063,7 @@ public class TableControl<R> extends VBox {
      * from {@link TiwulFXUtil#DEFAULT_USE_BACKGROUND_TASK_TO_SAVE}. Default is FALSE.
      * @param useBackgroundTaskToSave useBackgroundTaskToSave
      */
-    public void setUseBackgroundTaskToSave(boolean useBackgroundTaskToSave) {
+    public final void setUseBackgroundTaskToSave(boolean useBackgroundTaskToSave) {
         this.useBackgroundTaskToSave = useBackgroundTaskToSave;
     }
 
@@ -2052,7 +2073,7 @@ public class TableControl<R> extends VBox {
      * {@link TiwulFXUtil#DEFAULT_USE_BACKGROUND_TASK_TO_DELETE}.
      * @return isUseBackgroundTaskToDelete
      */
-    public boolean isUseBackgroundTaskToDelete() {
+    public final boolean isUseBackgroundTaskToDelete() {
         return useBackgroundTaskToDelete;
     }
 
@@ -2064,7 +2085,7 @@ public class TableControl<R> extends VBox {
      * from {@link TiwulFXUtil#DEFAULT_USE_BACKGROUND_TASK_TO_DELETE}. Default is false
      * @param useBackgroundTaskToDelete useBackgroundTaskToDelete
      */
-    public void setUseBackgroundTaskToDelete(boolean useBackgroundTaskToDelete) {
+    public final void setUseBackgroundTaskToDelete(boolean useBackgroundTaskToDelete) {
         this.useBackgroundTaskToDelete = useBackgroundTaskToDelete;
     }
 

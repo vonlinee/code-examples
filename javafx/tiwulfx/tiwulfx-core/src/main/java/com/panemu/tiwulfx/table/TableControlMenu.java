@@ -55,12 +55,9 @@ class TableControlMenu extends MenuButton {
         LabelSeparatorMenuItem labelEditing = new LabelSeparatorMenuItem(TiwulFXUtil.getString("editing.mode"), false);
         this.getItems().addAll(labelEditing, normalEditing, agileEditing);
         
-        tableControl.agileEditingProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                agileEditing.setSelected(newValue);
-                normalEditing.setSelected(!newValue);
-            }
+        tableControl.agileEditingProperty().addListener((observable, oldValue, newValue) -> {
+            agileEditing.setSelected(newValue);
+            normalEditing.setSelected(!newValue);
         });
         
         createMaxRecordMenuItem();

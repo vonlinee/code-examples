@@ -106,7 +106,6 @@ public abstract class CustomTableCell<R, C> extends TableCell<R, C> {
          * This way, commitEdit() will be called if the cell is no longer focused
          */
         final Node focusableControl = getFocusableNode();
-        System.out.println("focusableControl => " + focusableControl);
         if (focusableControl != null) {
             focusableControl.focusedProperty().addListener((observable, oldValue, newValue) -> {
                 if (!CustomTableCell.this.isSelected() && newValue) {
@@ -144,7 +143,6 @@ public abstract class CustomTableCell<R, C> extends TableCell<R, C> {
         if (!programmaticallyEdited) {
             Node editView = getEditableView();
             setGraphic(editView);
-            System.out.println(editView);
             editView.requestFocus();
             updateCellValue(getItem());
             // 触发表格的编辑事件

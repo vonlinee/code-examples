@@ -60,12 +60,9 @@ public class FrmMasterDetail extends VBox {
         TextColumn<Insurance> clmCode = new TextColumn<>("code");
         TextColumn<Insurance> clmPackageName = new TextColumn<>("name", 300);
         tblInsurance.addColumn(clmCode, clmPackageName);
-        tblInsurance.selectedItemProperty().addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
-                if (tblInsurance.getMode() == OperationMode.READ) {
-                    tblPerson.reloadFirstPage();
-                }
+        tblInsurance.selectedItemProperty().addListener(observable -> {
+            if (tblInsurance.getMode() == OperationMode.READ) {
+                tblPerson.reloadFirstPage();
             }
         });
     }

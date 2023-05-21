@@ -1,7 +1,3 @@
-/*
- * License BSD License
- * Copyright (C) 2013 Amrullah <amrullah@panemu.com>.
- */
 package com.panemu.tiwulfx.demo.ui;
 
 import com.panemu.tiwulfx.common.TableCriteria;
@@ -31,9 +27,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author Amrullah <amrullah@panemu.com>
- */
 public class FrmPersonTable extends VBox {
 
     @FXML

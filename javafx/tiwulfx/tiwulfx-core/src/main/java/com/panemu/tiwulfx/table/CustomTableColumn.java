@@ -5,8 +5,6 @@ import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.common.Validator;
 import com.panemu.tiwulfx.utils.ClassUtils;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -109,14 +107,11 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
     public CustomTableColumn(String propertyName, String columnHeader) {
         super(columnHeader);
         this.propertyName = new SimpleStringProperty(propertyName);
-        tableCriteria.addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
-                if (tableCriteria.get() != null) {
-                    CustomTableColumn.this.setGraphic(filterImage);
-                } else {
-                    CustomTableColumn.this.setGraphic(null);
-                }
+        tableCriteria.addListener(observable -> {
+            if (tableCriteria.get() != null) {
+                CustomTableColumn.this.setGraphic(filterImage);
+            } else {
+                CustomTableColumn.this.setGraphic(null);
             }
         });
         this.setCellValueFactory(new Callback<CellDataFeatures<R, C>, ObservableValue<C>>() {
@@ -127,7 +122,6 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
                 // This code is adapted from {@link javafx.scene.control.cell.PropertyValueFactory#getCellDataReflectively(java.lang.Object)}
                 try {
                     Object cellValue;
-                    System.out.println(propertyName);
                     if (getPropertyName().contains(".")) {
                         cellValue = ClassUtils.getNestedProperty(param.getValue(), getPropertyName());
                     } else {
@@ -397,7 +391,6 @@ public class CustomTableColumn<R, C> extends TableColumn<R, C> {
 
     public PopupControl getPopup(Object record) {
         String msg = mapInvalid.get(record);
-        System.out.println(msg);
         if (popup == null) {
             popup = new PopupControl();
             final HBox pnl = new HBox();

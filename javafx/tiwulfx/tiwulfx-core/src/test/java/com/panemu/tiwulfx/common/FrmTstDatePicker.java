@@ -59,7 +59,7 @@ public class FrmTstDatePicker extends Application {
 
 			@Override
 			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-				System.out.println(newValue);
+
 			}
 		});
 		
