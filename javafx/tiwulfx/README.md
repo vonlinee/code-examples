@@ -77,8 +77,3 @@ If you use Java 8, please use TiwulFX version 2 as follow:
 
 * TiwulFX : LGPL
 * TiwulFX samples: BSD
-
-
-https://github.com/panemu/tiwulfx-dock
-
-

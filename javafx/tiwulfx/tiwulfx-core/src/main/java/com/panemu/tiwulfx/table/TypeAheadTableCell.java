@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2014 Panemu.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301  USA
+ */
 package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.control.TypeAheadField;
@@ -9,9 +27,12 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import org.jetbrains.annotations.NotNull;
 
-public class TypeAheadTableCell<R, C> extends CustomTableCell<R, C> {
+/**
+ *
+ * @author Amrullah 
+ */
+public class TypeAheadTableCell<R, C> extends BaseCell<R, C> {
 
 	private TypeAheadField<C> typeAheadField;
 	private TypeAheadColumn<R, C> column;
@@ -22,7 +43,7 @@ public class TypeAheadTableCell<R, C> extends CustomTableCell<R, C> {
 	}
 
 	@Override
-	protected void updateCellValue(C value) {
+	protected void updateValue(C value) {
 		typeAheadField.setValue(value);
 	}
 
@@ -33,20 +54,33 @@ public class TypeAheadTableCell<R, C> extends CustomTableCell<R, C> {
 	}
 
 	@Override
-	protected @NotNull Control getEditView() {
+	protected Control getEditableControl() {
 		if (typeAheadField == null) {
 			typeAheadField = new TypeAheadField<>();
+
 			typeAheadField.setSorted(column.isSorted());
-			typeAheadField.valueProperty().addListener((ov, t, newValue) -> {
-				for (CellEditorListener<R, C> svl : column.getCellEditorListeners()) {
-					svl.valueChanged(getTableRow().getIndex(), column.getPropertyName(), (R) getTableRow().getItem(), newValue);
+//			if (!column.isRequired()) {
+//				typeAheadField.getItems().add(null);
+//			}
+
+			typeAheadField.valueProperty().addListener(new ChangeListener<C>() {
+
+				@Override
+				public void changed(ObservableValue<? extends C> ov, C t, C newValue) {
+					for (CellEditorListener<R, C> svl : column.getCellEditorListeners()) {
+						svl.valueChanged(getTableRow().getIndex(), column.getPropertyName(), (R) getTableRow().getItem(), newValue);
+					}
 				}
 			});
-			column.requiredProperty().addListener((ov, t, t1) -> {
-				if (t1) {
-					typeAheadField.getItems().remove(null);
-				} else {
-					typeAheadField.getItems().add(0, null);
+
+			column.requiredProperty().addListener(new ChangeListener<Boolean>() {
+				@Override
+				public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
+					if (t1) {
+						typeAheadField.getItems().remove(null);
+					} else {
+						typeAheadField.getItems().add(0, null);
+					}
 				}
 			});
 			typeAheadField.getItems().addAll(column.getItemMap().values());
@@ -61,12 +95,22 @@ public class TypeAheadTableCell<R, C> extends CustomTableCell<R, C> {
 					}
 				}
 			});
+
 			typeAheadField.setConverter(column.getStringConverter());
-			/**
-			 * Use event filter instead on onKeyPressed because Enter and Escape have
-			 * been consumed by TypeAhead itself
-			 */
-			typeAheadField.addEventFilter(KeyEvent.KEY_PRESSED, t -> {
+
+		}
+		return typeAheadField;
+	}
+
+	@Override
+	protected void attachEnterEscapeEventHandler() {
+		/**
+		 * Use event filter instead on onKeyPressed because Enter and Escape have
+		 * been consumed by TypeAhead it self
+		 */
+		typeAheadField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent t) {
 				if (t.getCode() == KeyCode.ENTER) {
 					commitEdit(typeAheadField.getValue());
 					t.consume();
@@ -77,8 +121,7 @@ public class TypeAheadTableCell<R, C> extends CustomTableCell<R, C> {
 					 */
 					TypeAheadTableCell.this.fireEvent(t);
 				}
-			});
-		}
-		return typeAheadField;
+			}
+		});
 	}
 }

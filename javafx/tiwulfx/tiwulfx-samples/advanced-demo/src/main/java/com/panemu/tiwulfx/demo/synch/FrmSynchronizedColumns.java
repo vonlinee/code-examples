@@ -30,7 +30,7 @@ import com.panemu.tiwulfx.common.TableData;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.table.CellEditorListener;
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableControlBehaviour;
+import com.panemu.tiwulfx.table.TableControlBehavior;
 import com.panemu.tiwulfx.table.TypeAheadColumn;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -171,16 +171,16 @@ public class FrmSynchronizedColumns extends VBox {
 		lstColumns.add(new SynchColumnPojo(continent, country, province));
 		lstColumns.add(new SynchColumnPojo(continent2, country2, province2));
 		tblSynchColumn.setRecordClass(SynchColumnPojo.class);
-		tblSynchColumn.setBehaviour(controller);
+		tblSynchColumn.setController(controller);
 	}
 	
 	public void reload() {
 		tblSynchColumn.reloadFirstPage();
 	}
 	
-	private TableControlBehaviour<SynchColumnPojo> controller = new TableControlBehaviour<>() {
+	private TableControlBehavior<SynchColumnPojo> controller = new TableControlBehavior<SynchColumnPojo>() {
 		@Override
-		public <C> TableData<SynchColumnPojo> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
+		public TableData<SynchColumnPojo> loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
 			return new TableData<>(lstColumns, false, lstColumns.size());
 		}
 

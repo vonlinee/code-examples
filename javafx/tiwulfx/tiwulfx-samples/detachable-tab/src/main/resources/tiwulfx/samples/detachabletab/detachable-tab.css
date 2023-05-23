@@ -14,7 +14,7 @@
 }
 
 .top-panel {
-	-fx-background-image: url("/tiwulfx/samples/detachabletab/CoarseGrid.png");
+	-fx-background-image: url("/tiwulfx-core/samples/detachabletab/CoarseGrid.png");
 	-fx-background-repeat: repeat;
 	-fx-background-color:#747d88;
 }

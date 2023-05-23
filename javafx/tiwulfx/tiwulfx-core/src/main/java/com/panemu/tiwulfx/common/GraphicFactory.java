@@ -25,233 +25,256 @@ import javafx.scene.layout.Region;
 
 /**
  * This class responsible to create image/graphic to various TiwulFX Control.
- * Developer can extend this class and overrides the methods to create custom
+ * Developer can extends this class and overrides the methods to create custom
  * images. Call {@link TiwulFXUtil#setGraphicFactory(GraphicFactory)} to replace
  * the default factory.
+ *
  * @author amrullah
  */
 public class GraphicFactory {
 
-    private static final Image imgAdd = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/add.png"));
-    private static final Image imgDelete = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/delete.png"));
-    private static final Image imgEdit = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/edit.png"));
-    private static final Image imgExport = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/export.png"));
-    private static final Image imgReload = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/reload.png"));
-    private static final Image imgSave = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/save.png"));
-    private static final Image imgFilter = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/filter.png"));
-    private static final Image imgLookup = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/lookup.png"));
+	private static final Image imgAdd = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/add.png"));
+	private static final Image imgDelete = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/delete.png"));
+	private static final Image imgEdit = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/edit.png"));
+	private static final Image imgExport = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/export.png"));
+	private static final Image imgReload = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/reload.png"));
+	private static final Image imgSave = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/save.png"));
+	private static final Image imgFilter = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/filter.png"));
+	private static final Image imgLookup = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/lookup.png"));
 
-    private static final Image imgConfirm = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/confirm48.png"));
-    private static final Image imgError = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/error48.png"));
-    private static final Image imgInfo = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/info48.png"));
-    private static final Image imgWarning = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/warning48.png"));
+	private static final Image imgConfirm = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/confirm48.png"));
+	private static final Image imgError = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/error48.png"));
+	private static final Image imgInfo = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/info48.png"));
+	private static final Image imgWarning = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/warning48.png"));
 
-    private static final Image imgMenuCollapse = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/left.png"));
-    private static final Image imgMenuExpand = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/right.png"));
+	private static final Image imgMenuCollapse = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/left.png"));
+	private static final Image imgMenuExpand = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/right.png"));
 
-    private static final Image imgRequired = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/required.png"));
-    private static final Image imgInvalid = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/invalid.png"));
-    private static final Image imgRequiredInvalid = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/required_invalid.png"));
-    private static final Image imgCalendar = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/calendar.png"));
+	private static final Image imgRequired = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/required.png"));
+	private static final Image imgInvalid = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/invalid.png"));
+	private static final Image imgRequiredInvalid = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/required_invalid.png"));
+	private static final Image imgCalendar = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/calendar.png"));
 
-    private static final Image imgConfig = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/conf.png"));
+	private static final Image imgConfig = new Image(GraphicFactory.class.getResourceAsStream("/com/panemu/tiwulfx/res/image/conf.png"));
 
-    /**
-     * Graphic of Add button in TableControl
-     * @return
-     */
-    public Node createAddGraphic() {
-        return new ImageView(imgAdd);
-    }
+	/**
+	 * Graphic of Add button in TableControl
+	 *
+	 * @return
+	 */
+	public Node createAddGraphic() {
+		return new ImageView(imgAdd);
+	}
 
-    /**
-     * Graphic of Delete button in TableControl
-     * @return
-     */
-    public Node createDeleteGraphic() {
-        return new ImageView(imgDelete);
-    }
+	/**
+	 * Graphic of Delete button in TableControl
+	 *
+	 * @return
+	 */
+	public Node createDeleteGraphic() {
+		return new ImageView(imgDelete);
+	}
 
-    /**
-     * Graphic of Edit button in TableControl
-     * @return
-     */
-    public Node createEditGraphic() {
-        return new ImageView(imgEdit);
-    }
+	/**
+	 * Graphic of Edit button in TableControl
+	 *
+	 * @return
+	 */
+	public Node createEditGraphic() {
+		return new ImageView(imgEdit);
+	}
 
-    /**
-     * Graphic of Export button in TableContrl
-     * @return
-     */
-    public Node createExportGraphic() {
-        return new ImageView(imgExport);
-    }
+	/**
+	 * Graphic of Export button in TableContrl
+	 *
+	 * @return
+	 */
+	public Node createExportGraphic() {
+		return new ImageView(imgExport);
+	}
 
-    /**
-     * Graphic of Reload button in TableControl
-     * @return
-     */
-    public Node createReloadGraphic() {
-        return new ImageView(imgReload);
-    }
+	/**
+	 * Graphic of Reload button in TableControl
+	 *
+	 * @return
+	 */
+	public Node createReloadGraphic() {
+		return new ImageView(imgReload);
+	}
 
-    /**
-     * Graphic of Save button in TableControl
-     * @return
-     */
-    public Node createSaveGraphic() {
-        return new ImageView(imgSave);
-    }
+	/**
+	 * Graphic of Save button in TableControl
+	 *
+	 * @return
+	 */
+	public Node createSaveGraphic() {
+		return new ImageView(imgSave);
+	}
 
-    /**
-     * Graphic of go-to-first-page button in TableControl
-     * @return
-     */
-    public Node createPageFirstGraphic() {
-        Region rg = new Region();
-        rg.getStyleClass().addAll("pagination-arrow", "first-shape");
-        return rg;
-    }
+	/**
+	 * Graphic of go-to-first-page button in TableControl
+	 *
+	 * @return
+	 */
+	public Node createPageFirstGraphic() {
+		Region rg = new Region();
+		rg.getStyleClass().addAll("pagination-arrow", "first-shape");
+		return rg;
+	}
 
-    /**
-     * Graphic of go-to-previous-page button in TableControl
-     * @return
-     */
-    public Node createPagePrevGraphic() {
-        Region rg = new Region();
-        rg.getStyleClass().addAll("pagination-arrow", "prev-shape");
-        return rg;
-    }
+	/**
+	 * Graphic of go-to-previous-page button in TableControl
+	 *
+	 * @return
+	 */
+	public Node createPagePrevGraphic() {
+		Region rg = new Region();
+		rg.getStyleClass().addAll("pagination-arrow", "prev-shape");
+		return rg;
+	}
 
-    /**
-     * Graphic of go-to-next-page button in TableControl
-     * @return
-     */
-    public Node createPageNextGraphic() {
-        Region rg = new Region();
-        rg.getStyleClass().addAll("pagination-arrow", "next-shape");
-        return rg;
-    }
+	/**
+	 * Graphic of go-to-next-page button in TableControl
+	 *
+	 * @return
+	 */
+	public Node createPageNextGraphic() {
+		Region rg = new Region();
+		rg.getStyleClass().addAll("pagination-arrow", "next-shape");
+		return rg;
+	}
 
-    /**
-     * Graphic of go-to-last-page button in TableControl
-     * @return
-     */
-    public Node createPageLastGraphic() {
-        Region rg = new Region();
-        rg.getStyleClass().addAll("pagination-arrow", "last-shape");
-        return rg;
-    }
+	/**
+	 * Graphic of go-to-last-page button in TableControl
+	 *
+	 * @return
+	 */
+	public Node createPageLastGraphic() {
+		Region rg = new Region();
+		rg.getStyleClass().addAll("pagination-arrow", "last-shape");
+		return rg;
+	}
 
-    /**
-     * Graphic of Filter button in TableControl
-     * @return
-     */
-    public Node createFilterGraphic() {
-        ImageView filterImage = new ImageView(imgFilter);
-        filterImage.setFitHeight(20.0);
-        filterImage.setFitWidth(20.0);
-        return filterImage;
-    }
+	/**
+	 * Graphic of Filter button in TableControl
+	 *
+	 * @return
+	 */
+	public Node createFilterGraphic() {
+		ImageView filterImage = new ImageView(imgFilter);
+		filterImage.setFitHeight(20.0);
+		filterImage.setFitWidth(20.0);
+		return filterImage;
+	}
 
-    /**
-     * Graphic of Lookup button in LookupField or LookupColumn
-     * @return
-     */
-    public Node createLookupGraphic() {
-        return new ImageView(imgLookup);
-    }
+	/**
+	 * Graphic of Lookup button in LookupField or LookupColumn
+	 *
+	 * @return
+	 */
+	public Node createLookupGraphic() {
+		return new ImageView(imgLookup);
+	}
 
-    /**
-     * Image of Confirmation dialog
-     * @return
-     */
-    public Image getDialogConfirmImage() {
-        return imgConfirm;
-    }
+	/**
+	 * Image of Confirmation dialog
+	 *
+	 * @return
+	 */
+	public Image getDialogConfirmImage() {
+		return imgConfirm;
+	}
 
-    /**
-     * Image of Error dialog
-     * @return
-     */
-    public Image getDialogErrorImage() {
-        return imgError;
-    }
+	/**
+	 * Image of Error dialog
+	 *
+	 * @return
+	 */
+	public Image getDialogErrorImage() {
+		return imgError;
+	}
 
-    /**
-     * Image of Information dialog
-     * @return
-     */
-    public Image getDialogInfoImage() {
-        return imgInfo;
-    }
+	/**
+	 * Image of Information dialog
+	 *
+	 * @return
+	 */
+	public Image getDialogInfoImage() {
+		return imgInfo;
+	}
 
-    /**
-     * Image of Warning dialog
-     * @return
-     */
-    public Image getDialogWarningImage() {
-        return imgWarning;
-    }
+	/**
+	 * Image of Warning dialog
+	 *
+	 * @return
+	 */
+	public Image getDialogWarningImage() {
+		return imgWarning;
+	}
 
-    /**
-     * Graphic of collapse button in sidemenu
-     * @return
-     */
-    public Node createMenuCollapseGraphic() {
-        return new ImageView(imgMenuCollapse);
-    }
+	/**
+	 * Graphic of collapse button in sidemenu
+	 *
+	 * @return
+	 */
+	public Node createMenuCollapseGraphic() {
+		return new ImageView(imgMenuCollapse);
+	}
 
-    /**
-     * Graphic of expand button in sidemenu
-     * @return
-     */
-    public Node createMenuExpandGraphic() {
-        return new ImageView(imgMenuExpand);
-    }
+	/**
+	 * Graphic of expand button in sidemenu
+	 *
+	 * @return
+	 */
+	public Node createMenuExpandGraphic() {
+		return new ImageView(imgMenuExpand);
+	}
 
-    /**
-     * Image located next to a control indicating it's value is required. The
-     * default is a red asterisk.
-     * @return
-     */
-    public Image getValidationRequiredImage() {
-        return imgRequired;
-    }
+	/**
+	 * Image located next to a control indicating it's value is required. The
+	 * default is a red asterisk.
+	 *
+	 * @return
+	 */
+	public Image getValidationRequiredImage() {
+		return imgRequired;
+	}
 
-    /**
-     * Image located next to a control indicating it's value is invalid. The
-     * default is a red exclamation mark
-     * @return
-     */
-    public Image getValidationInvalidImage() {
-        return imgInvalid;
-    }
+	/**
+	 * Image located next to a control indicating it's value is invalid. The
+	 * default is a red exclamation mark
+	 *
+	 * @return
+	 */
+	public Image getValidationInvalidImage() {
+		return imgInvalid;
+	}
 
-    /**
-     * Image located next to a control indicating it's value is required but
-     * invalid. The default is a red asterisk and exclamation mark.
-     * @return
-     */
-    public Image getValidationRequiredInvalidImage() {
-        return imgRequiredInvalid;
-    }
+	/**
+	 * Image located next to a control indicating it's value is required but
+	 * invalid. The default is a red asterisk and exclamation mark.
+	 *
+	 * @return
+	 */
+	public Image getValidationRequiredInvalidImage() {
+		return imgRequiredInvalid;
+	}
 
-    /**
-     * Graphic of a configuration button in the footer of TableControl. The
-     * default is a small gear
-     * @return
-     */
-    public Node createConfigGraphic() {
-        return new ImageView(imgConfig);
-    }
-
-    /**
-     * Graphic for calendar icon used by DateField.
-     * @return
-     */
-    public Node createCalendarGraphic() {
-        return new ImageView(imgCalendar);
-    }
+	/**
+	 * Graphic of a configuration button in the footer of TableControl. The
+	 * default is a small gear
+	 *
+	 * @return
+	 */
+	public Node createConfigGraphic() {
+		return new ImageView(imgConfig);
+	}
+	
+	/**
+	 * Graphic for calendar icon used by DateField.
+	 * @return 
+	 */
+	public Node createCalendarGraphic() {
+		return new ImageView(imgCalendar);
+	}
 }

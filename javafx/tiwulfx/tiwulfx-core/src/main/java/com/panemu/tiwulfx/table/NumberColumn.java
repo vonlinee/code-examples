@@ -1,10 +1,12 @@
+/*
+ * License GNU LGPL
+ * Copyright (C) 2012 Amrullah .
+ */
 package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.common.TableCriteria.Operator;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.control.NumberField;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -12,9 +14,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.math.BigDecimal;
@@ -23,20 +22,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * column for number
+ * @author amrullah
  */
-public class NumberColumn<R, C extends Number> extends CustomTableColumn<R, C> {
+@SuppressWarnings("unchecked")
+public class NumberColumn<R, C extends Number> extends BaseColumn<R, C> {
 
     private boolean grouping = true;
     private int maxLength = 10;
     private int digitBehindDecimal;
-    private final ObjectProperty<Class<C>> clazzProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<Class<? extends C>> clazzProperty = new SimpleObjectProperty<>();
     private final NumberField<C> searchInputControl = new NumberField<>(null);
     protected String pattern = "###,###";
     private String zeroDigit = "";
     private final BooleanProperty negativeAllowed = new SimpleBooleanProperty(TiwulFXUtil.DEFAULT_NEGATIVE_ALLOWED);
     protected DecimalFormat formatter = TiwulFXUtil.getDecimalFormat();
-    private final SearchMenuItemBase<C> searchMenuItem = new SearchMenuItemBase<C>(this) {
+    private final SearchMenuItemBase<C> searchMenuItem = new SearchMenuItemBase<>(this) {
         @Override
         protected Node getInputControl() {
             return searchInputControl;
@@ -63,45 +63,25 @@ public class NumberColumn<R, C extends Number> extends CustomTableColumn<R, C> {
     };
 
     public NumberColumn() {
-        this(null, Double.class, 100);
-    }
-
-    public NumberColumn(String propertyName) {
-        this(propertyName, Double.class, 100);
+        this("", (Class<C>) Double.class);
     }
 
     public NumberColumn(String propertyName, Class<?> clazz) {
-        this(propertyName, clazz, 100);
+        this(propertyName, (Class<? extends C>) clazz, 100);
     }
 
-    @SuppressWarnings("unchecked")
-    public NumberColumn(String propertyName, Class<?> clazz, double prefWidth) {
+    public NumberColumn(String propertyName, Class<? extends C> clazz, double prefWidth) {
         super(propertyName, prefWidth);
         setAlignment(Pos.BASELINE_RIGHT);
-        this.clazzProperty.set((Class<C>) clazz);
-        Callback<TableColumn<R, C>, TableCell<R, C>> cellFactory =
-                new Callback<TableColumn<R, C>, TableCell<R, C>>() {
-                    @Override
-                    public TableCell call(TableColumn p) {
-                        return new NumberTableCell<R, C>(NumberColumn.this);
-                    }
-                };
-        setCellFactory(cellFactory);
+        this.clazzProperty.set(clazz);
+        setCellFactory(p -> new NumberTableCell<>(NumberColumn.this));
         formatter.setParseBigDecimal(clazz.equals(BigDecimal.class));
         formatter.applyPattern(getPattern(grouping));
         searchInputControl.numberTypeProperty().bind(this.clazzProperty);
-        this.clazzProperty.addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable o) {
-                formatter.applyPattern(getPattern(grouping));
-            }
-        });
+        this.clazzProperty.addListener(o -> formatter.applyPattern(getPattern(grouping)));
         setStringConverter(stringConverter);
-
         digitBehindDecimal = TiwulFXUtil.DEFAULT_DIGIT_BEHIND_DECIMAL;
-        for (int i = 0; i < digitBehindDecimal; i++) {
-            zeroDigit = zeroDigit + "0";
-        }
+        zeroDigit += "0".repeat(Math.max(0, digitBehindDecimal));
         setGrouping(grouping);
     }
 
@@ -147,7 +127,7 @@ public class NumberColumn<R, C extends Number> extends CustomTableColumn<R, C> {
 
     /**
      * Set maximum character length is acceptable in input field
-     * @param maxLength maxLength
+     * @param maxLength
      */
     public void setMaxLength(int maxLength) {
         this.maxLength = maxLength;
@@ -175,8 +155,8 @@ public class NumberColumn<R, C extends Number> extends CustomTableColumn<R, C> {
         }
     }
 
-    public Class<C> getNumberType() {
-        return clazzProperty.get();
+    public final Class<C> getNumberType() {
+        return (Class<C>) clazzProperty.get();
     }
 
     public void setNumberType(Class<C> numberType) {
@@ -187,9 +167,7 @@ public class NumberColumn<R, C extends Number> extends CustomTableColumn<R, C> {
         this.digitBehindDecimal = digitBehindDecimal;
         if (digitBehindDecimal > 2) {
             zeroDigit = "";
-            for (int i = 0; i < digitBehindDecimal; i++) {
-                zeroDigit = zeroDigit + "0";
-            }
+            zeroDigit += "0".repeat(digitBehindDecimal);
         }
         setGrouping(grouping);
     }

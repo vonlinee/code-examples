@@ -1,15 +1,36 @@
+/*
+ * Copyright (C) 2014 Panemu.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301  USA
+ */
 package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.control.NumberField;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Control;
-import org.jetbrains.annotations.NotNull;
 
-public class NumberTableCell<R, C extends Number> extends CustomTableCell<R, C> {
+/**
+ *
+ * @author Amrullah 
+ */
+public class NumberTableCell<R, C extends Number> extends BaseCell<R, C> {
 
 	private NumberField<C> textField;
-	private final NumberColumn<R, C> column;
+	private NumberColumn<R, C> column;
 
 	public NumberTableCell(NumberColumn<R, C> column) {
 		super(column);
@@ -17,7 +38,7 @@ public class NumberTableCell<R, C extends Number> extends CustomTableCell<R, C> 
 	}
 
 	@Override
-	protected void updateCellValue(C value) {
+	protected void updateValue(C value) {
 		textField.setValue(value);
 	}
 
@@ -27,13 +48,14 @@ public class NumberTableCell<R, C extends Number> extends CustomTableCell<R, C> 
 	}
 
 	@Override
-	protected @NotNull Control getEditView() {
+	protected Control getEditableControl() {
 		if (textField == null) {
 			textField = new NumberField<>(column.getNumberType());
 			textField.setMaxLength(column.getMaxLength());
 			textField.setDigitBehindDecimal(column.getDigitBehindDecimal());
 			textField.setNegativeAllowed(column.isNegativeAllowed());
 			textField.valueProperty().addListener(new ChangeListener<C>() {
+
 				@Override
 				public void changed(ObservableValue<? extends C> ov, C t, C newValue) {
 					for (CellEditorListener<R, C> svl : column.getCellEditorListeners()) {

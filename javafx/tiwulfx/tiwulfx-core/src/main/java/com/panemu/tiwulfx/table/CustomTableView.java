@@ -1,101 +1,67 @@
+/*
+ * Copyright (C) 2014 Panemu.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301  USA
+ */
 package com.panemu.tiwulfx.table;
 
-import javafx.collections.FXCollections;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * 封装JavaFX TableView
- * @param <R>
+ * @author amrullah
  */
-@SuppressWarnings("unchecked")
-public class CustomTableView<R> extends TableView<R> {
+@SuppressWarnings(value = {"unchecked", "rawtypes"})
+class CustomTableView<R> extends TableView<R> {
 
     private TableColumn<R, ?> selectedColumn;
 
-    public final <C> TableColumn<R, C> getSelectedColumn() {
-        return (TableColumn<R, C>) selectedColumn;
+    public CustomTableView() {
+
+        getColumns().addListener(new ListChangeListener<TableColumn<R, ?>>() {
+            @Override
+            public void onChanged(Change<? extends TableColumn<R, ?>> c) {
+                while (c.next()) {
+                    if (c.wasReplaced()) {
+                        ObservableList<? extends TableColumn<R, ?>> list = c.getList();
+                        System.out.println(list.get(0).getText());
+                    }
+                }
+            }
+        });
     }
 
-    public <C> void setSelectedColumn(TableColumn<R, C> selectedColumn) {
+    public TableColumn<R, ?> getSelectedColumn() {
+        return selectedColumn;
+    }
+
+    public void setSelectedColumn(TableColumn<R, ?> selectedColumn) {
         this.selectedColumn = selectedColumn;
     }
 
-    /**
-     * 不通过getColumns()方法进行添加列，不使用TableColumn而是使用CustomTableColumn
-     * @param column 列
-     * @param <C>    列数据类型
-     */
-    public final <C> void addColumn(CustomTableColumn<R, C> column) {
-        getColumns().add(column);
-    }
-
-    /**
-     * 避免直接使用原javafx table api
-     * @param <C> 列数据类型
-     * @return 表的所有列，每次都产生一个新的集合
-     */
-    @SuppressWarnings("unchecked")
-    public final <C> ObservableList<CustomTableColumn<R, C>> getTableColumns() {
-        ObservableList<CustomTableColumn<R, C>> columns = FXCollections.observableArrayList();
-        for (TableColumn<R, ?> column : getColumns()) {
-            columns.add((CustomTableColumn<R, C>) column);
-        }
-        return columns;
-    }
-
-    /**
-     * 单选的行索引，注意并不一定是行号
-     * @return 行索引
-     */
-    public final int getSelectedIndex() {
-        return getSelectionModel().getSelectedIndex();
-    }
-
-    public final void clearSelection() {
-        getSelectionModel().clearSelection();
-    }
-
-    /**
-     * 编辑某个位置的单元格
-     * @param newValue 位置
-     * @param <C>      列数据类型
-     */
-    public final <C> void edit(TablePosition<R, C> newValue) {
-        this.edit(newValue.getRow(), newValue.getTableColumn());
-    }
-
-    public final boolean hasSelectedCells() {
-        return !getSelectionModel().getSelectedCells().isEmpty();
-    }
-
-    /**
-     * @param index 列索引
-     * @param <C>   列数据类型
-     * @return 选择位置
-     */
-    @Nullable
-    public final <C> TablePosition<R, C> getSelectedPosition(int index) {
-        return getSelectionModel().getSelectedCells().get(index);
-    }
-
-    /**
-     * 单选的数据
-     * @return 行对应的数据对象
-     */
     public final R getSelectedItem() {
         return getSelectionModel().getSelectedItem();
     }
 
-    /**
-     * 选择某个单元格
-     * @param row 行
-     * @param col 列
-     */
-    public final void select(int row, int col) {
-        this.getSelectionModel().select(row, getColumns().get(col));
+    public final void edit(TablePosition position) {
+        this.edit(position.getRow(), position.getTableColumn());
     }
 }

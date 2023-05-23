@@ -32,9 +32,10 @@ import java.util.TimerTask;
  * (package visibility) so it won't be visible by TiwulFX developer. I didn't delete
  * it just for future reference
  * @author Christian Schudt
- * <a href="http://myjavafx.blogspot.com/2012/01/javafx-calendar-control.html">...</a>
+ * http://myjavafx.blogspot.com/2012/01/javafx-calendar-control.html
  */
 class DatePicker extends HBox {
+
 
     private static final String CSS_DATE_PICKER_VALID = "datepicker-valid";
     private static final String CSS_DATE_PICKER_INVALID = "datepicker-invalid";
@@ -51,6 +52,7 @@ class DatePicker extends HBox {
 
     /**
      * Initializes the date picker with the given locale.
+     *
      * @param locale The locale.
      */
     public DatePicker(Locale locale) {
@@ -211,6 +213,7 @@ class DatePicker extends HBox {
 
     /**
      * Tries to parse the text field for a valid date.
+     *
      * @param setDateToNullOnException True, if the date should be set to null, when a {@link ParseException} occurs.
      *                                 This is the case, when the text field loses focus.
      */
@@ -224,8 +227,7 @@ class DatePicker extends HBox {
             DateFormat dateFormat = getActualDateFormat();
             Date parsedDate = dateFormat.parse(textField.getText());
             parsedDate = dateFormat.parse(dateFormat.format(parsedDate));
-            if (selectedDate.get() == null || selectedDate.get() != null && parsedDate.getTime() != selectedDate.get()
-                    .getTime()) {
+            if (selectedDate.get() == null || selectedDate.get() != null && parsedDate.getTime() != selectedDate.get().getTime()) {
                 selectedDate.set(parsedDate);
             }
             invalid.set(false);
@@ -260,6 +262,7 @@ class DatePicker extends HBox {
 
     /**
      * Gets the actual date format. If {@link #dateFormatProperty()} is set, take it, otherwise get a default format for the current locale.
+     *
      * @return The date format.
      */
     private DateFormat getActualDateFormat() {
@@ -278,6 +281,7 @@ class DatePicker extends HBox {
 
     /**
      * Use this to set further properties of the calendar.
+     *
      * @return The calendar view.
      */
     public CalendarView getCalendarView() {
@@ -291,6 +295,7 @@ class DatePicker extends HBox {
 
     /**
      * States whether the user input is invalid (is no valid date).
+     *
      * @return The property.
      */
     public ReadOnlyBooleanProperty invalidProperty() {
@@ -300,6 +305,7 @@ class DatePicker extends HBox {
 
     /**
      * The locale.
+     *
      * @return The property.
      */
     public ObjectProperty<Locale> localeProperty() {
@@ -319,6 +325,7 @@ class DatePicker extends HBox {
 
     /**
      * The selected date.
+     *
      * @return The property.
      */
     public ObjectProperty<Date> selectedDateProperty() {
@@ -337,6 +344,7 @@ class DatePicker extends HBox {
 
     /**
      * Gets the date format.
+     *
      * @return The date format.
      */
     public ObjectProperty<DateFormat> dateFormatProperty() {
@@ -358,6 +366,7 @@ class DatePicker extends HBox {
     /**
      * The prompt text for the text field.
      * By default, the prompt text is taken from the date format pattern.
+     *
      * @return The property.
      */
     public StringProperty promptTextProperty() {
@@ -392,8 +401,7 @@ class DatePicker extends HBox {
         Bounds bounds = localToScene(getBoundsInLocal());
 
         double posX = calendarBounds.getMinX() + bounds.getMinX() + getScene().getX() + getScene().getWindow().getX();
-        double posY = calendarBounds.getMinY() + bounds.getHeight() + bounds.getMinY() + getScene().getY() + getScene()
-                .getWindow().getY();
+        double posY = calendarBounds.getMinY() + bounds.getHeight() + bounds.getMinY() + getScene().getY() + getScene().getWindow().getY();
 
         popup.show(this, posX, posY);
 
@@ -403,5 +411,5 @@ class DatePicker extends HBox {
     public void requestFocus() {
         textField.requestFocus();
     }
-
+    
 }

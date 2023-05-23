@@ -8,10 +8,7 @@ import com.panemu.tiwulfx.common.TableCriteria.Operator;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.util.ArrayList;
@@ -20,14 +17,14 @@ import java.util.List;
 /**
  * @author amrullah
  */
-public class TextColumn<R> extends CustomTableColumn<R, String> {
+public class TextColumn<R> extends BaseColumn<R, String> {
 
     private final TextField searchInputControl = new TextField();
     private boolean emptyStringAsNull = TiwulFXUtil.DEFAULT_EMPTY_STRING_AS_NULL;
     private int maxLength = 0;
     private boolean capitalize = false;
 
-    private final SearchMenuItemBase<String> searchMenuItem = new SearchMenuItemBase<>(this) {
+    private final SearchMenuItemBase<String> searchMenuItem = new SearchMenuItemBase<String>(this) {
         @Override
         protected Node getInputControl() {
             searchInputControl.setPromptText("kata kunci");
@@ -61,7 +58,7 @@ public class TextColumn<R> extends CustomTableColumn<R, String> {
         this("");
     }
 
-    public boolean isEmptyStringAsNull() {
+    public final boolean isEmptyStringAsNull() {
         return emptyStringAsNull;
     }
 
@@ -75,8 +72,8 @@ public class TextColumn<R> extends CustomTableColumn<R, String> {
 
     public TextColumn(String propertyName, double preferredWidth) {
         super(propertyName, preferredWidth);
-        setStringConverter(stringConverter);
         setCellFactory(p -> new TextTableCell<R>(TextColumn.this));
+        setStringConverter(stringConverter);
     }
 
     @Override
@@ -90,16 +87,16 @@ public class TextColumn<R> extends CustomTableColumn<R, String> {
     /**
      * Get max character that could be entered when editing a cell. If 0 then
      * there is no limitation.
-     * @return
+     * @return max len
      */
-    public int getMaxLength() {
+    public final int getMaxLength() {
         return maxLength;
     }
 
     /**
      * Set maximum character that could be entered when editing a cell. Set it to
      * 0 to disable this limitation.
-     * @param maxLength
+     * @param maxLength maxLength
      */
     public void setMaxLength(int maxLength) {
         this.maxLength = maxLength;
@@ -133,8 +130,7 @@ public class TextColumn<R> extends CustomTableColumn<R, String> {
 
         @Override
         public String fromString(String string) {
-            if (string == null || string.equals(getNullLabel())
-                    || (isEmptyStringAsNull() && string.isEmpty())) {
+            if (string == null || string.equals(getNullLabel()) || (isEmptyStringAsNull() && string.isEmpty())) {
                 return null;
             }
             return string;

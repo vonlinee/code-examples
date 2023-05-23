@@ -4,12 +4,15 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.VBox?>
+
 <fx:root type="VBox" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
-  <TextArea editable="false" prefRowCount="2" prefWidth="200.0" text="Example implementation of Master - Detail tables."
-            wrapText="true"/>
-  <SplitPane dividerPositions="0.3996655518394649" focusTraversable="true"
-             VBox.vgrow="ALWAYS">
-    <TableControl fx:id="tblInsurance"/>
-    <TableControl fx:id="tblPerson"/>
-  </SplitPane>
+   <children>
+      <TextArea editable="false" prefRowCount="2" prefWidth="200.0" text="Example implementation of Master - Detail tables." wrapText="true" />
+    <SplitPane dividerPositions="0.3996655518394649" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <items>
+        <TableControl fx:id="tblInsurance" />
+        <TableControl fx:id="tblPerson" />
+      </items>
+    </SplitPane>
+   </children>
 </fx:root>

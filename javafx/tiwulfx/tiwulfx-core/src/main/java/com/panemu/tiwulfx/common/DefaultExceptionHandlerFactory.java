@@ -33,11 +33,11 @@ public class DefaultExceptionHandlerFactory implements ExceptionHandlerFactory {
 		return new DefaultExceptionHandler();
 	}
 
-	private static class DefaultExceptionHandler implements ExceptionHandler {
+	private class DefaultExceptionHandler implements ExceptionHandler {
 
 		@Override
 		public void handleException(Throwable throwable, Window window) {
-			String errMessage = TiwulFXUtil.getString("error.occured") + "\n" + throwable.getMessage();
+			String errMessage = TiwulFXUtil.getLiteral("error.occured") + "\n" + throwable.getMessage();
 			MessageDialogBuilder.error(throwable).message(errMessage).show(window);
 		}
 

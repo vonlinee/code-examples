@@ -30,7 +30,13 @@ import com.panemu.tiwulfx.common.TableData;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.dialog.MessageDialogBuilder;
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableControlBehaviour;
+import com.panemu.tiwulfx.table.TableControlBehavior;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -40,103 +46,91 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
+ *
  * @author amrullah
  */
 public class FrmData extends StackPane {
 
-    @FXML
-    private TableControl<RecordPojo> tblData;
-    @FXML
-    private TextField txtConfigFile;
-    @FXML
-    private TextField txtConfigItem;
-    @FXML
-    private Button btnSave;
-    @FXML
-    private Button btnRead;
-    private static final String DEVCONFIG = "dev.config";
+	@FXML
+	private TableControl<RecordPojo> tblData;
+	@FXML private TextField txtConfigFile;
+	@FXML private TextField txtConfigItem;
+	@FXML private Button btnSave;
+	@FXML private Button btnRead;
+	private static final String DEVCONFIG = "dev.config";
+	
+	public FrmData() {
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(getClass().getSimpleName() + ".fxml"));
+		fxmlLoader.setRoot(this);
+		fxmlLoader.setController(this);
+		fxmlLoader.setResources(TiwulFXUtil.getLiteralBundle());
+		try {
+			fxmlLoader.load();
+		} catch (IOException exception) {
+			throw new RuntimeException(exception);
+		}
+		init();
+	}
 
-    public FrmData() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(getClass().getSimpleName() + ".fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-        fxmlLoader.setResources(TiwulFXUtil.getLiteralBundle());
-        try {
-            fxmlLoader.load();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
-        init();
-    }
+	private void init() {
+		tblData.setConfigurationID("FrmData.tblData");
+		tblData.setController(new CntlRecord());
+		tblData.setRecordClass(RecordPojo.class);
+		
+		String home = System.getProperty("user.home");
+		String confPath = home + File.separator + TiwulFXUtil.getApplicationId() + File.separator +"conf.properties";
+		txtConfigFile.setText(confPath);
+		
+		btnSave.setOnAction(new EventHandler<ActionEvent>() {
 
-    private void init() {
-        tblData.setConfigurationID("FrmData.tblData");
-        tblData.setBehaviour(new CntlRecord());
-        tblData.setRecordClass(RecordPojo.class);
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					if (txtConfigItem.getText().isEmpty()) {
+						MessageDialogBuilder.error().message("Please enter value for " + DEVCONFIG).show(getScene().getWindow());
+						return;
+					}
+					TiwulFXUtil.writeProperties(DEVCONFIG, txtConfigItem.getText());
+				} catch (Exception ex) {
+					Logger.getLogger(FrmData.class.getName()).log(Level.SEVERE, null, ex);
+				}
+			}
+			
+		});
+		
+		btnRead.setOnAction(new EventHandler<ActionEvent>() {
 
-        String home = System.getProperty("user.home");
-        String confPath = home + File.separator + TiwulFXUtil.getApplicationId() + File.separator + "conf.properties";
-        txtConfigFile.setText(confPath);
+			@Override
+			public void handle(ActionEvent event) {
+				String value = TiwulFXUtil.readProperty(DEVCONFIG);
+				MessageDialogBuilder.info().message("The value of " + DEVCONFIG + ": " + value).show(getScene().getWindow());
+			}
+		});
+	}
 
-        btnSave.setOnAction(new EventHandler<ActionEvent>() {
+	public void reload() {
+		tblData.reloadFirstPage();
+	}
 
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    if (txtConfigItem.getText().isEmpty()) {
-                        MessageDialogBuilder.error().message("Please enter value for " + DEVCONFIG)
-                                .show(getScene().getWindow());
-                        return;
-                    }
-                    TiwulFXUtil.writeProperties(DEVCONFIG, txtConfigItem.getText());
-                } catch (Exception ex) {
-                    Logger.getLogger(FrmData.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+	private class CntlRecord extends TableControlBehavior<RecordPojo> {
 
-        });
+		@Override
+		public TableData<RecordPojo> loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
+			RecordPojo person = new RecordPojo();
+			person.setId(1);
+			person.setName("Allie Mckenzie");
+			person.setEmail("allie@panemu.com");
+			List<RecordPojo> lstPerson = new ArrayList<>();
+			lstPerson.add(person);
+			person = new RecordPojo();
+			person.setId(2);
+			person.setName("Agus Suwono");
+			person.setEmail("suwono@panemu.com");
+			lstPerson.add(person);
+			return new TableData<>(lstPerson, false, lstPerson.size());
+		}
 
-        btnRead.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                String value = TiwulFXUtil.readProperty(DEVCONFIG);
-                MessageDialogBuilder.info().message("The value of " + DEVCONFIG + ": " + value)
-                        .show(getScene().getWindow());
-            }
-        });
-    }
-
-    public void reload() {
-        tblData.reloadFirstPage();
-    }
-
-    private static class CntlRecord extends TableControlBehaviour<RecordPojo> {
-
-        @Override
-        public <C> TableData<RecordPojo> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
-            RecordPojo person = new RecordPojo();
-            person.setId(1);
-            person.setName("Allie Mckenzie");
-            person.setEmail("allie@panemu.com");
-            List<RecordPojo> lstPerson = new ArrayList<>();
-            lstPerson.add(person);
-            person = new RecordPojo();
-            person.setId(2);
-            person.setName("Agus Suwono");
-            person.setEmail("suwono@panemu.com");
-            lstPerson.add(person);
-            return new TableData<>(lstPerson, false, lstPerson.size());
-        }
-
-    }
+	}
 
 }

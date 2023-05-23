@@ -1,3 +1,7 @@
+/*
+ * License BSD License
+ * Copyright (C) 2013 Amrullah <amrullah@panemu.com>.
+ */
 package com.panemu.tiwulfx.demo;
 
 import com.panemu.tiwulfx.common.TiwulFXUtil;
@@ -8,6 +12,10 @@ import javafx.stage.Stage;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+/**
+ *
+ * @author Amrullah <amrullah@panemu.com>
+ */
 public class TiwulfxDemo extends Application {
 
 	public static EntityManagerFactory factory = Persistence.createEntityManagerFactory("tiwulfx-demoPU");

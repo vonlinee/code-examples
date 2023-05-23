@@ -1,7 +1,15 @@
+/*
+ * License BSD License
+ * Copyright (C) 2013 Amrullah <amrullah@panemu.com>.
+ */
 package com.panemu.tiwulfx.demo.misc;
 
 import com.panemu.tiwulfx.common.Validator;
 
+/**
+ *
+ * @author Amrullah <amrullah@panemu.com>
+ */
 public class EmailValidator implements Validator<String> {
 
     static final String ATOM = "[a-z0-9!#$%&'*+/=?^_`{|}~-]";

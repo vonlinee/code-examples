@@ -6,6 +6,7 @@ import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.control.LookupField;
 import com.panemu.tiwulfx.control.LookupFieldController;
 import com.panemu.tiwulfx.dialog.MessageDialogBuilder;
+import com.panemu.tiwulfx.table.BaseColumn;
 import com.panemu.tiwulfx.table.TableControl;
 import java.util.ArrayList;
 import java.util.List;

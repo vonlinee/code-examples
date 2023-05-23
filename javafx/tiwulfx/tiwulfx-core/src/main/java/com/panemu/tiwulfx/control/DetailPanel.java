@@ -1,25 +1,29 @@
+/*
+ * License GNU LGPL
+ * Copyright (C) 2012 Amrullah .
+ */
 package com.panemu.tiwulfx.control;
 
 import com.panemu.tiwulfx.common.ObjectExposer;
-import com.panemu.tiwulfx.utils.ClassUtils;
-import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
-import org.apache.commons.beanutils.PropertyUtils;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import org.apache.commons.beanutils.PropertyUtils;
 
+/**
+ *
+ * @author amrullah
+ */
 public class DetailPanel extends VBox implements ObjectExposer {
 
     private List<String> propertyNames = new ArrayList<>();
     private Object objectToDisplay;
-    private final Map<String, Label> componentMap = new HashMap<>();
+    private Map<String, Label> componentMap = new HashMap<>();
 
     public DetailPanel() {
         setPadding(new Insets(10));
@@ -43,16 +47,17 @@ public class DetailPanel extends VBox implements ObjectExposer {
     }
 
     private void generateUI() {
-        ObservableList<Node> children = this.getChildren();
-        children.clear();
+        this.getChildren().removeAll(this.getChildren());
         for (String prop : propertyNames) {
-            LabelSeparator labelSeparator = new LabelSeparator(prop);
+            LabelSeparator labelSeparator = new LabelSeparator("");
+            labelSeparator.setText(prop);
             VBox.setMargin(labelSeparator, new Insets(10, 0, 0, 0));
             this.getChildren().add(labelSeparator);
             Label lblValue = new Label();
             lblValue.getStyleClass().add("valueLabel");
             lblValue.setWrapText(true);
-            children.add(lblValue);
+            this.getChildren().add(lblValue);
+            
             componentMap.put(prop, lblValue);
         }
     }
@@ -61,7 +66,7 @@ public class DetailPanel extends VBox implements ObjectExposer {
         for (String prop : propertyNames) {
             try {
                 Label lblValue = componentMap.get(prop);
-                Object obj = ClassUtils.getSimpleProperty(objectToDisplay, prop);
+                Object obj = PropertyUtils.getSimpleProperty(objectToDisplay, prop);
                 if (obj != null) {
                     /**
                      * There is a bug in Label control. When the text's length
@@ -71,6 +76,7 @@ public class DetailPanel extends VBox implements ObjectExposer {
                     if (obj.toString().length() == 1) {
                         lblValue.setWrapText(false);
                     }
+                    
                     lblValue.setText(obj.toString());
                 } else {
                     lblValue.setText("-- undefined --");

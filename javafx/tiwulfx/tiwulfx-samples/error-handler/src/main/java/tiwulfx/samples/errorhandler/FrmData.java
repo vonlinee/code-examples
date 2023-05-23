@@ -29,7 +29,7 @@ import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TableData;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableControlBehaviour;
+import com.panemu.tiwulfx.table.TableControlBehavior;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class FrmData extends StackPane {
 	}
 
 	private void init() {
-		tblData.setBehaviour(new CntlRecord());
+		tblData.setController(new CntlRecord());
 		tblData.setRecordClass(RecordPojo.class);
 	}
 
@@ -69,10 +69,10 @@ public class FrmData extends StackPane {
 		tblData.reloadFirstPage();
 	}
 
-	private class CntlRecord extends TableControlBehaviour<RecordPojo> {
+	private class CntlRecord extends TableControlBehavior<RecordPojo> {
 
 		@Override
-		public TableData<RecordPojo> loadData(int startIndex, List<TableCriteria<?>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
+		public TableData<RecordPojo> loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
 			RecordPojo person = new RecordPojo();
 			person.setId(1);
 			person.setName("Allie Mckenzie");

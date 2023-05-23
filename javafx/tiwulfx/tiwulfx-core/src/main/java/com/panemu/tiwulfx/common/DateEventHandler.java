@@ -20,8 +20,6 @@ package com.panemu.tiwulfx.common;
 
 import com.panemu.tiwulfx.control.LocalDateFieldController;
 import java.time.LocalDate;
-import java.util.Objects;
-
 import javafx.event.EventHandler;
 import javafx.scene.control.DatePicker;
 import javafx.scene.input.KeyCode;
@@ -41,13 +39,18 @@ public class DateEventHandler implements EventHandler<KeyEvent> {
 
 	public DateEventHandler(DatePicker datePicker, LocalDateFieldController dateController) {
 		this.datePicker = datePicker;
-		this.dateController = Objects.requireNonNullElseGet(dateController, () -> new LocalDateFieldController() {
+		if (dateController == null) {
+			this.dateController = new LocalDateFieldController() {
 
-			@Override
-			public boolean isEnabled(LocalDate date) {
-				return true;
-			}
-		});
+				@Override
+				public boolean isEnabled(LocalDate date) {
+					return true;
+				}
+			};
+		} else {
+			this.dateController = dateController;
+		}
+		
 	}
 
 	@Override

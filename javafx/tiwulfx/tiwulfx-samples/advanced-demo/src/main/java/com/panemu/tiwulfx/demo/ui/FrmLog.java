@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.panemu.tiwulfx.demo.ui;
 
 import com.panemu.tiwulfx.common.TableCriteria;
@@ -30,6 +35,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * @author panemu
+ */
 public class FrmLog extends VBox {
 
     @FXML
@@ -57,11 +65,7 @@ public class FrmLog extends VBox {
 
         @Override
         public String[] getColumns() {
-            return new String[]{
-                    "id",
-                    "code",
-                    "name"
-            };
+            return new String[]{"id", "code", "name"};
         }
 
         @Override
@@ -79,6 +83,7 @@ public class FrmLog extends VBox {
         protected TableData loadData(int startIndex, List filteredColumns, List sortedColumns, List sortingTypes, int maxResult) {
             return daoInsurance.fetch(startIndex, filteredColumns, sortedColumns, sortingTypes, maxResult);
         }
+
     };
 
     public FrmLog() {
@@ -97,7 +102,7 @@ public class FrmLog extends VBox {
 
     protected void init() {
         tblPerson.setRecordClass(Person.class);
-        tblPerson.setBehaviour(controller);
+        tblPerson.setController(controller);
         tblPerson.setMaxRecord(50);
 
         for (String location : DataGenerator.birthPlaces) {
@@ -123,10 +128,8 @@ public class FrmLog extends VBox {
             @Override
             public void handle(ActionEvent event) {
                 MessageDialog.Answer answer = MessageDialogBuilder.info().message("message.one")
-                        .yesOkButtonText("I know")
-                        .noButtonText("No, I don't")
-                        .buttonType(MessageDialog.ButtonType.YES_NO)
-                        .show(FrmLog.this.getScene().getWindow());
+                        .yesOkButtonText("I know").noButtonText("No, I don't")
+                        .buttonType(MessageDialog.ButtonType.YES_NO).show(FrmLog.this.getScene().getWindow());
                 if (answer == MessageDialog.Answer.NO) {
                     MessageDialogBuilder.info().message("Maybe the developer hid it.")
                             .show(FrmLog.this.getScene().getWindow());
@@ -149,11 +152,9 @@ public class FrmLog extends VBox {
                     @Override
                     public void run() {
                         MessageDialogBuilder.warning().buttonType(MessageDialog.ButtonType.YES_NO_CANCEL)
-                                .title("Custom Context Menu Item")
-                                .message("You just clicked custom context menu item.")
+                                .title("Custom Context Menu Item").message("You just clicked custom context menu item.")
                                 //                        .yesOkButtonText("Yes Text")
-                                .noButtonText("no.text")
-                                .cancelButtonText("Cancel Text")
+                                .noButtonText("no.text").cancelButtonText("Cancel Text")
                                 .show(FrmLog.this.getScene().getWindow());
                     }
                 });
@@ -168,25 +169,25 @@ public class FrmLog extends VBox {
         tblPerson.reloadFirstPage();
     }
 
-    private final TableControlBehaviour<Person> controller = new TableControlBehaviour<>() {
+    private TableControlBehavior<Person> controller = new TableControlBehavior<Person>() {
 
-        private final DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
+        private DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
 
         @Override
-        public <C> TableData<Person> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
+        public TableData loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
             boolean join = true;
-            for (TableCriteria<?> crit : filteredColumns) {
-                if (crit.getAttributeName()
-                        .equals("insurance") && crit.getOperator() == TableCriteria.Operator.is_null) {
-                    join = false;
-                    break;
-                }
-            }
+//        for (TableCriteria crit : filteredColumns) {
+//            if (crit.getAttributeName().equals("insurance") && crit.getOperator() == Operator.is_null) {
+//                join = false;
+//                break;
+//            }
+//        }
             List<String> lstJoin = new ArrayList<>();
             if (join) {
                 lstJoin.add("insurance");
             }
-            return (TableData<Person>) daoPerson.fetch(startIndex, filteredColumns, sortedColumns, sortingOrders, maxResult, lstJoin);
+            TableData<Person> result = daoPerson.fetch(startIndex, filteredColumns, sortedColumns, sortingOrders, maxResult, lstJoin);
+            return result;
         }
 
         @Override
@@ -196,12 +197,11 @@ public class FrmLog extends VBox {
 
         @Override
         public List<Person> update(List<Person> records) {
-            Runnable runnable = () -> {
-                tblPerson.getRecordChangeList().forEach((rc) -> {
-                    txtLog.insertText(0, "Property Name: " + rc.getPropertyName() + ", Old Value: " + rc.getOldValue() + ", New Value: " + rc.getNewValue() + ", Timestamp: " + Calendar
-                            .getInstance().getTime() + "\n");
-                });
-            };
+            Runnable runnable = () -> tblPerson.getRecordChangeList().forEach((rc) -> {
+                String log = String.format("Property Name: {}, Old Value: {}, New Value: {}, Timestamp: {} \n", rc.getPropertyName(), rc.getOldValue(), rc.getNewValue(), Calendar
+                        .getInstance().getTime());
+                txtLog.insertText(0, log);
+            });
             Platform.runLater(runnable);
             List<Person> result = daoPerson.update(records);
             result = daoPerson.initRelationship(records, "insurance");
@@ -209,7 +209,7 @@ public class FrmLog extends VBox {
         }
 
         @Override
-        public void postSave(TableControl.OperationMode previousMode) {
+        public void postSave(TableControl.Mode previousMode) {
             super.postSave(previousMode); //To change body of generated methods, choose Tools | Templates.
         }
 
@@ -219,7 +219,7 @@ public class FrmLog extends VBox {
         }
 
         @Override
-        public <C> void exportToExcel(String title, int maxResult, TableControl<Person> tblView, List<TableCriteria<C>> lstCriteria) {
+        public void exportToExcel(String title, int maxResult, TableControl<Person> tblView, List<TableCriteria> lstCriteria) {
             super.exportToExcel("Person Data", maxResult, tblView, lstCriteria);
         }
     };

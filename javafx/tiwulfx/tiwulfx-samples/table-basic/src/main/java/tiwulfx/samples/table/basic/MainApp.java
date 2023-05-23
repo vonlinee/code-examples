@@ -1,14 +1,16 @@
 package tiwulfx.samples.table.basic;
 
 import com.panemu.tiwulfx.common.TiwulFXUtil;
-import com.panemu.tiwulfx.table.TableControl;
+import com.panemu.tiwulfx.utils.SceneGraph;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import tiwulfx.samples.shared.DataGenerator;
+
+import java.awt.*;
 
 public class MainApp extends Application {
 
@@ -19,22 +21,27 @@ public class MainApp extends Application {
         final FrmPerson frmPerson = new FrmPerson();
         frmPerson.reload();
 
-        final ToolBar toolBar = new ToolBar();
 
-        BorderPane root = new BorderPane();
-        root.setCenter(frmPerson);
-        root.setTop(toolBar);
-
-        final Button button = new Button("A");
-
-        button.setOnAction(event -> {
-            frmPerson.tblPerson.setOperationMode(TableControl.OperationMode.READ);
-        });
-        toolBar.getItems().add(button);
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(frmPerson);
         TiwulFXUtil.setTiwulFXStyleSheet(scene);
         stage.setTitle("Basic TableControl");
+
         stage.setScene(scene);
+
         stage.show();
+
+
     }
+
+    /**
+     * The main() method is ignored in correctly deployed JavaFX application.
+     * main() serves only as fallback in case the application can not be launched
+     * through deployment artifacts, e.g., in IDEs with limited FX support.
+     * NetBeans ignores main().
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+
 }

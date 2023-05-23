@@ -40,12 +40,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @param <T> the entity type
  * @author Amrullah <amrullah@panemu.com>
  */
 public class DaoBase<T> {
 
-    private final Class<T> voClass;
+    private Class<T> voClass;
     private static final EntityManagerFactory factory = Persistence.createEntityManagerFactory("tiwulfx-samplePU");
     //    EntityManager em = JavaApplication6.factory.createEntityManager();
     EntityManager em;
@@ -55,19 +54,11 @@ public class DaoBase<T> {
         this.voClass = clazz;
     }
 
-    public <C> TableData<T> fetch(int startIndex,
-                                  List<TableCriteria<C>> filteredColumns,
-                                  List<String> sortedColumns,
-                                  List<SortType> sortingVersus,
-                                  int maxResult) {
+    public TableData fetch(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<SortType> sortingVersus, int maxResult) {
         return this.fetch(startIndex, filteredColumns, sortedColumns, sortingVersus, maxResult, new ArrayList<String>());
     }
 
-    public <C> TableData<T> fetch(int startIndex,
-                                  List<TableCriteria<C>> filteredColumns,
-                                  List<String> sortedColumns,
-                                  List<SortType> sortingVersus,
-                                  int maxResult, List<String> lstJoin) {
+    public TableData fetch(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<SortType> sortingVersus, int maxResult, List<String> lstJoin) {
         em = factory.createEntityManager();
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<T> cq = builder.createQuery(voClass);
@@ -78,7 +69,7 @@ public class DaoBase<T> {
 //        long count = count(predicates, root);
         long count = count(filteredColumns, lstJoin);
         // ordering
-        cq.orderBy(new ArrayList<>());
+        cq.orderBy(new ArrayList<Order>());
         for (int i = 0; i < sortedColumns.size(); i++) {
             From from = root;
             String attributeName = sortedColumns.get(i);
@@ -129,8 +120,7 @@ public class DaoBase<T> {
         return mapJoin;
     }
 
-    private <C> long count(List<TableCriteria<C>> filteredColumns,
-                           List<String> lstJoin) {
+    private long count(List<TableCriteria> filteredColumns, List<String> lstJoin) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Long> cq = builder.createQuery(Long.class);
         Root<T> root = cq.from(voClass);
@@ -144,10 +134,10 @@ public class DaoBase<T> {
         return result;
     }
 
-    private <C> Predicate[] buildPredicates(List<TableCriteria<C>> filteredColumns, Root<T> root, Map<String, From> mapJoin) {
+    private Predicate[] buildPredicates(List<TableCriteria> filteredColumns, Root<T> root, Map<String, From> mapJoin) {
         List<Predicate> lstPredicates = new ArrayList<>();
         CriteriaBuilder builder = em.getCriteriaBuilder();
-        for (TableCriteria<C> tableCriteria : filteredColumns) {
+        for (TableCriteria tableCriteria : filteredColumns) {
             From from = root;
             String attributeName = tableCriteria.getAttributeName();
             if (tableCriteria.getAttributeName().contains(".")) {

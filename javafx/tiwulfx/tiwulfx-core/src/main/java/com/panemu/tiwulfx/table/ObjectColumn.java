@@ -1,116 +1,133 @@
+/*
+ * License GNU LGPL
+ * Copyright (C) 2012 Amrullah .
+ */
 package com.panemu.tiwulfx.table;
 
+import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TableCriteria.Operator;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
-import javafx.scene.Node;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.Node;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 /**
- * 对象类型的列
- * @param <R>
- * @param <C>
+ *
+ * @author amrullah
  */
-public class ObjectColumn<R, C> extends CustomTableColumn<R, C> {
+public class ObjectColumn<R, C> extends BaseColumn<R, C> {
 
-    private final TextField searchInputControl = new TextField();
-    private boolean emptyStringAsNull = TiwulFXUtil.DEFAULT_EMPTY_STRING_AS_NULL;
-    private int maxLength = 0;
-    private boolean capitalize = false;
+	private TextField searchInputControl = new TextField();
+	private boolean emptyStringAsNull = TiwulFXUtil.DEFAULT_EMPTY_STRING_AS_NULL;
+	private int maxLength = 0;
+	private boolean capitalize = false;
+	
+	private SearchMenuItemBase<String> searchMenuItem = new SearchMenuItemBase<String>(this) {
+		@Override
+		protected Node getInputControl() {
+			searchInputControl.setPromptText("kata kunci");
+			return searchInputControl;
+		}
 
-    private final SearchMenuItemBase<String> searchMenuItem = new SearchMenuItemBase<>(this) {
-        @Override
-        protected Node getInputControl() {
-            searchInputControl.setPromptText("kata kunci");
-            return searchInputControl;
-        }
+		@Override
+		protected List<Operator> getOperators() {
+			List<Operator> lst = new ArrayList<>();
+			lst.add(Operator.eq);
+			lst.add(Operator.ne);
+			lst.add(Operator.lt);
+			lst.add(Operator.le);
+			lst.add(Operator.gt);
+			lst.add(Operator.ge);
+			lst.add(Operator.is_null);
+			lst.add(Operator.is_not_null);
+			return lst;
+		}
 
-        @Override
-        protected List<Operator> getOperators() {
-            List<Operator> lst = new ArrayList<>();
-            lst.add(Operator.eq);
-            lst.add(Operator.ne);
-            lst.add(Operator.lt);
-            lst.add(Operator.le);
-            lst.add(Operator.gt);
-            lst.add(Operator.ge);
-            lst.add(Operator.is_null);
-            lst.add(Operator.is_not_null);
-            return lst;
-        }
+		@Override
+		protected String getValue() {
+			return searchInputControl.getText();
+		}
+	};
 
-        @Override
-        protected String getValue() {
-            return searchInputControl.getText();
-        }
-    };
+	public ObjectColumn() {
+		this("");
+	}
 
-    public ObjectColumn() {
-        this("");
-    }
+	public boolean isEmptyStringAsNull() {
+		return emptyStringAsNull;
+	}
 
-    public boolean isEmptyStringAsNull() {
-        return emptyStringAsNull;
-    }
+	public void setEmptyStringAsNull(boolean emptyStringAsNull) {
+		this.emptyStringAsNull = emptyStringAsNull;
+	}
 
-    public void setEmptyStringAsNull(boolean emptyStringAsNull) {
-        this.emptyStringAsNull = emptyStringAsNull;
-    }
+	public ObjectColumn(String propertyName) {
+		this(propertyName, 100);
+	}
 
-    public ObjectColumn(String propertyName) {
-        this(propertyName, 100);
-    }
+	public ObjectColumn(String propertyName, double preferredWidth) {
+		super(propertyName, preferredWidth);
 
-    public ObjectColumn(String propertyName, double preferredWidth) {
-        super(propertyName, preferredWidth);
-        setCellFactory(p -> new ObjectTableCell<>(ObjectColumn.this));
-    }
+		Callback<TableColumn<R, C>, TableCell<R, C>> cellFactory =
+				new Callback<TableColumn<R, C>, TableCell<R, C>>() {
+			@Override
+			public TableCell call(TableColumn p) {
+				return new ObjectTableCell<>(ObjectColumn.this);
+			}
+		};
 
-    @Override
-    MenuItem getSearchMenuItem() {
-        if (getDefaultSearchValue() != null) {
-            searchInputControl.setText(getStringConverter().toString(getDefaultSearchValue()));
-        }
-        return searchMenuItem;
-    }
+		setCellFactory(cellFactory);
+	}
 
-    /**
-     * Get max character that could be entered when editing a cell. If 0 then
-     * there is no limitation.
-     * @return
-     */
-    public int getMaxLength() {
-        return maxLength;
-    }
+	@Override
+	MenuItem getSearchMenuItem() {
+		if (getDefaultSearchValue() != null) {
+			searchInputControl.setText(getStringConverter().toString(getDefaultSearchValue()));
+		}
+		return searchMenuItem;
+	}
 
-    /**
-     * Set maximum character that could be entered when editing a cell. Set it to
-     * 0 to disable this limitation.
-     * @param maxLength
-     */
-    public void setMaxLength(int maxLength) {
-        this.maxLength = maxLength;
-    }
+	/**
+	 * Get max character that could be entered when editing a cell. If 0 then
+	 * there is no limitation.
+	 * @return 
+	 */
+	public int getMaxLength() {
+		return maxLength;
+	}
 
-    /**
-     * @return true if the cell editor automatically convert entered text to capital
-     * letters
-     */
-    public boolean isCapitalize() {
-        return capitalize;
-    }
+	/**
+	 * Set maximum character that could be entered when editing a cell. Set it to
+	 * 0 to disable this limitation.
+	 * @param maxLength 
+	 */
+	public void setMaxLength(int maxLength) {
+		this.maxLength = maxLength;
+	}
 
-    /**
-     * Set whether text entered to a cell editor will be automatically converted to capital
-     * letters.
-     * @param capitalize set to true to make the text always capital.
-     */
-    public void setCapitalize(boolean capitalize) {
-        this.capitalize = capitalize;
-    }
+	/**
+	 * 
+	 * @return true if the cell editor automatically convert entered text to capital
+	 * letters
+	 */
+	public boolean isCapitalize() {
+		return capitalize;
+	}
 
+	/**
+	 * Set whether text entered to a cell editor will be automatically converted to capital
+	 * letters.
+	 * @param capitalize set to true to make the text always capital.
+	 */
+	public void setCapitalize(boolean capitalize) {
+		this.capitalize = capitalize;
+	}
+	
 //	private StringConverter<C> stringConverter = null;
 }

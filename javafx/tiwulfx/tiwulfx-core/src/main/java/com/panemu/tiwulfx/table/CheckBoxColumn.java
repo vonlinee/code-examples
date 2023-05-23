@@ -19,12 +19,16 @@ import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
-public class CheckBoxColumn<R> extends CustomTableColumn<R, Boolean> {
+/**
+ *
+ * @author amrullah
+ */
+public class CheckBoxColumn<R> extends BaseColumn<R, Boolean> {
 
 	private CheckBox searchInputControl;
 	private SearchMenuItemBase<Boolean> searchMenuItem;
-	private String trueLabel = TiwulFXUtil.getString("label.true");
-	private String falseLabel = TiwulFXUtil.getString("label.false");
+	private String trueLabel = TiwulFXUtil.getLiteral("label.true");
+	private String falseLabel = TiwulFXUtil.getLiteral("label.false");
 
 	public CheckBoxColumn() {
 		this("");
@@ -64,7 +68,7 @@ public class CheckBoxColumn<R> extends CustomTableColumn<R, Boolean> {
 				}
 			});
 
-			searchMenuItem = new SearchMenuItemBase<>(this) {
+			searchMenuItem = new SearchMenuItemBase<Boolean>(this) {
 				@Override
 				protected Node getInputControl() {
 					return searchInputControl;

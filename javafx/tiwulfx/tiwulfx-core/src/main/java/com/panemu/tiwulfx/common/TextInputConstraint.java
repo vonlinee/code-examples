@@ -70,12 +70,10 @@ public class TextInputConstraint implements ChangeListener<String>{
 		if (capitalize) {
 			txt.setText(newText.toUpperCase());
 		}
-		
 		if (maxLength > 0 && newText.length() > maxLength) {
 			newText = newText.substring(0, maxLength);
 			txt.setText(newText);
 		}
 		turnOffListener = false;
 	}
-	
 }

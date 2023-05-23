@@ -2,63 +2,93 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+  <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>com.panemu</groupId>
     <artifactId>tiwulfx</artifactId>
     <version>3.4</version>
   </parent>
 
-  <modules>
-    <module>typeahead</module>
-    <module>table-basic</module>
-    <module>shared</module>
-    <module>save-config</module>
-    <module>numberfield</module>
-    <module>message-dialog</module>
-    <module>lookupfield</module>
-    <module>localization</module>
-    <module>error-handler</module>
-    <module>detachable-tab</module>
-    <module>custom-graphicFactory</module>
-    <module>advanced-demo</module>
-    <module>fxml-samples</module>
-    <module>sidemenu-demo</module>
-  </modules>
-
-  <modelVersion>4.0.0</modelVersion>
-
   <artifactId>tiwulfx-samples</artifactId>
-  <name>tiwulfx</name>
-  <description>TiwulFX provides JavaFX custom components specially designed to work with java POJO object.</description>
+  <name>tiwulfx-samples</name>
   <packaging>pom</packaging>
   <version>3.4</version>
 
+  <modules>
+    <module>advanced-demo</module>
+    <module>custom-graphicFactory</module>
+    <module>detachable-tab</module>
+    <module>error-handler</module>
+    <module>localization</module>
+    <module>lookupfield</module>
+    <module>message-dialog</module>
+    <module>numberfield</module>
+    <module>save-config</module>
+    <module>shared</module>
+    <module>table-basic</module>
+    <module>typeahead</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.javassist</groupId>
+        <artifactId>javassist</artifactId>
+        <version>3.29.2-GA</version>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager -->
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-entitymanager</artifactId>
+        <version>5.6.15.Final</version>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+      <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <version>2.1.214</version>
+      </dependency>
+      <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>5.1.47</version>
+      </dependency>
+      <dependency>
+        <groupId>com.panemu</groupId>
+        <artifactId>shared</artifactId>
+        <version>3.4</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-base</artifactId>
-      <version>${openjfx.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-controls</artifactId>
-      <version>${openjfx.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-graphics</artifactId>
-      <version>${openjfx.version}</version>
+      <groupId>com.panemu</groupId>
+      <artifactId>tiwulfx-core</artifactId>
+      <scope>compile</scope>
+      <version>3.4</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>${openjfx.version}</version>
     </dependency>
-
     <dependency>
-      <groupId>com.panemu</groupId>
-      <artifactId>tiwulfx-core</artifactId>
-      <version>3.4</version>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

@@ -21,17 +21,17 @@ package com.panemu.tiwulfx.table;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  *
  * @author Amrullah 
  */
-public class CheckBoxTableCell<R> extends CustomTableCell<R, Boolean> {
+public class CheckBoxTableCell<R> extends BaseCell<R, Boolean> {
 
 	private CheckBox checkbox;
 	private CheckBoxColumn<R> column;
@@ -42,7 +42,7 @@ public class CheckBoxTableCell<R> extends CustomTableCell<R, Boolean> {
 	}
 
 	@Override
-	protected void updateCellValue(Boolean value) {
+	protected void updateValue(Boolean value) {
 		if (value == null && !column.isRequired()) {
 			checkbox.setIndeterminate(true);
 		} else {
@@ -65,7 +65,7 @@ public class CheckBoxTableCell<R> extends CustomTableCell<R, Boolean> {
 	}
 
 	@Override
-	protected @NotNull Control getEditView() {
+	protected Control getEditableControl() {
 		if (checkbox == null) {
 			checkbox = new CheckBox();
 			checkbox.setAllowIndeterminate(!column.isRequired());

@@ -1,3 +1,7 @@
+/*
+ * License GNU LGPL
+ * Copyright (C) 2012 Amrullah .
+ */
 package com.panemu.tiwulfx.form;
 
 import com.panemu.tiwulfx.common.TiwulFXUtil;
@@ -16,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import org.apache.commons.beanutils.PropertyUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -30,32 +35,29 @@ import java.util.List;
 public abstract class BaseControl<R, E extends Control> extends HBox {
 
     private String propertyName;
-    private BooleanProperty required = new SimpleBooleanProperty(false);
-    private BooleanProperty valid = new SimpleBooleanProperty(true);
+    private final BooleanProperty required = new SimpleBooleanProperty(false);
+    private final BooleanProperty valid = new SimpleBooleanProperty(true);
     private StringProperty errorMessage;
     private static Image imgRequired = TiwulFXUtil.getGraphicFactory().getValidationRequiredImage();
     private static Image imginvalid = TiwulFXUtil.getGraphicFactory().getValidationRequiredImage();
     private static Image imgRequiredInvalid = TiwulFXUtil.getGraphicFactory().getValidationRequiredInvalidImage();
-    private ImageView imagePlaceHolder = new ImageView();
+    private final ImageView imagePlaceHolder = new ImageView();
     private E inputControl;
     protected ObjectProperty<R> value;
     private PopupControl popup;
     private Label errorLabel;
     private List<Validator<R>> lstValidator = new ArrayList<>();
-    private InvalidationListener imageListener = new InvalidationListener() {
-        @Override
-        public void invalidated(Observable o) {
-            if (required.get() && !valid.get()) {
-                imagePlaceHolder.setImage(imgRequiredInvalid);
-            } else if (required.get()) {
-                imagePlaceHolder.setImage(imgRequired);
-            } else if (!valid.get()) {
-                imagePlaceHolder.setImage(imginvalid);
-            } else {
-                imagePlaceHolder.setImage(null);
-            }
-        }
-    };
+    private InvalidationListener imageListener = o -> {
+		if (required.get() && !valid.get()) {
+			imagePlaceHolder.setImage(imgRequiredInvalid);
+		} else if (required.get()) {
+			imagePlaceHolder.setImage(imgRequired);
+		} else if (!valid.get()) {
+			imagePlaceHolder.setImage(imginvalid);
+		} else {
+			imagePlaceHolder.setImage(null);
+		}
+	};
 
     public BaseControl(E control) {
         this("", control);
@@ -79,22 +81,19 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
         bindValuePropertyWithControl(control);
         bindEditablePropertyWithControl(control);
 
-        addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (event.getEventType() == MouseEvent.MOUSE_MOVED
-                        && !isValid()
-                        && !getPopup().isShowing()) {
-                    Point2D p = BaseControl.this.localToScene(0.0, 0.0);
-                    getPopup().show(BaseControl.this,
-                            p.getX() + getScene().getX() + getScene().getWindow().getX(),
-                            p.getY() + getScene().getY() + getScene().getWindow()
-                                    .getY() + getInputComponent().getHeight() - 1);
-                } else if (event.getEventType() == MouseEvent.MOUSE_EXITED && getPopup().isShowing()) {
-                    getPopup().hide();
-                }
-            }
-        });
+        addEventHandler(MouseEvent.ANY, event -> {
+			if (event.getEventType() == MouseEvent.MOUSE_MOVED
+					&& !isValid()
+					&& !getPopup().isShowing()) {
+				Point2D p = BaseControl.this.localToScene(0.0, 0.0);
+				getPopup().show(BaseControl.this,
+						p.getX() + getScene().getX() + getScene().getWindow().getX(),
+						p.getY() + getScene().getY() + getScene().getWindow()
+								.getY() + getInputComponent().getHeight() - 1);
+			} else if (event.getEventType() == MouseEvent.MOUSE_EXITED && getPopup().isShowing()) {
+				getPopup().hide();
+			}
+		});
         getInputComponent().addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
@@ -128,7 +127,7 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
             final HBox pnl = new HBox();
             pnl.getChildren().add(errorLabel);
             pnl.getStyleClass().add("error-popup");
-            popup.setSkin(new Skin() {
+            popup.setSkin(new Skin<>() {
                 @Override
                 public Skinnable getSkinnable() {
                     return BaseControl.this.getInputComponent();
@@ -161,7 +160,7 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
     }
 
     /**
-     * Set the field to required. A red star will be shown if this value is
+     * Set the field to be required. A red star will be shown if this value is
      * true. If the value for this field is empty and required is true, a
      * validation error will appear on calling {@link Form#validate()}
      * @param required
@@ -188,7 +187,7 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
 
     /**
      * Set the value contained by the control to invalid.
-     * @param errorMessage
+     * @param errorMessage error message
      * @see #setValid()
      */
     public void setInvalid(String errorMessage) {
@@ -202,7 +201,7 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
 
     /**
      * Push value to display in input control
-     * @param object
+     * @param object 对象
      */
     public final void pushValue(Object object) {
         R pushedValue = null;
@@ -217,22 +216,6 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
             } else {
                 System.out.println("Warning: propertyName is not set for " + getId());
             }
-
-        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException |
-                 NoSuchMethodException ex) {
-            if (ex instanceof IllegalArgumentException) {
-                /**
-                 * The actual exception needed to be cathect is
-                 * org.apache.commons.beanutils.NestedNullException. But Scene
-                 * Builder throw java.lang.ClassNotFoundException:
-                 * org.apache.commons.beanutils.NestedNullException if
-                 * NestedNullException is referenced in this class. So I catch
-                 * its parent isntead.
-                 */
-                setValue(null);
-            } else {
-                throw new RuntimeException("Error when pushing value \"" + pushedValue + "\" to \"" + propertyName + "\" propertyName. " + ex.getMessage(), ex);
-            }
         } catch (Exception ex) {
             throw new RuntimeException("Error when pushing value \"" + pushedValue + "\" to \"" + propertyName + "\" propertyName. " + ex.getMessage(), ex);
         }
@@ -244,10 +227,15 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
      * @param obj
      */
     public void pullValue(Object obj) {
-        if (propertyName != null && !propertyName.trim().isEmpty()) {
-            ClassUtils.setSimpleProperty(obj, propertyName, this.getValue());
-        } else {
-            System.out.println("Warning: propertyName is not set for " + getId());
+        try {
+            if (propertyName != null && !propertyName.trim().isEmpty()) {
+                PropertyUtils.setSimpleProperty(obj, propertyName, this.getValue());
+            } else {
+                System.out.println("Warning: propertyName is not set for " + getId());
+            }
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+            RuntimeException ex2 = new RuntimeException("Error when pulling " + propertyName + ".", ex);
+            throw ex2;
         }
     }
 
@@ -303,7 +291,7 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
         if (required.get()
                 && (value.get() == null
                 || (value.get() instanceof String && value.get().toString().trim().length() == 0))) {
-            String msg = TiwulFXUtil.getString("field.mandatory");
+            String msg = TiwulFXUtil.getLiteral("field.mandatory");
             setInvalid(msg);
             return false;
         }

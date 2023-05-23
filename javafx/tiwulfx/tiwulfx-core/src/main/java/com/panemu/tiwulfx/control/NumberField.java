@@ -1,3 +1,7 @@
+/*
+ * License GNU LGPL
+ * Copyright (C) 2012 Amrullah .
+ */
 package com.panemu.tiwulfx.control;
 
 import com.panemu.tiwulfx.common.TiwulFXUtil;
@@ -17,20 +21,24 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @author Amrullah
+ */
+@SuppressWarnings("unchecked")
 public class NumberField<T extends Number> extends TextField {
 
-    private DecimalFormat formatter = TiwulFXUtil.getDecimalFormat();
+    private final DecimalFormat formatter = TiwulFXUtil.getDecimalFormat();
     private String zeroDigit = "";
     private int digitBehindDecimal;
     private boolean ignore;
     private int maxLength = 10;
     private String regex = "";
     private String regexDecimal = "";
-    private final ObjectProperty<Class<T>> clazzProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<Class<? extends T>> clazzProperty = new SimpleObjectProperty<>();
     private boolean grouping = false;
     private String MAX_VALUE_STRING = "";
     private static final Logger logger = Logger.getLogger(NumberField.class.getName());
-    private BooleanProperty negativeAllowed = new SimpleBooleanProperty(TiwulFXUtil.DEFAULT_NEGATIVE_ALLOWED);
+    private final BooleanProperty negativeAllowed = new SimpleBooleanProperty(TiwulFXUtil.DEFAULT_NEGATIVE_ALLOWED);
 
     public NumberField() {
         this((Class<T>) Double.class);
@@ -39,58 +47,51 @@ public class NumberField<T extends Number> extends TextField {
     public NumberField(Class<T> clazz) {
         this.clazzProperty.set(clazz);
         digitBehindDecimal = TiwulFXUtil.DEFAULT_DIGIT_BEHIND_DECIMAL;
-        for (int i = 0; i < digitBehindDecimal; i++) {
-            zeroDigit = zeroDigit + "0";
-        }
-        textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> ov, String s, String s1) {
-                if (ignore) {
-                    return;
-                }
-                ignore = true;
-                boolean needMoveCaret = false;
-                String[] parts = breakApart(s1);
-                if (parts[0].length() > maxLength) {
+        zeroDigit += "0".repeat(digitBehindDecimal);
+        textProperty().addListener((ov, s, s1) -> {
+            if (ignore) {
+                return;
+            }
+            ignore = true;
+            boolean needMoveCaret = false;
+            String[] parts = breakApart(s1);
+            if (parts[0].length() > maxLength) {
+                String validText = chopDecimalPlaces(s1);
+                value.set(castToExpectedType(validText));
+                setText(validText);
+                needMoveCaret = true;
+            }
+            if (getRegex() != null && !getRegex().equals("") && !s1.matches(getRegex())) {
+                if (s1.matches(regexDecimal)) {
                     String validText = chopDecimalPlaces(s1);
                     value.set(castToExpectedType(validText));
                     setText(validText);
                     needMoveCaret = true;
-                }
-
-                if (getRegex() != null && !getRegex().equals("") && !s1.matches(getRegex())) {
-                    if (s1.matches(regexDecimal)) {
-                        String validText = chopDecimalPlaces(s1);
-                        value.set(castToExpectedType(validText));
-                        setText(validText);
-                        needMoveCaret = true;
-                    } else {
-                        setText(s);
-                    }
-                }
-                s1 = getText();
-                if (s1.isEmpty() || s1.equals(formatter.getDecimalFormatSymbols().getDecimalSeparator())) {
-                    setText("");
-                    value.set(null);
-                } else if (clazzProperty.get() != BigDecimal.class && (s1.length() > MAX_VALUE_STRING.length()
-                        || (s1.length() == MAX_VALUE_STRING.length() && s1.compareTo(MAX_VALUE_STRING) > 0))) {
-                    setText(s);
                 } else {
-                    value.set(castToExpectedType(s1));
+                    setText(s);
                 }
-                ignore = false;
-                if (needMoveCaret) {
-                    Platform.runLater(() -> {
-                        int currentPos = getCaretPosition();
-                        char separator = TiwulFXUtil.getDecimalFormat().getDecimalFormatSymbols().getDecimalSeparator();
-                        int increment = 1;
-                        if (currentPos > 0 && currentPos < getText().length() - 1 && getText().charAt(currentPos) == separator) {
-                            increment = 2;
-                        }
-                        int pos = Math.min(getText().length(), currentPos + increment);
-                        positionCaret(pos);
-                    });
-                }
+            }
+            s1 = getText();
+            if (s1.isEmpty() || s1.equals(formatter.getDecimalFormatSymbols().getDecimalSeparator())) {
+                setText("");
+                value.set(null);
+            } else if (clazzProperty.get() != BigDecimal.class && (s1.length() > MAX_VALUE_STRING.length() || (s1.length() == MAX_VALUE_STRING.length() && s1.compareTo(MAX_VALUE_STRING) > 0))) {
+                setText(s);
+            } else {
+                value.set(castToExpectedType(s1));
+            }
+            ignore = false;
+            if (needMoveCaret) {
+                Platform.runLater(() -> {
+                    int currentPos = getCaretPosition();
+                    char separator = TiwulFXUtil.getDecimalFormat().getDecimalFormatSymbols().getDecimalSeparator();
+                    int increment = 1;
+                    if (currentPos > 0 && currentPos < getText().length() - 1 && getText().charAt(currentPos) == separator) {
+                        increment = 2;
+                    }
+                    int pos = Math.min(getText().length(), currentPos + increment);
+                    positionCaret(pos);
+                });
             }
         });
         focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -110,29 +111,23 @@ public class NumberField<T extends Number> extends TextField {
             setupRegex();
         }
 
-        value.addListener(new ChangeListener<T>() {
-            @Override
-            public void changed(ObservableValue<? extends T> observable, T oldValue, T newValue) {
-                if (ignore) {
-                    return;
-                }
-                ignore = true;
-                if (newValue != null) {
-                    formatter.applyPattern(getPattern(isGrouping()));
-                    setText(formatter.format(newValue));
-                } else {
-                    setText("");
-                }
-                ignore = false;
+        value.addListener((observable, oldValue, newValue) -> {
+            if (ignore) {
+                return;
             }
+            ignore = true;
+            if (newValue != null) {
+                formatter.applyPattern(getPattern(isGrouping()));
+                setText(formatter.format(newValue));
+            } else {
+                setText("");
+            }
+            ignore = false;
         });
-        clazzProperty.addListener(new ChangeListener<Class<T>>() {
-            @Override
-            public void changed(ObservableValue<? extends Class<T>> ov, Class<T> t, Class<T> t1) {
-                setupRegex();
-                formatter.setParseBigDecimal(t1.equals(BigDecimal.class));
-                resetMaxValueString();
-            }
+        clazzProperty.addListener((ov, t, t1) -> {
+            setupRegex();
+            formatter.setParseBigDecimal(t1.equals(BigDecimal.class));
+            resetMaxValueString();
         });
 
         resetMaxValueString();
@@ -140,7 +135,7 @@ public class NumberField<T extends Number> extends TextField {
     }
 
     private String[] breakApart(String numberString) {
-        String[] parts = null;
+        String[] parts;
         char separator = TiwulFXUtil.getDecimalFormat().getDecimalFormatSymbols().getDecimalSeparator();
         if (separator == '.') {
             parts = numberString.split("\\.");
@@ -151,8 +146,7 @@ public class NumberField<T extends Number> extends TextField {
     }
 
     private String chopDecimalPlaces(String numberString) {
-        if (clazzProperty.get() == Integer.class
-                || clazzProperty.get() == Long.class) {
+        if (clazzProperty.get() == Integer.class || clazzProperty.get() == Long.class) {
             int end = Math.min(numberString.length(), maxLength);
             return numberString.substring(0, end);
         }
@@ -167,7 +161,6 @@ public class NumberField<T extends Number> extends TextField {
             parts[0] = parts[0].substring(0, maxLength);
             numberString = parts[0] + separator + parts[1];
         }
-
         if (parts.length > 1 && parts[1].length() > digitBehindDecimal) {
             parts[1] = parts[1].substring(0, digitBehindDecimal);
             numberString = parts[0] + separator + parts[1];
@@ -218,21 +211,22 @@ public class NumberField<T extends Number> extends TextField {
     }
 
     public final Class<T> getNumberType() {
-        return clazzProperty.get();
+        return (Class<T>) clazzProperty.get();
     }
 
-    public final ObjectProperty<Class<T>> numberTypeProperty() {
+    public final ObjectProperty<Class<? extends T>> numberTypeProperty() {
         return this.clazzProperty;
     }
 
     /**
      * Cast string to Number type that accepted by this NumberField. It depends
      * on NumberType (see {@link #setNumberType}
-     * @param numberString
+     * @param numberString 数字字符串
      * @return
      */
     public T castToExpectedType(String numberString) {
-        if (numberString.length() == 1 && numberString.charAt(0) == formatter.getDecimalFormatSymbols().getDecimalSeparator()) {
+        if (numberString.length() == 1 && numberString.charAt(0) == formatter.getDecimalFormatSymbols()
+                .getDecimalSeparator()) {
             return null;
         }
         if ("-".equals(numberString)) {
@@ -265,8 +259,8 @@ public class NumberField<T extends Number> extends TextField {
     }
 
     /**
-     * Set whether it will use thousand separator or not
-     * @param grouping set it to true to use thousand separator
+     * Set whether it will use a thousand separator or not
+     * @param grouping set it to true to use a thousand separator
      */
     public void setGrouping(boolean grouping) {
         this.grouping = grouping;
@@ -274,7 +268,7 @@ public class NumberField<T extends Number> extends TextField {
     }
 
     /**
-     * @return true if the NumberField display thousand separator
+     * @return true if the NumberField display a thousand separator
      */
     public boolean isGrouping() {
         return grouping;
@@ -305,10 +299,7 @@ public class NumberField<T extends Number> extends TextField {
     public void setDigitBehindDecimal(int digitBehindDecimal) {
         this.digitBehindDecimal = digitBehindDecimal;
         if (digitBehindDecimal > 2) {
-            zeroDigit = "";
-            for (int i = 0; i < digitBehindDecimal; i++) {
-                zeroDigit = zeroDigit + "0";
-            }
+            zeroDigit = "0".repeat(digitBehindDecimal);
         }
         setupRegex();
     }

@@ -22,25 +22,22 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 
 /**
- *
- * @author Amrullah 
+ * @author Amrullah
  */
 public interface ButtonColumnController<R> {
 
-	/**
-	 * This method is called only once, after the button is initiated. Use this method to set property i.e: action
-	 * handler, that won't change through out button's lifecycle
-	 *
-	 * @param button
-	 */
-	void initButton(Button button, TableCell<R, ?> cell);
+    /**
+     * This method is called only once, after the button is initiated. Use this method to set property i.e: action
+     * handler, that won't change throughout button's lifecycle
+     * @param button
+     */
+    void initButton(Button button, TableCell<R, ?> cell);
 
-	/**
-	 * This method is called for every {@link TableCell#updateItem(int)} call. Use this method to set different property
-	 * i.e: style, text and perhaps actionHandler dynamically
-	 *
-	 * @param button
-	 * @param record
-	 */
-	void redrawButton(Button button, R record, String text);
+    /**
+     * This method is called for every call. Use this method to set different property
+     * i.e: style, text and perhaps actionHandler dynamically
+     * @param button
+     * @param record
+     */
+    void redrawButton(Button button, R record, String text);
 }

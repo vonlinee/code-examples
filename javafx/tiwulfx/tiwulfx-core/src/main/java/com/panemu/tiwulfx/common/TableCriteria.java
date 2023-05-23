@@ -1,32 +1,37 @@
+/*
+ * License GNU LGPL
+ * Copyright (C) 2012 Amrullah .
+ */
 package com.panemu.tiwulfx.common;
 
 import java.io.Serializable;
 
 /**
- * @param <T> 列数据类型
+ *
+ * @author amrullah
  */
 public class TableCriteria<T> implements Serializable {
 
-    public enum Operator {
-        in("in"),
-        not_in("not.in"),
+    public static enum Operator {
+
+        in("in"), 
+        not_in("not.in"), 
         eq("="),
-        ne("<>"),
-        le("<="),
-        lt("<"),
-        ge(">="),
-        gt(">"),
+        ne("<>"), 
+        le("<="), 
+        lt("<"), 
+        ge(">="), 
+        gt(">"), 
         is_null("null"),
-        is_not_null("not.null"),
+        is_not_null("not.null"), 
         like_begin("start.with"),
         like_end("end.with"),
         like_anywhere("contains"),
         ilike_begin("start.with"),
         ilike_end("end.with"),
         ilike_anywhere("contains");
-        private final String description;
-
-        Operator(String desc) {
+        private String description;
+        private Operator(String desc) {
             this.description = desc;
         }
 
@@ -35,7 +40,6 @@ public class TableCriteria<T> implements Serializable {
             return description;
         }
     }
-
     private String attributeName;
     private Operator operator;
     private T value;

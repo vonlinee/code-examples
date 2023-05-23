@@ -1,6 +1,6 @@
 package com.panemu.tiwulfx.common;
 
-import com.panemu.tiwulfx.table.CustomTableColumn;
+import com.panemu.tiwulfx.table.BaseColumn;
 import com.panemu.tiwulfx.table.TableControl;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
@@ -43,9 +43,9 @@ public class ExportToExcel<T> {
 		int rowOffset = offset[0];
 		for (int i = 0; i < header.size(); i++) {
 			TableColumn column = header.get(i);
-			if ((!(column instanceof CustomTableColumn) && column.getColumns().isEmpty()) || (!column.isVisible())) {
+			if ((!(column instanceof BaseColumn) && column.getColumns().isEmpty()) || (!column.isVisible())) {
 				/**
-				 * Skip column that is not CustomTableColumn and doesn't have inner columns
+				 * Skip column that is not BaseColumn and doesn't have inner columns
 				 */
 				nextCellOffset--;
 				continue;
@@ -113,7 +113,7 @@ public class ExportToExcel<T> {
 			row = sheet.getRow(rowIdx + headerDepth - 1);
 			int i = 0;
 			for (TableColumn column : lstLeafColumn) {
-				if (column.isVisible() && column instanceof CustomTableColumn) {
+				if (column.isVisible() && column instanceof BaseColumn) {
 					sheet.setColumnWidth(i, (int) (258 / 8 * column.getPrefWidth()));
 					cell = row.getCell(i);
 					if (cell == null) {
@@ -131,8 +131,8 @@ public class ExportToExcel<T> {
 			row = sheet.createRow(rowIdx);
 			int j = 0;
 			for (TableColumn column : lstLeafColumn) {
-				if (column instanceof CustomTableColumn && column.isVisible()) {
-					CustomTableColumn baseColumn = (CustomTableColumn) column;
+				if (column instanceof BaseColumn && column.isVisible()) {
+					BaseColumn baseColumn = (BaseColumn) column;
 					String propertyName = baseColumn.getPropertyName();
 					cell = row.createCell(j);
 

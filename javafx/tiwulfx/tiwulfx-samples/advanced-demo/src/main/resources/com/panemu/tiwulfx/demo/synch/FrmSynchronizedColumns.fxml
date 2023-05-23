@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?scenebuilder-preview-i18n-resource ../../../../../literal.properties?>
-<?scenebuilder-stylesheet ../../../../../tiwulfx-demo.css?>
-
 <?import com.panemu.tiwulfx.table.TableControl?>
 <?import com.panemu.tiwulfx.table.TypeAheadColumn?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.VBox?>
-<fx:root id="AnchorPane" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/10.0.1"
-         xmlns:fx="http://javafx.com/fxml/1">
-  <TextArea editable="false" prefRowCount="2" prefWidth="200.0"
-            text="This form is an example of synchronized TypeAheadColumns. The options in the Country column depends on selected Continent. The options in Province columns depends on selected Country."
-            wrapText="true" VBox.vgrow="NEVER"/>
-  <TableControl fx:id="tblSynchColumn" agileEditing="true" VBox.vgrow="ALWAYS">
-    <columns>
-      <TypeAheadColumn fx:id="clmContinent" prefWidth="150.0" propertyName="continent" text="%continent"/>
-      <TypeAheadColumn fx:id="clmCountry" prefWidth="150.0" propertyName="country" text="%country"/>
-      <TypeAheadColumn fx:id="clmProvince" prefWidth="250.0" propertyName="province" text="%province"/>
-    </columns>
-  </TableControl>
+<?scenebuilder-preview-i18n-resource ../../../../../literal.properties?>
+<?scenebuilder-stylesheet ../../../../../tiwulfx-demo.css?>
+
+<fx:root id="AnchorPane" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+      <TextArea editable="false" prefRowCount="2" prefWidth="200.0" text="This form is an example of synchronized TypeAheadColumns. The options in the Country column depends on selected Continent. The options in Province columns depends on selected Country." wrapText="true" VBox.vgrow="NEVER" />
+		<TableControl fx:id="tblSynchColumn" agileEditing="true" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+			<columns>
+				<TypeAheadColumn fx:id="clmContinent" prefWidth="150.0" propertyName="continent" text="%continent" />
+				<TypeAheadColumn fx:id="clmCountry" prefWidth="150.0" propertyName="country" text="%country" />
+				<TypeAheadColumn fx:id="clmProvince" prefWidth="250.0" propertyName="province" text="%province" />
+			</columns>
+		</TableControl>
+	</children>
 </fx:root>

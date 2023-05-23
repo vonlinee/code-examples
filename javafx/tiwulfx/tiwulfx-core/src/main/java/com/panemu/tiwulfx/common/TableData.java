@@ -1,49 +1,49 @@
+/*
+ * License GNU LGPL
+ * Copyright (C) 2012 Amrullah .
+ */
 package com.panemu.tiwulfx.common;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * 表格数据
- * @param <T> 表格数据类型
+ *
+ * @author amrullah
  */
 public class TableData<T> implements Serializable {
 
-    private List<T> rows;
-    private boolean moreRows;
-    private long totalRows;
+	private List<T> rows;
+	private boolean moreRows;
+	private long totalRows;
 
-    public TableData(List<T> rows, boolean moreRows, long totalRows) {
-        this.rows = rows;
-        this.moreRows = moreRows;
-        this.totalRows = totalRows;
-    }
+	public TableData() {
+	}
 
-    public List<T> getRows() {
-        return rows;
-    }
+	public TableData(List<T> rows, boolean moreRows, long totalRows) {
+		this.rows = rows;
+		this.moreRows = moreRows;
+		this.totalRows = totalRows;
+	}
 
-    public void setRows(List<T> rows) {
-        this.rows = rows;
-    }
+	public List<T> getRows() {
+		return rows;
+	}
 
-    public void setTotalRows(long totalRows) {
-        this.totalRows = totalRows;
-    }
+	public void setRows(List<T> rows) {
+		this.rows = rows;
+	}
 
-    public boolean isMoreRows() {
-        return moreRows;
-    }
+	public void setTotalRows(long totalRows) {
+		this.totalRows = totalRows;
+	}
 
-    public long getTotalRows() {
-        return totalRows;
-    }
+	public boolean isMoreRows() {
+		return moreRows;
+	}
 
-    public void setHasMoreRows(boolean moreRows) {
-        this.moreRows = moreRows;
-    }
+	public long getTotalRows() {
+		return totalRows;
+	}
 
-    public boolean hasMoreRows() {
-        return moreRows;
-    }
 }

@@ -14,6 +14,7 @@ import java.util.Calendar;
 
 /**
  * The main navigation pane.
+ *
  * @author Christian Schudt
  */
 final class MainNavigationPane extends HBox {
@@ -72,6 +73,7 @@ final class MainNavigationPane extends HBox {
 
     /**
      * Gets a navigation button.
+     *
      * @param direction Either -1 (for left) or 1 (for right).
      * @return The button.
      */

@@ -10,5 +10,5 @@ package com.panemu.tiwulfx.common;
  */
 public interface ObjectExposer {
 
-    void setObjectToDisplay(Object objectToDisplay);
+    public void setObjectToDisplay(Object objectToDisplay);
 }

@@ -19,7 +19,7 @@
 package com.panemu.tiwulfx.common;
 
 import com.panemu.tiwulfx.table.TableControl;
-import com.panemu.tiwulfx.table.TableControlBehaviour;
+import com.panemu.tiwulfx.table.TableControlBehavior;
 import com.panemu.tiwulfx.table.TickColumn;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +40,10 @@ public class FrmTstTickColumn extends Application {
 	public void start(Stage primaryStage) {
 		TableControl<Record> tbl = new TableControl<>(Record.class);
 		TickColumn<Record> clm = new TickColumn<>();
-		tbl.setBehaviour(new TableControlBehaviour<Record>() {
+		tbl.setController(new TableControlBehavior<Record>() {
 
 			@Override
-			public <C> TableData<Record> loadData(int startIndex, List<TableCriteria<C>> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
+			public TableData<Record> loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
 				List<Record> lst = new ArrayList<>();
 				for (int i = 0; i < 10; i++) {
 					lst.add(new Record());

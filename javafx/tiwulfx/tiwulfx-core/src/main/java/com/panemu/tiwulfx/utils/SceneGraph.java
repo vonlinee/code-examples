@@ -5,9 +5,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 
 /**
@@ -50,5 +48,9 @@ public class SceneGraph {
         Button btn = new Button(text);
         btn.setOnAction(actionEventHandler);
         return btn;
+    }
+
+    public static Border border(Paint paint, double radius, double width) {
+        return new Border(new BorderStroke(paint, BorderStrokeStyle.NONE, new CornerRadii(radius), new BorderWidths(width)));
     }
 }
