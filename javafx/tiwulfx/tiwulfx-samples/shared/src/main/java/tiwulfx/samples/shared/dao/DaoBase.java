@@ -145,7 +145,7 @@ public class DaoBase<T> {
                 attributeName = attributeName.substring(attributeName.lastIndexOf(".") + 1, attributeName.length());
             }
             Comparable comparable;
-            TableCriteria.Operator operator = tableCriteria.getOperator();
+            TableCriteria.Condition operator = tableCriteria.getOperator();
             Object value = tableCriteria.getValue();
             switch (operator) {
                 case eq:

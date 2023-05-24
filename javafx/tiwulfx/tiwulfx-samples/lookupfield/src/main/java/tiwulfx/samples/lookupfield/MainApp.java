@@ -6,7 +6,6 @@ import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.control.LookupField;
 import com.panemu.tiwulfx.control.LookupFieldController;
 import com.panemu.tiwulfx.dialog.MessageDialogBuilder;
-import com.panemu.tiwulfx.table.BaseColumn;
 import com.panemu.tiwulfx.table.TableControl;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,13 +75,13 @@ public class MainApp extends Application {
 					lstFiltered.addAll(lst);
 				} else {
 					for (TableCriteria crit : filteredColumns) {
-						if (crit.getOperator() == TableCriteria.Operator.eq) {
+						if (crit.getOperator() == TableCriteria.Condition.eq) {
 							for (Option option : lst) {
 								if (option.getLabel().equals(crit.getValue())) {
 									lstFiltered.add(option);
 								}
 							}
-						} else if (crit.getOperator() == TableCriteria.Operator.ilike_anywhere) {
+						} else if (crit.getOperator() == TableCriteria.Condition.ilike_anywhere) {
 							for (Option option : lst) {
 								if (option.getLabel().toUpperCase().contains(crit.getValue().toString().toUpperCase())) {
 									lstFiltered.add(option);

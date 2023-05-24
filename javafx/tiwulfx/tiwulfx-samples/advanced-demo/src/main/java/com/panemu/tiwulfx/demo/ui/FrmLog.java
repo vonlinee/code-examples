@@ -102,7 +102,7 @@ public class FrmLog extends VBox {
 
     protected void init() {
         tblPerson.setRecordClass(Person.class);
-        tblPerson.setController(controller);
+        tblPerson.setBehavior(controller);
         tblPerson.setMaxRecord(50);
 
         for (String location : DataGenerator.birthPlaces) {
@@ -169,7 +169,7 @@ public class FrmLog extends VBox {
         tblPerson.reloadFirstPage();
     }
 
-    private TableControlBehavior<Person> controller = new TableControlBehavior<Person>() {
+    private TableControlBehavior<Person> controller = new TableControlBehavior<>() {
 
         private DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
 
@@ -186,8 +186,7 @@ public class FrmLog extends VBox {
             if (join) {
                 lstJoin.add("insurance");
             }
-            TableData<Person> result = daoPerson.fetch(startIndex, filteredColumns, sortedColumns, sortingOrders, maxResult, lstJoin);
-            return result;
+            return (TableData<Person>) daoPerson.fetch(startIndex, filteredColumns, sortedColumns, sortingOrders, maxResult, lstJoin);
         }
 
         @Override
@@ -198,14 +197,13 @@ public class FrmLog extends VBox {
         @Override
         public List<Person> update(List<Person> records) {
             Runnable runnable = () -> tblPerson.getRecordChangeList().forEach((rc) -> {
-                String log = String.format("Property Name: {}, Old Value: {}, New Value: {}, Timestamp: {} \n", rc.getPropertyName(), rc.getOldValue(), rc.getNewValue(), Calendar
+                String log = String.format("Property Name: %s, Old Value: %s, New Value: %s, Timestamp: %s \n", rc.getPropertyName(), rc.getOldValue(), rc.getNewValue(), Calendar
                         .getInstance().getTime());
                 txtLog.insertText(0, log);
             });
             Platform.runLater(runnable);
             List<Person> result = daoPerson.update(records);
-            result = daoPerson.initRelationship(records, "insurance");
-            return result;
+            return daoPerson.initRelationship(result, "insurance");
         }
 
         @Override

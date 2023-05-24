@@ -1,25 +1,5 @@
-/*
- * Copyright (C) 2014 Panemu.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301  USA
- */
 package com.panemu.tiwulfx.table;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -27,23 +7,19 @@ import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 
 /**
- * @author amrullah
+ * 自定义TableView，继承自TableView
  */
 @SuppressWarnings(value = {"unchecked", "rawtypes"})
-class CustomTableView<R> extends TableView<R> {
+public class CustomTableView<R> extends TableView<R> {
 
     private TableColumn<R, ?> selectedColumn;
 
     public CustomTableView() {
-
-        getColumns().addListener(new ListChangeListener<TableColumn<R, ?>>() {
-            @Override
-            public void onChanged(Change<? extends TableColumn<R, ?>> c) {
-                while (c.next()) {
-                    if (c.wasReplaced()) {
-                        ObservableList<? extends TableColumn<R, ?>> list = c.getList();
-                        System.out.println(list.get(0).getText());
-                    }
+        getColumns().addListener((ListChangeListener<TableColumn<R, ?>>) c -> {
+            while (c.next()) {
+                if (c.wasReplaced()) {
+                    ObservableList<? extends TableColumn<R, ?>> list = c.getList();
+                    System.out.println(list.get(0).getText());
                 }
             }
         });
@@ -63,5 +39,17 @@ class CustomTableView<R> extends TableView<R> {
 
     public final void edit(TablePosition position) {
         this.edit(position.getRow(), position.getTableColumn());
+    }
+
+    public final <T> TablePosition<R, T> getSelectedCellPosition(int index) {
+        return getSelectionModel().getSelectedCells().get(index);
+    }
+
+    public final <T> TableColumn<R, T> getColumn(int index) {
+        return (TableColumn<R, T>) getColumns().get(index);
+    }
+
+    public final boolean hasSelectedCells() {
+        return !getSelectionModel().getSelectedCells().isEmpty();
     }
 }

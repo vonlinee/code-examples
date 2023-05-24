@@ -18,7 +18,7 @@
  */
 package com.panemu.tiwulfx.table;
 
-import com.panemu.tiwulfx.common.TableCriteria.Operator;
+import com.panemu.tiwulfx.common.TableCriteria.Condition;
 import com.panemu.tiwulfx.control.TypeAheadField;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -51,12 +51,12 @@ public class TypeAheadColumn<R, C> extends BaseColumn<R, C>{
 		}
 
 		@Override
-		protected List<Operator> getOperators() {
-			List<Operator> lst = new ArrayList<>();
-			lst.add(Operator.eq);
-			lst.add(Operator.ne);
-			lst.add(Operator.is_null);
-			lst.add(Operator.is_not_null);
+		protected List<Condition> getOperators() {
+			List<Condition> lst = new ArrayList<>();
+			lst.add(Condition.eq);
+			lst.add(Condition.ne);
+			lst.add(Condition.is_null);
+			lst.add(Condition.is_not_null);
 			return lst;
 		}
 

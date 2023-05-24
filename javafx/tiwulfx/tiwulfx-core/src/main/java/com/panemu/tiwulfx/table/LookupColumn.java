@@ -6,21 +6,18 @@ package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
-import com.panemu.tiwulfx.control.LookupField;
 import com.panemu.tiwulfx.control.LookupFieldController;
-import java.lang.reflect.InvocationTargetException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.panemu.tiwulfx.utils.ClassUtils;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
-import org.apache.commons.beanutils.PropertyUtils;
 
 /**
  *
@@ -45,12 +42,7 @@ public class LookupColumn<R, C> extends BaseColumn<R, C> {
 	public LookupColumn(String propertyName, String lookupPropertyName, double prefWidth) {
 		super(propertyName, prefWidth);
 		this.lookupPropertyName = lookupPropertyName;
-		setCellFactory(new Callback<TableColumn<R, C>, TableCell<R, C>>() {
-			@Override
-			public TableCell<R, C> call(TableColumn<R, C> p) {
-				return new LookupTableCell<R, C>(LookupColumn.this);
-			}
-		});
+		setCellFactory(p -> new LookupTableCell<>(LookupColumn.this));
 		setStringConverter(stringConverter);
 	}
 
@@ -74,15 +66,13 @@ public class LookupColumn<R, C> extends BaseColumn<R, C> {
 	public void setLookupController(LookupFieldController<C> lookupController) {
 		this.lookupController = lookupController;
 	}
-	private Map<String, C> mapValue = new HashMap<>();
-	private StringConverter<C> stringConverter = new StringConverter<C>() {
+	private final Map<String, C> mapValue = new HashMap<>();
+	private final StringConverter<C> stringConverter = new StringConverter<C>() {
 		@Override
 		public String toString(C value) {
 			Object string;
 			try {
-				string = PropertyUtils.getSimpleProperty(value, lookupPropertyName);
-			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-				return null;
+				string = ClassUtils.getSimpleProperty(value, lookupPropertyName);
 			} catch (Exception ex) {
 				return null;
 			}
@@ -95,15 +85,14 @@ public class LookupColumn<R, C> extends BaseColumn<R, C> {
 				return null;
 			}
 			C result = mapValue.get(stringValue);
-			if (result == null && stringValue != null && !stringValue.isEmpty()) {
-				List<C> data = lookupController.loadDataForPopup(getLookupPropertyName(), stringValue, TableCriteria.Operator.eq);
+			if (result == null && !stringValue.isEmpty()) {
+				List<C> data = lookupController.loadDataForPopup(getLookupPropertyName(), stringValue, TableCriteria.Condition.eq);
 				if (data.size() == 1) {
 					result = data.get(0);
 					mapValue.put(stringValue, result);
 				} else {
 					result = getLookupController().show(getTableView().getScene().getWindow(), null, getLookupPropertyName(), stringValue);
 				}
-
 			}
 			return result;
 		}
@@ -112,26 +101,26 @@ public class LookupColumn<R, C> extends BaseColumn<R, C> {
 	private SearchMenuItemBase<C> getLookupMenuItem() {
 		if (searchMenuItem == null) {
 			searchInputControl = new TextField();
-			searchMenuItem = new SearchMenuItemBase<C>(this) {
+			searchMenuItem = new SearchMenuItemBase<>(this) {
 				@Override
 				protected Node getInputControl() {
 					return searchInputControl;
 				}
 
 				@Override
-				protected List<TableCriteria.Operator> getOperators() {
-					List<TableCriteria.Operator> lst = new ArrayList<>();
-					lst.add(TableCriteria.Operator.eq);
-					lst.add(TableCriteria.Operator.ne);
-					lst.add(TableCriteria.Operator.ilike_begin);
-					lst.add(TableCriteria.Operator.ilike_anywhere);
-					lst.add(TableCriteria.Operator.ilike_end);
-					lst.add(TableCriteria.Operator.lt);
-					lst.add(TableCriteria.Operator.le);
-					lst.add(TableCriteria.Operator.gt);
-					lst.add(TableCriteria.Operator.ge);
-					lst.add(TableCriteria.Operator.is_null);
-					lst.add(TableCriteria.Operator.is_not_null);
+				protected List<TableCriteria.Condition> getOperators() {
+					List<TableCriteria.Condition> lst = new ArrayList<>();
+					lst.add(TableCriteria.Condition.eq);
+					lst.add(TableCriteria.Condition.ne);
+					lst.add(TableCriteria.Condition.ilike_begin);
+					lst.add(TableCriteria.Condition.ilike_anywhere);
+					lst.add(TableCriteria.Condition.ilike_end);
+					lst.add(TableCriteria.Condition.lt);
+					lst.add(TableCriteria.Condition.le);
+					lst.add(TableCriteria.Condition.gt);
+					lst.add(TableCriteria.Condition.ge);
+					lst.add(TableCriteria.Condition.is_null);
+					lst.add(TableCriteria.Condition.is_not_null);
 					return lst;
 				}
 
@@ -160,8 +149,8 @@ public class LookupColumn<R, C> extends BaseColumn<R, C> {
 	}
 	
 	@Override
-	TableCriteria<C> createSearchCriteria(TableCriteria.Operator operator, C value) {
-		return new TableCriteria(this.getPropertyName() + "." + lookupPropertyName, operator, value);
+	TableCriteria<C> createSearchCriteria(TableCriteria.Condition operator, C value) {
+		return new TableCriteria<>(this.getPropertyName() + "." + lookupPropertyName, operator, value);
 	}
 
 	public int getShowSuggestionWaitTime() {
@@ -172,7 +161,7 @@ public class LookupColumn<R, C> extends BaseColumn<R, C> {
 	 * Set it TRUE to restrict input only from lookupWindow and disable user
 	 * manual input.
 	 *
-	 * @param disableLookupManualInput
+	 * @param disableLookupManualInput disableLookupManualInput
 	 */
 	public void setDisableLookupManualInput(boolean disableLookupManualInput) {
 		this.disableLookupManualInput = disableLookupManualInput;

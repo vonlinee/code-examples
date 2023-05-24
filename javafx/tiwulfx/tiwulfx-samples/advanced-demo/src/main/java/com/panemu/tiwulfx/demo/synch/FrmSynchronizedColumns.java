@@ -171,7 +171,7 @@ public class FrmSynchronizedColumns extends VBox {
 		lstColumns.add(new SynchColumnPojo(continent, country, province));
 		lstColumns.add(new SynchColumnPojo(continent2, country2, province2));
 		tblSynchColumn.setRecordClass(SynchColumnPojo.class);
-		tblSynchColumn.setController(controller);
+		tblSynchColumn.setBehavior(controller);
 	}
 	
 	public void reload() {

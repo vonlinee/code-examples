@@ -21,7 +21,6 @@ public class MainApp extends Application {
         final FrmPerson frmPerson = new FrmPerson();
         frmPerson.reload();
 
-
         Scene scene = new Scene(frmPerson);
         TiwulFXUtil.setTiwulFXStyleSheet(scene);
         stage.setTitle("Basic TableControl");

@@ -80,7 +80,7 @@ public class FrmTextColumn extends VBox {
 		lstColumns.add(new TextColumnPojo(max, cap, maxCap));
 //		lstColumns.add(new TextColumnPojo(new String(), new String(), new String()));
 		tblTextColumn.setRecordClass(TextColumnPojo.class);
-		tblTextColumn.setController(controller);
+		tblTextColumn.setBehavior(controller);
 		tblTextColumn.setVisibleComponents(false, TableControl.Component.FOOTER);
 	}
 	

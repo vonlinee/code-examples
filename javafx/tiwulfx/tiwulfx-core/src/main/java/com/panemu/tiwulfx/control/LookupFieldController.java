@@ -51,7 +51,7 @@ public abstract class LookupFieldController<T> {
 
 	private LookupWindow lookupWindow;
 	private Stage dialogStage;
-	private Class<T> recordClass;
+	private final Class<T> recordClass;
 
 	/**
 	 *
@@ -72,7 +72,7 @@ public abstract class LookupFieldController<T> {
 	 * @return
 	 */
 	public List<T> loadDataForPopup(String propertyName, String key) {
-		return loadDataForPopup(propertyName, key, TableCriteria.Operator.ilike_anywhere);
+		return loadDataForPopup(propertyName, key, TableCriteria.Condition.ilike_anywhere);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public abstract class LookupFieldController<T> {
 	 * @param operator
 	 * @return
 	 */
-	public List<T> loadDataForPopup(String propertyName, String key, TableCriteria.Operator operator) {
+	public List<T> loadDataForPopup(String propertyName, String key, TableCriteria.Condition operator) {
 		List<TableCriteria> lstCriteria = new ArrayList<>();
 		if (key != null && !key.isEmpty()) {
 			lstCriteria.add(new TableCriteria(propertyName, operator, key));
@@ -167,7 +167,7 @@ public abstract class LookupFieldController<T> {
 		for (TableColumn column : lookupWindow.table.getTableView().getColumns()) {
 			if (column instanceof BaseColumn && ((BaseColumn) column).getPropertyName().equals(propertyName)) {
 				if (searchCriteria != null && !searchCriteria.isEmpty()) {
-					TableCriteria tc = new TableCriteria(propertyName, TableCriteria.Operator.ilike_anywhere, searchCriteria);
+					TableCriteria tc = new TableCriteria(propertyName, TableCriteria.Condition.ilike_anywhere, searchCriteria);
 					((BaseColumn) column).setTableCriteria(tc);
 				} else {
 					((BaseColumn) column).setTableCriteria(null);
@@ -280,7 +280,7 @@ public abstract class LookupFieldController<T> {
 
 			getChildren().addAll(table, pnlButton);
 			VBox.setVgrow(table, Priority.ALWAYS);
-			table.setController(new LookupTableController());
+			table.setBehavior(new LookupTableController());
 			table.setVisibleComponents(false, Component.BUTTON_DELETE,
 					  Component.BUTTON_EDIT,
 					  Component.BUTTON_EXPORT,

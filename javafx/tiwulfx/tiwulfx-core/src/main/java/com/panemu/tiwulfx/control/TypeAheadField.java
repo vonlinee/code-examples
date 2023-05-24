@@ -29,13 +29,13 @@ import javafx.util.StringConverter;
 public class TypeAheadField<T> extends Control {
 	private Logger logger = Logger.getLogger(TypeAheadField.class.getName());
 	
-    private ObjectProperty<T> value = new SimpleObjectProperty<T>() {
+    private final ObjectProperty<T> value = new SimpleObjectProperty<>() {
         private boolean skipValidation = false;
+
         @Override
         public T get() {
-//			  logger.fine("get value. skipValidation: " + skipValidation + ", markInvalid: " + markInvalid.get());
             if (!skipValidation && markInvalid.get()) {
-					logger.fine("mark as valid. skipValidation: " + skipValidation);
+                logger.fine("mark as valid. skipValidation: " + skipValidation);
                 markInvalid.set(false);
             }
             return super.get();
@@ -47,10 +47,10 @@ public class TypeAheadField<T> extends Control {
             super.set(v);
             skipValidation = false;
         }
-        
+
     };
 	
-	private StringProperty promptText = new SimpleStringProperty("");
+	private final StringProperty promptText = new SimpleStringProperty("");
 	
 	public String getPromptText() {
 		return promptText.get();
@@ -64,7 +64,7 @@ public class TypeAheadField<T> extends Control {
 		return promptText;
 	}
 	
-    private BooleanProperty markInvalid = new SimpleBooleanProperty(false);
+    private final BooleanProperty markInvalid = new SimpleBooleanProperty(false);
 	private static final String DEFAULT_STYLE_CLASS = "type-ahead-field";
 	
     public TypeAheadField() {
@@ -74,27 +74,23 @@ public class TypeAheadField<T> extends Control {
 	public TypeAheadField(ObservableList<T> items) {
 		getStyleClass().add(DEFAULT_STYLE_CLASS);
 		setItems(items);
-		getItems().addListener(new ListChangeListener<T>() {
-
-			@Override
-			public void onChanged(ListChangeListener.Change<? extends T> change) {
-				while (change.next()) {
-					if (change.wasRemoved()) {
-						for (T t : change.getRemoved()){
-							for (String key : itemMap.keySet()) {
-								if (t!= null && t.equals(itemMap.get(key))) {
-									itemMap.remove(key);
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
-		});
+		getItems().addListener((ListChangeListener<T>) change -> {
+            while (change.next()) {
+                if (change.wasRemoved()) {
+                    for (T t : change.getRemoved()){
+                        for (String key : itemMap.keySet()) {
+                            if (t!= null && t.equals(itemMap.get(key))) {
+                                itemMap.remove(key);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
 	}
 	
-	private ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<ObservableList<T>>(this, "items");
+	private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>(this, "items");
 	public final void setItems(ObservableList<T> value) { itemsProperty().set(value); }
     public final ObservableList<T> getItems() {return items.get(); }
     public ObjectProperty<ObservableList<T>> itemsProperty() { return items; }
@@ -104,9 +100,8 @@ public class TypeAheadField<T> extends Control {
      * markInvalidProperty() is set to true if user changes textfield's text. When 
      * {@link #valueProperty()}.get()  is called and markInvalidProperty is true, validation
      * will be executed to ensure user's input is valid.
-     * 
      * Developer should not need to use this property.
-     * @return 
+     * @return
      */
     public BooleanProperty markInvalidProperty() {
         return markInvalid;
@@ -199,18 +194,18 @@ public class TypeAheadField<T> extends Control {
         setShowingSuggestion(false);
     }
 	 
-	private HashMap<String, T> itemMap = new LinkedHashMap<>();
+	private final HashMap<String, T> itemMap = new LinkedHashMap<>();
 	/**
      * Converts the user-typed input to an object of type T, such that 
      * the input may be retrieved via the  {@link #valueProperty() value} property.
      */
     public ObjectProperty<StringConverter<T>> converterProperty() { return converter; }
-    private ObjectProperty<StringConverter<T>> converter = 
-            new SimpleObjectProperty<StringConverter<T>>(this, "converter", new LabelConverter());
+    private final ObjectProperty<StringConverter<T>> converter =
+            new SimpleObjectProperty<>(this, "converter", new LabelConverter());
     public final void setConverter(StringConverter<T> value) { converterProperty().set(value); }
     public final StringConverter<T> getConverter() {return converterProperty().get(); }
 	
-	private BooleanProperty sortedProperty = new SimpleBooleanProperty(false);
+	private final BooleanProperty sortedProperty = new SimpleBooleanProperty(false);
 	
 	/**
 	 * 
@@ -277,7 +272,5 @@ public class TypeAheadField<T> extends Control {
 	 */
 	public String getText(T value){
 		return getConverter().toString(value);
-		
 	}
-	
 }

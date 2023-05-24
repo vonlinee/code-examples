@@ -85,7 +85,7 @@ public class FrmDateColumn extends VBox {
 		lstRecord.add(new DatePojo(new Date(), LocalDate.now(), new Date(),LocalDate.now(), new Date(), LocalDate.now()));
 		tblDate.setVisibleComponents(false, TableControl.Component.FOOTER);
 		tblDate.setRecordClass(DatePojo.class);
-		tblDate.setController(controller);
+		tblDate.setBehavior(controller);
 	}
 	
 	private TableControlBehavior<DatePojo> controller = new TableControlBehavior<DatePojo>() {

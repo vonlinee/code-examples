@@ -22,8 +22,9 @@ import javafx.scene.control.Control;
 public class LookupField<T> extends Control {
 
     private LookupFieldController<T> controller;
-    private ObjectProperty<T> value = new SimpleObjectProperty<T>() {
+    private final ObjectProperty<T> value = new SimpleObjectProperty<>() {
         private boolean skipValidation = false;
+
         @Override
         public T get() {
             if (!skipValidation && markInvalid.get()) {
@@ -39,12 +40,12 @@ public class LookupField<T> extends Control {
             super.set(v);
             skipValidation = false;
         }
-        
+
     };
-    private StringProperty propertyName = new SimpleStringProperty();
+    private final StringProperty propertyName = new SimpleStringProperty();
     private int waitTime = TiwulFXUtil.DEFAULT_LOOKUP_SUGGESTION_WAIT_TIMES;
-    private BooleanProperty markInvalid = new SimpleBooleanProperty(false);
-    private BooleanProperty disableManualInput = new SimpleBooleanProperty(false);
+    private final BooleanProperty markInvalid = new SimpleBooleanProperty(false);
+    private final BooleanProperty disableManualInput = new SimpleBooleanProperty(false);
 
     public LookupField() {
         getStyleClass().add("lookup-field");
@@ -228,7 +229,7 @@ public class LookupField<T> extends Control {
         setShowingSuggestion(false);
     }
 	
-	private StringProperty promptText = new SimpleStringProperty("");
+	private final StringProperty promptText = new SimpleStringProperty("");
 	
 	public String getPromptText() {
 		return promptText.get();

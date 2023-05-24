@@ -21,4 +21,13 @@ public class ClassUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public static void setSimpleProperty(final Object bean,
+                                         final String name, final Object value) {
+        try {
+            PropertyUtils.setSimpleProperty(bean, name, value);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

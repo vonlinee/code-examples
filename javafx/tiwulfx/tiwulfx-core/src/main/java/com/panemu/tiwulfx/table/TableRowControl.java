@@ -48,7 +48,7 @@ public class TableRowControl<R> extends TableRow<R> {
 				if (event.getButton().equals(MouseButton.PRIMARY)
 						  && event.getClickCount() == 2
 						  && TableRowControl.this.getIndex() < tblView.getRecords().size()) {
-					tblView.getController().doubleClick(tblView.getSelectionModel().getSelectedItem());
+					tblView.getBehavior().doubleClick(tblView.getSelectionModel().getSelectedItem());
 				}
 			}
 		});

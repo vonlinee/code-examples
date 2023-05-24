@@ -1,37 +1,33 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.common;
 
 import java.io.Serializable;
 
 /**
- *
- * @author amrullah
+ * Table Query Criteria
+ * @param <T> table column data type
  */
 public class TableCriteria<T> implements Serializable {
 
-    public static enum Operator {
-
-        in("in"), 
-        not_in("not.in"), 
+    public enum Condition {
+        in("in"),
+        not_in("not.in"),
         eq("="),
-        ne("<>"), 
-        le("<="), 
-        lt("<"), 
-        ge(">="), 
-        gt(">"), 
+        ne("<>"),
+        le("<="),
+        lt("<"),
+        ge(">="),
+        gt(">"),
         is_null("null"),
-        is_not_null("not.null"), 
+        is_not_null("not.null"),
         like_begin("start.with"),
         like_end("end.with"),
         like_anywhere("contains"),
         ilike_begin("start.with"),
         ilike_end("end.with"),
         ilike_anywhere("contains");
-        private String description;
-        private Operator(String desc) {
+        private final String description;
+
+        Condition(String desc) {
             this.description = desc;
         }
 
@@ -40,14 +36,12 @@ public class TableCriteria<T> implements Serializable {
             return description;
         }
     }
+
     private String attributeName;
-    private Operator operator;
+    private Condition operator;
     private T value;
 
-    public TableCriteria() {
-    }
-
-    public TableCriteria(String attributeName, Operator operator, T value) {
+    public TableCriteria(String attributeName, Condition operator, T value) {
         this.attributeName = attributeName;
         this.operator = operator;
         this.value = value;
@@ -61,11 +55,11 @@ public class TableCriteria<T> implements Serializable {
         this.attributeName = attributeName;
     }
 
-    public Operator getOperator() {
+    public Condition getOperator() {
         return operator;
     }
 
-    public void setOperator(Operator operator) {
+    public void setOperator(Condition operator) {
         this.operator = operator;
     }
 

@@ -75,7 +75,7 @@ public class FrmData extends StackPane {
 
 	private void init() {
 		tblData.setConfigurationID("FrmData.tblData");
-		tblData.setController(new CntlRecord());
+		tblData.setBehavior(new CntlRecord());
 		tblData.setRecordClass(RecordPojo.class);
 		
 		String home = System.getProperty("user.home");

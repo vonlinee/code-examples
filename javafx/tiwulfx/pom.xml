@@ -22,7 +22,7 @@
   <modules>
     <module>tiwulfx-core</module>
     <module>tiwulfx-samples</module>
-    <module>fxtras-mvvm</module>
+    <module>tiwulfx-samples/table-sql-demo</module>
   </modules>
 
 

@@ -4,7 +4,7 @@
  */
 package com.panemu.tiwulfx.table;
 
-import com.panemu.tiwulfx.common.TableCriteria.Operator;
+import com.panemu.tiwulfx.common.TableCriteria.Condition;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
@@ -32,19 +32,19 @@ public class TextColumn<R> extends BaseColumn<R, String> {
         }
 
         @Override
-        protected List<Operator> getOperators() {
-            List<Operator> lst = new ArrayList<>();
-            lst.add(Operator.eq);
-            lst.add(Operator.ne);
-            lst.add(Operator.ilike_begin);
-            lst.add(Operator.ilike_anywhere);
-            lst.add(Operator.ilike_end);
-            lst.add(Operator.lt);
-            lst.add(Operator.le);
-            lst.add(Operator.gt);
-            lst.add(Operator.ge);
-            lst.add(Operator.is_null);
-            lst.add(Operator.is_not_null);
+        protected List<Condition> getOperators() {
+            List<Condition> lst = new ArrayList<>();
+            lst.add(Condition.eq);
+            lst.add(Condition.ne);
+            lst.add(Condition.ilike_begin);
+            lst.add(Condition.ilike_anywhere);
+            lst.add(Condition.ilike_end);
+            lst.add(Condition.lt);
+            lst.add(Condition.le);
+            lst.add(Condition.gt);
+            lst.add(Condition.ge);
+            lst.add(Condition.is_null);
+            lst.add(Condition.is_not_null);
             return lst;
         }
 

@@ -1,36 +1,21 @@
-/*
- * License BSD License
- * Copyright (C) 2013 Amrullah <amrullah@panemu.com>.
- */
 package com.panemu.tiwulfx.demo;
 
 import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TableData;
+import javafx.scene.control.TableColumn.SortType;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.scene.control.TableColumn.SortType;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.From;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
 
-/**
- *
- * @author Amrullah <amrullah@panemu.com>
- */
 public class DaoBase<T> {
 
-    private Class<T> voClass;
-//    EntityManager em = JavaApplication6.factory.createEntityManager();
+    private final Class<T> voClass;
+    //    EntityManager em = JavaApplication6.factory.createEntityManager();
     EntityManager em;
 
     public DaoBase(Class<T> clazz) {
@@ -38,19 +23,11 @@ public class DaoBase<T> {
         this.voClass = clazz;
     }
 
-    public TableData fetch(int startIndex,
-            List<TableCriteria> filteredColumns,
-            List<String> sortedColumns,
-            List<SortType> sortingVersus,
-            int maxResult) {
+    public TableData fetch(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<SortType> sortingVersus, int maxResult) {
         return this.fetch(startIndex, filteredColumns, sortedColumns, sortingVersus, maxResult, new ArrayList<String>());
     }
 
-    public TableData fetch(int startIndex,
-            List<TableCriteria> filteredColumns,
-            List<String> sortedColumns,
-            List<SortType> sortingVersus,
-            int maxResult, List<String> lstJoin) {
+    public TableData fetch(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<SortType> sortingVersus, int maxResult, List<String> lstJoin) {
         em = TiwulfxDemo.factory.createEntityManager();
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<T> cq = builder.createQuery(voClass);
@@ -91,7 +68,6 @@ public class DaoBase<T> {
     }
 
     private Map<String, From> buildJoinMap(Root<T> root, List<String> lstJoin, boolean fetchJoin) {
-
         Map<String, From> mapJoin = new HashMap<>();
         for (String joinName : lstJoin) {
             From<?, ?> from;
@@ -112,8 +88,7 @@ public class DaoBase<T> {
         return mapJoin;
     }
 
-    private long count(List<TableCriteria> filteredColumns,
-            List<String> lstJoin) {
+    private long count(List<TableCriteria> filteredColumns, List<String> lstJoin) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Long> cq = builder.createQuery(Long.class);
         Root<T> root = cq.from(voClass);
@@ -138,7 +113,7 @@ public class DaoBase<T> {
                 attributeName = attributeName.substring(attributeName.lastIndexOf(".") + 1, attributeName.length());
             }
             Comparable comparable;
-            TableCriteria.Operator operator = tableCriteria.getOperator();
+            TableCriteria.Condition operator = tableCriteria.getOperator();
             Object value = tableCriteria.getValue();
             switch (operator) {
                 case eq:
@@ -170,16 +145,19 @@ public class DaoBase<T> {
                     lstPredicates.add(builder.like(from.<String>get(attributeName), "%" + value.toString() + "%"));
                     break;
                 case like_end:
-                    lstPredicates.add(builder.like(from.<String>get(attributeName),  "%" + value.toString()));
+                    lstPredicates.add(builder.like(from.<String>get(attributeName), "%" + value.toString()));
                     break;
                 case ilike_begin:
-                    lstPredicates.add(builder.like(builder.lower(from.<String>get(attributeName)), value.toString().toLowerCase() + "%"));
+                    lstPredicates.add(builder.like(builder.lower(from.<String>get(attributeName)), value.toString()
+                            .toLowerCase() + "%"));
                     break;
                 case ilike_anywhere:
-                    lstPredicates.add(builder.like(builder.lower(from.<String>get(attributeName)), "%" + value.toString().toLowerCase() + "%"));
+                    lstPredicates.add(builder.like(builder.lower(from.<String>get(attributeName)), "%" + value
+                            .toString().toLowerCase() + "%"));
                     break;
                 case ilike_end:
-                    lstPredicates.add(builder.like(builder.lower(from.<String>get(attributeName)), "%" + value.toString().toLowerCase()));
+                    lstPredicates.add(builder.like(builder.lower(from.<String>get(attributeName)), "%" + value
+                            .toString().toLowerCase()));
                     break;
                 case is_null:
                     lstPredicates.add(builder.isNull(from.get(attributeName)));
@@ -206,7 +184,6 @@ public class DaoBase<T> {
     /**
      * This method doesn't work in Hibernate. Hibernate can't reuse predicates
      * and root. Maybe because alias generation conflict.
-     *
      * @param records
      * @return
      */

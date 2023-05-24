@@ -1,7 +1,3 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.control;
 
 import javafx.beans.property.StringProperty;
@@ -32,7 +28,6 @@ public class LabelSeparator extends StackPane {
         lblText = new Label(label);
         this.getChildren().addAll(line, lblText);
         this.getStyleClass().add("label-separator");
-
     }
 
     public void setText(String label) {

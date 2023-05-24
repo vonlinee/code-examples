@@ -1,7 +1,3 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.control;
 
 import com.panemu.tiwulfx.common.TiwulFXUtil;
@@ -10,8 +6,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 
 import java.math.BigDecimal;
@@ -22,7 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Amrullah
+ * a TextField that can only have number values
  */
 @SuppressWarnings("unchecked")
 public class NumberField<T extends Number> extends TextField {
@@ -72,7 +66,7 @@ public class NumberField<T extends Number> extends TextField {
                 }
             }
             s1 = getText();
-            if (s1.isEmpty() || s1.equals(formatter.getDecimalFormatSymbols().getDecimalSeparator())) {
+            if (s1.isEmpty() || s1.equals(String.valueOf(getDecimalSeparator()))) {
                 setText("");
                 value.set(null);
             } else if (clazzProperty.get() != BigDecimal.class && (s1.length() > MAX_VALUE_STRING.length() || (s1.length() == MAX_VALUE_STRING.length() && s1.compareTo(MAX_VALUE_STRING) > 0))) {
@@ -94,23 +88,19 @@ public class NumberField<T extends Number> extends TextField {
                 });
             }
         });
-        focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> ov, Boolean oldValue, Boolean newValue) {
-                formatter.applyPattern(getPattern(!newValue && grouping));
-                ignore = true;
-                if (value.get() != null) {
-                    setText(formatter.format(value.get()));
-                } else {
-                    setText("");
-                }
-                ignore = false;
+        focusedProperty().addListener((ov, oldValue, newValue) -> {
+            formatter.applyPattern(getPattern(!newValue && grouping));
+            ignore = true;
+            if (value.get() != null) {
+                setText(formatter.format(value.get()));
+            } else {
+                setText("");
             }
+            ignore = false;
         });
         if (clazz != null) {
             setupRegex();
         }
-
         value.addListener((observable, oldValue, newValue) -> {
             if (ignore) {
                 return;
@@ -218,15 +208,19 @@ public class NumberField<T extends Number> extends TextField {
         return this.clazzProperty;
     }
 
+    private char getDecimalSeparator() {
+        return formatter.getDecimalFormatSymbols()
+                .getDecimalSeparator();
+    }
+
     /**
      * Cast string to Number type that accepted by this NumberField. It depends
      * on NumberType (see {@link #setNumberType}
      * @param numberString 数字字符串
-     * @return
+     * @return 数据类型转换
      */
     public T castToExpectedType(String numberString) {
-        if (numberString.length() == 1 && numberString.charAt(0) == formatter.getDecimalFormatSymbols()
-                .getDecimalSeparator()) {
+        if (numberString.length() == 1 && numberString.charAt(0) == getDecimalSeparator()) {
             return null;
         }
         if ("-".equals(numberString)) {
@@ -355,7 +349,7 @@ public class NumberField<T extends Number> extends TextField {
         return negativeAllowed;
     }
 
-    private final ObjectProperty<T> value = new SimpleObjectProperty<T>() {
+    private final ObjectProperty<T> value = new SimpleObjectProperty<>() {
 
         @Override
         public T get() {
@@ -365,6 +359,5 @@ public class NumberField<T extends Number> extends TextField {
             }
             return super.get();
         }
-
     };
 }

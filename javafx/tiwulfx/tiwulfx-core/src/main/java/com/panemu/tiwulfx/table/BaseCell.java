@@ -1,16 +1,10 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.table;
 
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.WeakInvalidationListener;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.css.PseudoClass;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -19,16 +13,12 @@ import javafx.util.StringConverter;
 
 import java.util.logging.Logger;
 
-/**
- * @author Amrullah
- */
 public abstract class BaseCell<R, C> extends TableCell<R, C> {
 
     private static final Logger logger = Logger.getLogger(BaseCell.class.getName());
     private Control control;
     private final StringConverter<C> stringConverter;
     private static final PseudoClass PSEUDO_CLASS_INVALID = PseudoClass.getPseudoClass("invalid");
-    private final BaseColumn<R, C> column;
     private boolean focusListenerAttached = false;
     private boolean programmaticallyEdited = false;
 
@@ -43,45 +33,42 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
             }
         });
 
-        this.addEventHandler(MouseEvent.ANY, event -> {
-            if (event.getEventType() == MouseEvent.MOUSE_EXITED || event.getEventType() == MouseEvent.MOUSE_MOVED) {
-                TableColumn<R, C> clm = getTableColumn();
-                if (clm instanceof BaseColumn<R, C> baseColumn && !baseColumn.isValid(getTableRow().getItem())) {
-                    PopupControl popup = baseColumn.getPopup(getTableRow().getItem());
-                    if (event.getEventType() == MouseEvent.MOUSE_MOVED && !popup.isShowing()) {
+        EventHandler<MouseEvent> mouseEventEventHandler = event -> {
+            TableColumn<R, C> clm = getTableColumn();
+            if (clm instanceof BaseColumn<R, C> baseColumn && !baseColumn.isValid(getTableRow().getItem())) {
+                PopupControl popup = baseColumn.getPopup(getTableRow().getItem());
+                if (event.getEventType() == MouseEvent.MOUSE_MOVED && !popup.isShowing()) {
 
-                        Point2D p = BaseCell.this.localToScene(0.0, 0.0);
-                        popup.show(BaseCell.this, p.getX() + getScene().getX() + getScene().getWindow()
-                                .getX(), p.getY() + getScene().getY() + getScene().getWindow()
-                                .getY() + BaseCell.this.getHeight() - 1);
-                    } else if (event.getEventType() == MouseEvent.MOUSE_EXITED && popup.isShowing()) {
-                        popup.hide();
-                    }
+                    Point2D p = BaseCell.this.localToScene(0.0, 0.0);
+                    popup.show(BaseCell.this, p.getX() + getScene().getX() + getScene().getWindow()
+                            .getX(), p.getY() + getScene().getY() + getScene().getWindow()
+                            .getY() + BaseCell.this.getHeight() - 1);
+                } else if (event.getEventType() == MouseEvent.MOUSE_EXITED && popup.isShowing()) {
+                    popup.hide();
                 }
-            } else if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                /**
-                 * We don't need this on java 8u05 because eventhough selection model is not cell-selection, we can get selected column using TablePos. However since 8u25 we cannot
-                 * get selected column from TablePos unless selection model is cell-selection. To solve that, here we keep the information what column is clicked. This way we can
-                 * get correct column to filter.
-                 */
-                CustomTableView<R> ctv = (CustomTableView<R>) getTableView();
-                ctv.setSelectedColumn(getTableColumn());
             }
+        };
+
+        this.setOnMouseExited(mouseEventEventHandler);
+        this.setOnMouseMoved(mouseEventEventHandler);
+
+        this.setOnMousePressed(event -> {
+            /*
+             * We don't need this on java 8u05 because eventhough selection model
+             * is not cell-selection, we can get selected column using TablePos.
+             * However, since 8u25 we cannot get selected column from TablePos
+             * unless selection model is cell-selection. To solve that, here we
+             * keep the information what column is clicked. This way we can
+             * get correct column to filter.
+             */
+            CustomTableView<R> ctv = (CustomTableView<R>) getTableView();
+            ctv.setSelectedColumn(getTableColumn());
         });
-        this.column = column;
+        InvalidationListener invalidRecordListener = observable -> pseudoClassStateChanged(PSEUDO_CLASS_INVALID, column.isRecordInvalid(getRowItem()));
         column.getInvalidRecordMap().addListener(new WeakInvalidationListener(invalidRecordListener));
         itemProperty().addListener(invalidRecordListener);
         setAlignment(column.getAlignment());
     }
-
-    private final InvalidationListener invalidRecordListener = new InvalidationListener() {
-
-        @Override
-        public void invalidated(Observable observable) {
-            pseudoClassStateChanged(PSEUDO_CLASS_INVALID, column.getInvalidRecordMap()
-                    .containsKey(BaseCell.this.getTableRow().getItem()));
-        }
-    };
 
     /**
      * For the case of TypeAhead, Date and Lookup, the focusable control is the textfield, not the control itself.
@@ -107,8 +94,8 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
             return;
         }
         /**
-         * Set cell mode to edit if the editor control receives focus. This is intended to deal with mouse click. This way, commitEdit() will be called if the cell is no longer
-         * focused
+         * Set cell mode to edit if the editor control receives focus. This is intended to deal
+         * with mouse click. This way, commitEdit() will be called if the cell is no longer focused
          */
         Control focusableControl = getFocusableControl();
         if (focusableControl == null) {
@@ -120,14 +107,11 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
              * 因此不会触发TableCell#selectedProperty()监听
              * @see javafx.scene.control.TableSelectionModel#cellSelectionEnabledProperty()
              */
-            this.selectedProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (newValue && !isEditing()) {
-                        // programmaticallyEdited = true;
-                        getTableView().edit(getIndex(), getTableColumn());
-                        programmaticallyEdited = false;
-                    }
+            this.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue && !isEditing()) {
+                    // programmaticallyEdited = true;
+                    getTableView().edit(getIndex(), getTableColumn());
+                    programmaticallyEdited = false;
                 }
             });
 
@@ -154,7 +138,6 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
         if (!this.getTableRow().isVisible() || !getTableRow().isEditable()) {
             return;
         }
-        System.out.println("startEdit " + programmaticallyEdited);
         super.startEdit();
         if (!programmaticallyEdited) {
             getControl();
@@ -164,7 +147,9 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
             /**
              * put focus on the textfield so user can directly type on it
              */
-            Platform.runLater(() -> control.requestFocus());
+            if (!control.isFocused()) {
+                Platform.runLater(() -> control.requestFocus());
+            }
         }
     }
 
@@ -186,26 +171,27 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
     public void cancelEdit() {
         if (!isFocused() && isEditing()) {
             /**
-             * The only way to commit edit in tableCell was by pressing enter. If user select another cell by clicking it or pressing tab than cell's value is reverted back. We want
-             * to change this behavior. Now if user move to another cell, it's value is committed. The only way to revert the value is by pressing escape. Check {@link Cell}
+             * The only way to commit edit in tableCell was by pressing enter.
+             * If user select another cell by clicking it or pressing tab than cell's value
+             * is reverted back. We want to change this behavior. Now if user move to another cell,
+             * it's value is committed. The only way to revert the value is by pressing escape.
+             * Check {@link Cell}
              */
             logger.fine("about to commitEdit in cancelEdit() method");
             commitEdit(getEditedValue());
+            System.out.println("失去焦点但处于编辑状态");
             return;
         }
-
         updateValue(getItem());
         super.cancelEdit();
-
     }
 
     @Override
     public void updateItem(C item, boolean empty) {
         boolean emptyRow = getTableView().getItems().size() < getIndex() + 1;
         /**
-         * don't call super.updateItem() because it will trigger cancelEdit() if the cell is being edited. It causes calling commitEdit() ALWAYS call cancelEdit as well which is
-         * undesired.
-         *
+         * don't call super.updateItem() because it will trigger cancelEdit() if the cell is being edited.
+         * It causes calling commitEdit() ALWAYS call cancelEdit as well which is undesired.
          */
         if (!isEditing()) {
             super.updateItem(item, empty && emptyRow);
@@ -217,14 +203,14 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
             setText(null);
             //do not nullify graphic here. Let the TableRow to control cell dislay
         } else if (!isEditing()) {
-            setText(getString(item));
+            setText(getStringValue(item));
             if (getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) {
                 updateValue(item);
             }
         }
     }
 
-    protected final String getString(C value) {
+    protected String getStringValue(C value) {
         try {
             return stringConverter.toString(value);
         } catch (ClassCastException ex) {
@@ -239,11 +225,21 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
 
     protected void attachEnterEscapeEventHandler() {
         control.setOnKeyPressed(t -> {
+            // 按 Enter 提交单元格的修改
             if (t.getCode() == KeyCode.ENTER && !t.isShiftDown()) {
                 commitEdit(getEditedValue());
+                // Event.fireEvent(this, t);
             } else if (t.getCode() == KeyCode.ESCAPE) {
                 cancelEdit();
             }
         });
+    }
+
+    /**
+     * 获取Cell所在行的数据
+     * @return Cell所在行的数据
+     */
+    public final R getRowItem() {
+        return getTableRow().getItem();
     }
 }

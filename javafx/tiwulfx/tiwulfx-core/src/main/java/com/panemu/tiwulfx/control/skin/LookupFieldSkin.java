@@ -7,6 +7,7 @@ package com.panemu.tiwulfx.control.skin;
 import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.control.LookupField;
+import com.panemu.tiwulfx.utils.ClassUtils;
 import com.sun.javafx.scene.ParentHelper;
 import com.sun.javafx.scene.control.FakeFocusTextField;
 import com.sun.javafx.scene.control.behavior.TextInputControlBehavior;
@@ -327,7 +328,7 @@ public class LookupFieldSkin<T> extends SkinBase<LookupField<T>> {
 			return;
 		}
 		try {
-			Object value = PropertyUtils.getSimpleProperty(lookupField.getValue(), lookupField.getPropertyName());
+			Object value = ClassUtils.getSimpleProperty(lookupField.getValue(), lookupField.getPropertyName());
 			if (value != null) {
 				textField.setText(value.toString());
 			} else {
@@ -335,7 +336,7 @@ public class LookupFieldSkin<T> extends SkinBase<LookupField<T>> {
 			}
 			lookupField.markInvalidProperty().set(false);
 			detectTextChanged = true;
-		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
 	}
@@ -398,7 +399,7 @@ public class LookupFieldSkin<T> extends SkinBase<LookupField<T>> {
 	private void validate() {
 		if (needValidation && !textField.getText().isEmpty()) {
 			loaderTimerTask.setObsolete(true);
-			List<T> data = lookupField.getController().loadDataForPopup(lookupField.getPropertyName(), textField.getText(), TableCriteria.Operator.eq);
+			List<T> data = lookupField.getController().loadDataForPopup(lookupField.getPropertyName(), textField.getText(), TableCriteria.Condition.eq);
 			if (data.size() == 1) {
 				lookupField.setValue(data.get(0));
 			} else {
@@ -454,15 +455,12 @@ public class LookupFieldSkin<T> extends SkinBase<LookupField<T>> {
 		public void run() {
 			if (!obsolete) {
 				final List<T> data = lookupField.getController().loadDataForPopup(lookupField.getPropertyName(), textField.getText());
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						if (!obsolete) {
-							listView.getItems().clear();
-							if (!data.isEmpty()) {
-								listView.getItems().addAll(data);
-								positionAndShowPopup();
-							}
+				Platform.runLater(() -> {
+					if (!obsolete) {
+						listView.getItems().clear();
+						if (!data.isEmpty()) {
+							listView.getItems().addAll(data);
+							positionAndShowPopup();
 						}
 					}
 				});

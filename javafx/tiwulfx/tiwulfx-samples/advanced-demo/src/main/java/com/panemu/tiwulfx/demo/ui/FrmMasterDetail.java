@@ -63,7 +63,7 @@ public class FrmMasterDetail extends VBox {
 
 	private void initMasterTable() {
 		tblInsurance.setRecordClass(Insurance.class);
-		tblInsurance.setController(cntlInsurance);
+		tblInsurance.setBehavior(cntlInsurance);
 		TextColumn<Insurance> clmCode = new TextColumn<>("code");
 		TextColumn<Insurance> clmPackageName = new TextColumn<>("name", 300);
 		tblInsurance.addColumn(clmCode, clmPackageName);
@@ -79,7 +79,7 @@ public class FrmMasterDetail extends VBox {
 
 	private void initDetailTable() {
 		tblPerson.setRecordClass(Person.class);
-		tblPerson.setController(cntlPerson);
+		tblPerson.setBehavior(cntlPerson);
 		tblPerson.setMaxRecord(50);
 		tblPerson.getTableView().setTableMenuButtonVisible(true);
 		TiwulfxDemo.factory.createEntityManager();
@@ -120,7 +120,7 @@ public class FrmMasterDetail extends VBox {
 		tblPerson.setAgileEditing(true);
 
 	}
-	private TableControlBehavior<Insurance> cntlInsurance = new TableControlBehavior<Insurance>() {
+	private final TableControlBehavior<Insurance> cntlInsurance = new TableControlBehavior<>() {
 		@Override
 		public TableData loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<SortType> sortingOrders, int maxResult) {
 			return daoInsurance.fetch(startIndex, filteredColumns, sortedColumns, sortingOrders, maxResult);
@@ -137,7 +137,7 @@ public class FrmMasterDetail extends VBox {
 		}
 
 		@Override
-		public boolean canDelete(TableControl table) {
+		public boolean canDelete(TableControl<Insurance> table) {
 			/**
 			 * This checking is not perfect. If there are Persons filtered thus not displayed in tblPerson, the delete is not canceled. An error will be displayed along with the stack
 			 * trace. The better implementation is to count the children from database and ensure the result is zero.
@@ -145,8 +145,8 @@ public class FrmMasterDetail extends VBox {
 			boolean nochildren = tblPerson.getRecords().isEmpty();
 			if (!nochildren) {
 				MessageDialogBuilder.error().message("Unable to delete Insurance (code "
-						  + tblInsurance.getSelectedItem().getCode() + ") because"
-						  + "\nthere are Persons refer to it!").show(getScene().getWindow());
+						+ tblInsurance.getSelectedItem().getCode() + ") because"
+						+ "\nthere are Persons refer to it!").show(getScene().getWindow());
 			}
 			return nochildren;
 		}
@@ -167,7 +167,7 @@ public class FrmMasterDetail extends VBox {
 			 * the column, user can remove it. In this case, we don't want user to be able to remove this criteria which means breaking the master-detail presentation.
 			 */
 			Insurance selectedInsurance = tblInsurance.getSelectedItem();
-			TableCriteria<Insurance> criteria = new TableCriteria<>("insurance", TableCriteria.Operator.eq, selectedInsurance);
+			TableCriteria<Insurance> criteria = new TableCriteria<>("insurance", TableCriteria.Condition.eq, selectedInsurance);
 			filteredColumns.add(criteria);
 
 			TableData result = daoPerson.fetch(startIndex, filteredColumns, sortedColumns, sortingOrders, maxResult, Arrays.asList("insurance"));

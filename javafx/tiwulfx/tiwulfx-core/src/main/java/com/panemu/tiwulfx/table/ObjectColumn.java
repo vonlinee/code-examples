@@ -4,8 +4,7 @@
  */
 package com.panemu.tiwulfx.table;
 
-import com.panemu.tiwulfx.common.TableCriteria;
-import com.panemu.tiwulfx.common.TableCriteria.Operator;
+import com.panemu.tiwulfx.common.TableCriteria.Condition;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 /**
  *
@@ -28,7 +26,7 @@ public class ObjectColumn<R, C> extends BaseColumn<R, C> {
 	private int maxLength = 0;
 	private boolean capitalize = false;
 	
-	private SearchMenuItemBase<String> searchMenuItem = new SearchMenuItemBase<String>(this) {
+	private final SearchMenuItemBase<String> searchMenuItem = new SearchMenuItemBase<String>((BaseColumn<?, String>) this) {
 		@Override
 		protected Node getInputControl() {
 			searchInputControl.setPromptText("kata kunci");
@@ -36,16 +34,16 @@ public class ObjectColumn<R, C> extends BaseColumn<R, C> {
 		}
 
 		@Override
-		protected List<Operator> getOperators() {
-			List<Operator> lst = new ArrayList<>();
-			lst.add(Operator.eq);
-			lst.add(Operator.ne);
-			lst.add(Operator.lt);
-			lst.add(Operator.le);
-			lst.add(Operator.gt);
-			lst.add(Operator.ge);
-			lst.add(Operator.is_null);
-			lst.add(Operator.is_not_null);
+		protected List<Condition> getOperators() {
+			List<Condition> lst = new ArrayList<>();
+			lst.add(Condition.eq);
+			lst.add(Condition.ne);
+			lst.add(Condition.lt);
+			lst.add(Condition.le);
+			lst.add(Condition.gt);
+			lst.add(Condition.ge);
+			lst.add(Condition.is_null);
+			lst.add(Condition.is_not_null);
 			return lst;
 		}
 

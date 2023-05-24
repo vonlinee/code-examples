@@ -80,8 +80,8 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
     };
 
 
-    TableCriteria<C> createSearchCriteria(TableCriteria.Operator operator, C value) {
-        return new TableCriteria(propertyName, operator, value);
+    TableCriteria<C> createSearchCriteria(TableCriteria.Condition operator, C value) {
+        return new TableCriteria<>(propertyName, operator, value);
     }
 
     /**
@@ -116,9 +116,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
             @Override
             public ObservableValue<C> call(CellDataFeatures<R, C> param) {
-                /**
-                 * This code is adapted from {@link PropertyValueFactory#getCellDataReflectively(T)
-                 */
+                // This code is adapted from {@link PropertyValueFactory#getCellDataReflectively(T)
                 try {
                     Object cellValue;
                     if (getPropertyName().contains(".")) {
@@ -133,7 +131,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
                 } catch (Exception ex) {
                     /**
                      * Ideally it catches
-                     * org.apache.commons.beanutils.NestedNullException. However
+                     * org.apache.commons.beanutils.NestedNullException. However,
                      * we need to import apachec bean utils library in FXML file
                      * to be able to display it in Scene Builder. So, I decided
                      * to catch Exception to avoid the import.
@@ -142,7 +140,6 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
                 }
             }
         });
-
     }
 
     public StringConverter<C> getStringConverter() {
@@ -155,9 +152,9 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
     /**
      * Property that holds applied criteria to column
-     * @return
+     * @return tableCriteria
      */
-    public SimpleObjectProperty<TableCriteria> tableCriteriaProperty() {
+    public final SimpleObjectProperty<TableCriteria> tableCriteriaProperty() {
         return tableCriteria;
     }
 
@@ -195,7 +192,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
     /**
      * Gets propertyName passed in constructor
-     * @return
+     * @return propertyName
      */
     public String getPropertyName() {
         return propertyName;
@@ -223,7 +220,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
     /**
      * Gets cell alignment
-     * @return
+     * @return alignment of this column
      */
     public Pos getAlignment() {
         return alignment;
@@ -288,8 +285,8 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
     /**
      * Convert
      * <code>value</code> to String as represented in TableControl
-     * @param value
-     * @return
+     * @param value 列的值
+     * @return string value
      */
     public final String convertToString(C value) {
         return stringConverter.toString(value);
@@ -319,7 +316,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
      * @param record
      * @return true for valid
      */
-    public boolean isValid(R record) {
+    public final boolean isValid(R record) {
         return !mapInvalid.containsKey(record);
     }
 
@@ -504,5 +501,9 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
     public void removeCellEditorListener(CellEditorListener<R, C> selectedValueListener) {
         lstValueChangeListener.remove(selectedValueListener);
+    }
+
+    public final boolean isRecordInvalid(R record) {
+        return getInvalidRecordMap().containsKey(record);
     }
 }

@@ -86,7 +86,7 @@ public class FrmOddEditablePersonTable extends VBox {
 
 	protected void init(boolean showTickColumn) {
 		tblPerson.setRecordClass(Person.class);
-		tblPerson.setController(controller);
+		tblPerson.setBehavior(controller);
 		tblPerson.setMaxRecord(50);
 
 		for (String location : DataGenerator.birthPlaces) {

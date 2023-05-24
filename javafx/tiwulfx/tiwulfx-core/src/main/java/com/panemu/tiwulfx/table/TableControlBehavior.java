@@ -44,7 +44,7 @@ public abstract class TableControlBehavior<R> {
      * Override this method to implement insert routine. This method is called
      * when TableControl's save button is clicked.
      * @param newRecords new records
-     * @return
+     * @return newRecords inserted
      */
     public List<R> insert(List<R> newRecords) {
         throw new UnsupportedOperationException("Insert method is not supported");
@@ -83,7 +83,7 @@ public abstract class TableControlBehavior<R> {
      * This method is called by {@link TableControl} when edit button is clicked
      * but before EDIT mode is actually activated. Override this method and
      * return FALSE to cancel EDIT mode change.
-     * @param selectedRecord
+     * @param selectedRecord selected record
      * @return FALSE to cancel the EDIT mode. By default, returns TRUE
      */
     public boolean canEdit(R selectedRecord) {
@@ -94,8 +94,8 @@ public abstract class TableControlBehavior<R> {
      * This method is called by {@link TableControl#delete()} before it actually
      * executes delete routine. If this method returns FALSE, to delete is
      * canceled.
-     * @param table
-     * @return
+     * @param table TableControl
+     * @return can table delete
      */
     public boolean canDelete(TableControl<R> table) {
         MessageDialog.Answer answer = MessageDialogBuilder.confirmation()
