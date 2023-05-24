@@ -7,6 +7,7 @@ package com.panemu.tiwulfx.table;
 import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.common.Validator;
+import com.panemu.tiwulfx.utils.ClassUtils;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -111,7 +112,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
                 BaseColumn.this.setGraphic(null);
             }
         });
-        setCellValueFactory(new Callback<>() {
+        this.setCellValueFactory(new Callback<>() {
             private SimpleObjectProperty<C> propertyValue;
 
             @Override
@@ -120,14 +121,12 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
                 try {
                     Object cellValue;
                     if (getPropertyName().contains(".")) {
-                        cellValue = PropertyUtils.getNestedProperty(param.getValue(), getPropertyName());
+                        cellValue = ClassUtils.getNestedProperty(param.getValue(), getPropertyName());
                     } else {
-                        cellValue = PropertyUtils.getSimpleProperty(param.getValue(), getPropertyName());
+                        cellValue = ClassUtils.getSimpleProperty(param.getValue(), getPropertyName());
                     }
                     propertyValue = new SimpleObjectProperty<>((C) cellValue);
                     return propertyValue;
-                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-                    throw new RuntimeException(ex);
                 } catch (Exception ex) {
                     /**
                      * Ideally it catches

@@ -5,9 +5,8 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.panemu</groupId>
-    <artifactId>tiwulfx</artifactId>
+    <artifactId>tiwulfx-samples</artifactId>
     <version>3.4</version>
-    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <groupId>org.example</groupId>
@@ -34,6 +33,14 @@
       <artifactId>lombok</artifactId>
       <version>1.18.26</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
     </dependency>
   </dependencies>
 

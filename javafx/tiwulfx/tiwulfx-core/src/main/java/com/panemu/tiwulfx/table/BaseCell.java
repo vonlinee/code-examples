@@ -33,7 +33,6 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
             initGraphic();
             if (newValue == ContentDisplay.GRAPHIC_ONLY) {
                 // ContentDisplay.GRAPHIC_ONLY表明退出编辑状态
-                logger.info("Listener setContentDisplay  ContentDisplay.GRAPHIC_ONLY");
                 updateValue(getItem());
             }
         });
@@ -144,12 +143,12 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
              * 由代码进入编辑状态，不会更新相关的UI，因此需要手动进行更新
              */
             initGraphic();
-            updateValue(getItem());
             /**
              * trigger the listener in Constructor
              */
             logger.info("setContentDisplay  ContentDisplay.GRAPHIC_ONLY");
             this.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            updateValue(getItem());
             // put focus on the textfield so user can directly type on it
             if (!control.isFocused()) {
                 Platform.runLater(() -> control.requestFocus());
@@ -168,6 +167,21 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
     @Override
     public void commitEdit(C newValue) {
         super.commitEdit(newValue);
+        final C value = getEditedValue();
+        updateValue(value);
+        System.out.println("commitEdit " + value);
+
+
+        final Control control = getEditableControl();
+
+        if (control instanceof TextField) {
+            TextField textField = (TextField) control;
+
+            final String text = textField.getText();
+
+            System.out.println(text);
+        }
+        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
     }
 
     /**

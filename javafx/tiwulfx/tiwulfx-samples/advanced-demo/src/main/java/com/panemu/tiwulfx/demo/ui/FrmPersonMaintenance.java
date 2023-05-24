@@ -128,7 +128,7 @@ public class FrmPersonMaintenance extends BorderPane {
 		personForm.setMode(mode);
 	}
 
-	private EventHandler<ActionEvent> eventHandler = new EventHandler<ActionEvent>() {
+	private EventHandler<ActionEvent> eventHandler = new EventHandler<>() {
 		@Override
 		public void handle(ActionEvent t) {
 			if (t.getSource() == btnSave && personForm.validate()) {

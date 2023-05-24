@@ -25,7 +25,6 @@
     <module>tiwulfx-samples/table-sql-demo</module>
   </modules>
 
-
   <dependencyManagement>
     <dependencies>
       <dependency>

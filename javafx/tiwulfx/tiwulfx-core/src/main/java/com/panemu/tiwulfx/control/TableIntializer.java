@@ -3,6 +3,7 @@ package com.panemu.tiwulfx.control;
 import com.panemu.tiwulfx.control.anno.TableViewColumn;
 import com.panemu.tiwulfx.table.*;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;

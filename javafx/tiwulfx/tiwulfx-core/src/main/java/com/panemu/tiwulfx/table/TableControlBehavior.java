@@ -57,7 +57,7 @@ public abstract class TableControlBehavior<R> {
      * version number should increase by 1
      */
     public List<R> update(List<R> records) {
-        throw new UnsupportedOperationException("Update method is not supported");
+        return records;
     }
 
     /**

@@ -27,6 +27,7 @@
     <module>save-config</module>
     <module>shared</module>
     <module>table-basic</module>
+    <module>table-sql-demo</module>
     <module>typeahead</module>
   </modules>
 
@@ -66,7 +67,6 @@
         <version>1.18.26</version>
         <scope>provided</scope>
       </dependency>
-
     </dependencies>
   </dependencyManagement>
 

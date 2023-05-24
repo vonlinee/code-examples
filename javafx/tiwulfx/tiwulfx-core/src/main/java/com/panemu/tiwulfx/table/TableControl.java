@@ -67,6 +67,11 @@ public class TableControl<R> extends VBox {
     private final StartIndexChangeListener startIndexChangeListener = new StartIndexChangeListener();
     private final InvalidationListener sortTypeChangeListener = new SortTypeChangeListener();
     private final ReadOnlyObjectWrapper<Mode> mode = new ReadOnlyObjectWrapper<>(null);
+
+    public final void setMode(Mode mode) {
+        this.mode.set(mode);
+    }
+
     private long totalRows = 0;
     private Integer currentPage = 0;
 
@@ -1229,8 +1234,7 @@ public class TableControl<R> extends VBox {
         tblView.getItems().add(selectedRow, newRecord);
         lstChangedRow.add(newRecord);
         final int row = selectedRow;
-        mode.set(Mode.INSERT);
-
+        setMode(Mode.INSERT);
         /**
          * Force the table to layout before selecting the newly added row.
          * Without this call, the selection will land on existing row at
@@ -1256,20 +1260,20 @@ public class TableControl<R> extends VBox {
 
         try {
             if (lstChangedRow.isEmpty()) {
-                mode.set(Mode.READ);
+                setMode(Mode.READ);
                 return;
             }
             if (!behavior.validate(this, lstChangedRow)) {
                 return;
             }
-            Mode prevMode = mode.get();
+            Mode prevMode = getMode();
             if (useBackgroundTaskToSave) {
                 service.runSaveInBackground(prevMode);
             } else {
                 List<R> lstResult = new ArrayList<>();
-                if (mode.get().equals(Mode.EDIT)) {
+                if (isEditMode()) {
                     lstResult = behavior.update(lstChangedRow);
-                } else if (mode.get().equals(Mode.INSERT)) {
+                } else if (isInsertMode()) {
                     lstResult = behavior.insert(lstChangedRow);
                 }
                 postSaveAction(lstResult, prevMode);
