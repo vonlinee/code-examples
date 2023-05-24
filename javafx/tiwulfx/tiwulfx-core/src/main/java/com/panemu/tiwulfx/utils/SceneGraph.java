@@ -50,6 +50,13 @@ public class SceneGraph {
         return btn;
     }
 
+    /**
+     * 生成边框
+     * @param paint  边框颜色
+     * @param radius 半径
+     * @param width  宽度
+     * @return {@link Border}
+     */
     public static Border border(Paint paint, double radius, double width) {
         return new Border(new BorderStroke(paint, BorderStrokeStyle.NONE, new CornerRadii(radius), new BorderWidths(width)));
     }

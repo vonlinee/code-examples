@@ -24,11 +24,16 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
 
     public BaseCell(final BaseColumn<R, C> column) {
         this.stringConverter = column.getStringConverter();
-        contentDisplayProperty().addListener((observable, oldValue, newValue) -> {
-            getControl();
-            setGraphic(control);
-            attachFocusListener();
+        this.setAlignment(column.getAlignment());
+
+        /**
+         * 当Cell首次显示时，肯定是ContentDisplay.GRAPHIC_ONLY状态，此监听会在单元格首次出现时就会触发
+         */
+        this.contentDisplayProperty().addListener((observable, oldValue, newValue) -> {
+            initGraphic();
             if (newValue == ContentDisplay.GRAPHIC_ONLY) {
+                // ContentDisplay.GRAPHIC_ONLY表明退出编辑状态
+                logger.info("Listener setContentDisplay  ContentDisplay.GRAPHIC_ONLY");
                 updateValue(getItem());
             }
         });
@@ -51,7 +56,6 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
 
         this.setOnMouseExited(mouseEventEventHandler);
         this.setOnMouseMoved(mouseEventEventHandler);
-
         this.setOnMousePressed(event -> {
             /*
              * We don't need this on java 8u05 because eventhough selection model
@@ -67,7 +71,6 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
         InvalidationListener invalidRecordListener = observable -> pseudoClassStateChanged(PSEUDO_CLASS_INVALID, column.isRecordInvalid(getRowItem()));
         column.getInvalidRecordMap().addListener(new WeakInvalidationListener(invalidRecordListener));
         itemProperty().addListener(invalidRecordListener);
-        setAlignment(column.getAlignment());
     }
 
     /**
@@ -89,6 +92,9 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
         }
     }
 
+    /**
+     * this method will only be executed once
+     */
     private void attachFocusListener() {
         if (focusListenerAttached) {
             return;
@@ -109,22 +115,15 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
              */
             this.selectedProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue && !isEditing()) {
-                    // programmaticallyEdited = true;
+                    /**
+                     * edit the cell by code instead of UI operation, which called 'programmatically'
+                     * 如果切换到编辑状态，会触发{@link BaseCell#startEdit()}方法
+                     */
+                    logger.info("programmaticallyEdited " + getIndex() + ", " + getTableColumn().getText());
                     getTableView().edit(getIndex(), getTableColumn());
-                    programmaticallyEdited = false;
+                    programmaticallyEdited = true;
                 }
             });
-
-//            focusableControl.focusedProperty().addListener((observable, oldValue, newValue) -> {
-//                if (!BaseCell.this.isSelected() && newValue) {
-//                    getTableView().getSelectionModel().select(getIndex(), getTableColumn());
-//                }
-//                if (!isEditing() && newValue) {
-//                    programmaticallyEdited = true;
-//                    getTableView().edit(getIndex(), getTableColumn());
-//                    programmaticallyEdited = false;
-//                }
-//            });
             focusListenerAttached = true;
         }
     }
@@ -132,7 +131,8 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
     @Override
     public void startEdit() {
         /**
-         * If a row is added, new cells are created. The old cells are not disposed automatically. They still respond to user event's. Fortunately, the "should-be-discarded" cells
+         * If a row is added, new cells are created. The old cells are not disposed automatically. They still respond to user event's.
+         * Fortunately, the "should-be-discarded" cells
          * have invisible row, so we can recognize them and prevent them to interact with user's event.
          */
         if (!this.getTableRow().isVisible() || !getTableRow().isEditable()) {
@@ -140,30 +140,56 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
         }
         super.startEdit();
         if (!programmaticallyEdited) {
-            getControl();
-            setGraphic(control);
-            updateValue(getItem());
-            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
             /**
-             * put focus on the textfield so user can directly type on it
+             * 由代码进入编辑状态，不会更新相关的UI，因此需要手动进行更新
              */
+            initGraphic();
+            updateValue(getItem());
+            /**
+             * trigger the listener in Constructor
+             */
+            logger.info("setContentDisplay  ContentDisplay.GRAPHIC_ONLY");
+            this.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            // put focus on the textfield so user can directly type on it
             if (!control.isFocused()) {
                 Platform.runLater(() -> control.requestFocus());
             }
         }
+        // reset the programmaticallyEdited flag
+        programmaticallyEdited = false;
     }
 
-    protected abstract void updateValue(C value);
+    /**
+     * 提交修改
+     * @param newValue the value as input by the end user, which should be
+     *                 persisted in the relevant way given the data source underpinning the
+     *                 user interface and the installation edit commit handler of the UI control
+     */
+    @Override
+    public void commitEdit(C newValue) {
+        super.commitEdit(newValue);
+    }
 
-    protected abstract C getEditedValue();
-
-    private void getControl() {
+    /**
+     * 每次初始化一行的所有列
+     * lazy初始化
+     */
+    private void initGraphic() {
         if (control == null) {
             control = getEditableControl();
             attachEnterEscapeEventHandler();
             attachFocusListener();
         }
+        setGraphic(control);
     }
+
+    protected abstract void updateValue(C value);
+
+    /**
+     * 获取编辑后的值，此值应是实时更新的
+     * @return {@link C}
+     */
+    protected abstract C getEditedValue();
 
     protected abstract Control getEditableControl();
 
@@ -179,7 +205,6 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
              */
             logger.fine("about to commitEdit in cancelEdit() method");
             commitEdit(getEditedValue());
-            System.out.println("失去焦点但处于编辑状态");
             return;
         }
         updateValue(getItem());
@@ -228,7 +253,6 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
             // 按 Enter 提交单元格的修改
             if (t.getCode() == KeyCode.ENTER && !t.isShiftDown()) {
                 commitEdit(getEditedValue());
-                // Event.fireEvent(this, t);
             } else if (t.getCode() == KeyCode.ESCAPE) {
                 cancelEdit();
             }
