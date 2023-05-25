@@ -21,7 +21,7 @@ import java.util.List;
 public class FrmPerson extends StackPane {
 
     @FXML
-    private TableControl<Person> tblPerson;
+    public TableControl<Person> tblPerson;
     @FXML
     private ComboBoxColumn<Person, Character> clmGender;
 

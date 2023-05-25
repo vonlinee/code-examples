@@ -6,6 +6,10 @@ import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
+/**
+ * @see javafx.scene.control.cell.TextFieldTableCell
+ * @param <R>
+ */
 public class TextTableCell<R> extends BaseCell<R, String> {
 
     private TextField textField;
@@ -39,8 +43,8 @@ public class TextTableCell<R> extends BaseCell<R, String> {
             textField = new TextField();
             textField.setPrefHeight(this.getHeight());
             textField.setFocusTraversable(true);
-            textField.setBorder(SceneGraph.border(Color.BLACK, 0, 0));
-            textField.setBackground(SceneGraph.background(Color.WHITE, 0, 0));
+            // textField.setBorder(SceneGraph.border(Color.BLACK, 0, 0));
+            // textField.setBackground(SceneGraph.background(Color.WHITE, 0, 0));
             textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
             if (column.isCapitalize() || column.getMaxLength() > 0) {
                 textField.textProperty()

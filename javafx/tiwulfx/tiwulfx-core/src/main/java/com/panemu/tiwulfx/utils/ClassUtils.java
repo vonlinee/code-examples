@@ -9,6 +9,40 @@ import java.lang.reflect.InvocationTargetException;
 public class ClassUtils {
 
     /**
+     * 获取对象属性
+     * @param bean 对象
+     * @param name 属性名称
+     * @param <R>  返回数据类型
+     * @return 对象属性值
+     */
+    public static <R> R getProperty(final Object bean, final String name) {
+        Object cellValue;
+        if (name.contains(".")) {
+            cellValue = ClassUtils.getNestedProperty(bean, name);
+        } else {
+            cellValue = ClassUtils.getSimpleProperty(bean, name);
+        }
+        return (R) cellValue;
+    }
+
+    /**
+     * 获取对象属性
+     * @param bean 对象
+     * @param name 属性名称
+     * @param <R>  返回数据类型
+     * @return 对象属性值
+     */
+    public static <R> R getProperty(final Object bean, final String name, Class<R> requireType) {
+        Object cellValue;
+        if (name.contains(".")) {
+            cellValue = ClassUtils.getNestedProperty(bean, name);
+        } else {
+            cellValue = ClassUtils.getSimpleProperty(bean, name);
+        }
+        return (R) cellValue;
+    }
+
+    /**
      * 创建新实例
      * @param clazz clazz
      * @return {@link T}

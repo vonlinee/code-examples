@@ -25,7 +25,6 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
     public BaseCell(final BaseColumn<R, C> column) {
         this.stringConverter = column.getStringConverter();
         this.setAlignment(column.getAlignment());
-
         /**
          * 当Cell首次显示时，肯定是ContentDisplay.GRAPHIC_ONLY状态，此监听会在单元格首次出现时就会触发
          */
@@ -55,18 +54,6 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
 
         this.setOnMouseExited(mouseEventEventHandler);
         this.setOnMouseMoved(mouseEventEventHandler);
-        this.setOnMousePressed(event -> {
-            /*
-             * We don't need this on java 8u05 because eventhough selection model
-             * is not cell-selection, we can get selected column using TablePos.
-             * However, since 8u25 we cannot get selected column from TablePos
-             * unless selection model is cell-selection. To solve that, here we
-             * keep the information what column is clicked. This way we can
-             * get correct column to filter.
-             */
-            CustomTableView<R> ctv = (CustomTableView<R>) getTableView();
-            ctv.setSelectedColumn(getTableColumn());
-        });
         InvalidationListener invalidRecordListener = observable -> pseudoClassStateChanged(PSEUDO_CLASS_INVALID, column.isRecordInvalid(getRowItem()));
         column.getInvalidRecordMap().addListener(new WeakInvalidationListener(invalidRecordListener));
         itemProperty().addListener(invalidRecordListener);
@@ -118,7 +105,7 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
                      * edit the cell by code instead of UI operation, which called 'programmatically'
                      * 如果切换到编辑状态，会触发{@link BaseCell#startEdit()}方法
                      */
-                    logger.info("programmaticallyEdited " + getIndex() + ", " + getTableColumn().getText());
+                    logger.info("programmaticallyEdited Row:" + getIndex() + ", Column Name:" + getTableColumn().getText());
                     getTableView().edit(getIndex(), getTableColumn());
                     programmaticallyEdited = true;
                 }
@@ -143,11 +130,7 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
              * 由代码进入编辑状态，不会更新相关的UI，因此需要手动进行更新
              */
             initGraphic();
-            /**
-             * trigger the listener in Constructor
-             */
-            logger.info("setContentDisplay  ContentDisplay.GRAPHIC_ONLY");
-            this.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            this.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); // trigger the listener in Constructor
             updateValue(getItem());
             // put focus on the textfield so user can directly type on it
             if (!control.isFocused()) {
@@ -167,21 +150,8 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
     @Override
     public void commitEdit(C newValue) {
         super.commitEdit(newValue);
-        final C value = getEditedValue();
-        updateValue(value);
-        System.out.println("commitEdit " + value);
-
-
-        final Control control = getEditableControl();
-
-        if (control instanceof TextField) {
-            TextField textField = (TextField) control;
-
-            final String text = textField.getText();
-
-            System.out.println(text);
-        }
-        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        updateValue(getEditedValue());
+        System.out.println("单元格提交编辑 NewValue: " + newValue + ", EditedValue: " + getEditedValue());
     }
 
     /**

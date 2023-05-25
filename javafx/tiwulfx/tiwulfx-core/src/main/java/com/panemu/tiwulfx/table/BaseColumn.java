@@ -1,29 +1,20 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.common.TableCriteria;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.common.Validator;
-import com.panemu.tiwulfx.utils.ClassUtils;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
-import org.apache.commons.beanutils.PropertyUtils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +37,6 @@ import java.util.Map;
  * skipped by export-to-excel and paste routine
  * @param <R> Record data type
  * @param <C> Column data type
- * @author amrullah
  */
 public class BaseColumn<R, C> extends TableColumn<R, C> {
 
@@ -106,39 +96,13 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
         setPrefWidth(prefWidth);
         this.propertyName = propertyName;
         tableCriteria.addListener(observable -> {
-            if (tableCriteria.get() != null) {
+            if (getTableCriteria() != null) {
                 BaseColumn.this.setGraphic(filterImage);
             } else {
                 BaseColumn.this.setGraphic(null);
             }
         });
-        this.setCellValueFactory(new Callback<>() {
-            private SimpleObjectProperty<C> propertyValue;
-
-            @Override
-            public ObservableValue<C> call(CellDataFeatures<R, C> param) {
-                // This code is adapted from {@link PropertyValueFactory#getCellDataReflectively(T)
-                try {
-                    Object cellValue;
-                    if (getPropertyName().contains(".")) {
-                        cellValue = ClassUtils.getNestedProperty(param.getValue(), getPropertyName());
-                    } else {
-                        cellValue = ClassUtils.getSimpleProperty(param.getValue(), getPropertyName());
-                    }
-                    propertyValue = new SimpleObjectProperty<>((C) cellValue);
-                    return propertyValue;
-                } catch (Exception ex) {
-                    /**
-                     * Ideally it catches
-                     * org.apache.commons.beanutils.NestedNullException. However,
-                     * we need to import apachec bean utils library in FXML file
-                     * to be able to display it in Scene Builder. So, I decided
-                     * to catch Exception to avoid the import.
-                     */
-                    return new SimpleObjectProperty<>(null);
-                }
-            }
-        });
+        this.setCellValueFactory(new PropertyCellValueFactory<>());
     }
 
     public StringConverter<C> getStringConverter() {
@@ -167,7 +131,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
     /**
      * Get criteria applied to this column
-     * @return
+     * @return TableCriteria
      * @see #tableCriteriaProperty()
      */
     public TableCriteria getTableCriteria() {
@@ -240,7 +204,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
     }
 
     /**
-     * Specifies whether right clicking the column will show menu item to do
+     * Specifies whether right-clicking the column will show menu item to do
      * filtering. If filterable is true, search menu item will be displayed in
      * context menu.
      */
@@ -274,8 +238,8 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
     /**
      * Convert
      * <code>stringValue</code> to value that is acceptable by this column.
-     * @param stringValue
-     * @return
+     * @param stringValue String
+     * @return {@link C}
      */
     public final C convertFromString(String stringValue) {
         return stringConverter.fromString(stringValue);
@@ -287,8 +251,8 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
      * @param value 列的值
      * @return string value
      */
-    public final String convertToString(C value) {
-        return stringConverter.toString(value);
+    public final String convertToString(Object value) {
+        return stringConverter.toString((C) value);
     }
 
     /**
@@ -357,7 +321,6 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
             setInvalid(record, msg);
             return false;
         }
-
         //do not trim
         if (value instanceof String && ((String) value).length() == 0) {
             value = null;
@@ -388,7 +351,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
             final HBox pnl = new HBox();
             pnl.getChildren().add(errorLabel);
             pnl.getStyleClass().add("error-popup");
-            popup.setSkin(new Skin() {
+            popup.setSkin(new Skin<>() {
                 @Override
                 public Skinnable getSkinnable() {
                     return null;
@@ -409,7 +372,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
         return popup;
     }
 
-    private List<EditCommitListener<R, C>> lstEditCommitListener = new ArrayList<EditCommitListener<R, C>>();
+    private final List<EditCommitListener<R, C>> lstEditCommitListener = new ArrayList<>();
 
     /**
      * Register a listener to editCommit event. The {@link TableColumn#setOnEditCommit(javafx.event.EventHandler) TableColumn.setOnEditCommit()}
@@ -432,7 +395,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
     }
 
     private void fireEditCommitChangeEvent(R record, C oldValue, C newValue) {
-        for (EditCommitListener listener : lstEditCommitListener) {
+        for (EditCommitListener<R, C> listener : lstEditCommitListener) {
             listener.editCommited(this, record, oldValue, newValue);
         }
     }
@@ -445,20 +408,12 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
             RecordChange<R, C> rc = new RecordChange<>(record, getPropertyName(), oldValue, newValue);
             mapChangedRecord.put(record, rc);
         }
-
         /**
          * At this point, the value of the record is still the oldValue. The newValue
          * is assigned to the record after this method call ends (See TableControl oneditcommit).
          * In order the event is fired after the newValue is assigned, run the event in Platform.runLater
          */
-        Platform.runLater(new Runnable() {
-
-            @Override
-            public void run() {
-                fireEditCommitChangeEvent(record, oldValue, newValue);
-            }
-        });
-
+        Platform.runLater(() -> fireEditCommitChangeEvent(record, oldValue, newValue));
     }
 
 //    public void revertRecordChange(R record) {
@@ -481,7 +436,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
         return mapChangedRecord;
     }
 
-    private List<CellEditorListener<R, C>> lstValueChangeListener = new ArrayList<>();
+    private final List<CellEditorListener<R, C>> lstValueChangeListener = new ArrayList<>();
 
     protected List<CellEditorListener<R, C>> getCellEditorListeners() {
         return lstValueChangeListener;

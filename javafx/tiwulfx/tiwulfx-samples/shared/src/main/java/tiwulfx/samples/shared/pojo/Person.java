@@ -25,32 +25,17 @@
  */
 package tiwulfx.samples.shared.pojo;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Version;
 
 /**
- *
  * @author Amrullah <amrullah@panemu.com>
  */
 @Entity
 @Table(name = "person")
-@NamedQueries({
-    @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p")})
-public class Person implements Serializable , Cloneable {
+@NamedQueries({@NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p")})
+public class Person implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,11 +48,11 @@ public class Person implements Serializable , Cloneable {
     private Date birthDate;
     @Column(name = "birth_place")
     private String birthPlace;
-    @Column(name = "email", nullable=false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Column(name = "gender")
     private char gender;
-    @Column(name = "name", nullable=false)
+    @Column(name = "name", nullable = false)
     private String name;
     @Version
     @Column(name = "version")
@@ -77,14 +62,14 @@ public class Person implements Serializable , Cloneable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "weight")
     private Double weight;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "insurance_id", referencedColumnName = "id")
     private Insurance insurance;
 
     public Person() {
     }
-    
+
     public Person(Integer id) {
         this.id = id;
     }
@@ -123,7 +108,7 @@ public class Person implements Serializable , Cloneable {
     public String getBirthPlace() {
         return birthPlace;
     }
-    
+
     public void setBirthPlace(String birthPlace) {
         this.birthPlace = birthPlace;
     }
@@ -186,7 +171,19 @@ public class Person implements Serializable , Cloneable {
 
     @Override
     public String toString() {
-        return "com.panemu.tiwulfx.demo.pojo.Person[ id=" + id + " ]";
+        return "Person{" +
+                "id=" + id +
+                ", alive=" + alive +
+                ", birthDate=" + birthDate +
+                ", birthPlace='" + birthPlace + '\'' +
+                ", email='" + email + '\'' +
+                ", gender=" + gender +
+                ", name='" + name + '\'' +
+                ", version=" + version +
+                ", visit=" + visit +
+                ", weight=" + weight +
+                ", insurance=" + insurance +
+                '}';
     }
 
     @Override

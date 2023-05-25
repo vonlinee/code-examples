@@ -10,9 +10,9 @@ import javafx.scene.layout.HBox;
 
 class TableControlMenu extends MenuButton {
 
-    private TableControl tableControl;
+    private final TableControl<?> tableControl;
 
-    public TableControlMenu(final TableControl tableControl) {
+    public TableControlMenu(final TableControl<?> tableControl) {
         this.tableControl = tableControl;
         getStyleClass().add("table-menu");
         setGraphic(TiwulFXUtil.getGraphicFactory().createConfigGraphic());

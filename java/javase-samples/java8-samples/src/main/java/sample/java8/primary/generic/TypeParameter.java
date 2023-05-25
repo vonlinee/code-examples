@@ -11,5 +11,10 @@ public class TypeParameter<K, V> extends HashMap<K, V> {
     public void test1() {
         TypeVariable<Class<TypeParameter>>[] typeParameters = TypeParameter.class.getTypeParameters();
         System.out.println(typeParameters.length);
+
+        TypeParameter<String, Integer> tp = new TypeParameter<>();
+
+
+
     }
 }

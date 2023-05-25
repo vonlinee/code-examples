@@ -5,10 +5,13 @@ import com.panemu.tiwulfx.utils.SceneGraph;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tiwulfx.samples.shared.DataGenerator;
+import tiwulfx.samples.shared.pojo.Person;
 
 import java.awt.*;
 
@@ -21,7 +24,16 @@ public class MainApp extends Application {
         final FrmPerson frmPerson = new FrmPerson();
         frmPerson.reload();
 
-        Scene scene = new Scene(frmPerson);
+        VBox vBox = new VBox(frmPerson, SceneGraph.button("A", event -> {
+            Person selectedItem = frmPerson.tblPerson.getSelectedItem();
+            System.out.println(selectedItem);
+
+            TableColumn tableColumn = frmPerson.tblPerson.getSelectionModel().getSelectedCells().get(0)
+                    .getTableColumn();
+            
+        }));
+
+        Scene scene = new Scene(vBox);
         TiwulFXUtil.setTiwulFXStyleSheet(scene);
         stage.setTitle("Basic TableControl");
 

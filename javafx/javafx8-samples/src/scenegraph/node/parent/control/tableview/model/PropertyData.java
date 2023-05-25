@@ -7,8 +7,8 @@ import javafx.beans.property.StringProperty;
 
 public class PropertyData {
 
-	private IntegerProperty id = new SimpleIntegerProperty();
-	private StringProperty name = new SimpleStringProperty();
+	private final IntegerProperty id = new SimpleIntegerProperty();
+	private final StringProperty name = new SimpleStringProperty();
 
 	public int getId() {
 		return id.get();
