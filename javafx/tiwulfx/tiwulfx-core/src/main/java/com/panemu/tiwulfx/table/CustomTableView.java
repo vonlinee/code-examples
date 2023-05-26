@@ -23,6 +23,10 @@ public class CustomTableView<R> extends TableView<R> {
         });
     }
 
+    /**
+     * 得到选中项
+     * @return {@link R}
+     */
     public final R getSelectedItem() {
         return getSelectionModel().getSelectedItem();
     }

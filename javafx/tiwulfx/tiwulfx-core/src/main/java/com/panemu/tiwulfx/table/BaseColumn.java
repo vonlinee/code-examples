@@ -95,13 +95,8 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
         super(columnHeader);
         setPrefWidth(prefWidth);
         this.propertyName = propertyName;
-        tableCriteria.addListener(observable -> {
-            if (getTableCriteria() != null) {
-                BaseColumn.this.setGraphic(filterImage);
-            } else {
-                BaseColumn.this.setGraphic(null);
-            }
-        });
+        // 添加过滤状态图标
+        tableCriteria.addListener(observable -> this.setGraphic(getTableCriteria() != null ? filterImage : null));
         this.setCellValueFactory(new PropertyCellValueFactory<>());
     }
 
@@ -121,11 +116,11 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
         return tableCriteria;
     }
 
-    public String getNullLabel() {
+    public final String getNullLabel() {
         return nullLabel;
     }
 
-    public void setNullLabel(String nullLabel) {
+    public final void setNullLabel(String nullLabel) {
         this.nullLabel = nullLabel;
     }
 

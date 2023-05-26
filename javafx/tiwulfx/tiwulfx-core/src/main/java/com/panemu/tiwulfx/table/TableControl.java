@@ -6,7 +6,7 @@ import com.panemu.tiwulfx.dialog.MessageDialog;
 import com.panemu.tiwulfx.dialog.MessageDialogBuilder;
 import com.panemu.tiwulfx.utils.ClassUtils;
 import com.panemu.tiwulfx.utils.ClipboardUtils;
-import javafx.application.Platform;
+import com.panemu.tiwulfx.utils.EventUtils;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.BooleanBinding;
@@ -70,7 +70,11 @@ public class TableControl<R> extends VBox {
     private final SimpleIntegerProperty startIndex = new SimpleIntegerProperty(0);
     private final StartIndexChangeListener startIndexChangeListener = new StartIndexChangeListener();
     private final InvalidationListener sortTypeChangeListener = new SortTypeChangeListener();
-    private final ReadOnlyObjectWrapper<Mode> mode = new ReadOnlyObjectWrapper<>(null);
+
+    /**
+     * 操作模式
+     */
+    private final SimpleObjectProperty<Mode> mode = new SimpleObjectProperty<>(Mode.READ);
 
     public final void setMode(Mode mode) {
         this.mode.set(mode);
@@ -96,7 +100,7 @@ public class TableControl<R> extends VBox {
     private boolean fitColumnAfterReload = false;
     private final List<TableCriteria> lstCriteria = new ArrayList<>();
     private boolean reloadOnCriteriaChange = true;
-    private boolean directEdit = false;
+
     private final ObservableList<TableColumn<R, ?>> columns = tblView.getColumns();
     private final ProgressBar progressIndicator = new ProgressBar();
     private final TableControlService service = new TableControlService();
@@ -113,10 +117,6 @@ public class TableControl<R> extends VBox {
     private boolean useBackgroundTaskToLoad = TiwulFXUtil.DEFAULT_USE_BACKGROUND_TASK_TO_LOAD;
     private boolean useBackgroundTaskToSave = TiwulFXUtil.DEFAULT_USE_BACKGROUND_TASK_TO_SAVE;
     private boolean useBackgroundTaskToDelete = TiwulFXUtil.DEFAULT_USE_BACKGROUND_TASK_TO_DELETE;
-
-    public final boolean isEditable() {
-        return tblView.isEditable();
-    }
 
     public enum Mode {
         INSERT,
@@ -172,11 +172,6 @@ public class TableControl<R> extends VBox {
                 return (isInsertMode() && lstChangedRow.size() < 2) || tblView.getSelectedItem() == null || isEditMode();
             }
         });
-        mode.addListener((ov, t, t1) -> {
-            if (t1 == Mode.READ) {
-                directEdit = false;
-            }
-        });
 
         tblView.editableProperty().bind(mode.isNotEqualTo(Mode.READ));
         // 列选择模式
@@ -184,13 +179,6 @@ public class TableControl<R> extends VBox {
         tblView.getSelectionModel().selectedIndexProperty()
                 .addListener((ov, t, t1) -> lblRowIndex.setText(TiwulFXUtil.getLiteral("row.param", (currentPage * maxResult.get() + t1.intValue() + 1))));
 
-        tblView.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ESCAPE) {
-                directEdit = false;
-            } else if (event.getCode() == KeyCode.ENTER && isReadMode()) {
-                getBehavior().doubleClick((getSelectedItem()));
-            }
-        });
         /**
          * Define policy for TAB key press
          * Move focus to the next cell if user pressing TAB and the mode is
@@ -239,28 +227,6 @@ public class TableControl<R> extends VBox {
                 }
             }
         });
-        /**
-         * In INSERT mode, only inserted row that is focusable
-         * Prevent moving focus to not-inserted-row in INSERT mode
-         */
-        tblView.getFocusModel().focusedCellProperty().addListener((observable, oldValue, newValue) -> {
-            if (!resettingRecords && tblView.isEditable() && directEdit && isAgileEditing()) {
-                tblView.edit(newValue);
-            }
-            if (!isInsertMode() || newValue.getRow() == -1 || oldValue.getRow() == -1) {
-                return;
-            }
-            Platform.runLater(() -> {
-                R oldRow = tblView.getItems().get(oldValue.getRow());
-                R newRow = tblView.getItems().get(newValue.getRow());
-                System.out.println("oldRow => " + oldRow);
-                System.out.println("newRow => " + newRow);
-                if (lstChangedRow.contains(oldRow) && !lstChangedRow.contains(newRow)) {
-                    tblView.getFocusModel().focus(oldValue);
-                    tblView.selectCell(oldValue);
-                }
-            });
-        });
 
         tblView.setOnMouseReleased(event -> {
             if (cm.isShowing()) {
@@ -296,7 +262,18 @@ public class TableControl<R> extends VBox {
             }
         });
         // create custom row factory that can intercept double click on grid row
-        tblView.setRowFactory(param -> new TableControlRow<>(TableControl.this));
+        tblView.setRowFactory(param -> {
+            TableControlRow<R> row = new TableControlRow<>(TableControl.this);
+            row.setOnMouseClicked(event -> {
+                @SuppressWarnings("unchecked")
+                TableControlRow<R> tableRow = (TableControlRow<R>) event.getSource();
+                if (EventUtils.isPrimaryKeyDoubleClicked(event) && !tableRow.isEmpty() && tableRow.isFocused()) {
+                    // Table未显示的行为空，即空白行
+                    behavior.doubleClick(tableRow.getItem());
+                }
+            });
+            return row;
+        });
 
         cm = createContextMenu();
         setToolTips();
@@ -716,7 +693,7 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * @return
+     * @return ObservableList
      * @see TableView#getSelectionModel() getSelectionItems()
      */
     public final ObservableList<R> getSelectedItems() {
@@ -912,7 +889,7 @@ public class TableControl<R> extends VBox {
 
     /**
      * Set object responsible to fetch, insert, delete and update data
-     * @param behavior
+     * @param behavior TableControlBehavior
      */
     public void setBehavior(TableControlBehavior<R> behavior) {
         this.behavior = behavior;
@@ -933,7 +910,7 @@ public class TableControl<R> extends VBox {
                 baseColumn.setOnEditCommit(event -> {
                     CellEditEvent<R, ?> t = (CellEditEvent<R, ?>) event;
                     final R persistentObj = TableViewHelper.getEditingItem(t);
-                    System.out.println("列编辑提交事件" + persistentObj + " : \n" + t.getOldValue() + " => " + t.getNewValue());
+                    // System.out.println("列编辑提交事件" + persistentObj + " : \n" + t.getOldValue() + " => " + t.getNewValue());
                     if (persistentObj == null) {
                         return;
                     }
@@ -1216,10 +1193,11 @@ public class TableControl<R> extends VBox {
 
     /**
      * Edit table. This method is called when pressing edit button.
+     * 仅修改mode状态
      */
-    public void edit() {
-        if (behavior.canEdit(tblView.getSelectionModel().getSelectedItem())) {
-            mode.set(Mode.EDIT);
+    public final void edit() {
+        if (behavior.canEdit(tblView.getSelectedItem())) {
+            setMode(Mode.EDIT);
         }
     }
 
@@ -1462,15 +1440,23 @@ public class TableControl<R> extends VBox {
         }
     }
 
-    public Mode getMode() {
-        return mode.get();
+    /**
+     * 获取模式
+     * @return {@link Mode}
+     */
+    public final Mode getMode() {
+        return modeProperty().get();
     }
 
-    public ReadOnlyObjectProperty<Mode> modeProperty() {
-        return mode.getReadOnlyProperty();
+    /**
+     * 模式属性
+     * @return {@link SimpleObjectProperty}<{@link Mode}>
+     */
+    public final SimpleObjectProperty<Mode> modeProperty() {
+        return mode;
     }
 
-    public TableView<R> getTableView() {
+    public final TableView<R> getTableView() {
         return tblView;
     }
 
@@ -1497,6 +1483,7 @@ public class TableControl<R> extends VBox {
         return behavior.isRecordEditable(item);
     }
 
+    // 是否重置所有记录
     private boolean resettingRecords = false;
 
     private void postLoadAction(TableData<R> vol) {
@@ -2125,5 +2112,9 @@ public class TableControl<R> extends VBox {
 
     public final boolean isReadMode() {
         return getMode() == Mode.READ;
+    }
+
+    public final boolean isEditable() {
+        return tblView.isEditable();
     }
 }

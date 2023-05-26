@@ -107,7 +107,7 @@ public abstract class TableControlBehavior<R> {
 
     /**
      * Callback method to respond double click or ENTER on table's row
-     * @param record
+     * @param record record of one row
      */
     public void doubleClick(R record) {
     }
@@ -233,7 +233,7 @@ public abstract class TableControlBehavior<R> {
     }
 
     /**
-     * 该行记录是否可编辑
+     * 该行记录是否可编辑，扩展点
      * @param item 行记录
      * @return 是否可编辑
      */

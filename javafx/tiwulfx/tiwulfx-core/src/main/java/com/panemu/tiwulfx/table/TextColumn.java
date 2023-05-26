@@ -72,7 +72,7 @@ public class TextColumn<R> extends BaseColumn<R, String> {
 
     public TextColumn(String propertyName, double preferredWidth) {
         super(propertyName, preferredWidth);
-        setCellFactory(p -> new TextTableCell<R>(TextColumn.this));
+        setCellFactory(p -> new TextTableCell<>(TextColumn.this));
         setStringConverter(stringConverter);
     }
 

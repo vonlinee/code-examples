@@ -19,109 +19,101 @@
 package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.control.TypeAheadField;
-import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.MapChangeListener;
-import javafx.event.EventHandler;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 /**
- *
- * @author Amrullah 
+ * @author Amrullah
  */
 public class TypeAheadTableCell<R, C> extends BaseCell<R, C> {
 
-	private TypeAheadField<C> typeAheadField;
-	private TypeAheadColumn<R, C> column;
-	private Logger logger = Logger.getLogger(TypeAheadTableCell.class.getName());
-	public TypeAheadTableCell(TypeAheadColumn<R, C> column) {
-		super(column);
-		this.column = column;
-	}
+    private TypeAheadField<C> typeAheadField;
+    private TypeAheadColumn<R, C> column;
 
-	@Override
-	protected void updateValue(C value) {
-		typeAheadField.setValue(value);
-	}
+    public TypeAheadTableCell(TypeAheadColumn<R, C> column) {
+        super(column);
+        this.column = column;
+    }
 
-	@Override
-	protected C getEditedValue() {
-		typeAheadField.markInvalidProperty().set(true);
-		return typeAheadField.getValue();
-	}
+    @Override
+    protected void updateValue(C value) {
+        typeAheadField.setValue(value);
+    }
 
-	@Override
-	protected Control getEditableControl() {
-		if (typeAheadField == null) {
-			typeAheadField = new TypeAheadField<>();
+    @Override
+    protected C getEditedValue() {
+        typeAheadField.markInvalidProperty().set(true);
+        return typeAheadField.getValue();
+    }
 
-			typeAheadField.setSorted(column.isSorted());
+    @Override
+    protected Control getEditableControl() {
+        if (typeAheadField == null) {
+            typeAheadField = new TypeAheadField<>();
+
+            typeAheadField.setSorted(column.isSorted());
 //			if (!column.isRequired()) {
 //				typeAheadField.getItems().add(null);
 //			}
 
-			typeAheadField.valueProperty().addListener(new ChangeListener<C>() {
+            typeAheadField.valueProperty().addListener(new ChangeListener<C>() {
 
-				@Override
-				public void changed(ObservableValue<? extends C> ov, C t, C newValue) {
-					for (CellEditorListener<R, C> svl : column.getCellEditorListeners()) {
-						svl.valueChanged(getTableRow().getIndex(), column.getPropertyName(), (R) getTableRow().getItem(), newValue);
-					}
-				}
-			});
+                @Override
+                public void changed(ObservableValue<? extends C> ov, C t, C newValue) {
+                    for (CellEditorListener<R, C> svl : column.getCellEditorListeners()) {
+                        svl.valueChanged(getTableRow().getIndex(), column.getPropertyName(), (R) getTableRow().getItem(), newValue);
+                    }
+                }
+            });
 
-			column.requiredProperty().addListener(new ChangeListener<Boolean>() {
-				@Override
-				public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
-					if (t1) {
-						typeAheadField.getItems().remove(null);
-					} else {
-						typeAheadField.getItems().add(0, null);
-					}
-				}
-			});
-			typeAheadField.getItems().addAll(column.getItemMap().values());
-			column.getItemMap().addListener(new MapChangeListener<String, C>() {
-				//TODO this listener is subject to memory leak
-				@Override
-				public void onChanged(MapChangeListener.Change<? extends String, ? extends C> change) {
-					if (change.wasAdded()) {
-						typeAheadField.getItems().add(change.getValueAdded());
-					} else {
-						typeAheadField.getItems().remove(change.getValueRemoved());
-					}
-				}
-			});
+            column.requiredProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
+                    if (t1) {
+                        typeAheadField.getItems().remove(null);
+                    } else {
+                        typeAheadField.getItems().add(0, null);
+                    }
+                }
+            });
+            typeAheadField.getItems().addAll(column.getItemMap().values());
+            column.getItemMap().addListener(new MapChangeListener<String, C>() {
+                //TODO this listener is subject to memory leak
+                @Override
+                public void onChanged(MapChangeListener.Change<? extends String, ? extends C> change) {
+                    if (change.wasAdded()) {
+                        typeAheadField.getItems().add(change.getValueAdded());
+                    } else {
+                        typeAheadField.getItems().remove(change.getValueRemoved());
+                    }
+                }
+            });
 
-			typeAheadField.setConverter(column.getStringConverter());
+            typeAheadField.setConverter(column.getStringConverter());
 
-		}
-		return typeAheadField;
-	}
+        }
+        return typeAheadField;
+    }
 
-	@Override
-	protected void attachEnterEscapeEventHandler() {
-		/**
-		 * Use event filter instead on onKeyPressed because Enter and Escape have
-		 * been consumed by TypeAhead it self
-		 */
-		typeAheadField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent t) {
-				if (t.getCode() == KeyCode.ENTER) {
-					commitEdit(typeAheadField.getValue());
-					t.consume();
-				} else if (t.getCode() == KeyCode.ESCAPE) {
-					cancelEdit();
-					/**
-					 * Propagate ESCAPE key press to cell
-					 */
-					TypeAheadTableCell.this.fireEvent(t);
-				}
-			}
-		});
-	}
+    @Override
+    protected void attachEnterEscapeEventHandler() {
+        /**
+         * Use event filter instead on onKeyPressed because Enter and Escape have
+         * been consumed by TypeAhead itself
+         */
+        typeAheadField.addEventFilter(KeyEvent.KEY_PRESSED, t -> {
+            if (t.getCode() == KeyCode.ENTER) {
+                commitEdit(typeAheadField.getValue());
+                t.consume();
+            } else if (t.getCode() == KeyCode.ESCAPE) {
+                cancelEdit();
+                // Propagate ESCAPE key press to cell
+                TypeAheadTableCell.this.fireEvent(t);
+            }
+        });
+    }
 }

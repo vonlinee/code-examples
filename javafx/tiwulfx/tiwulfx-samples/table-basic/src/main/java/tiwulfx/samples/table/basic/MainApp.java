@@ -7,7 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tiwulfx.samples.shared.DataGenerator;
@@ -45,9 +44,6 @@ public class MainApp extends Application {
         VBox vBox = new VBox(frmPerson, SceneGraph.button("A", event -> {
             Person selectedItem = frmPerson.tblPerson.getSelectedItem();
             System.out.println(selectedItem);
-
-            TableColumn tableColumn = frmPerson.tblPerson.getSelectionModel().getSelectedCells().get(0)
-                    .getTableColumn();
 
             simpleList.add("A");
             simpleList.add("B");

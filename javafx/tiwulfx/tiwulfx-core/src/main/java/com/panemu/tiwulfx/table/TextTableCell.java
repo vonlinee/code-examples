@@ -58,9 +58,4 @@ public class TextTableCell<R> extends BaseCell<R, String> {
         }
         return textField;
     }
-
-    @Override
-    protected void attachEnterEscapeEventHandler() {
-        super.attachEnterEscapeEventHandler();
-    }
 }
