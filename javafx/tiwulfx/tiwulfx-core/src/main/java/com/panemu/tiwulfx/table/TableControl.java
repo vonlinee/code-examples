@@ -41,6 +41,11 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * 为了区分API和JavaFX内置的API，很多地方用到强制转换
+ * 比如 BaseCell 和 TableControlRow
+ * @param <R>
+ */
 public class TableControl<R> extends VBox {
 
     private Button btnAdd;
@@ -108,6 +113,10 @@ public class TableControl<R> extends VBox {
     private boolean useBackgroundTaskToLoad = TiwulFXUtil.DEFAULT_USE_BACKGROUND_TASK_TO_LOAD;
     private boolean useBackgroundTaskToSave = TiwulFXUtil.DEFAULT_USE_BACKGROUND_TASK_TO_SAVE;
     private boolean useBackgroundTaskToDelete = TiwulFXUtil.DEFAULT_USE_BACKGROUND_TASK_TO_DELETE;
+
+    public final boolean isEditable() {
+        return tblView.isEditable();
+    }
 
     public enum Mode {
         INSERT,
@@ -286,12 +295,13 @@ public class TableControl<R> extends VBox {
                 cm.show(tblView, event.getScreenX(), event.getScreenY());
             }
         });
+        // create custom row factory that can intercept double click on grid row
+        tblView.setRowFactory(param -> new TableControlRow<>(TableControl.this));
 
         cm = createContextMenu();
         setToolTips();
-        // create custom row factory that can intercept double click on grid row
-        tblView.setRowFactory(param -> new TableRowControl<>(TableControl.this));
 
+        // 初始化TableControl的列
         columns.addListener((ListChangeListener<TableColumn<R, ?>>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
@@ -615,13 +625,13 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * Force the table to repaint specified row.It propagates the call to {@link TableRowControl#refresh()}.
+     * Force the table to repaint specified row.It propagates the call to {@link TableControlRow#refresh()}.
      * @param record specified record to refresh.
      */
     public final void refresh(R record) {
         Set<Node> nodes = tblView.lookupAll(".table-row-cell");
         for (Node node : nodes) {
-            if (node instanceof TableRowControl<?> tableRow) {
+            if (node instanceof TableControlRow<?> tableRow) {
                 if (tableRow.getItem() != null && tableRow.getItem().equals(record)) {
                     tableRow.refresh();
                     break;
@@ -923,7 +933,7 @@ public class TableControl<R> extends VBox {
                 baseColumn.setOnEditCommit(event -> {
                     CellEditEvent<R, ?> t = (CellEditEvent<R, ?>) event;
                     final R persistentObj = TableViewHelper.getEditingItem(t);
-                    System.out.println("列编辑提交事件" + persistentObj + " : " + t.getOldValue() + " => " + t.getNewValue());
+                    System.out.println("列编辑提交事件" + persistentObj + " : \n" + t.getOldValue() + " => " + t.getNewValue());
                     if (persistentObj == null) {
                         return;
                     }

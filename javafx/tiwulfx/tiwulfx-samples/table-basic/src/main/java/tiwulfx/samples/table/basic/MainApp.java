@@ -3,17 +3,18 @@ package tiwulfx.samples.table.basic;
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.utils.SceneGraph;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tiwulfx.samples.shared.DataGenerator;
 import tiwulfx.samples.shared.pojo.Person;
 
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainApp extends Application {
 
@@ -24,13 +25,34 @@ public class MainApp extends Application {
         final FrmPerson frmPerson = new FrmPerson();
         frmPerson.reload();
 
+        ObservableList<String> list = FXCollections.observableArrayList();
+
+        list.addListener(new ListChangeListener<String>() {
+            @Override
+            public void onChanged(Change<? extends String> c) {
+                while (c.next()) {
+                    for (String s : c.getAddedSubList()) {
+                        System.out.println(s);
+                    }
+                }
+            }
+        });
+
+        List<String> simpleList = new ArrayList<>();
+
+        list.setAll(simpleList);
+
         VBox vBox = new VBox(frmPerson, SceneGraph.button("A", event -> {
             Person selectedItem = frmPerson.tblPerson.getSelectedItem();
             System.out.println(selectedItem);
 
             TableColumn tableColumn = frmPerson.tblPerson.getSelectionModel().getSelectedCells().get(0)
                     .getTableColumn();
-            
+
+            simpleList.add("A");
+            simpleList.add("B");
+            simpleList.add("C");
+
         }));
 
         Scene scene = new Scene(vBox);
@@ -40,8 +62,6 @@ public class MainApp extends Application {
         stage.setScene(scene);
 
         stage.show();
-
-
     }
 
     /**

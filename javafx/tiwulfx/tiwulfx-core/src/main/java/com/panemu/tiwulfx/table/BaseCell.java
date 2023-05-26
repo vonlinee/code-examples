@@ -30,9 +30,11 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
          */
         this.contentDisplayProperty().addListener((observable, oldValue, newValue) -> {
             initGraphic();
+            System.out.println("contentDisplayProperty Old:" + oldValue + " New:" + newValue + " Item:" + getItem());
             if (newValue == ContentDisplay.GRAPHIC_ONLY) {
-                // ContentDisplay.GRAPHIC_ONLY表明退出编辑状态
                 updateValue(getItem());
+            } else if (newValue == ContentDisplay.TEXT_ONLY) { // ContentDisplay.TEXT_ONLY 表明退出编辑状态
+                commitEdit(getEditedValue());
             }
         });
 
@@ -91,7 +93,9 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
          */
         Control focusableControl = getFocusableControl();
         if (focusableControl == null) {
-            if (isEditable()) attachSkinListener();
+            if (isEditable()) {
+                attachSkinListener();
+            }
         } else {
             /**
              * 表格的列选是和表格是否可编辑绑定的
@@ -142,19 +146,6 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
     }
 
     /**
-     * 提交修改
-     * @param newValue the value as input by the end user, which should be
-     *                 persisted in the relevant way given the data source underpinning the
-     *                 user interface and the installation edit commit handler of the UI control
-     */
-    @Override
-    public void commitEdit(C newValue) {
-        super.commitEdit(newValue);
-        updateValue(getEditedValue());
-        System.out.println("单元格提交编辑 NewValue: " + newValue + ", EditedValue: " + getEditedValue());
-    }
-
-    /**
      * 每次初始化一行的所有列
      * lazy初始化
      */
@@ -167,14 +158,23 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
         setGraphic(control);
     }
 
+    /**
+     * 更新此Cell的编辑节点的值
+     * @param value 新值
+     */
     protected abstract void updateValue(C value);
 
     /**
      * 获取编辑后的值，此值应是实时更新的
+     * 单元格的编辑节点的实际值
      * @return {@link C}
      */
     protected abstract C getEditedValue();
 
+    /**
+     * 获取编辑节点，比如TextField
+     * @return 编辑节点控件
+     */
     protected abstract Control getEditableControl();
 
     @Override

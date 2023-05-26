@@ -57,12 +57,14 @@ public class TestApp extends Application {
 					@Override
 					public void commitEdit(String newValue) {
 						super.commitEdit(newValue);
-						System.out.println("单元格提交");
-					}
+                    }
 				};
+                cell.setOnMouseClicked(event -> cell.setContentDisplay(ContentDisplay.GRAPHIC_ONLY));
                 return cell;
             }
         });
+
+        tableView1.setRowFactory(param -> new TableRow<>());
         tableView1.getColumns().addAll(idColumn1, nameColumn1);
 
         TableColumn<PropertyData, Integer> idColumn2 = new TableColumn<>("ID");
