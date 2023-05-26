@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.panemu.tiwulfx.form;
 
 import java.util.HashMap;
@@ -20,68 +16,49 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.util.StringConverter;
 
-/**
- *
- * @author sencaki
- */
 public class ComboBoxControl<R> extends BaseControl<R, ComboBox<R>> {
 
-    private HashMap<String, R> itemMap = new LinkedHashMap<>();
+    private final HashMap<String, R> itemMap = new LinkedHashMap<>();
     private LabelConverter lblConverter = new LabelConverter();
-    private ComboBox<R> combobox;
-    private ListCell<R> buttoncell = new ListCell();
+    private final ComboBox<R> combobox;
+    private final ListCell<R> buttoncell = new ListCell<>();
 
     public ComboBoxControl() {
         super(new ComboBox<R>());
         combobox = getInputComponent();
-        
         /**
          * Workaround for
          * http://javafx-jira.kenai.com/browse/RT-24412?focusedCommentId=323719&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-323719
          */
         combobox.setButtonCell(buttoncell);
-        combobox.valueProperty().addListener(new ChangeListener<R>() {
-
-            @Override
-            public void changed(ObservableValue<? extends R> observable, R oldValue, R newValue) {
-                buttoncell.setText(getLabel(newValue));
-            }
-        });
+        combobox.valueProperty().addListener((observable, oldValue, newValue) -> buttoncell.setText(getLabel(newValue)));
         
         combobox.setConverter(lblConverter);
         if (!isRequired()) {
             combobox.getItems().add(null);
         }
-        requiredProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean t1) {
-                if (t1) {
-                    combobox.getItems().remove(null);
-                } else {
-                    combobox.getItems().add(0, null);
-                }
+        requiredProperty().addListener((ov, t, t1) -> {
+            if (t1) {
+                combobox.getItems().remove(null);
+            } else {
+                combobox.getItems().add(0, null);
             }
         });
 		
-		getItems().addListener(new ListChangeListener<R>() {
-
-			@Override
-			public void onChanged(ListChangeListener.Change<? extends R> change) {
-				while (change.next()) {
-					if (change.wasRemoved()) {
-						for (R t : change.getRemoved()){
-							for (String key : itemMap.keySet()) {
-								if (t!= null && t.equals(itemMap.get(key))) {
-									itemMap.remove(key);
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
-		});
+		getItems().addListener((ListChangeListener<R>) change -> {
+            while (change.next()) {
+                if (change.wasRemoved()) {
+                    for (R t : change.getRemoved()){
+                        for (String key : itemMap.keySet()) {
+                            if (t!= null && t.equals(itemMap.get(key))) {
+                                itemMap.remove(key);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private String getLabel(R object) {
@@ -161,5 +138,4 @@ public class ComboBoxControl<R> extends BaseControl<R, ComboBox<R>> {
 	public final void setPromptText(String string) {
 		combobox.setPromptText(string);
 	}
-	
 }

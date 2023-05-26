@@ -21,11 +21,8 @@ public class App extends Application {
 
     final EntityManager entityManager = factory.createEntityManager();
 
-    public App() {
-    }
-
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         TableControl<FieldInfo> table = new TableControl<>(FieldInfo.class);
 

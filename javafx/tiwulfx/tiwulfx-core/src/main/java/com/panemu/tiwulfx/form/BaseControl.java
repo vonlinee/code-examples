@@ -1,14 +1,9 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.form;
 
 import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.common.Validator;
 import com.panemu.tiwulfx.utils.ClassUtils;
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -48,16 +43,16 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
     private Label errorLabel;
     private List<Validator<R>> lstValidator = new ArrayList<>();
     private InvalidationListener imageListener = o -> {
-		if (required.get() && !valid.get()) {
-			imagePlaceHolder.setImage(imgRequiredInvalid);
-		} else if (required.get()) {
-			imagePlaceHolder.setImage(imgRequired);
-		} else if (!valid.get()) {
-			imagePlaceHolder.setImage(imginvalid);
-		} else {
-			imagePlaceHolder.setImage(null);
-		}
-	};
+        if (required.get() && !valid.get()) {
+            imagePlaceHolder.setImage(imgRequiredInvalid);
+        } else if (required.get()) {
+            imagePlaceHolder.setImage(imgRequired);
+        } else if (!valid.get()) {
+            imagePlaceHolder.setImage(imginvalid);
+        } else {
+            imagePlaceHolder.setImage(null);
+        }
+    };
 
     public BaseControl(E control) {
         this("", control);
@@ -82,18 +77,18 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
         bindEditablePropertyWithControl(control);
 
         addEventHandler(MouseEvent.ANY, event -> {
-			if (event.getEventType() == MouseEvent.MOUSE_MOVED
-					&& !isValid()
-					&& !getPopup().isShowing()) {
-				Point2D p = BaseControl.this.localToScene(0.0, 0.0);
-				getPopup().show(BaseControl.this,
-						p.getX() + getScene().getX() + getScene().getWindow().getX(),
-						p.getY() + getScene().getY() + getScene().getWindow()
-								.getY() + getInputComponent().getHeight() - 1);
-			} else if (event.getEventType() == MouseEvent.MOUSE_EXITED && getPopup().isShowing()) {
-				getPopup().hide();
-			}
-		});
+            if (event.getEventType() == MouseEvent.MOUSE_MOVED
+                    && !isValid()
+                    && !getPopup().isShowing()) {
+                Point2D p = BaseControl.this.localToScene(0.0, 0.0);
+                getPopup().show(BaseControl.this,
+                        p.getX() + getScene().getX() + getScene().getWindow().getX(),
+                        p.getY() + getScene().getY() + getScene().getWindow()
+                                .getY() + getInputComponent().getHeight() - 1);
+            } else if (event.getEventType() == MouseEvent.MOUSE_EXITED && getPopup().isShowing()) {
+                getPopup().hide();
+            }
+        });
         getInputComponent().addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
@@ -234,8 +229,7 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
                 System.out.println("Warning: propertyName is not set for " + getId());
             }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-            RuntimeException ex2 = new RuntimeException("Error when pulling " + propertyName + ".", ex);
-            throw ex2;
+            throw new RuntimeException("Error when pulling " + propertyName + ".", ex);
         }
     }
 
@@ -334,7 +328,7 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
     /**
      * set whether the input control is editable
      */
-    private BooleanProperty editable = new SimpleBooleanProperty(true);
+    private final BooleanProperty editable = new SimpleBooleanProperty(true);
 
     public void setEditable(boolean editable) {
         this.editable.set(editable);

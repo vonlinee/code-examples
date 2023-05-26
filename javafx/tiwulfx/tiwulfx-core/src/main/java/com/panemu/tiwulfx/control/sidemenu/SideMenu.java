@@ -50,16 +50,16 @@ import javafx.stage.WindowEvent;
  */
 public class SideMenu extends VBox {
 
-	private List<SideMenuItem> lstMenuItem = new ArrayList<SideMenuItem>();
-	private BooleanProperty expanded = new SimpleBooleanProperty(true);
-	private BooleanProperty armed = new SimpleBooleanProperty(false);
-	private StackPane expStackPane = new StackPane();
-	private VBox expMenuContainer = new VBox();
-	private Button btnExpand = new Button();
+	private List<SideMenuItem> lstMenuItem = new ArrayList<>();
+	private final BooleanProperty expanded = new SimpleBooleanProperty(true);
+	private final BooleanProperty armed = new SimpleBooleanProperty(false);
+	private final StackPane expStackPane = new StackPane();
+	private final VBox expMenuContainer = new VBox();
+	private final Button btnExpand = new Button();
 	private Popup popup;
 	private VBox infoBox;
 	private Label infoName;
-	private Map<TitledPane, VBox> map = new HashMap<TitledPane, VBox>();
+	private final Map<TitledPane, VBox> map = new HashMap<>();
 	private Node imgCollapse = TiwulFXUtil.getGraphicFactory().createMenuCollapseGraphic();
 	private Node imgExpand = TiwulFXUtil.getGraphicFactory().createMenuExpandGraphic();
 	private SideMenuActionHandler facade;
@@ -88,8 +88,7 @@ public class SideMenu extends VBox {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				for (Node node : expMenuContainer.getChildren()) {
-					if (node instanceof TitledPane) {
-						TitledPane pane = (TitledPane) node;
+					if (node instanceof TitledPane pane) {
 						pane.setContentDisplay(newValue ? ContentDisplay.LEFT : ContentDisplay.GRAPHIC_ONLY);
 						if (newValue) {
 							pane.setContent(map.get(pane));
@@ -97,8 +96,7 @@ public class SideMenu extends VBox {
 							pane.setContent(null);
 						}
 						pane.setCollapsible(newValue);
-					} else if (node instanceof Button) {
-						Button btn = (Button) node;
+					} else if (node instanceof Button btn) {
 						btn.setContentDisplay(newValue ? ContentDisplay.LEFT : ContentDisplay.GRAPHIC_ONLY);
 					}
 				}

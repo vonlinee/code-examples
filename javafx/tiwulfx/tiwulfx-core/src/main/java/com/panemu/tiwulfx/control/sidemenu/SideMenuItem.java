@@ -1,14 +1,5 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2013 Amrullah .
- */
 package com.panemu.tiwulfx.control.sidemenu;
 
-
-/**
- *
- * @author Amrullah 
- */
 public class SideMenuItem {
     private String imageStyle;
     private String label;
@@ -62,5 +53,4 @@ public class SideMenuItem {
 	public void setFrmClass(String frmClass) {
 		this.frmClass = frmClass;
 	}
-
 }

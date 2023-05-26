@@ -11,7 +11,6 @@ import com.panemu.tiwulfx.common.TiwulFXUtil;
 import com.panemu.tiwulfx.dialog.MessageDialog;
 import com.panemu.tiwulfx.dialog.MessageDialogBuilder;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -117,21 +116,21 @@ public abstract class TableControlBehavior<R> {
      * Generic export to excel. This method is called by clicking TableControl's
      * Export button. You can override this method to define title in the
      * generated spreadsheet.
-     * @param title
-     * @param maxResult
-     * @param tblView
-     * @param lstCriteria
+     * @param title       标题
+     * @param maxResult   最大行数
+     * @param tblView     表格控件
+     * @param lstCriteria 查询标准
      */
     public void exportToExcel(String title, int maxResult, TableControl<R> tblView, List<TableCriteria> lstCriteria) {
         try {
-            ExportToExcel exporter = new ExportToExcel();
+            ExportToExcel<R> exporter = new ExportToExcel<>();
             List<Double> lstWidth = new ArrayList<>();
             List<R> data = new ArrayList<>();
             List<String> lstSortedColumn = new ArrayList<>();
             List<SortType> lstSortedType = new ArrayList<>();
             for (TableColumn<R, ?> tc : tblView.getTableView().getSortOrder()) {
                 if (tc instanceof BaseColumn) {
-                    lstSortedColumn.add(((BaseColumn) tc).getPropertyName());
+                    lstSortedColumn.add(((BaseColumn<R, ?>) tc).getPropertyName());
                     lstSortedType.add(tc.getSortType());
                 } else if (tc != null && tc.getCellValueFactory() instanceof PropertyValueFactory) {
                     PropertyValueFactory valFactory = (PropertyValueFactory) tc.getCellValueFactory();
@@ -139,11 +138,11 @@ public abstract class TableControlBehavior<R> {
                     lstSortedType.add(tc.getSortType());
                 }
             }
-            TableData vol;
+            TableData<R> vol;
             int startIndex2 = 0;
             do {
                 vol = loadData(startIndex2, lstCriteria, lstSortedColumn, lstSortedType, maxResult);
-                data.addAll((ObservableList<R>) FXCollections.observableArrayList(vol.getRows()));
+                data.addAll(FXCollections.observableArrayList(vol.getRows()));
                 startIndex2 = startIndex2 + maxResult;
             } while (vol.isMoreRows());
 
@@ -157,12 +156,9 @@ public abstract class TableControlBehavior<R> {
 
     public void exportToExcelCurrentPage(String title, TableControl<R> tblView) {
         try {
-            ExportToExcel exporter = new ExportToExcel();
+            ExportToExcel<R> exporter = new ExportToExcel<>();
             List<Double> lstWidth = new ArrayList<>();
-            List<R> data = new ArrayList<>();
-
-            data.addAll(tblView.getRecords());
-
+            List<R> data = new ArrayList<>(tblView.getRecords());
             String tmpFolder = System.getProperty("java.io.tmpdir");
             File targetFile = File.createTempFile("test", ".xls", new File(tmpFolder));
             exporter.export("", targetFile.getAbsolutePath(), tblView, data, lstWidth);
@@ -198,7 +194,7 @@ public abstract class TableControlBehavior<R> {
      * after user click Save button before calling {@link #update} and
      * {@link #insert}. By default, this method triggers
      * {@link BaseColumn#validate} and returns Boolean.True
-     * @param changedRecords
+     * @param changedRecords TableControl
      * @return false if there is invalid value
      */
     public boolean validate(TableControl<R> tbl, List<R> changedRecords) {
@@ -224,18 +220,23 @@ public abstract class TableControlBehavior<R> {
      * A callback that is called before reloading table and there is record
      * changed. This method will show a warning dialog telling user that some
      * records are changed, and asking user to revert and reload, or cancel reload.
-     * @param table
+     * @param table               TableControl
      * @param numberOfChangedRows the number of changed record
      * @return true will revert change and continue loading data. Return false
      * will cancel reloading data.
      */
-    protected boolean revertConfirmation(TableControl table, int numberOfChangedRows) {
+    protected boolean revertConfirmation(TableControl<R> table, int numberOfChangedRows) {
         MessageDialog.Answer answer = MessageDialogBuilder.warning().message("reload.confirmation", numberOfChangedRows)
                 .buttonType(MessageDialog.ButtonType.YES_NO).yesOkButtonText("revert.then.reload")
                 .noButtonText("cancel.reload").show(table.getScene().getWindow());
         return answer == MessageDialog.Answer.YES_OK;
     }
 
+    /**
+     * 该行记录是否可编辑
+     * @param item 行记录
+     * @return 是否可编辑
+     */
     public boolean isRecordEditable(R item) {
         return true;
     }

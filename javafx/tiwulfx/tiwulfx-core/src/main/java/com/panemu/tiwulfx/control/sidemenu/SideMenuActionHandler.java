@@ -10,6 +10,6 @@ package com.panemu.tiwulfx.control.sidemenu;
  */
 public interface SideMenuActionHandler {
 	
-	public void executeAction(String actionName);
+	void executeAction(String actionName);
     
 }

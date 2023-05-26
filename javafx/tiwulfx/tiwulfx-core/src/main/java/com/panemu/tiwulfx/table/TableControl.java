@@ -1491,7 +1491,7 @@ public class TableControl<R> extends VBox {
         if (item == null) {
             return false;
         }
-        if (mode.get() == Mode.INSERT) {
+        if (isInsertMode()) {
             return true;
         }
         return behavior.isRecordEditable(item);

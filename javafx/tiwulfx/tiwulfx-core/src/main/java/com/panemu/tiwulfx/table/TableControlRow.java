@@ -3,7 +3,6 @@ package com.panemu.tiwulfx.table;
 import com.panemu.tiwulfx.utils.EventUtils;
 import javafx.application.Platform;
 import javafx.beans.WeakInvalidationListener;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WeakChangeListener;
 import javafx.css.PseudoClass;
@@ -40,7 +39,7 @@ public class TableControlRow<R> extends TableRow<R> {
                 tblView.getBehavior().doubleClick(tblView.getSelectionModel().getSelectedItem());
             }
         });
-        /**
+        /*
          * Set content display to TEXT_ONLY in READ mode. This listener is relevant
          * only in agileEditing mode
          */
@@ -50,9 +49,43 @@ public class TableControlRow<R> extends TableRow<R> {
                 setChildrenCellContentDisplay(ContentDisplay.TEXT_ONLY);
             }
         }));
+
+        /*
+         * Flag the row whether it is editable or not.
+         * In Agile mode, display cell editors in selected row, if the record is editable.
+         */
         tblView.getSelectionModel().selectedIndexProperty()
-                .addListener(new WeakChangeListener<>(selectionChangeListener));
-        /**
+                .addListener(new WeakChangeListener<>((ov, t, t1) -> {
+                    int idx = getIndex();
+                    if (!tblView.isEditable() || (!t.equals(idx) && !t1.equals(idx))) {
+                        return; //nothing to do with me (I am a TableRowControl instance)
+                    }
+                    /*
+                     * Set the row not editable if the record is not editable. This is
+                     * just flag. The actual logic is in BaseCell.startEdit. The
+                     * tableRowControl.isEditable is called by BaseCell.startEdit to
+                     * decide whether it is okay to edit the cell or not.
+                     */
+                    boolean isRecordEditable = true;
+                    System.out.println(selected);
+                    if (!selected) {
+                        isRecordEditable = tblView.isRecordEditable(getItem());
+                        TableControlRow.this.setEditable(isRecordEditable);
+                    }
+                    if (tblView.isAgileEditing()) {
+                        System.out.println("快速编辑状态");
+                        if (t.equals(getIndex()) && selected) {
+                            setChildrenCellContentDisplay(ContentDisplay.TEXT_ONLY);
+                            selected = false;
+                        } else if (t1.equals(getIndex()) && !selected) {
+                            if (isRecordEditable) {
+                                setChildrenCellContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                            }
+                            selected = true;
+                        }
+                    }
+                }));
+        /*
          * If in normalEditing mode (agileEditing == false), when a particular cell
          * is no longer being edited, the content display should change to TEXT_ONLY
          */
@@ -119,7 +152,8 @@ public class TableControlRow<R> extends TableRow<R> {
             Platform.runLater(() -> setChildrenCellContentDisplay(contentDisplay));
         } else {
             for (Node node : getChildrenUnmodifiable()) {
-                TableCell cell = (TableCell) node;
+                @SuppressWarnings("unchecked")
+                TableCell<R, Object> cell = (TableCell<R, Object>) node;
                 if (cell.getTableColumn().isEditable() || cell.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) {
                     cell.setContentDisplay(contentDisplay);
                 }
@@ -127,15 +161,21 @@ public class TableControlRow<R> extends TableRow<R> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void refreshLookupSiblings(String propertyName) {
         for (Node node : getChildrenUnmodifiable()) {
-            TableCell cell = (TableCell) node;
-            if (cell.getTableColumn() instanceof BaseColumn) {
-                BaseColumn baseColumn = (BaseColumn) cell.getTableColumn();
+            TableCell<R, Object> cell = (TableCell<R, Object>) node;
+            if (cell.getTableColumn() instanceof BaseColumn<R, Object> baseColumn) {
                 if (baseColumn.getPropertyName().startsWith(propertyName) && !baseColumn.getPropertyName()
                         .equals(propertyName)) {
-                    ObservableValue currentObservableValue = baseColumn.getCellObservableValue(cell.getIndex());
-                    ((BaseCell) cell).updateItem(currentObservableValue.getValue(), currentObservableValue == null);
+                    ObservableValue<Object> currentObservableValue = baseColumn.getCellObservableValue(cell.getIndex());
+                    if (currentObservableValue == null) {
+                        continue;
+                    }
+                    if (cell instanceof BaseCell<R, ?>) {
+                        Object value = currentObservableValue.getValue();
+                        ((BaseCell<R, Object>) cell).updateItem(value, false);
+                    }
                 }
             }
         }
@@ -147,17 +187,18 @@ public class TableControlRow<R> extends TableRow<R> {
     public void refresh() {
         for (Node node : getChildrenUnmodifiable()) {
             if (node instanceof TableCell) {
-                TableCell cell = (TableCell) node;
+                @SuppressWarnings("unchecked")
+                TableCell<R, Object> cell = (TableCell<R, Object>) node;
                 if (cell.getTableColumn() == null) {
                     continue;
                 }
-                TableColumn baseColumn = (TableColumn) cell.getTableColumn();
-                ObservableValue currentObservableValue = baseColumn.getCellObservableValue(cell.getIndex());
+                TableColumn<R, Object> baseColumn = cell.getTableColumn();
+                ObservableValue<Object> currentObservableValue = baseColumn.getCellObservableValue(cell.getIndex());
                 if (currentObservableValue == null) {
                     continue;
                 }
                 if (cell instanceof BaseCell) {
-                    ((BaseCell) cell).updateItem(currentObservableValue.getValue(), false);
+                    ((BaseCell<R, Object>) cell).updateItem(currentObservableValue.getValue(), false);
                 } else {
                     try {
                         Method m = cell.getClass().getDeclaredMethod("updateItem", Object.class, boolean.class);
@@ -170,43 +211,4 @@ public class TableControlRow<R> extends TableRow<R> {
             }
         }
     }
-
-    /////////////////////////////////////////////////////////
-    // LISTENERS
-    /////////////////////////////////////////////////////////
-    /**
-     * Flag the row whether it is editable or not.
-     * In Agile mode, display cell editors in selected row, if the record is editable.
-     */
-    private ChangeListener<Number> selectionChangeListener = new ChangeListener<>() {
-        @Override
-        public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
-            int idx = getIndex();
-            if (!tblView.isEditable() || (!t.equals(idx) && !t1.equals(idx))) {
-                return; //nothing to do with me (i am a TableRowControl instance)
-            }
-            /**
-             * Set the row not editable if the record is not editable. This is
-             * just flag. The actual logic is in BaseCell.startEdit. The
-             * tableRowControl.isEditable is called by BaseCell.startEdit to
-             * decide whether it is okay to edit the cell or not.
-             */
-            boolean isRecordEditable = true;
-            if (!selected) {
-                isRecordEditable = tblView.isRecordEditable(getItem());
-                TableControlRow.this.setEditable(isRecordEditable);
-            }
-            if (tblView.isAgileEditing()) {
-                if (t.equals(getIndex()) && selected) {
-                    setChildrenCellContentDisplay(ContentDisplay.TEXT_ONLY);
-                    selected = false;
-                } else if (t1.equals(getIndex()) && !selected) {
-                    if (isRecordEditable) {
-                        setChildrenCellContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    }
-                    selected = true;
-                }
-            }
-        }
-    };
 }

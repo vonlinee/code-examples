@@ -30,7 +30,6 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
          */
         this.contentDisplayProperty().addListener((observable, oldValue, newValue) -> {
             initGraphic();
-            System.out.println("contentDisplayProperty Old:" + oldValue + " New:" + newValue + " Item:" + getItem());
             if (newValue == ContentDisplay.GRAPHIC_ONLY) {
                 updateValue(getItem());
             } else if (newValue == ContentDisplay.TEXT_ONLY) { // ContentDisplay.TEXT_ONLY 表明退出编辑状态

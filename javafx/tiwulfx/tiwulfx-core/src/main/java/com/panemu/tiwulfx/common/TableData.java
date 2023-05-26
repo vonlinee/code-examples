@@ -1,16 +1,8 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.common;
 
 import java.io.Serializable;
 import java.util.List;
 
-/**
- *
- * @author amrullah
- */
 public class TableData<T> implements Serializable {
 
 	private List<T> rows;

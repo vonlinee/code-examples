@@ -175,7 +175,7 @@ public class TickColumn<R> extends TableColumn<R, Boolean> {
 			setText(null);
 			setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 			checkbox.setMaxWidth(Double.MAX_VALUE);
-			contentDisplayProperty().addListener(new ChangeListener<ContentDisplay>() {
+			contentDisplayProperty().addListener(new ChangeListener<>() {
 				private boolean suspendEvent = false;
 
 				@Override
