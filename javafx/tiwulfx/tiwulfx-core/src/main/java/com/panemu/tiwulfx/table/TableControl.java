@@ -87,10 +87,6 @@ public class TableControl<R> extends VBox {
         return startIndex.get();
     }
 
-    public final SimpleIntegerProperty startIndexProperty() {
-        return startIndex;
-    }
-
     /**
      * 存放修改的行
      * 编辑模式下：被修改的行高亮显示
@@ -690,21 +686,6 @@ public class TableControl<R> extends VBox {
      */
     public final R getSelectedItem() {
         return tblView.getSelectionModel().selectedItemProperty().get();
-    }
-
-    /**
-     * @return ObservableList
-     * @see TableView#getSelectionModel() getSelectionItems()
-     */
-    public final ObservableList<R> getSelectedItems() {
-        return tblView.getSelectionModel().getSelectedItems();
-    }
-
-    /**
-     * @see TableView#getSelectionModel()
-     */
-    public final TableView.TableViewSelectionModel<R> getSelectionModel() {
-        return tblView.getSelectionModel();
     }
 
     private ContextMenu cm;
@@ -1921,18 +1902,6 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * If it is set to true, TableControl will use background task to execute
-     * Load and Export actions. In this case, the corresponding methods in
-     * {@link TableControlBehavior} will be executed in background task so developer
-     * need to avoid updating UI in those methods. Default value for this
-     * property is taken from {@link TiwulFXUtil#DEFAULT_USE_BACKGROUND_TASK_TO_LOAD}. Default is FALSE
-     * @param useBackgroundTaskToLoad
-     */
-    public void setUseBackgroundTaskToLoad(boolean useBackgroundTaskToLoad) {
-        this.useBackgroundTaskToLoad = useBackgroundTaskToLoad;
-    }
-
-    /**
      * Check if this TableControl use background task to execute save.
      * Default value for this property is taken from
      * {@link TiwulFXUtil#DEFAULT_USE_BACKGROUND_TASK_TO_SAVE}.
@@ -1943,18 +1912,6 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * If it is set to true, TableControl will use background task to execute
-     * Save action. In this case, the corresponding method in
-     * {@link TableControlBehavior} will be executed in background task so developer
-     * need to avoid updating UI in it. Default value for this property is taken
-     * from {@link TiwulFXUtil#DEFAULT_USE_BACKGROUND_TASK_TO_SAVE}. Default is FALSE.
-     * @param useBackgroundTaskToSave useBackgroundTaskToSave
-     */
-    public void setUseBackgroundTaskToSave(boolean useBackgroundTaskToSave) {
-        this.useBackgroundTaskToSave = useBackgroundTaskToSave;
-    }
-
-    /**
      * Check if this TableControl use background task to execute delete.
      * Default value for this property is taken from
      * {@link TiwulFXUtil#DEFAULT_USE_BACKGROUND_TASK_TO_DELETE}.
@@ -1962,18 +1919,6 @@ public class TableControl<R> extends VBox {
      */
     public boolean isUseBackgroundTaskToDelete() {
         return useBackgroundTaskToDelete;
-    }
-
-    /**
-     * If it is set to true, TableControl will use background task to execute
-     * Delete action. In this case, the corresponding method in
-     * {@link TableControlBehavior} will be executed in background task so developer
-     * need to avoid updating UI in it. Default value for this property is taken
-     * from {@link TiwulFXUtil#DEFAULT_USE_BACKGROUND_TASK_TO_DELETE}. Default is false
-     * @param useBackgroundTaskToDelete useBackgroundTaskToDelete
-     */
-    public void setUseBackgroundTaskToDelete(boolean useBackgroundTaskToDelete) {
-        this.useBackgroundTaskToDelete = useBackgroundTaskToDelete;
     }
 
     private class TableControlService extends Service {
@@ -2045,10 +1990,8 @@ public class TableControl<R> extends VBox {
     }
 
     private class SaveTask extends Task<List<R>> {
-        private Mode prevMode;
 
         public SaveTask(Mode prevMode) {
-            this.prevMode = prevMode;
             setOnFailed((WorkerStateEvent event) -> handleException(getException()));
             setOnSucceeded((WorkerStateEvent event) -> postSaveAction(getValue(), prevMode));
         }
@@ -2075,7 +2018,7 @@ public class TableControl<R> extends VBox {
         }
 
         @Override
-        protected Void call() throws Exception {
+        protected Void call() {
             behavior.delete(lstToDelete);
             return null;
         }

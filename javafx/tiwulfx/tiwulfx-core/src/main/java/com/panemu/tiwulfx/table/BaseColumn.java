@@ -53,8 +53,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
     private String nullLabel = TiwulFXUtil.DEFAULT_NULL_LABEL;
     private final Map<R, RecordChange<R, C>> mapChangedRecord = new HashMap<>();
 
-    private StringConverter<C> stringConverter = new StringConverter<C>() {
-
+    private StringConverter<C> stringConverter = new StringConverter<>() {
         @Override
         public String toString(C t) {
             if (t == null) {

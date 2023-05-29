@@ -1,8 +1,7 @@
 package com.panemu.tiwulfx.table;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.WeakInvalidationListener;
-import javafx.css.PseudoClass;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.control.*;
@@ -10,13 +9,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
-import java.util.logging.Logger;
-
 public abstract class BaseCell<R, C> extends TableCell<R, C> {
 
     private Control control;
     private final StringConverter<C> stringConverter;
-    private static final PseudoClass PSEUDO_CLASS_INVALID = PseudoClass.getPseudoClass("invalid");
 
     public BaseCell(final BaseColumn<R, C> column) {
         this.stringConverter = column.getStringConverter();
@@ -24,6 +20,7 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
         EventHandler<MouseEvent> mouseEventEventHandler = event -> {
             TableColumn<R, C> clm = getTableColumn();
             if (clm instanceof BaseColumn<R, C> baseColumn && !baseColumn.isValid(getTableRow().getItem())) {
+                System.out.println("展示");
                 PopupControl popup = baseColumn.getPopup(getTableRow().getItem());
                 if (event.getEventType() == MouseEvent.MOUSE_MOVED && !popup.isShowing()) {
                     Point2D p = BaseCell.this.localToScene(0.0, 0.0);
@@ -38,9 +35,16 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
 
         this.setOnMouseExited(mouseEventEventHandler);
         this.setOnMouseMoved(mouseEventEventHandler);
-        InvalidationListener invalidRecordListener = observable -> pseudoClassStateChanged(PSEUDO_CLASS_INVALID, column.isRecordInvalid(getRowItem()));
-        column.getInvalidRecordMap().addListener(new WeakInvalidationListener(invalidRecordListener));
-        itemProperty().addListener(invalidRecordListener);
+
+        focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!newValue) {
+                    // 失去焦点
+                    setContentDisplay(ContentDisplay.TEXT_ONLY);
+                }
+            }
+        });
     }
 
     /**
@@ -50,6 +54,12 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
      */
     protected Control getFocusableControl() {
         return control;
+    }
+
+    @Override
+    public void startEdit() {
+        initGraphic();
+        super.startEdit();
     }
 
     /**
@@ -62,6 +72,7 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
             attachEnterEscapeEventHandler();
         }
         setGraphic(control);
+        updateValue(getItem());
     }
 
     /**

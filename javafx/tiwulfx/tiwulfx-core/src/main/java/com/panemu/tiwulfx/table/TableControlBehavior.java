@@ -1,7 +1,3 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.common.ExportToExcel;
@@ -24,7 +20,6 @@ import java.util.List;
  * {@link #loadData(int, java.util.List, java.util.List, java.util.List, int)}
  * is mandatory to be implemented. That method should handle data population for
  * {@link TableControl}
- * @author amrullah
  */
 public abstract class TableControlBehavior<R> {
 

@@ -24,7 +24,7 @@ public class TextColumn<R> extends BaseColumn<R, String> {
     private int maxLength = 0;
     private boolean capitalize = false;
 
-    private final SearchMenuItemBase<String> searchMenuItem = new SearchMenuItemBase<String>(this) {
+    private final SearchMenuItemBase<String> searchMenuItem = new SearchMenuItemBase<>(this) {
         @Override
         protected Node getInputControl() {
             searchInputControl.setPromptText("kata kunci");

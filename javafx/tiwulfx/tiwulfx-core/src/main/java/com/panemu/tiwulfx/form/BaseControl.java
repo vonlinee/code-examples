@@ -341,5 +341,4 @@ public abstract class BaseControl<R, E extends Control> extends HBox {
     public BooleanProperty editableProperty() {
         return this.editable;
     }
-
 }

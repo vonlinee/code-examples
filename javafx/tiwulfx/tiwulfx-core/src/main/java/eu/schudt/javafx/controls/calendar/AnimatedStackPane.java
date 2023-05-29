@@ -3,10 +3,6 @@ package eu.schudt.javafx.controls.calendar;
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -16,7 +12,6 @@ import java.util.Date;
 
 /**
  * The StackPane which manages two {@link DatePane}, which are necessary for the animation.
- *
  * @author Christian Schudt
  */
 final class AnimatedStackPane extends StackPane {
@@ -42,27 +37,21 @@ final class AnimatedStackPane extends StackPane {
         getStyleClass().add("calendar-daypane");
 
         // Listen to changes of the calendar date, if it changes, check if the new date has another month and move the panes accordingly.
-        actualPane.calendarView.calendarDate.addListener(new ChangeListener<Date>() {
-            @Override
-            public void changed(ObservableValue<? extends Date> observableValue, Date oldDate, Date newDate) {
+        actualPane.calendarView.calendarDate.addListener((observableValue, oldDate, newDate) -> {
+            Calendar calendar = actualPane.calendarView.getCalendar();
+            calendar.setTime(oldDate);
+            int oldYear = calendar.get(Calendar.YEAR);
+            int oldMonth = calendar.get(Calendar.MONTH);
 
-
-                Calendar calendar = actualPane.calendarView.getCalendar();
-
-                calendar.setTime(oldDate);
-                int oldYear = calendar.get(Calendar.YEAR);
-                int oldMonth = calendar.get(Calendar.MONTH);
-
-                calendar.setTime(newDate);
-                int newYear = calendar.get(Calendar.YEAR);
-                int newMonth = calendar.get(Calendar.MONTH);
-                // move the panes, if necessary.
-                if (getWidth() > 0 && actualPane.calendarView.ongoingTransitions.get() == 0) {
-                    if (newYear > oldYear || newYear == oldYear && newMonth > oldMonth) {
-                        slideLeftRight(-1, oldDate);
-                    } else if (newYear < oldYear || newYear == oldYear && newMonth < oldMonth) {
-                        slideLeftRight(1, oldDate);
-                    }
+            calendar.setTime(newDate);
+            int newYear = calendar.get(Calendar.YEAR);
+            int newMonth = calendar.get(Calendar.MONTH);
+            // move the panes, if necessary.
+            if (getWidth() > 0 && actualPane.calendarView.ongoingTransitions.get() == 0) {
+                if (newYear > oldYear || newYear == oldYear && newMonth > oldMonth) {
+                    slideLeftRight(-1, oldDate);
+                } else if (newYear < oldYear || newMonth < oldMonth) {
+                    slideLeftRight(1, oldDate);
                 }
             }
         });
@@ -72,7 +61,6 @@ final class AnimatedStackPane extends StackPane {
 
     /**
      * Slides the panes from left to right or vice versa.
-     *
      * @param direction The direction, either 1 (moves to right) or -1 (moves to left).
      * @param oldDate   The date, which the {@link #animatePane} gets set.
      */
@@ -92,14 +80,14 @@ final class AnimatedStackPane extends StackPane {
         // Set the offset depending on the direction.‚‚
         animatePane.setDate(oldDate);
 
-        // Set the clip, so that the translate transition stays within the clip.
+        // Set the clip, so that the translation transition stays within the clip.
         // Use the bounds from one pane.
         setClip(new Rectangle(animatePane.getBoundsInLocal().getWidth(), animatePane.getBoundsInLocal().getHeight()));
 
         // Move the old pane away from 0. (I added 1px, so that both panes overlap, which makes it look a little smoother).
-        transition1.setFromX(-direction * 1);
+        transition1.setFromX(-direction);
         // and either to right or to left.
-        transition1.setToX(getLayoutBounds().getWidth() * direction + -direction * 1);
+        transition1.setToX(getLayoutBounds().getWidth() * direction + -direction);
 
         // Move new pane from left or right
         transition2.setFromX(-getBoundsInParent().getWidth() * direction);
@@ -112,14 +100,11 @@ final class AnimatedStackPane extends StackPane {
         slideTransition.setInterpolator(Interpolator.EASE_OUT);
 
         slideTransition.play();
-        slideTransition.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                // When we are finished, set the animate pane to invisible and remove the clip.
-                animatePane.setVisible(false);
-                // If the calendar gets resized, we don't have any clip.
-                setClip(null);
-            }
+        slideTransition.setOnFinished(actionEvent -> {
+            // When we are finished, set the animate pane to invisible and remove the clip.
+            animatePane.setVisible(false);
+            // If the calendar gets resized, we don't have any clip.
+            setClip(null);
         });
     }
 }
