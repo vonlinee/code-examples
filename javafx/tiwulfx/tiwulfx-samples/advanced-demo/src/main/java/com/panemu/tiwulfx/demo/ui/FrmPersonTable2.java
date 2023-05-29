@@ -86,7 +86,7 @@ public class FrmPersonTable2 extends VBox {
 	protected void init() {
 		tblPerson.setRecordClass(Person.class);
 		tblPerson.setBehavior(controller);
-		tblPerson.setMaxRecord(50);
+		tblPerson.setPageSize(50);
 
 		for (String location : DataGenerator.birthPlaces) {
 			clmBirthPlace.addItem(location, location);
@@ -152,7 +152,7 @@ public class FrmPersonTable2 extends VBox {
 		txtInformation.setText("This form provide an implementation example of editing or inserting records in a separate form.");
 	}
 
-	private TableControlBehavior<Person> controller = new TableControlBehavior<Person>() {
+	private final TableControlBehavior<Person> controller = new TableControlBehavior<>() {
 
 		private DaoBase<Person> daoPerson = new DaoBase<>(Person.class);
 		private Stage dialogStage;// = new Stage();

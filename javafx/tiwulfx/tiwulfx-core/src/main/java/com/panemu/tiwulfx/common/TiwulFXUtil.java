@@ -208,8 +208,8 @@ public class TiwulFXUtil {
 
     /**
      * Convenient way to set tooltip with translated text.
-     * @param control
-     * @param key
+     * @param control control
+     * @param key     tooltip text
      */
     public static void setToolTip(Control control, String key) {
         control.setTooltip(new Tooltip(getLiteral(key)));
@@ -217,7 +217,7 @@ public class TiwulFXUtil {
 
     /**
      * Convenient way to open file using default operating system app.
-     * @param fileToOpen
+     * @param fileToOpen file to open
      * @throws Exception
      */
     public static void openFile(String fileToOpen) throws Exception {
@@ -234,73 +234,70 @@ public class TiwulFXUtil {
         }
     }
 
-    private static String OS = System.getProperty("os.name").toLowerCase();
+    private static final String OS = System.getProperty("os.name").toLowerCase();
 
     /**
      * Check if the app is running on Windows OS
-     * @return
+     * @return boolean
      */
     public static boolean isWindows() {
-        return (OS.indexOf("win") >= 0);
+        return (OS.contains("win"));
     }
 
     /**
-     * Check if the app is running on Mac OS
-     * @return
+     * Check if the app is running on macOS
+     * @return boolean
      */
     public static boolean isMac() {
-        return (OS.indexOf("mac") >= 0);
+        return (OS.contains("mac"));
     }
 
     /**
      * Check if the app is running on Linux or Unix
-     * @return
+     * @return if the platform is unix, return true
      */
     public static boolean isUnix() {
-        return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
+        return (OS.contains("nix") || OS.contains("nux") || OS.indexOf("aix") > 0);
     }
 
     /**
      * Check if the app is running on Solaris OS
-     * @return
+     * @return if the app is running on Solaris OS
      */
     public static boolean isSolaris() {
-        return (OS.indexOf("sunos") >= 0);
+        return (OS.contains("sunos"));
     }
 
     /**
      * Convert LocalDate to Date
-     * @param localDate
-     * @return
+     * @param localDate LocalDate
+     * @return Date
      */
     public static Date toDate(LocalDate localDate) {
         if (localDate == null) {
             return null;
         }
-
         Instant instant = localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
-        Date date = Date.from(instant);
-        return date;
+        return Date.from(instant);
     }
 
     /**
      * Convert Date to LocalDate
-     * @param date
-     * @return
+     * @param date Date
+     * @return LocalDate
      */
     public static LocalDate toLocalDate(Date date) {
         if (date == null) {
             return null;
         }
         Instant instant = Instant.ofEpochMilli(date.getTime());
-        LocalDate res = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
-        return res;
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
     }
 
     /**
      * Application id will be the folder's name where the configuration file is stored inside user's home folder. The folder will be started with a dot.
      * The default configuration file name is conf.properties.
-     * @param id
+     * @param id id
      */
     public static void setApplicationId(String id) {
         setApplicationId(id, "conf.properties");
@@ -309,8 +306,8 @@ public class TiwulFXUtil {
     /**
      * Application id will be the folder's name where the configuration file is stored inside user's home folder.
      * The folder will be started with a dot. The configurationFileName is the filename of the configuration file
-     * @param id
      * @param configurationFileName if null or empty default to conf.properties
+     * @param id                    id
      */
     public static void setApplicationId(String id, String configurationFileName) {
         if (id != null && !id.contains(File.separator) && !id.contains(" ")) {
@@ -346,17 +343,16 @@ public class TiwulFXUtil {
 
     public static String getConfigurationPath() throws IOException {
         String home = System.getProperty("user.home");
-
         String confPath = home + File.separator + applicationId;
-
         File _confFile = new File(confPath);
+        boolean result = false;
         if (!_confFile.exists()) {
-            _confFile.mkdirs();
+            result = _confFile.mkdirs();
         }
         confPath = home + File.separator + applicationId + File.separator + configFileName;
         _confFile = new File(confPath);
         if (!_confFile.exists()) {
-            _confFile.createNewFile();
+            result = _confFile.createNewFile();
         }
         return confPath;
     }
@@ -384,20 +380,22 @@ public class TiwulFXUtil {
     }
 
     /**
+     * 读属性
      * Read property from configuration file. See {@link #setApplicationId(String, String)}
      * <p>
-     * @param propName
-     * @return
+     * @param propName propName
+     * @return {@link String}
      */
     public static String readProperty(String propName) {
         return getConfigurations().getProperty(propName);
     }
 
     /**
+     * 删除属性
      * Delete items from configuration file. See {@link #setApplicationId(String, String)}
      * <p>
-     * @param propNames
-     * @throws Exception
+     * @param propNames 道具名称
+     * @throws Exception 异常
      */
     public synchronized static void deleteProperties(List<String> propNames) throws Exception {
         for (String propName : propNames) {
@@ -407,10 +405,11 @@ public class TiwulFXUtil {
     }
 
     /**
+     * 删除属性
      * Delete an item from configuration file. See {@link #setApplicationId(String, String)}
      * <p>
-     * @param propName
-     * @throws Exception
+     * @param propName 道具名字
+     * @throws Exception 异常
      */
     public synchronized static void deleteProperties(String propName) throws Exception {
         getConfigurations().remove(propName);
@@ -434,12 +433,13 @@ public class TiwulFXUtil {
     private synchronized static void writePropertiesToFile() {
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream(getConfigurationPath());
+            out = new FileOutputStream(Objects.requireNonNull(getConfigurationPath()));
             getConfigurations().store(out, null);
         } catch (Exception ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
             try {
+                assert out != null;
                 out.close();
             } catch (IOException ex) {
                 logger.log(Level.SEVERE, ex.getMessage(), ex);
@@ -448,11 +448,12 @@ public class TiwulFXUtil {
     }
 
     /**
+     * 写属性
      * Save property-name's value to configuration file. See {@link #setApplicationId(String, String)}
      * <p>
-     * @param propName
-     * @param value
-     * @throws Exception
+     * @param propName 名称
+     * @param value    值
+     * @throws Exception 异常
      */
     public synchronized static void writeProperties(String propName, String value) throws Exception {
         getConfigurations().setProperty(propName, value);

@@ -185,14 +185,12 @@ public abstract class LookupFieldController<T> {
 			 * Since we support multiple monitors, ensure that the stage is located in the center of parent stage. But we don't know the dimension of the stage for the calculation, so
 			 * we defer the relocation after the stage is actually displayed.
 			 */
-			Runnable runnable = new Runnable() {
-				public void run() {
-					dialogStage.setX(stage.getX() + stage.getWidth() / 2 - dialogStage.getWidth() / 2);
-					dialogStage.setY(stage.getY() + stage.getHeight() / 2 - dialogStage.getHeight() / 2);
+			Runnable runnable = () -> {
+				dialogStage.setX(stage.getX() + stage.getWidth() / 2 - dialogStage.getWidth() / 2);
+				dialogStage.setY(stage.getY() + stage.getHeight() / 2 - dialogStage.getHeight() / 2);
 
-					//set the opacity back to fully opaque
-					dialogStage.setOpacity(1);
-				}
+				//set the opacity back to fully opaque
+				dialogStage.setOpacity(1);
 			};
 
 			Platform.runLater(runnable);
@@ -235,12 +233,7 @@ public abstract class LookupFieldController<T> {
 	}
 
 	private void close() {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				dialogStage.hide();
-			}
-		});
+		Platform.runLater(() -> dialogStage.hide());
 	}
 
 	protected abstract TableData loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<SortType> sortingTypes, int maxResult);
@@ -261,21 +254,17 @@ public abstract class LookupFieldController<T> {
 	private class LookupWindow extends VBox {
 
 		TableControl<T> table = new TableControl<>();
-		private Button button = new Button(TiwulFXUtil.getLiteral("lookup.select"));
 
 		public LookupWindow() {
-			addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-
-				@Override
-				public void handle(KeyEvent event) {
-					if (event.getCode() == KeyCode.ESCAPE) {
-						close();
-					}
+			addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+				if (event.getCode() == KeyCode.ESCAPE) {
+					close();
 				}
 			});
 			HBox pnlButton = new HBox();
 			pnlButton.setAlignment(Pos.CENTER);
 			pnlButton.setPadding(new Insets(10));
+			Button button = new Button(TiwulFXUtil.getLiteral("lookup.select"));
 			pnlButton.getChildren().add(button);
 
 			getChildren().addAll(table, pnlButton);
@@ -286,12 +275,7 @@ public abstract class LookupFieldController<T> {
 					  Component.BUTTON_EXPORT,
 					  Component.BUTTON_INSERT,
 					  Component.BUTTON_SAVE);
-			button.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent t) {
-					select();
-				}
-			});
+			button.setOnAction(t -> select());
 		}
 	}
 }

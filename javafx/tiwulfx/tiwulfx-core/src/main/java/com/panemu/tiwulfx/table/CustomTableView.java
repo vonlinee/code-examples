@@ -17,7 +17,7 @@ public class CustomTableView<R> extends TableView<R> {
             while (c.next()) {
                 if (c.wasReplaced()) {
                     ObservableList<? extends TableColumn<R, ?>> list = c.getList();
-                    System.out.println(list.get(0).getText());
+                    System.out.println("添加列" + list.get(0).getText());
                 }
             }
         });
@@ -35,17 +35,27 @@ public class CustomTableView<R> extends TableView<R> {
         this.edit(position.getRow(), position.getTableColumn());
     }
 
+    /**
+     * 得到选中的单元格位置
+     * @param index 第几列，0开始
+     * @return {@link TablePosition}<{@link R}, {@link T}>
+     */
     public final <T> TablePosition<R, T> getSelectedCellPosition(int index) {
         return getSelectionModel().getSelectedCells().get(index);
     }
 
+    /**
+     * 获得第几列
+     * @param index 第几列，0开始
+     * @return {@link TableColumn}<{@link R}, {@link T}>
+     */
     public final <T> TableColumn<R, T> getColumn(int index) {
         return (TableColumn<R, T>) getColumns().get(index);
     }
 
     /**
-     * 得到选择列
-     * @param index 索引
+     * 得到选择中的第几列
+     * @param index 第几列，0开始
      * @return {@link TableColumn}<{@link R}, {@link C}>
      */
     public final <C> TableColumn<R, C> getSelectedColumn(int index) {
@@ -61,7 +71,7 @@ public class CustomTableView<R> extends TableView<R> {
     }
 
     /**
-     * 是否存在选择的单元格
+     * 是否存在选中的单元格
      * @return boolean 是否存在选择的单元格
      */
     public final boolean hasSelectedCells() {

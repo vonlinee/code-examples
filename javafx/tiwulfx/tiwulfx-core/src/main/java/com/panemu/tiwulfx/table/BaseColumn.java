@@ -15,10 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This is a parent class for columns that display value from a POJO object.
@@ -191,7 +188,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
         this.alignment = alignment;
     }
 
-    private BooleanProperty filterable = new SimpleBooleanProperty(true);
+    private final BooleanProperty filterable = new SimpleBooleanProperty(true);
 
     public BooleanProperty filterableProperty() {
         return filterable;
@@ -210,7 +207,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
         return this.filterable.get();
     }
 
-    private BooleanProperty required = new SimpleBooleanProperty(false);
+    private final BooleanProperty required = new SimpleBooleanProperty(false);
 
     /**
      * Set the field to required and cannot null. Some columns implementation
@@ -382,7 +379,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
     /**
      * Remove a listener of editCommit event.
-     * @param listener
+     * @param listener EditCommitListener
      */
     public void removeEditCommitListener(EditCommitListener<R, C> listener) {
         lstEditCommitListener.remove(listener);
@@ -410,24 +407,12 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
         Platform.runLater(() -> fireEditCommitChangeEvent(record, oldValue, newValue));
     }
 
-//    public void revertRecordChange(R record) {
-//        RecordChange rc = mapChangedRecord.get(record);
-//        if (rc != null) {
-//            try {
-//                PropertyUtils.setSimpleProperty(record, getPropertyName(), rc.getOldValue());
-//                mapChangedRecord.remove(record);
-//            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-//                throw new RuntimeException(ex);
-//            }
-//        }
-//    }
-
-    void clearRecordChange() {
+    public void clearRecordChange() {
         mapChangedRecord.clear();
     }
 
-    Map<R, RecordChange<R, C>> getRecordChangeMap() {
-        return mapChangedRecord;
+    public final Collection<? extends RecordChange<R, C>> getRecordChanges() {
+        return mapChangedRecord.values();
     }
 
     private final List<CellEditorListener<R, C>> lstValueChangeListener = new ArrayList<>();

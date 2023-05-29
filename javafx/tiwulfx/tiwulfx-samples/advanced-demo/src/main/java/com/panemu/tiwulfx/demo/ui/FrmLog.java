@@ -103,7 +103,7 @@ public class FrmLog extends VBox {
     protected void init() {
         tblPerson.setRecordClass(Person.class);
         tblPerson.setBehavior(controller);
-        tblPerson.setMaxRecord(50);
+        tblPerson.setPageSize(50);
 
         for (String location : DataGenerator.birthPlaces) {
             clmBirthPlace.addItem(location, location);
@@ -196,12 +196,11 @@ public class FrmLog extends VBox {
 
         @Override
         public List<Person> update(List<Person> records) {
-            Runnable runnable = () -> tblPerson.getRecordChangeList().forEach((rc) -> {
+            Platform.runLater(() -> tblPerson.getRecordChangeList().forEach((rc) -> {
                 String log = String.format("Property Name: %s, Old Value: %s, New Value: %s, Timestamp: %s \n", rc.getPropertyName(), rc.getOldValue(), rc.getNewValue(), Calendar
                         .getInstance().getTime());
                 txtLog.insertText(0, log);
-            });
-            Platform.runLater(runnable);
+            }));
             List<Person> result = daoPerson.update(records);
             return daoPerson.initRelationship(result, "insurance");
         }

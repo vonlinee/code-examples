@@ -80,7 +80,7 @@ public class FrmMasterDetail extends VBox {
 	private void initDetailTable() {
 		tblPerson.setRecordClass(Person.class);
 		tblPerson.setBehavior(cntlPerson);
-		tblPerson.setMaxRecord(50);
+		tblPerson.setPageSize(50);
 		tblPerson.getTableView().setTableMenuButtonVisible(true);
 		TiwulfxDemo.factory.createEntityManager();
 		TextColumn<Person> clmName = new TextColumn<>("name", 150);

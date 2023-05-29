@@ -53,14 +53,14 @@ class TableControlMenu extends MenuButton {
         // Max Row
         ////////////////////////////////
         final NumberField<Integer> txtMaxRow = new NumberField<>(Integer.class);
-        txtMaxRow.setValue(tableControl.getMaxRecord());
+        txtMaxRow.setValue(tableControl.getPageSize());
         txtMaxRow.valueProperty().addListener((observable, oldValue, newValue) -> {
             ignore = true;
             int max = newValue == null || newValue == 0 ? 1 : newValue;
-            tableControl.setMaxRecord(max);
+            tableControl.setPageSize(max);
             ignore = false;
         });
-        tableControl.maxRecordProperty().addListener((observable, oldValue, newValue) -> {
+        tableControl.pageSizeProperty().addListener((observable, oldValue, newValue) -> {
             if (ignore) {
                 return;
             }

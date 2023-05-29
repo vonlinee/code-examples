@@ -29,10 +29,10 @@ public abstract class TableControlBehavior<R> {
      * @param filteredColumns list of columns filtered by user
      * @param sortedColumns   list of sorted columns
      * @param sortingOrders   list of sorting orders in the same index with {@code sortedColumns}
-     * @param maxResult       max records to retrieve. Used for pagination.
+     * @param pageSize        max records to retrieve. Used for pagination.
      * @return TableData
      */
-    public abstract TableData<R> loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<SortType> sortingOrders, int maxResult);
+    public abstract TableData<R> loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<SortType> sortingOrders, int pageSize);
 
     /**
      * Override this method to implement insert routine. This method is called
