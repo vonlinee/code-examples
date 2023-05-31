@@ -277,7 +277,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
     /**
      * Get a Record-InvalidErrorMessage map that is managed by calls to {@link #setValid(java.lang.Object)}
      * and {@link #setInvalid(java.lang.Object, java.lang.String)}
-     * @return
+     * @return mapInvalid
      */
     public ObservableMap<R, String> getInvalidRecordMap() {
         return mapInvalid;
@@ -287,7 +287,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
      * Add validator. The validator will be called with the same sequence the
      * validators are added to input controls. One validator instance is
      * reusable across columns, but only can be added once in a column.
-     * @param validator
+     * @param validator Validator
      */
     public void addValidator(Validator<C> validator) {
         if (!lstValidator.contains(validator)) {
@@ -391,12 +391,13 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
         }
     }
 
-    void addRecordChange(R record, C oldValue, C newValue) {
+    @SuppressWarnings("unchecked")
+    void addRecordChange(R record, Object oldValue, Object newValue) {
         if (mapChangedRecord.containsKey(record)) {
             RecordChange<R, C> rc = mapChangedRecord.get(record);
-            rc.setNewValue(newValue);
+            rc.setNewValue((C) newValue);
         } else {
-            RecordChange<R, C> rc = new RecordChange<>(record, getPropertyName(), oldValue, newValue);
+            RecordChange<R, C> rc = (RecordChange<R, C>) new RecordChange<>(record, getPropertyName(), oldValue, newValue);
             mapChangedRecord.put(record, rc);
         }
         /**
@@ -404,7 +405,7 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
          * is assigned to the record after this method call ends (See TableControl oneditcommit).
          * In order the event is fired after the newValue is assigned, run the event in Platform.runLater
          */
-        Platform.runLater(() -> fireEditCommitChangeEvent(record, oldValue, newValue));
+        Platform.runLater(() -> fireEditCommitChangeEvent(record, (C) oldValue, (C) newValue));
     }
 
     public void clearRecordChange() {
@@ -438,5 +439,18 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
 
     public final boolean isRecordInvalid(R record) {
         return getInvalidRecordMap().containsKey(record);
+    }
+
+    /**
+     * 获取列中某一行的字符串值
+     * @param row 行
+     * @return {@link String}
+     */
+    public final String getStringValueOfRow(R row) {
+        return stringConverter.toString(getCellData(row));
+    }
+
+    public final String getStringValueOfRow(int row) {
+        return stringConverter.toString(getCellData(row));
     }
 }

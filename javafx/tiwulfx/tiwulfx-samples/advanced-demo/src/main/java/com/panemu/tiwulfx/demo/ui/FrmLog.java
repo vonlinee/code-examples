@@ -176,12 +176,13 @@ public class FrmLog extends VBox {
         @Override
         public TableData loadData(int startIndex, List<TableCriteria> filteredColumns, List<String> sortedColumns, List<TableColumn.SortType> sortingOrders, int maxResult) {
             boolean join = true;
-//        for (TableCriteria crit : filteredColumns) {
-//            if (crit.getAttributeName().equals("insurance") && crit.getOperator() == Operator.is_null) {
-//                join = false;
-//                break;
-//            }
-//        }
+            for (TableCriteria crit : filteredColumns) {
+                if (crit.getAttributeName()
+                        .equals("insurance") && crit.getOperator() == TableCriteria.Condition.is_null) {
+                    join = false;
+                    break;
+                }
+            }
             List<String> lstJoin = new ArrayList<>();
             if (join) {
                 lstJoin.add("insurance");

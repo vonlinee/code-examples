@@ -1,21 +1,3 @@
-/*
- * Copyright (C) 2013 Panemu.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301  USA
- */
 package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.common.TableCriteria.Condition;
@@ -36,15 +18,10 @@ import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
-/**
- *
- * @author amrullah
- */
 public class TypeAheadColumn<R, C> extends BaseColumn<R, C>{
-	private ObservableMap<String, C> itemMap = FXCollections.observableMap(new LinkedHashMap<String, C>());
-	
-	private TypeAheadField<C> searchInputControl = new TypeAheadField<>();
-	private SearchMenuItemBase<C> searchMenuItem = new SearchMenuItemBase<C>(this) {
+	private final ObservableMap<String, C> itemMap = FXCollections.observableMap(new LinkedHashMap<String, C>());
+	private final TypeAheadField<C> searchInputControl = new TypeAheadField<>();
+	private final SearchMenuItemBase<C> searchMenuItem = new SearchMenuItemBase<C>(this) {
 		@Override
 		protected Node getInputControl() {
 			return searchInputControl;
@@ -167,7 +144,7 @@ public class TypeAheadColumn<R, C> extends BaseColumn<R, C>{
 		}
 	};
 	
-	private BooleanProperty sortedProperty = new SimpleBooleanProperty(false);
+	private final BooleanProperty sortedProperty = new SimpleBooleanProperty(false);
 	/**
 	 * 
 	 * @return 
@@ -194,5 +171,4 @@ public class TypeAheadColumn<R, C> extends BaseColumn<R, C>{
 	public BooleanProperty sortedProperty() {
 		return sortedProperty;
 	}
-	
 }

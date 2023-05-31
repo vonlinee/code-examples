@@ -29,20 +29,15 @@ import javafx.scene.control.TableView;
  */
 public class TickColumn<R> extends TableColumn<R, Boolean> {
 
-	private ReadOnlyListWrapper<R> tickedRecords = new ReadOnlyListWrapper<R>(FXCollections.<R>observableArrayList());
-	private CheckBox chkHeader = new CheckBox();
+	private final ReadOnlyListWrapper<R> tickedRecords = new ReadOnlyListWrapper<R>(FXCollections.<R>observableArrayList());
+	private final CheckBox chkHeader = new CheckBox();
 
 	public TickColumn() {
 		super();
 		setSortable(false);
 		setGraphic(chkHeader);
 		chkHeader.setSelected(defaultTicked.get());
-		defaultTicked.addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				chkHeader.setSelected(newValue);
-			}
-		});
+		defaultTicked.addListener((observable, oldValue, newValue) -> chkHeader.setSelected(newValue));
 		setText(null);
 		setCellFactory((TableColumn<R, Boolean> param) -> new TickCell());
 		setCellValueFactory((CellDataFeatures<R, Boolean> param) -> {
@@ -84,7 +79,7 @@ public class TickColumn<R> extends TableColumn<R, Boolean> {
 		});
 		chkHeader.disableProperty().bind(this.editableProperty().not());
 	}
-	private BooleanProperty defaultTicked = new SimpleBooleanProperty(false);
+	private final BooleanProperty defaultTicked = new SimpleBooleanProperty(false);
 
 	public boolean isDefaultTicked() {
 		return defaultTicked.get();
@@ -119,10 +114,7 @@ public class TickColumn<R> extends TableColumn<R, Boolean> {
 	 * @return
 	 */
 	public Boolean isTicked(R item) {
-		if (tickedRecords.contains(item)) {
-			return true;
-		}
-		return false;
+		return tickedRecords.contains(item);
 	}
 
 	/**
@@ -151,8 +143,7 @@ public class TickColumn<R> extends TableColumn<R, Boolean> {
 	}
 
 	public List<R> getTickedRecords() {
-		final List<R> lst = new ArrayList<>(tickedRecords);
-		return lst;
+		return new ArrayList<>(tickedRecords);
 	}
 
 	public List<R> getUntickedRecords() {
@@ -163,11 +154,16 @@ public class TickColumn<R> extends TableColumn<R, Boolean> {
 
 	private class TickCell extends TableCell<R, Boolean> {
 
-		private CheckBox checkbox = new CheckBox();
+		private final CheckBox checkbox = new CheckBox();
 
 		public TickCell() {
 			super();
 			checkbox.setDisable(!TickColumn.this.isEditable());
+			ChangeListener<Boolean> editableListener = (observable, oldValue, newValue) -> {
+				if (newValue != null) {
+					checkbox.setDisable(!newValue);
+				}
+			};
 			TickColumn.this.editableProperty().addListener(new WeakChangeListener<>(editableListener));
 			setGraphic(checkbox);
 			setAlignment(Pos.BASELINE_CENTER);
@@ -191,15 +187,12 @@ public class TickColumn<R> extends TableColumn<R, Boolean> {
 				}
 			});
 
-			checkbox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-				@Override
-				public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-					setTicked((R) getTableRow().getItem(), newValue);
-					if (!newValue) {
-						setHeaderSelected(false);
-					} else {
-						setHeaderSelected(tickedRecords.size() == getTableView().getItems().size());
-					}
+			checkbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+				setTicked(getTableRow().getItem(), newValue);
+				if (!newValue) {
+					setHeaderSelected(false);
+				} else {
+					setHeaderSelected(tickedRecords.size() == getTableView().getItems().size());
 				}
 			});
 		}
@@ -210,19 +203,11 @@ public class TickColumn<R> extends TableColumn<R, Boolean> {
 			if (!empty && getTableRow() != null && getTableRow().getItem() != null) {
 				setGraphic(checkbox);
 				if (getTableRow() != null) {
-					checkbox.setSelected(isTicked((R) getTableRow().getItem()));
+					checkbox.setSelected(isTicked(getTableRow().getItem()));
 				}
 			} else {
 				setGraphic(null);
 			}
 		}
-		private ChangeListener<Boolean> editableListener = new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				if (newValue != null) {
-					checkbox.setDisable(!newValue);
-				}
-			}
-		};
 	}
 }

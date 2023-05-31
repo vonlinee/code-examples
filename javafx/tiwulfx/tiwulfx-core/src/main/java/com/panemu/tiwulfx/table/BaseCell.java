@@ -9,6 +9,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
+/**
+ * 兼容JavaFX原本的API: TableView 和 TableColumn
+ * @param <R> 行数据类型
+ * @param <C> 列数据类型
+ */
 public abstract class BaseCell<R, C> extends TableCell<R, C> {
 
     private Control control;
@@ -20,7 +25,6 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
         EventHandler<MouseEvent> mouseEventEventHandler = event -> {
             TableColumn<R, C> clm = getTableColumn();
             if (clm instanceof BaseColumn<R, C> baseColumn && !baseColumn.isValid(getTableRow().getItem())) {
-                System.out.println("展示");
                 PopupControl popup = baseColumn.getPopup(getTableRow().getItem());
                 if (event.getEventType() == MouseEvent.MOUSE_MOVED && !popup.isShowing()) {
                     Point2D p = BaseCell.this.localToScene(0.0, 0.0);
@@ -36,13 +40,9 @@ public abstract class BaseCell<R, C> extends TableCell<R, C> {
         this.setOnMouseExited(mouseEventEventHandler);
         this.setOnMouseMoved(mouseEventEventHandler);
 
-        focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!newValue) {
-                    // 失去焦点
-                    setContentDisplay(ContentDisplay.TEXT_ONLY);
-                }
+        this.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                setContentDisplay(ContentDisplay.TEXT_ONLY); // 失去焦点
             }
         });
     }

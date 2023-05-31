@@ -1,7 +1,3 @@
-/*
- * License GNU LGPL
- * Copyright (C) 2012 Amrullah .
- */
 package com.panemu.tiwulfx.table;
 
 import com.panemu.tiwulfx.common.TableCriteria.Condition;
@@ -14,9 +10,6 @@ import javafx.util.StringConverter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author amrullah
- */
 public class TextColumn<R> extends BaseColumn<R, String> {
 
     private final TextField searchInputControl = new TextField();

@@ -96,7 +96,7 @@ public class LocalDateColumn<R> extends BaseColumn<R, LocalDate> {
         return dateFormat;
     }
 
-    private ObjectProperty<DateTimeFormatter> dateFormat = new SimpleObjectProperty<>(TiwulFXUtil.getDateFormatForLocalDate());
+    private final ObjectProperty<DateTimeFormatter> dateFormat = new SimpleObjectProperty<>(TiwulFXUtil.getDateFormatForLocalDate());
 
     public void setDateFormat(DateTimeFormatter dateFormat) {
         this.dateFormat.set(dateFormat);
@@ -123,7 +123,7 @@ public class LocalDateColumn<R> extends BaseColumn<R, LocalDate> {
      * disable date, by default the controller will display an error message and
      * revert the value back. To change this behavior, override {@link LocalDateFieldController#onDisabledDateSelected(javafx.scene.control.DatePicker, java.time.LocalDate)
      * DateFieldController.onDisabledDateSelected}
-     * @param dateFieldController
+     * @param dateFieldController LocalDateFieldController
      */
     public void setController(LocalDateFieldController dateFieldController) {
         this.controllerProperty.set(dateFieldController);

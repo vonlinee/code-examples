@@ -209,11 +209,8 @@ public class TableControl<R> extends VBox {
             TableView.TableViewSelectionModel<R> selectionModel = tblView.getSelectionModel();
             if (isReadMode()) {
                 if (event.getCode() == KeyCode.C && event.isControlDown()) {
-                    if (event.isShiftDown()) {
-                        copyRow();
-                    } else {
-                        copyCell();
-                    }
+                    if (event.isShiftDown()) copyRow();
+                    else copyCell();
                     event.consume();
                 } else if (event.getCode() == KeyCode.B && event.isAltDown()) {
                     // Alt + B 浏览选中行
@@ -317,7 +314,7 @@ public class TableControl<R> extends VBox {
         return columns;
     }
 
-    public ObservableList<R> getChangedRecords() {
+    public final ObservableList<R> getChangedRecords() {
         return lstChangedRow;
     }
 
@@ -599,7 +596,7 @@ public class TableControl<R> extends VBox {
                                 Object newValue = ((BaseColumn<R, ?>) toFillColumn).convertFromString(stringCellValue);
                                 ClassUtils.setSimpleProperty(item, ((BaseColumn<R, ?>) toFillColumn).getPropertyName(), newValue);
                                 if (isEditMode()) {
-                                    ((BaseColumn<R, Object>) toFillColumn).addRecordChange(item, oldValue, newValue);
+                                    ((BaseColumn<R, ?>) toFillColumn).addRecordChange(item, oldValue, newValue);
                                 }
                             } catch (Exception ex) {
                                 MessageDialog.Answer answer = MessageDialogBuilder.error(ex)
@@ -728,54 +725,19 @@ public class TableControl<R> extends VBox {
     }
 
     private TableContextMenu tableContextMenu;
-    private MenuItem searchMenuItem;
 
+    /**
+     * 复制一个单元格
+     */
     private void copyCell() {
-        R selectedRow = getSelectedItem();
-        if (selectedRow == null) {
-            return;
-        }
-        String textToCopy;
-        TablePosition<R, ?> pos = tblView.getSelectedCellPosition(0);
-        TableColumn<R, ?> column = null;
-        if (pos != null) {
-            column = pos.getTableColumn();
-        }
-        if (column instanceof BaseColumn<R, ?> bc) {
-            textToCopy = bc.convertToString(bc.getCellData(selectedRow));
-        } else if (column != null) {
-            Object cellValue = column.getCellData(selectedRow);
-            textToCopy = String.valueOf(cellValue);
-        } else {
-            logger.log(Level.SEVERE, "Failed to detect column to copy from");
-            return;
-        }
-        ClipboardUtils.putString(textToCopy);
+        System.out.println("复制一个单元格");
     }
 
+    /**
+     * Ctrl + C 复制一行
+     */
     private void copyRow() {
-        R selectedRow = getSelectedItem();
-        if (selectedRow == null) {
-            return;
-        }
-        StringBuilder textToCopy = new StringBuilder();
-        for (TableColumn clm : getLeafColumns()) {
-            if (clm instanceof BaseColumn) {
-                BaseColumn bc = (BaseColumn) clm;
-                Object cellData = bc.getCellData(selectedRow);
-                textToCopy.append(bc.convertToString(cellData)).append("\t");
-            } else {
-                Object cellValue = clm.getCellData(selectedRow);
-                textToCopy.append(cellValue).append("\t");
-            }
-        }
-        if (textToCopy.toString().endsWith("\t")) {
-            textToCopy = new StringBuilder(textToCopy.substring(0, textToCopy.length() - 1));
-        }
-        Clipboard clipboard = Clipboard.getSystemClipboard();
-        ClipboardContent content = new ClipboardContent();
-        content.putString(textToCopy.toString());
-        clipboard.setContent(content);
+        System.out.println("复制一行");
     }
 
     public void browseSelectedRow() {
@@ -784,17 +746,15 @@ public class TableControl<R> extends VBox {
             return;
         }
         List<TableColumn<R, ?>> lstColumn = getLeafColumns();
-        List<RowBrowser.Record> lstRecord = new ArrayList<>();
+        List<Record> lstRecord = new ArrayList<>();
         for (TableColumn<R, ?> tableColumn : lstColumn) {
-            RowBrowser.Record rcd;
-            if (tableColumn instanceof BaseColumn) {
-                String stringVal = ((BaseColumn) tableColumn).getStringConverter()
-                        .toString(((BaseColumn) tableColumn).getCellData(selectedRow));
-                rcd = new RowBrowser.Record(tableColumn.getText(), stringVal);
+            Record rcd;
+            if (tableColumn instanceof BaseColumn<R, ?> column) {
+                rcd = new Record(tableColumn.getText(), column.getStringValueOfRow(selectedRow));
             } else {
                 String stringVal = tableColumn.getCellData(selectedRow) == null ? "" : tableColumn
                         .getCellData(selectedRow).toString();
-                rcd = new RowBrowser.Record(tableColumn.getText(), stringVal);
+                rcd = new Record(tableColumn.getText(), stringVal);
             }
             lstRecord.add(rcd);
         }
@@ -806,8 +766,7 @@ public class TableControl<R> extends VBox {
     }
 
     public void closeRowBrowsers() {
-        List<RowBrowser> lst = new ArrayList<>(lstRowBrowser);
-        lst.forEach(RowBrowser::close);
+        lstRowBrowser.forEach(RowBrowser::close);
     }
 
     /**
@@ -895,25 +854,21 @@ public class TableControl<R> extends VBox {
     private void initColumn(TableColumn<R, ?> clm) {
         List<TableColumn<R, ?>> lstColumn = getColumnsRecursively(List.of(clm));
         for (TableColumn<R, ?> column : lstColumn) {
-            if (column instanceof BaseColumn) {
-                final BaseColumn baseColumn = (BaseColumn) column;
+            if (column instanceof BaseColumn<R, ?> baseColumn) {
                 baseColumn.tableCriteriaProperty().addListener(tableCriteriaListener);
                 baseColumn.sortTypeProperty().addListener(sortTypeChangeListener);
-
                 baseColumn.setOnEditCommit(event -> {
-                    CellEditEvent<R, ?> t = (CellEditEvent<R, ?>) event;
-                    final R persistentObj = TableViewHelper.getEditingItem(t);
-                    // System.out.println("列编辑提交事件" + persistentObj + " : \n" + t.getOldValue() + " => " + t.getNewValue());
+                    final R persistentObj = TableViewHelper.getEditingItem(event);
                     if (persistentObj == null) {
                         return;
                     }
-                    if (isEditMode() && TableViewHelper.isValueChanged(t)) {
+                    if (isEditMode() && TableViewHelper.isValueChanged(event)) {
                         if (!lstChangedRow.contains(persistentObj)) {
                             lstChangedRow.add(persistentObj);
                         }
-                        baseColumn.addRecordChange(persistentObj, t.getOldValue(), t.getNewValue());
+                        baseColumn.addRecordChange(persistentObj, event.getOldValue(), event.getNewValue());
                     }
-                    ClassUtils.setSimpleProperty(persistentObj, baseColumn.getPropertyName(), t.getNewValue());
+                    ClassUtils.setSimpleProperty(persistentObj, baseColumn.getPropertyName(), event.getNewValue());
                     baseColumn.validate(persistentObj);
                 });
             }
