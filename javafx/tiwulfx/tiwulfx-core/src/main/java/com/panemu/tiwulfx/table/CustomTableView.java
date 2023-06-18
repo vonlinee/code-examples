@@ -95,4 +95,13 @@ public class CustomTableView<R> extends TableView<R> {
     public final void selectCell(TablePosition position) {
         getSelectionModel().select(position.getRow(), position.getTableColumn());
     }
+
+    /**
+     * 编辑某行某列
+     * @param row 行
+     * @param col 列
+     */
+    public final void edit(int row, int col) {
+        edit(row, getColumns().get(col));
+    }
 }

@@ -8,6 +8,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -50,6 +51,8 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
     private String nullLabel = TiwulFXUtil.DEFAULT_NULL_LABEL;
     private final Map<R, RecordChange<R, C>> mapChangedRecord = new HashMap<>();
 
+    private final ObservableList<BaseColumn<R, ?>> columns = FXCollections.observableArrayList();
+
     private StringConverter<C> stringConverter = new StringConverter<>() {
         @Override
         public String toString(C t) {
@@ -66,9 +69,12 @@ public class BaseColumn<R, C> extends TableColumn<R, C> {
         }
     };
 
+    TableCriteria createSearchCriteria(TableCriteria.Condition operator, C value) {
+        return new TableCriteria(propertyName, operator, value);
+    }
 
-    TableCriteria<C> createSearchCriteria(TableCriteria.Condition operator, C value) {
-        return new TableCriteria<>(propertyName, operator, value);
+    public BaseColumn() {
+
     }
 
     /**

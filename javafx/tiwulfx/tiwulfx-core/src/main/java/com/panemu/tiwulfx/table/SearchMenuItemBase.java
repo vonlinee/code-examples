@@ -26,7 +26,7 @@ import java.util.Map;
 public abstract class SearchMenuItemBase<C> extends SeparatorMenuItem {
 
     private final ChoiceBox<Condition> operatorChoice = new ChoiceBox<>();
-    private TableCriteria<C> searchCriteria;
+    private TableCriteria searchCriteria;
     private final Button btnRemove = new Button(TiwulFXUtil.getLiteral("remove.filter"));
 
     protected abstract Node getInputControl();
@@ -107,7 +107,7 @@ public abstract class SearchMenuItemBase<C> extends SeparatorMenuItem {
         });
 
         column.tableCriteriaProperty().addListener(observable -> {
-            TableCriteria<?> crit = (TableCriteria<?>) ((SimpleObjectProperty<?>) observable).getValue();
+            TableCriteria crit = (TableCriteria) ((SimpleObjectProperty<?>) observable).getValue();
             if (crit == null) {
                 vbox.getChildren().remove(btnRemove);
             } else if (!vbox.getChildren().contains(btnRemove)) {

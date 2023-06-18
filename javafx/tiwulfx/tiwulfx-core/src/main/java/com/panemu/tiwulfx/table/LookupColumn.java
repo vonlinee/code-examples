@@ -143,8 +143,8 @@ public class LookupColumn<R, C> extends BaseColumn<R, C> {
     }
 
     @Override
-    TableCriteria<C> createSearchCriteria(TableCriteria.Condition operator, C value) {
-        return new TableCriteria<>(this.getPropertyName() + "." + lookupPropertyName, operator, value);
+    TableCriteria createSearchCriteria(TableCriteria.Condition operator, C value) {
+        return new TableCriteria(this.getPropertyName() + "." + lookupPropertyName, operator, value);
     }
 
     public int getShowSuggestionWaitTime() {

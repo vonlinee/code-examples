@@ -79,7 +79,7 @@ public class FrmPerson extends StackPane {
         tblPerson.reloadFirstPage();
     }
 
-    private LookupFieldController<Insurance> insuranceLookupController = new LookupFieldController<Insurance>(Insurance.class) {
+    private final LookupFieldController<Insurance> insuranceLookupController = new LookupFieldController<>(Insurance.class) {
         @Override
         public String[] getColumns() {
             return new String[]{

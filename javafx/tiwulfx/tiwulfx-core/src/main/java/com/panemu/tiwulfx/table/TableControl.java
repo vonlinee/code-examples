@@ -25,7 +25,6 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.skin.VirtualFlow;
@@ -51,7 +50,7 @@ public class TableControl<R> extends VBox {
     private final SimpleIntegerProperty startIndex = new SimpleIntegerProperty(0);
     private final StartIndexChangeListener startIndexChangeListener = new StartIndexChangeListener();
     private final InvalidationListener sortTypeChangeListener = new SortTypeChangeListener();
-
+    private int lastColumnIndex = 0;
     /**
      * 操作模式
      */
@@ -63,10 +62,6 @@ public class TableControl<R> extends VBox {
 
     private long totalRows = 0;
     private Integer currentPage = 0;
-
-    public final int getStartIndex() {
-        return startIndex.get();
-    }
 
     /**
      * 存放修改的行
@@ -308,8 +303,6 @@ public class TableControl<R> extends VBox {
         return (currentPage * pageSize.get() + rowIndex.intValue() + 1);
     }
 
-    private int lastColumnIndex = 0;
-
     public final ObservableList<TableColumn<R, ?>> getColumns() {
         return columns;
     }
@@ -338,7 +331,6 @@ public class TableControl<R> extends VBox {
         toolBar.disableProperty().bind(service.runningProperty());
 
         footer = new Footer(this);
-
 
         getChildren().addAll(toolBar, tblView, footer);
 
@@ -724,7 +716,7 @@ public class TableControl<R> extends VBox {
         return tblView.getSelectionModel().selectedItemProperty().get();
     }
 
-    private TableContextMenu tableContextMenu;
+    private final TableContextMenu tableContextMenu;
 
     /**
      * 复制一个单元格
@@ -779,7 +771,6 @@ public class TableControl<R> extends VBox {
         tableContextMenu.getItems().add(menuItem);
     }
 
-
     /**
      * Remove passed menuItem from context menu.
      * @param menuItem MenuItem
@@ -789,7 +780,7 @@ public class TableControl<R> extends VBox {
         tableContextMenu.getItems().remove(menuItem);
     }
 
-    protected <T> void resizeToFit(TableColumn<R, T> col, int maxRows) {
+    protected <T> void resizeToFit(TableColumn<R, T> col) {
         List<?> items = tblView.getItems();
         if (items == null || items.isEmpty()) {
             return;
@@ -813,7 +804,7 @@ public class TableControl<R> extends VBox {
             padding = region.getInsets().getLeft() + region.getInsets().getRight();
         }
 
-        int rows = maxRows == -1 ? items.size() : Math.min(items.size(), maxRows);
+        int rows = items.size();
         double maxWidth = 0;
         for (int row = 0; row < rows; row++) {
             cell.updateTableColumn(col);
@@ -1393,9 +1384,8 @@ public class TableControl<R> extends VBox {
              * ArrayIndexOutOfBound exception happens since tblView items are
              * cleared (see next lines) but setOnEditCommit listener is executed.
              */
-            tblView.edit(-1, tblView.getColumns().get(0));
+            tblView.edit(-1, 0);
         }
-
         tblView.getItems().setAll(vol.getRows());
         if (selectedIndex < vol.getRows().size()) {
             tblView.getSelectionModel().select(selectedIndex, selectedColumn);
@@ -1418,7 +1408,7 @@ public class TableControl<R> extends VBox {
         clearChange();
         if (fitColumnAfterReload) {
             for (TableColumn<R, ?> clm : tblView.getColumns()) {
-                resizeToFit(clm, -1);
+                resizeToFit(clm);
             }
         }
         footer.updateTotalRecord(totalRows);
