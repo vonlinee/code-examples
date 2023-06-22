@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.mybatis.crud.mapper.AdminClassMapper">
+
+  <select id="selectByCondition" resultType="org.example.mybatis.crud.entity.AdminClass">
+    SELECT * FROM admin_class WHERE 1 = 1
+    <if test="className != null and className != ''">
+      AND instr(class_name, #{className}) > 0
+    </if>
+    <if test="grade != null and grade != ''">
+      AND grade = #{grade}
+    </if>
+  </select>
+</mapper>
