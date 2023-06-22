@@ -26,13 +26,10 @@ public class MainApp extends Application {
 
         ObservableList<String> list = FXCollections.observableArrayList();
 
-        list.addListener(new ListChangeListener<String>() {
-            @Override
-            public void onChanged(Change<? extends String> c) {
-                while (c.next()) {
-                    for (String s : c.getAddedSubList()) {
-                        System.out.println(s);
-                    }
+        list.addListener((ListChangeListener<String>) c -> {
+            while (c.next()) {
+                for (String s : c.getAddedSubList()) {
+                    System.out.println(s);
                 }
             }
         });

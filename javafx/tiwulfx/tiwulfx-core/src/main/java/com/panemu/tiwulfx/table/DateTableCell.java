@@ -46,7 +46,6 @@ public class DateTableCell<R> extends BaseCell<R, Date> {
 					event.consume();
 				}
 			});
-			
 			datePicker.selectedDateProperty().addListener((ov, t, newValue) -> {
 				for (CellEditorListener<R, Date> svl : column.getCellEditorListeners()) {
 					svl.valueChanged(getTableRow().getIndex(), column.getPropertyName(), (R) getTableRow().getItem(), newValue);

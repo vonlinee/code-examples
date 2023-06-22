@@ -4,9 +4,8 @@ import java.io.Serializable;
 
 /**
  * Table Query Criteria
- * @param <T> table column data type
  */
-public class TableCriteria<T> implements Serializable {
+public class TableCriteria implements Serializable {
 
     public enum Condition {
         in("in"),
@@ -39,9 +38,9 @@ public class TableCriteria<T> implements Serializable {
 
     private String attributeName;
     private Condition operator;
-    private T value;
+    private Object value;
 
-    public TableCriteria(String attributeName, Condition operator, T value) {
+    public TableCriteria(String attributeName, Condition operator, Object value) {
         this.attributeName = attributeName;
         this.operator = operator;
         this.value = value;
@@ -63,11 +62,11 @@ public class TableCriteria<T> implements Serializable {
         this.operator = operator;
     }
 
-    public T getValue() {
+    public Object getValue() {
         return value;
     }
 
-    public void setValue(T value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 }
