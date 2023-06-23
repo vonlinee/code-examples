@@ -61,6 +61,15 @@ export const menuRoutes: RouteRecordRaw[] = [
                     title: 'MyBatis 工具',
                     icon: 'icon-edit-square'
                 }
+            },
+            {
+                path: '/test',
+                name: '测试',
+                component: () => import('@/views/test/index.vue'),
+                meta: {
+                    title: '测试',
+                    icon: 'icon-edit-square'
+                }
             }
         ]
     }

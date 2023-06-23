@@ -19,12 +19,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * 数据源管理
- *
- * @author 阿沐 babamu@126.com
- * <a href="https://maku.net">MAKU</a>
  */
 @Service
 @AllArgsConstructor
@@ -34,10 +30,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 
     @Override
     public PageResult<DataSourceEntity> page(Query query) {
-        IPage<DataSourceEntity> page = baseMapper.selectPage(
-                getPage(query),
-                getWrapper(query)
-        );
+        IPage<DataSourceEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
         return new PageResult<>(page.getRecords(), page.getTotal());
     }
 

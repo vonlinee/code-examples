@@ -69,6 +69,7 @@
 import {Codemirror} from 'vue-codemirror'
 // 语言支持
 import {xml} from '@codemirror/lang-xml'
+import {sql} from '@codemirror/lang-sql'
 import {hasText} from '@/utils/tool'
 // import "codemirror/addon/hint/show-hint.css";
 import {onMounted, reactive, ref, toRefs} from 'vue'
@@ -143,6 +144,18 @@ export default {
 			extensions: [xml()] //传递给CodeMirror EditorState。创建({扩展})
 		})
 		
+		const cmOptions = reactive({
+			style: {
+				height: '500px'
+			},
+			mode: 'text/x-mysql',
+			spellcheck: false, // 拼写检查
+			autofocus: true, // Focus editor immediately after mounted.
+			indentWithTab: true,
+			tabSize: 2,
+			extensions: [sql()] //传递给CodeMirror EditorState。创建({扩展})
+		})
+		
 		// mybatis mapper语句参数
 		let mapperParams = ref([])
 		
@@ -184,6 +197,7 @@ export default {
 			editorRef,
 			sqlRef,
 			dialogEditorRef,
+			cmOptions,
 			updateEditorText, getSqlOfMapperStatement
 		}
 	}

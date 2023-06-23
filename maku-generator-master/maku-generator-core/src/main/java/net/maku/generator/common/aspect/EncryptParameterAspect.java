@@ -18,8 +18,6 @@ import java.util.Objects;
 
 /**
  * 处理参数加密解密切面
- *
- * @author 李淼 Milo 505754686@qq.com
  */
 @Aspect
 @Slf4j
@@ -28,14 +26,12 @@ public class EncryptParameterAspect {
 
     /**
      * 切面方法：page、list、get、save、update、tableList
-     *
-     * @param proceedingJoinPoint
+     * @param proceedingJoinPoint ProceedingJoinPoint
      * @return
      * @throws Throwable
      */
     @Around("execution(* net.maku.generator.controller.DataSourceController.*(..))")
     public Object doProcess(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-
         // 处理请求入参
         List<Object> methodArgs = this.getMethodArgs(proceedingJoinPoint);
         for (Object item : methodArgs) {
@@ -63,7 +59,6 @@ public class EncryptParameterAspect {
 
     /**
      * 加密返回结果中的字段
-     *
      * @param object
      * @throws Exception
      */
@@ -86,17 +81,15 @@ public class EncryptParameterAspect {
 
     /**
      * 加密/解密具体对象下的字段
-     *
      * @param item      需要加解密的对象
      * @param isDecrypt true：解密，false：加密
      */
     private void handleItem(Object item, boolean isDecrypt) {
-
         // 只处理在entity包下面的对象
-        if (Objects.isNull(item.getClass().getPackage()) || !item.getClass().getPackage().getName().startsWith("net.maku.generator.entity")) {
+        if (Objects.isNull(item.getClass().getPackage()) || !item.getClass().getPackage().getName()
+                .startsWith("net.maku.generator.entity")) {
             return;
         }
-
         // 遍历所有字段
         Field[] fields = item.getClass().getDeclaredFields();
         for (Field field : fields) {

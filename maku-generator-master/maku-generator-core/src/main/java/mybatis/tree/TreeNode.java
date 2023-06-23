@@ -15,6 +15,9 @@ public class TreeNode<T> implements Visitable<T> {
      */
     private List<TreeNode<T>> children;
 
+    /**
+     * 节点携带的数据项
+     */
     private T data;
 
     /**
