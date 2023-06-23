@@ -1,13 +1,16 @@
-package code.example.mybatis.crud;
+package org.example.mybatis.crud;
 
-import code.example.mybatis.crud.mapper.TClassMapper;
+import org.example.mybatis.crud.entity.AdminClass;
+import org.example.mybatis.crud.mapper.AdminClassMapper;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.session.*;
 import sun.misc.Unsafe;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.List;
 
 public class CRUDTest {
 
@@ -38,13 +41,14 @@ public class CRUDTest {
 
     public static void main(String[] args) throws IOException {
         try (SqlSession session = openSession()) {
-
-            TClassMapper mapper = session.getMapper(TClassMapper.class);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("class_id", UUID.randomUUID().toString());
-            final int i = mapper.insertOne(map);
-            System.out.println(i);
-            session.commit();
+            AdminClassMapper adminClassMapper = session.getMapper(AdminClassMapper.class);
+            /**
+             * @see org.apache.ibatis.executor.SimpleExecutor#query(MappedStatement, Object, RowBounds, ResultHandler)
+             */
+            final List<AdminClass> classList = adminClassMapper.selectByCondition("1班", "G3");
+            for (AdminClass adminClass : classList) {
+                System.out.println(adminClass);
+            }
         }
     }
 

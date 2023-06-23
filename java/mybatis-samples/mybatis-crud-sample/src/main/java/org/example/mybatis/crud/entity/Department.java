@@ -1,4 +1,4 @@
-package code.example.mybatis.crud.entity;
+package org.example.mybatis.crud.entity;
 
 public class Department {
 

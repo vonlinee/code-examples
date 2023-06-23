@@ -36,10 +36,8 @@ import java.util.TimerTask;
  */
 class DatePicker extends HBox {
 
-
     private static final String CSS_DATE_PICKER_VALID = "datepicker-valid";
     private static final String CSS_DATE_PICKER_INVALID = "datepicker-invalid";
-
 
     /**
      * Initializes the date picker with the default locale.

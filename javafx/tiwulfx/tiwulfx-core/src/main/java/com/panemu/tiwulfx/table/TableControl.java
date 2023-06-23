@@ -256,7 +256,7 @@ public class TableControl<R> extends VBox {
                 tableContextMenu.removePasteMenuItem();
 
                 if (column instanceof BaseColumn<R, Object> clm) {
-                    int row = tblView.getSelectionModel().getSelectedIndex();
+                    int row = tblView.getSelectedIndex();
                     clm.setDefaultSearchValue(column.getCellData(row));
                     tableContextMenu.addSearchMenuItem(clm.getSearchMenuItem(), clm.isFilterable());
                     if (!isReadMode() && !hasEditingCell() && ClipboardUtils.hasString()) {
@@ -288,7 +288,7 @@ public class TableControl<R> extends VBox {
                         initColumn(column);
                     }
                 }
-                lastColumnIndex = getLeafColumns().size() - 1;
+                lastColumnIndex = tblView.getLeafColumns().size() - 1;
             }
         });
         attachWindowVisibilityListener();
@@ -317,7 +317,6 @@ public class TableControl<R> extends VBox {
 
     private void initControls() {
         this.getStyleClass().add("table-control");
-
         /**
          * 分页控制
          */
@@ -530,7 +529,7 @@ public class TableControl<R> extends VBox {
                 if (cell == null) {
                     return;
                 }
-                List<TableColumn<R, ?>> lstColumn = getLeafColumns();
+                List<TableColumn<R, ?>> lstColumn = tblView.getLeafColumns();
                 TableColumn<R, ?> startColumn = null;
                 for (TableColumn<R, ?> clm : lstColumn) {
                     if (clm instanceof BaseColumn && clm == cell.getTableColumn()) {
@@ -549,15 +548,15 @@ public class TableControl<R> extends VBox {
                         break;
                     }
                     R item = null;
-                    if (rowIndex < tblView.getItems().size()) {
-                        item = tblView.getItems().get(rowIndex);
+                    if (rowIndex < tblView.rowCount()) {
+                        item = tblView.getRecord(rowIndex);
                     } else if (isEditMode()) {
                         /**
                          * Will ensure the content display to TEXT_ONLY because
                          * there is no way to update cell editors value (in
                          * agile editing mode)
                          */
-                        tblView.getSelectionModel().clearSelection();
+                        tblView.clearSelection();
                         return;//stop pasting as it already touched last row
                     }
 
@@ -574,8 +573,7 @@ public class TableControl<R> extends VBox {
                     showRow(rowIndex);
 
                     TableColumn<R, ?> toFillColumn = startColumn;
-                    tblView.getSelectionModel().select(rowIndex, toFillColumn);
-
+                    tblView.selectCell(rowIndex, toFillColumn);
                     // Handle multicolumn paste
                     String[] stringCellValues = line.split("\t");
                     for (String stringCellValue : stringCellValues) {
@@ -732,27 +730,13 @@ public class TableControl<R> extends VBox {
         System.out.println("复制一行");
     }
 
+    /**
+     * 查看一行的数据
+     */
     public void browseSelectedRow() {
-        R selectedRow = getSelectedItem();
-        if (selectedRow == null) {
-            return;
-        }
-        List<TableColumn<R, ?>> lstColumn = getLeafColumns();
-        List<Record> lstRecord = new ArrayList<>();
-        for (TableColumn<R, ?> tableColumn : lstColumn) {
-            Record rcd;
-            if (tableColumn instanceof BaseColumn<R, ?> column) {
-                rcd = new Record(tableColumn.getText(), column.getStringValueOfRow(selectedRow));
-            } else {
-                String stringVal = tableColumn.getCellData(selectedRow) == null ? "" : tableColumn
-                        .getCellData(selectedRow).toString();
-                rcd = new Record(tableColumn.getText(), stringVal);
-            }
-            lstRecord.add(rcd);
-        }
         RowBrowser rb = new RowBrowser();
         lstRowBrowser.add(rb);
-        rb.setRecords(lstRecord);
+        rb.setRecords(tblView.getRowRecord());
         rb.show(getScene().getWindow());
         rb.getScene().getWindow().addEventHandler(WindowEvent.WINDOW_HIDDEN, (e) -> lstRowBrowser.remove(rb));
     }
@@ -804,7 +788,11 @@ public class TableControl<R> extends VBox {
             padding = region.getInsets().getLeft() + region.getInsets().getRight();
         }
 
+<<<<<<< HEAD
+        int rows = -1 == -1 ? items.size() : Math.min(items.size(), -1);
+=======
         int rows = items.size();
+>>>>>>> b61af7393f57d4fa8ce1b25d552d6a8c3892892a
         double maxWidth = 0;
         for (int row = 0; row < rows; row++) {
             cell.updateTableColumn(col);
@@ -843,7 +831,7 @@ public class TableControl<R> extends VBox {
      * @param clm clm
      */
     private void initColumn(TableColumn<R, ?> clm) {
-        List<TableColumn<R, ?>> lstColumn = getColumnsRecursively(List.of(clm));
+        List<TableColumn<R, ?>> lstColumn = tblView.getColumnsRecursively(List.of(clm));
         for (TableColumn<R, ?> column : lstColumn) {
             if (column instanceof BaseColumn<R, ?> baseColumn) {
                 baseColumn.tableCriteriaProperty().addListener(tableCriteriaListener);
@@ -879,50 +867,11 @@ public class TableControl<R> extends VBox {
     }
 
     /**
-     * Get list of columns including the nested ones.
-     * @param lstColumn TableColumn列表 只读列表
-     * @return 所有的列，包含列的子列
-     */
-    private List<TableColumn<R, ?>> getColumnsRecursively(List<TableColumn<R, ?>> lstColumn) {
-        List<TableColumn<R, ?>> newColumns = new ArrayList<>();
-        for (TableColumn<R, ?> column : lstColumn) {
-            if (column.getColumns().isEmpty()) {
-                newColumns.add(column);
-            } else {
-                // Should be in new arraylist to avoid java.lang.IllegalArgumentException: Children: duplicate children added
-                newColumns.addAll(getColumnsRecursively(new ArrayList<>(column.getColumns())));
-            }
-        }
-        return newColumns;
-    }
-
-    /**
-     * Get list of columns that is hold cell. It excludes columns that are
-     * containers of nested columns.
-     * @return all left columns
-     */
-    public List<TableColumn<R, ?>> getLeafColumns() {
-        List<TableColumn<R, ?>> result = new ArrayList<>();
-        for (TableColumn<R, ?> clm : tblView.getColumns()) {
-            if (clm.getColumns().isEmpty()) {
-                result.add(clm);
-            } else {
-                result.addAll(getColumnsRecursively(clm.getColumns()));
-            }
-        }
-        return result;
-    }
-
-    /**
      * Clear all criteria/filters applied to columns then reload the first page.
      */
     public void clearTableCriteria() {
         setReloadOnCriteriaChange(false);
-        for (TableColumn<R, ?> clm : getLeafColumns()) {
-            if (clm instanceof BaseColumn) {
-                ((BaseColumn<R, ?>) clm).setTableCriteria(null);
-            }
-        }
+        tblView.clearTableCriteria();
         setReloadOnCriteriaChange(true);
         reloadFirstPage();
     }
@@ -942,7 +891,7 @@ public class TableControl<R> extends VBox {
         lstCriteria.clear();
         // Should be in new arraylist to avoid java.lang.IllegalArgumentException: Children: duplicate children added
         List<TableColumn<R, ?>> lstColumns = new ArrayList<>(tblView.getColumns());
-        lstColumns = getColumnsRecursively(lstColumns);
+        lstColumns = tblView.getColumnsRecursively(lstColumns);
         for (TableColumn<R, ?> clm : lstColumns) {
             if (clm instanceof BaseColumn<R, ?> baseColumn) {
                 if (baseColumn.getTableCriteria() != null) {
@@ -974,11 +923,7 @@ public class TableControl<R> extends VBox {
 
     private void clearChange() {
         lstChangedRow.clear();
-        for (TableColumn<R, ?> clm : getLeafColumns()) {
-            if (clm instanceof BaseColumn<R, ?> baseColumn) {
-                baseColumn.clearRecordChange();
-            }
-        }
+        tblView.clearRecordChange();
     }
 
     /**
@@ -987,13 +932,7 @@ public class TableControl<R> extends VBox {
      * @return 改变的记录
      */
     public List<RecordChange<R, ?>> getRecordChangeList() {
-        List<RecordChange<R, ?>> lstRecordChange = new ArrayList<>();
-        for (TableColumn<R, ?> column : getLeafColumns()) {
-            if (column instanceof BaseColumn<R, ?> baseColumn) {
-                lstRecordChange.addAll(baseColumn.getRecordChanges());
-            }
-        }
-        return lstRecordChange;
+        return tblView.getLstRecordChange();
     }
 
     /**
@@ -1206,7 +1145,6 @@ public class TableControl<R> extends VBox {
                 return;
             }
             reload();
-            resetColumnSortConfig();
         }
     }
 
@@ -1371,7 +1309,7 @@ public class TableControl<R> extends VBox {
         }
         totalRows = vol.getTotalRows();
         //keep track of previous selected row
-        int selectedIndex = tblView.getSelectionModel().getSelectedIndex();
+        int selectedIndex = tblView.getSelectedIndex();
         TableColumn<R, Object> selectedColumn = null;
         if (tblView.hasSelectedCells()) {
             // 默认选择第一列
@@ -1386,11 +1324,17 @@ public class TableControl<R> extends VBox {
              */
             tblView.edit(-1, 0);
         }
+<<<<<<< HEAD
+
+        tblView.replaceItems(vol.getRows());
+
+=======
         tblView.getItems().setAll(vol.getRows());
+>>>>>>> b61af7393f57d4fa8ce1b25d552d6a8c3892892a
         if (selectedIndex < vol.getRows().size()) {
-            tblView.getSelectionModel().select(selectedIndex, selectedColumn);
+            tblView.selectCell(selectedIndex, selectedColumn);
         } else {
-            tblView.getSelectionModel().select(vol.getRows().size() - 1, selectedColumn);
+            tblView.selectCell(vol.getRows().size() - 1, selectedColumn);
         }
         long page = vol.getTotalRows() / pageSize.get();
         if (vol.getTotalRows() % pageSize.get() != 0) {
@@ -1412,11 +1356,7 @@ public class TableControl<R> extends VBox {
             }
         }
         footer.updateTotalRecord(totalRows);
-        for (TableColumn<R, ?> clm : getLeafColumns()) {
-            if (clm instanceof BaseColumn<R, ?> baseColumn) {
-                baseColumn.getInvalidRecordMap().clear();
-            }
-        }
+        tblView.clearInvalidRecord();
         behavior.postLoadData();
     }
 
@@ -1435,7 +1375,6 @@ public class TableControl<R> extends VBox {
             tblView.getItems().add(index, lstResult.get(i));
             i++;
         }
-
         /**
          * Refresh cells. They won't refresh automatically if the entity's
          * properties bound to the cells are not javaFX property object.
@@ -1445,15 +1384,15 @@ public class TableControl<R> extends VBox {
     }
 
     private void postDeleteAction(List<R> lstDeleted, int selectedRow) {
-        tblView.getItems().removeAll(lstDeleted);
+        tblView.getRecords().removeAll(lstDeleted);
         /**
          * select a row
          */
-        if (!tblView.getItems().isEmpty()) {
-            if (selectedRow >= tblView.getItems().size()) {
-                tblView.getSelectionModel().select(tblView.getItems().size() - 1);
+        if (!tblView.getRecords().isEmpty()) {
+            if (selectedRow >= tblView.getRecords().size()) {
+                tblView.selectRow(tblView.getRecords().size() - 1);
             } else {
-                tblView.getSelectionModel().select(selectedRow);
+                tblView.selectRow(selectedRow);
             }
         }
         totalRows = totalRows - lstDeleted.size();
@@ -1497,7 +1436,6 @@ public class TableControl<R> extends VBox {
                  * This code need to be initialized once only.
                  */
                 readColumnPosition();
-                readColumnOrderConfig();
                 columns.addListener((ListChangeListener<TableColumn<R, ?>>) change -> {
                     while (change.next()) {
                         if (change.wasReplaced()) {
@@ -1556,80 +1494,6 @@ public class TableControl<R> extends VBox {
             logger.log(Level.SEVERE, "unexpected error", ex);
         } finally {
             suppressWidthConfigListener = false;
-        }
-    }
-
-    private void resetColumnSortConfig() {
-        if (configurationID == null || configurationID.trim().isEmpty() || suppressSortConfigListener) {
-            return;
-        }
-        List<TableColumn<R, ?>> lstLeafColumns = getLeafColumns();
-        Runnable runnable = () -> {
-            List<String> propNames = new ArrayList<>();
-            for (int i = 0; i < lstLeafColumns.size(); i++) {
-                propNames.add(configurationID + "." + i + ".sort");
-            }
-
-            try {
-                TiwulFXUtil.deleteProperties(propNames);
-
-                Map<String, String> mapProperties = new LinkedHashMap<>();
-                for (int i = 0; i < tblView.getSortOrder().size(); i++) {
-                    TableColumn<R, ?> t = tblView.getSortOrder().get(i);
-                    int oriIndex = lstTableColumnsOriginalOrder.indexOf(t);
-
-                    mapProperties.put(configurationID + "." + oriIndex + ".sort", t.getSortType() + "," + i);
-                }
-                if (!mapProperties.isEmpty()) {
-                    TiwulFXUtil.writeProperties(mapProperties);
-                }
-
-            } catch (Exception ex) {
-                handleException(ex);
-            }
-        };
-        new Thread(runnable).start();
-    }
-
-    private void readColumnOrderConfig() {
-        if (configurationID == null || configurationID.trim().isEmpty()) {
-            return;
-        }
-        try {
-            suppressSortConfigListener = true;
-            TableColumn[] arrColumn = new TableColumn[lstTableColumnsOriginalOrder.size()];
-            for (int i = 0; i < lstTableColumnsOriginalOrder.size(); i++) {
-                String pos = TiwulFXUtil.readProperty(configurationID + "." + i + ".sort");
-                if (pos != null) {
-                    String[] infos = pos.split(",");
-                    lstTableColumnsOriginalOrder.get(i).setSortType(SortType.valueOf(infos[0]));
-                    int sortingIndex = Integer.parseInt(infos[1]);
-                    arrColumn[sortingIndex] = lstTableColumnsOriginalOrder.get(i);
-                }
-                String stringWidth = TiwulFXUtil.readProperty(configurationID + "." + i + ".width");
-                if (stringWidth != null && !stringWidth.isBlank()) {
-                    try {
-                        double dwidth = Double.parseDouble(stringWidth);
-                        lstTableColumnsOriginalOrder.get(i).setPrefWidth(dwidth);
-                    } catch (Exception ex) {
-                        logger.warning("Invalid column width configuration: " + configurationID + "." + i + ".width");
-                    }
-                }
-            }
-            List<TableColumn<R, ?>> lstSorted = new ArrayList<>();
-            for (TableColumn clm : arrColumn) {
-                if (clm != null) lstSorted.add(clm);
-            }
-            if (!lstSorted.isEmpty()) {
-                tblView.getSortOrder().clear();
-                for (TableColumn<R, ?> tableColumn : lstSorted) {
-                    tblView.getSortOrder().add(tableColumn);
-                }
-            }
-        } catch (Exception ex) {
-            handleException(ex);
-        } finally {
-            suppressSortConfigListener = false;
         }
     }
 
