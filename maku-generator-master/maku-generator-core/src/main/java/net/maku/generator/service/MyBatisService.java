@@ -1,9 +1,15 @@
 package net.maku.generator.service;
 
+import mybatis.MappedStatementParseResult;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 
+/**
+ * MyBatis Service
+ */
 public interface MyBatisService {
+
+    MappedStatementParseResult parseMapperStatement(String mapperStatement);
 
     /**
      * 获取可执行的SQL

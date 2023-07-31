@@ -31,6 +31,4 @@ public class DbUtils {
 
         return connection;
     }
-
-
 }

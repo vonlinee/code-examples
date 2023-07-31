@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
+import io.devpl.codegen.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,17 +28,17 @@ public class ASTFieldParser implements CompilationUnitVisitor<List<FieldMetaData
                     continue; // 忽略静态变量
                 }
                 FieldMetaData fieldMetaData = new FieldMetaData();
+                // 变量声明，一个FieldDeclaration可以有多个变量
                 final NodeList<VariableDeclarator> variables = field.getVariables();
-
                 for (VariableDeclarator variable : variables) {
                     String fieldName = variable.getName().asString();
                     // 字段名
-                    fieldMetaData.setName(fieldName);
+                    fieldMetaData.setName(Utils.removeInvalidCharacters(fieldName));
                     // 类型名称
                     fieldMetaData.setDataTypeName(variable.getTypeAsString());
                 }
                 // 注释信息
-                fieldMetaData.setDescription(findFieldDescription(field));
+                fieldMetaData.setDescription(Utils.removeInvalidCharacters(findFieldDescription(field)));
                 fieldMetaDataList.add(fieldMetaData);
             }
         }

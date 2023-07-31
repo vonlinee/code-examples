@@ -10,5 +10,9 @@ import java.lang.annotation.*;
 @Retention(value = RetentionPolicy.SOURCE)
 public @interface GenericParam {
 
+    /**
+     * 数据类型
+     * @return 类型Class
+     */
     Class<?> value();
 }

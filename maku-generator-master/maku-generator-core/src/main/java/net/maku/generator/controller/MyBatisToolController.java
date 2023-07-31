@@ -4,7 +4,7 @@ import io.devpl.sdk.collection.Lists;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mybatis.MyBatisUtils;
-import mybatis.ParseResult;
+import mybatis.MappedStatementParseResult;
 import mybatis.tree.TreeNode;
 import net.maku.generator.common.utils.Result;
 import net.maku.generator.domain.DataTypeVO;
@@ -37,9 +37,9 @@ public class MyBatisToolController {
     public Result<List<ParamNode>> getMapperStatementParams(@RequestBody Map<String, Object> param) throws Exception {
         String content = (String) param.get("ms");
         Assert.hasText(content, "文本为空");
-        ParseResult result = MyBatisUtils.parseXml(content);
+        MappedStatementParseResult result = myBatisService.parseMapperStatement(content);
         // 根节点不使用
-        TreeNode<String> root = result.getRoot();
+        TreeNode<String> root = result.getParam();
         final List<ParamNode> rows = new LinkedList<>();
         if (root.hasChildren()) {
             for (TreeNode<String> node : root.getChildren()) {
@@ -77,7 +77,7 @@ public class MyBatisToolController {
             fillParamMap(treeNode, map);
         }
         // TODO 缓存解析结果
-        ParseResult result = MyBatisUtils.parseXml(param.getMapperStatement());
+        MappedStatementParseResult result = MyBatisUtils.parseXml(param.getMapperStatement());
 
         MappedStatement ms = result.getMappedStatement();
         BoundSql boundSql = ms.getBoundSql(map);

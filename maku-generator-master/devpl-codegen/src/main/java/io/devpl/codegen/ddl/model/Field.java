@@ -1,6 +1,5 @@
 package io.devpl.codegen.ddl.model;
 
-
 import io.devpl.codegen.ddl.enums.SqlTypeAndJavaTypeEnum;
 import io.devpl.codegen.ddl.utils.SqlTypeMapUtil;
 import com.google.common.base.CaseFormat;

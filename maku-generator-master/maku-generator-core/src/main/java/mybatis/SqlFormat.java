@@ -7,7 +7,7 @@ public class SqlFormat {
 
     /**
      * mysql格式化
-     * @param sql
+     * @param sql sql
      */
     public static String mysql(String sql) {
         return SQLUtils.formatMySql(sql);
@@ -15,7 +15,7 @@ public class SqlFormat {
 
     /**
      * oracle格式化
-     * @param sql
+     * @param sql sql
      */
     public static String oracleSql(String sql) {
         return SQLUtils.formatOracle(sql);

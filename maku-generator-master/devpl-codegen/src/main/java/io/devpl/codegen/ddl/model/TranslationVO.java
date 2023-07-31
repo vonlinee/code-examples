@@ -2,9 +2,9 @@ package io.devpl.codegen.ddl.model;
 
 public class TranslationVO {
 
-    private String src = "";
+    private String src;
 
-    private String dst = "";
+    private String dst;
 
     public TranslationVO(String src, String dst) {
         this.src = src;

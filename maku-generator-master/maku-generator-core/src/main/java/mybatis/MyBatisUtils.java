@@ -13,7 +13,7 @@ import java.util.*;
 
 public class MyBatisUtils {
 
-    public static ParseResult parseXml(String xml) {
+    public static MappedStatementParseResult parseXml(String xml) {
         // 直接获取XML中的节点
         XPathParser xPathParser = new XPathParser(xml, false, null, new IgnoreDTDEntityResolver());
         XNode selectNode = xPathParser.evalNode("select");
@@ -27,7 +27,7 @@ public class MyBatisUtils {
         List<MappedStatement> list = mappedStatements.stream().distinct().toList();
         MappedStatement mappedStatement = list.get(0);
         Set<String> ognlVar = getOgnlVar(mappedStatement);
-        return new ParseResult(tree(ognlVar), mappedStatement);
+        return new MappedStatementParseResult(tree(ognlVar), mappedStatement);
     }
 
     public static TreeNode<String> tree(Set<String> ognlVar) {

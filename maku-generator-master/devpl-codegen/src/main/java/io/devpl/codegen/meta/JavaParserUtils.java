@@ -29,15 +29,11 @@ import java.util.Optional;
 
 /**
  * https://houbb.github.io/2020/05/29/java-ast-06-comments
- *
- * @author wangliang
- * Created On 2022-12-29 10:11:33
  */
 public class JavaParserUtils {
 
     /**
      * 解析工程下的所有Java文件
-     *
      * @param path 工程根目录
      */
     public static void parseProject(String path) {
@@ -164,7 +160,6 @@ public class JavaParserUtils {
 
     /**
      * 处理类型,方法,成员
-     *
      * @param node
      */
     public static void processNode(Node node) {

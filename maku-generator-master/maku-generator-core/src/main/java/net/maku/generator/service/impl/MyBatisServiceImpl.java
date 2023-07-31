@@ -2,6 +2,8 @@ package net.maku.generator.service.impl;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import mybatis.MappedStatementParseResult;
+import mybatis.MyBatisUtils;
 import mybatis.SqlFormat;
 import net.maku.generator.service.MyBatisService;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
@@ -24,6 +26,13 @@ public class MyBatisServiceImpl implements MyBatisService {
 
     @Resource
     DataSource dataSource;
+
+    @Override
+    public MappedStatementParseResult parseMapperStatement(String mapperStatement) {
+        MappedStatementParseResult result = MyBatisUtils.parseXml(mapperStatement);
+
+        return result;
+    }
 
     @Override
     public String getExecutableSql(MappedStatement mappedStatement, BoundSql boundSql, Object parameterObject) {

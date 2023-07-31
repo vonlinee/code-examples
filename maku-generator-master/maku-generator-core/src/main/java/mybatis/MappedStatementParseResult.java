@@ -7,8 +7,9 @@ import org.apache.ibatis.mapping.MappedStatement;
 
 @Data
 @AllArgsConstructor
-public class ParseResult {
+public class MappedStatementParseResult {
 
-    private TreeNode<String> root;
+    private TreeNode<String> param;
+
     private MappedStatement mappedStatement;
 }

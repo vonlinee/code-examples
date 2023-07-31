@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class YamlParser {
+
     private static final Logger logger = LoggerFactory.getLogger(YamlParser.class);
 
     /**
