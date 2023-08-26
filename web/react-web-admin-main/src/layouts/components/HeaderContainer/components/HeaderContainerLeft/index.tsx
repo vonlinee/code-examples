@@ -25,12 +25,12 @@ const HeaderContainerLeft = (props: HeaderContainerLeftProps) => {
   const navigate = useNavigate()
   const [layoutLeftClass, setLayoutLeftClass] = useState<string>(navigationMode === 1 ? 'layout_left' : 'layout_left layout_left_top')
   const breadcrumb = () => {
-    if (breadcrumbData[pathname]) {
+    if (breadcrumbData.getRoutes(pathname)) {
       return (
         <Breadcrumb className='breadcrumb'>
           {
-            breadcrumbData[pathname].map((ele: ModelRoute.Route, idx: number) => {
-              if (idx === 0 || breadcrumbData[pathname].length - 1 === idx) {
+            breadcrumbData.getRoutes(pathname).map((ele: ModelRoute.Route, idx: number) => {
+              if (idx === 0 || breadcrumbData.getRoutes(pathname).length - 1 === idx) {
                 return (
                   <Breadcrumb.Item key={ele.path}>{ele.label}</Breadcrumb.Item>
                 )

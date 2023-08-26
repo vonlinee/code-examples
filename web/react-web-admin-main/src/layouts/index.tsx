@@ -38,7 +38,7 @@ const Layouts = () => {
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false)
   //是否小屏幕
   const [isSmall, setIsSmall] = useState<boolean>(false)
-  //选中的窗口
+  // 选中的窗口
   const [selectedKeys, setSelectedKeys] = useState<string[]>([pathname])
   // 面包屑数据
   const [breadcrumbData, setBreadcrumbData] = useState<ModelRoute.Breadcrumb>(filterAsyncBreadcrumb(routerArray, []))
@@ -100,7 +100,7 @@ const Layouts = () => {
    */
   const gerenateOpenKeys = () => {
     openKeys.splice(1)
-    // @ts-ignore
+    console.log("==================", breadcrumbData)
     breadcrumbData[pathname].map(
       (ele: ModelRoute.Breadcrumb, idx: number) => {
         if (idx === 0) {

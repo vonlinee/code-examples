@@ -91,10 +91,19 @@ const filterAsyncRoute = (asyncRouterMap: ModelRoute.Route[], localRoutetMap: Mo
  * @param route
  */
 const filterAsyncBreadcrumb = (localRoutetMap: ModelRoute.Route[], route: ModelRoute.Route[]): ModelRoute.Breadcrumb => {
-  let routes: ModelRoute.Breadcrumb = {}
-
-  // TODO 使用Map代替对象
-  let routesMap: Map<string, ModelRoute.Route> = new Map
+  let routes: ModelRoute.Breadcrumb = {
+    routesMap: new Map,
+    getRoutes: (path?: string | undefined): ModelRoute.Route[] => {
+      if (path) {
+        let res: ModelRoute.Route[] | undefined = routes.routesMap.get(path)
+        if (res) {
+          return res
+        }
+      }
+      return []
+    }
+  }
+  let routesMap: Map<string, ModelRoute.Route[]> = routes.routesMap
 
   localRoutetMap.map((ele: ModelRoute.Route) => {
     if (ele.path && ele.meta) {
@@ -107,18 +116,76 @@ const filterAsyncBreadcrumb = (localRoutetMap: ModelRoute.Route[], route: ModelR
         }
       ]
 
-
+      routesMap.set(ele.path, [
+        ...route,
+        {
+          label: ele.meta.title,
+          path: ele.path
+        }
+      ])
     }
 
     if (ele.children && ele.children.length) {
-      routes = {
-        ...routes,
-        ...filterAsyncBreadcrumb(ele.children, routes[ele.path]
-        )
+      let items: ModelRoute.Route[] = []
+      if (ele.path) {
+        let routeItems = routesMap.get(ele.path)
+        if (routeItems) {
+          items = routeItems
+        }
       }
+
+
+      let a = {
+        ...routes,
+        ...filterAsyncBreadcrumb(ele.children, items)
+      }
+
+      routes = a
     }
   })
+
+
+  let routesMap1: Map<string, ModelRoute.Route[]> = new Map
+
+  getData(localRoutetMap, route, routesMap1)
+
+  debugger
+
   return routes
+}
+
+/**
+ * 递归填充面包屑数据
+ * @param localRoutetMap
+ * @param route
+ * @param routesMap
+ */
+function getData(localRoutetMap: ModelRoute.Route[], route: ModelRoute.Route[], routesMap: Map<string, ModelRoute.Route[]>): void {
+  localRoutetMap.map((ele: ModelRoute.Route) => {
+
+    debugger
+    if (ele.path && ele.meta) {
+      routesMap.set(ele.path, [
+        ...route,
+        {
+          label: ele.meta.title,
+          path: ele.path
+        }
+      ])
+    }
+
+
+    if (ele.children && ele.children.length) {
+      let items: ModelRoute.Route[] = []
+      if (ele.path) {
+        let routeItems = routesMap.get(ele.path)
+        if (routeItems) {
+          items = routeItems
+        }
+      }
+      getData(ele.children, items, routesMap)
+    }
+  })
 }
 
 export {

@@ -39,7 +39,7 @@ const MenuContainer = (props: MenuContainerProps) => {
   useEffect(() => {
     let selectSiderList: string[] = []
 
-    breadcrumbData[pathname].map((ele: any, idx: number) => {
+    breadcrumbData.getRoutes(pathname).map((ele: any, idx: number) => {
       selectSiderList.push(ele.path)
     })
     setSelectedKeys(selectSiderList)

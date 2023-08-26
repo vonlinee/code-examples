@@ -43,7 +43,8 @@ declare namespace ModelRoute {
     path?: string
     key?: React.Key
     icon?: string,
-    routesMap?: Map<string, ModelRoute.Route>
+    routesMap: Map<string, ModelRoute.Route[]>,
+    getRoutes: (path?: string) => ModelRoute.Route[],
   }
 
   interface TabsList {
