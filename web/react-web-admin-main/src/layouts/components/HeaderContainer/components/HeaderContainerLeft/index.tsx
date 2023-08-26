@@ -20,6 +20,7 @@ interface HeaderContainerLeftProps extends React.HTMLAttributes<HTMLElement> {
 
 const HeaderContainerLeft = (props: HeaderContainerLeftProps) => {
   const { toggle, breadcrumbData, collapsed, breadCrumb, isSmall, navigationMode } = props
+  // 获取当前路径
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [layoutLeftClass, setLayoutLeftClass] = useState<string>(navigationMode === 1 ? 'layout_left' : 'layout_left layout_left_top')
@@ -28,7 +29,7 @@ const HeaderContainerLeft = (props: HeaderContainerLeftProps) => {
       return (
         <Breadcrumb className='breadcrumb'>
           {
-            breadcrumbData[pathname].map((ele: any, idx: number) => {
+            breadcrumbData[pathname].map((ele: ModelRoute.Route, idx: number) => {
               if (idx === 0 || breadcrumbData[pathname].length - 1 === idx) {
                 return (
                   <Breadcrumb.Item key={ele.path}>{ele.label}</Breadcrumb.Item>
@@ -36,7 +37,11 @@ const HeaderContainerLeft = (props: HeaderContainerLeftProps) => {
               } else {
                 return (
                   <Breadcrumb.Item key={ele.path}>
-                    <a onClick={() => navigate(ele.path)}>{ele.label}</a>
+                    <a onClick={() => {
+                      if (ele.path) {
+                        navigate(ele.path)
+                      }
+                    }}>{ele.label}</a>
                   </Breadcrumb.Item>
                 )
               }
@@ -45,34 +50,34 @@ const HeaderContainerLeft = (props: HeaderContainerLeftProps) => {
         </Breadcrumb>
       )
     }
-  }
-  useEffect(() => {
-    switch (navigationMode) {
-      case 1:
-        setLayoutLeftClass('layout_left')
-        break
-      case 2:
-        setLayoutLeftClass('layout_left layout_left_top')
-        break
     }
-  }, [navigationMode])
-  return (
-    <div className={layoutLeftClass}>
-      {isSmall && createElement(
-        collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-        {
-          className: 'trigger',
-          onClick: () => {
-            toggle()
-          }
+      useEffect(() => {
+        switch (navigationMode) {
+          case 1:
+            setLayoutLeftClass('layout_left')
+            break
+          case 2:
+            setLayoutLeftClass('layout_left layout_left_top')
+            break
         }
-      )}
-      {
-        !isSmall && breadCrumb &&
-        breadcrumb()
-      }
-    </div>
-  )
-}
+      }, [navigationMode])
+      return (
+        <div className={layoutLeftClass}>
+          {isSmall && createElement(
+            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+            {
+              className: 'trigger',
+              onClick: () => {
+                toggle()
+              }
+            }
+          )}
+          {
+            !isSmall && breadCrumb &&
+            breadcrumb()
+          }
+        </div>
+      )
+    }
 
-export default HeaderContainerLeft
+    export default HeaderContainerLeft

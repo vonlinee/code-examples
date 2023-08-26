@@ -93,6 +93,9 @@ const filterAsyncRoute = (asyncRouterMap: ModelRoute.Route[], localRoutetMap: Mo
 const filterAsyncBreadcrumb = (localRoutetMap: ModelRoute.Route[], route: ModelRoute.Route[]): ModelRoute.Breadcrumb => {
   let routes: ModelRoute.Breadcrumb = {}
 
+  // TODO 使用Map代替对象
+  let routesMap: Map<string, ModelRoute.Route> = new Map
+
   localRoutetMap.map((ele: ModelRoute.Route) => {
     if (ele.path && ele.meta) {
       // @ts-ignore
@@ -103,6 +106,8 @@ const filterAsyncBreadcrumb = (localRoutetMap: ModelRoute.Route[], route: ModelR
           path: ele.path
         }
       ]
+
+
     }
 
     if (ele.children && ele.children.length) {

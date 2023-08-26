@@ -35,11 +35,15 @@ declare namespace ModelRoute {
     children?: Menu[]
   }
 
+  /**
+   * 面包屑
+   */
   interface Breadcrumb {
     label?: React.ReactNode
     path?: string
     key?: React.Key
-    icon?: string
+    icon?: string,
+    routesMap?: Map<string, ModelRoute.Route>
   }
 
   interface TabsList {
