@@ -173,8 +173,6 @@ function getData(localRoutetMap: ModelRoute.Route[], route: ModelRoute.Route[], 
         }
       ])
     }
-
-
     if (ele.children && ele.children.length) {
       let items: ModelRoute.Route[] = []
       if (ele.path) {

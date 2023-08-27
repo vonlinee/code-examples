@@ -38,7 +38,6 @@ const MenuContainer = (props: MenuContainerProps) => {
   // 刷新页面菜单保持高亮
   useEffect(() => {
     let selectSiderList: string[] = []
-
     breadcrumbData.getRoutes(pathname).map((ele: any, idx: number) => {
       selectSiderList.push(ele.path)
     })
