@@ -22,9 +22,13 @@ export default ({ mode }) => {
         '/api': {
           target: VITE_API_URL,
           changeOrigin: true,
+          // 重写
           rewrite: (path) => path.replace(/^\/api/, '')
         }
       }
+    },
+    define: {
+      'process.env': process.env
     },
     resolve: {
       // 配置路径别名

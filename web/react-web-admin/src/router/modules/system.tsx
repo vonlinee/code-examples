@@ -6,9 +6,10 @@ import Layouts from '@/layouts/index'
 
 const systemRouter: ModelRoute.Route[] = [
   {
-    element: <Layouts />,
+    // <Layouts />,
+    element: lazyLoad(React.lazy(() => import('@/layouts/index'))),
     meta: {
-      title: '系统管理11111111'
+      title: '系统管理'
     },
     path: '/system',
     sidebar: true,

@@ -1,8 +1,10 @@
 
 import React from 'react';
-import { Space, Table, Tag } from 'antd';
+import { Button, Space, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import CodeEditor from '@/components/editor/CodeEditor';
+
+import http from '@/utils/http';
 
 interface DataType {
   key: string;
@@ -88,11 +90,19 @@ const data: DataType[] = [
 
 const Devpl = () => {
 
+  function api() {
+    http.get("https://httpbin.org/get").then(res => {
+      console.log(res);
+    })
+  }
+
   return (
   <div>
     <Table columns={columns} dataSource={data} />
 
     <CodeEditor></CodeEditor>
+
+    <Button onClick={api}>API</Button>
     </div>
   )
 }

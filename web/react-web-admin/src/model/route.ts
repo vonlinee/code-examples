@@ -46,9 +46,12 @@ declare namespace ModelRoute {
    * https://ant.design/components/breadcrumb-cn
    */
   interface Breadcrumb {
+    // 显示文本
     label?: React.ReactNode
+    // 路由路径
     path?: string
     key?: React.Key
+    // 图标
     icon?: string,
     [propname: string]: any
   }

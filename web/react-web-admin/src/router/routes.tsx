@@ -47,6 +47,10 @@ export let rootRouter: ModelRoute.Route[] = [
     element: <Navigate to='/login' />
   }
 ]
+
+/**
+ * 根据token添加登录路由
+ */
 if (token) {
   rootRouter = [
     {
@@ -61,17 +65,16 @@ if (token) {
       element: <Navigate to='/login' />
     }
   ]
-  console.log('有token,storeRoute', storeRoute)
-  console.log('有token,routerArray', routerArray)
+  // console.log('有token,storeRoute', storeRoute)
+  // console.log('有token,routerArray', routerArray)
 
   if (storeRoute.length) {
     rootRouter.push(...storeRoute)
   } else {
     rootRouter.push(...routerArray)
   }
-} else {
-  rootRouter.push(...routerArray)
 }
+
 /**
  * 错误路由配置
  * @param {string} path 路径

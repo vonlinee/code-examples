@@ -5,7 +5,6 @@ import {
 } from 'axios'
 /**
  * 自定义扩展axios模块
- * @author lvnianci
  */
 declare module 'axios' {
   export interface AxiosInstance {

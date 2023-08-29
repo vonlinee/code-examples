@@ -17,14 +17,28 @@ const devplRouter: ModelRoute.Route[] = [
     children: [
       {
         label: '代码生成',
-        path: '/devpl/index',
+        path: '/devpl/codegen',
         element: lazyLoad(
           React.lazy(
-            () => import('@/views/devpl/index')
+            () => import('@/views/devpl/codegen/index')
           )
         ),
         meta: {
           title: '代码生成'
+        },
+        sidebar: true,
+        isPage: true
+      },
+      {
+        label: '模板管理',
+        path: '/devpl/codegen/template',
+        element: lazyLoad(
+          React.lazy(
+            () => import('@/views/devpl/codegen/template/index')
+          )
+        ),
+        meta: {
+          title: '模板管理'
         },
         sidebar: true,
         isPage: true

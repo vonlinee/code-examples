@@ -44,13 +44,14 @@ const trees: ModelRoute.Route[] = [
     children: [
       {
         menuName: '代码生成',
-        routePath: '/devpl/index',
+        routePath: '/devpl/codegen',
         children: [
-          {
-            menuName: '代码生成111',
-            routePath: '/devpl/department',
-            children: []
-          }
+        ]
+      },
+      {
+        menuName: '模板管理',
+        routePath: '/devpl/codegen/template',
+        children: [
         ]
       }
     ]
