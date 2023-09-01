@@ -3,10 +3,11 @@ import {
 } from 'antd'
 import React from 'react'
 import WaterMask from '@/components/WaterMask'
-import { Outlet } from "react-router-dom";
+import { Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { getWaterMask } from '@/store/getters'
-import "./index.less"
+import './index.less'
+
 const { Content } = Layout
 const ContentContainer = () => {
   return (
@@ -24,4 +25,4 @@ const ContentContainer = () => {
   )
 }
 
-export default  ContentContainer
+export default ContentContainer

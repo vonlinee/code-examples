@@ -315,8 +315,6 @@ const Layouts = () => {
         setOpenKeys(keys)
       }
     } else if (keys.length || openKeys.length) {
-      // console.log('==5==')
-      // setOpenKeys([])
       setOpenKeys(keys)
     }
   }

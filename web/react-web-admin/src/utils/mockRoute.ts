@@ -1,4 +1,6 @@
 //动态路由数据,模拟后端接口
+import React from 'react'
+
 const trees: ModelRoute.Route[] = [
   {
     menuName: '主页',
@@ -45,15 +47,20 @@ const trees: ModelRoute.Route[] = [
       {
         menuName: '代码生成',
         routePath: '/devpl/codegen',
-        children: [
-        ]
+        children: []
       },
       {
         menuName: '模板管理',
         routePath: '/devpl/codegen/template',
-        children: [
-        ]
+        children: []
       }
+    ]
+  },
+  {
+    menuName: '测试',
+    routePath: '/test',
+    children: [
+
     ]
   }
 ]

@@ -1,5 +1,4 @@
-
-# react 
+# react
 
 项目基于react18、react routerv6、redux、typescript 进行开发,实现快速开发,只要熟悉简单的react语法即可开发项目.
 

@@ -9,7 +9,6 @@ import { filterAsyncSidebar } from '@/utils/route'
 import trees from '@/utils/mockRoute'
 
 import React, { useEffect, useState } from 'react'
-import * as Icons from '@ant-design/icons'
 
 interface MenuContainerProps extends React.HTMLAttributes<HTMLElement> {
   collapsed: boolean
@@ -34,13 +33,12 @@ const MenuContainer = (props: MenuContainerProps) => {
   /**
    * 获取菜单列表并处理成 antd menu 需要的格式
    */
-  const [menuList, setMenuList] = useState<ModelRoute.Menu[]>(filterAsyncSidebar(trees, routerArray))
+  const [menuList] = useState<ModelRoute.Menu[]>(filterAsyncSidebar(trees, routerArray))
 
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   // 刷新页面菜单保持高亮
   useEffect(() => {
     let selectSiderList: string[] = []
-
     breadcrumbData[pathname].map((ele: any, idx: number) => {
       selectSiderList.push(ele.path)
     })

@@ -29,14 +29,20 @@ declare namespace ModelRoute {
   }
 
   /**
-   * 菜单项
-   * antd 
+   * 适配antd菜单项
+   * https://ant.design/components/menu-cn#itemtype
    * @see MenuItemType | SubMenuType | MenuItemGroupType | MenuDividerType | null;
    */
   interface Menu {
     path?: string //路径
+    /**
+     * 菜单项标题
+     */
     label: React.ReactNode
     key: React.Key
+    /**
+     * 菜单图标
+     */
     icon?: React.ReactNode
     children?: Menu[]
   }
@@ -53,6 +59,7 @@ declare namespace ModelRoute {
     key?: React.Key
     // 图标
     icon?: string,
+
     [propname: string]: any
   }
 

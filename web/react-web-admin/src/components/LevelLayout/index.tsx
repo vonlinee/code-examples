@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import matchRoute from '@/utils/match'
+import React from 'react'
 
 interface LevelLayoutProps extends React.HTMLAttributes<HTMLElement> {
   pathName: string
@@ -8,19 +9,18 @@ interface LevelLayoutProps extends React.HTMLAttributes<HTMLElement> {
 
 /**
  * 多层级路由容器
- * @param {string} pathName 二级路由
- * @param  children 二级路由页面
  * @returns {HTMLElement}   页面
+ * @param props
  */
 const LevelLayout = (props: LevelLayoutProps) => {
   const { pathName, children } = props
   return (
-    <>
+    <div>
       {/*匹配二级路由*/}
       {matchRoute(pathName) && children}
       {/*占位符，匹配三级路由*/}
       <Outlet></Outlet>
-    </>
+    </div>
   )
 }
 

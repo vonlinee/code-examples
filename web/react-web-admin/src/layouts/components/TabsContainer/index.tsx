@@ -6,7 +6,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import PropType from 'prop-types'
 import "./index.less"
 
-
 interface  TabsContainerProps extends React.HTMLAttributes<HTMLElement> {
   isSmall:boolean
   tabsList:ModelRoute.TabsList[],
