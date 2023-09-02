@@ -37,9 +37,14 @@ class Meun extends Component {
   };
   // 菜单渲染
   getMenuNodes = (menuList) => {
+
+    debugger
     // 得到当前请求的路由路径
     const path = this.props.location.pathname;
     return menuList.reduce((pre, item) => {
+
+      debugger
+
       if (this.filterMenuItem(item)) {
         if (!item.children) {
           pre.push(
@@ -104,6 +109,8 @@ class Meun extends Component {
 
   componentWillMount() {
     const menuTreeNode = this.getMenuNodes(menuList);
+
+    debugger
     this.setState({
       menuTreeNode,
     });

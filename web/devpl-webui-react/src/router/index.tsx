@@ -9,7 +9,7 @@ const Router = () => {
   return (
     <HashRouter>
       <Routes>
-        <Route path="/layout" element={<Layout tagsView />} />
+        <Route path="/" element={<Layout tagsView />} />
       </Routes>
     </HashRouter>
   );

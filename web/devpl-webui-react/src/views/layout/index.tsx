@@ -10,7 +10,7 @@ import { Layout } from "antd";
  * @param props 是否展示标签视图 
  * @returns 
  */
-const BasicLayout = (props: {tagsView: boolean}) => {
+const BasicLayout = (props: {tagsView: boolean}) : JSX.Element => {
   const { tagsView } = props;
   return (
     <Layout style={{ minHeight: "100vh" }}>
