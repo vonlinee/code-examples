@@ -43,12 +43,14 @@ const MenuContainer = (props: MenuContainerProps) => {
   const {collapsed, isSmall} = props;
 
   console.log(collapsed, isSmall);
+  
 
   return (
     <div className="sidebar-menu-container">
         <Menu mode="inline" theme="dark" selectedKeys={[path]}>
           <MenuItem title="系统管理"></MenuItem>
-
+        </Menu>
+        <Menu>
           <SubMenu title="菜单管理"></SubMenu>
         </Menu>
     </div>
