@@ -1,6 +1,7 @@
+import { Outlet } from "react-router";
 
 const LayoutContent = () => {
-  return (<div></div>)
+  return (<div><Outlet></Outlet></div>)
 };
 
 export default LayoutContent
