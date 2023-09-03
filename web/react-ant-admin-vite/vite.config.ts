@@ -57,7 +57,8 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    open: false,
+    // Open browser window on startup
+    open: true,
     host: true,
     proxy: {
       '^/api': {
