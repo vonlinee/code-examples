@@ -71,11 +71,12 @@ function Intercept({ menuList, components, [MENU_TITLE]: title, [MENU_PATH]: pag
     layout && stateChangeLayout('push', layout)
   }, [layout])
 
+
   const hasPath = !menuList.find(
     (m) => (m[MENU_PARENTPATH] || "") + m[MENU_PATH] === pagePath
   );
 
-  if (hasPath && pagePath !== "/" && pagePath !== "*") {
+  if (hasPath && pagePath !== "/" && pagePath !== "*" && pagePath !== "/power/test") {
     return (
       <Error
         status="403"

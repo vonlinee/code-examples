@@ -154,7 +154,6 @@ export const route = {
 
 2. 浏览器访问 `http://localhost:3000/react-ant-admin/test` 即可
 
-
 ## 脚本启动
 
 在完成依赖安装之后,有以下几种启动方式。
@@ -175,24 +174,84 @@ export const route = {
 
 打包后的产物，开启本地预览。
 
-## 项目截图
 
-- 登录
 
-![登录](https://raw.githubusercontent.com/kongyijilafumi/my-image/master/react-ant-admin-doc01.png)
+## 创建一个菜单
 
-- 详情页
 
-![详情页](https://raw.githubusercontent.com/kongyijilafumi/my-image/master/react-ant-admin-detail.png)
+该添加方式适用于 `npm run "start:mock"`启动的项目
 
-- 列表
+1. 在 `src/mock/index.js` 找到 `menu`变量,往里添加一条菜单信息.代码如下所示
 
-![表格](https://raw.githubusercontent.com/kongyijilafumi/my-image/master/react-ant-admin-list.png)
+```typescript
+let menu = [
+  {
+    menu_id: 9,
+    [MENU_TITLE]: "列表页",
+    [MENU_PATH]: "/list",
+    [MENU_KEY]: "list",
+    [MENU_PARENTKEY]: "",
+    [MENU_ICON]: "icon_list",
+    [MENU_KEEPALIVE]: "false",
+    order: 1,
+  },
+  {
+    menu_id: 10,
+    [MENU_TITLE]: "卡片列表",
+    [MENU_PATH]: "/card",
+    [MENU_KEY]: "listCard",
+    [MENU_PARENTKEY]: "list",
+    [MENU_ICON]: "",
+    [MENU_KEEPALIVE]: "false",
+    order: 5485,
+  },
+  // .... 开始添加菜单信息 ....
+  {
+    menu_id: 11, // 菜单id 用于关联权限
+    [MENU_TITLE]: "test", // 标题
+    [MENU_PATH]: "/test", // 访问路径
+    [MENU_KEY]: "test", // 唯一key
+    [MENU_PARENTKEY]: "", // 空表示 为主菜单而非子菜单
+    [MENU_ICON]: "icon_infopersonal", // 菜单图标
+    order: 1, // 菜单排序 越小越靠前
+    [MENU_KEEPALIVE]: "true", //  页面保持状态
+  },
+  // .....
+];
+```
 
-- 权限管理
 
-![权限管理](https://raw.githubusercontent.com/kongyijilafumi/my-image/master/react-ant-admin-power.png)
+2. 由于菜单会走本地会话存储 `window.sessionStorage`,所以保存代码后需要关闭当前窗口,重新打开地址 `http://localhost:3000/react-ant-admin`
 
-- 结果页
+> 打开之后,会发现菜单会多出一个 `test`栏目,点击会打开之前我们创建的 test 页面.这样就完成了菜单和页面的编写.
 
-![结果页](https://raw.githubusercontent.com/kongyijilafumi/my-image/master/react-ant-admin-result1.png)
+
+
+
+
+
+
+
+
+
+
+
+
+Github和Gitee版本部分不一样
+
+
+npm run "start:mock"
+
+npm run "dev:mock"
+
+
+
+react-monaco-editor与vite
+
+
+vite使用monaco-editor
+
+https://github.com/vitejs/vite/discussions/1791
+
+
+https://malagege.github.io/blog/posts/monaco-editor-%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%A8%98-%E6%90%AD%E9%85%8D-Vite/

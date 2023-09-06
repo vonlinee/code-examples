@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "monaco-editor": "^0.41.0",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-monaco-editor": "^0.54.0"
   },
   "devDependencies": {
     "@ant-design/icons": "^5.1.0",
