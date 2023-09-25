@@ -1,10 +1,9 @@
 package io.devpl.fxui;
 
-import io.devpl.fxui.view.NavigationPane;
+import io.devpl.fxui.layout.LayoutPane;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -16,7 +15,7 @@ public class MainApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main.fxml"));
 
         final VBox root = fxmlLoader.load();
-        root.getChildren().add(new NavigationPane());
+        root.getChildren().add(new LayoutPane());
         Scene scene = new Scene(root, 620, 640);
         stage.setTitle("Hello!");
         stage.setScene(scene);

@@ -9,4 +9,6 @@ module io.devpl.fxui {
     exports io.devpl.fxui;
     exports io.devpl.fxui.view;
     opens io.devpl.fxui.view to javafx.fxml;
+    exports io.devpl.fxui.layout;
+    opens io.devpl.fxui.layout to javafx.fxml;
 }

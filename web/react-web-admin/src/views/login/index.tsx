@@ -2,7 +2,7 @@
 //登录页
 import { useState } from 'react'
 import { Button, message } from 'antd'
-import KeyboardEventHandler from 'react-keyboard-event-handler'
+// import KeyboardEventHandler from 'react-keyboard-event-handler'
 // import PropTypes from 'prop-types' // 引入依赖
 import './index.less'
 import pwd from '@/assets/img/pwd.png'
@@ -125,8 +125,6 @@ const Login = () => {
   }
   //登录
   const handleLogin = async () => {
-    console.log('登录')
-
     if (
       handleInputAccount() &&
       handleInputPassword() &&
@@ -177,10 +175,7 @@ const Login = () => {
         <form className="form" onKeyUp={() => handleKeyUp}>
           <label htmlFor="account" className="form_account">
             <img src={accountImg} />
-            <KeyboardEventHandler
-              handleKeys={['enter']}
-              onKeyEvent={handleKeyUp}
-            >
+
               <input
                 type="text"
                 placeholder="请输入账号"
@@ -196,7 +191,7 @@ const Login = () => {
                 className="form_underline"
                 id="form_underline_account"
               ></div>
-            </KeyboardEventHandler>
+           
             <span className="errorMsg" id="accErrorMsg">
               {accountErrorMsg}
             </span>
@@ -206,10 +201,7 @@ const Login = () => {
             htmlFor="password"
           >
             <img src={pwd} />
-            <KeyboardEventHandler
-              handleKeys={['enter']}
-              onKeyEvent={handleKeyUp}
-            >
+
               <input
                 type="password"
                 placeholder="请输入密码"
@@ -225,17 +217,16 @@ const Login = () => {
                 className="form_underline"
                 id="form_underline_password"
               ></div>
-            </KeyboardEventHandler>
             <span className="errorMsg" id="pwdErrorMsg">
               {passwordErrorMsg}
             </span>
           </label>
           <label className="form_code" htmlFor="code">
             <img src={codeImg} />
-            <KeyboardEventHandler
+            {/* <KeyboardEventHandler
               handleKeys={['enter']}
               onKeyEvent={handleKeyUp}
-            >
+            > */}
               <input
                 type="text"
                 placeholder="请输入验证码"
@@ -252,7 +243,7 @@ const Login = () => {
                 className="form_underline"
                 id="form_underline_code"
               ></div>
-            </KeyboardEventHandler>
+            {/* </KeyboardEventHandler> */}
             <span className="errorMsg" id="codeErrorMsg">
               {codeErrorMsg}
             </span>

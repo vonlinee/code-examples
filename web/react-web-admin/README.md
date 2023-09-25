@@ -31,3 +31,10 @@ yarn build:pred
 # 生产环境
 yarn build:production
 ```
+
+
+
+
+[react-keyboard-event-handler](https://github.com/linsight/react-keyboard-event-handler)
+
+不支持raect18
