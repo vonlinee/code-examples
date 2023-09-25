@@ -1,3 +1,6 @@
+/**
+ * 环境变量配置
+ */
 const dev = {
   REACT_APP_ROUTERBASE: "/react-ant-admin",
   REACT_APP_API_BASEURL: "/api",

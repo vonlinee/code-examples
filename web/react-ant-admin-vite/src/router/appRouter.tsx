@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, HashRouter } from "react-router-dom";
 import { Spin } from "antd";
-import Layout from "@/layout";
+import LayoutContainer from "@/layout";
 import Login from "@/pages/login";
 import { getLocalUser } from "@/utils";
 import { useDispatchUser, useStateUserInfo } from "@/store/hooks";
@@ -29,15 +29,16 @@ function AppRouter() {
       <Spin size="large" wrapperClassName="loading-page" tip="Loading..." />
     );
   if (!userInfo) return <Login />;
+
   if (isHash) {
     return <HashRouter>
-      <Layout />
+      <LayoutContainer />
     </HashRouter>
   }
 
   return (
     <BrowserRouter basename={RouterBasename}>
-      <Layout />
+      <LayoutContainer />
     </BrowserRouter>
   );
 }

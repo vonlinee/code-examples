@@ -6,11 +6,15 @@ import { setLayoutMode, setCompVisible as util_setCompVisible } from "@/utils";
 import singImg from "@/assets/images/layout2.jpg";
 import twoImg from "@/assets/images/layout1.jpg";
 import twoFlanksImg from "@/assets/images/layout3.jpg";
-import { LayoutMode, State, LayoutModes } from "@/types"
+import { LayoutMode, State, LayoutModes } from "@/types";
 import useStyle from "./style";
-import { useDispatchLayout, useDispatchVisibel, useStateLayout, useStateVisibel } from "@/store/hooks";
+import {
+  useDispatchLayout,
+  useDispatchVisibel,
+  useStateLayout,
+  useStateVisibel,
+} from "@/store/hooks";
 import { useThemeToken } from "@/hooks";
-
 
 const modes: LayoutModes = [
   {
@@ -44,21 +48,24 @@ function LayoutSet() {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const wakeup = useCallback(() => setDrawerVisible(true), []);
   const onClose = useCallback(() => setDrawerVisible(false), []);
-  const layoutMode = useStateLayout()
-  const componentsVisible = useStateVisibel()
-  const { stateSetVisible } = useDispatchVisibel()
-  const { stateChangeLayout } = useDispatchLayout()
-  const token = useThemeToken()
-  const { styles } = useStyle(token)
-  const setLayout = useCallback((mode: LayoutMode) => {
-    stateChangeLayout('push', mode)
-    message.success("布局设置成功！");
-  }, [stateChangeLayout])
+  const layoutMode = useStateLayout();
+  const componentsVisible = useStateVisibel();
+  const { stateSetVisible } = useDispatchVisibel();
+  const { stateChangeLayout } = useDispatchLayout();
+  const token = useThemeToken();
+  const { styles } = useStyle(token);
+  const setLayout = useCallback(
+    (mode: LayoutMode) => {
+      stateChangeLayout("push", mode);
+      message.success("布局设置成功！");
+    },
+    [stateChangeLayout]
+  );
   const saveLayout = useCallback(() => {
     setLayoutMode([layoutMode]);
     util_setCompVisible(componentsVisible);
     message.success("布局保存本地成功！");
-  }, [layoutMode, componentsVisible])
+  }, [layoutMode, componentsVisible]);
   return (
     <div className={styles.layoutsetContainer}>
       <MyIcon type="icon_setting" onClick={wakeup} />
@@ -88,7 +95,12 @@ function LayoutSet() {
           <Row key={key} className="visible-list">
             {key === "footer" ? "底部：" : "顶部切换导航："}
             <Radio.Group
-              onChange={(e) => stateSetVisible(key as keyof State["componentsVisible"], e.target.value)}
+              onChange={(e) =>
+                stateSetVisible(
+                  key as keyof State["componentsVisible"],
+                  e.target.value
+                )
+              }
               value={componentsVisible[key as keyof State["componentsVisible"]]}
             >
               {RadioArray.map((i) => (
@@ -109,4 +121,4 @@ function LayoutSet() {
   );
 }
 
-export default LayoutSet
+export default LayoutSet;

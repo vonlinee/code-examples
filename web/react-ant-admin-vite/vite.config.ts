@@ -34,10 +34,16 @@ export default defineConfig({
     CUSTOMVARLESSDATA: `${JSON.stringify(customVarLessJson)}`
   },
   plugins: [
+    // 文档参考: https://gitee.com/kong_yiji_and_lavmi/vite-plugin-react-router-generator
     ReactRouterGenerator({
+      // 生成路由列表信息的文件路径。
       outputFile: resolve(".", "./src/router/auto.jsx"),
+      // 导出的组件是否为懒加载
       isLazy: true,
-      comKey: "components"
+      // 导出路由文件的 key
+      comKey: "components",
+      // 需要匹配的文件后缀名
+      // exts: [".tsx"]
     }),
     react(),
   ],
