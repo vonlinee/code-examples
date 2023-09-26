@@ -1,56 +1,40 @@
 package io.devpl.fxui.layout;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
-
-import java.util.IdentityHashMap;
-import java.util.Map;
+import javafx.scene.control.TreeCell;
 
 /**
  * 导航面板
  */
 public class LayoutPane extends SplitPane {
 
-    // 菜单映射
-    Map<MenuItem, Node> contentMap = new IdentityHashMap<>();
-
-    MenuContainer menu;
+    MenuContainer menuPane;
     ContentContainer contentPane;
 
     public LayoutPane() {
         contentPane = new ContentContainer();
-        menu = new MenuContainer(node -> contentPane.switchTo(node));
 
-        getItems().addAll(menu, contentPane);
-
-        final Label label = new Label("AAA");
-
-        label.setPrefSize(600.0, 500.0);
-
-        menu.prefWidthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                final double prefWidth = LayoutPane.this.getPrefWidth();
-                final double percentage = newValue.doubleValue() / prefWidth;
-                setDividerPosition(0, percentage);
-            }
+        menuPane = new MenuContainer();
+        menuPane.setOnMenuClicked(event -> {
+            TreeCell<?> cell = (TreeCell<?>) event.getSource();
+            NavigationMenu menu = (NavigationMenu) cell.getTreeItem();
+            contentPane.switchTo(menu.getContent());
         });
 
-        final Divider divider = getDividers().get(0);
+        getItems().addAll(menuPane, contentPane);
 
-        divider.positionProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                menu.setPrefWidth(LayoutPane.this.getPrefWidth() * newValue.doubleValue());
-            }
-        });
+        contentPane.setStyle("-fx-background-color: #888787");
 
-        menu.addMenu(new MenuItem("A", label));
-        menu.addMenu(new MenuItem("B", new Label("BBB")));
-        menu.addMenu(new MenuItem("C", new Label("CCC")));
-        menu.addMenu(new MenuItem("D", new Label("DDD")));
+        getDividers().get(0).positionProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    menuPane.setPrefWidth(LayoutPane.this.getWidth() * newValue.doubleValue());
+                    contentPane.setPrefWidth(LayoutPane.this.getWidth() * (1.0 - newValue.doubleValue()));
+                });
+
+        menuPane.prefHeightProperty().bind(this.heightProperty());
+    }
+
+    public final void addNavigationMenu(NavigationMenu menuItem) {
+        menuPane.addNavigationMenu(menuItem);
     }
 }

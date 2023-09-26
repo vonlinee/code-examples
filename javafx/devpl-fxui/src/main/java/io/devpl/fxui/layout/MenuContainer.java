@@ -1,15 +1,14 @@
 package io.devpl.fxui.layout;
 
 import javafx.event.EventHandler;
-import javafx.scene.Node;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
-
-import java.util.function.Consumer;
 
 /**
  * 菜单容器
@@ -18,7 +17,9 @@ public class MenuContainer extends Region {
 
     private final TreeView<String> menuTreeView;
 
-    public MenuContainer(Consumer<Node> consumer) {
+    EventHandler<MouseEvent> menuClickedHandler;
+
+    public MenuContainer() {
         this.menuTreeView = new TreeView<>();
         this.menuTreeView.setRoot(new TreeItem<>());
         this.menuTreeView.setShowRoot(false);
@@ -30,10 +31,8 @@ public class MenuContainer extends Region {
                 Object source = event.getSource();
                 if (source instanceof TreeCell<?> treeCell) {
                     TreeItem<?> treeItem = treeCell.getTreeItem();
-                    if (treeItem instanceof MenuItem menuItem) {
-                        if (menuItem.getContent() != null) {
-                            consumer.accept(menuItem.getContent());
-                        }
+                    if (treeItem instanceof NavigationMenu menu && this.menuClickedHandler != null) {
+                        this.menuClickedHandler.handle(event);
                     }
                 }
             });
@@ -41,12 +40,16 @@ public class MenuContainer extends Region {
         });
     }
 
-    @Override
-    protected void layoutChildren() {
-        super.layoutChildren();
+    public final void setOnMenuClicked(EventHandler<MouseEvent> menuClickedHandler) {
+        this.menuClickedHandler = menuClickedHandler;
     }
 
-    public final void addMenu(MenuItem menuItem) {
+    @Override
+    protected void layoutChildren() {
+        layoutInArea(menuTreeView, 0, 0, getWidth(), getHeight(), 0, HPos.CENTER, VPos.CENTER);
+    }
+
+    public final void addNavigationMenu(NavigationMenu menuItem) {
         this.menuTreeView.getRoot().getChildren().add(menuItem);
     }
 }

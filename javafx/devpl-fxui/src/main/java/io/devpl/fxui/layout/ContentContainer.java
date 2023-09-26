@@ -3,19 +3,22 @@ package io.devpl.fxui.layout;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 
-import java.util.IdentityHashMap;
-import java.util.Map;
-
 /**
  * 内容区域
  */
 public class ContentContainer extends ScrollPane {
 
-    Node currentContent;
+    public ContentContainer() {
+        this.setHbarPolicy(ScrollBarPolicy.NEVER);
+        this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+    }
 
-    Map<Integer, Node> childrenMap = new IdentityHashMap<>();
-
-    public void switchTo(Node node) {
+    public final void switchTo(Node node) {
         setContent(node);
+    }
+
+    @Override
+    protected void layoutChildren() {
+        super.layoutChildren();
     }
 }
