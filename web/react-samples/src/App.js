@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 function Card({ children }) {
@@ -8,10 +8,21 @@ function Card({ children }) {
   return (
     <div className="card">
       {children}
-
-      <button onClick={() => setNum(1)}>+</button>
+      <button >+</button>
     </div>
   );
+}
+
+class MyComponent extends React.Component {
+
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    console.log(this);
+    return <h1>11111</h1>
+  }
 }
 
 function Button(props) {
@@ -33,9 +44,7 @@ console.log(obj.name);
 function App() {
   return (
     <div className="App">
-      <Card>
-        <Button text='111' onClick={alertMsg}></Button>
-      </Card>
+      <MyComponent></MyComponent>
     </div>
   );
 }
