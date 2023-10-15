@@ -10,6 +10,16 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+yarn.lock
+package-lock.json
+# testing
+/coverage
+
+
 # Package Files #
 *.jar
 *.war
