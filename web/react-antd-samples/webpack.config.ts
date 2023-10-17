@@ -25,7 +25,9 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.css']
+        // extensions: ['.tsx', '.ts', '.css'],
+        alias: { // 配置 import 相对路径引入的文件or图片
+            '@': path.resolve(__dirname, 'src'),
+        }
     }
-
 }

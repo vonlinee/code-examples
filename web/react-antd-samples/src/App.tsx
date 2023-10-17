@@ -1,5 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Button } from 'antd';
+import DataTable from './components/datatable';
 
 interface IRefProps {
   childMethod: () => void;
@@ -42,6 +43,8 @@ const App: React.FC = () => (
   <div className="App">
     <Button type="primary">Button</Button>
     <Parent></Parent>
+
+    <DataTable></DataTable>
   </div>
 );
 
