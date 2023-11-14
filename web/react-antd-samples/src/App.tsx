@@ -1,6 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Button } from 'antd';
 import DataTable from './components/datatable';
+import ResultSetTable from './components/ResultSetTable';
 
 interface IRefProps {
   childMethod: () => void;
@@ -13,13 +14,13 @@ const Child = forwardRef<IRefProps, Props>((props, ref) => {
   useImperativeHandle(ref, () => ({
     childMethod
   }), [])
-  
+
   const childMethod = () => {
-      console.log('cCom data')
+    console.log('cCom data')
   }
-  
+
   return (
-      <div>子组件</div>
+    <div>子组件</div>
   )
 })
 
@@ -41,10 +42,7 @@ const Parent = () => {
 
 const App: React.FC = () => (
   <div className="App">
-    <Button type="primary">Button</Button>
-    <Parent></Parent>
-
-    <DataTable></DataTable>
+    <ResultSetTable></ResultSetTable>
   </div>
 );
 
