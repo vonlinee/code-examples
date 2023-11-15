@@ -3,6 +3,11 @@ import { Button } from 'antd';
 import DataTable from './components/datatable';
 import ResultSetTable from './components/ResultSetTable';
 
+
+import { ReactComponent as Menu } from './icons/svg/menu.svg'
+
+console.log(Menu);
+
 interface IRefProps {
   childMethod: () => void;
 }
@@ -42,6 +47,8 @@ const Parent = () => {
 
 const App: React.FC = () => (
   <div className="App">
+
+    <Menu width={22}></Menu>
     <ResultSetTable></ResultSetTable>
   </div>
 );

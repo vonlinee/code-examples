@@ -107,12 +107,19 @@ function ResultSetTable() {
   })
 
   return (
-    <div className="p-2">
+    <div className="p-2" style={{
+      padding: 20
+    }}>
       <div className="overflow-x-auto">
         <table
           {...{
             style: {
               width: table.getCenterTotalSize(),
+              verticalAlign: 'middle',
+              border: '1px solid lightgray',
+              borderCollapse: 'collapse',
+              borderSpacing: 0,
+              tableLayout: 'fixed'
             },
           }}
         >
@@ -126,6 +133,7 @@ function ResultSetTable() {
                       colSpan: header.colSpan,
                       style: {
                         width: header.getSize(),
+                        border: '1px solid lightgray',
                       },
                     }}
                   >
@@ -149,11 +157,13 @@ function ResultSetTable() {
                       key: cell.id,
                       style: {
                         width: cell.column.getSize(),
+                        border: '1px solid lightgray',
+                        padding: 0,
+                        margin: 0
                       },
                     }}
                     onClick={(event) => {
-                      const t = table as any
-                      t.meta.currentCell = cell
+                      
                     }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
