@@ -159,11 +159,15 @@ function ResultSetTable() {
                         width: cell.column.getSize(),
                         border: '1px solid lightgray',
                         padding: 0,
-                        margin: 0
+                        paddingLeft: 5,
+                        margin: 0,
                       },
                     }}
                     onClick={(event) => {
                       
+                      const cell = event.currentTarget as HTMLTableCellElement
+
+                      cell.style.border = '1px solid red'
                     }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

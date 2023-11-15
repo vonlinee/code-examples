@@ -1,10 +1,8 @@
-import { Cell, Column, Header, Row, Table } from "@tanstack/react-table";
+import { Cell, Column, Row, Table } from "@tanstack/react-table";
 import React, {
   useEffect,
   useState,
   useRef,
-  MouseEventHandler,
-  SyntheticEvent,
 } from "react";
 
 import { ReactComponent as Undo } from "../icons/svg/undo.svg";
@@ -25,9 +23,10 @@ export default function ResultSetTableCell<T>(
   const { column, cell, table } = props;
 
   const initialValue = cell.getValue();
+  const [oldValue] = useState(initialValue);
   // 单元格的值
   const [value, setValue] = useState(initialValue);
-
+  const [menuVisiable, setMenuVisiable] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [editing, setEditing] = useState(false);
@@ -36,6 +35,9 @@ export default function ResultSetTableCell<T>(
     if (editing) {
       setEditing(false);
       setSelected(false);
+      if (menuVisiable) {
+        setMenuVisiable(false)
+      }
     } else {
       setEditing(true);
     }
@@ -65,12 +67,14 @@ export default function ResultSetTableCell<T>(
 
   const [containerBorderStyle, setContainerBorderStyle] = useState("");
 
-  function handleUndoEdit(e : any) {
-    e.stopPropagation();
+  function handleUndoEdit(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    event.stopPropagation();
+    setValue(oldValue)
   }
 
-  function onMenuClicked() {
+  function onMenuClicked(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     console.log("clicked menu");
+    event.stopPropagation();
   }
 
   return (
@@ -92,7 +96,10 @@ export default function ResultSetTableCell<T>(
               alignItems: "center",
               overflow: "hidden",
             }}
-            onBlur={() => toggleEdit()}
+            onFocus={() => {
+              console.log("获取焦点");
+            }}
+
           >
             <input
               ref={inputRef}
@@ -103,9 +110,12 @@ export default function ResultSetTableCell<T>(
                 border: "transparent",
                 outline: "none",
               }}
+              onBlur={() => toggleEdit()}
               onChange={(e) => setValue(e.target.value)}
             />
-            <button onClick={handleUndoEdit}>
+            <button style={{
+              height: '100%'
+            }} onClick={handleUndoEdit} onDoubleClick={handleUndoEdit}>
               <Undo width={16} height={16} />
             </button>
           </div>
@@ -118,6 +128,8 @@ export default function ResultSetTableCell<T>(
               overflow: "hidden",
               textOverflow: "ellipsis",
             }}
+            onMouseEnter={() => setMenuVisiable(true)}
+            onMouseLeave={() => setMenuVisiable(false)}
           >
             <span
               style={{
@@ -131,9 +143,13 @@ export default function ResultSetTableCell<T>(
             >
               {value}
             </span>
-            <button>
-              <Menu width={16} height={16} onClick={onMenuClicked} />
-            </button>
+            {
+              menuVisiable ? <button style={{
+                height: '100%'
+              }} onClick={onMenuClicked} onDoubleClick={onMenuClicked}>
+                <Menu width={16} height={16} />
+              </button> : null
+            }
           </div>
         )}
       </div>
