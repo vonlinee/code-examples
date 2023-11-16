@@ -10,10 +10,11 @@ export default function ResultSetTableHeader<T>(
   props: ResultSetTableHeaderProps<T>
 ) {
   const { header } = props;
-
   return (
     <>
-      <span>{header.id}</span>
+      <span style={{
+        minWidth: '150px'
+      }}>{header.id}</span>
       <div
         {...{
           onMouseDown: header.getResizeHandler(),

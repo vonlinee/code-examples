@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from "react";
 
-import './index.css'
+import "./index.css";
 
 import {
   useReactTable,
@@ -8,166 +8,191 @@ import {
   getCoreRowModel,
   ColumnDef,
   flexRender,
-} from '@tanstack/react-table'
-import ResultSetTableHeader from './ResultSetTableHeader'
-import ResultSetTableCell from './ResultSetTableCell'
+} from "@tanstack/react-table";
+import ResultSetTableHeader from "./ResultSetTableHeader";
+import ResultSetTableCell from "./ResultSetTableCell";
 
 type Person = {
-  firstName: string
-  lastName: string
-  age: number
-  visits: number
-  status: string
-  progress: number
-}
+  firstName: string;
+  lastName: string;
+  age: number;
+  visits: number;
+  status: string;
+  progress: number;
+};
 
-const defaultData: Person[] = [
+let defaultData: Person[] = [
   {
-    firstName: 'tanner',
-    lastName: 'linsley',
+    firstName: "tanner",
+    lastName: "linsley",
     age: 24,
     visits: 100,
-    status: 'In Relationship',
+    status: "In Relationship",
     progress: 50,
   },
   {
-    firstName: 'tandy',
-    lastName: 'miller',
+    firstName: "tandy",
+    lastName: "miller",
     age: 40,
     visits: 40,
-    status: 'Single',
+    status: "Single",
     progress: 80,
   },
-  {
-    firstName: 'joe',
-    lastName: 'dirte',
-    age: 45,
-    visits: 20,
-    status: 'Complicated',
-    progress: 10,
-  },
-]
+];
+
+for (let i = 0; i < 2; i++) {
+  for (let j = 0; j < 100; j++) {
+    const element = Object.assign(defaultData[i], {}) as Person;
+    defaultData.push(element);
+  }
+}
 
 const defaultColumns: ColumnDef<Person>[] = [
   {
-    header: ResultSetTableHeader,
-    accessorKey: 'firstName',
-    cell: ResultSetTableCell,
-    footer: props => props.column.id,
-  },
-
-  {
-    accessorKey: 'age',
-    cell: ResultSetTableCell,
-    header: ResultSetTableHeader,
-    footer: props => props.column.id,
+    header: "#",
+    cell: (cell) => <div style={{
+      textAlign: 'center'
+    }}>{cell.row.index}</div>,
+    minSize: 50,
+    maxSize: 50,
+    footer: (props) => props.column.id,
   },
   {
-    accessorKey: 'visits',
     header: ResultSetTableHeader,
+    accessorKey: "firstName",
     cell: ResultSetTableCell,
-    footer: props => props.column.id,
+    minSize: 100,
+    footer: (props) => props.column.id,
   },
   {
-    accessorKey: 'status',
-    header: ResultSetTableHeader,
+    accessorKey: "age",
     cell: ResultSetTableCell,
-    footer: props => props.column.id,
+    header: ResultSetTableHeader,
+    minSize: 100,
+    footer: (props) => props.column.id,
   },
   {
-    accessorKey: 'progress',
+    accessorKey: "visits",
     header: ResultSetTableHeader,
     cell: ResultSetTableCell,
-    footer: props => props.column.id,
+    minSize: 100,
+    footer: (props) => props.column.id,
   },
-]
+  {
+    accessorKey: "status",
+    header: ResultSetTableHeader,
+    cell: ResultSetTableCell,
+    minSize: 100,
+    footer: (props) => props.column.id,
+  },
+  {
+    accessorKey: "progress",
+    header: ResultSetTableHeader,
+    cell: ResultSetTableCell,
+    minSize: 100,
+    footer: (props) => props.column.id,
+  },
+];
 
 function ResultSetTable() {
-  const [data, setData] = React.useState(() => [...defaultData])
+  const [data, setData] = React.useState(() => [...defaultData]);
   const [columns] = React.useState<typeof defaultColumns>(() => [
     ...defaultColumns,
-  ])
+  ]);
 
   const [columnResizeMode, setColumnResizeMode] =
-    React.useState<ColumnResizeMode>('onChange')
+    React.useState<ColumnResizeMode>("onChange");
 
-  const rerender = React.useReducer(() => ({}), {})[1]
+  const rerender = React.useReducer(() => ({}), {})[1];
+
+  const [currentCell, setCurrentCell] = useState<HTMLTableCellElement | null>(
+    null
+  );
 
   const table = useReactTable({
     data,
     columns,
     columnResizeMode,
     getCoreRowModel: getCoreRowModel(),
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true,
+    // debugTable: true,
+    // debugHeaders: true,
+    // debugColumns: true,
     meta: {
-      currentCell: null
-    }
-  })
+      currentCell: null,
+    },
+  });
 
   return (
-    <div className="p-2" style={{
-      padding: 20
-    }}>
+    <div
+      className="p-2"
+      style={{
+        padding: 20,
+      }}
+    >
       <div className="overflow-x-auto">
         <table
           {...{
             style: {
               width: table.getCenterTotalSize(),
-              verticalAlign: 'middle',
-              border: '1px solid lightgray',
-              borderCollapse: 'collapse',
+              verticalAlign: "middle",
+              border: "1px solid lightgray",
+              borderCollapse: "collapse",
               borderSpacing: 0,
-              tableLayout: 'fixed'
+              tableLayout: "fixed",
             },
           }}
         >
           <thead>
-            {table.getHeaderGroups().map(headerGroup => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
+                {headerGroup.headers.map((header) => (
                   <th
                     {...{
                       key: header.id,
                       colSpan: header.colSpan,
                       style: {
                         width: header.getSize(),
-                        border: '1px solid lightgray',
+                        minWidth: "200px !important",
+                        border: "1px solid lightgray",
                       },
                     }}
                   >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                    <div
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </div>
                   </th>
                 ))}
               </tr>
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map(row => (
+            {table.getRowModel().rows.map((row) => (
               <tr key={row.id}>
-                {row.getVisibleCells().map(cell => (
+                {row.getVisibleCells().map((cell) => (
                   <td
                     {...{
                       key: cell.id,
                       style: {
                         width: cell.column.getSize(),
-                        border: '1px solid lightgray',
+                        border: "1px solid lightgray",
                         padding: 0,
-                        paddingLeft: 5,
                         margin: 0,
                       },
                     }}
-                    onClick={(event) => {
-                      
-                      const cell = event.currentTarget as HTMLTableCellElement
-
-                      cell.style.border = '1px solid red'
+                    onFocus={(event) => {
+                      event.currentTarget.style.border = "2px solid #98FB98";
+                    }}
+                    onBlur={(event) => {
+                      event.currentTarget.style.border = "1px solid lightgray";
                     }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -179,7 +204,7 @@ function ResultSetTable() {
         </table>
       </div>
     </div>
-  )
+  );
 }
 
-export default ResultSetTable
+export default ResultSetTable;
