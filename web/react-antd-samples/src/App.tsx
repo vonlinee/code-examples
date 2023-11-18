@@ -1,8 +1,8 @@
-import ResultSetTable from "./components/ResultSetTable";
+import TreeTable from "./rtsamples/TreeTable";
 
 export default function App() {
 
   return <>
-    <ResultSetTable></ResultSetTable>
-  </>;
+    <TreeTable></TreeTable>
+  </>
 }
