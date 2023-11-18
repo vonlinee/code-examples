@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-
+import { useVirtual } from "react-virtual";
 import "./index.css";
-
-import { useSticky } from "react-table-sticky";
 
 import {
   useReactTable,
@@ -10,6 +8,7 @@ import {
   getCoreRowModel,
   ColumnDef,
   flexRender,
+  Row,
 } from "@tanstack/react-table";
 import ResultSetTableHeader from "./ResultSetTableHeader";
 import ResultSetTableCell from "./ResultSetTableCell";
@@ -51,12 +50,22 @@ for (let i = 0; i < 2; i++) {
 
 const defaultColumns: ColumnDef<Person>[] = [
   {
-    header: "#",
-    cell: (cell) => <div style={{
-      textAlign: 'center'
-    }}>{cell.row.index}</div>,
+    id: "serial",
+    header: (props) => {
+      return <>1</>;
+    },
+    cell: (cell) => (
+      <div
+        style={{
+          textAlign: "center",
+        }}
+      >
+        {cell.row.index}
+      </div>
+    ),
     minSize: 50,
     maxSize: 50,
+    accessorFn: (originalRow: Person, index: number) => index,
     footer: (props) => props.column.id,
   },
   {
@@ -124,14 +133,24 @@ function ResultSetTable() {
     },
   });
 
+  const tableContainerRef = React.useRef<HTMLDivElement>(null);
+  const { rows } = table.getRowModel();
+  const rowVirtualizer = useVirtual({
+    parentRef: tableContainerRef,
+    size: 20,
+    overscan: 10,
+  });
+  const { virtualItems: virtualRows, totalSize } = rowVirtualizer;
+
+  const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
+  const paddingBottom =
+    virtualRows.length > 0
+      ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
+      : 0;
+
   return (
-    <div
-      className="p-2"
-      style={{
-        padding: 20,
-      }}
-    >
-      <div className="overflow-x-auto">
+    <div className="view">
+      <div className="wrapper">
         <table
           {...{
             style: {
@@ -147,61 +166,99 @@ function ResultSetTable() {
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    {...{
-                      key: header.id,
-                      colSpan: header.colSpan,
-                      style: {
-                        width: header.getSize(),
-                        minWidth: "200px !important",
-                        border: "1px solid lightgray",
-                      },
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "100%",
-                      }}
-                    >
+                {headerGroup.headers.map((header) =>
+                  header.id == "serial" ? (
+                    <th className="sticky-col first-col">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                    </div>
-                  </th>
-                ))}
+                    </th>
+                  ) : (
+                    <th
+                      {...{
+                        key: header.id,
+                        colSpan: header.colSpan,
+                        style: {
+                          width: header.getSize(),
+                          minWidth: "200px !important",
+                          border: "1px solid lightgray",
+                        },
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </div>
+                    </th>
+                  )
+                )}
               </tr>
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    {...{
-                      key: cell.id,
-                      style: {
-                        width: cell.column.getSize(),
-                        border: "1px solid lightgray",
-                        padding: 0,
-                        margin: 0,
-                      },
-                    }}
-                    onFocus={(event) => {
-                      event.currentTarget.style.border = "2px solid #98FB98";
-                    }}
-                    onBlur={(event) => {
-                      event.currentTarget.style.border = "1px solid lightgray";
-                    }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+            {paddingTop > 0 && (
+              <tr>
+                <td style={{ height: `${paddingTop}px` }} />
               </tr>
-            ))}
+            )}
+            {virtualRows.map((virtualRow) => {
+              const row = rows[virtualRow.index] as Row<Person>;
+              return (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) =>
+                    cell.id == "serial" ? (
+                      <td className="ticky-col first-col">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ) : (
+                      <td
+                        {...{
+                          key: cell.id,
+                          style: {
+                            width: cell.column.getSize(),
+                            border: "1px solid lightgray",
+                            padding: 0,
+                            margin: 0,
+                          },
+                        }}
+                        onFocus={(event) => {
+                          event.currentTarget.style.border =
+                            "2px solid #98FB98";
+                        }}
+                        onBlur={(event) => {
+                          event.currentTarget.style.border =
+                            "1px solid lightgray";
+                        }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    )
+                  )}
+                </tr>
+              );
+            })}
+            {paddingBottom > 0 && (
+              <tr>
+                <td style={{ height: `${paddingBottom}px` }} />
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

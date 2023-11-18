@@ -63,7 +63,35 @@ td,
     opacity: 0;
   }
 
-  *:hover > .resizer {
+  *:hover>.resizer {
     opacity: 1;
   }
+}
+
+.sticky-col {
+  position: -webkit-sticky;
+  position: sticky;
+  background-color: white !important;
+}
+
+.first-col {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+  left: 0px;
+}
+
+.view {
+  margin: auto;
+  width: 600px;
+  height: 600px;
+}
+
+.wrapper {
+  position: relative;
+  overflow: auto;
+  overflow-x: auto;
+  overflow-y: auto;
+  border: 1px solid black;
+  white-space: nowrap;
 }
