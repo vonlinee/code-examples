@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useVirtual } from "react-virtual";
+import { useVirtualizer } from '@tanstack/react-virtual'
 import "./index.css";
 
 import {
@@ -135,12 +135,15 @@ function ResultSetTable() {
 
   const tableContainerRef = React.useRef<HTMLDivElement>(null);
   const { rows } = table.getRowModel();
-  const rowVirtualizer = useVirtual({
-    parentRef: tableContainerRef,
-    size: 20,
-    overscan: 10,
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => tableContainerRef.current,
+    estimateSize: () => 34,
+    overscan: 20,
   });
-  const { virtualItems: virtualRows, totalSize } = rowVirtualizer;
+
+  const totalSize = rowVirtualizer.getTotalSize()
+  const virtualRows = rowVirtualizer.getVirtualItems()
 
   const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
   const paddingBottom =
@@ -212,7 +215,7 @@ function ResultSetTable() {
                 <td style={{ height: `${paddingTop}px` }} />
               </tr>
             )}
-            {virtualRows.map((virtualRow) => {
+            {virtualRows.map((virtualRow: any) => {
               const row = rows[virtualRow.index] as Row<Person>;
               return (
                 <tr key={row.id}>

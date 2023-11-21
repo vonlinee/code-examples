@@ -15,8 +15,10 @@ import {
   getExpandedRowModel,
   ColumnDef,
   flexRender,
+  Row,
 } from '@tanstack/react-table'
 import { makeData, Person } from './makeData'
+import { useVirtualizer } from '@tanstack/react-virtual'
 
 function App() {
 
@@ -139,51 +141,78 @@ function App() {
     debugTable: true,
   })
 
+  const { rows } = table.getRowModel()
+
+  const parentRef = React.useRef<HTMLDivElement>(null)
+
+  console.log(rows.length);
+  
+  const virtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: (index: number) => 35,
+  })
+
   return (
-    <div className="p-2">
-      <div className="h-2" />
-      <table>
-        <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => {
-                return (
-                  <th key={header.id} colSpan={header.colSpan} style={{
-                    width: 250
-                  }}>
-                    {header.isPlaceholder ? null : (
-                      <div>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </div>
-                    )}
-                  </th>
-                )
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map(row => {
-            return (
-              <tr key={row.id}>
-                {row.getVisibleCells().map(cell => {
+    <div ref={parentRef} className="container">
+      <div style={{ height: `${virtualizer.getTotalSize()}px` }}>
+        <table>
+          <thead>
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => {
                   return (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
+                    <th key={header.id} colSpan={header.colSpan} style={{
+                      width: 250
+                    }}>
+                      {header.isPlaceholder ? null : (
+                        <div>
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        </div>
                       )}
-                    </td>
+                    </th>
                   )
                 })}
               </tr>
-            )
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody>
+            {
+              virtualizer.getVirtualItems().map((virtualRow, index) => {
+                const row = rows[virtualRow.index] as Row<Person>
+
+                console.log("qqq", virtualizer.getVirtualItems().length);
+
+                return (
+                  <tr
+                    key={row.id}
+                    style={{
+                      height: `${virtualRow.size}px`,
+                      transform: `translateY(${virtualRow.start - index * virtualRow.size
+                        }px)`,
+                    }}
+                  >
+                    {row.getVisibleCells().map((cell) => {
+                      return (
+                        <td key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </td>
+                      )
+                    })}
+                  </tr>
+                )
+              })
+
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
