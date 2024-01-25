@@ -1,0 +1,20 @@
+.split-pane {
+    /*-fx-background-color: red;*/
+}
+
+.split-pane > .split-pane-divider {
+    /*分割线的宽度*/
+    -fx-padding: 0 0.01em 0 0.01em; /* 0 3 0 3 */
+}
+
+/* horizontal the two nodes are placed to the left/right of each other. */
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: -fx-box-border, -fx-inner-border-horizontal;
+    -fx-background-insets: 0, 0 1 0 1;
+}
+
+/* vertical the two nodes are placed on top of each other. */
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color: -fx-box-border, -fx-inner-border;
+    -fx-background-insets: 0, 1 0 1 0;
+}
