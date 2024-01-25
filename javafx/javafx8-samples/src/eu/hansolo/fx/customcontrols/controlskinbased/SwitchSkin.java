@@ -28,24 +28,24 @@ import javafx.util.Duration;
 
 
 public class SwitchSkin extends SkinBase<CustomControl> implements Skin<CustomControl> {
-    private static final double                   PREFERRED_WIDTH  = 76;
-    private static final double                   PREFERRED_HEIGHT = 46;
-    private              Region                   switchBackground;
-    private              Region                   thumb;
-    private              Pane                     pane;
-    private              TranslateTransition      translate;
-    private              CustomControl            control;
-    private              InvalidationListener     colorListener;
-    private              InvalidationListener     state;
-    private              EventHandler<MouseEvent> mouseEventHandler;
+    private static final double PREFERRED_WIDTH = 76;
+    private static final double PREFERRED_HEIGHT = 46;
+    private Region switchBackground;
+    private Region thumb;
+    private Pane pane;
+    private TranslateTransition translate;
+    private final CustomControl control;
+    private final InvalidationListener colorListener;
+    private final InvalidationListener state;
+    private final EventHandler<MouseEvent> mouseEventHandler;
 
 
     // ******************** Constructors **************************************
     public SwitchSkin(final CustomControl control) {
         super(control);
-        this.control      = control;
-        colorListener     = o -> handleControlPropertyChanged("COLOR");
-        state             = o -> handleControlPropertyChanged("STATE");
+        this.control = control;
+        colorListener = o -> handleControlPropertyChanged("COLOR");
+        state = o -> handleControlPropertyChanged("STATE");
         mouseEventHandler = e -> this.control.setState(!this.control.getState());
         initGraphics();
         registerListeners();
@@ -61,7 +61,9 @@ public class SwitchSkin extends SkinBase<CustomControl> implements Skin<CustomCo
         thumb = new Region();
         thumb.getStyleClass().add("thumb");
         thumb.setMouseTransparent(true);
-        if (control.getState()) { thumb.setTranslateX(32); }
+        if (control.getState()) {
+            thumb.setTranslateX(32);
+        }
 
         translate = new TranslateTransition(Duration.millis(70), thumb);
 
@@ -77,7 +79,8 @@ public class SwitchSkin extends SkinBase<CustomControl> implements Skin<CustomCo
 
 
     // ******************** Methods *******************************************
-    @Override public void layoutChildren(final double x, final double y, final double width, final double height) {
+    @Override
+    public void layoutChildren(final double x, final double y, final double width, final double height) {
         super.layoutChildren(x, y, width, height);
         switchBackground.relocate((width - PREFERRED_WIDTH) * 0.5, (height - PREFERRED_HEIGHT) * 0.5);
         thumb.relocate((width - PREFERRED_WIDTH) * 0.5, (height - PREFERRED_HEIGHT) * 0.5);
@@ -100,7 +103,8 @@ public class SwitchSkin extends SkinBase<CustomControl> implements Skin<CustomCo
         }
     }
 
-    @Override public void dispose() {
+    @Override
+    public void dispose() {
         control.colorProperty().removeListener(colorListener);
         control.stateProperty().removeListener(state);
         switchBackground.removeEventHandler(MouseEvent.MOUSE_PRESSED, mouseEventHandler);

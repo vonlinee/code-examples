@@ -17,5 +17,7 @@
 package eu.hansolo.fx.customcontrols.canvasbased;
 
 public class LauncherCanvasBased {
-    public static void main(String[] args) { DemoCanvasBased.main(args); }
+    public static void main(String[] args) {
+        DemoCanvasBased.main(args);
+    }
 }

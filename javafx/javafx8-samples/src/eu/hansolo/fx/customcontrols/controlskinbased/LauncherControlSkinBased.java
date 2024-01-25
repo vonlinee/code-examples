@@ -17,5 +17,7 @@
 package eu.hansolo.fx.customcontrols.controlskinbased;
 
 public class LauncherControlSkinBased {
-    public static void main(String[] args) { DemoControlSkinBased.main(args); }
+    public static void main(String[] args) {
+        DemoControlSkinBased.main(args);
+    }
 }

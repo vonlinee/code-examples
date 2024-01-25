@@ -27,15 +27,17 @@ import javafx.stage.Stage;
 
 public class DemoRestyled extends Application {
     private CheckBox control0;
-    private Switch   control1;
+    private Switch control1;
 
 
-    @Override public void init() {
+    @Override
+    public void init() {
         control0 = new CheckBox("Material Design");
         control1 = new Switch("Material Design");
     }
 
-    @Override public void start(final Stage stage) {
+    @Override
+    public void start(final Stage stage) {
         VBox pane = new VBox(24, control0, control1);
         pane.setPadding(new Insets(20));
 
@@ -47,7 +49,8 @@ public class DemoRestyled extends Application {
         stage.show();
     }
 
-    @Override public void stop() {
+    @Override
+    public void stop() {
         Platform.exit();
         System.exit(0);
     }

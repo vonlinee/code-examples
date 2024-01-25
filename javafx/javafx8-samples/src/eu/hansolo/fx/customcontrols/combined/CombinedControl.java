@@ -27,7 +27,7 @@ import java.util.Locale;
 
 public class CombinedControl extends HBox {
     private TextField textField;
-    private Button    button;
+    private Button button;
 
 
     // ******************** Constructors **************************************
@@ -66,7 +66,7 @@ public class CombinedControl extends HBox {
     private void handleControlPropertyChanged(final String property) {
         if ("BUTTON_PRESSED".equals(property)) {
             String buttonText = button.getText();
-            String text       = textField.getText();
+            String text = textField.getText();
             if (text.matches("^[-+]?\\d+(\\.\\d+)?$")) {
                 if ("°C".equals(buttonText)) {
                     // Convert to Fahrenheit
@@ -89,6 +89,7 @@ public class CombinedControl extends HBox {
             return text;
         }
     }
+
     private String toCelsius(final String text) {
         try {
             double fahrenheit = Double.parseDouble(text);

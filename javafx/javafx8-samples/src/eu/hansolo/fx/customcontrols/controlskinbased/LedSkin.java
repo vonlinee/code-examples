@@ -27,29 +27,29 @@ import javafx.scene.paint.Color;
 
 
 public class LedSkin extends SkinBase<CustomControl> implements Skin<CustomControl> {
-    private static final double               PREFERRED_WIDTH  = 16;
-    private static final double               PREFERRED_HEIGHT = 16;
-    private static final double               MINIMUM_WIDTH    = 8;
-    private static final double               MINIMUM_HEIGHT   = 8;
-    private static final double               MAXIMUM_WIDTH    = 1024;
-    private static final double               MAXIMUM_HEIGHT   = 1024;
-    private              double               size;
-    private              Region               frame;
-    private              Region               main;
-    private              Region               highlight;
-    private              InnerShadow          innerShadow;
-    private              DropShadow           glow;
-    private              CustomControl        control;
-    private              InvalidationListener sizeListener;
-    private              InvalidationListener colorListener;
-    private              InvalidationListener stateListener;
+    private static final double PREFERRED_WIDTH = 16;
+    private static final double PREFERRED_HEIGHT = 16;
+    private static final double MINIMUM_WIDTH = 8;
+    private static final double MINIMUM_HEIGHT = 8;
+    private static final double MAXIMUM_WIDTH = 1024;
+    private static final double MAXIMUM_HEIGHT = 1024;
+    private double size;
+    private Region frame;
+    private Region main;
+    private Region highlight;
+    private InnerShadow innerShadow;
+    private DropShadow glow;
+    private CustomControl control;
+    private final InvalidationListener sizeListener;
+    private final InvalidationListener colorListener;
+    private final InvalidationListener stateListener;
 
 
     // ******************** Constructors **************************************
     public LedSkin(final CustomControl control) {
         super(control);
-        this.control  = control;
-        sizeListener  = o -> handleControlPropertyChanged("RESIZE");
+        this.control = control;
+        sizeListener = o -> handleControlPropertyChanged("RESIZE");
         colorListener = o -> handleControlPropertyChanged("COLOR");
         stateListener = o -> handleControlPropertyChanged("STATE");
         initGraphics();
@@ -60,7 +60,7 @@ public class LedSkin extends SkinBase<CustomControl> implements Skin<CustomContr
     // ******************** Initialization ************************************
     private void initGraphics() {
         if (Double.compare(control.getPrefWidth(), 0.0) <= 0 || Double.compare(control.getPrefHeight(), 0.0) <= 0 ||
-            Double.compare(control.getWidth(), 0.0) <= 0 || Double.compare(control.getHeight(), 0.0) <= 0) {
+                Double.compare(control.getWidth(), 0.0) <= 0 || Double.compare(control.getHeight(), 0.0) <= 0) {
             if (control.getPrefWidth() > 0 && control.getPrefHeight() > 0) {
                 control.setPrefSize(control.getPrefWidth(), control.getPrefHeight());
             } else {
@@ -95,12 +95,35 @@ public class LedSkin extends SkinBase<CustomControl> implements Skin<CustomContr
 
 
     // ******************** Methods *******************************************
-    @Override protected double computeMinWidth(final double height, final double top, final double right, final double bottom, final double left)  { return MINIMUM_WIDTH; }
-    @Override protected double computeMinHeight(final double width, final double top, final double right, final double bottom, final double left)  { return MINIMUM_HEIGHT; }
-    @Override protected double computePrefWidth(final double height, final double top, final double right, final double bottom, final double left) { return super.computePrefWidth(height, top, right, bottom, left); }
-    @Override protected double computePrefHeight(final double width, final double top, final double right, final double bottom, final double left) { return super.computePrefHeight(width, top, right, bottom, left); }
-    @Override protected double computeMaxWidth(final double width, final double top, final double right, final double bottom, final double left)  { return MAXIMUM_WIDTH; }
-    @Override protected double computeMaxHeight(final double width, final double top, final double right, final double bottom, final double left)  { return MAXIMUM_HEIGHT; }
+    @Override
+    protected double computeMinWidth(final double height, final double top, final double right, final double bottom, final double left) {
+        return MINIMUM_WIDTH;
+    }
+
+    @Override
+    protected double computeMinHeight(final double width, final double top, final double right, final double bottom, final double left) {
+        return MINIMUM_HEIGHT;
+    }
+
+    @Override
+    protected double computePrefWidth(final double height, final double top, final double right, final double bottom, final double left) {
+        return super.computePrefWidth(height, top, right, bottom, left);
+    }
+
+    @Override
+    protected double computePrefHeight(final double width, final double top, final double right, final double bottom, final double left) {
+        return super.computePrefHeight(width, top, right, bottom, left);
+    }
+
+    @Override
+    protected double computeMaxWidth(final double width, final double top, final double right, final double bottom, final double left) {
+        return MAXIMUM_WIDTH;
+    }
+
+    @Override
+    protected double computeMaxHeight(final double width, final double top, final double right, final double bottom, final double left) {
+        return MAXIMUM_HEIGHT;
+    }
 
     protected void handleControlPropertyChanged(final String property) {
         if ("RESIZE".equals(property)) {
@@ -113,7 +136,8 @@ public class LedSkin extends SkinBase<CustomControl> implements Skin<CustomContr
         }
     }
 
-    @Override public void dispose() {
+    @Override
+    public void dispose() {
         control.widthProperty().removeListener(sizeListener);
         control.heightProperty().removeListener(sizeListener);
         control.colorProperty().removeListener(colorListener);
@@ -123,14 +147,15 @@ public class LedSkin extends SkinBase<CustomControl> implements Skin<CustomContr
 
 
     // ******************** Layout ********************************************
-    @Override public void layoutChildren(final double x, final double y, final double width, final double height) {
+    @Override
+    public void layoutChildren(final double x, final double y, final double width, final double height) {
         super.layoutChildren(x, y, width, height);
     }
 
     private void resize() {
-        double width  = control.getWidth() - control.getInsets().getLeft() - control.getInsets().getRight();
+        double width = control.getWidth() - control.getInsets().getLeft() - control.getInsets().getRight();
         double height = control.getHeight() - control.getInsets().getTop() - control.getInsets().getBottom();
-        size          = width < height ? width : height;
+        size = width < height ? width : height;
 
         if (size > 0) {
             innerShadow.setRadius(0.07 * size);

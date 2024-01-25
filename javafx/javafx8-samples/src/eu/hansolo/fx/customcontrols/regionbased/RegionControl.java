@@ -53,10 +53,10 @@ public class RegionControl extends Region {
     private static final PseudoClass HOVERED_PSEUDO_CLASS = PseudoClass.getPseudoClass("hovered");
     private static final PseudoClass PRESSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("pressed");
     private static final PseudoClass STATE_PSEUDO_CLASS = PseudoClass.getPseudoClass("state");
-    private BooleanProperty hovered;
-    private BooleanProperty state;
+    private final BooleanProperty hovered;
+    private final BooleanProperty state;
     private static String userAgentStyleSheet;
-    private ObjectProperty<Type> type;
+    private final ObjectProperty<Type> type;
     private double size;
     private double width;
     private double height;
@@ -84,8 +84,7 @@ public class RegionControl extends Region {
                     pseudoClassStateChanged(CLOSE_PSEUDO_CLASS, false);
                     pseudoClassStateChanged(MINIMIZE_PSEUDO_CLASS, true);
                     pseudoClassStateChanged(ZOOM_PSEUDO_CLASS, false);
-                }
-                else if (type == Type.ZOOM) {
+                } else if (type == Type.ZOOM) {
                     pseudoClassStateChanged(CLOSE_PSEUDO_CLASS, false);
                     pseudoClassStateChanged(MINIMIZE_PSEUDO_CLASS, false);
                     pseudoClassStateChanged(ZOOM_PSEUDO_CLASS, true);

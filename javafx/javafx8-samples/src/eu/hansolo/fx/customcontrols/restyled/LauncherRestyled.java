@@ -17,5 +17,7 @@
 package eu.hansolo.fx.customcontrols.restyled;
 
 public class LauncherRestyled {
-    public static void main(String[] args) { DemoRestyled.main(args); }
+    public static void main(String[] args) {
+        DemoRestyled.main(args);
+    }
 }

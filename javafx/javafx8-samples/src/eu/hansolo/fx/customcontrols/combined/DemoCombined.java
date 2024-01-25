@@ -27,15 +27,17 @@ import javafx.stage.Stage;
 
 public class DemoCombined extends Application {
     private CombinedControl control;
-    private Button          button;
+    private Button button;
 
 
-    @Override public void init() {
+    @Override
+    public void init() {
         control = new CombinedControl();
-        button  = new Button("Focus");
+        button = new Button("Focus");
     }
 
-    @Override public void start(final Stage stage) {
+    @Override
+    public void start(final Stage stage) {
         VBox pane = new VBox(24, control, button);
         pane.setPadding(new Insets(20));
 
@@ -48,7 +50,8 @@ public class DemoCombined extends Application {
         button.requestFocus();
     }
 
-    @Override public void stop() {
+    @Override
+    public void stop() {
         Platform.exit();
         System.exit(0);
     }

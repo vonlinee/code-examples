@@ -17,5 +17,7 @@
 package eu.hansolo.fx.customcontrols.extended;
 
 public class LauncherExtended {
-    public static void main(String[] args) { DemoExtended.main(args); }
+    public static void main(String[] args) {
+        DemoExtended.main(args);
+    }
 }

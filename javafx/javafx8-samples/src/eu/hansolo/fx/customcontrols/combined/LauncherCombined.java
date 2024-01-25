@@ -17,5 +17,7 @@
 package eu.hansolo.fx.customcontrols.combined;
 
 public class LauncherCombined {
-    public static void main(String[] args) { DemoCombined.main(args); }
+    public static void main(String[] args) {
+        DemoCombined.main(args);
+    }
 }

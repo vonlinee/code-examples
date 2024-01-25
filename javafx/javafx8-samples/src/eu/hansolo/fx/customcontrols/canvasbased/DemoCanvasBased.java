@@ -19,16 +19,11 @@
  import javafx.application.Application;
  import javafx.application.Platform;
  import javafx.geometry.Insets;
+ import javafx.scene.Scene;
  import javafx.scene.image.Image;
- import javafx.scene.layout.Background;
- import javafx.scene.layout.BackgroundFill;
- import javafx.scene.layout.CornerRadii;
- import javafx.scene.layout.HBox;
- import javafx.scene.layout.Priority;
+ import javafx.scene.layout.*;
  import javafx.scene.paint.Color;
  import javafx.stage.Stage;
- import javafx.scene.layout.StackPane;
- import javafx.scene.Scene;
 
 
  /**
@@ -37,14 +32,15 @@
   * Time: 13:38
   */
  public class DemoCanvasBased extends Application {
-     private Image         dukeImg;
-     private Image         heartImg;
+     private Image dukeImg;
+     private Image heartImg;
      private CanvasControl control1;
      private CanvasControl control2;
      private CanvasControl control3;
 
-     @Override public void init() {
-         dukeImg  = new Image(DemoCanvasBased.class.getResourceAsStream("duke.png"));
+     @Override
+     public void init() {
+         dukeImg = new Image(DemoCanvasBased.class.getResourceAsStream("duke.png"));
          heartImg = new Image(DemoCanvasBased.class.getResourceAsStream("heart.png"));
 
          control1 = new CanvasControl("We");
@@ -67,7 +63,8 @@
          control3.setOnAction(e -> System.out.println("Java button pressed"));
      }
 
-     @Override public void start(Stage stage) {
+     @Override
+     public void start(Stage stage) {
          HBox.setHgrow(control1, Priority.ALWAYS);
          HBox.setHgrow(control2, Priority.ALWAYS);
          HBox.setHgrow(control3, Priority.ALWAYS);
@@ -82,7 +79,8 @@
          stage.show();
      }
 
-     @Override public void stop() {
+     @Override
+     public void stop() {
          Platform.exit();
          System.exit(0);
      }

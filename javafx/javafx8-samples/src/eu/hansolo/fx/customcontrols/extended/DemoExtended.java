@@ -27,17 +27,19 @@ import javafx.stage.Stage;
 
 public class DemoExtended extends Application {
     private ExtendedControl control;
-    private Button          button;
+    private Button button;
 
 
-    @Override public void init() {
+    @Override
+    public void init() {
         control = new ExtendedControl();
         control.setPromptText("Name");
 
         button = new Button("Focus");
     }
 
-    @Override public void start(final Stage stage) {
+    @Override
+    public void start(final Stage stage) {
         VBox pane = new VBox(24, control, button);
         pane.setPadding(new Insets(20));
 
@@ -50,7 +52,8 @@ public class DemoExtended extends Application {
         button.requestFocus();
     }
 
-    @Override public void stop() {
+    @Override
+    public void stop() {
         Platform.exit();
         System.exit(0);
     }

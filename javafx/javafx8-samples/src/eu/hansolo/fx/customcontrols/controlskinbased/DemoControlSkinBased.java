@@ -31,7 +31,8 @@ public class DemoControlSkinBased extends Application {
     private CustomControl control1;
 
 
-    @Override public void init() {
+    @Override
+    public void init() {
         control0 = new CustomControl();
         control0.setState(true);
         control0.setPrefSize(100, 100);
@@ -43,7 +44,8 @@ public class DemoControlSkinBased extends Application {
         control1.stateProperty().addListener((o, ov, nv) -> control0.setState(nv));
     }
 
-    @Override public void start(final Stage stage) {
+    @Override
+    public void start(final Stage stage) {
         VBox pane = new VBox(20, control0, control1);
         pane.setPadding(new Insets(20));
 
@@ -55,7 +57,8 @@ public class DemoControlSkinBased extends Application {
         stage.show();
     }
 
-    @Override public void stop() {
+    @Override
+    public void stop() {
         Platform.exit();
         System.exit(0);
     }

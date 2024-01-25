@@ -22,11 +22,7 @@ import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.css.CssMetaData;
-import javafx.css.SimpleStyleableObjectProperty;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
-import javafx.css.StyleablePropertyFactory;
+import javafx.css.*;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -38,36 +34,37 @@ import java.util.List;
 
 
 public class ExtendedControl extends TextField {
-    private static final StyleablePropertyFactory<ExtendedControl> FACTORY                       = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());
-    private static final Color                                     DEFAULT_MATERIAL_DESIGN_COLOR = Color.web("#009688");
-    private static final Color                                     DEFAULT_PROMPT_TEXT_COLOR     = Color.web("#757575");
-    private static final double                                    STD_FONT_SIZE                 = 13;
-    private static final double                                    SMALL_FONT_SIZE               = 10;
-    private static final double                                    TOP_OFFSET_Y                  = 4;
-    private static final int                                       ANIMATION_DURATION            = 60;
-    private static final CssMetaData<ExtendedControl, Color>       MATERIAL_DESIGN_COLOR         = FACTORY.createColorCssMetaData("-material-design-color", s -> s.materialDesignColor, DEFAULT_MATERIAL_DESIGN_COLOR, false);
-    private static final CssMetaData<ExtendedControl, Color>       PROMPT_TEXT_COLOR             = FACTORY.createColorCssMetaData("-prompt-text-color", s -> s.promptTextColor, DEFAULT_PROMPT_TEXT_COLOR, false);
-    private static       String                                    userAgentStyleSheet;
-    private        final StyleableProperty<Color>                  materialDesignColor;
-    private        final StyleableProperty<Color>                  promptTextColor;
-    private              Text                                      promptText;
-    private              HBox                                      promptTextBox;
-    private              DoubleProperty                            fontSize;
-    private              Timeline                                  timeline;
+    private static final StyleablePropertyFactory<ExtendedControl> FACTORY = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());
+    private static final Color DEFAULT_MATERIAL_DESIGN_COLOR = Color.web("#009688");
+    private static final Color DEFAULT_PROMPT_TEXT_COLOR = Color.web("#757575");
+    private static final double STD_FONT_SIZE = 13;
+    private static final double SMALL_FONT_SIZE = 10;
+    private static final double TOP_OFFSET_Y = 4;
+    private static final int ANIMATION_DURATION = 60;
+    private static final CssMetaData<ExtendedControl, Color> MATERIAL_DESIGN_COLOR = FACTORY.createColorCssMetaData("-material-design-color", s -> s.materialDesignColor, DEFAULT_MATERIAL_DESIGN_COLOR, false);
+    private static final CssMetaData<ExtendedControl, Color> PROMPT_TEXT_COLOR = FACTORY.createColorCssMetaData("-prompt-text-color", s -> s.promptTextColor, DEFAULT_PROMPT_TEXT_COLOR, false);
+    private static String userAgentStyleSheet;
+    private final StyleableProperty<Color> materialDesignColor;
+    private final StyleableProperty<Color> promptTextColor;
+    private Text promptText;
+    private HBox promptTextBox;
+    private final DoubleProperty fontSize;
+    private final Timeline timeline;
 
 
     // ******************** Constructors **************************************
     public ExtendedControl() {
         this("");
     }
+
     public ExtendedControl(final String promptTextBox) {
         super(promptTextBox);
 
         materialDesignColor = new SimpleStyleableObjectProperty<>(MATERIAL_DESIGN_COLOR, this, "materialDesignColor");
-        promptTextColor     = new SimpleStyleableObjectProperty<>(PROMPT_TEXT_COLOR, this, "promptTextColor");
+        promptTextColor = new SimpleStyleableObjectProperty<>(PROMPT_TEXT_COLOR, this, "promptTextColor");
 
-        fontSize            = new SimpleDoubleProperty(ExtendedControl.this, "fontSize", getFont().getSize());
-        timeline            = new Timeline();
+        fontSize = new SimpleDoubleProperty(ExtendedControl.this, "fontSize", getFont().getSize());
+        timeline = new Timeline();
 
         initGraphics();
         registerListeners();
@@ -79,7 +76,7 @@ public class ExtendedControl extends TextField {
         getStyleClass().addAll("material-field");
 
         final String fontFamily = getFont().getFamily();
-        final int    length      = getText().length();
+        final int length = getText().length();
 
         promptText = new Text(getPromptText());
         promptText.getStyleClass().add("prompt-text");
@@ -114,13 +111,29 @@ public class ExtendedControl extends TextField {
 
 
     // ******************** CSS Stylable Properties ***************************
-    public Color getMaterialDesignColor() { return materialDesignColor.getValue(); }
-    public void setMaterialDesignColor(final Color color) { materialDesignColor.setValue(color); }
-    public ObjectProperty<Color> materialDesignColorProperty() { return (ObjectProperty<Color>) materialDesignColor; }
+    public Color getMaterialDesignColor() {
+        return materialDesignColor.getValue();
+    }
 
-    public Color getPromptTextColor() { return promptTextColor.getValue(); }
-    public void setPromptTextColor(final Color color) { promptTextColor.setValue(color); }
-    public ObjectProperty<Color> promptTextColorProperty() { return (ObjectProperty<Color>) promptTextColor; }
+    public void setMaterialDesignColor(final Color color) {
+        materialDesignColor.setValue(color);
+    }
+
+    public ObjectProperty<Color> materialDesignColorProperty() {
+        return (ObjectProperty<Color>) materialDesignColor;
+    }
+
+    public Color getPromptTextColor() {
+        return promptTextColor.getValue();
+    }
+
+    public void setPromptTextColor(final Color color) {
+        promptTextColor.setValue(color);
+    }
+
+    public ObjectProperty<Color> promptTextColorProperty() {
+        return (ObjectProperty<Color>) promptTextColor;
+    }
 
 
     // ******************** Misc **********************************************
@@ -139,10 +152,10 @@ public class ExtendedControl extends TextField {
 
         if (isFocused | length > 0 || isDisabled() || !isEditable()) {
             if (Double.compare(promptTextBox.getTranslateY(), -STD_FONT_SIZE - TOP_OFFSET_Y) != 0) {
-                kvTextY0          = new KeyValue(promptTextBox.translateYProperty(), 0);
-                kvTextY1          = new KeyValue(promptTextBox.translateYProperty(), -STD_FONT_SIZE - TOP_OFFSET_Y);
-                kvTextFontSize0   = new KeyValue(fontSize, STD_FONT_SIZE);
-                kvTextFontSize1   = new KeyValue(fontSize, SMALL_FONT_SIZE);
+                kvTextY0 = new KeyValue(promptTextBox.translateYProperty(), 0);
+                kvTextY1 = new KeyValue(promptTextBox.translateYProperty(), -STD_FONT_SIZE - TOP_OFFSET_Y);
+                kvTextFontSize0 = new KeyValue(fontSize, STD_FONT_SIZE);
+                kvTextFontSize1 = new KeyValue(fontSize, SMALL_FONT_SIZE);
                 kvPromptTextFill0 = new KeyValue(promptTextColorProperty(), DEFAULT_PROMPT_TEXT_COLOR);
                 kvPromptTextFill1 = new KeyValue(promptTextColorProperty(), isFocused ? getMaterialDesignColor() : DEFAULT_PROMPT_TEXT_COLOR);
 
@@ -155,10 +168,10 @@ public class ExtendedControl extends TextField {
             promptText.setFill(isFocused ? getMaterialDesignColor() : DEFAULT_PROMPT_TEXT_COLOR);
         } else {
             if (Double.compare(promptTextBox.getTranslateY(), 0) != 0) {
-                kvTextY0          = new KeyValue(promptTextBox.translateYProperty(), promptTextBox.getTranslateY());
-                kvTextY1          = new KeyValue(promptTextBox.translateYProperty(), 0);
-                kvTextFontSize0   = new KeyValue(fontSize, SMALL_FONT_SIZE);
-                kvTextFontSize1   = new KeyValue(fontSize, STD_FONT_SIZE);
+                kvTextY0 = new KeyValue(promptTextBox.translateYProperty(), promptTextBox.getTranslateY());
+                kvTextY1 = new KeyValue(promptTextBox.translateYProperty(), 0);
+                kvTextFontSize0 = new KeyValue(fontSize, SMALL_FONT_SIZE);
+                kvTextFontSize1 = new KeyValue(fontSize, STD_FONT_SIZE);
                 kvPromptTextFill0 = new KeyValue(promptTextColorProperty(), getMaterialDesignColor());
                 kvPromptTextFill1 = new KeyValue(promptTextColorProperty(), DEFAULT_PROMPT_TEXT_COLOR);
 
@@ -173,11 +186,20 @@ public class ExtendedControl extends TextField {
 
 
     // ******************** Style related *************************************
-    @Override public String getUserAgentStylesheet() {
-        if (null == userAgentStyleSheet) { userAgentStyleSheet = getClass().getResource("extended.css").toExternalForm(); }
+    @Override
+    public String getUserAgentStylesheet() {
+        if (null == userAgentStyleSheet) {
+            userAgentStyleSheet = getClass().getResource("extended.css").toExternalForm();
+        }
         return userAgentStyleSheet;
     }
 
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() { return FACTORY.getCssMetaData(); }
-    @Override public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() { return FACTORY.getCssMetaData(); }
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+        return FACTORY.getCssMetaData();
+    }
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return FACTORY.getCssMetaData();
+    }
 }
