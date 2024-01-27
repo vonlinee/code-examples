@@ -110,7 +110,7 @@ public class ExtendedControl extends TextField {
     }
 
 
-    // ******************** CSS Stylable Properties ***************************
+    // ******************** CSS Styleable Properties ***************************
     public Color getMaterialDesignColor() {
         return materialDesignColor.getValue();
     }

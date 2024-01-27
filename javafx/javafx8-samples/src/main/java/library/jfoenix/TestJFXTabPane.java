@@ -33,11 +33,7 @@ public class TestJFXTabPane extends Application {
 		JFXTabPane root = new JFXTabPane();
 		
 		TabPane tabPane = new TabPane();
-		
-		
-		
-		
-		
+
 		Tab tab1 = new Tab("Tab1");
 		tab1.setContent(new AnchorPane());
 		
