@@ -1,10 +1,12 @@
 
-
 decl(type, name, value) ::= "<type> <name><init(value)>;"
 init(v) ::= "<if(v)> = <v><endif>"
 
 
-
+sql(arg) ::= <%
+SELECT * FROM user
+WHERE <first(arg)>
+%>
 
 
 

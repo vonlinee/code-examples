@@ -1,0 +1,18 @@
+sql(arg) ::= <%
+SELECT * FROM user WHERE <first(arg)>
+%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

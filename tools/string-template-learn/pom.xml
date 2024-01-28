@@ -33,7 +33,7 @@
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
-                    <include>*.stg</include>
+                    <include>**/*.stg</include>
                 </includes>
             </resource>
         </resources>
