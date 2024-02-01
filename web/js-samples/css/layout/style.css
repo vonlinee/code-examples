@@ -1,0 +1,17 @@
+
+
+.row {
+  height: 40px;
+  width: 100%;
+  /* 消除行内元素的默认间距 */
+  font-size: 0;
+  border: solid red;
+}
+
+.cell  {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 20px;
+  height: 100%;
+  border: 1px solid rgb(182, 143, 143);
+}

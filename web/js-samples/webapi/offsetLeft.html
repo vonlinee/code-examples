@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="div1" style="height: 500px; background-color: aquamarine;">
+    <div id="div2" style="position: absolute; left: 200px; height: 300px; background-color: blue;">
+      <div id="div3" style="height: 200px; background-color: rgb(85, 238, 113);">
+        <span id="target">11</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    const target = document.getElementById("target")
+    console.log("offsetParent = ", target.offsetParent);
+
+    console.log(target.offsetLeft, target.offsetTop);
+
+  </script>
+</body>
+
+</html>
