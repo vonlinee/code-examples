@@ -28,8 +28,10 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <mybatis.version>3.4.6</mybatis.version>
+        <mybatis.version>3.5.15</mybatis.version>
+        <mybatis.spring.version>2.0.7</mybatis.spring.version>
         <lombok.version>1.18.22</lombok.version>
+        <mybatis.generator.version>1.4.2</mybatis.generator.version>
         <mysql.driver.version>5.1.49</mysql.driver.version>
         <druid.version>1.2.8</druid.version>
     </properties>
@@ -44,7 +46,7 @@
             <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
-                <version>3.4.6</version>
+                <version>${mybatis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>

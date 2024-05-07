@@ -16,4 +16,14 @@
         from `t_student`
         where `STU_ID` = #{stuId,jdbcType=VARCHAR}
     </delete>
+
+    <select id="selectList" parameterType="org.example.mybatis.crud.param.ListParam" resultType="org.example.mybatis.crud.entity.Student">
+        SELECT *
+        from `t_student`
+        where `STU_SEX` = #{param.sex,jdbcType=VARCHAR}
+        AND STU_NO IN
+        <foreach item="item" index="index" collection="param.studentIds" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

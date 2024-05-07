@@ -19,19 +19,16 @@ public class TestTextField extends TestApplication {
 
         final TextField textField = new TextField();
 
-        textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                System.out.println(textField.getWidth());
-                System.out.println(textField.getHeight());
-            }
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(textField.getWidth());
+            System.out.println(textField.getHeight());
         });
         textField.setPrefHeight(18.0);
         final Font font = textField.getFont();
 
         System.out.println(textField.getContextMenu());
 
-        textField.setStyle("-fx-border-radius: 0; -fx-background-insets: 0; -fx-border-width: 1;-fx-border-color: black");
+        textField.setStyle("-fx-border-radius: 0; -fx-background-insets: 0; -fx-border-width: 0;-fx-border-color: black");
 
 
         root.getChildren().add(textField);

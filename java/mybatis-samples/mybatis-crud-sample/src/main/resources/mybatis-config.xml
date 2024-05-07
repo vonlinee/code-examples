@@ -51,5 +51,6 @@
   </environments>
   <mappers>
     <mapper resource="mappers/AdminClassMapper.xml"/>
+    <mapper resource="mappers/StudentMapper.xml"/>
   </mappers>
 </configuration>

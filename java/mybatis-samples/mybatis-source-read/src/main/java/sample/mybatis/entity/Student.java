@@ -5,14 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * CREATE TABLE `students` (
- *   `id` bigint(20) NOT NULL AUTO_INCREMENT,
- *   `name` varchar(50) NOT NULL,
- *   `gender` tinyint(1) NOT NULL,
- *   `grade` int(11) NOT NULL,
- *   `score` int(11) NOT NULL,
- *   PRIMARY KEY (`id`)
- * ) ENGINE=InnoDB AUTO_INCREMENT=60007 DEFAULT CHARSET=utf8;
+    DROP TABLE IF EXISTS `students`;
+    CREATE TABLE `students` (
+        `id` bigint(20) NOT NULL AUTO_INCREMENT,
+        `name` varchar(50) NOT NULL,
+        `gender` tinyint(1) NOT NULL,
+        `grade` int(11) NOT NULL,
+        `score` int(11) NOT NULL,
+        PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=60007 DEFAULT CHARSET=utf8;
  */
 @Data
 @NoArgsConstructor

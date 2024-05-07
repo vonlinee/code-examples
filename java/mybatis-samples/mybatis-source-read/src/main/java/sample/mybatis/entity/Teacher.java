@@ -12,5 +12,5 @@ public class Teacher {
     private String departNo;
     private String departName;
     private String title;
-    private String telePhone;
+    private String phone;
 }

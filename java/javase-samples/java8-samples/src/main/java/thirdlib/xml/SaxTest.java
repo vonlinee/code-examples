@@ -27,7 +27,7 @@ public class SaxTest {
         // 4.设置内容处理器
         reader.setContentHandler(new PHandler());
         // 5.读取xml的文档内容
-        reader.parse("D:\\Develop\\Projects\\Github\\code-example\\javase-samples\\third-library-sample\\src\\main\\resources\\xml\\1.xml");
+        reader.parse("D:\\Develop\\Projects\\Github\\code-org.example\\javase-samples\\third-library-sample\\src\\main\\resources\\xml\\1.xml");
     }
 }
 

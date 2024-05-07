@@ -59,3 +59,12 @@ archive.zip
 
 # idea output directory
 ./out/production
+*.db
+*.recipe
+*.idb
+*.tlog
+*.ipch
+*.vsidx
+*.filters
+*.vcxproj
+*.sln

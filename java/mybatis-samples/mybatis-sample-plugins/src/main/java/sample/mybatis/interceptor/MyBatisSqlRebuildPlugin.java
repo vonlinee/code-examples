@@ -22,10 +22,11 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * 获取真实执行的 sql
  * <p>
- * https://www.cnblogs.com/larva-zhh/p/12191531.html 重写SQL
+ * <a href="https://www.cnblogs.com/larva-zhh/p/12191531.html">重写SQL</a>
  * </p>
- * https://cloud.tencent.com/developer/article/1734409 自定义插件
+ * <a href="https://cloud.tencent.com/developer/article/1734409">自定义插件</a>
  */
 @Intercepts({@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
         RowBounds.class, ResultHandler.class})})

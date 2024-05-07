@@ -1,10 +1,18 @@
 
 
+# 版本信息
 
+1. mybatis-3.5.15
+2. mybatis-spring 1.4.2
+
+
+
+每个子模块不相互依赖，会有重复的代码
 
 {[closureParameters ->] statements}
 
 ```java
+
 @Override
 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     try {
@@ -24,17 +32,12 @@ public Object invoke(Object proxy, Method method, Object[] args) throws Throwabl
 获取方法在哪个类中声明
 
 ```java
+
 @Override
 public Class<?> getDeclaringClass() {
     return clazz;
 }
 ```
-
-
-
-
-
-
 
 ```java
 public Object execute(SqlSession sqlSession, Object[] args) {
@@ -77,18 +80,12 @@ public Object execute(SqlSession sqlSession, Object[] args) {
             throw new BindingException("Unknown execution method for: " + command.getName());
     }
     if (result == null && method.getReturnType().isPrimitive() && !method.returnsVoid()) {
-        throw new BindingException("Mapper method '" + command.getName() 
-                                   + " attempted to return null from a method with a primitive return type (" + method.getReturnType() + ").");
+        throw new BindingException("Mapper method '" + command.getName()
+                + " attempted to return null from a method with a primitive return type (" + method.getReturnType() + ").");
     }
     return result;
 }
 ```
-
-
-
-
-
-
 
 MapperProxy缓存有Mapper的Method和对应的MapperMethod实例
 
@@ -100,7 +97,9 @@ private final Map<Method, MapperMethod> methodCache;
 MapperMethod调用需要SqlSession，SqlSession是方法实际执行者
 
 ```java
-sqlSession.<E>selectList(command.getName(), param)
+sqlSession .
+
+<E> selectList(command.getName(),param)
 ```
 
 DefaultSqlSession：
@@ -108,6 +107,7 @@ DefaultSqlSession：
 ```java
 statement:方法全限定名称code.example.mybatis.mapper.TeacherMapper.queryAllTeacher
 @Override
+
 public <E> List<E> selectList(String statement, Object parameter) {
     return this.selectList(statement, parameter, RowBounds.DEFAULT);
 }
@@ -116,6 +116,7 @@ public <E> List<E> selectList(String statement, Object parameter) {
 org.apache.ibatis.executor.CachingExecutor
 
 ```java
+
 @Override
 public <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds) {
     try {
@@ -129,12 +130,11 @@ public <E> List<E> selectList(String statement, Object parameter, RowBounds rowB
 }
 ```
 
-
-
 ```java
+
 @Override
 public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql)
-    throws SQLException {
+        throws SQLException {
     // 默认走一级缓存
     Cache cache = ms.getCache();
     if (cache != null) {
@@ -145,21 +145,22 @@ public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds r
             // private final TransactionalCacheManager tcm = new TransactionalCacheManager();
             List<E> list = (List<E>) tcm.getObject(cache, key);
             if (list == null) {
-                list = delegate.<E> query(
-                    ms, parameterObject, rowBounds, resultHandler, key, boundSql);
+                list = delegate.<E>query(
+                        ms, parameterObject, rowBounds, resultHandler, key, boundSql);
                 tcm.putObject(cache, key, list); // issue #578 and #116
             }
             return list;
         }
     }
     //委托模式，实际执行交给org.apache.ibatis.executor.SimpleExecutor
-    return delegate.<E> query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
+    return delegate.<E>query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
 }
 ```
 
 org.apache.ibatis.executor.BaseExecutor
 
 ```java
+
 @SuppressWarnings("unchecked")
 @Override
 public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql) throws SQLException {
@@ -198,8 +199,6 @@ public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBoun
 }
 ```
 
-
-
 ```java
 private <E> List<E> queryFromDatabase(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql) throws SQLException {
     List<E> list;
@@ -221,6 +220,7 @@ private <E> List<E> queryFromDatabase(MappedStatement ms, Object parameter, RowB
 这里的实现是org.apache.ibatis.executor.SimpleExecutor
 
 ```java
+
 @Override
 public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
     Statement stmt = null;
@@ -229,7 +229,7 @@ public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBo
         Configuration configuration = ms.getConfiguration();
         // 创建StatementHandler
         StatementHandler handler = configuration.newStatementHandler(
-            wrapper, ms, parameter, rowBounds, resultHandler, boundSql);
+                wrapper, ms, parameter, rowBounds, resultHandler, boundSql);
         stmt = prepareStatement(handler, ms.getStatementLog());
         return handler.<E>query(stmt, resultHandler);
     } finally {
@@ -244,13 +244,11 @@ public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBo
 
 org.apache.ibatis.executor.statement.RoutingStatementHandler
 
-
-
 ```java
 public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
     // RoutingStatementHandler
     StatementHandler statementHandler = new RoutingStatementHandler(
-        executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+            executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
     // 添加代理
     statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
     return statementHandler;
@@ -259,11 +257,10 @@ public StatementHandler newStatementHandler(Executor executor, MappedStatement m
 
 返回的StatementHandler是org.apache.ibatis.executor.statement.RoutingStatementHandler
 
-
-
 org.apache.ibatis.executor.statement.PreparedStatementHandler
 
 ```java
+
 @Override
 public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
     Statement stmt = null;
@@ -272,7 +269,7 @@ public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBo
         Configuration configuration = ms.getConfiguration();
         // 创建StatementHandler
         StatementHandler handler = configuration.newStatementHandler(
-            wrapper, ms, parameter, rowBounds, resultHandler, boundSql);
+                wrapper, ms, parameter, rowBounds, resultHandler, boundSql);
         // 创建Statement对象
         stmt = prepareStatement(handler, ms.getStatementLog());
         return handler.<E>query(stmt, resultHandler);
@@ -282,17 +279,14 @@ public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBo
 }
 ```
 
-
-
-
-
 ```java
+
 @Override
 public <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException {
     // org.apache.ibatis.logging.jdbc.PreparedStatementLogger
     PreparedStatement ps = (PreparedStatement) statement;
     ps.execute();
-    return resultSetHandler.<E> handleResultSets(ps);
+    return resultSetHandler.<E>handleResultSets(ps);
 }
 ```
 
@@ -302,21 +296,16 @@ public <E> List<E> query(Statement statement, ResultHandler resultHandler) throw
 public final class PreparedStatementLogger extends BaseJdbcLogger implements InvocationHandler
 ```
 
-
-
 org.apache.ibatis.logging.jdbc.ResultSetLogger是ResultSet的代理
 
-
-
-
-
 ```java
+
 @Override
 public Object invoke(Object proxy, Method method, Object[] params) throws Throwable {
     try {
         if (Object.class.equals(method.getDeclaringClass())) {
             return method.invoke(this, params);
-        }          
+        }
         if (EXECUTE_METHODS.contains(method.getName())) {
             if (isDebugEnabled()) {
                 debug("Parameters: " + getParameterValueString(), true);
@@ -354,8 +343,6 @@ public Object invoke(Object proxy, Method method, Object[] params) throws Throwa
 }
 ```
 
-
-
 创建Statement的过程
 
 ```java
@@ -384,15 +371,12 @@ protected Connection getConnection(Log statementLog) throws SQLException {
 
 获取JDBC的对象Connection，Statement等，但实际拿到的都是其代理对象
 
-
-
 org.apache.ibatis.transaction.jdbc.JdbcTransaction
-
-
 
 在org.apache.ibatis.executor.BaseExecutor中获取连接
 
 ```java
+
 @Override
 public Connection getConnection() throws SQLException {
     if (connection == null) {
@@ -417,8 +401,6 @@ protected void openConnection() throws SQLException {
 事务管理器获取连接，连接创建Statement，然后再为其进行代理
 
 Executor直接同驱动层交互
-
-
 
 Debug进不去某些jar包
 

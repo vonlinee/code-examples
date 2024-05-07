@@ -1,0 +1,17 @@
+
+
+eq(column, param) ::= <<
+   <column> = <param>
+>>
+
+// 查询列表
+selectList(name,code,list) ::= <<
+select * from user
+ <eq("c.sd", name)>
+
+ <list;separator=",">
+>>
+
+alias(param) ::= <%
+<param>
+%>

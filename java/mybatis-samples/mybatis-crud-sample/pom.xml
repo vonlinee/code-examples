@@ -15,7 +15,6 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <mybatis.version>3.4.6</mybatis.version>
         <lombok.version>1.18.22</lombok.version>
         <mysql.driver.version>5.1.49</mysql.driver.version>
     </properties>
@@ -39,9 +38,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.5.13</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

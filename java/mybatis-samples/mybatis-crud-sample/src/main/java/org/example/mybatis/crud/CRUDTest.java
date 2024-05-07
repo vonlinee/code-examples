@@ -1,15 +1,20 @@
 package org.example.mybatis.crud;
 
-import org.example.mybatis.crud.entity.AdminClass;
-import org.example.mybatis.crud.mapper.AdminClassMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.*;
+import org.example.mybatis.crud.entity.AdminClass;
+import org.example.mybatis.crud.entity.Student;
+import org.example.mybatis.crud.mapper.AdminClassMapper;
+import org.example.mybatis.crud.mapper.TStudentMapper;
+import org.example.mybatis.crud.param.ListParam;
+import org.junit.Test;
 import sun.misc.Unsafe;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 
 public class CRUDTest {
@@ -62,6 +67,20 @@ public class CRUDTest {
             u.putObjectVolatile(cls, u.staticFieldOffset(logger), null);
         } catch (Exception e) {
             // ignore ，肯定会抛异常
+        }
+    }
+
+    @Test
+    public void test1() {
+        try (SqlSession session = openSession()) {
+            TStudentMapper studentMapper = session.getMapper(TStudentMapper.class);
+
+            ListParam param = new ListParam();
+            param.setSex(null);
+            param.setStudentIds(Arrays.asList("1", "2", "3"));
+            List<Student> students = studentMapper.selectList(param);
+
+            System.out.println(students);
         }
     }
 }

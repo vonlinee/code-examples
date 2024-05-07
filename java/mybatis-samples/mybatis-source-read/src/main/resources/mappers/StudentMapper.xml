@@ -8,8 +8,7 @@
     </insert>
 
     <!--XML拼接成1条sql，update时就不能拼了-->
-    <!-- sql语句过长会报错，此条跟数据库类型有关-->
-    <!-- java项目www.fhadmin.org -->
+    <!-- sql语句过长会报错，跟数据库类型有关-->
     <insert id="insertBatchWithForeach" parameterType="list">
         INSERT INTO students (name, gender, grade, score) VALUES
         <foreach collection="studentList" separator="," item="item">
@@ -33,4 +32,7 @@
         FROM students
         WHERE 1 = 1
     </delete>
+    <select id="selectByCondition">
+        SELECT * FROM student
+    </select>
 </mapper>
