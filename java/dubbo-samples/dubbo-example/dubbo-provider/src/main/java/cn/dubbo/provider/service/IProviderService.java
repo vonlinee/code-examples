@@ -6,5 +6,5 @@ package cn.dubbo.provider.service;
  * @description
  **/
 public interface IProviderService {
-    public String sayHello(String name);
+    String sayHello(String name);
 }

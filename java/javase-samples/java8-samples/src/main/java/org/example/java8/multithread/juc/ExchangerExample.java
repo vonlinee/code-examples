@@ -9,30 +9,10 @@ public class ExchangerExample {
     public static void main(String[] args) {
         ExecutorService executor = Executors.newCachedThreadPool();
         final Exchanger<String> exchanger = new Exchanger<>();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                nbaTrade("克拉克森，小拉里南斯", exchanger);
-            }
-        });
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                nbaTrade("格里芬", exchanger);
-            }
-        });
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                nbaTrade("哈里斯", exchanger);
-            }
-        });
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                nbaTrade("以赛亚托马斯，弗莱", exchanger);
-            }
-        });
+        executor.execute(() -> nbaTrade("克拉克森，小拉里南斯", exchanger));
+        executor.execute(() -> nbaTrade("格里芬", exchanger));
+        executor.execute(() -> nbaTrade("哈里斯", exchanger));
+        executor.execute(() -> nbaTrade("以赛亚托马斯，弗莱", exchanger));
         executor.shutdown();
     }
 

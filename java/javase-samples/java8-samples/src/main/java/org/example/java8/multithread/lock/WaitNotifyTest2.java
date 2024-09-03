@@ -1,13 +1,19 @@
 package org.example.java8.multithread.lock;
 
 public class WaitNotifyTest2 {
-	public static void main(String args[]) {
-		
-		Object lock = new Object();
+
+	static final Object lock = new Object();
+
+	public static void main(String[] args) {
 		
 		synchronized (lock) {
-			
-		}
+            try {
+				System.out.println("wait");
+                lock.wait();
+            } catch (InterruptedException e) {
+				e.printStackTrace();
+            }
+        }
 	}
 }
 

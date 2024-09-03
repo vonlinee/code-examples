@@ -9,11 +9,12 @@ import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebSe
 import org.springframework.cglib.core.DebuggingClassWriter;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import spring.boot.aop.service.IUserService;
 
 @SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class
 })
-@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
+@EnableAspectJAutoProxy(exposeProxy = true)
 public class MainLauncher {
     public static void main(String[] args) {
 
@@ -31,14 +32,15 @@ public class MainLauncher {
          */
         ConfigurableApplicationContext context = SpringApplication.run(MainLauncher.class, args);
 
-        ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
-
         // System.out.println(beanFactory.getBeanDefinition("logAspect"));
 
         // UserService userService = beanFactory.getBean("userService", UserService.class);
 
         // CglibAopProxy proxy;
         //
+
+        IUserService userService = context.getBean(IUserService.class);
+        userService.login("zs", "123");
 
 
         ProxyFactory pf;

@@ -11,10 +11,8 @@ public class ThreadPriorityTest {
             }
         });
 
-
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
         Class<?> clazz = loader.loadClass(Thread.class.getName());
-
     }
 }

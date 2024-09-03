@@ -12,6 +12,8 @@
     <modules>
         <module>rabbitmq-client-samples</module>
         <module>rabbitmq-springboot-samples</module>
+        <module>rabbitmq-springboot-provider</module>
+        <module>commons</module>
     </modules>
 
     <properties>

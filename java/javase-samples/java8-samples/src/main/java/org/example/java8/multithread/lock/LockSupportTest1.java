@@ -1,5 +1,6 @@
 package org.example.java8.multithread.lock;
 
+import java.util.Timer;
 import java.util.concurrent.locks.LockSupport;
 
 public class LockSupportTest1 {
@@ -13,12 +14,13 @@ public class LockSupportTest1 {
         ta.start();
         // 阻塞主线程
         LockSupport.park(mainThread);
+
     }
 
     static class ThreadA extends Thread {
 
         public void run() {
-            // 唤醒“主线程”
+            // 唤醒主线程
             LockSupport.unpark(mainThread);
 
             LockSupport.park(new Object());

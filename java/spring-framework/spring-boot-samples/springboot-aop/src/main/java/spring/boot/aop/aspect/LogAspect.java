@@ -26,8 +26,6 @@ public class LogAspect {
     @Around("execution(public * spring.boot.aop.service.UserService.*(..))")
     public Object logBeforeUserLoginIn(ProceedingJoinPoint joinPoint) throws Throwable {
         System.out.println("执行前");
-
-
         Object returnValue = joinPoint.proceed();
         System.out.println("执行后");
         return returnValue;

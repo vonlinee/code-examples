@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.StopWatch;
 import redis.clients.jedis.*;
-import sample.redis.jedis.model.Model;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +21,51 @@ public class JedisClient {
     @Test
     public void test11() {
         Jedis jedis = getConnection();
+    }
+
+    @Test
+    public void test12() {
+        Jedis jedis = getConnection();
+        jedis.set("mykey", "1");
+        jedis.expire("mykey", 5);
+
+        // 创建一个JedisPubSub的匿名子类来处理消息
+        JedisPubSub jedisPubSub = new JedisPubSub() {
+            @Override
+            public void onPMessage(String pattern, String channel, String message) {
+                // 当匹配到过期事件时，这里会被调用
+                // 注意：channel 的格式是 "__keyevent@<db>__:expired"，其中 <db> 是数据库编号
+                System.out.println("Expired key: " + message + " in channel: " + channel);
+            }
+
+            @Override
+            public void onSubscribe(String channel, int subscribedChannels) {
+                // 当成功订阅一个或多个频道时调用
+                System.out.println("Subscribed to " + channel);
+            }
+
+            @Override
+            public void onUnsubscribe(String channel, int subscribedChannels) {
+                // 当取消订阅时调用
+                System.out.println("Unsubscribed from " + channel);
+            }
+
+            @Override
+            public void onPUnsubscribe(String pattern, int subscribedChannels) {
+                // 当取消订阅一个或多个模式时调用（如果你的应用使用了模式订阅）
+            }
+        };
+
+        // 订阅所有数据库的过期事件（或者你可以只订阅特定的数据库）
+        // 注意：这里使用的是 psubscribe，它允许你按模式订阅
+        jedis.psubscribe(jedisPubSub, "__keyevent@*__:expired");
+
+        // 为了保持这个示例简单，我们直接阻塞在这里。在实际应用中，请避免这样做。
+        // 更好的做法是使用单独的线程来运行监听器
+
+        // 当不再需要监听时，你应该取消订阅并关闭Jedis连接
+        // 注意：在这个示例中，由于我们直接阻塞了主线程，所以这些代码实际上不会被执行。
+        jedis.close();
     }
 
     public static Jedis getConnection() {
@@ -89,6 +133,7 @@ public class JedisClient {
 
     /**
      * 上锁：SET resource-name anystring NX EX max-lock-time
+     *
      * @param resourceName
      * @param value
      */

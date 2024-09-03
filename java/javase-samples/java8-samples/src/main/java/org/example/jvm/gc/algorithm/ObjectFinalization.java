@@ -3,8 +3,7 @@ package org.example.jvm.gc.algorithm;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author vonline
- * @since 2022-07-24 20:07
+ * -xms2m
  */
 public class ObjectFinalization {
 

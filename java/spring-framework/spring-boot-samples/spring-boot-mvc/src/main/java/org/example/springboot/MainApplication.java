@@ -6,6 +6,9 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 
+/**
+ *
+ */
 @SpringBootApplication
 @ServletComponentScan
 @ImportResource(value = {"classpath:obs.properties"})

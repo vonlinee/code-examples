@@ -1,5 +1,7 @@
 package org.example.java8.multithread.concurrency;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.stream.IntStream;
 
 public class C001_ThreadLocal {
@@ -25,5 +27,15 @@ public class C001_ThreadLocal {
                 System.out.println(Thread.currentThread().getName() + "->" + localVar.get());
             }).start();
         });
+    }
+
+    @Test
+    public void test2() {
+
+        InheritableThreadLocal<String> itl = new InheritableThreadLocal<>();
+
+
+
+
     }
 }

@@ -28,9 +28,9 @@ public class DeclarativeTransactionAnnotation {
 
 	public static void main(String[] args) {
 		printDataSourceInformation();
-//		test1();
+		test1();
 		// test2();
-		test5();
+		// test5();
 	}
 
 	/**
@@ -85,7 +85,8 @@ public class DeclarativeTransactionAnnotation {
 		} catch (Exception e) {
 			if (e instanceof NoUniqueBeanDefinitionException) {
 				String message = e.getMessage();
-				String[] split = message.split(":");
+                assert message != null;
+                String[] split = message.split(":");
 				if (split.length >= 2) {
 					String trim = split[split.length - 1].trim();
 					String[] split2 = trim.split(",");

@@ -11,7 +11,7 @@ public class StringExer {
 	int anInt = 1;
 	char[] ch = { 't', 'e', 's', 't' };
 
-	public void change(String str, char ch[], int i) {
+	public void change(String str, char[] ch, int i) {
 		System.out.println("======" + str);// good
 		// String不可变性，栈上的str（String类型没有加this）变为 "test ok"，即是字符串常量池新增一个 "test
 		// ok"，str指向符串常量池（
@@ -42,7 +42,7 @@ public class StringExer {
 	}
 
 	// 考察值传递，String特性
-	public void change2(String str, char ch[], int i) {
+	public void change2(String str, char[] ch, int i) {
 		System.out.println("======" + str);// ======good
 		// 增加this明确是对象的str
 		this.str = "test ok";
@@ -52,7 +52,7 @@ public class StringExer {
 		anInt = 2;
 	}
 
-	public void change3(String a, char ch[], int i) {
+	public void change3(String a, char[] ch, int i) {
 		System.out.println("======" + str);// ======good
 		// 栈上入参为a，str为this的
 		str = "test ok";
