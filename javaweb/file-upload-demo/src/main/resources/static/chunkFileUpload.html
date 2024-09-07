@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="js/spark-md5.js"></script>
+    <title>Document</title>
+</head>
+<body>
+
+<form action="http:localhost:9999/api/file/upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="fileInput">
+    <input type="submit">
+</form>
+
+<br>
+base64上传图片
+<input type="file" id='file'>
+<canvas id='canvas'></canvas>
+<img src="" id='target-img' alt="target-img">
+
+<br>
+<input type="file" id="imageInput" accept="image/*">
+<div id="base64Output" style=""></div>
+<button id="getBase64OfImage">Base64编码图片</button>
+
+<br>
+
+<p>分片上传文件</p>
+<div>
+    <input type="file" id='bigFile' width="500">
+</div>
+<p>
+    <label for="file">完成度：</label>
+    <progress id="bigFileProgress" max="100" value="0" style="width: 300px"></progress>
+    <span id="bigFileProgressSpan">0</span>%
+</p>
+<p>
+<div>
+    <button id="btnStartUpload">开始上传</button>
+    <button id="pauseUpload">暂停上传</button>
+    <button id="cancelUpload">取消上传</button>
+</div>
+</p>
+
+<script>
+    let targetImg = document.getElementById('target-img')
+    let file = document.getElementById('file')
+    let canvas = document.getElementById("canvas")
+    let context = canvas.getContext('2d')
+    // 监听文件变更事件
+    file.onchange = function () {
+        let URL = window.URL || window.webkitURL
+        const img = new Image()
+        img.crossOrigin = "anonymous" // 只有服务器模式打开， 才有效
+        img.src = URL.createObjectURL(this.files[0]) // 创建URL对象
+        img.onload = function () {
+            URL.revokeObjectURL(this.src) //  img加载完成后,主动释放URL对象
+            canvas.width = img.width
+            canvas.height = img.height
+            context.drawImage(img, 0, 0, img.width, img.height)
+            targetImg.src = canvas.toDataURL('img/png')
+        }
+    }
+
+    // 开始上传按钮
+    let btnStartUpload = document.getElementById('btnStartUpload')
+    let bigFileProgressSpan = document.getElementById('bigFileProgressSpan')
+    btnStartUpload.onclick = function (e) {
+        const file = document.getElementById('bigFile').value; // 获取上传的文件
+        if (file && !file.type.startsWith('image/')) {
+            alert('请上传图片文件！');
+            return;
+        }
+        const reader = new FileReader()
+        reader.onload = function (e) {
+            // e.target.result 包含了图片的Base64编码, e.target即FileReader对象
+            let base64StringOfImage = e.target.result
+            $.post(
+                'http://localhost:9999/api/file/upload/base64',
+                {base64: base64StringOfImage},
+                function (data) {
+                    console.log(data);
+                }
+            );
+        };
+        // 读取文件内容，并将结果作为DataURL
+        reader.readAsDataURL(file);
+    }
+
+    // 进度条
+    const bigFileProgress = document.getElementById('bigFileProgress')
+
+    /**
+     * 字节数转带单位的字符串
+     * @param size
+     * @returns {string}
+     */
+    function calculateSizeOfBytes(size) {
+        if (size < 0.1 * 1024) {
+            size = size.toFixed(2) + "B"; //小于0.1KB，则转化成B
+        } else if (size < 0.1 * 1024 * 1024) {
+            size = (size / 1024).toFixed(2) + "KB"; // 小于0.1MB，则转化成KB
+        } else if (size < 0.1 * 1024 * 1024 * 1024) {
+            size = (size / (1024 * 1024)).toFixed(2) + "MB"; // 小于0.1GB，则转化成MB
+        } else {
+            size = (size / (1024 * 1024 * 1024)).toFixed(2) + "GB"; // 其他转化成GB
+        }
+        // 转成字符串
+        const sizeStr = size + "",
+            index = sizeStr.indexOf("."), // 获取小数点处的索引
+            dou = sizeStr.slice(index + 1, 2); // 获取小数点后两位的值
+        // 判断后两位是否为00，如果是则删除00
+        if (dou === "00") return sizeStr.substring(0, index) + sizeStr.slice(index + 3, 2);
+        return size;
+    }
+
+    const md5 = new SparkMD5();
+
+    /**
+     * 生成唯一任务ID
+     * @returns {string}
+     */
+    function getTaskId() {
+        return Date.now() + '-' + Math.random().toString(36).slice(2, 9);
+    }
+
+    const taskId = getTaskId()
+
+
+    /**
+     * 分片上传
+     * @param file  大文件
+     * @param index 当前分片索引
+     * @param chunkSize 分片大小
+     * @param chunkCount 总的分片数量
+     */
+    function uploadChunk(file, index, chunkSize, chunkCount) {
+        // 切割分片文件
+        const start = index * chunkSize     // 开始字节
+        const end = (index + 1) * chunkSize // 结束字节
+        const chunkFile = file.slice(start, end)
+        // 当前分片的MD5
+        md5.appendBinary(chunkFile);
+
+        let currentChunkMd5 = md5.end();
+        if (index < chunkCount) {
+            index = index + 1;
+            console.log('开始上传分片' + index)
+            // 发送请求，上传当前分片
+            const formData = new FormData();
+            formData.append("taskId", taskId);
+            formData.append("file", chunkFile);
+            formData.append("filename", file.name)
+            formData.append("totalSize", file.size)
+            formData.append("md5", currentChunkMd5);
+            formData.append("chunk", index);
+            formData.append("chunks", chunkCount);
+            formData.append("start", start);
+            formData.append("end", end);
+            formData.append("chunkSize", chunkSize);
+            // 千万不能直接把参数和文件放在下面post请求的data里面，！！！！data就是整个formData！！！！！
+            $.ajax({
+                type: 'post',
+                url: 'http://localhost:9999/api/file/upload/chunk',
+                data: formData,
+                processData: false, // 告诉jQuery不要去处理发送的数据
+                contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+                success: function (res) {
+                    // 更新进度
+                    bigFileProgress.value = index * 100 / chunkCount
+                    bigFileProgressSpan.textContent = bigFileProgress.value.toString()
+                    // 成功则上传下一个分片
+                    uploadChunk(file, index, chunkSize, chunkCount);
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+        } else {
+            console.log('最终的MD5' + md5.end())
+        }
+    }
+
+    // https://github.com/satazor/js-spark-md5
+    document.getElementById('bigFile').addEventListener('change', e => {
+        // 大文件
+        const file = e.target.files[0];
+        // 分片大小，默认10M
+        const chunkSize = 1024 * 1024 * 10
+        // 计算分片数量
+        const sliceCount = Math.ceil(file.size / chunkSize)
+        console.log('文件大小' + calculateSizeOfBytes(file.size) + ', 分片数' + sliceCount)
+        // 从第1个分片开始
+        uploadChunk(file, 0, chunkSize, sliceCount);
+    });
+</script>
+
+<script>
+
+</script>
+</body>
+</html>

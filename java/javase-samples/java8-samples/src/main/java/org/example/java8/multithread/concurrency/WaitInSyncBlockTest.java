@@ -15,7 +15,5 @@ public class WaitInSyncBlockTest {
         }
 
         BiMap<String, Object> map = HashBiMap.create();
-
-
     }
 }
