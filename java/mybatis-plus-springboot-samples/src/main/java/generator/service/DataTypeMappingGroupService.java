@@ -1,7 +1,7 @@
 package generator.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import generator.domain.DataTypeMappingGroup;
-import com.baomidou.mybatisplus.service.IService;
 
 /**
 * @author lenovo

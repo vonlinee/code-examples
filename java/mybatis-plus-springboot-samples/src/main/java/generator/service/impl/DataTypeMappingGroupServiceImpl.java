@@ -1,6 +1,6 @@
 package generator.service.impl;
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import generator.domain.DataTypeMappingGroup;
 import generator.service.DataTypeMappingGroupService;
 import generator.mapper.DataTypeMappingGroupMapper;

@@ -24,14 +24,15 @@
     <!-- 依赖版本管理 -->
     <!-- spring-cloud版本可以去 https://start.spring.io 根据springBoot自己查看 -->
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-cloud.version>Greenwich.SR5</spring-cloud.version>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2.1.4.RELEASE</spring-cloud-alibaba.version>
     </properties>
     <dependencyManagement>
         <dependencies>
+            <!--https://spring.io/projects/spring-cloud-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -45,6 +46,12 @@
                 <version>${spring-cloud-alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>4.1.3</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

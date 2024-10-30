@@ -31,7 +31,6 @@ public class CircleBreakerController {
     public CommonResult<Payment> fallback(@PathVariable("id") Long id){
 
         CommonResult<Payment> result = restTemplate.getForObject(SERVICE_URL + "/paymentSQL/" + id, CommonResult.class, id);
-
         if (id == 4) {
             throw new IllegalArgumentException("IllegalArgumentException,非法参数异常");
         } else if (result.getData() == null) {

@@ -11,7 +11,7 @@ public final class JdbcUtils {
     public static final String MYSQL_URL_PREFIX = "jdbc:mysql://localhost:3306/";
     public static final String MYSQL_URL_SUFFIX = "?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8";
     public static final String USERNAME = "root";
-    public static final String DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
+    public static final String DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
     public static final String PASSWORD = "123456";
 
     private static boolean flag = false;

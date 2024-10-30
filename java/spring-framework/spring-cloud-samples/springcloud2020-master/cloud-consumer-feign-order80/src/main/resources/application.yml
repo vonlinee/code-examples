@@ -18,3 +18,16 @@ logging:
   level:
     #feiqn日志以什么级别监控哪个接口
     com.springcloud.service.PaymentFeignService: debug
+
+
+spring:
+  application:
+    name: cloud-consumer-feign-order80
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: public # 默认为 public，你可以指定其他 namespace
+        # 如果需要用户名和密码进行认证，添加如下配置
+        username: nacos
+        password: nacos

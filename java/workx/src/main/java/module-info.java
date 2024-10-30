@@ -9,6 +9,7 @@ module org.example.workx {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires java.desktop;
 
     opens org.example.workx to javafx.fxml;
     exports org.example.workx;

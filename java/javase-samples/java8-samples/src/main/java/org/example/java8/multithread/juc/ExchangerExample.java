@@ -1,29 +1,46 @@
 package org.example.java8.multithread.juc;
 
 import java.util.concurrent.Exchanger;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ExchangerExample {
-
     public static void main(String[] args) {
-        ExecutorService executor = Executors.newCachedThreadPool();
-        final Exchanger<String> exchanger = new Exchanger<>();
-        executor.execute(() -> nbaTrade("克拉克森，小拉里南斯", exchanger));
-        executor.execute(() -> nbaTrade("格里芬", exchanger));
-        executor.execute(() -> nbaTrade("哈里斯", exchanger));
-        executor.execute(() -> nbaTrade("以赛亚托马斯，弗莱", exchanger));
-        executor.shutdown();
-    }
+        Exchanger<String> exchanger = new Exchanger<>();
 
-    private static void nbaTrade(String data1, Exchanger<String> exchanger) {
+
+        // 线程1
+        Thread thread1 = new Thread(() -> {
+            try {
+                String message1 = "Hello from Thread 1";
+                // 交换数据
+                String message2 = exchanger.exchange(message1);
+                System.out.println("Thread 1 received: " + message2);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        // 线程2
+        Thread thread2 = new Thread(() -> {
+            try {
+                String message1 = "Hello from Thread 2";
+                // 交换数据
+                String message2 = exchanger.exchange(message1);
+                System.out.println("Thread 2 received: " + message2);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        // 启动线程
+        thread1.start();
+        thread2.start();
+        
+        // 等待线程结束
         try {
-            System.out.println(Thread.currentThread().getName() + "在交易截止之前把 " + data1 + " 交易出去");
-            Thread.sleep((long) (Math.random() * 1000));
-            String data2 = exchanger.exchange(data1);
-            System.out.println(Thread.currentThread().getName() + "交易得到" + data2);
+            thread1.join();
+            thread2.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }

@@ -27,8 +27,6 @@ public class PaymentController {
     @GetMapping(value = "/paymentSQL/{id}")
     public CommonResult<Payment> paymentSQL(@PathVariable("id") Long id){
         Payment payment = hashMap.get(id);
-        CommonResult<Payment> result = new CommonResult<>(200, "from mysql,serverPort: " + serverPort, payment);
-        return result;
+        return new CommonResult<>(200, "from mysql,serverPort: " + serverPort, payment);
     }
-
 }

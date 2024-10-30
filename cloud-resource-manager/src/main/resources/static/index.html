@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chat Application</title>
+    <style>
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            width: 600px;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .chat-input {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 5px;
+        }
+
+        .chat-input button {
+            margin-left: 10px;
+        }
+
+        .notification {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .notification.info {
+            background-color: #e6f2ff;
+            color: #007bff;
+        }
+
+        .notification.warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .notification.error {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input">
+        <label for="chat-input"></label>
+        <input type="text" placeholder="Enter your message" id="chat-input">
+        <button onclick="sendChatMessage()">Send</button>
+    </div>
+
+    <button>11111111</button>
+    <a href="pages/sse.html" content="SSE">SSE</a>
+</div>
+
+<script>
+    // 建立 WebSocket 连接
+    let socket;
+    try {
+        socket = new WebSocket('ws://localhost:8080/ws');
+    } catch (e) {
+        alert(e)
+    }
+
+    // 订阅聊天消息频道
+    socket.addEventListener('open', () => {
+        socket.send(JSON.stringify({type: 'subscribe', destination: '/topic/messages'}));
+    });
+
+    // 监听聊天消息事件
+    socket.addEventListener('message', (event) => {
+        const message = JSON.parse(event.data);
+        // 处理聊天消息
+        console.log(`[${message.timestamp}] ${message.from}: ${message.content}`);
+    });
+
+    // 发送聊天消息
+    function sendChatMessage(from, content) {
+        socket.send(JSON.stringify({
+            type: 'send', destination: '/app/chat', content: {
+                from, content, timestamp: new Date().toISOString()
+            }
+        }));
+    }
+
+    // 订阅通知频道
+    socket.addEventListener('open', () => {
+        socket.send(JSON.stringify({type: 'subscribe', destination: '/user/queue/notifications'}));
+    });
+
+    // 监听通知事件
+    socket.addEventListener('message', (event) => {
+        const notification = JSON.parse(event.data);
+        // 处理通知
+        showNotification(notification.title, notification.message, notification.type);
+    });
+
+    // 显示通知的函数
+    function showNotification(title, message, type) {
+        // 使用浏览器提供的 Notification API 或其他方式显示通知
+        console.log(`[${type}] ${title}: ${message}`);
+    }
+</script>
+</body>
+</html>

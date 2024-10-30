@@ -25,5 +25,7 @@ public class ThreadPoolTest1 {
 
         });
         executor.shutdown();
+        executor.shutdownNow();
+
     }
 }
