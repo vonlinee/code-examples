@@ -1,6 +1,9 @@
 package org.example.java8.multithread;
 
-public class CountDownLatchDemo {
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class CountDownLatchDemo extends Application {
 
     public static void main(String[] args) throws InterruptedException {
         Thread t = new Thread(() -> {
@@ -14,5 +17,10 @@ public class CountDownLatchDemo {
         });
         t.start();
         Thread.sleep(3000);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
     }
 }

@@ -3,6 +3,7 @@ package org.sqltemplate;
 import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.AviatorEvaluatorInstance;
 import org.junit.Test;
+import org.springframework.aop.support.AopUtils;
 
 public class TestAviatorScriptEngine {
 
@@ -13,5 +14,7 @@ public class TestAviatorScriptEngine {
         Object result = instance.execute("12");
 
         System.out.println(result);
+
+        AopUtils.getTargetClass();
     }
 }

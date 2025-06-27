@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.agentdemo.mapper.StudentMapper">
+
+    <sql id="column">
+        AND delete_flag = 'N' AND
+        <if test="stuNo != null and stuNo != ''">
+            stu_no = #{stuNo}
+        </if>
+    </sql>
+
     <select id="queryAll" parameterType="map" resultType="org.example.agentdemo.entity.Student">
         SELECT *
         FROM student
         where stu_name = #{name}
+        <sql id="column">
+        AND delete_flag = 'N' AND
         <if test="stuNo != null and stuNo != ''">
             stu_no = #{stuNo}
+        </if>
+    </sql>
+    </select>
+
+    <select id="queryAll1" parameterType="map" resultType="org.example.agentdemo.entity.Student">
+        SELECT *
+        FROM student
+        where stu_name = #{name}
+        AND delete_flag = 'N' AND
+        <if test="stuNo != null and stuNo != ''">
+            stu_no = #{stuNo,jdbcType=VARCHAR}
         </if>
     </select>
 </mapper>

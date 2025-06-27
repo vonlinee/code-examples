@@ -1,0 +1,35 @@
+server:
+  port: 8999
+
+spring:
+  mvc:
+    favicon:
+      enabled=false
+  thymeleaf:
+    cache: false
+  datasource:
+    #中国Timezone要设置为CTT ，CTT为东八区
+    url: jdbc:mysql://localhost:3306/langv?serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  #设置允许上传的最大大小
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  configuration:
+    #关闭驼峰命名，但是mybatis-plus无效 还是要改字段或属性名
+    map-underscore-to-camel-case: false
+#阿里oss配置
+my-oss:
+  ENDPOINT: xxx
+  ACCESS_KEY_Id: xxx
+  ACCESS_KEY_SECRET: xxx
+  BUCKET_NAME: xx
+  BUCKET_IP: 填入你的外网访问的bucket域名
+#自定义用户临时存放视频及图片的文件夹
+my-video-path:
+  MYPATH: "D:\\videoSite\\"
