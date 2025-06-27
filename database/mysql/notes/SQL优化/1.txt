@@ -1,0 +1,39 @@
+聚簇索引：将数据存储与索引放到了一块，找到索引也就找到了数据. 
+非聚簇索引：将数据存储于索引分开结构，索引结构的叶子节点指向了数据的对应行，
+
+myisam通过key_buffer把索引先缓存到内存中，当需要访问数据时（通过索引访问数据），在内存中直接搜索索引，
+然后通过索引找到磁盘相应数据，这也就是为什么索引不在key buffer命中时，速度慢的原因. 
+
+澄清一个概念 ：innodb中，在聚簇索引之上创建的索引称之为辅助索引(和二级索引的区别)，辅助索引访问数据总是需要二次查找，
+非聚簇索引都是辅助索引，像复合索引、前缀索引、唯一索引，辅助索引叶子节点存储的不再是行的物理位置，而是主键值。
+
+
+https://www.guru99.com/indexing-in-database.html
+
+聚簇索引对应B树，而非聚簇索引对应B+树
+
+
+
+
+磁盘物理位置
+
+qps
+
+
+
+
+Index_type
+The index method used (BTREE, FULLTEXT, HASH, RTREE).
+
+
+This version of MySQL doesn't yet support 'RTREE INDEX'  5.7.36-log
+
+
+
+CannotAcquireLockException
+
+
+
+https://www.cnblogs.com/happyflyingpig/p/7662881.html
+
+https://javaguide.cn/
