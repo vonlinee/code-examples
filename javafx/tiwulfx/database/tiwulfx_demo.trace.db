@@ -1,3 +1,0 @@
-05-22 11:52:58 jdbc[2]: exception
-org.h2.jdbc.JdbcSQLException: Table "PERSON" not found; SQL statement:
-alter table person drop constraint FKC4E39B55ABD51491 [42102-171]
