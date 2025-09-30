@@ -63,8 +63,8 @@ public abstract class SparkApplication {
       .appName(appName)
       .master(master)  // 或者: yarn
       .config("spark.eventLog.enabled", "true")  // 开启事件日志
-      .config("spark.eventLog.dir", "hdfs://localhost:8020/user/spark/eventLogs")  // 事件日志存放目录
-      .config("spark.history.fs.logDirectory", "hdfs://localhost:8020/user/spark/eventLogs")
+      .config("spark.eventLog.dir", "hdfs://localhost:19000/spark-logs")  // 事件日志存放目录
+      .config("spark.history.fs.logDirectory", "hdfs://localhost:19000/spark-logs")
       .config("spark.yarn.historyServer.address", "http://localhost:18080") // 指定HistoryServer地址
       .config("spark.sql.adaptive.enabled", "true")
       .config("spark.sql.adaptive.coalescePartitions.enabled", "true");
@@ -74,5 +74,9 @@ public abstract class SparkApplication {
     SparkSession sparkSession = builder.getOrCreate();
 
     app.start(sparkSession);
+
+    sparkSession.stop();
+
+    sparkSession.close();
   }
 }

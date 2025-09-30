@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * JVM运行时信息工具类
  */
-public class RuntimeUtil {
+class RuntimeUtil {
 
   /**
    * 获取当前JVM进程的主类名

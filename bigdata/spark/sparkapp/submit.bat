@@ -1,22 +1,37 @@
 @echo off
 setlocal enabledelayedexpansion
+chcp 65001
+set MAIN_CLASS_NAME=%1
 
-echo ========================================
-echo Maven打包和Spark任务提交脚本（含History Server）
-echo ========================================
+:: 检查主类名
+IF "%MAIN_CLASS_NAME%"=="" (
+@REM 第一个参数
+    if not "%~1"=="" (
+        set "MAIN_CLASS_NAME=%~1"
+    ) else (
+        echo ERROR: mainClassName is not set
+        echo.
+        echo Solutions:
+        echo   1. set MAIN_CLASS_NAME=your.package.MainClass
+        echo   2. %~nx0 your.package.MainClass
+        exit /b 1
+    )
+)
+
 
 REM 可配置参数
 set PROJECT_ROOT=%~dp0
 set MAVEN_OPTS=-DskipTests
 set SPARK_MASTER=yarn
-set MAIN_CLASS=com.yourcompany.YourMainClass
-set APP_NAME=YourSparkApp
+@REM 支持传参指定运行驱动类
+set MAIN_CLASS=spark.SparkApplication
+set APP_NAME=%MAIN_CLASS_NAME%
 
 REM Spark History Server 配置
 set SPARK_HISTORY_SERVER_ENABLED=true
 set SPARK_EVENTLOG_ENABLED=true
-set SPARK_EVENTLOG_DIR=hdfs://namenode:8020/spark-logs
-set SPARK_HISTORY_FS_LOGDIR=hdfs://namenode:8020/spark-logs
+set SPARK_EVENTLOG_DIR=hdfs://localhost:8020/spark-logs
+set SPARK_HISTORY_FS_LOGDIR=hdfs://localhost:8020/spark-logs
 set SPARK_HISTORY_UI_PORT=18080
 
 REM Spark 其他配置
@@ -77,7 +92,7 @@ echo Jar包目录: %JAR_DIR%
 
 REM 构建Spark提交命令
 echo.
-echo [步骤3] 构建Spark提交命令...
+echo [Step3] 构建Spark提交命令...
 
 set SPARK_SUBMIT_CMD=spark-submit
 set SPARK_SUBMIT_CMD=!SPARK_SUBMIT_CMD! --master %SPARK_MASTER%
@@ -110,7 +125,7 @@ if "%SPARK_HISTORY_SERVER_ENABLED%"=="true" (
 )
 
 REM 添加JAR文件
-set SPARK_SUBMIT_CMD=!SPARK_SUBMIT_CMD! "%JAR_FILE%"
+set SPARK_SUBMIT_CMD=!SPARK_SUBMIT_CMD! "%JAR_FILE%" %MAIN_CLASS_NAME%
 
 REM 显示完整命令
 echo.
@@ -129,15 +144,12 @@ if %errorlevel% neq 0 (
 
 REM 显示History Server相关信息
 if "%SPARK_HISTORY_SERVER_ENABLED%"=="true" (
-    echo.
     echo ========================================
     echo Spark History Server 信息
     echo ========================================
     echo 任务提交成功！您可以在以下地址查看任务历史：
-    echo UI地址: http://your-history-server-host:%SPARK_HISTORY_UI_PORT%
+    echo UI地址: http://localhost:%SPARK_HISTORY_UI_PORT%
     echo 事件日志目录: %SPARK_EVENTLOG_DIR%
-    echo.
-    echo 注意：请将 'your-history-server-host' 替换为实际的History Server主机名
 )
 
 echo.

@@ -5,14 +5,18 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.example</groupId>
-  <artifactId>spark-quickstart</artifactId>
+  <artifactId>sparkapp</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     <spark.version>3.3.4</spark.version>
     <scala.version>2.13</scala.version>
+    <scala.binary.version>2.13</scala.binary.version>
   </properties>
 
   <dependencies>
@@ -87,6 +91,11 @@
       <artifactId>hadoop-hdfs</artifactId>
       <version>2.6.5</version>
     </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.38</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -99,9 +108,6 @@
         <executions>
           <execution>
             <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
             <configuration>
               <createDependencyReducedPom>false</createDependencyReducedPom>
               <filters>
@@ -158,8 +164,17 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
         <configuration>
-          <source>8</source>
-          <target>8</target>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.3.1</version>
+        <configuration>
+          <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
     </plugins>
