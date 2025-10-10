@@ -1,5 +1,5 @@
 package spark
 
-class SparkApplication {
+abstract class SparkApplication {
 
 }
