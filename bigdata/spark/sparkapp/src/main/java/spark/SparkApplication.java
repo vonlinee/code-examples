@@ -1,5 +1,7 @@
 package spark;
 
+import org.apache.spark.rdd.RDD;
+import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.SparkSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class SparkApplication {
+
+  static final String HDFS = "hdfs://localhost:8020";
 
   private static final Logger bootstrapLogger = LoggerFactory.getLogger(SparkApplication.class);
 
@@ -57,7 +61,12 @@ public abstract class SparkApplication {
     }
 
     final String appName = app.getAppName();
-    final String master = app.getMaster();
+
+    String master = app.getMaster();
+    if (app.isLocal() && args.length == 1) {
+      // 通过脚本运行，默认为 yarn
+      master = "yarn";
+    }
 
     final SparkSession.Builder builder = SparkSession.builder()
       .appName(appName)
@@ -78,5 +87,17 @@ public abstract class SparkApplication {
     sparkSession.stop();
 
     sparkSession.close();
+  }
+
+  public RDD<String> readHDFSText(SparkSession session, String path, int minPartitions) {
+    return session.sparkContext().textFile(HDFS + path, minPartitions);
+  }
+
+  public void writeHDFSText(RDD<String> rdd, String path) {
+    rdd.saveAsTextFile(HDFS + path);
+  }
+
+  public Dataset<String> readHDFSText(SparkSession session, String path) {
+    return session.read().textFile(HDFS + path);
   }
 }
