@@ -22,7 +22,7 @@ public class StatusCodeExample1 extends SparkApplication {
     // 订单状态数据
     JavaRDD<Integer> orderStatusRDD = jsc.parallelize(IntStream.range(0, 10000)
       .map((i) -> random.nextInt(5))
-      .boxed().collect(Collectors.toList()));
+      .boxed().collect(Collectors.toList()), 10);
 
     // 状态码映射字典
     Map<Integer, String> statusMap = new HashMap<>();
@@ -32,16 +32,16 @@ public class StatusCodeExample1 extends SparkApplication {
     statusMap.put(3, "已完成");
     statusMap.put(4, "已取消");
 
-//    JavaRDD<Tuple2<Integer, String>> rdd1 = orderStatusRDD.map(
-//      (Function<Integer, Tuple2<Integer, String>>) integer -> Tuple2.apply(integer, statusMap.get(integer)));
-//
-//    rdd1.collect().forEach(System.out::println);
+    JavaRDD<Tuple2<Integer, String>> rdd1 = orderStatusRDD.map(
+      (Function<Integer, Tuple2<Integer, String>>) integer -> Tuple2.apply(integer, statusMap.get(integer)));
 
-    // 广播状态字典
-    Broadcast<Map<Integer, String>> broadcastStatus =
-      spark.sparkContext().broadcast(statusMap, scala.reflect.ClassTag$.MODULE$.apply(Map.class));
-    JavaRDD<Tuple2<Integer, String>> rdd2 = orderStatusRDD.map(
-      (Function<Integer, Tuple2<Integer, String>>) integer -> Tuple2.apply(integer, broadcastStatus.value().get(integer)));
-    rdd2.collect().forEach(System.out::println);
+    rdd1.collect().forEach(System.out::println);
+
+//    // 广播状态字典
+//    Broadcast<Map<Integer, String>> broadcastStatus =
+//      spark.sparkContext().broadcast(statusMap, scala.reflect.ClassTag$.MODULE$.apply(Map.class));
+//    JavaRDD<Tuple2<Integer, String>> rdd2 = orderStatusRDD.map(
+//      (Function<Integer, Tuple2<Integer, String>>) integer -> Tuple2.apply(integer, broadcastStatus.value().get(integer)));
+//    rdd2.collect().forEach(System.out::println);
   }
 }
