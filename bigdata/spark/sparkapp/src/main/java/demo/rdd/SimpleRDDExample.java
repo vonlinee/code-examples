@@ -33,7 +33,7 @@ public class SimpleRDDExample extends JavaSparkApplication {
       .mapToPair(x -> new Tuple2<>(x % 3, x));  // Stage 1
 
     JavaPairRDD<Integer, Integer> reducedRDD = pairRDD
-      .reduceByKey((a, b) -> a + b);            // Stage 2 - 宽依赖
+      .reduceByKey(Integer::sum);            // Stage 2 - 宽依赖
 
     List<Tuple2<Integer, Integer>> stage2Result = reducedRDD.collect();
     System.out.println("Stage 2 结果: " + stage2Result);

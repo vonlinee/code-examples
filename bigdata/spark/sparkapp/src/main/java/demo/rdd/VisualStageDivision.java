@@ -83,7 +83,7 @@ public class VisualStageDivision {
       .mapToPair(x -> new Tuple2<>(x % 3, x));  // 窄依赖
 
     JavaPairRDD<Integer, Integer> reducedRDD = pairRDD
-      .reduceByKey((a, b) -> a + b);            // 宽依赖 - Stage 边界
+      .reduceByKey(Integer::sum);            // 宽依赖 - Stage 边界
 
     JavaRDD<String> processed2 = reducedRDD
       .map(tuple -> "Key_" + tuple._1() + ": " + tuple._2()); // 窄依赖

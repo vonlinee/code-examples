@@ -1,0 +1,35 @@
+#!/bin/bash
+# run_spark_comparison.sh
+
+# 编译
+javac -cp "$(spark-classpath):." *.java
+
+# 打包
+jar cf spark-comparison.jar *.class
+
+# 生成测试数据
+spark-submit --class DataGenerator --master local[4] spark-comparison.jar
+
+# 运行Broadcast版本
+echo "运行Broadcast版本..."
+spark-submit \
+    --class SparkWithBroadcast \
+    --master yarn \
+    --deploy-mode cluster \
+    --executor-memory 4G \
+    --executor-cores 2 \
+    --num-executors 4 \
+    --conf spark.dynamicAllocation.enabled=false \
+    spark-comparison.jar
+
+# 运行非Broadcast版本
+echo "运行非Broadcast版本..."
+spark-submit \
+    --class SparkWithoutBroadcast \
+    --master yarn \
+    --deploy-mode cluster \
+    --executor-memory 4G \
+    --executor-cores 2 \
+    --num-executors 4 \
+    --conf spark.dynamicAllocation.enabled=false \
+    spark-comparison.jar

@@ -122,32 +122,5 @@ public class RealTimeRiskControl extends SparkApplication {
   }
 }
 
-// 交易数据类
-@Data
-@AllArgsConstructor
-class Transaction implements Serializable {
-  private String userId;
-  private double amount;
-  private String pattern;
-  private String timestamp;
-}
 
-// 风险分析结果类
-@Data
-@AllArgsConstructor
-class RiskAnalysisResult implements Serializable {
-  private String userId;
-  private double amount;
-  private String pattern;
-  private String riskLevel;
-  private String riskReasons;
-}
 
-// 风险规则类
-@Data
-@AllArgsConstructor
-class RiskRules implements Serializable {
-  private double maxAmountPerTransaction;
-  private Set<String> suspiciousPatterns;
-  private int highFrequencyThreshold;
-}

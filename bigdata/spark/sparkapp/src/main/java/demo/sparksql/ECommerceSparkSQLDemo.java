@@ -12,9 +12,9 @@ import java.util.Properties;
 
 public class ECommerceSparkSQLDemo {
 
-    private SparkSession spark;
-    private String jdbcUrl;
-    private Properties connectionProperties;
+    private final SparkSession spark;
+    private final String jdbcUrl;
+    private final Properties connectionProperties;
 
     public ECommerceSparkSQLDemo() {
         // 初始化 SparkSession

@@ -1,14 +1,11 @@
 package demo.dataset;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.apache.spark.api.java.function.FilterFunction;
 import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.DataTypes;
 import spark.SparkApplication;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -90,30 +87,6 @@ public class BroadcastVariableExample extends SparkApplication {
     System.out.println("=== 分类统计 ===");
     categoryStats.show();
   }
-}
 
-/**
- * 定义业务规则类
- */
-@Data
-@AllArgsConstructor
-class BusinessRules implements Serializable {
-  private Set<String> blacklistedUsers;
-  private Set<String> highRiskRegions;
-  private Set<String> vipUsers;
-  private Map<String, String> productCategories;
-}
 
-/**
- * 用户行为数据类
- */
-@Data
-@AllArgsConstructor
-class UserBehavior implements Serializable {
-  private String userId;
-  private String action;
-  private String productId;
-  private String categoryId;
-  private String region;
-  private String timestamp;
 }

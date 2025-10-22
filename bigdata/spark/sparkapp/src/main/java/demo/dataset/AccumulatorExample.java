@@ -1,7 +1,5 @@
 package demo.dataset;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.sql.Dataset;
@@ -13,7 +11,6 @@ import org.apache.spark.util.CollectionAccumulator;
 import org.apache.spark.util.LongAccumulator;
 import spark.SparkApplication;
 
-import java.io.Serializable;
 import java.util.*;
 
 public class AccumulatorExample extends SparkApplication {
@@ -106,10 +103,3 @@ public class AccumulatorExample extends SparkApplication {
   }
 }
 
-@Data
-@AllArgsConstructor
-class UserAction implements Serializable {
-  private String userId;
-  private String action;
-  private String region;
-}

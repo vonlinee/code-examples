@@ -25,11 +25,7 @@ public abstract class SparkApplication {
   }
 
   public String getMaster() {
-    if (isLocal()) {
-      return "local[*]";
-    } else {
-      return "yarn";
-    }
+    return isLocal() ? "local[*]" : "yarn";
   }
 
   public abstract void start(SparkSession spark);
@@ -81,11 +77,8 @@ public abstract class SparkApplication {
     bootstrapLogger.info("HDFS: \thttp://localhost:9870");
     bootstrapLogger.info("Spark Web UI: \thttp://localhost:18080");
     SparkSession sparkSession = builder.getOrCreate();
-
     app.start(sparkSession);
-
     sparkSession.stop();
-
     sparkSession.close();
   }
 
