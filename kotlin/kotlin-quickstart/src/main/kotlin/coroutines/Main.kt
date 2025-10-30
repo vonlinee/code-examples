@@ -1,26 +1,18 @@
-package coroutines
+class User(val id: Int, val name: String, val address: String)
 
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-
-fun main(): Unit = runBlocking {
-    val channel = Channel<Int>()
-
-    // 生产者
-    launch {
-        for (x in 1..5) {
-            channel.send(x * x)
-            delay(100L)
-        }
-        channel.close() // 关闭通道
-    }
-
-    // 消费者
-    launch {
-        for (y in channel) {
-            println("Received: $y")
+fun saveUser(user: User) {
+    fun validate(
+        user: User,
+        value: String,
+        fieldName: String
+    ) {
+        if (value.isEmpty()) {
+            throw IllegalArgumentException(
+                "Cannot save user ${user.id}: $fieldName is empty"
+            )
         }
     }
+    validate(user, user.name, "Name")
+    validate(user, user.address, "Address")
+    // Save user to the database
 }
